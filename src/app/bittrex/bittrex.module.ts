@@ -29,6 +29,7 @@ import {MarketViewComponent} from "../shared/market-view/market-view.component";
 import {ChatService} from "./chat-servica";
 import { MarketBooksComponent } from './market-books/market-books.component';
 import {BooksService} from "../services/books-service";
+import {OrdersManagerService} from "../services/orders-manager.service";
 
 
 
@@ -88,7 +89,8 @@ const routes: Routes = [
     BittrexPrivateService,
     BotTestService,
     ChatService,
-    BooksService
+    BooksService,
+    OrdersManagerService
   ],
   entryComponents: [
     BittrexLoginComponent,

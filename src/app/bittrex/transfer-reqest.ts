@@ -208,8 +208,9 @@ export class TransferReqest {
 
     console.warn(message);
 
+    let a = market.split('_');
 
-    let sub = this.privateService.sellLimit(market, amountCoin, rate).subscribe(res=> {
+    let sub = this.privateService.sellLimit(a[0], a[1], amountCoin, rate).subscribe(res=> {
 
       console.log(res);
       this.results.push(JSON.stringify(res));
@@ -219,9 +220,9 @@ export class TransferReqest {
 
       if(!res){
         this.onServerError(' sellLimit result null');
-      }else if(res.result && res.result.uuid) {
+      }else if(res && res.uuid) {
 
-        this.uuid = res.result.uuid;
+        this.uuid = res.uuid;
         this.emitter.next(new EventTransfer(EventTransfer.ON_ORDER_SET, this.uuid, this.uuid));
         this.timeout = setTimeout(()=>this.checkOrder(), 3000);
 
@@ -258,7 +259,9 @@ export class TransferReqest {
     let message = 'buyLimit ' + this.market + '  '+ this.amountCoin +'   '+this.rate + ' : ';
     //this.results.push(JSON.stringify(this.sell.slice(0,5)));
     this.results.push(message);
-    let sub = this.privateService.buyLimit(this.market, +this.amountCoin.toPrecision(8), this.rate).subscribe(res=> {
+    let a = this.market.split('_');
+
+    let sub = this.privateService.buyLimit(a[0], a[1], +this.amountCoin.toPrecision(8), this.rate).subscribe(res=> {
       console.log(res);
       this.onOrderSet(res);
       this.results.push(JSON.stringify(res));
@@ -266,8 +269,8 @@ export class TransferReqest {
 
       if(!res) {
         this.onServerError(' buyLimit result null');
-      }else if (res.result && res.result.uuid) {
-        this.uuid = res.result.uuid;
+      }else if (res && res.uuid) {
+        this.uuid = res.uuid;
         this.timeout = setTimeout(()=>this.checkOrder(), 3000);
       }else if(res.message && res.message ==='INSUFFICIENT_FUNDS') {
         this.errors.push('INSUFFICIENT_FUNDS');

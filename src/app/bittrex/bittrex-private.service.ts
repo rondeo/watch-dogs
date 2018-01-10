@@ -181,37 +181,35 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
 
 
 
-  buyLimit(market: string, quantity: number, rate: number): Observable<SOBuySell> {
+  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
+    let market = base+'-'+coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-
-    market = market.replace('_', '-');
     let uri = 'https://bittrex.com/api/v1.1/market/buylimit';
-
     return this.call(uri, {
       market: market,
       quantity: quantity,
       rate: rate
+    }).map(res=>{
+      console.log(' buyLimit market ' + market , res);
+
+      return res.result;
     });
   }
 
-  sellLimit(market: string, quantity: number, rate: number): Observable<SOBuySell> {
+  sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
+    let market = base+'-'+coin;
     console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-    market = market.replace('_', '-');
 
     let uri = 'https://bittrex.com/api/v1.1/market/selllimit';
     return this.call(uri, {
       market: market,
       quantity: quantity,
       rate: rate
+    }).map(res=>{
+      console.log(' sellLimit market '+market , res);
+      return res.result;
     });
   }
-
-
-  cancelOrder(uuid: string): Observable<SOBuySell> {
-    let uri = 'https://bittrex.com/api/v1.1/market/cancel';
-    return this.call(uri, {uuid: uuid});//.map(res=>res.json());
-  }
-
 
   withdrawHistory(){
      let url = 'https://bittrex.com/api/v1.1/account/getwithdrawalhistory';
@@ -238,14 +236,23 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
   }
 
 
-  getOpenOrders(market: string): Observable<VOOrder[]> {
+  getOpenOrders(base:string, coin:string): Observable<VOOrder[]> {
+    let market = base+'-'+coin;
 
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
-    return this.call(uri, {market: market})
-    /*.map(res=>{
-          let r =  res.json().result;
-          return r;
-        })*/
+    return this.call(uri, {market: market}).map(res=>{
+      console.log(' getOpenOrders  '+ market , res);
+      return res;
+    })
+
+  }
+
+  cancelOrder(uuid: string): Observable<VOOrder> {
+    let uri = 'https://bittrex.com/api/v1.1/market/cancel';
+    return this.call(uri, {uuid: uuid}).map(res=>{
+      console.log(' cancelOrder ', res);
+      return res;
+    });
   }
 
   getOrderById(uuid: string): Observable<VOOrder> {
@@ -254,6 +261,7 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
     return this.call(url, {uuid: uuid}).map(res => {
       let order: VOOrder = res.result;
       order.OrderType = order.Type;
+      console.log('getOrderById ',res);
       return order
     });
 
@@ -552,14 +560,17 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
 
   private loadNextOrders(markets: string[], i, out: VOOrder[], sub) {
     if (i >= markets.length) sub.next(out);
-    else this.getOpenOrders(markets[i++]).subscribe(res => {
-      console.log(res);
-      if (!res) console.warn(' no result for ' + markets[i]);
-      else out = out.concat(res);
-      this.tick++;
-      setTimeout(() => this.loadNextOrders(markets, i, out, sub), 500);
+    else{
+      let a = markets[i++].split('_');
+      this.getOpenOrders(a[0], a[1]).subscribe(res => {
+        console.log(res);
+        if (!res) console.warn(' no result for ' + markets[i]);
+        else out = out.concat(res);
+        this.tick++;
+        setTimeout(() => this.loadNextOrders(markets, i, out, sub), 500);
 
-    })
+      })
+    }
   }
 
 

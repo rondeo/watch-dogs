@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import {VOOrder} from "../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {SOBuySell} from "../bittrex/bittrex-private.service";
+import {Subject} from "rxjs/Subject";
 
 
 export interface APIOrdersManager{
-  cancelOrder(uuid:string):Observable<SOBuySell>
+  cancelOrder(uuid:string):Observable<VOOrder>
   getOrderById(uuid:string):Observable<VOOrder>
 }
 
@@ -14,40 +15,66 @@ export interface APIOrdersManager{
 export class OrdersManagerService {
 
   private uuid:string;
+
   private privateService:APIOrdersManager;
-  constructor() { }
+
+  private statusSub:Subject<VOOrder> = new Subject();
+  private errorsSub:Subject<string> = new Subject();
+
+  constructor() {
+
+  }
+
+  checkOrder(uuid):Observable<VOOrder>{
+    this.uuid = uuid;
+    setTimeout(()=>this.checkCurrentOrder(), 2000);
+    return this.statusSub.asObservable();
+  }
+
+  checkCurrentOrder(){
+    let uuid = this.uuid;
+    if(!uuid) return;
+    this.privateService.getOrderById(uuid).toPromise().then((res:VOOrder)=>{
+      if(res.IsOpen){
+        setTimeout(()=>this.checkCurrentOrder(), 3000);
+      }
+      this.statusSub.next(res);
+    });
+
+  }
 
 
+  cancelOrder(uuid?:string):Observable<VOOrder>{
 
-  removeOrder(uuid?:string):Promise<string[]>{
-    if(uuid) this.uuid = uuid;
-
-
-    this.privateService.cancelOrder(this.uuid).toPromise().then(res=>{
+    if(!uuid) uuid = this.uuid;
+    else this.uuid = uuid;
+    if(!uuid) return;
+    this.privateService.cancelOrder(this.uuid).toPromise().then(res1=>{
 
       this.privateService.getOrderById(this.uuid).toPromise().then((res:VOOrder)=>{
         console.log(res);
         //this.results.push(JSON.stringify(res));
         if(res.IsOpen){
-          //this.errors.push(' cant cancel order ' + JSON.stringify(res));
-          // clearTimeout(this.timeout);
-          // this.timeout = setTimeout(()=>this.removeOrder(), 10000);
-        }else {
-
-          //this.onSuccess();
+            setTimeout(()=>this.cancelOrder(), 10000);
         }
+        this.statusSub.next(res);
+
       })
     }).catch(err=>{
-      //this.errors.push(err.toString());
-      //clearTimeout(this.timeout);
-      //this.timeout = setTimeout(()=>this.removeOrder(), 10000);
-    })
+      this.onError(err);
+      this.errorsSub.next(err.message);
 
-    return  null;//this.promise;
+    });
+
+    return  this.statusSub.asObservable();
   }
 
   onError(error){
 
   }
 
+  destroy() {
+    this.uuid = null;
+
+  }
 }

@@ -39,7 +39,7 @@
             <small>{{transfer.rate}}</small>
             id: <small>{{transfer.uuid}}</small>
             <span *ngIf="transfer.uuid" class="btn fa fa-refresh" (click)="onTransferUidClick()"></span>
-            <span *ngIf="transfer.uuid" class="btn fa fa-minus-circle dred" (click)="onCancelOrderClick()"></span>
+            <span *ngIf="transfer.uuid" class="btn fa fa-minus-circle dred fa-lg" (click)="onCancelOrderClick()"></span>
         </h5>
         <div>
             <mat-checkbox (change)="onShowAll($event)"><small class="on-top">all</small></mat-checkbox>

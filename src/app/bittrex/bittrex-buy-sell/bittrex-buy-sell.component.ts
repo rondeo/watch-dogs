@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {VOBalance, VOMarket, VOMarketB, VOMarketCap, VOOrderBook, VOTransfer} from '../../models/app-models';
-import {BittrexPrivateService} from '../bittrex-private.service';
+import {VOBalance, VOMarket, VOMarketB, VOMarketCap, VOOrder, VOOrderBook, VOTransfer} from '../../models/app-models';
+import {BittrexPrivateService, SOBuySell} from '../bittrex-private.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MarketCapService} from '../../market-cap/market-cap.service';
 import {Observable} from 'rxjs/Observable';
@@ -14,6 +14,8 @@ import {MappersBooks} from "../../com/mappers-books";
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
 import {BuySellModel} from "../../models/buy-sell-model";
 import {BooksService} from "../../services/books-service";
+import {APIBuySellService} from "../../services/buy-sell.service";
+import {OrdersManagerService} from "../../services/orders-manager.service";
 
 
 
@@ -31,6 +33,11 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   priceCoin:number;
   amountCoin:number;
   amountBase:number;
+
+
+
+  currentOrder:VOOrder;
+
 
 
   rateByBooks:{buy:number, sell:number} = {buy:0, sell:0};
@@ -97,6 +104,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     private router:Router,
     private privateService:BittrexPrivateService,
     private booksService:BooksService,
+    private ordersManager:OrdersManagerService,
     private snackBar:MatSnackBar
   )
   {
@@ -130,6 +138,16 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     });
   }
 
+  private sub6;
+  onCancelOrder(uuid){
+    if(confirm('You want to cancel '+ uuid+'?')){
+      if(this.sub6) this.sub6.unsubscribe();
+      this.sub6 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
+        this.currentOrder = res;
+      })
+    }
+
+  }
   isCharging:boolean;
   onChargeAmountChaged(){
 
@@ -155,7 +173,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
   onBuyClick(){
-    console.log('Buy');
     let action = 'Buy';
     let balance = this.balanceBase.balanceUS;
 
@@ -166,7 +183,27 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   }
 
+  private sub4
+  checkOrder(uuid:string){
+    if(this.sub4) this.sub4.unsubscribe();
+    this.sub4 = this.ordersManager.checkOrder(uuid).subscribe(res=>{
+      console.log(res);
+      this.currentOrder = res;
 
+    })
+  }
+
+
+  private sub5;
+  cancelOrder(uuid:string){
+    if(this.sub5) this.sub5.unsubscribe();
+    this.sub5 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
+      this.currentOrder = res;
+
+    })
+
+
+  }
 
   onSellClick(){
     let action = 'Sell';
@@ -185,6 +222,9 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     let amountBase = amountUS / this.priceBase;
 
+    let base:string;
+    let coin:string;
+    let market = base+'_'+coin;
 
     console.log('amountBase ' + amountBase + ' priceBase ' + this.priceBase );
 
@@ -200,6 +240,33 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       setTimeout(()=>{
         if(confirm(action + ' $'+ amountUS + ' ' +this.modelBuySell.coin +'\nPrice: $' + rateUS + '\nFee: $' + fee)){
 
+          let service:APIBuySellService = this.privateService;
+          let obs:Observable<VOOrder>
+          if(action ==='Sell') obs =  service.sellLimit(base, coin, amountCoin, rate );
+          else if(action ==='Buy')obs =  service.buyLimit(base, coin, amountCoin, rate );
+
+          if(!obs) {
+            console.error(action);
+            return;
+          }
+          obs.subscribe(res=>{
+            if(res && res.uuid){
+              this.currentOrder = {
+                uuid:res.uuid
+              }
+
+              this.snackBar.open('Order Set. Checking...'+res.message, 'x', {extraClasses:'alert-green', duration:2000});
+
+
+
+            } else{
+              this.snackBar.open('Error '+res.message, 'x', {extraClasses:'alert-red', duration:3000})
+            }
+
+          }, error=>{
+            this.snackBar.open('Error '+ error.message, 'x',{extraClasses:'alert-red'});
+          })
+
         }
       }, 200);
 
@@ -214,6 +281,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
  /* onAmountBaseUSChanged(evt){
     //console.log(this.transfer.amountBaseUS);
   }*/
+
   populateMarkets(){
     let sub = this.privateService.publicService.getMarketsAr().subscribe(res=>{
       if(!res) return;
@@ -244,6 +312,11 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     if(this.sub1)this.sub1.unsubscribe();
     if(this.sub2)this.sub2.unsubscribe();
     if(this.sub3)this.sub3.unsubscribe();
+    if(this.sub4)this.sub4.unsubscribe();
+    if(this.sub5)this.sub5.unsubscribe();
+    if(this.sub6) this.sub6.unsubscribe();
+    this.ordersManager.destroy();
+
   }
 
   onRateAvarage(evt){
@@ -253,51 +326,10 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     console.log(evt);
   }
-  onAmounFromChange(evt){
-    if(isNaN(evt)) return;
-    //console.log(this.transfer.amountFrom);
-    //this.transfer.amountUSFrom = (this.transfer.priceUSFrom * this.transfer.amountFrom) +'';
-    //this.calculateTo();
-  }
-
-  onAmountUSChange(evt){
-    if(isNaN(evt)) return;
-    this.updateTransfer();
-    //let amountFrom = +(+this.transfer.amountUSFrom/this.transfer.priceUSFrom).toFixed(8);
-    //if(amountFrom > +this.currentBalance.balance)amountFrom = +this.currentBalance.balance;
-    //this.transfer.amountFrom = amountFrom;
-   // this.calculateTo();
-  }
-
- /* calculateFrom(){
-    this.transfer.amountFrom =   this.transfer.  * this.transfer.rate:
-     // this.transfer.amountTo /this.transfer.rate)
-     // .toPrecision(8);
-
-    ///if(this.transfer.priceUS === -1 ) return;
-    //this.transfer.amountUSFrom = (this.transfer.amountFrom * this.transfer.priceUS).toFixed(2);
-  }*/
-
- calculateFee(){
-  // if(isNaN(this.transfer.amountFrom)) return;
-   //this.transfer.fee = this.transfer.amountFrom * 0.0025;
-   //this.transfer.feeUS = (this.transfer.fee * this.transfer.priceUSFrom).toFixed(2);
- }
-
-
-/*
-  onAmountCoinChange(evt){
-   // this.calculateFrom();
-    this.rateAvarage = evt;
-
-  }*/
-
 
   onRefreshBooksClick(){
     this.booksService.refreshBooks();
   }
-
-
   amountUS:number;
   onAmountChanged(evt){
     console.log(this.amountUS);

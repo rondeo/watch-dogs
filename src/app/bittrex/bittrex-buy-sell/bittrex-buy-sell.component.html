@@ -35,6 +35,11 @@
                 </mat-select>
             </mat-form-field>
         </div>
+        <div *ngIf="currentOrder">
+            <span>{{currentOrder.uuid}}</span>
+            <span class="btn fa fa-minus-circle dred fa-lg" (click)="onCancelOrder(currentOrder.uuid)"></span>
+        </div>
+
 
 <!--
         <div>
