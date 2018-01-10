@@ -28,6 +28,7 @@ import { MyGainersLosersComponent } from './my-gainers-losers/my-gainers-losers.
 import {MarketViewComponent} from "../shared/market-view/market-view.component";
 import {ChatService} from "./chat-servica";
 import { MarketBooksComponent } from './market-books/market-books.component';
+import {BooksService} from "../services/books-service";
 
 
 
@@ -86,7 +87,8 @@ const routes: Routes = [
   providers:[
     BittrexPrivateService,
     BotTestService,
-    ChatService
+    ChatService,
+    BooksService
   ],
   entryComponents: [
     BittrexLoginComponent,

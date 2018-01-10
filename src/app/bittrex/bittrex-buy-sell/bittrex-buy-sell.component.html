@@ -36,24 +36,28 @@
             </mat-form-field>
         </div>
 
-
+<!--
         <div>
             Last: <span>${{priceCoin}}</span>
-        </div>
+        </div>-->
 
-        <div>
+      <!--  <div>
             <app-market-books
                     [base]="modelBuySell.base"
                     [coin]="modelBuySell.coin"
                     [priceCoin]="1"
                     [amountCoin]="1"
             ></app-market-books>
-        </div>
+        </div>-->
         <br/>
 
 
         <div>
-            <mat-radio-group [(ngModel)] = "modelBuySell.amountUS" >
+           Buy: {{rateByBooks.sellUS}}  Sell: {{rateByBooks.buyUS}} &nbsp; &nbsp; <span class="btn fa fa-refresh fa-lg" (click)="onRefreshBooksClick()"></span>
+        </div>
+        <br/>
+        <div>
+            <mat-radio-group [(ngModel)] = "amountUS" (ngModelChange)="onAmountChanged($event)" >
                 <mat-radio-button value="100">$100</mat-radio-button>
                 <mat-radio-button value="200">$200</mat-radio-button>
                 <mat-radio-button value="400">$400</mat-radio-button>

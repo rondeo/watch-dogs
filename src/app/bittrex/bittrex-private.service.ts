@@ -20,10 +20,13 @@ import {StorageService} from '../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 import {MyBot, VOBot} from "./my-bot";
 import {SlackService} from "../services/slack.service";
+import {APIBuySellService} from "../services/buy-sell.service";
+import {APIOrdersManager} from "../services/orders-manager.service";
+
 
 
 @Injectable()
-export class BittrexPrivateService {
+export class BittrexPrivateService implements APIBuySellService, APIOrdersManager{
 
   apiKey: string;
   password: string;

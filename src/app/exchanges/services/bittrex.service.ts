@@ -14,9 +14,11 @@ import {HttpClient} from "@angular/common/http";
 import * as moment  from "moment";
 import {StorageService} from "../../services/app-storage.service";
 import {MappersBooks} from "../../com/mappers-books";
+import {APIBooksService} from "../../services/books-service";
+
 
 @Injectable()
-export class BittrexService {
+export class BittrexService implements APIBooksService{
 
   markets:{[pair:string]:VOMarket};
   //markets$:Observable<{[pair:string]:VOMarket}>;
@@ -186,9 +188,10 @@ export class BittrexService {
   getOrderBook(base:string, coin: string, depthMax = '50') {
 
          let url = 'api/bittrex/getorderbook/' +base +'-' +coin + '/' + depthMax;
+
       return this.http.get(url).map(res => {
         let r = (<any>res).result;
-        console.log(r);
+        console.log('books ', r);
 
         return r;// MappersBooks.bittrex(r, price);
 

@@ -13,6 +13,8 @@ import {MappersBooks} from "../../com/mappers-books";
 
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
 import {BuySellModel} from "../../models/buy-sell-model";
+import {BooksService} from "../../services/books-service";
+
 
 
 
@@ -28,7 +30,10 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   priceBase:number;
   priceCoin:number;
   amountCoin:number;
+  amountBase:number;
 
+
+  rateByBooks:{buy:number, sell:number} = {buy:0, sell:0};
   selectMarket:VOMarket[];
 
   rateAvarage:number;
@@ -91,6 +96,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     private route:ActivatedRoute,
     private router:Router,
     private privateService:BittrexPrivateService,
+    private booksService:BooksService,
     private snackBar:MatSnackBar
   )
   {
@@ -101,7 +107,16 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   private sub1:Subscription;
   private sub2:Subscription;
+  private sub3:Subscription;
   ngOnInit() {
+
+    this.booksService.setService(this.privateService.publicService);
+   this.sub3 =  this.booksService.subscribeForRate().subscribe(booksRate=>{
+     booksRate.buyUS =  +(booksRate.buy * this.priceBase).toPrecision(4);
+     booksRate.sellUS =  +(booksRate.sell * this.priceBase).toPrecision(4);
+
+      this.rateByBooks = booksRate;
+    })
     let sub = this.privateService.marketCap.getCoinsObs().subscribe(res=>{
       if(res){
         this.MC = res;
@@ -120,9 +135,10 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   }
 
-  checkCargeAmount(){
+  checkChargeAmount(){
 
   }
+
   onChargeClick(){
     this.isCharging = !this.isCharging;
     if(!this.isCharging){
@@ -140,12 +156,61 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   onBuyClick(){
     console.log('Buy');
+    let action = 'Buy';
+    let balance = this.balanceBase.balanceUS;
+
+    let amountUS = this.amountUS;
+    let isMax = (amountUS > balance);
+    if(isMax) amountUS = (balance - (balance * 0.001));
+    this.processAction(action, amountUS, isMax);
+
   }
+
+
 
   onSellClick(){
-    console.log('Sell');
+    let action = 'Sell';
+    let balance = this.balanceCoin.balanceUS;
+
+    let amountUS = this.amountUS;
+    let isMax = (amountUS > balance);
+    if(isMax) amountUS = (balance - (balance * 0.001));
+    this.processAction(action, amountUS, isMax);
 
   }
+
+  processAction(action,  amountUS, isMax){
+
+    console.log(action);
+
+    let amountBase = amountUS / this.priceBase;
+
+
+    console.log('amountBase ' + amountBase + ' priceBase ' + this.priceBase );
+
+    this.booksService.refreshBooks(action, amountBase).then((rate)=>{
+
+      let rateUS = (rate * this.priceBase).toPrecision(4);
+      console.log(' rateUS  ' + rateUS + ' rate ' + rate);
+      let amountCoin = amountBase * rate;
+      console.log(' amountCoin ' + amountCoin + ' on balance ' + this.modelBuySell.balanceCoin );
+
+
+      let fee = (amountUS * 0.001).toFixed(2);
+      setTimeout(()=>{
+        if(confirm(action + ' $'+ amountUS + ' ' +this.modelBuySell.coin +'\nPrice: $' + rateUS + '\nFee: $' + fee)){
+
+        }
+      }, 200);
+
+
+      //this.modelBuySell.balanceCoin
+
+
+    })
+  }
+
+
  /* onAmountBaseUSChanged(evt){
     //console.log(this.transfer.amountBaseUS);
   }*/
@@ -164,6 +229,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       this.priceBase = this.MC[this.modelBuySell.base].price_usd;
       this.modelBuySell.priceBase  =  this.priceBase;
 
+
    /* let symbol = this.currentBalance.symbol;
     let mc = mcData[symbol];
     console.log(mc)
@@ -177,7 +243,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     if(this.sub1)this.sub1.unsubscribe();
     if(this.sub2)this.sub2.unsubscribe();
-
+    if(this.sub3)this.sub3.unsubscribe();
   }
 
   onRateAvarage(evt){
@@ -226,6 +292,26 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   }*/
 
+
+  onRefreshBooksClick(){
+    this.booksService.refreshBooks();
+  }
+
+
+  amountUS:number;
+  onAmountChanged(evt){
+    console.log(this.amountUS);
+    this.amountBase = +(this.amountUS / this.priceBase).toPrecision(8);
+
+    this.downloadBooks();
+  }
+
+  downloadBooks(){
+    let amountBase = this.amountBase;
+    console.log('amountBase ' + amountBase + ' base '+ this.modelBuySell.base + ' coin '+this.modelBuySell.coin);
+    if(!amountBase || !this.modelBuySell.base || !this.modelBuySell.coin) return;
+    this.booksService.setAmount(this.modelBuySell.base, this.modelBuySell.coin,this.amountBase );
+  }
   refrshBalances(){
     this.privateService.refreshBalances();
   }
@@ -238,7 +324,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
  populateBalances(){
-
    let sub = this.privateService.balances$.subscribe(res=>{
      if(!res) return;
 
@@ -260,7 +345,9 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
          balanceUS:0
        };
 
+       this.modelBuySell.charge = balanceCoin.balanceUS;
        this.balanceCoin = balanceCoin;
+
      }
 
      this.setPriceBase();
@@ -281,10 +368,12 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   setMarket(pair:string){
 
+    console.warn(' setMarket ' + pair);
    if(!pair) pair = 'undefined';
     let ar =  pair.split('_');
     if(ar.length == 2){
       this.modelBuySell.market = pair;
+      this.booksService.setMarket(ar[0], ar[1])
       this.populateBalances();
       //this.downloadBooks();
      // this.downloadHistory();
