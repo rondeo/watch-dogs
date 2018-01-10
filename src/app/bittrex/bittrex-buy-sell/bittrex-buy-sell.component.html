@@ -1,0 +1,315 @@
+<div>
+    <section>
+        <h3>
+            <span class="btn small" (click)="onMarketClick()">{{modelBuySell.market}}</span>
+
+
+
+            <span><span class="btn fa fa-usd fa-lg" (click)="onChargeClick()"></span><span>{{modelBuySell.charge}}</span></span>
+
+            <!--<span>{{modelBuySell.amountCoin}}</span>
+            <span>${{modelBuySell.amountCoinUS}}</span>-->
+        </h3>
+
+
+
+        <div *ngIf="isCharging">
+            <span>{{balanceBase.symbol}}</span>
+            <span>${{balanceBase.balanceUS}}</span>
+            <span>{{balanceCoin.symbol}}</span>
+            <span>${{balanceCoin.balanceUS}}</span>
+
+            Charge:
+            <mat-input-container class="w5">
+                <input  matInput placeholder="Charge Amount" type="number" [(ngModel)] = "modelBuySell.charge" (ngModelChange)="onChargeAmountChaged($event)">
+            </mat-input-container>
+
+        </div>
+
+        <div *ngIf="marketsSelected">
+            <mat-form-field class="w9" >
+                <mat-select placeholder="Select Market" (change)="onMarketSelected($event)">
+                    <mat-option *ngFor="let selectMarket of marketsSelected" [value]="selectMarket.pair">
+                        {{selectMarket.pair}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+
+        <div>
+            Last: <span>${{priceCoin}}</span>
+        </div>
+
+        <div>
+            <app-market-books
+                    [base]="modelBuySell.base"
+                    [coin]="modelBuySell.coin"
+                    [priceCoin]="1"
+                    [amountCoin]="1"
+            ></app-market-books>
+        </div>
+        <br/>
+
+
+        <div>
+            <mat-radio-group [(ngModel)] = "modelBuySell.amountUS" >
+                <mat-radio-button value="100">$100</mat-radio-button>
+                <mat-radio-button value="200">$200</mat-radio-button>
+                <mat-radio-button value="400">$400</mat-radio-button>
+                <mat-radio-button value="600">$600</mat-radio-button>
+                <mat-radio-button value="1000">$1000</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <br/>
+        <div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
+            &nbsp;&nbsp;&nbsp;
+            <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
+            &nbsp;&nbsp;&nbsp;
+            <button  mat-raised-button color="accent" (click)="onSellClick()" >Sell All</button>
+        </div>
+    </section>
+    <hr/>
+
+    <app-market-history
+            [base]="modelBuySell.base"
+            [coin]="modelBuySell.coin"
+            [basePrice]="priceBase"
+            (rateAvarage)="onRateAvarage($event)"
+    ></app-market-history>
+
+   <!-- <section>
+        <div class="myFlex text-center" >
+            <div class="myFlexCol">
+                <a [ngClass]="isHistoryLoading?'scale05':''" class="btn fa fa-handshake-o fa-3x" title="History " (click)="onHistoryClick()"></a>
+            </div>
+            <div class="myFlexCol">
+                <a [ngClass]="isOrderBookLoading?'scale05':''" class="btn fa fa-book fa-3x" title="Orders Book " (click)="onBookClick()"></a>
+            </div>           &nbsp;&nbsp;
+
+        </div>
+    </section>-->
+   <!-- <div>
+
+            <table *ngIf="historyStats">
+                <tbody>
+                <tr class="small">
+                    <th><sup><small>{{historyLength}}</small></sup>{{durationD}}<small>m</small></th>
+                    <th><span [ngClass]="isBuying?'green':'red'">Amount</span></th>
+
+                    <th>$Price</th>
+                    <th>Max</th>
+                    <th>Max Price</th>
+
+                </tr>
+                <tr>
+                    <td><span [ngClass]="isSellUp?'green':'red'">Sold:</span></td>
+                    <td>{{historyStats.sold.amount}} </td>
+                    <td>{{historyStats.sold.priceUS}}</td>
+                    <td>{{historyStats.maxSold.amount}}</td>
+                    <td>{{historyStats.maxSold.priceUS}}</td>
+                </tr>
+                <tr>
+                    <td><span [ngClass]="isBuyUp?'green':'red'">Bought</span></td>
+                    <td>{{historyStats.bought.amount}}</td>
+                    <td>{{historyStats.bought.priceUS}}</td>
+                    <td>{{historyStats.maxBought.amount}}</td>
+
+                    <td>{{historyStats.maxSold.priceUS}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+    </div>
+-->
+
+
+
+
+
+
+        <!--<mat-select *ngIf="isCanBuy" placeholder="Buy or sell" (change)="onBuySellSelected($event)">
+            <mat-option value="Buy">
+              Buy
+            </mat-option>
+            <mat-option value="Sell">
+                Sell
+            </mat-option>
+        </mat-select>
+-->
+
+        <!--<mat-radio-group  [(ngModel)] = "modelBuySell.action" (ngModelChange)="onBuySellSelected($event)"  >
+            <mat-radio-button value="Buy">Buy</mat-radio-button>
+            <mat-radio-button value="Sell">Sell</mat-radio-button>
+        </mat-radio-group>
+-->
+
+       <!-- <mat-progress-spinner  mode="determinate" [value]="progress" color="accent" ></mat-progress-spinner>-->
+      <!--  <ng-container *ngIf="currentBalance">
+            <table>
+                <tr>
+                    <th>Price</th>
+                    <th>$US</th>
+                    <th>Balance</th>
+                    <th>Available</th>
+                    <th>Pending</th>
+                    <th>Address</th>
+                </tr>
+                <tr>
+                    <td>{{currentBalance.priceUS}}</td>
+                    <td><span class="btn" (click)="onAmounBalanceClick()">${{currentBalance.balanceUS}}</span></td>
+                    <td>{{currentBalance.balance}}</td>
+                    <td><span class="btn" (click)="onAvailableClick()">{{currentBalance.available}}</span></td>
+                    <td>{{currentBalance.pending}}</td>
+                    <td>{{currentBalance.address}}</td>
+                </tr>
+
+            </table>
+        </ng-container>
+        -->
+
+        <!--<div class="small">
+            <table>
+                <tbody>
+                <tr>
+                    <td>Base</td>
+                    <td>Balance</td>
+                    <td>Price</td>
+                    <td>$US</td>
+
+                    <td>Coin</td>
+                    <td>Balance</td>
+                    <td>Price</td>
+                    <td>$US</td>
+
+                </tr>
+                <tr *ngIf="balanceBase">
+                    <td>{{balanceBase.symbol}}</td>
+                    <td>{{balanceBase.available}}</td>
+                    <td>{{balanceBase.priceUS}}</td>
+                    <td><span class="btn" (click)="onAmountBaseClick()">{{balanceBase.balanceUS}}</span></td>
+
+                    <td>{{balanceCoin.symbol}}</td>
+                    <td>{{balanceCoin.available}}</td>
+                    <td>{{balanceCoin.priceUS}}</td>
+                    <td><span class="btn" (click)="onAmountCoinClick()">{{balanceCoin.balanceUS}}</span></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>-->
+   <!-- </section>-->
+   <!-- <hr/>-->
+   <!-- <section>
+        <small>{{transfer.base}}</small>
+        <small>{{transfer.amountBaseUS}}</small>
+        <span>{{transfer.action}}</span>
+        <span>{{transfer.coin}}</span>-->
+       <!-- <mat-radio-group  [(ngModel)] = "transfer.action" (ngModelChange)="onBuySellSelected($event)"  >
+            <mat-radio-button value="Buy">Buy</mat-radio-button>
+            <mat-radio-button value="Sell">Sell</mat-radio-button>
+        </mat-radio-group>
+-->
+
+
+
+      <!--  <mat-input-container  class="w5">
+            <input  matInput placeholder="$US" type="text" [(ngModel)] = "transfer.amountCoinUS" (ngModelChange)="onAmountUSChange($event)">
+        </mat-input-container>
+        <mat-input-container class="w6">
+            <input  matInput placeholder="Rate" type="text" [(ngModel)] = "transfer.rate" (ngModelChange)="onRateChange($event)">
+        </mat-input-container>
+-->
+       <!-- <mat-input-container>
+            <input  matInput placeholder="{{transfer.coin}}" type="text" [(ngModel)] = "transfer.amountCoin" (ngModelChange)="onAmounFromChange($event)" >
+        </mat-input-container>-->
+       <!-- <span>
+            fee: ${{transfer.feeUS}}
+        </span>
+        <small>{{transfer.coin}}</small>
+        <span>{{transfer.amountCoin}}</span>-->
+
+       <!-- <mat-input-container>
+            <input  matInput placeholder="Rate {{percentOfLast}}%" type="text" [(ngModel)] = "transfer.rate" (ngModelChange)="onRateChange($event)">
+        </mat-input-container>
+-->
+        <!--<mat-input-container>
+            <input  matInput placeholder="{{transfer.symbolTo}} (${{transfer.amountUSTo}})" type="text" readonly [ngModel] = "transfer.amountTo">
+        </mat-input-container>
+-->
+       <!-- <button  mat-raised-button color="accent" (click)="onActionClick()" disabled="{{!transfer.valid}}">{{transfer.action}}</button>-->
+
+  <!--  </section>-->
+
+  <!--  <section>
+        <div>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Last</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Bid</th>
+                    <th>Ask</th>
+                    <th>To Sell</th>
+                    <th>To Buy</th>
+                    <th>Volume</th>
+                </tr>
+                <tr>
+                    <td>{{currentMarket.pair}}</td>
+                    <td><span class="btn" (click)="onRateClick(currentMarket.Last)">{{currentMarket.Last}}</span></td>
+                    <td><span class="btn" (click)="onRateClick(currentMarket.High)">{{currentMarket.High}}</span></td>
+                    <td><span class="btn" (click)="onRateClick(currentMarket.Low)">{{currentMarket.Low}}</span></td>
+                    <td><span class="btn" (click)="onRateClick(currentMarket.Bid)">{{currentMarket.Bid}}</span></td>
+                    <td><span class="btn" (click)="onRateClick(currentMarket.Ask)">{{currentMarket.Ask}}</span></td>
+                    <td title="Open Sell Orders">{{currentMarket.OpenSellOrders}}</td>
+                    <td title="Open Buy Orders">{{currentMarket.OpenBuyOrders}}</td>
+                    <td>{{currentMarket.Volume}}</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </section>-->
+
+    &nbsp;&nbsp;<!-- <span class="fabtn fa fa-list" title="Show all Markets details" (click)="onShowMarketsClick()"></span>
+    &nbsp;&nbsp;&lt;!&ndash; <span class="fabtn fa fa-info" title="Show Original numbers"  (click)="onShowMarketsClick()"></span>&ndash;&gt;
+   -->
+<!--
+    <table>
+        <tbody>
+        <tr>
+            <th>Coin</th>
+            <th>%1h</th>
+            <th>%24h</th>
+            <th>%7d</th>
+            <th>MC</th>
+            <th>Graph</th>
+
+        </tr>
+        <tr>
+            <td>{{marketCapTo.symbol}}</td>
+            <td>{{marketCapTo.percent_change_1h}}</td>
+            <td>{{marketCapTo.percent_change_24h}}</td>
+            <td>{{marketCapTo.percent_change_7d}}</td>
+            <td><a class="btn fa fa-line-chart" (click)="onGraphMcClick()"></a></td>
+            <td><a class="btn fa fa-line-chart" (click)="onGraphMarketClick()"></a></td>
+        </tr>
+        </tbody>
+
+    </table>-->
+<!--    <section>
+
+        <div>
+            <app-markets-summary [markets]="symbolMarkets" [title]="symbolMarketsTitle" (market)="onMarketClickInList($event)"></app-markets-summary>
+        </div>
+    </section>
+
+<br/>-->
+
+</div>

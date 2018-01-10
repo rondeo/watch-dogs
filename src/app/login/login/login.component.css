@@ -1,0 +1,23 @@
+
+#LoginScreen{
+    width: 250px;
+    height: 300px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#LoginScreen form{
+    height: 300px;
+    margin-top: 1em;
+}
+
+mat-chip-list{
+    position: relative;
+}
+
+mat-chip{
+    position: absolute;
+    top: 0;
+    left: 0px;
+    width: 150px;
+}

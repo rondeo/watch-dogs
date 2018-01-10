@@ -1,0 +1,22 @@
+<div>
+    <mat-sidenav-container>
+        <mat-sidenav #coinslist>
+            <mat-list>
+                <a mat-list-item routerLink='/market-cap/selected'>Coin Market Cap</a>
+                <a mat-list-item routerLink='/all-in-one'>All In One&nbsp; </a>
+            </mat-list>
+        </mat-sidenav>
+
+    <nav>
+        <a class="btn" (click)="coinslist.open()">Menu</a>
+
+        <a class="btn" routerLink='/all-in-one-v2/search'>Search Coin</a>
+        <a class="btn" routerLink='/all-in-one-v2/coins'>Coins List</a>
+        <a [ngClass]="exchange.isError?'not-available':''"  class="btn" *ngFor="let exchange of exchanges" (click)="onExchangeClick(exchange)" >{{exchange.config.uid}}</a>
+
+    </nav>
+
+        <router-outlet></router-outlet>
+
+    </mat-sidenav-container>
+</div>

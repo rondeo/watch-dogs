@@ -1,0 +1,35 @@
+<div>
+
+        <table (click)="onTableclick($event)">
+            <tbody>
+            <tr class="small">
+                <th>Graph</th>
+                <th class="btn" (click)="onClickHeader('symbol')">Symbol</th>
+                <th  class="btn" (click)="onClickHeader('percent_change_1h')">%1h</th>
+                <th  class="btn" (click)="onClickHeader('percent_change_24h')" >%24h</th>
+                <th  class="btn" (click)="onClickHeader('percent_change_7d')">%7d</th>
+                <th  class="btn" (click)="onClickHeader('price_usd')">$US</th>
+                <th  class="btn" (click)="onClickHeader('rank')"><small>Rank</small></th>
+            </tr>
+
+            <tr *ngFor="let item of consAvailable">
+                <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn fa fa-line-chart"></a></td>
+                <td  title="{{item.name}}" class="btn" (click)="onSymbolClick(item)">{{item.symbol}}</td>
+                <td>
+                    <span [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">{{item.percent_change_1h}}</span>
+                </td>
+                <td>
+                    <span [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">{{item.percent_change_24h}}</span>
+
+                </td>
+                <td>
+                    <span [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">{{item.percent_change_7d}}</span>
+                </td>
+
+                <td class="small ">{{item.price_usd}}</td>
+                <td>{{item.rank}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+</div>

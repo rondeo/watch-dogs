@@ -1,0 +1,36 @@
+<div>
+    <section>
+        <nav>
+            <a [ngClass]="exchange.isError?'not-available':''"  class="btn" *ngFor="let exchange of exchanges" (click)="onExchangeClick(exchange)" >{{exchange.config.uid}}</a>
+
+        </nav>
+    </section>
+
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <th>Exchange</th>
+                <th>Base</th>
+                <th>Coin</th>
+                <th>Volume</th>
+                <th>Last</th>
+                <th>$ Last</th>
+
+            </tr>
+
+            <tr *ngFor="let market of marketsResults">
+                <td>{{market.exchange}}</td>
+                <td>{{market.base}}</td>
+                <td>{{market.coin}}</td>
+                <td>{{market.Volume}}</td>
+                <td>{{market.Last}}</td>
+                <td>{{market.usLast}}</td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>

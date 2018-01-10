@@ -1,0 +1,26 @@
+<div>
+    <nav  class="btns-row">
+
+        <a class="btn" routerLink='/all-in-one-v2'>V2</a>
+        <a class="btn" routerLink='/market-cap/all-coins'>MC</a>
+        <a class="btn fa fa-search"  routerLink="/all-in-one/search"></a>
+        <a routerLink="/all-in-one/gainers-losers"><span class="btn fa fa-thumbs-down"></span><span class="btn fa fa-thumbs-up"></span></a>
+
+        <div>
+            <span *ngFor="let api of apis">
+                  <input type="checkbox" [(ngModel)]="api.selected"  (ngModelChange)="onChange($event, api)">
+                <a  routerLink='/all-in-one/data/{{api.uid}}'> {{api.config.name}}</a>
+            </span>
+        </div>
+
+        <!--<ng-container *ngIf="!!(isLoggedIn$ | async)">-->
+        <a  routerLink='/all-in-one/balances'> Balances</a>
+     <!--   </ng-container>-->
+
+    </nav>
+    <nav   class="right">
+        <a  class="btn" (click)="onLoginClick()"> Login</a>
+        <a  class="btn" (click)="onLogoutClick()">Logout</a>
+    </nav>
+    <router-outlet></router-outlet>
+</div>

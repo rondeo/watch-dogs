@@ -1,0 +1,39 @@
+<div>
+    <h3>Poloniex</h3>
+    <small *ngIf="marketsAr">Total {{marketsAr.length}}</small>
+    <a mat-list-item routerLink='/poloniex/filter'>Filter </a>
+    <section>
+        <table>
+            <tr>
+                <th>Pair</th>
+                <th>Last</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>% Change</th>
+                <th>Base Volume</th>
+                <th>High 24h</th>
+                <th>Low 24h</th>
+
+
+            </tr>
+            <tbody>
+            <tr *ngFor="let item of marketsAr">
+                <td>{{item.pair}}</td>
+                <td>{{item.last}}</td>
+                <td>{{item.high}}</td>
+                <td>{{item.low}}</td>
+                <td>{{item.percentChange}}</td>
+                <td>{{item.baseVolume}}</td>
+                <td>{{item.low24hr}}</td>
+                <td>{{item.high24hr}}</td>
+
+
+
+            </tr>
+            </tbody>
+
+        </table>
+
+    </section>
+
+</div>

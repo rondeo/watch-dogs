@@ -1,0 +1,26 @@
+<div>
+    <section>
+        <h3>Coinbase <small>currencies</small></h3>
+    </section>
+    <section>
+        <table>
+            <tr>
+                <td>Code</td>
+                <td>Name</td>
+                <td>$US BTC</td>
+                <td>$US ETH</td>
+                <td>Minimum</td>
+            </tr>
+            <tbody>
+            <tr *ngFor="let item of collection">
+                <td>{{item.code}}</td>
+                <td>{{item.label}}</td>
+                <td>{{item.btc}}</td>
+                <td>{{item.eth}}</td>
+                <td>{{item.min}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </section>
+</div>

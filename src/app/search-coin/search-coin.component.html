@@ -1,0 +1,45 @@
+<div>
+    <section>
+        <h3>Search</h3>
+
+            <small>(
+                <span>ShapeShift,</span>
+                <span>Changely,</span>
+                <span>YoBit,</span>
+                <span>Poloniex,</span>
+                <span>Bittrex,</span>
+                <span>BitFinex,</span>
+                <span>CoinBase,</span>
+                <span>CoinExchange,</span>
+                <span>Hit BTC,</span>
+                <span>Kraken</span>
+                )
+            </small>
+
+
+
+        <div id="SearchResults">
+
+        <table>
+            <tbody>
+            <tr *ngFor="let result of searchResults">
+                <td>{{result.exchange}}</td>
+                <td>{{result.symbol}}</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        <div>
+
+            <mat-input-container>
+                <input [(ngModel)]="currentSearch"  matInput  placeholder="Search" name="search" >
+            </mat-input-container>
+            <mat-progress-spinner  mode="determinate" [value]="progress" color="accent" ></mat-progress-spinner>
+            <button mat-raised-button color="accent" [disabled]="progress!==0" (click)="onSubmit()">Submit</button>
+        </div>
+    </section>
+    <br/>
+    <section id="SearchAllCoin">
+        <app-sortable-table [consAvailable]="marketCapAr" (selectedSymbol)="onSelectSymbol($event)"></app-sortable-table>
+    </section>
+</div>

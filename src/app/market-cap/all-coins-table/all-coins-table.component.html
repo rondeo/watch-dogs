@@ -1,0 +1,46 @@
+<div>
+    <div>
+        <small *ngIf="allCoinsData">Total: {{allCoinsData.length}}</small>
+        <small>Average 1h: </small> <span  [ngClass]="average1h>0?'green':'red'">{{average1h}}%</span>
+        <small> 24h: </small> <span [ngClass]="average24h>0?'green':'red'">{{average24h}}%</span>
+        <small> 7d : </small> <span [ngClass]="average7d>0?'green':'red'">{{average7d}}%</span>
+    </div>
+    <section>
+        <table>
+            <tr>
+                <th class="btn" (click)="onClickHeader('rank')"><small>Rank</small></th>
+                <th>#</th>
+                <th>ID</th>
+                <th class="btn" (click)="onClickHeader('symbol')">Symbol</th>
+                <th class="btn" (click)="onClickHeader('percent_change_1h')">%1h</th>
+                <th class="btn" (click)="onClickHeader('percent_change_24h')" >%24h</th>
+                <th class="btn" (click)="onClickHeader('percent_change_7d')">%7d</th>
+                <th >$US</th>
+                <th>$B</th>
+
+
+              <!--  <th (click)="onClickHeader('market_cap_usd')">market cap usd</th>-->
+
+            </tr>
+
+            <tbody *ngFor="let item of allCoinsData">
+            <tr>
+                <td>{{item.rank}}</td>
+                <td><input type="checkbox"  (change)="onCoinSelected($event, item)" [checked]="item.selected"   name="selected"/></td>
+                <td class="w120 ell">{{item.id}}</td>
+                <td>{{item.symbol}}</td>
+                <td><span [ngClass]="item.percent_change_1h>0?'green':'red'">{{item.percent_change_1h}}</span></td>
+                <td><span  [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">{{item.percent_change_24h}}</span></td>
+                <td ><span [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">{{item.percent_change_7d}}</span></td>
+                <td>{{item.price_usd}}</td>
+                <td>{{item.price_btc}}</td>
+                <!--<td>{{item.market_cap_usd}}</td>-->
+
+
+            </tr>
+
+            </tbody>
+        </table>
+    </section>
+</div>
+

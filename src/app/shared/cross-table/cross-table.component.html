@@ -1,0 +1,25 @@
+<section class="scrolable">
+    <table>
+
+        <tbody>
+        <tr>
+            <td>
+
+            </td>
+            <td *ngFor="let coin1 of tableHeaders">
+                {{coin1}}
+            </td>
+        </tr>
+        <tr *ngFor="let coin2 of tableBody;  let i = index">
+            <td>
+                {{coin2}}
+            </td>
+            <td *ngFor="let coin3 of tableHeaders; let j = index">
+                {{(i==j)?'x':''}}
+
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+</section>

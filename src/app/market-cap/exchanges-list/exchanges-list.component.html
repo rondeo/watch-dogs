@@ -1,0 +1,22 @@
+<div>
+    <section>
+       <h4> Exchanges</h4><small *ngIf="exchangesCoin"> Total: {{exchangesCoin.length}} </small>
+        <table>
+            <tbody>
+            <tr>
+                <th>Exchange</th>
+                <th>Market</th>
+                <th>Candles</th>
+                <th>CMC</th>
+            </tr>
+            <tr *ngFor="let exchange of exchangesCoin">
+                <td><div class="w8 ell"><a title="{{exchange.pairUrl}}" href="{{exchange.pairUrl}}">{{exchange.exchange}}</a></div></td>
+                <td><div class="w6 ell"><small>{{exchange.pairUrl.substr(8)}}</small></div></td>
+                <td>{{exchange.pair}}</td>
+                <td><small>{{exchange.coinId}}</small></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>

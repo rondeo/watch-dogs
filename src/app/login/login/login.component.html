@@ -1,0 +1,195 @@
+<div id="LoginScreen">
+    <h4>Email service login manager</h4>
+    <small *ngIf="login?.nickname">Hi {{login.nickname}}</small>
+
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+        <mat-tab label="Login">
+            <form #f1="ngForm">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input #username
+                                   matInput
+                                   [(ngModel)]="login.email"
+                                   required
+                                   minlength="6" type="text" placeholder="email" name="email" type="email"/>
+                        </mat-input-container>
+                    </mat-list-item>
+
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input matInput
+                                   (blur)="checkPassword()"
+                                   placeholder="Password"
+                                   name="password"
+                                   [(ngModel)]="login.password"
+                                   required
+                                   minlength="6"
+                                   type ="password"
+                                   style="width: 100%"/>
+                        </mat-input-container>
+                    </mat-list-item>
+
+                    <br/>
+                    <mat-list-item>
+                        <button mat-raised-button color="accent" [disabled]="!f1.valid" (click)="onLogin()">
+                            Sign In
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+
+            </form>
+        </mat-tab>
+        <mat-tab label="Register">
+            <form #f2="ngForm" >
+
+                <mat-list>
+                    <mat-list-item>
+                        <mat-chip-list *ngIf="exists">
+                            <mat-chip color="accent" selected="true">
+                                User with this email exists
+                                <!--  <br/>
+                                  <a  [routerLink]="['/login/forgot-password']">Reset Password</a>-->
+                            </mat-chip>
+
+                        </mat-chip-list>
+
+                        <mat-input-container>
+                            <input #username
+                                   matInput
+                                   [(ngModel)]="login.email"
+                                   required
+                                   minlength="6" type="text"
+                                   placeholder="email"
+                                   name="email"
+                                   type="email"/>
+                        </mat-input-container>
+
+                    </mat-list-item>
+
+
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input matInput
+                                   (blur)="checkPassword()"
+                                   placeholder="Password"
+                                   name="password"
+                                   [(ngModel)]="login.password"
+                                   required
+                                   minlength="6"
+                                   type ="password"
+                                   style="width: 100%"/>
+                        </mat-input-container>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input matInput
+                                   (blur)="checkPassword()"
+                                   placeholder="Confirm Password"
+                                   name="password"
+                                   [(ngModel)]="confirmPassword"
+                                   required
+                                   minlength="6"
+                                   type ="password"
+                                   style="width: 100%"/>
+                        </mat-input-container>
+                    </mat-list-item>
+
+                    <br/>
+                    <mat-list-item>
+                        <button mat-raised-button color="accent" [disabled]="!f2.valid || notMatch"
+                                (click)="onRegister()">
+                            Register
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+            </form>
+        </mat-tab>
+        <mat-tab label="Forget Password">
+            <form #f3="ngForm" >
+
+                <mat-list>
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input #username matInput [(ngModel)]="login.email" required
+                                   minlength="6" type="text" placeholder="Email" name="email" type="email"/>
+                        </mat-input-container>
+                    </mat-list-item>
+                    <br/>
+                    <mat-list-item>
+                        <button mat-raised-button color="accent" [disabled]="!f3.valid" (click)="onRestPassword()">
+                            Reset Password
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+
+            </form>
+        </mat-tab>
+
+        <mat-tab label="New nickname">
+            <form #f5="ngForm"  autocomplete="off">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input #username
+                                   matInput
+                                   [(ngModel)]="login.email"
+                                   required
+                                   minlength="6" type="text" placeholder="email" name="email" type="email"/>
+                        </mat-input-container>
+                    </mat-list-item>
+
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input matInput
+                                   (blur)="checkPassword()"
+                                   placeholder="Password"
+                                   name="password"
+                                   [(ngModel)]="login.password"
+                                   required
+                                   minlength="6"
+                                   type ="password"
+                                   style="width: 100%"/>
+                        </mat-input-container>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-input-container>
+                            <input matInput
+                                   placeholder="New Nickname"
+                                   name="nickname"
+                                   [(ngModel)]="login.nickname"
+                                   required
+                                   minlength="6"
+                                   type ="text"
+                                   style="width: 100%"/>
+                        </mat-input-container>
+                    </mat-list-item>
+
+                    <br/>
+                    <mat-list-item>
+                        <button mat-raised-button color="accent" [disabled]="!f5.valid" (click)="onRequestNewNickname()"> Save </button>
+
+                    </mat-list-item>
+                </mat-list>
+
+            </form>
+        </mat-tab>
+
+        <mat-tab label="Logout">
+            <form #f3="ngForm" >
+
+                <mat-list>
+                   <br/>
+                    <mat-list-item>
+                        <button mat-raised-button color="accent" [disabled]="!f3.valid" (click)="onLogout()">
+                           Logout
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+
+            </form>
+        </mat-tab>
+
+
+    </mat-tab-group>
+</div>

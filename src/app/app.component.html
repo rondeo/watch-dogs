@@ -1,0 +1,69 @@
+<diV>
+    <div>
+    </div>
+    {{menu | async}}
+    <mat-sidenav-container >
+        <mat-sidenav #sidenav>
+            <mat-list>
+
+                <a mat-list-item routerLink='/market-cap/selected'>Coin Market Cap</a>
+               <!-- <a mat-list-item routerLink='/all-in-one'>All In One&nbsp; </a>-->
+
+                <hr/>
+                <a mat-list-item routerLink='/my-bittrex/data'>Bittrex &nbsp; <small> (Las Vegas, USA)</small></a>
+               <!-- <a mat-list-item routerLink='poloniex/data'>Poloniex  &nbsp;<small>(Delaware, USA)</small></a>
+
+                <a mat-list-item routerLink='/shape-shift-market-cap'>ShapeShift &nbsp; <small>(Switzerland) </small></a>
+
+                <a mat-list-item routerLink='/changelly'>Changelly &nbsp;<small> (Prague, Czech Rep.)</small></a>
+
+                <a mat-list-item routerLink='hit-btc/market'>Hit BTC &nbsp;<small>(Copenhagen, Denmark)</small> </a>
+                <a mat-list-item routerLink='yo-bit/market'>Yo Bit &nbsp; <small>(Moscow, Russia)</small></a>
+                <a mat-list-item routerLink='coin-exchange/markets'>CoinExchange &nbsp; <small></small></a>
+                <a mat-list-item routerLink='exchanges/kraken'>Kraken &nbsp; <small>(San Fran, USA)</small></a>
+                <a mat-list-item routerLink='exchanges/bitfinex'>BitFinex &nbsp; <small>(Hong-Kong)</small></a>
+                <a mat-list-item routerLink='exchanges/novaexchange'>Nova Exchange &nbsp;<small>(Sweden)</small></a>
+                <a mat-list-item routerLink='exchanges/cryptopia'>Cryptopia &nbsp;<small>(New Zealand)</small></a>
+
+                <hr/>
+
+                <a mat-list-item routerLink='/coinbase/currencies'>Coinbase &nbsp;<small> (San Fran, USA)</small></a>
+                <a mat-list-item routerLink='/exchanges/search'>Search &nbsp;</a>
+-->
+                <hr/>
+                <a mat-list-item routerLink='/email-service'>Watchdogs</a>
+                <a mat-list-item routerLink='/login/register'>Register</a>
+            </mat-list>
+
+        </mat-sidenav>
+
+        <div class="navbar">
+            <small><small class="btn" (click)="onRefreshClick()">{{countDown}}</small></small>
+            <div (click)="sidenav.open()" class="fa fa-bars btn large round">  </div>            &nbsp;
+            <ng-container *ngIf="isMenu">
+                <small> H: {{historyCounter}}</small>
+                <strong class="small">{{nickname}}</strong>
+                <a *ngIf="!isLogedIn" class="btn" (click)="onLogin()">Login</a>
+                <a *ngIf="!!isLogedIn" class="btn" (click)="onLogout()">Logout</a>
+                <a  class="btn dred small " (click)="onClearStorage()">Clear Storage</a>
+            </ng-container>
+
+
+
+                <div class="right">
+                    <a (click)="onDogClick()" class="btn watchdog">    </a>
+
+
+                </div>
+
+
+        </div>
+        <div id="MainOutlet">
+            <br/>
+
+            <router-outlet></router-outlet>
+            <router-outlet name="popup"></router-outlet>
+        </div>
+
+    </mat-sidenav-container>
+</diV>

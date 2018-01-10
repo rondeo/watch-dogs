@@ -1,0 +1,48 @@
+<div class="content">
+      <section>
+        <h4> Watch Dogs </h4>
+        <small>Total {{watchDogs.length}}</small>
+
+        <button color="accent" mat-raised-button  (click)="startStopTimer()" title="{{start_stop}}">
+            <mat-spinner mode="determinate" value="{{progress}}"></mat-spinner>
+            <span *ngIf="!isRunning" class="fa fa-play"></span>
+            <span *ngIf="isRunning" class="fa fa-pause"></span>
+        </button>
+          <span>{{seconds}}s</span>
+          <span> Counter {{counter}}</span>
+
+        <table>
+            <tr>
+                <th>Status</th>
+                <th>ID</th>
+                <th>Name</th>
+               <th>Description</th>
+                <th>Script</th>
+                <th>1h%</th>
+                <th>24h%</th>
+                <th>7days%</th>
+                <th>$US</th>
+                <th>Rank</th>
+            </tr>
+
+            <tbody *ngFor="let dog of watchDogs">
+            <tr>
+                <td><div class="red btn {{dog.statusIcon}}" (click)="onStatusClick(dog)"></div></td>
+                <td><small class="btn" (click)="onDogClick(dog)">{{dog.uid}}</small></td>
+                <td>{{dog.dogName}}</td>
+                <td><div class="ell w7">{{dog.description}}</div></td>
+                <td><div class="btn {{dog.scriptIcon}}" (click)="onScriptClick(dog)"></div></td>
+                <td>{{dog.marketCap.percent_change_1h}}</td>
+                <td>{{dog.marketCap.percent_change_24h}}</td>
+                <td>{{dog.marketCap.percent_change_7d}}</td>
+                <td>{{dog.marketCap.price_usd}}</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </section>
+
+
+
+</div>

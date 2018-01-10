@@ -1,0 +1,41 @@
+.scrollContent{
+   /* background-color: #333;*/
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.scrollContent p {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+mat-spinner {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 2px 5px 0px -15px;
+}
+
+
+
+
+table{
+    width: 100%;
+}
+table th{
+    text-align: left;
+}
+
+table td{
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+
+}
+
+table .history{
+    font-size: 10px;
+}
+

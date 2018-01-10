@@ -1,0 +1,35 @@
+<div>
+    <h2>
+        Exchange
+        <small>{{counter}}</small>
+        <button mat-raised-button  (click)="startStop()">
+       <mat-spinner *ngIf="active" color="accent" mode="determinate" value="{{seconds}}">
+
+        </mat-spinner>
+            {{start_stop}}
+        </button>
+    </h2>
+
+    <div>
+        <h3>Wallets</h3>
+
+        <table>
+            <tr><th>Wallet</th><th>Amount</th><th>Price $US</th><th> History $US</th><th>Ptice mB</th><th>1h</th><th>24h</th><th>7d</th></tr>
+            <tr *ngFor="let wallet of myWallets" >
+                <td>{{wallet.label}}</td>
+                <td (click)="onUsdClick(wallet)">${{wallet.usd}} <span (click)="updateBalance(wallet)" class="fa fa-refresh"></span></td>
+                <td>{{wallet.market.price_usd.toFixed(2)}}</td>
+                <td class="history">{{wallet.analitics.price_usd_historyDisplay}}</td>
+                <td>{{(wallet.market.price_btc*1000).toFixed(2)}}</td>
+                <td [style.color] = "(wallet.market.percent_change_1h > 0)? 'green' : 'red'">{{wallet.market.percent_change_1h}}</td>
+                <td [style.color] = "(wallet.market.percent_change_24h > 0)? 'green' : 'red'">{{wallet.market.percent_change_24h}}</td>
+                <td [style.color] = "(wallet.market.percent_change_7d > 0)? 'green' : 'red'">{{wallet.market.percent_change_7d}}</td>
+
+
+            </tr>
+        </table>
+
+
+    </div>
+
+</div>

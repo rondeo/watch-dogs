@@ -1,0 +1,40 @@
+<section>
+    <h4>Open Orders</h4>
+    <table>
+        <tbody>
+        <tr>
+            <td>Market</td>
+            <td>OrderType</td>
+
+            <td>Quantity</td>
+            <td>Remaining</td>
+
+            <td>Limit</td>
+            <td>UID</td>
+
+
+            <td>Active</td>
+            <td>Opened</td>
+
+            <td>Cancel</td>
+        </tr>
+        <tr *ngFor="let order of openOrders">
+            <td><span class="small">{{order.Exchange}}</span></td>
+            <td><span class="x-small">{{order.OrderType}}</span></td>
+            <td>{{order.Quantity}}</td>
+            <td>{{order.QuantityRemaining}}</td>
+            <td>{{order.Limit}}</td>
+
+            <td><span class="x-small">{{order.OrderUuid}}</span></td>
+
+            <td>{{order.IsOpen}}</td>
+            <td><span class="x-small">{{order.Opened}}</span></td>
+            <td><span class="btn fa fa-minus-circle dred" (click)="onCancelOrderClick(order)"></span></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+

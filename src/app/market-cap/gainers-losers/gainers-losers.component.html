@@ -1,0 +1,34 @@
+<div>
+    <br/>
+    <section>
+            <table>
+                <tbody>
+                <tr>
+                    <th>Graph</th>
+                    <th>Rank</th>
+                    <th>Symbol</th>
+                    <th  class="btn" (click)="onClickHeader('percent_change_1h')">1h%</th>
+                    <th  class="btn" (click)="onClickHeader('percent_change_24h')" >24h%</th>
+                    <th  class="btn" (click)="onClickHeader('percent_change_7d')">7d%</th>
+                    <th>$US</th>
+                    <th>$B</th>
+                    <th>ID</th>
+                </tr>
+
+                <tr *ngFor="let item of top100">
+
+                    <td><a class="fa fa-line-chart" target="_blank" href="https://coinmarketcap.com/currencies/{{item.id}}/"></a></td>
+                    <td>{{item.rank}}</td>
+                    <td><span class="btn" (click)="onSymbolClick(item)">{{item.symbol}}</span></td>
+                    <td class="w50" [ngClass]="item.percent_change_1h>0?'dgreen':'dred'" >{{item.percent_change_1h}}</td>
+                    <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'" >{{item.percent_change_24h}}</td>
+                    <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'" >{{item.percent_change_7d}}</td>
+                    <td class="small">{{item.price_usd}}</td>
+                    <td class="small">{{item.price_btc}}</td>
+                    <td class="small w80 ell" >{{item.id}}</td>
+                </tr>
+                </tbody>
+            </table>
+        <!-- <app-sortable-table [consAvailable]="gainersAr" (selectedSymbol)="onSymbolSelected($event)"></app-sortable-table>-->
+    </section>
+</div>

@@ -1,0 +1,13 @@
+.hide{
+    visibility: collapse;
+    display: none;
+}
+
+.icon{
+   /* transform: translateX(-10px);*/
+    margin-right: 0px;
+}
+
+table{
+    width: 100%;
+}

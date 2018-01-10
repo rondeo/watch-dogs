@@ -1,0 +1,116 @@
+<div class="content">
+
+    <section>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Symbol</th>
+                <th>1h%</th>
+                <th>24h%</th>
+                <th>7days%</th>
+                <th>$US</th>
+                <th>Rank</th>
+                <th>Coin Name</th>
+            </tr>
+
+            <tbody>
+
+            <tr>
+                <td><small>{{currentDog.uid}}</small></td>
+                <td><b><small>{{currentDog.dogName}}</small></b></td>
+                <td>{{currentDog.description}}</td>
+                <td><b><small>{{currentDog.marketCap.symbol}}</small></b></td>
+                <td>{{currentDog.marketCap.percent_change_1h}}</td>
+                <td>{{currentDog.marketCap.percent_change_24h}}</td>
+                <td>{{currentDog.marketCap.percent_change_7d}}</td>
+                <td>{{currentDog.marketCap.price_usd}}</td>
+                <td>{{currentDog.marketCap.rank}}</td>
+                <td><div class="w5 ell">{{currentDog.marketCap.name}}</div></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </section>
+    <section>
+
+        <div style=" display: flex; flex-direction: row" >
+            <div id="ScriptContentContainer">
+
+                <span>{{currentDog.uid}}</span>
+
+                <mat-select  [(ngModel)]="currentTrigger" id="SelectTrigger" #selectedTrigger placeholder="Select Variable" >
+                    <mat-option [value]="'send_notification'"> <span class="fa fa-flash"></span> Send Notification</mat-option>
+                    <mat-option *ngFor="let myvar of variablesAvailable" [value]="myvar.index">{{myvar.label}}</mat-option>
+                </mat-select>
+                <span class="fa fa-arrow-left"> </span>
+                <button mat-raised-button color="primary" (click)="insertTrigget(selectedTrigger)">
+                    <span class="fa fa-paste"></span>
+                    Insert
+                </button>
+                <button color="accent" mat-raised-button  (click)="runScript()" title="Run Script">
+                    <span class="fa fa-flash"></span>
+                    Test
+                </button>
+                <button mat-raised-button color="primary" (click)="saveDog()">
+                    <span class="fa fa-save"></span>
+                    Save
+                </button>
+
+
+
+                <div id="ScriptContent"
+                     #scriptContent
+                     contenteditable="true"
+                     spellcheck="false"
+                     (blur)="onScriptContentBlur(scriptContent)"
+                     (change)="onScriptContentChange(scriptContent)">
+                </div>
+            </div>
+
+            <div class="current-changes">
+
+                <h3>New Values</h3>
+                <table>
+                    <tbody>
+
+                    <tr *ngFor="let myvar of testVariables">
+                        <td>{{myvar.index}}</td>
+                        <td>
+                            <input style="width: 3em" type="number" [(ngModel)]="myvar.value"  name="value" />
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h3>Old Values</h3>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>old_percent_change_1h</td>
+                        <td>{{currentDog.marketCap.percent_change_1h}}</td>
+                    </tr>
+                    <tr>
+                        <td>old_percent_change_24h</td>
+                        <td>{{currentDog.marketCap.percent_change_24h}}</td>
+                    </tr>
+                    <tr>
+                        <td>old_percent_change_7d</td>
+                        <td>{{currentDog.marketCap.percent_change_7d}}</td>
+                    </tr>
+                    <tr>
+                        <td>old_price_usd</td>
+                        <td>{{currentDog.marketCap.price_usd}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>

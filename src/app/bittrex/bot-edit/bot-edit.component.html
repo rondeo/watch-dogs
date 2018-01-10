@@ -1,0 +1,171 @@
+<div>
+    <section *ngIf="botData">
+        <div>
+            <mat-checkbox [(ngModel)] = "botData.isSlack">Slack</mat-checkbox>
+            <mat-input-container class="w7" >
+                <input  matInput placeholder="Slack ID" type="text" [(ngModel)] = "botData.slackID"/>
+            </mat-input-container>
+
+            <mat-checkbox [(ngModel)] = "botData.active">Active</mat-checkbox>
+
+            <mat-checkbox [(ngModel)] = "botData.isTransfer">Transfer</mat-checkbox>
+            <button  mat-raised-button color="accent" (click)="onSaveClick()" >Save</button>
+            <button  mat-raised-button color="accent" (click)="onTestClick()" >Test</button>
+            <mat-checkbox [(ngModel)] = "isOnServer">Run on Server</mat-checkbox>
+        </div>
+
+        <div>
+            <mat-form-field class="w8">
+                <mat-select [(ngModel)] = "botData.market" placeholder="Select Market" (change)="onMarketChanged($event)">
+                    <mat-option *ngFor="let selectMarket of markets" [value]="selectMarket.pair">
+                        {{selectMarket.pair}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-input-container class="w7">
+                <input  matInput placeholder="Name" type="text" [(ngModel)] = "botData.name" />
+            </mat-input-container>
+
+            <mat-input-container  class="w3">
+                <input  matInput placeholder="$US" type="number" [(ngModel)] = "botData.amountUS"  (ngModelChange)="onAmountUSChange($event)"/>
+            </mat-input-container>
+        </div>
+
+
+    </section>
+    <section>
+        <div *ngIf="botData">
+            <strong>{{botData.base}}</strong>
+            <small>{{currentBot.balanceBase}}</small>
+            <span>${{currentBot.balanceBaseUS}}</span>
+            &nbsp;
+            <strong>{{botData.coin}}</strong>
+            <small>{{currentBot.balanceCoin}}</small>
+            <span>${{currentBot.balanceCoinUS}}</span>
+            &nbsp;
+            <span class="btn fa fa-refresh green" (click)="onBalancesRefresh()"></span>
+        </div>
+
+
+        <table>
+            <tbody>
+            <tr>
+                <th>Symbol</th>
+                <th>%1h</th>
+                <th>%24h</th>
+                <th>%7d</th>
+                <th>Symbol</th>
+                <th>%1h</th>
+                <th>%24h</th>
+                <th>%7d</th>
+            </tr>
+            <tr *ngIf="(currentBot && currentBot.mcBase)">
+                <td>{{currentBot.mcBase.id}}</td>
+                <td>{{currentBot.mcBase.percent_change_1h}}</td>
+                <td>{{currentBot.mcBase.percent_change_24h}}</td>
+                <td>{{currentBot.mcBase.percent_change_7d}}</td>
+                <td>{{currentBot.mcCoin.id}}</td>
+                <td>{{currentBot.mcCoin.percent_change_1h}}</td>
+                <td>{{currentBot.mcCoin.percent_change_24h}}</td>
+                <td>{{currentBot.mcCoin.percent_change_7d}}</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <h4>Triggers</h4>
+
+        <section>
+            <table>
+                <tbody>
+                <tr class="small">
+                    <th>Edit</th>
+                    <th>When</th>
+                    <th><small>&</small> %1h</th>
+                    <th><small>&</small> %24h</th>
+                    <th><small>&</small> %7d</th>
+                    <th>Coin</th>
+                    <th>Action</th>
+
+                </tr>
+                <tr *ngFor="let trigger of triggers">
+                    <td>
+                        <span class="btn fa fa-minus" (click)="onDeleteTriggerClick(trigger)"></span>
+                        <span class="btn fa fa-edit" (click)="onEditTriggerClick(trigger)"></span>
+                    </td>
+                    <td><div title="{{trigger.message}}">{{trigger.when}}</div></td>
+                    <td>
+                        <span *ngIf="trigger.percent_change_1h" class="fa"   [ngClass] ="trigger.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
+                        <span [ngClass]="trigger.percent_change_1h>0?'green':'red'">{{trigger.percent_change_1h}}</span>
+                    </td>
+                    <td>
+                        <span *ngIf="trigger.percent_change_24h" class="fa"   [ngClass] ="trigger.percent_change_24hLess?'fa-chevron-left':'fa-chevron-right'"></span>
+                        <span [ngClass]="trigger.percent_change_24h>0?'green':'red'">{{trigger.percent_change_24h}}</span>
+                    </td>
+                    <td>
+                        <span *ngIf="trigger.percent_change_7d" class="fa"   [ngClass] ="trigger.percent_change_7dLess?'fa-chevron-left':'fa-chevron-right'"></span>
+                        <span [ngClass]="trigger.percent_change_7d>0?'green':'red'">{{trigger.percent_change_7d}}</span>
+                    </td>
+
+                    <td>{{trigger.coin}}</td>
+                    <td>{{trigger.action}}</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="btn fa fa-plus" (click)="onPlusClick()"></section>
+
+
+        <div *ngIf="currentTrigger">
+            <mat-form-field class="w6">
+                <mat-select [(ngModel)] = "currentTrigger.when"  placeholder="When" (change)="onCoinChanged($event)">
+                    <mat-option  [value]="botData.base">
+                        {{botData.base}}
+                    </mat-option>
+                    <mat-option  [value]="botData.coin">
+                        {{botData.coin}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <span class="btn fa" (click)="onPercent1hLess()"  [ngClass] ="currentTrigger.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
+            <mat-input-container  class="w3" [ngClass]="currentTrigger.percent_change_1h>0?'green':'red'">
+                <input class="w5"  matInput placeholder="%1h" type="number" [(ngModel)] = "currentTrigger.percent_change_1h"  (ngModelChange)="onConditionChange($event)"/>
+            </mat-input-container>
+
+            <span class="btn fa" (click)="onPercent24hLess()"  [ngClass] ="currentTrigger.percent_change_24hLess?'fa-chevron-left':'fa-chevron-right'"></span>
+            <mat-input-container class="w3"  [ngClass]="currentTrigger.percent_change_24h>0?'green':'red'">
+                <input  matInput placeholder="%2h" type="number" [(ngModel)] = "currentTrigger.percent_change_24h" (ngModelChange)="onConditionChange($event)"/>
+            </mat-input-container>
+
+            <span class="btn fa"  (click)="onPercent7dLess()"  [ngClass] ="currentTrigger.percent_change_7dLess?'fa-chevron-left':'fa-chevron-right'"></span>
+            <mat-input-container class="w3"  [ngClass]="currentTrigger.percent_change_7d>0?'green':'red'">
+                <input  matInput placeholder="%7d" type="text" [(ngModel)] = "currentTrigger.percent_change_7d" (ngModelChange)="onConditionChange($event)" />
+            </mat-input-container>
+
+
+            <span>{{currentTrigger.coin}}</span>
+
+            <mat-radio-group  [(ngModel)] = "currentTrigger.action" (ngModelChange)="onBuySellChange($event)" >
+                <mat-radio-button value="Buy">Buy</mat-radio-button>
+                <mat-radio-button value="Sell">Sell</mat-radio-button>
+            </mat-radio-group>
+
+
+
+            <!--<mat-checkbox [(ngModel)] = "autoTransfer.isMax">Max</mat-checkbox>-->
+
+           <!-- <span> $</span>
+            <mat-input-container class="amountUS" >
+                <input  matInput placeholder="Leave $US" type="number" [(ngModel)] = "currentTrigger.amountCoinUS"  (ngModelChange)="onAmountUSChange($event)"/>
+            </mat-input-container>-->
+            <button  mat-raised-button color="accent" (click)="saveTrigger()" >{{triggerAdd}}</button>
+
+        </div>
+
+    </section>
+</div>

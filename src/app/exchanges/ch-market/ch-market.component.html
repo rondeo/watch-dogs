@@ -1,0 +1,80 @@
+<div>
+<h2>Changely</h2> <small *ngIf="coinsAvailable">Total: {{coinsAvailable.length}}</small>
+    <br/>
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    From:
+                </td>
+                <td>
+                    <mat-select  [(ngModel)]="coinFrom.symbol" #select1 placeholder="Select Coin" (change)="coinSelectChanged1($event)">
+                        <mat-option *ngFor="let coin of coinsSorted" [value]="coin.symbol">
+                            {{ coin.symbol}} <small class="dollars"> ${{coin.price_usd?coin.price_usd.toFixed(2):''}}</small>
+                        </mat-option>
+                    </mat-select>
+
+                </td>
+                <td>
+                    <mat-input-container>
+                       <input [(ngModel)]="coinFrom.US"  matInput  placeholder="amount" name="dollarsAmount" >
+                    </mat-input-container>
+
+                </td>
+
+                <td>
+                    <small>{{coinFrom.amount}}</small>
+                </td>
+                <td>
+                    ${{coinFrom.revertUS}}
+
+                </td>
+                <td>
+                    {{coinFrom.revertAmount}}
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    To:
+                </td>
+                <td>
+                    <mat-select [(ngModel)]="coinTo.symbol" #select2 placeholder="Select Coin" (change)="coinSelectChanged3($event)">
+                        <mat-option *ngFor="let coin of coinsSorted" [value]="coin.symbol">
+                            {{ coin.symbol}}<small class="dollars"> ${{coin.price_usd?coin.price_usd.toFixed(2):''}}</small>
+                        </mat-option>
+                    </mat-select>
+
+                </td>
+                <td>
+                    ${{coinTo.US}}
+
+                </td>
+
+                <td>
+                    {{coinTo.amount}}
+                </td>
+                <td>
+
+                    ${{coinTo.revertUS}}
+                </td>
+                <td>
+                    {{coinTo.revertAmount}}
+                </td>
+            </tr>
+
+            </tbody>
+
+            <button mat-raised-button color="accent" (click)="onSubmit()">Submit</button>
+        </table>
+        <br/>
+    </section>
+
+    <section>
+        <app-sortable-table [consAvailable]="coinsAvailable"></app-sortable-table>
+    </section>
+
+
+
+</div>

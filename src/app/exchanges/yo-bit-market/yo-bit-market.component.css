@@ -1,0 +1,14 @@
+.hide-me {
+
+}
+
+.hide-rows>tr{
+    display: none;
+}
+
+.show-all>tr{
+   display: table-row;
+}
+.hide-rows>tr.show-me{
+    display: table-row;
+}

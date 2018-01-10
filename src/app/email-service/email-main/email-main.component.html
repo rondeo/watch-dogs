@@ -1,0 +1,17 @@
+<div>
+
+    <nav>
+        <a routerLink='/email-service/watchdogs'  routerLinkActive="active-link">Watchdogs</a>
+        <a routerLink="/email-service/selected-coins" routerLinkActive="active-link" >My Coins</a>
+        <a routerLink="/market-cap/all-coins"  routerLinkActive="active-link" title="Select more Coins">CMC</a>
+
+           <!-- <div class="small" style="margin-left: auto; order: 2;">
+                <a  routerLink='/login/sign-in' class="btn" *ngIf="!(isLoggedIn$ | async)" >Login Email Service</a>
+                <a class="btn" *ngIf="!!(isLoggedIn$ | async)"  (click)="onLogoutClick()" >Logout Email Service</a>
+            </div>-->
+
+
+
+    </nav>
+    <router-outlet></router-outlet>
+</div>

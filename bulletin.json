@@ -1,0 +1,13 @@
+{
+  "coinType":{
+    "4":{
+      "criticality":1,
+      "version":1.18,
+      "menu_title":"ETC",
+      "title":"ETC",
+      "menu_title":"ETC",
+      "description":"We are currently experiencing intermittent issues with Ethereum Class (ETC). All funds are safe, we will continue to update our users as we resolve this issue ",
+      "date":"7/9/2017"
+    }
+  }
+}

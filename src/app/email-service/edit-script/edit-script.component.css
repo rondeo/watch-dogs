@@ -1,0 +1,39 @@
+mat-spinner {
+    float: left;
+    width: 24px;
+    height: 24px;
+    margin: 5px 10px 0px -10px;
+}
+
+#ScriptContent{
+    background-color: white;
+    border: #38dc55 thin solid;
+    min-width: 600px;
+    min-height: 400px;
+    padding: 1em;
+    font-size: small;
+}
+
+#SelectTrigger{
+    width: 150px;
+}
+
+
+#ScriptContentContainer{
+    min-width: 600px;
+    min-height: 600px;
+}
+
+
+.current-changes{
+    margin-left: 3em;
+    font-family: "Roboto Condensed";
+}
+
+#ScriptContent{
+    font-family: "Roboto Condensed";
+    font-weight: bold;
+    spellcheck:false;
+
+}
+

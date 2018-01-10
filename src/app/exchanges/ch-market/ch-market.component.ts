@@ -1,0 +1,216 @@
+import { Component, OnInit } from '@angular/core';
+import {ChangellyService} from '../services/changelly.service';
+import {MarketCapService} from '../../market-cap/market-cap.service';
+import {symbolIteratorPonyfill} from 'rxjs/symbol/iterator';
+import {VOCoin, VOMarketCap} from '../../models/app-models';
+import * as _ from 'lodash';
+
+@Component({
+  selector: 'app-ch-market',
+  templateUrl: './ch-market.component.html',
+  styleUrls: ['./ch-market.component.css']
+})
+
+export class ChMarketComponent implements OnInit {
+
+  coinsAvailable:VOCoin[];
+  coinsSorted:VOCoin[];
+
+  markets:{[symbol:string]:VOMarketCap};
+
+
+  coinFrom:{
+    symbol:string;
+    US:number,
+    amount:number,
+    price:number,
+    revertUS:number,
+    revertAmount:number;
+  } = {
+      symbol:'',
+      US:1000,
+      amount:0,
+      price:0,
+      revertUS:0,
+      revertAmount:0
+    }
+
+  coinTo:{
+    symbol:string,
+    US:number,
+    amount:number,
+    price:number,
+    revertUS:number,
+    revertAmount:number;
+  } ={
+    symbol:'',
+    US:0,
+    amount:0,
+    price:0,
+    revertUS:0,
+    revertAmount:0
+  };
+
+  exchange={
+    pair:''
+  };
+
+
+
+  constructor(
+    private changellyService:ChangellyService,
+    private marketCap:MarketCapService
+  ) { }
+
+  ngOnInit() {
+    this.marketCap.coinsAr$.subscribe(res =>{
+      if(!res) return;
+      let allCoins = this.marketCap.getAllCoinsData();
+    //  console.log(res);
+      this.markets = allCoins;
+
+      this.merge();
+    })
+    this.changellyService.getCurrencies().subscribe(res=>{
+    //  console.log(res);
+      this.coinsAvailable = res
+      this.coinsSorted = _.sortBy(res, 'symbol');
+      this.merge();
+
+    })
+
+  }
+
+  calculateRequest(){
+
+    let symbol = this.coinFrom.symbol;
+
+    let us = +this.coinFrom.US;
+    console.log('calculateRequest ' + symbol +'  ' + us);
+    if(!symbol || !us) return;
+
+    let market = this.markets[symbol];
+    console.log(market);
+    if(!market)return;
+
+      let price = market.price_usd;
+      this.coinFrom.amount = us/price;
+  }
+
+  coinSelectChanged1(evt){
+
+    this.calculateRequest();
+
+
+  }
+
+  coinSelectChanged2(evt){
+    this.calculateRequest();
+
+  }
+
+  coinSelectChanged3(evt){
+
+  }
+
+  getRevert(){
+
+    this.coinTo.revertUS = this.coinFrom.US;
+
+
+    let pair = this.coinTo.symbol.toLowerCase() +'_'+this.coinFrom.symbol.toLowerCase();
+
+    let symbol = this.coinTo.symbol;
+    let market = this.markets[symbol];
+    if(!market){
+      console.error(' market ' + market);
+    }
+
+    let price = market.price_usd;
+
+    let amount = this.coinTo.revertUS / price;
+
+    this.coinTo.revertAmount = amount;
+
+
+    this.changellyService.getExchangeAmount(pair, amount).subscribe(res=>{
+     // console.log(res);
+
+      let symbol = this.coinFrom.symbol;
+      let market = this.markets[symbol];
+
+      if(market)  {
+
+        this.coinFrom.revertAmount = res;
+
+         this.coinFrom.revertUS = +(res * market.price_usd).toFixed(2);
+
+
+      }
+
+
+    })
+
+  }
+
+  onSubmit(){
+
+    //console.log(this.selectedValue1, this.selectedValue2, this.selectedValue3);
+    let pair = this.coinFrom.symbol.toLowerCase() +'_'+this.coinTo.symbol.toLowerCase();
+    this.exchange.pair = pair;
+
+    let amount = this.coinFrom.amount;
+
+
+    this.changellyService.getExchangeAmount(pair, amount).subscribe(res=>{
+      console.log(res);
+      this.coinTo.amount = res;
+      let symbol = this.coinTo.symbol;
+      let market = this.markets[symbol];
+      if(market)  {
+        this.coinTo.US = +(res * market.price_usd).toFixed(2);
+        this.getRevert();
+      }
+
+
+    })
+
+  }
+
+
+
+  megeData(){
+
+    //if(this.markets && this.coinsAvailable){
+    //  this.marketCap.addMarketCap(this.coinsAvailable);
+   // }
+  }
+
+  private merge(){
+    if(this.markets && this.coinsAvailable){
+      let all = this.markets;
+      // console.log(all);
+      let ar = this.coinsAvailable;
+
+      ar.forEach(function (item) {
+        let market = all[item.symbol];
+        if(market){
+
+          item.percent_change_1h = market.percent_change_1h;
+          item.percent_change_7d = market.percent_change_7d;
+          item.percent_change_24h = market.percent_change_24h;
+          item.name = market.name;
+          item.rank = market.rank;
+          item.price_usd = market.price_usd;
+          //item.market_cap_usd = market.market_cap_usd;
+
+          item.market = market;
+        }else console.warn(' no coin ' + item.symbol)
+      })
+      this.coinsAvailable = _.orderBy(ar,'rank');
+
+    }
+
+  }
+
+}

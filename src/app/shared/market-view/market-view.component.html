@@ -1,0 +1,29 @@
+<div>
+    <section>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Last</th>
+
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Volume</th>
+                <th>Prev Day</th>
+            </tr>
+            <tr *ngFor="let market of markets">
+                <td><span class="btn" (click)="onMarketClick(market)">{{market.pair}}</span></td>
+                <td>{{market.usLast}}</td>
+                <td>{{market.usBid}}</td>
+                <td>{{market.usAsk}}</td>
+                <td>{{market.usHigh}}</td>
+                <td>{{market.usLow}}</td>
+
+                <td>{{market.dVolume}}</td>
+                <td>{{market.usPrevDay}}</td>
+
+            </tr>
+        </table>
+    </section>
+</div>

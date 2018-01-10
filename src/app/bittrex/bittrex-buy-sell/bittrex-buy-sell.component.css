@@ -1,0 +1,14 @@
+.oprderbook{
+    height: 400px;
+    overflow: auto;
+}
+
+mat-progress-spinner{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+mat-slider {
+    width: 300px;
+}

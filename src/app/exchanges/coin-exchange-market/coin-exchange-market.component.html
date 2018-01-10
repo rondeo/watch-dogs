@@ -1,0 +1,42 @@
+<div>
+    <section>
+        <h3>CoinExchange</h3><small> Total: {{allCoins.length}}</small>
+        <table>
+            <tbody>
+            <tr>
+                <th>Symbol</th>
+                <th>Sellers</th>
+                <th>Buyers</th>
+                <th>Trades</th>
+
+                <th>Last</th>
+                <th>Low</th>
+                <th>High</th>
+                <th>Change</th>
+
+                <th>Ask</th>
+                <th>Bid</th>
+                <th>Volume</th>
+
+            </tr>
+            <tr *ngFor="let coin of allCoins">
+                <td>{{coin.symbol}}</td>
+                <td>{{coin.sellers}}</td>
+                <td>{{coin.buyers}}</td>
+                <td>{{coin.trades}}</td>
+
+                <td>{{coin.last}}</td>
+                <td>{{coin.low}}</td>
+                <td>{{coin.high}}</td>
+                <td>{{coin.change}}</td>
+
+                <td>{{coin.ask}}</td>
+                <td>{{coin.bid}}</td>
+                <td>{{coin.volume}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </section>
+</div>

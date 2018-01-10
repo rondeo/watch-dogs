@@ -1,0 +1,55 @@
+<div>
+
+    <div>
+
+        <h3>Bittrex</h3> <small *ngIf="marketsAr"> Total {{marketsAr.length}}</small>
+        <a mat-list-item routerLink='/bittrex/data'>Available data </a>
+
+
+            <table>
+                <tr>
+                    <th>Pair</th>
+                    <th>MarketCap</th>
+
+                    <th><small>$</small>Last</th>
+
+                    <th><small>%</small>&Delta;l-h</th>
+                    <th><small>%</small>24h</th>
+                </tr>
+
+                <tr *ngFor="let item of marketsAr">
+                    <td>{{item.pair}}</td>
+                    <td><small>$</small>{{item.usd_mcap}}</td>
+
+                    <td><small>$</small>{{item.usd_last}}</td>
+                    <td>{{item.delta}}</td>
+                    <td [ngClass] ="item.is_last_up?'green':'red'" title="Prev Day: {{item.prevDay}} Last: {{item.last}}">{{item.delta24}}</td>
+
+
+                  <!--  <td>{{market.High}}</td>
+                    <td>{{market.Low}}</td>
+                    <td>{{market.Volume}}</td>
+                    <td>{{market.Last}}</td>
+                    <td>{{market.BaseVolume}}</td>
+
+                    <td>{{market.Bid}}</td>
+                    <td>{{market.Ask}}</td>
+
+                    <td>{{market.OpenBuyOrders}}</td>
+                    <td>{{market.OpenSellOrders}}</td>
+
+
+                    <td>{{market.PrevDay}}</td>
+                    <td><small>{{market.TimeStamp}}</small></td>-->
+
+                  <!--  <td>{{market.IsSponsored}}</td>
+                    <td class="my-timestamp"><div>{{market.Created}}</div></td>
+                    <td class="notice">{{market.Notice}}</td>-->
+                </tr>
+            </table>
+
+
+
+    </div>
+
+</div>

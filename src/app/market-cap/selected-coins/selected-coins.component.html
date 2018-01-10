@@ -1,0 +1,9 @@
+<div>
+    <h4><small>Total:</small> {{selectedCoins.length}}</h4>
+    <small>Average 1h: </small> <span  [ngClass]="average1h>0?'green':'red'">{{average1h}}%</span>
+    <small> 24h: </small> <span [ngClass]="average24h>0?'green':'red'">{{average24h}}%</span>
+    <small> 7d : </small> <span [ngClass]="average7d>0?'green':'red'">{{average7d}}%</span>
+    <div>
+        <app-sortable-table [consAvailable]="selectedCoins"></app-sortable-table>
+    </div>
+</div>

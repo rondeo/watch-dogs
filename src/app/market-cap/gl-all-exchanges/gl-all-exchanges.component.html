@@ -1,0 +1,13 @@
+<div>
+    <section>
+        <table>
+            <tbody>
+            <tr *ngFor="let coin of symbolMarkets">
+                <td>{{coin.symbol}}</td>
+                <td><small>{{coin.markets.toString()}}</small></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

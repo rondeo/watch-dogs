@@ -1,0 +1,15 @@
+<div>
+    <section>
+        Coins List
+        <table>
+            <tbody>
+            <tr *ngFor="let coin of listEchangeCoin">
+                <td><small>{{coin.coinId}}</small></td>
+                <td>{{coin.exchange}}</td>
+                <td>{{coin.pair}}</td>
+                <td><small>{{coin.pairUrl}}</small></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

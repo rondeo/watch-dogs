@@ -1,0 +1,20 @@
+<div>
+    <section>
+        <h4>{{coinId}} </h4><small *ngIf="symbolExchanges"> Total: {{symbolExchanges.length}} </small>
+    </section>
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <th>Exchange</th>
+                <th>Market</th>
+            </tr>
+            <tr *ngFor="let coin of symbolExchanges">
+                <td><a href ="{{coin.urlMC}}" target="_blank">{{coin.exchange}}</a></td>
+                <td><a href="{{coin.pairUrl}}" target="_blank">{{coin.pair}}</a></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

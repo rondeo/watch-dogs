@@ -1,0 +1,12 @@
+.coin-name{
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    font-size: smaller;
+    text-overflow: ellipsis;
+}
+.coin-symbol{
+    white-space: nowrap;
+    font-size: smaller;
+}

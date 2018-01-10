@@ -1,0 +1,20 @@
+table td>img{
+    width: 30px;
+    height: 30px;
+}
+
+
+td{
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+tr>th{
+    cursor: pointer;
+}
+
+
+h3{
+    display: inline;
+}

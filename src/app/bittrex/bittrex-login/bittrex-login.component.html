@@ -1,0 +1,39 @@
+<div>
+    <form #f1="ngForm"  autocomplete="off">
+        <mat-list>
+            <mat-list-item>
+                <mat-input-container class="w12">
+                    <input #username
+                           matInput
+                           [(ngModel)]="credetials.apiKey"
+                           required
+                           minlength="6" type="text" placeholder="apiKey" name="email" type="text" class="small"/>
+                </mat-input-container>
+            </mat-list-item>
+
+            <mat-list-item>
+                <mat-input-container class="w12">
+                    <input matInput
+                           placeholder="Password"
+                           name="password"
+                           [(ngModel)]="credetials.password"
+                           required
+                           minlength="6"
+                          type="text"
+                           class="small"
+                           />
+                </mat-input-container>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox #savepass class="small" >Don't save on this device </mat-checkbox>
+            </mat-list-item>
+
+            <mat-list-item>
+                <button mat-raised-button color="accent"  (click)="onSubmit()">
+                    Login
+                </button>
+            </mat-list-item>
+        </mat-list>
+
+    </form>
+</div>

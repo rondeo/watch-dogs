@@ -1,0 +1,99 @@
+<div>
+    <section>
+
+        <mat-input-container>
+            <input [(ngModel)]="currentCoin"  matInput  placeholder="Search" name="search" >
+        </mat-input-container>
+
+        <button color="accent" mat-raised-button  (click)="onSearchCoinClick()" title="Search Coin">
+            <mat-spinner *ngIf="isProgress" mode="indeterminate"></mat-spinner>
+            <span class="fa fa-search"></span>
+        </button>
+       <!-- <img class="w3" src="assets/img/spinner.gif" *ngIf="isProgress">-->
+
+        <mat-select placeholder="Selected Coin" (change)="onCoinSelectChanged($event)">
+            <mat-option *ngFor="let coin of selectedCoins" [value]="coin">
+                {{coin}}
+            </mat-option>
+        </mat-select>
+
+
+        <table *ngIf="currentMC">
+            <tbody>
+            <tr>
+                <td>Rank</td>
+                <td>Graph</td>
+                <td>Symbol</td>
+                <td>Name</td>
+                <td>$US</td>
+                <td>1h%</td>
+                <td>24h%</td>
+                <td>7days%</td>
+
+            </tr>
+            <tr>
+                <td>{{currentMC.rank}}</td>
+                <td><a href="https://coinmarketcap.com/currencies/{{currentMC.id}}" class="btn fa fa-line-chart" target="_blank"></a></td>
+                <td>{{currentMC.symbol}}</td>
+                <td>{{currentMC.name}}</td>
+                <td>{{currentMC.price_usd}}</td>
+                <td>{{currentMC.percent_change_1h}}</td>
+                <td>{{currentMC.percent_change_24h}}</td>
+                <td>{{currentMC.percent_change_7d}}</td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+    <br/>
+
+    <section>
+        <table>
+            <tbody>
+            <tr class="small">
+                <th>Name</th>
+                <th>Market</th>
+
+                <th>Last</th>
+                <th>High</th>
+                <th>Low</th>
+
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Prev Day</th>
+
+                <th>Volume</th>
+                <th>Base Vol</th>
+                <th>To Buy</th>
+                <th>To Sell</th>
+            </tr>
+            <tr *ngFor="let market of searchResult">
+
+                <td><div class="w100 small">{{market.pair}}</div></td>
+
+                <td><div class="w5 ell">{{market.exchange}}</div></td>
+                <td>{{market.usLast}}</td>
+                <td>{{market.usHigh}}</td>
+                <td>{{market.usLow}}</td>
+
+
+                <td>{{market.usBid}}</td>
+                <td>{{market.usAsk}}</td>
+                <td>{{market.usPrevDay}}</td>
+
+                <td>{{market.dVolume}}</td>
+                <td>{{market.dBaseVolume}}</td>
+
+                <td>{{market.OpenBuyOrders}}</td>
+                <td>{{market.OpenSellOrders}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
+
+    </section>
+</div>

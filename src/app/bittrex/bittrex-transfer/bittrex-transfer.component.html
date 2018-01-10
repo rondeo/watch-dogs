@@ -1,0 +1,122 @@
+<div>
+    <section>
+        <h4 (click)="onShowAddressClick()">{{balanceFrom.symbol}}</h4>
+        <small *ngIf="isAddress">{{balanceFrom.address}}</small>
+           <table>
+               <tr>
+                   <th>Coin</th>
+                   <th>Price</th>
+                   <th>$US</th>
+                   <th>Balance</th>
+                   <th>Available</th>
+                   <th>Pending</th>
+
+               </tr>
+               <tr>
+                   <td>{{balanceFrom.symbol}}</td>
+                   <td>{{balanceFrom.priceUS}}</td>
+                   <td><span class="btn" (click)="onAmounBalanceClick()">${{balanceFrom.balanceUS}}</span></td>
+                   <td>{{balanceFrom.balance}}</td>
+                   <td><span>{{balanceFrom.available}}</span></td>
+                   <td>{{balanceFrom.pending}}</td>
+               </tr>
+               <tr *ngIf="balanceTo" class="small">
+                   <td>{{balanceTo.symbol}}</td>
+                   <td>{{balanceTo.priceUS}}</td>
+                   <td><span>${{balanceTo.balanceUS}}</span></td>
+                   <td>{{balanceTo.balance}}</td>
+                   <td><span>{{balanceTo.available}}</span></td>
+                   <td>{{balanceTo.pending}}</td>
+               </tr>
+           </table>
+       </section>
+
+    <section>
+        <h5>
+            Transfer
+            <span>{{transfer.action}}</span>
+            Rate:
+            <small>{{transfer.rate}}</small>
+            id: <small>{{transfer.uuid}}</small>
+            <span *ngIf="transfer.uuid" class="btn fa fa-refresh" (click)="onTransferUidClick()"></span>
+            <span *ngIf="transfer.uuid" class="btn fa fa-minus-circle dred" (click)="onCancelOrderClick()"></span>
+        </h5>
+        <div>
+            <mat-checkbox (change)="onShowAll($event)"><small class="on-top">all</small></mat-checkbox>
+
+            <mat-form-field class="w6">
+                <mat-select placeholder="Select" (change)="onCoinSelected($event)">
+                    <mat-option *ngFor="let coin of transferToCoins" [value]="coin">
+                        {{coin}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <span>$</span>
+            <mat-input-container  class="w5">
+                <input  matInput placeholder="$US" type="text" [(ngModel)] = "amountFromUS" (ngModelChange)="onAmountUSChange($event)">
+            </mat-input-container>
+            <span class="btn" (click)="onRefreshRateClick()">Rate:</span>
+            <small>{{transfer.rate}}</small>
+            <strong>${{ratePrice}}</strong>
+
+
+        </div>
+        <div>
+
+            <span>{{symbolFrom}}:</span>
+            <small>{{amountFrom}}</small>
+            <span class="fa fa-long-arrow-right green"></span>
+            <span>{{symbolTo}}</span>
+            <small>{{amountTo}}</small>
+            <span>${{amountToUS}}</span>
+
+        </div>
+        <br/>
+        <div>
+            <button  mat-raised-button color="accent" (click)="onSubmitClick()" disabled="{{!transfer.valid}}">Buy</button>
+        </div>
+
+
+    </section>
+
+
+    <section *ngIf="order">
+        <h4>Order</h4>
+        <table>
+            <tbody>
+            <tr>
+                <td>Market</td>
+                <td>OrderType</td>
+
+                <td>Quantity</td>
+                <td>Remaining</td>
+
+                <td>Limit</td>
+                <td>UID</td>
+
+
+                <td>Active</td>
+                <td>Opened</td>
+
+                <td>Cancel</td>
+            </tr>
+            <tr>
+                <td><span class="small">{{order.Exchange}}</span></td>
+                <td><span class="x-small">{{order.OrderType}}</span></td>
+                <td>{{order.Quantity}}</td>
+                <td>{{order.QuantityRemaining}}</td>
+                <td>{{order.Limit}}</td>
+
+                <td><span class="x-small">{{order.OrderUuid}}</span></td>
+
+                <td>{{order.IsOpen}}</td>
+                <td><span class="x-small">{{order.Opened}}</span></td>
+                <td><span class="btn fa fa-minus-circle dred" (click)="onCancelOrderClick(order)"></span></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+
+</div>

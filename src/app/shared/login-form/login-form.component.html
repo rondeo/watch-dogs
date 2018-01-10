@@ -1,0 +1,43 @@
+<div>
+    <form #f1="ngForm"  autocomplete="off">
+        <mat-list>
+            <mat-list-item>
+                <mat-input-container>
+                    <input #username
+                           matInput
+                           [(ngModel)]="login.email"
+                           required
+                           minlength="6" type="text" placeholder="email" name="email" />
+                </mat-input-container>
+            </mat-list-item>
+
+            <mat-list-item>
+                <mat-input-container>
+                    <input matInput
+                           (blur)="checkPassword()"
+                           placeholder="Password"
+                           name="password"
+                           [(ngModel)]="login.password"
+                           required
+                           minlength="6"
+                           [type]="showPass ? 'text': 'password'"
+                           style="width: 100%"/>
+                </mat-input-container>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox #showpass (change)="onShowPasswordChanged($event, showpass)">Show password
+                </mat-checkbox>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox #savepass >Don't save on this device</mat-checkbox>
+            </mat-list-item>
+
+            <mat-list-item>
+                <button mat-raised-button color="accent"  (click)="onSubmit()">
+                    Login
+                </button>
+            </mat-list-item>
+        </mat-list>
+
+    </form>
+</div>
