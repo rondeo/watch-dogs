@@ -21,7 +21,6 @@ export class BooksService {
 
   constructor() { }
 
-
   base:string;
   coin:string;
 
@@ -39,6 +38,7 @@ export class BooksService {
     if(!amount) amount = this.amount;
 
       return this.downloadBooks().toPromise().then(res=>{
+        console.log(res);
         this.dispatchBooks();
         if(action ==='Buy') {
           return BooksService.getRateForAmountBase(this.booksSell, amount)

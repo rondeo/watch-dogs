@@ -207,7 +207,11 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
       rate: rate
     }).map(res=>{
       console.log(' sellLimit market '+market , res);
-      return res.result;
+      if(res.success) return res.result;
+      else return {
+        uuid:'',
+        message:res.message
+      }
     });
   }
 
@@ -259,13 +263,18 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
     console.log(' getOrderById  ' + uuid);
     let url = 'https://bittrex.com/api/v1.1/account/getorder';
     return this.call(url, {uuid: uuid}).map(res => {
-      let order: VOOrder = res.result;
-      order.OrderType = order.Type;
-      console.log('getOrderById ',res);
-      return order
+       let r = <SOOrder1>res.result;
+
+      console.log('getOrderById ',r);
+      return {
+        uuid:r.OrderUuid,
+        action:r.Type,
+        isOpen:r.IsOpen
+      }
     });
 
   }
+
 
   isLoaded: boolean;
 
@@ -663,3 +672,31 @@ export interface SOBuySell {
 }
 
 
+interface SOOrder1{
+  AccountId: string;
+  IsOpen:boolean;
+ OrderUuid:string;
+ Exchange:string;
+ Type :string;// "LIMIT_BUY",
+ OrderType:string;
+ Quantity:number;
+ QuantityRemaining:number;
+ Limit:number;
+ Reserved:number;
+ ReserveRemaining:number;
+ CommissionReserved:number;
+ CommissionReserveRemaining:number;
+ CommissionPaid:number;
+ Price:number;
+ PricePerUnit:string;
+ Opened:string;// : "2014-07-13T07:45:46.27",
+ Closed:string;
+
+ Sentinel:string;//" : "6c454604-22e2-4fb4-892e-179eede20972",
+ CancelInitiated : boolean;
+ ImmediateOrCancel:boolean;
+ IsConditional:boolean;
+ Condition:string;//" : "NONE",
+ Commission:number;
+ ConditionTarget :string;
+}

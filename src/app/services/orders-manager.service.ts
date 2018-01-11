@@ -25,6 +25,9 @@ export class OrdersManagerService {
 
   }
 
+  setService(service:APIOrdersManager){
+    this.privateService = service;
+  }
   checkOrder(uuid):Observable<VOOrder>{
     this.uuid = uuid;
     setTimeout(()=>this.checkCurrentOrder(), 2000);
@@ -35,7 +38,8 @@ export class OrdersManagerService {
     let uuid = this.uuid;
     if(!uuid) return;
     this.privateService.getOrderById(uuid).toPromise().then((res:VOOrder)=>{
-      if(res.IsOpen){
+      console.log(res);
+      if(res.isOpen){
         setTimeout(()=>this.checkCurrentOrder(), 3000);
       }
       this.statusSub.next(res);
@@ -54,7 +58,7 @@ export class OrdersManagerService {
       this.privateService.getOrderById(this.uuid).toPromise().then((res:VOOrder)=>{
         console.log(res);
         //this.results.push(JSON.stringify(res));
-        if(res.IsOpen){
+        if(res.isOpen){
             setTimeout(()=>this.cancelOrder(), 10000);
         }
         this.statusSub.next(res);

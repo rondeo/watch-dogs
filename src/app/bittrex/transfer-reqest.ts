@@ -68,9 +68,6 @@ export class TransferReqest {
 */
 
 
-
-
-
   removeOrder(uuid?:string):Promise<string[]>{
     if(uuid) this.uuid = uuid;
     if(this.errors.length>20){
@@ -82,7 +79,7 @@ export class TransferReqest {
       this.privateService.getOrderById(this.uuid).toPromise().then((res:VOOrder)=>{
         console.log(res);
         this.results.push(JSON.stringify(res));
-        if(res.IsOpen){
+        if(res.isOpen){
           this.errors.push(' cant cancel order ' + JSON.stringify(res));
           clearTimeout(this.timeout);
           this.timeout = setTimeout(()=>this.removeOrder(), 10000);
@@ -118,7 +115,7 @@ export class TransferReqest {
       console.log('ON_ORDER_CHECK_RESULT', res);
       this.onOrderCheck(res);
       this.results.push(JSON.stringify(res));
-      if(res.IsOpen){
+      if(res.isOpen){
         this.emitter.next(new EventTransfer(EventTransfer.ON_ORDER_CHECK_RESULT, '', res));
         setTimeout(()=>this.checkOrder(), 10000);
       }else {

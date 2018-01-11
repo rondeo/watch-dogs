@@ -10,7 +10,6 @@ import {MatSnackBar} from "@angular/material";
 })
 export class OpenOrdersComponent implements OnInit {
 
-
   openOrders:VOOrder[];
   constructor(
     private privateService:BittrexPrivateService,
@@ -22,10 +21,10 @@ export class OpenOrdersComponent implements OnInit {
   }
 
   onCancelOrderClick(order: VOOrder) {
-    if(!confirm('You want to cancel order? \n '+order.OrderUuid +' \n '+order.Exchange + ' '+order.Quantity +' '+order.Limit)) return;
+   /* if(!confirm('You want to cancel order? \n '+order.OrderUuid +' \n '+order.Exchange + ' '+order.Quantity +' '+order.Limit)) return;
 
       this.privateService.cancelOrder(order.OrderUuid).subscribe(res=>{
-        if(res.success){
+        if(res){
           //this.privateService.deleteTransferById(order.OrderUuid);
           this.snackBar.open('Order Canceled!','x');
         }
@@ -34,17 +33,17 @@ export class OpenOrdersComponent implements OnInit {
         }
         console.log(res);
 
-      });
+      });*/
 
 
   }
 
   getOpenOrders(){
-    let sub = this.privateService.getOpenOrders(null).subscribe(res=>{
+  /*  let sub = this.privateService.getOpenOrders(null).subscribe(res=>{
       console.log(res);
       sub.unsubscribe();
 
-    })
+    })*/
   }
 
 
