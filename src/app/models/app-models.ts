@@ -142,6 +142,8 @@ export class VOTransfer{
   feeUS:number;
   timestamp:number;
   valid:boolean;
+  isComplete:boolean;
+  isActive:boolean;
 }
 
 

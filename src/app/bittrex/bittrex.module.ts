@@ -30,6 +30,7 @@ import {ChatService} from "./chat-servica";
 import { MarketBooksComponent } from './market-books/market-books.component';
 import {BooksService} from "../services/books-service";
 import {OrdersManagerService} from "../services/orders-manager.service";
+import { BuySellControlComponent } from './buy-sell-control/buy-sell-control.component';
 
 
 
@@ -83,7 +84,8 @@ const routes: Routes = [
     OpenOrdersComponent,
     MarketHistoryComponent,
     MyGainersLosersComponent,
-    MarketBooksComponent
+    MarketBooksComponent,
+    BuySellControlComponent
   ],
   providers:[
     BittrexPrivateService,

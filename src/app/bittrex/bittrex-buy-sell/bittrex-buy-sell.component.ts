@@ -125,6 +125,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   private sub1:Subscription;
   private sub2:Subscription;
   private sub3:Subscription;
+
   ngOnInit() {
 
     this.ordersManager.setService(this.privateService)
@@ -204,7 +205,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     })
   }
 
-
   private sub5;
   cancelOrder(uuid:string){
     if(this.sub5) this.sub5.unsubscribe();
@@ -223,7 +223,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     let amountUS = this.amountUS;
     let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.001));
+    if(isMax) amountUS = (balance - (balance * 0.0025));
     this.processAction(action, amountUS, isMax);
   }
 
@@ -233,7 +233,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     let amountUS = this.amountUS;
     let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.001));
+    if(isMax) amountUS = (balance - (balance * 0.0025));
 
     this.processAction(action, amountUS, isMax);
 
@@ -243,8 +243,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     console.log(action);
 
     let amountBase = +(amountUS / this.priceBase).toFixed(8);
-
-
 
     let base:string = this.modelBuySell.base;
     let coin:string = this.modelBuySell.coin;
@@ -267,9 +265,11 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       console.log(' amountCoin ' + amountCoin + ' on balance ' +  this.balanceCoin.balance);
 
 
-      let fee = (amountUS * 0.001).toFixed(2);
+      let fee = (amountUS * 0.0025).toFixed(2);
+
       setTimeout(()=>{
-        if(confirm(action + ' $'+ amountUS + ' ' +coin +'\nPrice: $' + rateUS + '\nFee: $' + fee)){
+
+        if(confirm( action +' '+rateUS + ' \n' +coin  +' $'+ amountUS +  '\nFee: $' + fee)){
 
           let service:APIBuySellService = this.privateService;
           let obs:Observable<VOOrder>
@@ -360,16 +360,15 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   onAmountChanged(evt){
     console.log(this.amountUS);
     this.amountBase = +(this.amountUS / this.priceBase).toPrecision(8);
-
-    this.downloadBooks();
+    this.booksService.setAmount(this.amountBase);
   }
 
-  downloadBooks(){
+  /*downloadBooks(){
     let amountBase = this.amountBase;
     console.log('amountBase ' + amountBase + ' base '+ this.modelBuySell.base + ' coin '+this.modelBuySell.coin);
     if(!amountBase || !this.modelBuySell.base || !this.modelBuySell.coin) return;
-    this.booksService.setAmount(this.modelBuySell.base, this.modelBuySell.coin,this.amountBase );
-  }
+
+  }*/
   refrshBalances(){
     this.privateService.refreshBalances();
   }
@@ -431,7 +430,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     let ar =  pair.split('_');
     if(ar.length == 2){
       this.modelBuySell.market = pair;
-      this.booksService.setMarket(ar[0], ar[1])
+      this.booksService.setMarket(ar[0], ar[1]);
       this.populateBalances();
       //this.downloadBooks();
      // this.downloadHistory();

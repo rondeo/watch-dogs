@@ -185,18 +185,22 @@ export class BittrexService implements APIBooksService{
     })
   }
 
+
+  private booksObs:Observable<any>;
+
   getOrderBook(base:string, coin: string, depthMax = '50') {
 
-         let url = 'api/bittrex/getorderbook/' +base +'-' +coin + '/' + depthMax;
-
-      return this.http.get(url).map(res => {
+    let url = 'api/bittrex/getorderbook/' +base +'-' +coin + '/' + depthMax;
+    if(!!this.booksObs) return this.booksObs;
+    console.log(url);
+     this.booksObs =  this.http.get(url).map(res => {
         let r = (<any>res).result;
         console.log('books ', r);
-
+        this.booksObs = null
         return r;// MappersBooks.bittrex(r, price);
 
     });
-
+     return this.booksObs;
 
   }
   getAllMarkets(){

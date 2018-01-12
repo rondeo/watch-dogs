@@ -50,8 +50,6 @@ export class BooksService {
 
 
   private downloadBooks():Observable<{sell:VOOrderBook[], buy:VOOrderBook[]}>{
-
-
     if(!this.base || !this.coin) return;
 
     return this.exchangeService.getOrderBook(this.base, this.coin).map(res=>{
@@ -79,20 +77,9 @@ export class BooksService {
   }
 
   private amount:number;
-  setAmount(base:string, coin:string, amount:number):void{
+  setAmount(amount:number):void{
     this.amount = amount;
-    console.log(this.base,  this.coin);
-    if(this.base === base && this.coin === coin){
      this.dispatchBooks();
-    }else{
-      this.setMarket(base, coin).then(res=>{
-
-        this.dispatchBooks();
-      }).catch(err=>{
-        this.rateForAmountSub.next({buy:0, sell:0})
-      })
-    }
-
   }
 
   private dispatchBooks(){

@@ -22,19 +22,28 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
     uuid:null,
     action:'Sell',
     market:'',
+
     base:'',
     amountBase:0,
     amountBaseUS:0,
+    priceBaseUS:0,
+
+    rate:0,
+
+    coin:'',
     amountCoin:0,
     amountCoinUS:0,
-    coin:'',
-    rate:0,
-    priceBaseUS:-1,
-    priceCoinUS:-1,
+    priceCoinUS:0,
+
+
     fee:0,
     feeUS:0,
     timestamp:0,
-    valid:false
+    valid:false,
+
+    isComplete:false,
+    isActive:false
+
   };
 
 
@@ -62,7 +71,12 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
   transferId:string;
   //transferRate:number;
 
-  marketCap:MarketCapService;
+  //marketCap:MarketCapService;
+
+  MC:{[symbol:string]:VOMarketCap};
+
+  basePrice:number;
+
 
   isShowAll:boolean;
 
@@ -88,9 +102,17 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    let sub = this.privateService.marketCap.getCoinsObs().subscribe(res=>{
+      if(!res) return;
+      this.MC = res;
+      setTimeout(()=>{
+        if(sub) sub.unsubscribe();
+      }, 100)
+
+    });
+
     let symbol = this.route.snapshot.paramMap.get('symbol');
 
-    this.marketCap = this.privateService.marketCap;
 
     this.sub2 = this.privateService.publicService.serachResults$.subscribe(res=>{
      // console.log(res);
@@ -113,11 +135,9 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
     });
 
 
-
-
     this.sub1 = this.privateService.balances$.subscribe(balances=>{
       if(!balances) return;
-     // console.log(balances);
+
 
       this.balanceFrom = balances.find(function (item) {
         return item.symbol === symbol;
@@ -127,6 +147,8 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
         this.snackBar.open('You cant transfer empty balance','x');
         return;
       }
+
+      this.setBalances(balances);
 
       this.amountFromUS = this.balanceFrom.balanceUS;
       this.amountFrom = this.balanceFrom.available;
@@ -140,6 +162,35 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
   }
 
 
+  setBalances(balances:VOBalance[]){
+
+    let base = this.transfer.base;
+
+    let coin = this.transfer.coin;
+    if(coin){
+      let balance = balances.find(function (item) {
+        return item.symbol === coin;
+      });
+
+      if(balance){
+        this.transfer.amountCoin = balance.balance;
+        if(this.transfer.rate){
+
+        }
+
+      }
+
+    }
+  }
+  
+  adjustCoinPrice(){
+
+    let rate = this.transfer.rate;
+    if(!rate) return;
+    let basePrice = this.basePrice;
+    this.transfer.priceCoinUS = basePrice * rate;
+    this.transfer.amountCoinUS = this.transfer.amountCoin * this.transfer.priceCoinUS;
+  }
 
 
   calculateTo(){
@@ -149,7 +200,9 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
       return
     }
 
-    let MC = this.marketCap.getAllCoinsData();
+    let MC = this.MC
+
+
 
     let mcBase  = MC[this.currentMarket.base];
     if(mcBase)  this.ratePrice = (mcBase.price_usd * this.transfer.rate).toFixed(2);
@@ -290,7 +343,6 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
     console.log(market, action, amountCoin, amountBase);
 
     if(confirm(message)){
-
 
 
       let request: TransferReqest = new TransferReqest(this.privateService, this.privateService.publicService);
