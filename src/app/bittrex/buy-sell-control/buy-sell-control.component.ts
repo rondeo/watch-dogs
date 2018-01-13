@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, SimpleChange} from '@angular/core';
 import {BooksService, VOBooksRate} from "../../services/books-service";
 import {OrdersManagerService} from "../../services/orders-manager.service";
 import {MatSnackBar} from "@angular/material";
@@ -37,34 +37,89 @@ export class BuySellControlComponent implements OnInit {
     sellUS:0
   };
 
+
+
   @Input() priceBaseUS:number;
   @Input() base:string;
 
-  @Input() balanceBaseUS:number;
+  @Input() balanceBase:number;
 
   @Input() coin:string;
  // @Input() balanceCoin:number;
-  @Input() balanceCoinUS:number;
+  @Input() balanceCoin:number;
+
+
 
   @Output() currentOrder:VOOrder;
 
-  amountUS:number;
+  amountUS:number = 400;
 
  // amountBaseUS:number;
 
   amountBase:number;
 
+  rate:number;
+
+  buyChange:number;
+  buyColor:string;
+
+  sellChange:number;
+  sellColor:string
+
+  ngOnChanges(changes){
+    if(changes.base || changes.coin){
+      this.setMarket();
+    }
+    if(changes.priceBaseUS){
+      this.setAmount();
+     // this.updateBooks();
+    }
+
+    console.log(changes);
+  }
+
+
   private sub3:Subscription;
+
+
   ngOnInit() {
 
     this.sub3 =  this.booksService.subscribeForRate().subscribe(booksRate=>{
-      booksRate.buyUS =  +(booksRate.buy * this.priceBaseUS).toPrecision(4);
-      booksRate.sellUS =  +(booksRate.sell * this.priceBaseUS).toPrecision(4);
-
-      this.rateByBooks = booksRate;
+      if(!booksRate) return;
+      this.updateBooks(booksRate);
     })
 
 
+  }
+
+
+
+  updateBooks(booksRate?){
+
+    if(!booksRate) booksRate  =  this.rateByBooks;
+
+    let newBuy = +(booksRate.buy * this.priceBaseUS).toPrecision(4);;
+    let newSell = +(booksRate.sell * this.priceBaseUS).toPrecision(4);
+
+    let oldBooks = this.rateByBooks;
+
+    if(oldBooks.buyUS && oldBooks.sellUS){
+
+
+      this.buyChange = +(100 * (oldBooks.buyUS - newBuy)/oldBooks.buyUS).toFixed(2);
+      if(this.buyChange>0)this.buyColor = 'green';
+      else if(this.buyChange<0)this.buyColor = 'red';
+      else this.buyColor = '';
+
+      this.sellChange = +(100 * (oldBooks.sellUS - newSell)/oldBooks.sellUS).toFixed(2);
+      if(this.sellChange>0)this.sellColor = 'green';
+      else if(this.sellChange<0)this.sellColor = 'red';
+      else this.sellColor = '';
+    }
+
+    booksRate.buyUS =  newBuy;
+    booksRate.sellUS =  newSell;
+    this.rateByBooks = booksRate;
   }
 
   ngOnDestroy(){
@@ -77,47 +132,34 @@ export class BuySellControlComponent implements OnInit {
 
   setMarket(){
     if(this.base && this.coin) this.booksService.setMarket(this.base, this.coin).then(res=>{ });
+    this.rateByBooks = {buy:0, sell:0, buyUS:0, sellUS:0};
+    this.sellChange = 0;
+    this.buyColor ='';
+    this.sellChange = 0;
+    this.sellColor = '';
+
 
   }
 
-  onAmountChanged(evt){
-    console.log(this.amountBase);
+  private setAmount(){
+    if(!this.priceBaseUS) return;
     this.amountBase = +(this.amountUS / this.priceBaseUS).toPrecision(8);
     this.booksService.setAmount(this.amountBase);
+  }
+  onAmountChanged(evt){
+   this.setAmount();
   }
 
   onRefreshBooksClick(){
     this.booksService.refreshBooks();
   }
 
-  onBuyClick(){
-    let action = 'Buy';
-    let balance = this.balanceBaseUS;
-
-    let amountUS = this.amountUS;
-    let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.0025));
-    this.processAction(action, amountUS, isMax);
-  }
-
-  onSellClick(){
-    let action = 'Sell';
-    let balance = this.balanceCoinUS;
-
-    let amountUS = this.amountUS;
-    let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.0025));
-
-    this.processAction(action, amountUS, isMax);
-
-  }
-
   private sub5;
-  cancelOrder(uuid:string){
+  onCancelOrder(uuid:string){
     if(this.sub5) this.sub5.unsubscribe();
     this.sub5 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
       console.warn(res);
-      //this.currentOrder = res;
+      this.currentOrder = res;
 
     })
 
@@ -131,46 +173,90 @@ export class BuySellControlComponent implements OnInit {
       console.log(res);
       if(!res.isOpen){
         this.privateService.refreshBalances();
+
+        this.currentOrder = {
+          uuid:'',
+          isOpen:false
+        };
+
         this.snackBar.open('Complete ','x',{duration:2000, extraClasses:'alert-green'})
 
       }else{
         this.snackBar.open('In progress ','x',{duration:2000})
-      }
       this.currentOrder = res;
+      }
+
 
     })
   }
 
-  processAction(action,  amountUS, isMax){
+
+  onBuyClick(){
+    let action = 'Buy';
+    let balance = this.balanceBase;
+
+    let amounBase = this.amountUS / this.priceBaseUS;
+
+    let isMax = (amounBase > balance);
+    if(isMax) amounBase = (balance - (balance * 0.0025));
+    this.processAction(action, amounBase, isMax);
+  }
+
+  onSellClick(){
+    let action = 'Sell';
+    let balance = this.balanceCoin;
+    let rate = this.rate;
+    let amountBase = this.amountUS / this.priceBaseUS;
+
+    let amountCoin = amountBase / rate;
+
+    let isMax = (amountCoin > balance);
+
+    this.processAction(action, amountBase, isMax);
+
+  }
+
+
+
+  processAction(action,  amountBase, isMax){
     console.log(action);
 
     let base:string = this.base;
     let coin:string = this.coin;
    // let balanceCoin = this.balanceCoin;
-    let priceBase = this.priceBaseUS;
+    let priceBaseUS = this.priceBaseUS;
 
-    let amountBase = +(amountUS / priceBase).toFixed(8);
+    //let amountBase = +(amountUS / priceBase).toFixed(8);
 
 
-    console.log('amountBase ' + amountBase + ' priceBase ' + priceBase );
+    console.log('amountBase ' + amountBase + ' priceBaseUS ' + priceBaseUS );
 
     this.booksService.refreshBooks(action, amountBase).then((rate)=>{
 
       console.log(rate);
-      let rateUS = (rate * priceBase).toPrecision(4);
+      let amountCoin = +(amountBase / rate).toPrecision(5);
+
+      if(action === 'Sell'){
+        let balance = this.balanceCoin;
+        balance = (balance - (balance * 0.0025));
+        if(amountCoin > balance) amountCoin = balance;
+      }
+
+      let rateUS = (rate * priceBaseUS).toPrecision(4);
 
       // if(rate<1e-3) rate = +(rate.toFixed(8));
       console.log(' rateUS  ' + rateUS + ' rate ' + rate);
-      let amountCoin = +(amountBase / rate).toPrecision(5);
+
 
       console.log(' amountCoin ' + amountCoin + ' on balance ');
 
+      let amountBaseUS = +(amountBase * priceBaseUS).toFixed(2);
 
-      let fee = (amountUS * 0.0025).toFixed(2);
+      let fee = (amountBaseUS * 0.0025).toFixed(2);
 
       setTimeout(()=>{
 
-        if(confirm( action +' '+rateUS + ' \n' +coin  +' $'+ amountUS +  '\nFee: $' + fee)){
+        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountBaseUS +  '\nFee: $' + fee)){
 
           let service:APIBuySellService = this.privateService;
           let obs:Observable<VOOrder>

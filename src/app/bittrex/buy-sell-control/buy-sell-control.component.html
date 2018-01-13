@@ -1,36 +1,48 @@
 <div>
     <div>
-        Order: <span>{{currentOrder.uuid}}</span>
+        &nbsp;&nbsp;<small>{{currentOrder.uuid}}</small>
         <span *ngIf="currentOrder.isOpen" class="btn fa fa-minus-circle dred fa-2x" (click)="onCancelOrder(currentOrder.uuid)"></span>
     </div>
+    <br/>
     <div>
         <mat-radio-group [(ngModel)] = "amountUS" (ngModelChange)="onAmountChanged($event)" >
             <mat-radio-button value="100">$100</mat-radio-button>
             <mat-radio-button value="200">$200</mat-radio-button>
-            <mat-radio-button value="400">$400</mat-radio-button>
+            <mat-radio-button  value="400">$400</mat-radio-button>
             <mat-radio-button value="600">$600</mat-radio-button>
             <mat-radio-button value="1000">$1000</mat-radio-button>
         </mat-radio-group>
     </div>
     <div>
+        <br/>
         <table class="text-center">
             <tbody>
+
             <tr>
                 <td>
-                    <h2>{{rateByBooks.sellUS}}</h2>
+                    <div><strong class="large">{{rateByBooks.sellUS}}</strong></div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<small  [ngClass]="sellColor">{{sellChange}}%</small>
+                    </div>
                     <br/>
                     <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
                 </td>
                 <td>&nbsp;&nbsp;</td>
                 <td>
-                    <h2>{{rateByBooks.buyUS}}</h2>
+                    <div><strong class="large">  {{rateByBooks.buyUS}}  </strong></div>
+
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<small  [ngClass]="buyColor">{{buyChange}}%</small>
+                    </div>
                     <br/>
+
                     <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
                 </td>
                 <td>&nbsp;&nbsp;</td>
                 <td>
-                    <h3>Refresh</h3>
+                    <div><strong class="large">Refresh</strong></div>
                     <br/>
+                <br/>
                     <button mat-fab color="default" (click)="onRefreshBooksClick()"><span class="fa fa-refresh fa-2x white" ></span></button>
 
                 </td>

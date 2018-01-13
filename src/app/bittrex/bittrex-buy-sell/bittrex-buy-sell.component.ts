@@ -36,6 +36,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
 
+
   currentOrder:VOOrder;
 
 
@@ -131,18 +132,18 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     this.ordersManager.setService(this.privateService)
     this.booksService.setService(this.privateService.publicService);
 
-   this.sub3 =  this.booksService.subscribeForRate().subscribe(booksRate=>{
+   /*this.sub3 =  this.booksService.subscribeForRate().subscribe(booksRate=>{
      booksRate.buyUS =  +(booksRate.buy * this.priceBase).toPrecision(4);
      booksRate.sellUS =  +(booksRate.sell * this.priceBase).toPrecision(4);
 
       this.rateByBooks = booksRate;
     })
-
+*/
 
     let sub = this.privateService.marketCap.getCoinsObs().subscribe(res=>{
       if(res){
         this.MC = res;
-        this.setPriceBase();
+        if(this.base) this.priceBaseUS = this.MC[this.base].price_usd;
         setTimeout(()=>sub.unsubscribe(),100);
       }
     });
@@ -379,6 +380,9 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
 
+  balanceBaseN:number;
+  balanceCoinN:number;
+  priceBaseUS:number;
 
  populateBalances(){
    let sub = this.privateService.balances$.subscribe(res=>{
@@ -393,6 +397,8 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
        balanceUS:0
      };
 
+     this.balanceBaseN = this.balanceBase.balance;
+
 
      if(coin) {
 
@@ -402,6 +408,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
          balanceUS:0
        };
 
+       this.balanceCoinN =  balanceCoin.balance;
        this.modelBuySell.charge = balanceCoin.balanceUS;
        this.balanceCoin = balanceCoin;
 
@@ -423,6 +430,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
 
+  coin:string
   setMarket(pair:string){
 
     console.warn(' setMarket ' + pair);
@@ -430,7 +438,12 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     let ar =  pair.split('_');
     if(ar.length == 2){
       this.modelBuySell.market = pair;
-      this.booksService.setMarket(ar[0], ar[1]);
+
+      this.base = ar[0];
+      this.coin = ar[1];
+      if(this.MC) this.priceBaseUS = this.MC[this.base].price_usd;
+
+     // this.booksService.setMarket(, ar[1]);
       this.populateBalances();
       //this.downloadBooks();
      // this.downloadHistory();

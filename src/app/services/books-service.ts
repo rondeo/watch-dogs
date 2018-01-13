@@ -28,7 +28,7 @@ export class BooksService {
   booksBuy:VOOrderBook[];
   exchangeService:APIBooksService;
 
-  rateForAmountSub:BehaviorSubject<VOBooksRate> = new BehaviorSubject<VOBooksRate>({buy:0, buyUS:0, sellUS:0, sell:0});
+  rateForAmountSub:BehaviorSubject<VOBooksRate> = new BehaviorSubject<VOBooksRate>(null);
 
   setService( exchangeService:APIBooksService){
     this.exchangeService = exchangeService;
@@ -38,8 +38,7 @@ export class BooksService {
     if(!amount) amount = this.amount;
 
       return this.downloadBooks().toPromise().then(res=>{
-        console.log(res);
-        this.dispatchBooks();
+
         if(action ==='Buy') {
           return BooksService.getRateForAmountBase(this.booksSell, amount)
         } else if(action ==='Sell'){
@@ -53,7 +52,7 @@ export class BooksService {
     if(!this.base || !this.coin) return;
 
     return this.exchangeService.getOrderBook(this.base, this.coin).map(res=>{
-      console.log(res);
+     // console.log(res);
       this.booksSell = res.sell;
       this.booksBuy = res.buy;
       this.dispatchBooks();
@@ -69,22 +68,25 @@ export class BooksService {
   setMarket(base:string, coin:string){
     this.base = base;
     this.coin = coin;
-    return this.downloadBooks().toPromise();
+    if(base && coin) return this.downloadBooks().toPromise();
+    else this.rateForAmountSub.next({sell:0, buy:0});
   }
 
   subscribeForRate():Observable<VOBooksRate>{
     return this.rateForAmountSub.asObservable();
   }
 
-  private amount:number;
+  private amount:number = 1;
   setAmount(amount:number):void{
+    //console.log('setting amount ' + amount);
     this.amount = amount;
      this.dispatchBooks();
   }
 
   private dispatchBooks(){
     let amount = this.amount;
-    if(!amount) return;
+    if(!amount || !this.booksSell || !this.booksBuy) return;
+    //console.log('amount  ' + amount);
     this.rateForAmountSub.next({
       sell:BooksService.getRateForAmountBase(this.booksSell, amount),
       buy:BooksService.getRateForAmountBase(this.booksBuy, amount)

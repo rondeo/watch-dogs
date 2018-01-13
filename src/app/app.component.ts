@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
 
     let user =  this.storage.restoreUserSimple();
 
-    console.log(user);
+   // console.log(user);
     if(user && user.u && user.p){
       this.storage.setSalt( user.u, user.p);
 
