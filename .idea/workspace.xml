@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.component.ts" afterPath="$PROJECT_DIR$/src/app/app.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.html" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.html" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html" afterPath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html" />
       <change beforePath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/books-service.ts" afterPath="$PROJECT_DIR$/src/app/services/books-service.ts" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" afterPath="$PROJECT_DIR$/src/styles.css" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -46,16 +43,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bittrex.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/exchanges/services/bittrex.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3026">
-              <caret line="194" column="21" lean-forward="false" selection-start-line="194" selection-start-column="21" selection-end-line="194" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="bittrex-buy-sell.component.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts">
           <provider selected="true" editor-type-id="text-editor">
@@ -69,24 +56,32 @@
       <file leaf-file-name="buy-sell-control.component.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="26" column="25" lean-forward="true" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
+            <state relative-caret-position="119">
+              <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="13" />
               <folding>
                 <element signature="e#24#30#0" expanded="true" />
                 <element signature="e#30#36#0" expanded="true" />
-                <element signature="e#958#964#0" expanded="true" />
-                <element signature="e#964#970#0" expanded="true" />
-                <element signature="e#970#976#0" expanded="true" />
-                <element signature="e#976#982#0" expanded="true" />
-                <element signature="e#1225#1231#0" expanded="true" />
-                <element signature="e#1231#1237#0" expanded="true" />
-                <element signature="e#1403#1409#0" expanded="true" />
-                <element signature="e#1409#1415#0" expanded="true" />
-                <element signature="e#1415#1421#0" expanded="true" />
-                <element signature="e#1421#1427#0" expanded="true" />
-                <element signature="e#1666#1672#0" expanded="true" />
-                <element signature="e#1672#1678#0" expanded="true" />
+                <element signature="e#1167#1173#0" expanded="true" />
+                <element signature="e#1173#1179#0" expanded="true" />
+                <element signature="e#1179#1185#0" expanded="true" />
+                <element signature="e#1185#1191#0" expanded="true" />
+                <element signature="e#1723#1729#0" expanded="true" />
+                <element signature="e#1729#1735#0" expanded="true" />
+                <element signature="e#1735#1741#0" expanded="true" />
+                <element signature="e#1741#1747#0" expanded="true" />
+                <element signature="e#1986#1992#0" expanded="true" />
+                <element signature="e#1992#1998#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="styles.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/styles.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="318">
+              <caret line="161" column="15" lean-forward="false" selection-start-line="161" selection-start-column="15" selection-end-line="161" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,8 +99,8 @@
       <file leaf-file-name="buy-sell-control.component.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="77" column="25" lean-forward="false" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+            <state relative-caret-position="46">
+              <caret line="107" column="0" lean-forward="false" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
               <folding>
                 <element signature="e#0#77#0" expanded="true" />
               </folding>
@@ -137,7 +132,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/services/books-service.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="243">
-              <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
+              <caret line="37" column="37" lean-forward="false" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -154,7 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>popu</find>
       <find>selected</find>
       <find>book</find>
       <find>downloadBooks</find>
@@ -184,6 +178,7 @@
       <find>MC</find>
       <find>currentOrder</find>
       <find>rateByBooks</find>
+      <find>table</find>
     </findStrings>
     <replaceStrings>
       <replace>MatD</replace>
@@ -218,7 +213,6 @@
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-main/bittrex-main.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app.component.html" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-main/bittrex-main.component.html" />
-        <option value="$PROJECT_DIR$/src/styles.css" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.html" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts" />
@@ -249,9 +243,10 @@
         <option value="$PROJECT_DIR$/src/app/exchanges/services/bittrex.service.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.html" />
-        <option value="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app.component.ts" />
         <option value="$PROJECT_DIR$/src/app/services/books-service.ts" />
+        <option value="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts" />
+        <option value="$PROJECT_DIR$/src/styles.css" />
         <option value="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html" />
       </list>
     </option>
@@ -462,7 +457,7 @@
       <workItem from="1515544568067" duration="6070000" />
       <workItem from="1515588380395" duration="35524000" />
       <workItem from="1515717909122" duration="12608000" />
-      <workItem from="1515801462953" duration="11059000" />
+      <workItem from="1515801462953" duration="12390000" />
     </task>
     <task id="LOCAL-00001" summary="interfaces for services">
       <created>1515613193838</created>
@@ -492,11 +487,18 @@
       <option name="project" value="LOCAL" />
       <updated>1515725438379</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary=" final">
+      <created>1515858466005</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1515858466005</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="783086000" />
+    <option name="totallyTimeSpent" value="784417000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
@@ -587,7 +589,8 @@
     <MESSAGE value="refactor by sell" />
     <MESSAGE value="buy sell basic works" />
     <MESSAGE value="buy sell control" />
-    <option name="LAST_COMMIT_MESSAGE" value="buy sell control" />
+    <MESSAGE value=" final" />
+    <option name="LAST_COMMIT_MESSAGE" value=" final" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -649,13 +652,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="10" lean-forward="false" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -965,40 +961,46 @@
     <entry file="file://$PROJECT_DIR$/src/app/services/books-service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
-          <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
+          <caret line="37" column="37" lean-forward="false" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="77" column="25" lean-forward="false" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+        <state relative-caret-position="46">
+          <caret line="107" column="0" lean-forward="false" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
           <folding>
             <element signature="e#0#77#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="161" column="15" lean-forward="false" selection-start-line="161" selection-start-column="15" selection-end-line="161" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="26" column="25" lean-forward="true" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
+        <state relative-caret-position="119">
+          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="13" />
           <folding>
             <element signature="e#24#30#0" expanded="true" />
             <element signature="e#30#36#0" expanded="true" />
-            <element signature="e#958#964#0" expanded="true" />
-            <element signature="e#964#970#0" expanded="true" />
-            <element signature="e#970#976#0" expanded="true" />
-            <element signature="e#976#982#0" expanded="true" />
-            <element signature="e#1225#1231#0" expanded="true" />
-            <element signature="e#1231#1237#0" expanded="true" />
-            <element signature="e#1403#1409#0" expanded="true" />
-            <element signature="e#1409#1415#0" expanded="true" />
-            <element signature="e#1415#1421#0" expanded="true" />
-            <element signature="e#1421#1427#0" expanded="true" />
-            <element signature="e#1666#1672#0" expanded="true" />
-            <element signature="e#1672#1678#0" expanded="true" />
+            <element signature="e#1167#1173#0" expanded="true" />
+            <element signature="e#1173#1179#0" expanded="true" />
+            <element signature="e#1179#1185#0" expanded="true" />
+            <element signature="e#1185#1191#0" expanded="true" />
+            <element signature="e#1723#1729#0" expanded="true" />
+            <element signature="e#1729#1735#0" expanded="true" />
+            <element signature="e#1735#1741#0" expanded="true" />
+            <element signature="e#1741#1747#0" expanded="true" />
+            <element signature="e#1986#1992#0" expanded="true" />
+            <element signature="e#1992#1998#0" expanded="true" />
           </folding>
         </state>
       </provider>

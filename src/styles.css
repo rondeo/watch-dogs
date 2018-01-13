@@ -157,6 +157,11 @@ table td {
 
 }
 
+.small-table td{
+    padding: 2px 4px 2px 4px;
+    border:none;
+}
+
 h2, h3, h4, h5{
   display: inline-block;
 }

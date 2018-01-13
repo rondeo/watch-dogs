@@ -64,7 +64,9 @@ export class BuySellControlComponent implements OnInit {
   buyColor:string;
 
   sellChange:number;
-  sellColor:string
+  sellColor:string;
+
+  percentDiff:number = 0;
 
   ngOnChanges(changes){
     if(changes.base || changes.coin){
@@ -101,6 +103,7 @@ export class BuySellControlComponent implements OnInit {
     let newBuy = +(booksRate.buy * this.priceBaseUS).toPrecision(4);;
     let newSell = +(booksRate.sell * this.priceBaseUS).toPrecision(4);
 
+    this.percentDiff = +(100 * (newSell - newBuy)/newSell).toFixed(2);
     let oldBooks = this.rateByBooks;
 
     if(oldBooks.buyUS && oldBooks.sellUS){
