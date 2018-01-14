@@ -1,34 +1,20 @@
 <section>
-    <h4>History</h4>
+    <h4>History {{symbol}}</h4>
     <table class="small">
         <tbody>
         <tr>
-            <td>Exchange</td>
-            <td>.Quantity</td>
-            <td>OrderType</td>
-
+            <td>Date</td>
+            <td>Action</td>
+            <td>Amount</td>
             <td>Price</td>
-            <td>PricePerUnit</td>
-
-            <td>Limit</td>
-            <td>Comission</td>
-            <td>ID</td>
-
-            <td>Closed</td>
+            <td>Base</td>
         </tr>
         <tr *ngFor="let order of history">
-            <td>{{order.Exchange}}</td>
-            <td>{{order.Quantity}}</td>
-            <td>{{order.OrderType}}</td>
-
-            <td>{{order.Price}}</td>
-            <td>{{order.PricePerUnit}}</td>
-
-            <td>{{order.Limit}}</td>
-            <td>{{order.Commission}}</td>
-            <td><span class="x-small">{{order.OrderUuid}}</span></td>
-
-            <td><span class="x-small">{{order.Closed}}</span></td>
+            <td>{{order.date}}</td>
+            <td>{{order.action}}</td>
+            <td>{{order.amountBaseUS}}</td>
+            <td>{{order.priceUS}}</td>
+            <td>{{order.base}}</td>
 
         </tr>
         </tbody>

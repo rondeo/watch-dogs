@@ -26,6 +26,9 @@ export class BittrexService implements APIBooksService{
 
   marketsAr:VOMarket[];
 
+  private basesSub:BehaviorSubject<string[]> = new BehaviorSubject(['USDT', 'BTC', 'ETH']);
+
+  private basesPriceSub:BehaviorSubject<number> = new BehaviorSubject(0);
   private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
 
 
@@ -71,6 +74,20 @@ export class BittrexService implements APIBooksService{
 
   }
 
+  getBasePrice(symbol:string):Observable<number>{
+    return this.marketCap.getCoinsObs().switchMap(MC=>{
+      return this.basesSub.asObservable().map(bases=>{
+        if (bases.indexOf(symbol) !==-1) return 0;
+        else return MC[symbol].price_usd;
+      })
+    })
+  }
+
+  isSymbolBase(symbol:string):Observable<boolean>{
+    return this.basesSub.asObservable().map(bases=>{
+      return (bases.indexOf(symbol) !==-1)
+    })
+  }
 
  /* private _searchCoin(symbol:string, ar:VOMarket[]):VOMarket[]{
     return ar.filter(function (item) {

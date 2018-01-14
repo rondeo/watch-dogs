@@ -18,24 +18,33 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   ordersHistory:VOOrderDisplay[];
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
     let str = localStorage.getItem(this.marketId) || '[]';
     this.ordersHistory = JSON.parse(str);
   }
 
+  ngOnInit() {
+
+  }
+
   ngOnChanges(changes){
-    console.log(changes)
-    if(changes.newOrder){
-      this.addOrder(changes.newOrder);
+    //console.log('trading-history-component', changes)
+    if(changes.newOrder && changes.newOrder.currentValue){
+
+      this.addOrder(changes.newOrder.currentValue);
       this.calculateSummary();
       this.saveData()
+    }
+
+    if(changes.priceBaseUS && changes.priceBaseUS.currentValue){
+      console.log('trading-history-component  '+ changes.priceBaseUS.currentValue);
+
     }
 
   }
 
   private addOrder(order:VOOrder){
+
     console.log('add oredr ', order);
     let exists = this.ordersHistory.find(function (item) { return item.uuid === order.uuid; });
     if(!!exists){
@@ -59,9 +68,11 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       amoint:1,
       amountUS:1,
       priceUS:1,
-      rate:1,
-      action:order.action.substr(0,1),
-      isOpen:order.isOpen
+      rate:order.rate,
+      action:order.action,
+      isOpen:order.isOpen,
+      coin:order.coin,
+      base:order.base
     }
   }
 

@@ -1,6 +1,9 @@
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {VOBalance, VOMarket, VOMarketB, VOMarketCap, VOOrder, VOOrderBook, VOTransfer} from '../../models/app-models';
+import {
+  VOBalance, VOMarket, VOMarketB, VOMarketCap, VOORDER, VOOrder, VOOrderBook,
+  VOTransfer
+} from '../../models/app-models';
 import {BittrexPrivateService, SOBuySell} from '../bittrex-private.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MarketCapService} from '../../market-cap/market-cap.service';
@@ -115,10 +118,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   )
   {
 
-    this.currentOrder ={
-      uuid:'--',
-      isOpen:false
-    }
+    this.currentOrder = VOORDER;
     this.modelBuySell = new BuySellModel();
     console.log(this.modelBuySell )
   }
@@ -283,10 +283,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
           }
           obs.subscribe(res=>{
             if(res && res.uuid){
-              this.currentOrder = {
-                uuid:res.uuid,
-                isOpen:true
-              }
+              this.currentOrder = VOORDER
 
               this.checkOrder(res.uuid);
 

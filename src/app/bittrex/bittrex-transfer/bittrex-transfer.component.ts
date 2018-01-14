@@ -14,8 +14,6 @@ import {EventTransfer, TransferReqest} from "../transfer-reqest";
 })
 export class BittrexTransferComponent implements OnInit, OnDestroy {
 
-
-
   order:VOOrder;
 
   transfer:VOTransfer = {
@@ -76,6 +74,10 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
   MC:{[symbol:string]:VOMarketCap};
 
   basePrice:number;
+  coin:string;
+  base:string;
+  symbol:string;
+  isBase:boolean;
 
 
   isShowAll:boolean;
@@ -112,6 +114,12 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
     });
 
     let symbol = this.route.snapshot.paramMap.get('symbol');
+
+    this.symbol = symbol;
+    this.sub2 = this.privateService.publicService.isSymbolBase(symbol).subscribe(res=>{
+      this.isBase = res;
+    });
+
 
 
     this.sub2 = this.privateService.publicService.serachResults$.subscribe(res=>{
@@ -200,7 +208,7 @@ export class BittrexTransferComponent implements OnInit, OnDestroy {
       return
     }
 
-    let MC = this.MC
+    let MC = this.MC;
 
 
 

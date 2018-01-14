@@ -95,11 +95,30 @@ export class ConfigApp{
   ]
 }
 
+export const VOORDER:VOOrder = {
+  uuid:'',
+  isOpen:false,
+  base:'',
+  coin:'',
+  rate:0
+
+}
+
 export interface VOOrder{
-  uuid:string
-  isOpen:boolean
-  message?:string
+  uuid:string;
+  isOpen:boolean;
+  message?:string;
   action?:string;
+  date?:string;
+  rate:number;
+  priceBaseUS?:number;
+  amountBaseUS?:number;
+  priceUS?:number;
+  amountCoin?:number;
+  amountBase?:number;
+  fee?:number;
+  base:string;
+  coin:string;
 }
 
 

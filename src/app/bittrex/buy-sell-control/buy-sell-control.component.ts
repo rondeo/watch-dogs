@@ -6,7 +6,7 @@ import {BittrexPrivateService} from "../bittrex-private.service";
 import {BittrexService} from "../../exchanges/services/bittrex.service";
 import {Observable} from "rxjs/Observable";
 import {APIBuySellService} from "../../services/buy-sell.service";
-import {VOOrder} from "../../models/app-models";
+import {VOORDER, VOOrder} from "../../models/app-models";
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -26,7 +26,7 @@ export class BuySellControlComponent implements OnInit {
 
     ordersManager.setService(privateService);
     booksService.setService(publicService);
-    this.currentOrder = {uuid:'', isOpen:false};
+    this.currentOrder = VOORDER;
   }
 
 
@@ -186,10 +186,7 @@ export class BuySellControlComponent implements OnInit {
       if(!res.isOpen){
         this.privateService.refreshBalances();
         this.oredrCopmlete = res;
-        this.currentOrder = {
-          uuid:'',
-          isOpen:false
-        };
+        this.currentOrder = VOORDER;
 
         this.snackBar.open('Complete ','x',{duration:2000, extraClasses:'alert-green'})
 
@@ -281,10 +278,7 @@ export class BuySellControlComponent implements OnInit {
           }
           obs.subscribe(res=>{
             if(res && res.uuid){
-              this.currentOrder = {
-                uuid:res.uuid,
-                isOpen:true
-              }
+              this.currentOrder = VOORDER;
 
               this.checkOrder(res.uuid);
 

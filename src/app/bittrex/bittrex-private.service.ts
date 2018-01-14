@@ -49,6 +49,7 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
   private myBotsSub: BehaviorSubject<MyBot[]>;
 
 
+
   private MC:{[symbol:string]:VOMarketCap};
 
   constructor(private http: HttpClient,
@@ -222,13 +223,104 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
      })
   }
 
-  getHistory(): Observable<VOOrder[]> {
-    let url = 'https://bittrex.com/api/v1.1/account/getorderhistory';
-    return this.call(url, {}).map(res=>{
-    return res.result || [];
-    })
+  private ordersHistorySub:BehaviorSubject<VOOrder[]>;
+  getHistory(refresh:boolean = false): Observable<VOOrder[]> {
+    if(refresh){
+      return this._getHistory();
+    }else{
+      if(this.ordersHistorySub) return this.ordersHistorySub.asObservable();
+      else return  this._getHistory();
+    }
   }
 
+
+  private _getHistory(): Observable<VOOrder[]> {
+
+
+    let url = 'https://bittrex.com/api/v1.1/account/getorderhistory';
+    return this.marketCap.getCoinsObs().switchMap(MC=>{
+
+      return this.call(url, {}).map(res=>{
+        console.log(res);
+
+        let result =  res.result.map(function(item){
+          let a = item.Exchange.split('-');
+
+          let mc = MC[a[0]];
+          let priceBaseUS = mc?mc.price_usd:0;
+
+          return {
+            uuid:item.OrderUuid,
+            isOpen:item.QuantityRemaining,
+            base:a[0],
+            coin:a[1],
+            date:item.Closed.split('T')[0],
+            action:item.OrderType.split('_')[1],
+            priceBaseUS:priceBaseUS,
+            amountBaseUS:Math.round(item.Price * priceBaseUS),
+            rate:item.PricePerUnit,//item.Limit,
+            priceUS: +(item.PricePerUnit * priceBaseUS).toPrecision(3),
+            amountCoin:item.Quantity,
+            amountBase:item.Price,
+            fee:item.Commission
+          }
+        }) || [];
+
+        this.ordersHistorySub = new BehaviorSubject<VOOrder[]>(result);
+        return result;
+
+      })
+    })
+
+  }
+
+
+  /*
+  * Closed
+:
+"2018-01-13T13:48:21.277"
+Commission
+:
+0.00000843
+Condition
+:
+"NONE"
+ConditionTarget
+:
+null
+Exchange
+:
+"BTC-SC"
+ImmediateOrCancel
+:
+false
+IsConditional
+:
+false
+Limit
+:
+0.00000465
+OrderType
+:
+"LIMIT_SELL"
+OrderUuid
+:
+"22fdbb29-38bb-4db3-ab4c-60591f13d85b"
+Price
+:
+0.00337314
+PricePerUnit
+:
+0.00000464
+Quantity
+:
+725.4085335
+QuantityRemaining
+:
+0
+TimeStamp
+:
+"2018-01-13T13:48:21.23"*/
   //{"success":false,"message":"ADDRESS_GENERATING","result":null}
   createWallet(symbol: string): Observable<{ result: { Currency: string, Address: string }, message: string }> {
     let uri = 'https://bittrex.com/api/v1.1/account/getdepositaddress';
@@ -264,12 +356,15 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
     let url = 'https://bittrex.com/api/v1.1/account/getorder';
     return this.call(url, {uuid: uuid}).map(res => {
        let r = <SOOrder1>res.result;
-
       console.log('getOrderById ',r);
+      let a = r.Exchange.split('-');
       return {
         uuid:r.OrderUuid,
         action:r.Type,
-        isOpen:r.IsOpen
+        isOpen:r.IsOpen,
+        base:a[0],
+        coin:a[1],
+        rate:0
       }
     });
 
