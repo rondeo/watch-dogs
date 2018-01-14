@@ -14,13 +14,16 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   @Input() newOrder:VOOrder;
   @Input() priceBaseUS:number;
-  @Input() marketId:string;
+
+  @Input() coin:string;
+  @Input() exchange:string;
+  @Input() base:string;
 
   ordersHistory:VOOrderDisplay[];
 
   constructor() {
-    let str = localStorage.getItem(this.marketId) || '[]';
-    this.ordersHistory = JSON.parse(str);
+
+
   }
 
   ngOnInit() {
@@ -40,7 +43,19 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       console.log('trading-history-component  '+ changes.priceBaseUS.currentValue);
 
     }
+    //this.marketID = 'bittrex_'+this.base+'_'+ this.coin;
+    if(changes.coin || changes.base){
+      this.loadSavedData();
+    }
 
+  }
+
+  loadSavedData(){
+    if(this.exchange && this.base && this.coin){
+
+      let str = localStorage.getItem(this.exchange +'-'+ this.base +'-'+this.coin) || '[]';
+      this.ordersHistory = JSON.parse(str);
+    } else  this.ordersHistory = [];
   }
 
   private addOrder(order:VOOrder){
@@ -53,7 +68,6 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     };
 
     this.ordersHistory.push(this.mapOrder(order));
-
 
   }
 
@@ -77,11 +91,18 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   private saveData(){
-    localStorage.setItem(this.marketId, JSON.stringify(this.ordersHistory));
+    localStorage.setItem(this.exchange +'-'+ this.base +'-'+this.coin, JSON.stringify(this.ordersHistory));
   }
 
+  onClearSummaryClick(){
+    if(confirm('You want to clear local History?')){
+      localStorage.removeItem(this.exchange +'-'+ this.base +'-'+this.coin);
+      this.ordersHistory = [];
+    }
+  }
 
 }
+
 
 
 export interface VOOrderDisplay extends VOOrder{

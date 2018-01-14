@@ -37,6 +37,8 @@ export class BuySellControlComponent implements OnInit {
     sellUS:0
   };
 
+  @Input() exchange:string;
+
   @Input() priceBaseUS:number;
   @Input() base:string;
 
@@ -137,8 +139,6 @@ export class BuySellControlComponent implements OnInit {
     this.buyColor ='';
     this.sellChange = 0;
     this.sellColor = '';
-
-
   }
 
   private setAmount(){

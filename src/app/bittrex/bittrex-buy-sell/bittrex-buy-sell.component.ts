@@ -21,8 +21,6 @@ import {APIBuySellService} from "../../services/buy-sell.service";
 import {OrdersManagerService} from "../../services/orders-manager.service";
 
 
-
-
 @Component({
   selector: 'app-bittrex-buy-sell',
   templateUrl: './bittrex-buy-sell.component.html',
@@ -37,50 +35,48 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   amountCoin:number;
   amountBase:number;
 
+  //currentOrder:VOOrder;
 
 
-
-  currentOrder:VOOrder;
-
-
-
-  rateByBooks:VOBooksRate ={
+  /*rateByBooks:VOBooksRate ={
     buy:0,
     buyUS:0,
     sell:0,
     sellUS:0
-  };
+  };*/
   selectMarket:VOMarket[];
 
-  rateAvarage:number;
+ // rateAvarage:number;
 
   modelBuySell:BuySellModel;
 
 
-  historyStats:VOHistoryStats;
-  marketHistory:VOOrderBook[];
-  isHistoryLoading:boolean;
-  speedD:string;
-  durationD:string;
+ // historyStats:VOHistoryStats;
+  //marketHistory:VOOrderBook[];
+  //isHistoryLoading:boolean;
+  //speedD:string;
+  //durationD:string;
 
-  historyLength:string;
-  isBook:boolean;
+ // historyLength:string;
+ // isBook:boolean;
 
-  isShowTables:boolean;
+ // isShowTables:boolean;
  // isInfo:boolean;
 
-  currentBalance:VOBalance;
+  //currentBalance:VOBalance;
 
   balanceBase:VOBalance;
   balanceCoin:VOBalance;
 
-  percentOfLast:number;
-  fee:number = 0.0025;
+  //percentOfLast:number;
+ // fee:number = 0.0025;
 
   //action:string = 'Buy';
 
   baseMarkets:string[];
   base:string;
+  coin:string;
+  exchange:string = 'bittrex';
 
 
   symbolMarketsTitle:string;
@@ -90,10 +86,10 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
   currentMarket:VOMarket = new VOMarket();
  // usAmount:string;
-  usTo:number;
-  isOneMarket:boolean;
+  //usTo:number;
+  //isOneMarket:boolean;
 
-  progress:number = 20;
+  //progress:number = 20;
   //numMarkets$:Observable<number>;
   isCanBuy:boolean;
   isDisabled:boolean = true;
@@ -118,7 +114,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   )
   {
 
-    this.currentOrder = VOORDER;
+    //this.currentOrder = VOORDER;
     this.modelBuySell = new BuySellModel();
     console.log(this.modelBuySell )
   }
@@ -154,7 +150,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
   private sub6;
-  onCancelOrder(uuid){
+ /* onCancelOrder(uuid){
     if(confirm('You want to cancel '+ uuid+'?')){
       if(this.sub6) this.sub6.unsubscribe();
       this.sub6 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
@@ -162,7 +158,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       })
     }
 
-  }
+  }*/
   isCharging:boolean;
   onChargeAmountChaged(){
 
@@ -189,8 +185,8 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
 
-  private sub4
-  checkOrder(uuid:string){
+  //private sub4
+ /* checkOrder(uuid:string){
     if(this.sub4) this.sub4.unsubscribe();
     this.sub4 = this.ordersManager.checkOrder(uuid).subscribe(res=>{
       console.log(res);
@@ -205,9 +201,9 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     })
   }
-
-  private sub5;
-  cancelOrder(uuid:string){
+*/
+ // private sub5;
+ /* cancelOrder(uuid:string){
     if(this.sub5) this.sub5.unsubscribe();
     this.sub5 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
       console.log(res);
@@ -216,9 +212,9 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     })
 
 
-  }
+  }*/
 
-  onBuyClick(){
+ /* onBuyClick(){
     let action = 'Buy';
     let balance = this.balanceBase.balanceUS;
 
@@ -238,8 +234,8 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
     this.processAction(action, amountUS, isMax);
 
-  }
-
+  }*/
+/*
   processAction(action,  amountUS, isMax){
     console.log(action);
 
@@ -307,7 +303,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
     })
-  }
+  }*/
 
 
  /* onAmountBaseUSChanged(evt){
@@ -324,10 +320,13 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
 
-  setPriceBase(){
-    if(this.MC && this.modelBuySell.base)
-      this.priceBase = this.MC[this.modelBuySell.base].price_usd;
-      this.modelBuySell.priceBase  =  this.priceBase;
+  setPriceBase() {
+    if (!this.MC ||  !this.modelBuySell.base) return;
+
+    let prticeUS = this.MC[this.modelBuySell.base].price_usd || 0;
+    this.priceBaseUS = prticeUS;
+    this.priceBase = prticeUS;
+    this.modelBuySell.priceBase = prticeUS;
   }
 
 
@@ -336,8 +335,8 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     if(this.sub1)this.sub1.unsubscribe();
     if(this.sub2)this.sub2.unsubscribe();
     if(this.sub3)this.sub3.unsubscribe();
-    if(this.sub4)this.sub4.unsubscribe();
-    if(this.sub5)this.sub5.unsubscribe();
+    //if(this.sub4)this.sub4.unsubscribe();
+    //if(this.sub5)this.sub5.unsubscribe();
     if(this.sub6) this.sub6.unsubscribe();
     this.ordersManager.destroy();
 
@@ -427,17 +426,18 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
 
 
-  coin:string
+
   setMarket(pair:string){
 
     console.warn(' setMarket ' + pair);
    if(!pair) pair = 'undefined';
     let ar =  pair.split('_');
     if(ar.length == 2){
-      this.modelBuySell.market = pair;
 
+      this.modelBuySell.market = pair;
       this.base = ar[0];
       this.coin = ar[1];
+
       if(this.MC) this.priceBaseUS = this.MC[this.base].price_usd;
 
      // this.booksService.setMarket(, ar[1]);

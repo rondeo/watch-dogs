@@ -1,6 +1,7 @@
 <div>
     <div>
-        <sup>Summary: <span [ngClass]="summaryColor">{{summary}}</span></sup>
+        <small class="btn" (click)="onClearSummaryClick()">Summary:</small>
+        <span [ngClass]="summaryColor">{{summary}}</span>
     </div>
     <table class="table-small">
 
