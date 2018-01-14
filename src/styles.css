@@ -330,6 +330,11 @@ h2, h3, h4, h5{
 
 }
 
+.blur-text{
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
 .alert-red{
     background-color: #9b0a02;
     color: white;

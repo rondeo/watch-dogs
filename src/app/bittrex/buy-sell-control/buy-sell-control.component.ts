@@ -37,8 +37,6 @@ export class BuySellControlComponent implements OnInit {
     sellUS:0
   };
 
-
-
   @Input() priceBaseUS:number;
   @Input() base:string;
 
@@ -48,9 +46,8 @@ export class BuySellControlComponent implements OnInit {
  // @Input() balanceCoin:number;
   @Input() balanceCoin:number;
 
-
-
   @Output() currentOrder:VOOrder;
+  oredrCopmlete:VOOrder;
 
   amountUS:number = 400;
 
@@ -153,8 +150,20 @@ export class BuySellControlComponent implements OnInit {
    this.setAmount();
   }
 
+  isBooksLoading:boolean;
   onRefreshBooksClick(){
-    this.booksService.refreshBooks();
+    if(this.isBooksLoading){
+      setTimeout(()=>{
+        this.isBooksLoading = false;
+      }, 2000);
+      return;
+    }
+    this.isBooksLoading = true;
+    this.booksService.refreshBooks().then(res=>{
+      this.isBooksLoading = false;
+    }).catch(err=>{
+      this.isBooksLoading = false;
+    })
   }
 
   private sub5;
@@ -176,7 +185,7 @@ export class BuySellControlComponent implements OnInit {
       console.log(res);
       if(!res.isOpen){
         this.privateService.refreshBalances();
-
+        this.oredrCopmlete = res;
         this.currentOrder = {
           uuid:'',
           isOpen:false

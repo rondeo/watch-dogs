@@ -52,15 +52,15 @@
                             <small>{{percentDiff}}%</small>
                         </td>
                     </tr>
-                    <tr (click)="onRefreshBooksClick()">
+                    <tr  (click)="onRefreshBooksClick()">
                         <td>
-                            <strong class="large">{{rateByBooks.sellUS}}</strong>
+                            <strong  [ngClass]="isBooksLoading?'blur-text':''" class="large">{{rateByBooks.sellUS}}</strong>
                         </td>
                         <td>
-                            <span class="btn fa fa-refresh green"></span>
+                            <span [ngClass]="isBooksLoading?'scale05':''" class="btn fa fa-refresh green"></span>
                         </td>
                         <td>
-                            <strong class="large">  {{rateByBooks.buyUS}}  </strong>
+                            <strong  [ngClass]="isBooksLoading?'blur-text':''" class="large">  {{rateByBooks.buyUS}}  </strong>
                         </td>
                     </tr>
 
@@ -97,7 +97,10 @@
         </div>
 
         <div class="myFlexCol">
-            <app-trading-history></app-trading-history>
+            <app-trading-history
+                    [priceBaseUS]="priceBaseUS"
+                    [newOrder]="oredrCopmlete"
+            ></app-trading-history>
         </div>
     </div>
 </div>
