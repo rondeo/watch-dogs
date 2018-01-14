@@ -10,6 +10,9 @@
 
 
 
+.line{
+    margin-top: 5px;
+}
 sup, sub{
     font-weight:normal;
 }
@@ -157,7 +160,7 @@ table td {
 
 }
 
-.small-table td{
+.table-small td{
     padding: 2px 4px 2px 4px;
     border:none;
 }

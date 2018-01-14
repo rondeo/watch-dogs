@@ -1,40 +1,33 @@
 <div>
     <section>
-        <h3>
-            <span class="btn small" (click)="onMarketClick()">{{modelBuySell.market}}</span>
-
-
-
-            <span><span class="btn fa fa-usd fa-lg" (click)="onChargeClick()"></span><span>{{modelBuySell.charge}}</span></span>
-
-            <!--<span>{{modelBuySell.amountCoin}}</span>
-            <span>${{modelBuySell.amountCoinUS}}</span>-->
-        </h3>
-
-
-
-        <div *ngIf="isCharging">
-            <span>{{balanceBase.symbol}}</span>
-            <span>${{balanceBase.balanceUS}}</span>
-            <span>{{balanceCoin.symbol}}</span>
-            <span>${{balanceCoin.balanceUS}}</span>
-
-            Charge:
-            <mat-input-container class="w5">
-                <input  matInput placeholder="Charge Amount" type="number" [(ngModel)] = "modelBuySell.charge" (ngModelChange)="onChargeAmountChaged($event)">
-            </mat-input-container>
-
+        <div>
+            <strong class="btn small" (click)="onMarketClick()">{{modelBuySell.market}}</strong>
+            <span class="btn fa fa-usd fa-lg" (click)="onChargeClick()"></span>
+            <span> {{modelBuySell.charge}}</span>
         </div>
+                    <div *ngIf="isCharging">
+                        <span>{{balanceBase.symbol}}</span>
+                        <span>${{balanceBase.balanceUS}}</span>
+                        <span>{{balanceCoin.symbol}}</span>
+                        <span>${{balanceCoin.balanceUS}}</span>
 
-        <div *ngIf="marketsSelected">
-            <mat-form-field class="w9" >
-                <mat-select placeholder="Select Market" (change)="onMarketSelected($event)">
-                    <mat-option *ngFor="let selectMarket of marketsSelected" [value]="selectMarket.pair">
-                        {{selectMarket.pair}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+                        Charge:
+                        <mat-input-container class="w5">
+                            <input  matInput placeholder="Charge Amount" type="number" [(ngModel)] = "modelBuySell.charge" (ngModelChange)="onChargeAmountChaged($event)">
+                        </mat-input-container>
+
+                    </div>
+
+                    <div *ngIf="marketsSelected">
+                        <mat-form-field class="w9" >
+                            <mat-select placeholder="Select Market" (change)="onMarketSelected($event)">
+                                <mat-option *ngFor="let selectMarket of marketsSelected" [value]="selectMarket.pair">
+                                    {{selectMarket.pair}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
     </section>
 
     <section>

@@ -31,6 +31,7 @@ import { MarketBooksComponent } from './market-books/market-books.component';
 import {BooksService} from "../services/books-service";
 import {OrdersManagerService} from "../services/orders-manager.service";
 import { BuySellControlComponent } from './buy-sell-control/buy-sell-control.component';
+import { TradingHistoryComponent } from './trading-history/trading-history.component';
 
 
 
@@ -85,7 +86,8 @@ const routes: Routes = [
     MarketHistoryComponent,
     MyGainersLosersComponent,
     MarketBooksComponent,
-    BuySellControlComponent
+    BuySellControlComponent,
+    TradingHistoryComponent
   ],
   providers:[
     BittrexPrivateService,
