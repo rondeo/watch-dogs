@@ -20,7 +20,7 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
   @Input() base:string;
   @Input() coin:string;
-  @Input() basePrice:number;
+  @Input() priceBaseUS:number;
 
   @Output() rateAvarage = new EventEmitter();
   @Output() duration = new EventEmitter();
@@ -35,7 +35,7 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
   marketDetails:VOMarket = new VOMarket();
 
-  market:string;
+  //market:string;
   speedD:string;
   durationD:string;
   historyLength:string;
@@ -56,6 +56,8 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
   isAuto:boolean;
 
+
+
   constructor(
     private route:ActivatedRoute,
     private publicService:BittrexService,
@@ -72,16 +74,18 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges){
 
-    console.log(changes);
+    //console.log(changes);
 
    if(changes.coin || changes.base){
      if(this.coin && this.base){
-       this.market = this.base+'_' + this.market;
+      // this.market = this.base+'_' + this.market;
        this.loadMarketHistory();
+       this.loadMarketDetails();
+
 
      }
    }
-   if(changes.basePrice){
+   if(changes.priceBaseUS){
      this.loadMarketHistory();
      this.loadMarketDetails();
    }
@@ -93,13 +97,13 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
   }
 
   loadMarketDetails(){
-    if(!this.base || !this.coin) return;
+    if(!this.base || !this.coin || !this.priceBaseUS) return;
     this.publicService.getMarketSummary(this.base, this.coin).subscribe(res=>{
       console.log(res);
-      let basePrice = this.basePrice;
+      let basePrice = this.priceBaseUS;
 
 
-       let out = {
+       let out:VOMarket = {
         Ask:parseFloat((res.Ask * basePrice).toPrecision(4)),
         Bid:parseFloat((res.Bid * basePrice).toPrecision(4)),
         High:parseFloat((res.High * basePrice).toPrecision(4)),
@@ -171,14 +175,14 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
   loadMarketHistory(){
 
-    if(!this.base || !this.coin || !this.basePrice) return;
+    if(!this.base || !this.coin || !this.priceBaseUS) return;
 
     this.isHistoryLoading = true;
 
       this.publicService.getMarketHistory(this.base, this.coin).toPromise().then(res=>{
 
       this.marketHistory = res;
-      let basePrice = this.basePrice;
+      let basePrice = this.priceBaseUS;
 
       this.historyStats = MappersHistory.parseData(res, basePrice);
 

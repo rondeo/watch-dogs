@@ -39,6 +39,8 @@
                         [balanceBase]="balanceBaseN"
                         [balanceCoin]="balanceCoinN"
                         [priceBaseUS]="priceBaseUS"
+                        [ordersHistory]="ordersHistory"
+
 
                 ></app-buy-sell-control>
 
@@ -50,7 +52,7 @@
         <app-market-history
                 [base]="modelBuySell.base"
                 [coin]="modelBuySell.coin"
-                [basePrice]="priceBase"
+                [priceBaseUS]="priceBaseUS"
 
                 (rateAvarage)="onRateAvarage($event)"
         ></app-market-history>

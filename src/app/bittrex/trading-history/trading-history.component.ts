@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {VOOrder} from "../../models/app-models";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-trading-history',
@@ -11,6 +12,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   summary:number;
   summaryColor:string;
+  totalFee:string;
 
   @Input() newOrder:VOOrder;
   @Input() priceBaseUS:number;
@@ -19,7 +21,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   @Input() exchange:string;
   @Input() base:string;
 
-  ordersHistory:VOOrderDisplay[];
+  @Input() ordersHistory:VOOrder[];
 
   constructor() {
 
@@ -27,6 +29,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+
 
   }
 
@@ -54,8 +57,10 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     if(this.exchange && this.base && this.coin){
 
       let str = localStorage.getItem(this.exchange +'-'+ this.base +'-'+this.coin) || '[]';
+
       this.ordersHistory = JSON.parse(str);
     } else  this.ordersHistory = [];
+    console.log(this.ordersHistory);
   }
 
   private addOrder(order:VOOrder){
@@ -67,26 +72,36 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       return
     };
 
-    this.ordersHistory.push(this.mapOrder(order));
+    this.ordersHistory.push(this.mapOrder(order, this.priceBaseUS));
 
   }
 
   private calculateSummary(){
+    console.log(' calculateSummary ', this.priceBaseUS, this.ordersHistory);
+    let totalFee = 0;
+
+    this.ordersHistory.forEach(function (item) {
+      totalFee += item.fee
+    })
+    this.totalFee = totalFee.toFixed(3);
 
   }
 
-  private mapOrder(order:VOOrder):VOOrderDisplay{
+  private mapOrder(order:VOOrder, priceBaseUS:number):VOOrderDisplay{
+
+    console.log('mapOrder ', order)
 
     return {
       uuid:order.uuid,
-      amoint:1,
-      amountUS:1,
-      priceUS:1,
+      amountBaseUS: Math.round(order.amountBase * priceBaseUS),
+      priceUS:+(order.rate * priceBaseUS).toPrecision(4) ,
       rate:order.rate,
       action:order.action,
       isOpen:order.isOpen,
       coin:order.coin,
-      base:order.base
+      base:order.base,
+      fee:order.fee,
+      feeUS:+(order.fee * priceBaseUS).toPrecision(4)
     }
   }
 
@@ -107,9 +122,5 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
 export interface VOOrderDisplay extends VOOrder{
   uuid:string;
-  action:string;
-  amoint:number;
-  amountUS:number
   rate:number;
-  priceUS:number;
 }

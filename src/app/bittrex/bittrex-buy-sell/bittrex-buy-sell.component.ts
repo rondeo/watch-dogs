@@ -29,12 +29,12 @@ import {OrdersManagerService} from "../../services/orders-manager.service";
 
 export class BittrexBuySellComponent implements OnInit, OnDestroy {
 
-
   priceBase:number;
   priceCoin:number;
   amountCoin:number;
   amountBase:number;
 
+  ordersHistory:VOOrder[];
   //currentOrder:VOOrder;
 
 
@@ -438,6 +438,12 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       this.base = ar[0];
       this.coin = ar[1];
 
+      let sub = this.privateService.getHistory().subscribe(res=>{
+        this.ordersHistory = res.filter(function (item) {
+          return (item.base +'_' + item.coin ===pair);
+        })
+        setTimeout(()=>sub.unsubscribe(),20)
+      });
       if(this.MC) this.priceBaseUS = this.MC[this.base].price_usd;
 
      // this.booksService.setMarket(, ar[1]);

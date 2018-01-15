@@ -48,10 +48,17 @@ export class BuySellControlComponent implements OnInit {
  // @Input() balanceCoin:number;
   @Input() balanceCoin:number;
 
+  @Input() ordersHistory:VOOrder[];
+
   @Output() currentOrder:VOOrder;
+
+
   oredrCopmlete:VOOrder;
 
-  amountUS:number = 400;
+
+
+
+  amountUS:number = 50;
 
  // amountBaseUS:number;
 
@@ -179,15 +186,14 @@ export class BuySellControlComponent implements OnInit {
   }
 
   private sub4;
-  checkOrder(uuid:string){
+  startCheckingOrder(uuid:string){
     if(this.sub4) this.sub4.unsubscribe();
-    this.sub4 = this.ordersManager.checkOrder(uuid).subscribe(res=>{
+    this.sub4 = this.ordersManager.startCheckingOrder(uuid).subscribe(res=>{
       console.log(res);
       if(!res.isOpen){
         this.privateService.refreshBalances();
         this.oredrCopmlete = res;
         this.currentOrder = VOORDER;
-
         this.snackBar.open('Complete ','x',{duration:2000, extraClasses:'alert-green'})
 
       }else{
@@ -277,15 +283,12 @@ export class BuySellControlComponent implements OnInit {
             return;
           }
           obs.subscribe(res=>{
+
+            console.log(res);
             if(res && res.uuid){
-              this.currentOrder = VOORDER;
-
-              this.checkOrder(res.uuid);
-
+              this.currentOrder = res;
+              this.startCheckingOrder(res.uuid);
               this.snackBar.open('Order Set. Checking...'+res.message, 'x', {extraClasses:'alert-green', duration:2000});
-
-
-
             } else{
               this.snackBar.open('Error '+res.message, 'x', {extraClasses:'alert-red', duration:3000})
             }

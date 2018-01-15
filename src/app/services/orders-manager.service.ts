@@ -28,7 +28,8 @@ export class OrdersManagerService {
   setService(service:APIOrdersManager){
     this.privateService = service;
   }
-  checkOrder(uuid):Observable<VOOrder>{
+
+  startCheckingOrder(uuid):Observable<VOOrder>{
     this.uuid = uuid;
     setTimeout(()=>this.checkCurrentOrder(), 2000);
     return this.statusSub.asObservable();

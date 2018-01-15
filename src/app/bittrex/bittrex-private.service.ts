@@ -358,17 +358,52 @@ TimeStamp
        let r = <SOOrder1>res.result;
       console.log('getOrderById ',r);
       let a = r.Exchange.split('-');
+
       return {
         uuid:r.OrderUuid,
-        action:r.Type,
+        action:r.Type.split('_')[1].substr(0,1),
         isOpen:r.IsOpen,
         base:a[0],
         coin:a[1],
-        rate:0
+        rate:+r.PricePerUnit,
+        amountBase:r.Price,
+        amountCoin:r.Quantity,
+        fee:r.CommissionPaid
       }
     });
 
   }
+
+  /*
+  * interface SOOrder1{
+  AccountId: string;
+  IsOpen:boolean;
+ OrderUuid:string;
+ Exchange:string;
+ Type :string;// "LIMIT_BUY",
+ OrderType:string;
+ Quantity:number;
+ QuantityRemaining:number;
+ Limit:number;
+ Reserved:number;
+ ReserveRemaining:number;
+ CommissionReserved:number;
+ CommissionReserveRemaining:number;
+ CommissionPaid:number;
+ Price:number;
+ PricePerUnit:string;
+ Opened:string;// : "2014-07-13T07:45:46.27",
+ Closed:string;
+
+ Sentinel:string;//" : "6c454604-22e2-4fb4-892e-179eede20972",
+ CancelInitiated : boolean;
+ ImmediateOrCancel:boolean;
+ IsConditional:boolean;
+ Condition:string;//" : "NONE",
+ Commission:number;
+ ConditionTarget :string;
+}
+*/
 
 
   isLoaded: boolean;

@@ -3,15 +3,18 @@
         <small class="btn" (click)="onClearSummaryClick()">Summary:</small>
         <span [ngClass]="summaryColor">{{summary}}</span>
     </div>
-    <table class="table-small">
+    <div class="scrollY100">
+        <table class="table-small">
 
-        <tr *ngFor="let order of ordersHistory">
-            <td>{{order.action}}</td>
-            <td>{{order.amoint}}</td>
-            <td>{{order.priceUS}}</td>
-        </tr>
+            <tr *ngFor="let order of ordersHistory">
+                <td>{{order.action}}</td>
+                <td>{{order.amountBaseUS}}</td>
+                <td>{{order.priceUS}}</td>
+            </tr>
 
-    </table>
+        </table>
+    </div>
+
 
 
 </div>

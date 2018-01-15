@@ -1,7 +1,27 @@
 <div>
- <h4>History </h4>
+ <span>History </span>
         <a href="https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}" target="_blank">{{base}}-{{coin}}</a>
-    &nbsp;&nbsp;
+    <div >
+        <table class="table-small">
+            <tbody>
+            <tr class="small">
+                <td>Last</td>
+                <td>Low</td>
+                <td>High</td>
+                <td>Ask</td>
+                <td>Bid</td>
+            </tr>
+            <tr>
+                <td>{{marketDetails.Last}}</td>
+                <td>{{marketDetails.Low}}</td>
+                <td>{{marketDetails.High}}</td>
+                <td>{{marketDetails.Ask}}</td>
+                <td>{{marketDetails.Bid}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br/>
     <span>{{durationD}} <small>min</small></span>    &nbsp;&nbsp;
         <span> {{speedD}} /<small>min</small></span> &nbsp;&nbsp;
     <span  [ngClass]="(marketVolumeChange < 0)?'red':'green'">V: {{marketVolumeChange.toFixed(2)}} %</span>
