@@ -56,7 +56,6 @@ import {SearchCoinComponent} from './search-coin/search-coin.component';
 import {HitBtcService} from './exchanges/services/hit-btc.service';
 import {SearchCoinService} from './exchanges/search-coin.service';
 import {NovaexchangeService} from './exchanges/services/novaexchange.service';
-import {CryptopiaService} from './exchanges/services/cryptopia.service';
 import {BittrexModule} from './bittrex/bittrex.module';
 import {AllExchangesModule} from './all-in-one/all-exchanges.module';
 import {CompareService} from './services/compare.service';
@@ -64,6 +63,7 @@ import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
 import {BalancesModule} from "./balances/balances.module";
 import { WebsocketService} from "./shared/websocket-service";
+import {ApiServiceService} from "./exchanges/api-service.service";
 
 //import {WebsocketService} from "./shared/websocket-service";
 
@@ -128,7 +128,6 @@ declare const Buffer:any;
     YoBitService,
     HitBtcService,
     NovaexchangeService,
-    CryptopiaService,
     CompareService
    // WebsocketService
 

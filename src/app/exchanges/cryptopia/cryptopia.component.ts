@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CryptopiaService, VOCtopia} from '../services/cryptopia.service';
+import { VOCtopia} from '../services/cryptopia.service';
 
 @Component({
   selector: 'app-cryptopia',
@@ -10,14 +10,11 @@ export class CryptopiaComponent implements OnInit {
 
   coinsAr:VOCtopia[];
   constructor(
-    private ctopia:CryptopiaService
+
   ) { }
 
   ngOnInit() {
-    this.ctopia.getCurrencies().subscribe(res=>{
-     /// console.log(res)
-      this.coinsAr = res;
-    })
+
   }
 
 }

@@ -52,7 +52,8 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
 
   private MC:{[symbol:string]:VOMarketCap};
 
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
               public marketCap: MarketCapService,
               public publicService: BittrexService,
               private slack:SlackService,
