@@ -34,7 +34,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes){
-    //console.log('trading-history-component', changes)
+    console.log('trading-history-component', changes)
     if(changes.newOrder && changes.newOrder.currentValue){
 
       this.addOrder(changes.newOrder.currentValue);
@@ -51,15 +51,18 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       this.loadSavedData();
     }
 
+    if(changes.ordersHistory && changes.ordersHistory.currentValue){
+      this.calculateSummary();
+    }
   }
 
   loadSavedData(){
     if(this.exchange && this.base && this.coin){
 
-      let str = localStorage.getItem(this.exchange +'-'+ this.base +'-'+this.coin) || '[]';
+      let str = localStorage.getItem(this.exchange +'-'+ this.base +'-'+this.coin);
 
-      this.ordersHistory = JSON.parse(str);
-    } else  this.ordersHistory = [];
+      if(str) this.ordersHistory  = JSON.parse(str);
+    }
     console.log(this.ordersHistory);
   }
 
@@ -81,9 +84,9 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     let totalFee = 0;
 
     this.ordersHistory.forEach(function (item) {
-      totalFee += item.fee
+      totalFee += item.feeUS
     })
-    this.totalFee = totalFee.toFixed(3);
+    this.totalFee = totalFee.toFixed(2);
 
   }
 

@@ -439,11 +439,14 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
       this.coin = ar[1];
 
       let sub = this.privateService.getHistory().subscribe(res=>{
+
         this.ordersHistory = res.filter(function (item) {
           return (item.base +'_' + item.coin ===pair);
         })
+        console.warn(this.ordersHistory);
         setTimeout(()=>sub.unsubscribe(),20)
       });
+
       if(this.MC) this.priceBaseUS = this.MC[this.base].price_usd;
 
      // this.booksService.setMarket(, ar[1]);

@@ -262,7 +262,8 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
             priceUS: +(item.PricePerUnit * priceBaseUS).toPrecision(3),
             amountCoin:item.Quantity,
             amountBase:item.Price,
-            fee:item.Commission
+            fee:item.Commission,
+            feeUS:item.Commission * priceBaseUS
           }
         }) || [];
 

@@ -66,10 +66,10 @@ export class BuySellControlComponent implements OnInit {
 
   rate:number;
 
-  buyChange:number;
+  buyChange:number = 0;
   buyColor:string;
 
-  sellChange:number;
+  sellChange:number = 0;
   sellColor:string;
 
   percentDiff:number = 0;
@@ -115,14 +115,14 @@ export class BuySellControlComponent implements OnInit {
     if(oldBooks.buyUS && oldBooks.sellUS){
 
 
-      this.buyChange = +(100 * (oldBooks.buyUS - newBuy)/oldBooks.buyUS).toFixed(2);
-      if(this.buyChange>0)this.buyColor = 'green';
-      else if(this.buyChange<0)this.buyColor = 'red';
+      this.buyChange = +(100 * (newBuy - oldBooks.buyUS)/oldBooks.buyUS).toFixed(2);
+      if(this.buyChange > 0)this.buyColor = 'green';
+      else if(this.buyChange < 0)this.buyColor = 'red';
       else this.buyColor = '';
 
-      this.sellChange = +(100 * (oldBooks.sellUS - newSell)/oldBooks.sellUS).toFixed(2);
-      if(this.sellChange>0)this.sellColor = 'green';
-      else if(this.sellChange<0)this.sellColor = 'red';
+      this.sellChange = +(100 * (newSell - oldBooks.sellUS)/oldBooks.sellUS).toFixed(2);
+      if(this.sellChange > 0)this.sellColor = 'green';
+      else if(this.sellChange < 0)this.sellColor = 'red';
       else this.sellColor = '';
     }
 
@@ -192,6 +192,8 @@ export class BuySellControlComponent implements OnInit {
       console.log(res);
       if(!res.isOpen){
         this.privateService.refreshBalances();
+
+        res.feeUS = res.fee * this.priceBaseUS;
         this.oredrCopmlete = res;
         this.currentOrder = VOORDER;
         this.snackBar.open('Complete ','x',{duration:2000, extraClasses:'alert-green'})

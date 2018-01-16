@@ -2,6 +2,7 @@
     <div>
         <small class="btn" (click)="onClearSummaryClick()">Summary:</small>
         <span [ngClass]="summaryColor">{{summary}}</span>
+        &nbsp;&nbsp;<small>fee: $</small><span>{{totalFee}}</span>
     </div>
     <div class="scrollY100">
         <table class="table-small">
@@ -14,7 +15,4 @@
 
         </table>
     </div>
-
-
-
 </div>
