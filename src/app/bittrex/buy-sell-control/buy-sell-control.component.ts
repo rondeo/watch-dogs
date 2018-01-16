@@ -158,17 +158,23 @@ export class BuySellControlComponent implements OnInit {
   }
 
   isBooksLoading:boolean;
+  bookingColor= 'green';
   onRefreshBooksClick(){
     if(this.isBooksLoading){
+
       setTimeout(()=>{
         this.isBooksLoading = false;
-      }, 2000);
+        this.bookingColor = 'red';
+      }, 20000);
       return;
     }
     this.isBooksLoading = true;
+    this.bookingColor ='scale05';
     this.booksService.refreshBooks().then(res=>{
       this.isBooksLoading = false;
+      this.bookingColor= 'green';
     }).catch(err=>{
+      this.bookingColor= 'red';
       this.isBooksLoading = false;
     })
   }
