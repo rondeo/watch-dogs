@@ -128,13 +128,7 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
     this.ordersManager.setService(this.privateService)
     this.booksService.setService(this.privateService.publicService);
 
-   /*this.sub3 =  this.booksService.subscribeForRate().subscribe(booksRate=>{
-     booksRate.buyUS =  +(booksRate.buy * this.priceBase).toPrecision(4);
-     booksRate.sellUS =  +(booksRate.sell * this.priceBase).toPrecision(4);
 
-      this.rateByBooks = booksRate;
-    })
-*/
 
     let sub = this.privateService.marketCap.getCoinsObs().subscribe(res=>{
       if(res){
@@ -150,15 +144,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
   private sub6;
- /* onCancelOrder(uuid){
-    if(confirm('You want to cancel '+ uuid+'?')){
-      if(this.sub6) this.sub6.unsubscribe();
-      this.sub6 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
-        this.currentOrder = res;
-      })
-    }
-
-  }*/
   isCharging:boolean;
   onChargeAmountChaged(){
 
@@ -184,131 +169,6 @@ export class BittrexBuySellComponent implements OnInit, OnDestroy {
   }
 
 
-
-  //private sub4
- /* checkOrder(uuid:string){
-    if(this.sub4) this.sub4.unsubscribe();
-    this.sub4 = this.ordersManager.checkOrder(uuid).subscribe(res=>{
-      console.log(res);
-      if(!res.isOpen){
-        this.privateService.refreshBalances();
-        this.snackBar.open('Complete ','x',{duration:2000, extraClasses:'alert-green'})
-
-      }else{
-        this.snackBar.open('In progress ','x',{duration:2000})
-      }
-      this.currentOrder = res;
-
-    })
-  }
-*/
- // private sub5;
- /* cancelOrder(uuid:string){
-    if(this.sub5) this.sub5.unsubscribe();
-    this.sub5 = this.ordersManager.cancelOrder(uuid).subscribe(res=>{
-      console.log(res);
-      //this.currentOrder = res;
-
-    })
-
-
-  }*/
-
- /* onBuyClick(){
-    let action = 'Buy';
-    let balance = this.balanceBase.balanceUS;
-
-    let amountUS = this.amountUS;
-    let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.0025));
-    this.processAction(action, amountUS, isMax);
-  }
-
-  onSellClick(){
-    let action = 'Sell';
-    let balance = this.balanceCoin.balanceUS;
-
-    let amountUS = this.amountUS;
-    let isMax = (amountUS > balance);
-    if(isMax) amountUS = (balance - (balance * 0.0025));
-
-    this.processAction(action, amountUS, isMax);
-
-  }*/
-/*
-  processAction(action,  amountUS, isMax){
-    console.log(action);
-
-    let amountBase = +(amountUS / this.priceBase).toFixed(8);
-
-    let base:string = this.modelBuySell.base;
-    let coin:string = this.modelBuySell.coin;
-    let balanceCoin = this.modelBuySell.balanceCoin;
-    let priceBase = this.priceBase;
-
-
-
-    console.log('amountBase ' + amountBase + ' priceBase ' + this.priceBase );
-
-    this.booksService.refreshBooks(action, amountBase).then((rate)=>{
-
-      console.log(rate);
-      let rateUS = (rate * priceBase).toPrecision(4);
-
-     // if(rate<1e-3) rate = +(rate.toFixed(8));
-      console.log(' rateUS  ' + rateUS + ' rate ' + rate);
-      let amountCoin = +(amountBase / rate).toPrecision(5);
-
-      console.log(' amountCoin ' + amountCoin + ' on balance ' +  this.balanceCoin.balance);
-
-
-      let fee = (amountUS * 0.0025).toFixed(2);
-
-      setTimeout(()=>{
-
-        if(confirm( action +' '+rateUS + ' \n' +coin  +' $'+ amountUS +  '\nFee: $' + fee)){
-
-          let service:APIBuySellService = this.privateService;
-          let obs:Observable<VOOrder>
-          if(action ==='Sell') obs =  service.sellLimit(base, coin, amountCoin, rate );
-          else if(action ==='Buy')obs =  service.buyLimit(base, coin, amountCoin, rate );
-
-          if(!obs) {
-            console.error(action);
-            return;
-          }
-          obs.subscribe(res=>{
-            if(res && res.uuid){
-              this.currentOrder = VOORDER
-
-              this.checkOrder(res.uuid);
-
-              this.snackBar.open('Order Set. Checking...'+res.message, 'x', {extraClasses:'alert-green', duration:2000});
-
-
-
-            } else{
-              this.snackBar.open('Error '+res.message, 'x', {extraClasses:'alert-red', duration:3000})
-            }
-
-          }, error=>{
-            this.snackBar.open('Error '+ error.message, 'x',{extraClasses:'alert-red'});
-          })
-
-        }
-      }, 200);
-
-
-      //this.modelBuySell.balanceCoin
-
-
-    })
-  }*/
-
-
- /* onAmountBaseUSChanged(evt){
-    //console.log(this.transfer.amountBaseUS);
-  }*/
 
   populateMarkets(){
     let sub = this.privateService.publicService.getMarketsAr().subscribe(res=>{

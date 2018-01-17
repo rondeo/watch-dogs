@@ -15,7 +15,6 @@ export class BittrexMainComponent implements OnInit {
 
   isBittrexIn$:Observable<boolean>;
 
-
   isuserLogin$:Observable<boolean>;
   constructor(
     private privateService:BittrexPrivateService,
@@ -68,15 +67,6 @@ export class BittrexMainComponent implements OnInit {
 
 
   onLoginClick(){
-
-
-   // let str = this.storage.getItem('Bittrex-credetials', true);
-
-   /* if(!this.storage.isLoggedIn()){
-      alert('Please provide Security Login first!')
-      return
-    }*/
-
 
 
     let credentials = {apiKey:'', password:'', save:false, submit:false};

@@ -3,17 +3,19 @@ import {AuthHttpService} from '../../services/auth-http.service';
 import {APIBooksService} from "../../services/books-service";
 import {VOOrderBook} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
-import {IExchangeConnector} from "../api-service.service";
+import {IExchangeConnector} from "../../my-exchange/services/api-service.service";
 import {ApiLogin} from "../../shared/api-login";
 
 
 export class CryptopiaService extends ApiLogin implements IExchangeConnector{
+
 
   constructor(
     private http:AuthHttpService,
     storage:StorageService
   ) {
     super(storage, 'cryptopia');
+
   }
   private booksObs:Observable<any>;
   getOrderBook(base:string, coin: string, depthMax = '50') {

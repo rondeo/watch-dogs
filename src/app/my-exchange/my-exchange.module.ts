@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MyExchangeMainComponent } from './my-exchange-main/my-exchange-main.component';
+
+import {FormsModule} from "@angular/forms";
+import {BrowserModule} from "@angular/platform-browser";
+import {MaterialAppModule} from "../material/material-app.module";
+import {RouterModule, Routes} from "@angular/router";
 
 
 
-
+/*
 import {OrdersHistoryComponent} from "../bittrex/orders-history/orders-history.component";
 import {BittrexMarketsComponent} from "../bittrex/bittrex-markets/bittrex-markets.component";
 import {BittrexBuySellComponent} from "../bittrex/bittrex-buy-sell/bittrex-buy-sell.component";
@@ -12,23 +16,28 @@ import {BotListComponent} from "../bittrex/bot-list/bot-list.component";
 import {OpenOrdersComponent} from "../bittrex/open-orders/open-orders.component";
 import {BotEditComponent} from "../bittrex/bot-edit/bot-edit.component";
 import {MyGainersLosersComponent} from "../bittrex/my-gainers-losers/my-gainers-losers.component";
-import {RouterModule, Routes} from "@angular/router";
+
 import {BittrexBalancesComponent} from "../bittrex/bittrex-balances/bittrex-balances.component";
 import {MarketHistoryComponent} from "../bittrex/market-history/market-history.component";
 import {BittrexMainComponent} from "../bittrex/bittrex-main/bittrex-main.component";
 import {BittrexTransferComponent} from "../bittrex/bittrex-transfer/bittrex-transfer.component";
 import {BittrexDataComponent} from "../bittrex/bittrex-data/bittrex-data.component";
-import {FormsModule} from "@angular/forms";
-import {BrowserModule} from "@angular/platform-browser";
-import {MaterialAppModule} from "../material/material-app.module";
+*/
+
+
+
+import { MyMainComponent } from './my-main/my-main.component';
+import { MyBalnceComponent } from './my-balnce/my-balnce.component';
+import { MyMarketsComponent } from './my-markets/my-markets.component';
+import {ApiServiceService} from "./services/api-service.service";
 
 const routes: Routes = [
   {
-    path: 'my-exchange', component: MyExchangeMainComponent,
+    path: 'my-exchange/:exchange', component: MyMainComponent,
     children: [
-      {path: '', redirectTo: 'data', pathMatch: 'full'},
-      {path: 'balance/:exchange', component: MarketHistoryComponent},
-      {path: 'data', component: BittrexDataComponent},
+      {path: '', redirectTo: 'markets/poloniex', pathMatch: 'full'},
+      {path: 'balance/', component: MyBalnceComponent},
+      {path: 'markets', component: MyMarketsComponent}
      /* {path: 'data', component: BittrexDataComponent},
 
       {path: 'coin-markets/:symbols', component: BittrexMarketsComponent},
@@ -56,7 +65,13 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    MyExchangeMainComponent
+    MyMainComponent,
+    MyBalnceComponent,
+    MyMarketsComponent
+  ],
+  providers:[
+    ApiServiceService
   ]
+
 })
 export class MyExchangeModule { }

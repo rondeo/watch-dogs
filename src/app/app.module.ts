@@ -63,7 +63,7 @@ import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
 import {BalancesModule} from "./balances/balances.module";
 import { WebsocketService} from "./shared/websocket-service";
-import {ApiServiceService} from "./exchanges/api-service.service";
+import {MyExchangeModule} from "./my-exchange/my-exchange.module";
 
 //import {WebsocketService} from "./shared/websocket-service";
 
@@ -88,6 +88,7 @@ declare const Buffer:any;
     BittrexModule,
     AllExchangesModule,
     BalancesModule,
+    MyExchangeModule,
    // AuthModule,
     RouterModule.forRoot(rootRouterConfig, { useHash: true })
   ],
@@ -113,7 +114,7 @@ declare const Buffer:any;
 
     SlackService,
     ExchangeSsService,
-    ApiServerService,
+   // ApiServerService,
     SendAlertService,
     MarketCapService,
     PoloniexService,

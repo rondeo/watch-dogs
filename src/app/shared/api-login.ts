@@ -8,7 +8,7 @@ export class ApiLogin {
   apiKey:string;
   password:string;
   isLogedInSub:BehaviorSubject<boolean> = new BehaviorSubject(false);
-  exchange:string;
+  public exchange:string;
   storage:StorageService;
   constructor(
     storage:StorageService,
@@ -46,4 +46,11 @@ export class ApiLogin {
     return this.isLogedInSub.asObservable();
   }
 
+
+  logout() {
+    this.apiKey = null;
+    this.password = null;
+    this.removeSavedLogin();
+    this.isLogedInSub.next(false)
+  }
 }
