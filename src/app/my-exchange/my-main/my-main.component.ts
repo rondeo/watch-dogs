@@ -14,6 +14,7 @@ import {ConnectorApiService} from "../services/connector-api.service";
 export class MyMainComponent implements OnInit {
 
 
+  exchange:string;
   isLogedIn:boolean;
   constructor(
     private route:ActivatedRoute,
@@ -25,12 +26,14 @@ export class MyMainComponent implements OnInit {
 
   private sub1:Subscription;
   private subLogin:Subscription;
-  ngOnInit() {
 
+  ngOnInit() {
     this.sub1 = this.route.params.subscribe(params=>{
       let exchange = params.exchange;
       console.log(params);
+      this.exchange = exchange;
       if(exchange){
+
         this.apiService.setExchange(exchange);
 
        if(this.subLogin) this.subLogin.unsubscribe();
