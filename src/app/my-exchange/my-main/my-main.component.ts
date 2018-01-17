@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ApiServiceService} from "../services/api-service.service";
+
 import {BittrexLoginComponent} from "../../bittrex/bittrex-login/bittrex-login.component";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
+import {ConnectorApiService} from "../services/connector-api.service";
 
 @Component({
   selector: 'app-my-main',
@@ -17,7 +18,7 @@ export class MyMainComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     private router:Router,
-    private apiService:ApiServiceService,
+    private apiService:ConnectorApiService,
     private snackBar:MatSnackBar,
     private dialog:MatDialog
   ) { }

@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="my exchange module">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-balnce.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-balnce.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-balnce.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/api-service.service.ts" />
+    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/api-cryptopia.ts" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/api-poloniex.ts" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.component.html" afterPath="$PROJECT_DIR$/src/app/app.component.html" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.module.ts" afterPath="$PROJECT_DIR$/src/app/app.module.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-main/bittrex-main.component.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex-main/bittrex-main.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/api-service.service.ts" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts" afterPath="$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/api-login.ts" afterPath="$PROJECT_DIR$/src/app/shared/api-login.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/api-service.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -35,22 +24,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="bittrex-private.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/bittrex/bittrex-private.service.ts">
+      <file leaf-file-name="cryptopia.service.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="644" column="3" lean-forward="false" selection-start-line="639" selection-start-column="2" selection-end-line="644" selection-end-column="3" />
-              <folding />
+            <state relative-caret-position="136">
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api-login.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/shared/api-login.ts">
+      <file leaf-file-name="api-poloniex.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-poloniex.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
-              <folding />
+            <state relative-caret-position="187">
+              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -59,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="41" />
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="e#0#50#0" expanded="true" />
               </folding>
@@ -67,24 +60,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="my-main.component.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="my-main.component.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="55" column="7" lean-forward="true" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
+            <state relative-caret-position="323">
+              <caret line="20" column="43" lean-forward="false" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
               <folding>
                 <element signature="e#0#50#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bittrex.module.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/bittrex/bittrex.module.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="39" column="3" lean-forward="false" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -114,11 +97,23 @@
       <file leaf-file-name="my-exchange.module.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
+            <state relative-caret-position="646">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
                 <element signature="e#1389#1451#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api-cryptopia.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-cryptopia.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -128,17 +123,17 @@
         <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="86" lean-forward="true" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
+              <caret line="9" column="86" lean-forward="false" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api-service.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-service.service.ts">
+      <file leaf-file-name="connector-api.service.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="55" column="45" lean-forward="false" selection-start-line="55" selection-start-column="45" selection-end-line="55" selection-end-column="45" />
+            <state relative-caret-position="170">
+              <caret line="10" column="43" lean-forward="false" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -210,11 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/com/mappers-history.ts" />
-        <option value="$PROJECT_DIR$/src/app/all-in-one/coin-sercice-base.ts" />
-        <option value="$PROJECT_DIR$/src/app/com/mappers.ts" />
-        <option value="$PROJECT_DIR$/src/app/bittrex/my-gainers-losers/my-gainers-losers.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/bittrex/my-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/market-books/market-books.component.html" />
         <option value="$PROJECT_DIR$/src/app/com/MATH.ts" />
         <option value="$PROJECT_DIR$/src/app/com/mappers-books.ts" />
@@ -253,14 +243,19 @@
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.html" />
         <option value="$PROJECT_DIR$/src/app/app.module.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-main/bittrex-main.component.ts" />
         <option value="$PROJECT_DIR$/src/app/shared/api-login.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/api-service.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
         <option value="$PROJECT_DIR$/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/poloniex-api.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/api-cryptopia.ts" />
+        <option value="$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/api-poloniexi.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/api-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts" />
       </list>
     </option>
   </component>
@@ -354,6 +349,13 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="bittrex" type="462c0819:PsiDirectoryNode" />
               <item name="buy-sell-control" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="exchanges" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -523,7 +525,7 @@
       <workItem from="1515946534449" duration="12032000" />
       <workItem from="1515959526565" duration="13973000" />
       <workItem from="1516064643421" duration="8851000" />
-      <workItem from="1516149040405" duration="4536000" />
+      <workItem from="1516149040405" duration="5574000" />
     </task>
     <task id="LOCAL-00001" summary="interfaces for services">
       <created>1515613193838</created>
@@ -630,11 +632,18 @@
       <option name="project" value="LOCAL" />
       <updated>1516075347273</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="login">
+      <created>1516153613743</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1516153613743</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="834714000" />
+    <option name="totallyTimeSpent" value="835752000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
@@ -734,7 +743,8 @@
     <MESSAGE value="hhhhh" />
     <MESSAGE value="new exchange" />
     <MESSAGE value="my exchange module" />
-    <option name="LAST_COMMIT_MESSAGE" value="my exchange module" />
+    <MESSAGE value="login" />
+    <option name="LAST_COMMIT_MESSAGE" value="login" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -743,20 +753,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/bittrex/bot-test.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/bittrex/open-orders/open-orders.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="22" column="38" lean-forward="false" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/bittrex/transfer-reqest.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1025">
@@ -792,6 +788,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
           <caret line="44" column="43" lean-forward="false" selection-start-line="44" selection-start-column="43" selection-end-line="44" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#77#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -806,6 +805,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="10" column="2" lean-forward="false" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -813,6 +813,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="86" column="4" lean-forward="false" selection-start-line="86" selection-start-column="4" selection-end-line="86" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -820,6 +821,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="119" column="16" lean-forward="false" selection-start-line="119" selection-start-column="16" selection-end-line="119" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -884,6 +886,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="54" column="30" lean-forward="false" selection-start-line="54" selection-start-column="30" selection-end-line="54" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -891,6 +894,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
           <caret line="31" column="2" lean-forward="false" selection-start-line="31" selection-start-column="2" selection-end-line="31" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -921,6 +925,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="7" column="92" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="92" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -935,6 +940,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
           <caret line="87" column="39" lean-forward="false" selection-start-line="87" selection-start-column="39" selection-end-line="87" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1041,14 +1047,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/bittrex/bittrex-private.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -1062,16 +1060,6 @@
         <state relative-caret-position="494">
           <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-service.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="55" column="45" lean-forward="false" selection-start-line="55" selection-start-column="45" selection-end-line="55" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1101,20 +1089,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="86" lean-forward="false" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="41" />
+          <caret line="20" column="43" lean-forward="false" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-cryptopia.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
+        <state relative-caret-position="646">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
             <element signature="e#1389#1451#0" expanded="true" />
@@ -1122,20 +1148,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/api-poloniex.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="86" lean-forward="true" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
-          <folding />
+        <state relative-caret-position="187">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-main/my-main.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="55" column="7" lean-forward="true" selection-start-line="55" selection-start-column="7" selection-end-line="55" selection-end-column="7" />
+        <state relative-caret-position="170">
+          <caret line="10" column="43" lean-forward="false" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
           <folding>
-            <element signature="e#0#50#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>

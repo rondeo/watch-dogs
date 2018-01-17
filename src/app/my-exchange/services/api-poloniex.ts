@@ -5,17 +5,19 @@ import {VOOrderBook} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
-import {IExchangeConnector} from "../../my-exchange/services/connector-api.service";
+import {IExchangeConnector} from "./connector-api.service";
+import {VOCtopia} from "./api-cryptopia";
 
 
-export class CryptopiaService extends ApiLogin implements IExchangeConnector{
+
+export class ApiPoloniex extends ApiLogin implements IExchangeConnector{
 
 
   constructor(
     private http:AuthHttpService,
     storage:StorageService
   ) {
-    super(storage, 'cryptopia');
+    super(storage, 'poloniex');
 
   }
   private booksObs:Observable<any>;
@@ -40,7 +42,7 @@ export class CryptopiaService extends ApiLogin implements IExchangeConnector{
     let url = '/api/cryptopia/currencies';
     return this.http.get(url).map(res=>{
       let obj = res.json();
-     // console.log(obj);
+      // console.log(obj);
       //let out:VOCryptopia[]=[];
       return obj.Data.map(function (item) {
         return item;
@@ -55,7 +57,7 @@ export class CryptopiaService extends ApiLogin implements IExchangeConnector{
     let url = '/api/cryptopia/pairs';
     return this.http.get(url).map(res=>{
       let obj = res.json();
-     // let out:VOCryptopia[]=[];
+      // let out:VOCryptopia[]=[];
       return obj.markets.map(function (item) {
         return item;
 
@@ -78,23 +80,3 @@ export class CryptopiaService extends ApiLogin implements IExchangeConnector{
   }
 }
 
-
-export interface VOCtopia{
-  Id:number;
-  Name:string;
-  Symbol:string;
-  Algorithm:string;
-  WithdrawFee:number;
-  MinWithdraw:number;
-  MinBaseTrade:number;
-  IsTipEnabled:boolean;
-  MinTip:number;
-  DepositConfirmations:number;
-  Status:string;
-  StatusMessage:string;
-  ListingStatus:string;
-}
-
-export interface VOCtopiaPair{
-
-}

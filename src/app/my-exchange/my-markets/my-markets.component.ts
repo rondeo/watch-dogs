@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {ApiServiceService} from "../services/api-service.service";
+import {ConnectorApiService} from "../services/connector-api.service";
+
 
 
 @Component({
@@ -12,7 +13,7 @@ export class MyMarketsComponent implements OnInit {
 
   constructor(
     private route:ActivatedRoute,
-    private apiService:ApiServiceService
+    private apiService:ConnectorApiService
   ) { }
 
   ngOnInit() {

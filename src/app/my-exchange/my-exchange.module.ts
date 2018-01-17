@@ -29,7 +29,7 @@ import {BittrexDataComponent} from "../bittrex/bittrex-data/bittrex-data.compone
 import { MyMainComponent } from './my-main/my-main.component';
 import { MyBalnceComponent } from './my-balnce/my-balnce.component';
 import { MyMarketsComponent } from './my-markets/my-markets.component';
-import {ApiServiceService} from "./services/api-service.service";
+import {ConnectorApiService} from "./services/connector-api.service";
 
 const routes: Routes = [
   {
@@ -70,7 +70,7 @@ const routes: Routes = [
     MyMarketsComponent
   ],
   providers:[
-    ApiServiceService
+    ConnectorApiService
   ]
 
 })

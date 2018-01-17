@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
-import {BittrexService} from "../../exchanges/services/bittrex.service";
 import {StorageService} from "../../services/app-storage.service";
 import {SlackService} from "../../services/slack.service";
 import {MarketCapService} from "../../market-cap/market-cap.service";
@@ -9,9 +7,11 @@ import {AuthHttpService} from "../../services/auth-http.service";
 import {VOOrderBook} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {ApiCryptopia} from "./api-cryptopia";
+import {ApiPoloniex} from "./api-poloniex";
 
 @Injectable()
-export class ApiServiceService {
+export class ConnectorApiService {
 
 
   private currentService:IExchangeConnector;
@@ -21,7 +21,7 @@ export class ApiServiceService {
   constructor(
     private http: HttpClient,
     public marketCap: MarketCapService,
-    public publicService: BittrexService,
+    //public publicService: BittrexService,
     private slack:SlackService,
     public storage: StorageService,
     private auth:AuthHttpService
@@ -48,7 +48,12 @@ export class ApiServiceService {
         break;
 
       case 'cryptopia':
-        connector = new CryptopiaService(this.auth, this.storage);
+
+        connector = new ApiCryptopia(this.auth, this.storage);
+        break;
+
+      case 'poloniex':
+        connector = new ApiPoloniex(this.auth, this.storage);
         break;
     }
 
