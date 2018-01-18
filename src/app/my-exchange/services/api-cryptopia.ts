@@ -14,6 +14,7 @@ import {applyMixins} from "rxjs/util/applyMixins";
 import {SOMarketCryptopia} from "../../models/sos";
 import {Mappers} from "../../com/mappers";
 import {ApiBase} from "./api-base";
+import {MarketCapService} from "../../market-cap/market-cap.service";
 
 
 export class ApiCryptopia extends ApiBase {
@@ -21,9 +22,10 @@ export class ApiCryptopia extends ApiBase {
 
   constructor(
     private http:AuthHttpService,
-    storage:StorageService
+    storage:StorageService,
+    marketCap:MarketCapService
   ) {
-    super(storage, 'cryptopia');
+    super(storage, 'cryptopia', marketCap);
 
   }
   private booksObs:Observable<any>;
@@ -121,8 +123,8 @@ export class ApiCryptopia extends ApiBase {
       //this.coinsSub.next(localCoins);
       ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
 
-      this.marketsObjSub.next(indexed);
-      this.marketsArSub.next(marketsAr);
+      this.setMarketsData(marketsAr, indexed, bases);
+
       this.isLoadinMarkets = false;
     })
 

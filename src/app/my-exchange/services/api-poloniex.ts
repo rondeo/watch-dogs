@@ -12,6 +12,7 @@ import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
 import {SelectedSaved} from "../../com/selected-saved";
 import {ApiBase} from "./api-base";
+import {MarketCapService} from "../../market-cap/market-cap.service";
 
 
 
@@ -20,9 +21,10 @@ export class ApiPoloniex extends ApiBase  {
 
   constructor(
     private http:AuthHttpService,
-    storage:StorageService
+    storage:StorageService,
+    marketCap:MarketCapService
   ) {
-    super(storage, 'poloniex');
+    super(storage, 'poloniex', marketCap);
 
   }
   private booksObs:Observable<any>;
@@ -86,8 +88,8 @@ export class ApiPoloniex extends ApiBase  {
 
 
 
-  marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
-  isLoadinMarkets:boolean = false;
+ // marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
+ // isLoadinMarkets:boolean = false;
 
   loadAllMarketSummaries():void {
     console.log('%c cruptopia  loadAllMarketSummaries   ', 'color:orange');
@@ -110,14 +112,16 @@ export class ApiPoloniex extends ApiBase  {
 
       let selected: string[] = this.getMarketsSelected();
 
-      // Mappers.bittrexMarkets( result, marketsAr, indexed, baseCoins, MC, selected, localCoins);
+      let indexed:{}
+      let bases:string[] = [];
 
       //this.marketsAr = marketsAr;
       // this.markets = indexed;
       //this.baseCoins = baseCoins;
       //this.coinsSub.next(localCoins);
+      this.setMarketsData(marketsAr, indexed, bases)
 
-      this.marketsArSub.next(marketsAr);
+     // this.marketsArSub.next(marketsAr);
       this.isLoadinMarkets = false;
     })
 

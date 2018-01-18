@@ -1,3 +1,89 @@
-<p>
-  my-markets works!
-</p>
+<div>
+
+    <div>
+        <h3> Summary  </h3>
+        <small *ngIf="marketsAr"> Total {{marketsAr.length}}</small>
+        <span class="fa fa-refresh btn fa-lg" (click)="onRefreshClick()"></span>
+        <div>
+            <mat-checkbox #baseBTC checked="true" (change)="onChangeBase()">BTC</mat-checkbox>
+            <mat-checkbox #baseETH checked="true" (change)="onChangeBase()">ETH </mat-checkbox>
+            <mat-checkbox #baseUSDT checked="true" (change)="onChangeBase()">USDT </mat-checkbox>
+            &nbsp;&nbsp;
+            <mat-checkbox #selectedChck checked="true" (change)="onSelectedChckClick($event)">Selected Only</mat-checkbox>
+        </div>
+
+        <br/>
+
+        <table>
+            <tr class="small">
+                <th></th>
+                <th><span class="btn" (click)="onSortClick('pair')">Pair</span></th>
+                <th><span class="btn" (click)="onSortClick('coinRank')">Rank</span></th>
+
+                <th><span  class="btn" (click)="onSortClick('Last')">Last</span></th>
+                <!-- <th>Bid</th>
+                 <th>Ask</th>-->
+
+                <th>High</th>
+                <th>Low</th>
+                <th><span class="btn" (click)="onSortClick('mcDiff')">%of MC</span></th>
+                <th>%1h</th>
+                <th>%24h</th>
+                <th>%7d</th>
+
+                <!--<th>Prev Day</th>
+
+                <th>Volume</th>
+                <th>Base Vol</th>
+                <th><span class="btn" (click)="onSortClick('OpenBuyOrders')" >To Buy</span></th>
+                <th><span class="btn" (click)="onSortClick('OpenSellOrders')">To Sell</span></th>-->
+
+                <!-- <th>Time</th>-->
+
+                <!--  <th>Sponsored</th>
+                  <th>Created</th>
+                  <th>Notice</th>-->
+            </tr>
+            <tr *ngFor="let market of marketsAr">
+                <td>
+                    <input type="checkbox"  (change)="onMarketSelected($event, market)" [checked]="market.selected"   name="selected"/>
+                    <!-- <a (click)="onChartClick(market)" class="fa fa-line-chart"></a>-->
+                </td>
+                <td><a class="btn" (click)="onMarketClick(market)">{{market.pair}}</a></td>
+                <td>{{market.coinRank}}</td>
+
+                <td>{{market.usLast}}</td>
+                <!-- <td>{{market.usBid}}</td>
+                 <td>{{market.usAsk}}</td>-->
+
+                <td>{{market.usHigh}}</td>
+                <td>{{market.usLow}}</td>
+                <td>{{market.mcDiff}}</td>
+                <td>{{market.percent_change_1h}}</td>
+                <td>{{market.percent_change_24h}}</td>
+                <td>{{market.percent_change_7d}}</td>
+
+
+
+                <!--  <td>{{market.usPrevDay}}</td>
+
+                  <td>{{market.dVolume}}</td>
+                  <td>{{market.dBaseVolume}}</td>
+
+                  <td>{{market.OpenBuyOrders}}</td>
+                  <td>{{market.OpenSellOrders}}</td>
+
+  -->
+                <!-- <td><small>{{market.TimeStamp}}</small></td>-->
+
+                <!--  <td>{{market.IsSponsored}}</td>
+                  <td class="my-timestamp"><div>{{market.Created}}</div></td>
+                  <td class="notice">{{market.Notice}}</td>-->
+            </tr>
+        </table>
+
+
+
+    </div>
+
+</div>

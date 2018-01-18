@@ -2,6 +2,8 @@ import {StorageService} from "../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {VOMarket} from "../../models/app-models";
+import {MarketCapService} from "../../market-cap/market-cap.service";
+import {Mappers} from "../../com/mappers";
 
 export abstract class ApiBase {
 
@@ -11,11 +13,16 @@ export abstract class ApiBase {
 
   exchange: string;
   storage: StorageService;
+  marketCap:MarketCapService;
 
-  constructor(storage: StorageService,
-              exchange: string) {
+  constructor(
+    storage: StorageService,
+    exchange: string,
+    marketCap:MarketCapService
+  ) {
     this.exchange = exchange;
     this.storage = storage;
+    this.marketCap = marketCap;
   }
 
 
@@ -32,6 +39,30 @@ export abstract class ApiBase {
   private marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
   isLoadinMarkets:boolean = false;
 
+  bases:string[];
+  protected setMarketsData( marketsAr, indexed, bases){
+    this.marketCap.getCoinsObs().subscribe(MC=>{
+      if(!MC) return;
+
+      marketsAr.forEach(function (item:VOMarket) {
+        let mcBase = MC[item.base];
+        let mcCoin = MC[item.coin];
+        let basePrice = mcBase?mcBase.price_usd:0;
+        Mappers.mapDisplayValues(item, basePrice, 4, mcCoin);
+      })
+
+
+
+
+
+      this.bases = bases;
+      this.marketsObjSub.next(indexed);
+      this.marketsArSub.next(marketsAr);
+    })
+
+
+
+  }
 
 
 

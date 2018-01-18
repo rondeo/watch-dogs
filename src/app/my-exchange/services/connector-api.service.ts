@@ -55,11 +55,11 @@ export class ConnectorApiService {
 
       case 'cryptopia':
 
-        connector = new ApiCryptopia(this.auth, this.storage);
+        connector = new ApiCryptopia(this.auth, this.storage, this.marketCap);
         break;
 
       case 'poloniex':
-        connector = new ApiPoloniex(this.auth, this.storage);
+        connector = new ApiPoloniex(this.auth, this.storage, this.marketCap);
         break;
     }
 
