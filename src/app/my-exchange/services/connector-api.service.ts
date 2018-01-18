@@ -9,15 +9,19 @@ import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {ApiCryptopia} from "./api-cryptopia";
 import {ApiPoloniex} from "./api-poloniex";
+import {ApiBase} from "./api-base";
 
 @Injectable()
 export class ConnectorApiService {
 
 
-  private currentService:IExchangeConnector;
+  private currentService:ApiBase;
 
   salt:string;
   isLogedIn$:Observable<boolean>;
+
+  connectorSub:BehaviorSubject<ApiBase> = new BehaviorSubject(null);
+
   constructor(
     private http: HttpClient,
     public marketCap: MarketCapService,
@@ -39,10 +43,12 @@ export class ConnectorApiService {
 
   }
 
-
+  connector$(){
+    return this.connectorSub.asObservable();
+  }
 
   setExchange(exchange:string){
-    let connector:IExchangeConnector;
+    let connector:ApiBase;
     switch(exchange){
       case 'bittrex':
         break;
@@ -57,13 +63,13 @@ export class ConnectorApiService {
         break;
     }
 
+
     this.currentService = connector;
     this.isLogedIn$ = connector.isLogedIn$();
     if(this.salt)  this.currentService.autoLogin();
-
-
-
+    this.connectorSub.next(connector);
   }
+
 
 
   getExchangeName() {
@@ -88,6 +94,8 @@ export class ConnectorApiService {
   autoLogin(){
     this.currentService.autoLogin();
   }
+
+
 }
 
 
@@ -100,5 +108,6 @@ export interface IExchangeConnector{
   login(apiKey:string, password:string, save:boolean):void
   isLogedIn$():Observable<boolean>;
   getOrderBook(base:string, coin:string):Observable<{buy:VOOrderBook[], sell:VOOrderBook[]}>
+  loadAllMarketSummaries():void;
 }
 

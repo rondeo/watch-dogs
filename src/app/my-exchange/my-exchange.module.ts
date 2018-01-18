@@ -35,8 +35,8 @@ const routes: Routes = [
   {
     path: 'my-exchange/:exchange', component: MyMainComponent,
     children: [
-      {path: '', redirectTo: 'markets/poloniex', pathMatch: 'full'},
-      {path: 'balance/', component: MyBalnceComponent},
+      {path: '', redirectTo: 'markets', pathMatch: 'full'},
+      {path: 'balance', component: MyBalnceComponent},
       {path: 'markets', component: MyMarketsComponent}
      /* {path: 'data', component: BittrexDataComponent},
 

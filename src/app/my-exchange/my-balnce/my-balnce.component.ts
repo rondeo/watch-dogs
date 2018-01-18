@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ConnectorApiService} from "../services/connector-api.service";
 
 @Component({
   selector: 'app-my-balnce',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyBalnceComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private apiService:ConnectorApiService
+  ) { }
 
   ngOnInit() {
+    console.log(this.apiService.getExchangeName())
   }
 
 }

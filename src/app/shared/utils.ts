@@ -27,3 +27,16 @@ static filterMarkets3(symbol:string, coins:VOExchangeCoin[]):number{
 }
 
 }
+
+export function applyMixins(derivedCtor: any, baseCtors: any[]) {
+  console.log(derivedCtor)
+  baseCtors.forEach(baseCtor => {
+    console.log(baseCtors)
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      console.log(name);
+      if (name !== 'constructor') {
+        derivedCtor.prototype[name] = baseCtor.prototype[name];
+      }
+    });
+  });
+}
