@@ -14,6 +14,8 @@ import { MyBalnceComponent } from './my-balnce/my-balnce.component';
 import { MyMarketsComponent } from './my-markets/my-markets.component';
 import {ConnectorApiService} from "./services/connector-api.service";
 import { MyGainersLosersComponent } from './my-gainers-losers/my-gainers-losers.component';
+import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
+import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
 
 
 const routes: Routes = [
@@ -23,7 +25,9 @@ const routes: Routes = [
       {path: '', redirectTo: 'markets', pathMatch: 'full'},
       {path: 'balance', component: MyBalnceComponent},
       {path: 'markets', component: MyMarketsComponent},
-      {path: 'gainers-losers', component:  MyGainersLosersComponent}
+      {path: 'gainers-losers', component:  MyGainersLosersComponent},
+      {path: 'orders-history', component:  MyOrdersHistoryComponent},
+      {path: 'buy-sell/:market', component: MyBuySellComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
 
@@ -55,7 +59,9 @@ const routes: Routes = [
     MyMainComponent,
     MyBalnceComponent,
     MyMarketsComponent,
-    MyGainersLosersComponent
+    MyGainersLosersComponent,
+    MyBuySellComponent,
+    MyOrdersHistoryComponent
   ],
   providers:[
     ConnectorApiService
