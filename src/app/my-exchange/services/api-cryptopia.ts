@@ -45,7 +45,7 @@ export class ApiCryptopia extends ApiBase {
 
   }
 
-  getCurrencies():Observable<VOCtopia[]>{
+ /* getCurrencies():Observable<VOCtopia[]>{
 
     let url = '/api/cryptopia/currencies';
     return this.http.get(url).map(res=>{
@@ -58,7 +58,7 @@ export class ApiCryptopia extends ApiBase {
       });
 
     })
-  }
+  }*/
 
   getPairs():Observable<VOCtopia[]>{
 
@@ -104,23 +104,11 @@ export class ApiCryptopia extends ApiBase {
 
       console.log(result);
       let marketsAr:VOMarket[] = [];
-
-
-
-      // let indexed:{[pair:string]:VOMarket} ={};
       let bases:string[] = [];
-      //let localCoins:{[symbol:string]:VOMarketCap} = {};
-      //let coinsAvailable:string[]=[];
 
       let selected:string[] = this.getMarketsSelected();
       let indexed = {};
 
-      // Mappers.bittrexMarkets( result, marketsAr, indexed, baseCoins, MC, selected, localCoins);
-
-      //this.marketsAr = marketsAr;
-      // this.markets = indexed;
-      //this.baseCoins = baseCoins;
-      //this.coinsSub.next(localCoins);
       ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
 
       this.setMarketsData(marketsAr, indexed, bases);

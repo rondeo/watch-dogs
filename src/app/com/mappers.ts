@@ -711,7 +711,26 @@ export class Mappers{
     });
     return marketsAr.length;
   }
+  static mapDisplayValues1(item:VOMarket, basePrice:number, base_1h:number, base_24h:number, base_7d:number, marketCap:VOMarketCap){
+    let base = basePrice;
+    item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
+    item.dBaseVolume = item.BaseVolume.toFixed(2);
+    item.usAsk = (item.Ask * base).toPrecision(2);
+    item.usBid =(item.Bid * base).toPrecision(2);
+    item.usLow = parseFloat((item.Low * base).toPrecision(2));
+    item.usHigh = parseFloat((item.High * base).toPrecision(2));
+    item.usLast = parseFloat((item.Last * base).toPrecision(2));
+    item.usPrevDay = (item.PrevDay * base).toFixed(2);
+    if(marketCap){
+      item.coinId = marketCap.id;
+      item.coinRank = marketCap.rank;
+      item.percent_change_7d = +(marketCap.percent_change_7d - base_7d).toFixed(2);
+      item.percent_change_1h = +(marketCap.percent_change_1h - base_1h).toFixed(2);
+      item.percent_change_24h = +(marketCap.percent_change_24h - base_24h).toFixed(2);
+      item.usMC = marketCap.price_usd.toPrecision(4);
+    }
 
+  }
 
   static mapDisplayValues(item:VOMarket, basePrice:number, prec:number, marketCap:VOMarketCap){
     let base = basePrice;

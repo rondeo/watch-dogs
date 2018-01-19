@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {Subscription} from "rxjs/Subscription";
@@ -65,7 +65,6 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
 
   render(){
     if(!this.marketsArAll) return;
-    console.log('render');
 
     let ar = this.marketsArAll.filter(function (item) {
       return this.ar.indexOf(item.base) !==-1;
@@ -80,12 +79,16 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
     this.doSort(ar);
 
   }
+
+  @ViewChild('baseBTC') baseBTC;
+  @ViewChild('baseETH') baseETH;
+  @ViewChild('baseUSDT') baseUSDT;
   private checked = ['BTC', 'ETH','USDT' ];
   onChangeBase(){
     let checked:string[] = [];
-   // if(this.baseBTC.checked)checked.push('BTC');
-   // if(this.baseETH.checked)checked.push('ETH');
-    //if(this.baseUSDT.checked)checked.push('USDT');
+    if(this.baseBTC.checked)checked.push('BTC');
+    if(this.baseETH.checked)checked.push('ETH');
+    if(this.baseUSDT.checked)checked.push('USDT');
 
     this.checked = checked;
     this.render();
@@ -149,7 +152,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-  isSelectedOnly:boolean
+  isSelectedOnly:boolean = true;
   onSelectedChckClick(evt){
     // console.log(evt);
     this.isSelectedOnly = evt.checked;

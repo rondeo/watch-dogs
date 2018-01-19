@@ -1,7 +1,7 @@
 import {StorageService} from "../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOMarket} from "../../models/app-models";
+import {VOMarket, VOMarketCap} from "../../models/app-models";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Mappers} from "../../com/mappers";
 
@@ -26,6 +26,15 @@ export abstract class ApiBase {
   }
 
 
+  private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
+  getCurrencies():Observable<{[symbol:string]:VOMarketCap}> {
+    if(!this.coinsSub.getValue())this.loadAllMarketSummaries();
+
+    return this.coinsSub.asObservable();
+
+  }
+
+
   abstract loadAllMarketSummaries():void;
 
   marketsAr$():Observable<VOMarket[]>{
@@ -44,17 +53,26 @@ export abstract class ApiBase {
     this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
+      let localCoins:{[symbol:string]:VOMarketCap} = {};
       marketsAr.forEach(function (item:VOMarket) {
-        let mcBase = MC[item.base];
+        let mcBase = MC[item.base] || {
+          price_usd:0,
+          percent_change_1h:0,
+          percent_change_24h:0,
+          percent_change_7d:0
+        };
         let mcCoin = MC[item.coin];
-        let basePrice = mcBase?mcBase.price_usd:0;
-        Mappers.mapDisplayValues(item, basePrice, 4, mcCoin);
+        if(mcCoin) localCoins[item.coin]= mcCoin;
+
+
+        Mappers.mapDisplayValues1(item, mcBase.price_usd, mcBase.percent_change_1h, mcBase.percent_change_24h, mcBase.percent_change_7d , mcCoin);
       })
 
 
 
 
 
+      this.coinsSub.next(localCoins);
       this.bases = bases;
       this.marketsObjSub.next(indexed);
       this.marketsArSub.next(marketsAr);
