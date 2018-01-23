@@ -1,7 +1,9 @@
 import {AutoTransfer} from "./my-bot";
-import {VOMarketCap} from "../models/app-models";
+import {VOMarket, VOMarketCap, VOOrder} from "../models/app-models";
+import * as _ from 'lodash';
 
 export class Utils{
+
 
   static parseTrigger(trigger:AutoTransfer, mc:VOMarketCap):string[]{
 

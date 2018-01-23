@@ -43,7 +43,7 @@ export class ConnectorApiService {
 
   }
 
-  connector$(){
+  connector$():Observable<ApiBase>{
     return this.connectorSub.asObservable();
   }
 
@@ -59,10 +59,9 @@ export class ConnectorApiService {
         break;
 
       case 'poloniex':
-        connector = new ApiPoloniex(this.auth, this.storage, this.marketCap);
+        connector = new ApiPoloniex(this.http, this.storage, this.marketCap);
         break;
     }
-
 
     this.currentService = connector;
     this.isLogedIn$ = connector.isLogedIn$();

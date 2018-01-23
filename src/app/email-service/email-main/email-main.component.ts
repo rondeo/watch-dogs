@@ -41,7 +41,7 @@ export class EmailMainComponent implements OnInit, OnDestroy {
   onLogoutClick(){
     if(confirm('You want to logout from Email Service?')) {
 
-      this.auth.logout().subscribe(res=>{
+      this.auth.logout().subscribe((res:any)=>{
         let color = res.error?'red':'black';
 
         this.snackBar.open(res.message,'x');

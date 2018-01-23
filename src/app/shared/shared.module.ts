@@ -9,6 +9,7 @@ import {LoginFormComponent} from './login-form/login-form.component';
 import {FormsModule} from '@angular/forms';
 import { MarketViewComponent } from './market-view/market-view.component';
 
+
 @NgModule({
   exports:[
     SortableTableComponent

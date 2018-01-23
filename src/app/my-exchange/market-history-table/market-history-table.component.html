@@ -1,0 +1,117 @@
+<div>
+    <div >
+        <table class="table-small">
+            <tbody>
+            <tr class="small">
+                <td>Last</td>
+                <td>Low</td>
+                <td>High</td>
+                <td>Ask</td>
+                <td>Bid</td>
+            </tr>
+            <tr>
+                <td>{{marketDetails.Last}}</td>
+                <td>{{marketDetails.Low}}</td>
+                <td>{{marketDetails.High}}</td>
+                <td>{{marketDetails.Ask}}</td>
+                <td>{{marketDetails.Bid}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <span>{{durationD}} <small>min</small></span>    &nbsp;&nbsp;
+    <span> {{speedD}} /<small>min</small></span> &nbsp;&nbsp;
+    <span  [ngClass]="(marketVolumeChange < 0)?'red':'green'">V: {{marketVolumeChange.toFixed(2)}} %</span>
+
+    <div class="myFlex text-center" >
+        <div >
+            <table *ngIf="historyStats2">
+                <tbody>
+                <tr class="small">
+                    <th><sup>{{historyLength}}</sup></th>
+                    <th><span [ngClass]="isBuying?'green':'red'">Total</span></th>
+                    <th>Price</th>
+                    <th>Max</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td><span [ngClass]="isSellUp?'green':'red'">Sold:</span></td>
+                    <td>{{historyStats.sold.amount}} </td>
+
+                    <td>{{historyStats.sold.priceUS}}</td>
+                    <td>{{historyStats.maxSold.amount}}</td>
+                    <td>{{historyStats.maxSold.priceUS}}</td>
+                </tr>
+                <tr>
+                    <td><span [ngClass]="isBuyUp?'green':'red'">Bought</span></td>
+                    <td>{{historyStats.bought.amount}}</td>
+                    <td>{{historyStats.bought.priceUS}}</td>
+                    <td>{{historyStats.maxBought.amount}}</td>
+
+                    <td>{{historyStats.maxSold.priceUS}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5">Last 50</td>
+                </tr>
+
+                <tr>
+                    <td>Sold:</td>
+                    <td>{{historyStats1.sold.amount}} </td>
+
+                    <td>{{historyStats1.sold.priceUS}}</td>
+                    <td>{{historyStats1.maxSold.amount}}</td>
+
+                    <td>{{historyStats1.maxSold.priceUS}}</td>
+                </tr>
+
+                <tr>
+                    <td>Bought</td>
+                    <td>{{historyStats1.bought.amount}}</td>
+
+                    <td>{{historyStats1.bought.priceUS}}</td>
+                    <td>{{historyStats1.maxBought.amount}}</td>
+
+                    <td>{{historyStats1.maxSold.priceUS}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5">Prev 50</td>
+                </tr>
+
+                <tr>
+                    <td>Sold:</td>
+                    <td>{{historyStats2.sold.amount}} </td>
+
+                    <td>{{historyStats2.sold.priceUS}}</td>
+                    <td>{{historyStats2.maxSold.amount}}</td>
+
+                    <td>{{historyStats2.maxSold.priceUS}}</td>
+                </tr>
+
+                <tr>
+                    <td>Bought</td>
+                    <td>{{historyStats2.bought.amount}}</td>
+
+                    <td>{{historyStats2.bought.priceUS}}</td>
+                    <td>{{historyStats2.maxBought.amount}}</td>
+
+                    <td>{{historyStats2.maxSold.priceUS}}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div>
+            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+            <mat-checkbox #baseUSDT  (change)="onAutoClick($event)">Auto </mat-checkbox>
+            <br/>
+            <br/>
+            &nbsp;&nbsp;
+            <a [ngClass]="isHistoryLoading?'scale05':''" class="btn dgreen fa fa-refresh fa-3x" title="History " (click)="refreshMarketHistory()"></a>
+            <sub>{{refreshCount}}</sub>
+        </div>
+
+    </div>
+</div>

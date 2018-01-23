@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../services/auth-http.service';
 import {APIBooksService} from "../../services/books-service";
-import {VOMarket, VOMarketCap, VOOrderBook} from "../../models/app-models";
+import {VOBalance, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
@@ -28,6 +28,204 @@ export class ApiCryptopia extends ApiBase {
     super(storage, 'cryptopia', marketCap);
 
   }
+
+
+
+  cancelOrder(orderId):Observable<VOOrder>{
+    return this.call({
+      command:'cancelOrder',
+      orderNumber:orderId
+    })
+  }
+
+
+  trackOrder(orderId):Observable<VOOrder>{
+    return this.call({
+      command:'returnOrderTrades',
+      orderNumber:orderId
+    })
+
+  }
+
+
+  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
+
+    //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
+    return this.call({
+      command:'returnTradeHistory',
+      currencyPair: base+'_'+coin
+    })
+  }
+
+
+  getMarketSummary(base:string, coin:string):Promise<VOMarket>{
+    let sub = this.marketsObj$();
+
+    return new Promise(function(resolve, reject) {
+      sub.subscribe(res=>{
+        if(res) resolve(res[base+'_'+coin]);
+      })
+    })
+  }
+
+  downloadMarketHistory(base:string, coin:string){
+    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+    url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
+    // console.log(url)
+    this.http.get(url).map((res:any)=>{
+      console.log(res)
+      return res.map(function(item) {
+        return {
+          action:item.type,
+          uuid: item.tradeID,
+          exchange: 'poloniex',
+          rate:+item.rate,
+          amountBase:+item.total,
+          base: base,
+          coin: coin,
+          date:item.date,
+          timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+
+        }
+      })
+
+      /*
+ amount
+:
+"426.99207834"
+date
+:
+"2018-01-21 14:59:06"
+globalTradeID
+:
+332735146
+rate
+:
+"0.00000063"
+total
+:
+"0.00026900"
+tradeID
+:
+5047797
+type
+:
+"sell"*/
+    }).toPromise().then(res=>{
+      this.dispatchMarketHistory(res)
+    }).catch(err=>{
+      console.error(err)
+    })
+  }
+
+
+
+  ////////////////////////////////////////
+
+
+  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
+    let market = base+'-'+coin;
+    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+    let ri = 'https://bittrex.com/api/v1.1/market/buylimit';
+    return this.call( {
+      market: market,
+      quantity: quantity,
+      rate: rate
+    }).map(res=>{
+      console.log(' buyLimit market ' + market , res);
+
+      return res.result;
+    });
+  }
+
+  sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
+    let market = base+'-'+coin;
+    console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+
+    let uri = 'https://bittrex.com/api/v1.1/market/selllimit';
+    return this.call( {
+      market: market,
+      quantity: quantity,
+      rate: rate
+    }).map(res=>{
+      console.log(' sellLimit market '+market , res);
+      if(res.success) return res.result;
+      else return {
+        uuid:'',
+        message:res.message
+      }
+    });
+  }
+
+
+  downloadBooks(base:string, coin:string){
+
+    let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
+    this.http.get(url).map(res=>{
+      console.log(res);
+    }).toPromise()
+  }
+
+
+  isLoadingBalances:boolean;
+  refreshBalances():void {
+    if(!this.isLogedInSub.getValue()){
+      console.warn(' not logged in');
+      return;
+    }
+
+    if(this.isLoadingBalances) return;
+    this.isLoadingBalances = true;
+
+    //console.log('%c refreshBalances  ','color:pink');
+
+    this.call( {command:'returnBalances'}).map(res => {
+      console.log(res);
+
+
+      if(!res){
+        console.warn('refreshBalances null')
+        return null;
+      }
+      if(res.error){
+
+        this.onError(res);
+
+        return null;
+      }
+
+      let out =[];
+
+      for(let str in res) {
+        let bal = new VOBalance();
+        bal.balance = +res[str];
+        bal.symbol = str;
+        out.push(bal)
+      }
+
+      return out;
+    }).toPromise().then(res=>{
+      this.isLoadingBalances = false;
+      this.dispatchBalances(res);
+
+    }).catch(err=>{
+      this.isLoadingBalances = false;
+      this.onError(err);
+
+    });
+
+    /*   })
+
+       let sb = this._getBalances().subscribe(bals => {
+         if (!bals) return;
+         this.balances = bals;
+         this.balancesSub.next(bals);
+         sb.unsubscribe();
+       })*/
+  }
+
+
+
   private booksObs:Observable<any>;
   getOrderBook(base:string, coin: string, depthMax = '50') {
 
@@ -159,6 +357,29 @@ export class ApiCryptopia extends ApiBase {
 
     return result.length;
   }
+
+
+  private call( post: any): Observable<any> {
+    if (!this.apiKey) {
+      console.error(' no key')
+      return new BehaviorSubject(null).asObservable();
+    }
+
+    // post.apikey = this.apiKey;
+    post.nonce = Date.now();
+
+    let load = Object.keys(post).map(function (item) {
+      return item + '=' + this.post[item];
+    }, {post: post}).join('&');
+
+
+    let signed = this.hash_hmac(load, this.password);
+    let url = '/api/poloniex/private';
+
+    return this.http.post(url, {key: this.apiKey, signed: signed, postData:load});
+
+  }
+
 
 
 }

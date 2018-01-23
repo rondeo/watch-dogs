@@ -183,6 +183,7 @@ export class MarketHistoryComponent implements OnInit, OnChanges {
 
       this.marketHistory = res;
       let basePrice = this.priceBaseUS;
+      console.log(res);
 
       this.historyStats = MappersHistory.parseData(res, basePrice);
 

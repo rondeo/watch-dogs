@@ -94,7 +94,7 @@ export class AuthHttpService {
     //this.isLogedInSub.next((this.user !== null));
   }
 
-  logout():Observable<VOResult> {
+  logout() {
     return this.post('/api/login/logout', this.user)
   }
 
@@ -167,7 +167,7 @@ export class AuthHttpService {
     return this.http.get(url)//, this.addHeaders(options));
   }
 
-  public post(url: string, body: any): Observable<any> {
+  public post(url: string, body: any) {
     return this.http.post(url, body);
   }
 

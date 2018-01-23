@@ -149,7 +149,7 @@ export class LoginComponent implements OnInit {
       password:password,
       nickname:this.login.nickname
     }
-    this.authHttp.post(url, out).subscribe(res=>{
+    this.authHttp.post(url, out).subscribe((res:any)=>{
       console.log(res);
       this.snakBar.open(res.message,'x');
       if(res.success){
@@ -165,7 +165,7 @@ export class LoginComponent implements OnInit {
 
   onLogout(){
     if(confirm('You want to logout from email service?')){
-      this.authHttp.logout().subscribe(res=>{
+      this.authHttp.logout().subscribe((res:any)=>{
 
         if(res.success){
           this.authHttp.setUser(null);
@@ -180,7 +180,7 @@ export class LoginComponent implements OnInit {
 
   onRestPassword(){
     let url = 'api/login/reset-password';
-    this.authHttp.post(url, this.login).subscribe(res=>{
+    this.authHttp.post(url, this.login).subscribe((res:any)=>{
       console.log(res);
       if(res.success){
         this.dialog.open(DialogSimpleComponent,{data:{

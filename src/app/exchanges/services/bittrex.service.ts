@@ -299,6 +299,9 @@ export class BittrexService implements APIBooksService{
     return this.http.get(url).map(res =>{
       return  (<any>res).result.map(function (item:VOMarketHistory) {
 
+        {
+
+        }
         //item.timestamp = 1;
        // item.time = moment.utc(item.TimeStamp).local().format('HH:mm:ss');
         return item

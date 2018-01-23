@@ -16,6 +16,11 @@ import {ConnectorApiService} from "./services/connector-api.service";
 import { MyGainersLosersComponent } from './my-gainers-losers/my-gainers-losers.component';
 import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
 import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
+import {MarketSelectComponent} from "./market-select/market-select.component";
+import { MyBooksComponent } from './my-books/my-books.component';
+import { MarketHistoryLineComponent } from './market-history-line/market-history-line.component';
+import {ChartsModule} from "ng2-charts";
+import { MarketHistoryTableComponent } from './market-history-table/market-history-table.component';
 
 
 const routes: Routes = [
@@ -53,6 +58,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     MaterialAppModule,
+    ChartsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -61,7 +67,11 @@ const routes: Routes = [
     MyMarketsComponent,
     MyGainersLosersComponent,
     MyBuySellComponent,
-    MyOrdersHistoryComponent
+    MyOrdersHistoryComponent,
+    MarketSelectComponent,
+    MyBooksComponent,
+    MarketHistoryLineComponent,
+    MarketHistoryTableComponent
   ],
   providers:[
     ConnectorApiService

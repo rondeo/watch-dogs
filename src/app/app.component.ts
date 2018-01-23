@@ -81,7 +81,7 @@ export class AppComponent implements OnInit {
 
   onLogout(){
     if(confirm('You want to logout from Application')){
-      this.auth.logout().toPromise().then(res=>{
+      this.auth.logout().toPromise().then((res:any)=>{
         console.log(res);
         if(res.success) this.auth.setUser(null);
         else this.snackBar.open( res.message,'x', {extraClasses:['alert-red']});

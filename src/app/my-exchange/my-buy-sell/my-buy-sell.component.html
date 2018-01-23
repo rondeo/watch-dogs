@@ -1,3 +1,86 @@
-<p>
-  In progress!
-</p>
+<div>
+    <app-market-select></app-market-select>
+    <span>{{base}}: ${{balanceBaseUS}}</span>
+    <span> ${{priceBaseUS}}</span>
+    <span>{{coin}}</span>
+    <span> ${{balanceCoinUS}}</span>
+
+    <section class="line">
+        <div class="scrollmenu">
+            <mat-radio-group [(ngModel)] = "amountUS" (ngModelChange)="onAmountChanged($event)" >
+                <a>
+                    <mat-radio-button value="50">$50</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="100">$100</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="200">$200</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button  value="400">$400</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="600">$600</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="1000">$1000</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="2000">$2000</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="4000">$4000</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="6000">$6000</mat-radio-button>
+                </a>
+                <a>
+                    <mat-radio-button value="10000">$10000</mat-radio-button>
+                </a>
+
+            </mat-radio-group>
+
+        </div>
+
+    </section>
+
+    <app-my-books
+            [market]="market"
+            [priceBaseUS]="priceBaseUS"
+            [amountBase]="amountBase"
+            (rateForAmount)="onRateForAmount($event)"
+    > </app-my-books>
+    <section>
+        <table>
+            <tr>
+                <td>
+                    <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
+                </td>
+            </tr>
+
+        </table>
+    </section>
+
+
+    <section>
+        <market-history-line
+                [marketHistory]="marketHistory"
+        ></market-history-line>
+    </section>
+
+    <section>
+        <market-history-table
+                [marketHistoryData]="marketHistory"
+        ></market-history-table>
+    </section>
+
+
+
+</div>

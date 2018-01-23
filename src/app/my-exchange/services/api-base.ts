@@ -1,9 +1,14 @@
 import {StorageService} from "../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOMarket, VOMarketCap} from "../../models/app-models";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrder, VOOrderBook} from "../../models/app-models";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Mappers} from "../../com/mappers";
+import * as _ from 'lodash';
+
+
+import * as cryptojs from 'crypto-js';
+import {Subject} from "rxjs/Subject";
 
 export abstract class ApiBase {
 
@@ -25,6 +30,99 @@ export abstract class ApiBase {
     this.marketCap = marketCap;
   }
 
+  abstract cancelOrder(orderId):Observable<VOOrder>;
+
+
+  abstract trackOrder(orderId):Observable<VOOrder>;
+
+
+  abstract downloadOrders(base:string, coin:string):Observable<VOOrder[]>;
+
+  dispatchOrders(orders){
+    this.marketHistorySub.next(orders);
+  }
+
+  orders$(){
+    return this.ordersSub.asObservable();
+  }
+  private ordersSub:Subject<VOOrder[]> = new Subject();
+
+
+  abstract getMarketSummary(base:string, coin:string):Promise<VOMarket>
+
+
+  abstract downloadMarketHistory(base:string, coin:string):void;
+
+  dispatchMarketHistory(history){
+    this.marketHistorySub.next(history);
+  }
+
+  marketHistory$(){
+    return this.marketHistorySub.asObservable();
+  }
+  marketHistorySub:Subject<VOOrder[]> = new Subject();
+
+
+
+  abstract sellLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
+
+  abstract buyLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
+
+  abstract downloadBooks(base:string, coin:string):void;
+  isBooksLoading:boolean;
+ private booksSub:Subject<VOBooks>;// = new BehaviorSubject<VOBooks>(null);
+
+  books$(){
+    if(!this.booksSub) this.booksSub = new Subject<VOBooks>()
+    return this.booksSub.asObservable();
+  }
+
+  dispatchBook(books:VOBooks){
+    this.booksSub.next(books);
+  }
+
+
+
+  private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
+  isLoaded: boolean;
+
+  loadBalances() {
+    if (this.isLoaded) return;
+    this.isLoaded = true;
+    this.refreshBalances();
+  }
+
+  abstract refreshBalances():void;
+
+
+
+  balances$(){
+    let bals =  this.balancesSub.getValue();
+    if(!bals) this.loadBalances();
+    return this.balancesSub.asObservable();
+  }
+  dispatchBalances(balances:VOBalance[]):void{
+    if(!balances) return;
+    this.marketCap.getCoinsObs().subscribe(MC=>{
+      if(!MC) return;
+      balances.forEach(function (balance: VOBalance) {
+        let mc = this.MC[balance.symbol];
+        if(mc){
+            balance.percent_change_1h = mc.percent_change_1h;
+          balance.percent_change_24h = mc.percent_change_24h;
+          balance.percent_change_7d = mc.percent_change_7d;
+          balance.priceUS = mc.price_usd;
+          balance.id = mc.id;
+            balance.balanceUS = +(mc.price_usd*balance.balance).toFixed(2)
+        }else balance.balanceUS = +(balance.balance).toFixed(4);
+
+
+      }, {MC:MC})
+      this.balancesSub.next(balances);
+    })
+
+  }
+
 
   private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
   getCurrencies():Observable<{[symbol:string]:VOMarketCap}> {
@@ -38,9 +136,14 @@ export abstract class ApiBase {
   abstract loadAllMarketSummaries():void;
 
   marketsAr$():Observable<VOMarket[]>{
+    let markets = this.marketsArSub.getValue();
+    if(!markets)this.loadAllMarketSummaries();
     return this.marketsArSub.asObservable();
   }
-  marketsOnj$():Observable<{[pair:string]:VOMarket}>{
+  marketsObj$():Observable<{[pair:string]:VOMarket}>{
+    let markets = this.marketsArSub.getValue();
+    if(!markets)this.loadAllMarketSummaries();
+
     return this.marketsObjSub.asObservable();
   }
 
@@ -67,10 +170,6 @@ export abstract class ApiBase {
 
         Mappers.mapDisplayValues1(item, mcBase.price_usd, mcBase.percent_change_1h, mcBase.percent_change_24h, mcBase.percent_change_7d , mcCoin);
       })
-
-
-
-
 
       this.coinsSub.next(localCoins);
       this.bases = bases;
@@ -139,5 +238,30 @@ export abstract class ApiBase {
   }
 
 
+  hash_hmac(text, password) {
+    let dg: any = cryptojs.HmacSHA512(text, password);
+    return dg.toString(cryptojs.enc.Hex);
+  }
 
+
+  onError(err){
+    console.error(err)
+  }
+
+  getPriceForBase(base: string):Promise<number> {
+    return new Promise( (resolve, reject) => {
+      this.marketCap.getCoinsObs().subscribe(MC=>{
+        if(!MC) return;
+        let mc = MC[base];
+        mc?resolve(mc.price_usd):reject(0);
+      })
+    })
+  }
+}
+
+export interface VOBooks{
+  market:string;
+  exchange:string;
+  buy:VOOrderBook[];
+  sell:VOOrderBook[];
 }

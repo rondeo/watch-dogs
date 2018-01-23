@@ -52,6 +52,9 @@ export class MappersBooks{
     return parseFloat(( _.sum(prices)/prices.length).toPrecision(5));
   }
 
+
+
+
   static getHistoryDuration(res):number{
     let l = res.length;
     let first = res[0];

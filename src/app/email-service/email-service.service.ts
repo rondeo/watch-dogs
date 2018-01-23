@@ -241,7 +241,7 @@ export class EmailServiceService {
       };
 
       console.log(' sendNotification ' + url, payload);
-      return this.http.post(url, payload).map(res=>res.json());
+      return this.http.post(url, payload).map(res=>res);
     }else{
       let sub:BehaviorSubject<any> = new BehaviorSubject({error:'login',message:'Please login into email service'})
       return sub.asObservable();

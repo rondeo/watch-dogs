@@ -100,7 +100,8 @@ export const VOORDER:VOOrder = {
   isOpen:false,
   base:'',
   coin:'',
-  rate:0
+  rate:0,
+  action:''
 
 }
 
@@ -110,7 +111,9 @@ export interface VOOrder{
   message?:string;
   action?:string;
   date?:string;
+  timestamp?:number;
   rate:number;
+  exchange?:string;
   priceBaseUS?:number;
   amountBaseUS?:number;
   priceUS?:number;
