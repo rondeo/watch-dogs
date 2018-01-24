@@ -15,7 +15,7 @@ import { MyMarketsComponent } from './my-markets/my-markets.component';
 import {ConnectorApiService} from "./services/connector-api.service";
 import { MyGainersLosersComponent } from './my-gainers-losers/my-gainers-losers.component';
 import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
-import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
+
 import {MarketSelectComponent} from "./market-select/market-select.component";
 import { MyBooksComponent } from './my-books/my-books.component';
 import { MarketHistoryLineComponent } from './market-history-line/market-history-line.component';
@@ -33,7 +33,7 @@ const routes: Routes = [
       {path: 'balance', component: MyBalnceComponent},
       {path: 'markets', component: MyMarketsComponent},
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
-      {path: 'orders-history', component:  MyOrdersHistoryComponent},
+     // {path: 'orders-history', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:market', component: MyBuySellComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
@@ -69,7 +69,7 @@ const routes: Routes = [
     MyMarketsComponent,
     MyGainersLosersComponent,
     MyBuySellComponent,
-    MyOrdersHistoryComponent,
+    //MyOrdersHistoryComponent,
     MarketSelectComponent,
     MyBooksComponent,
     MarketHistoryLineComponent,

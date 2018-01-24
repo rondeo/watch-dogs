@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {VOOrder} from "../../models/app-models";
 import * as _ from 'lodash';
 import {ConnectorApiService} from "../services/connector-api.service";
@@ -14,17 +14,14 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   summary:number;
   summaryColor:string;
-  totalFee:string;
+  totalFee:number = 0;
 
   @Input() newOrder:VOOrder;
   @Input() marketInit:MarketInit;
 
- /* @Input() priceBaseUS:number;
+  @Output() completeOrder:EventEmitter<VOOrder> = new EventEmitter<VOOrder>();
 
-  @Input() coin:string;
-  @Input() exchange:string;
-  @Input() base:string;
-*/
+  private checkOrder:VOOrder;
 
 
  ordersHistory:VOOrder[];
@@ -34,7 +31,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     private snackBar:MatSnackBar
   ) {
 
-
+      this.ordersHistory = [];
   }
 
   ngOnInit() {
@@ -42,21 +39,22 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnChanges(changes){
-    if(changes.marketInit){
+  ngOnChanges(changes:any){
+    console.log('trading-history-component', changes);
+    if(changes.marketInit && changes.marketInit.currentValue){
       this.loadSavedData();
+      if(this.newOrder){
+        this.checkOrder = this.mapOrder(this.newOrder, this.marketInit.priceBaseUS);
+      }
+
+      this.calculateSummary();
     }
 
-    console.log('trading-history-component', changes)
-    if(changes.newOrder && changes.newOrder.currentValue){
 
-      let order:VOOrder = changes.newOrder.currentValu;
-
-      this.mapOrder(order, this.marketInit.priceBaseUS)
-      this.checkingOrder(order);
-      /*this.addOrder(changes.newOrder.currentValue);
-      this.calculateSummary();
-      this.saveData()*/
+    if(changes.newOrder && changes.newOrder.currentValue && this.marketInit){
+      let order:VOOrder = changes.newOrder.currentValue;
+      this.checkOrder = this.mapOrder(order, this.marketInit.priceBaseUS);
+      setTimeout(()=> this.checkingOrder(this.checkOrder), 2000);
     }
 
     if(changes.priceBaseUS && changes.priceBaseUS.currentValue){
@@ -69,58 +67,74 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     }*/
   }
 
+
+
   trackOrderTimeout;
 
-  onCancelClick(){
-    if(!this.newOrder) return;
+  onCancelNewOrderClick(){
+    if(!this.checkOrder) return;
     let api =  this.apiService.getCurrentAPI();
-    let uuid = this.newOrder.uuid
+    let order = this.checkOrder;
+
+    let uuid = order.uuid;
+
+    if(!confirm('Cancel order '+ order.action + ' ' + order.amountBaseUS +' '+ order.priceUS +'?')) return;
+
     api.cancelOrder(uuid).toPromise().then(res=>{
       console.log(res);
       if(res.uuid)this.snackBar.open('Order canceled', 'x', {duration:3000, extraClasses:'alert-green'});
       else  this.snackBar.open('cant cancel order ', 'x', {duration:3000, extraClasses:'alert-red'});
 
     }).catch(err=>{
+      console.warn(err);
       this.snackBar.open('Server error ', 'x', {duration:3000, extraClasses:'alert-red'});
     })
   }
 
-  checkingOrder(newOrder){
+
+  checkingOrder(myOrder:VOOrder){
 
 
    let api =  this.apiService.getCurrentAPI();
 
-   api.trackOrder(newOrder.uuid).toPromise().then(res=>{
-     console.log(res);
-     if(res.isOpen) {
-       this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(newOrder), 3000);
-     }else{
+   console.log('checkingOrder ', myOrder);
 
-       this.newOrder = null;
-       if(res.uuid !==newOrder.uuid){
+   api.trackOrder(myOrder.uuid).toPromise().then(res=>{
+     console.log(res);
+
+     if(res.isOpen) {
+
+       let msg = myOrder.action + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
+
+       this.snackBar.open('Open ' + msg + 'wait 3sec', 'x', {duration:2000});
+
+       this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 3000);
+     }else{
+       this.checkOrder = null;
+       if(res.uuid !== myOrder.uuid){
         console.error(res);
-       }else this.addOrder(newOrder);
+       }else {
+         myOrder.isOpen = false;
+         //let out = JSON.parse(JSON.stringify(myOrder));
+         //out.action = (myOrder.action ==='B'?'BUY':'SELL');
+         this.completeOrder.emit(myOrder);
+         this.addOrderHistory(myOrder);
+         this.calculateSummary();
+       }
      }
 
-
    }).catch(err=>{
-     this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(newOrder), 3000);
+     console.warn(err);
+     this.snackBar.open('Check Order Error wait 5sec', 'x', {duration:2000, extraClasses:'alert-red'});
+     this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 5000);
    })
   }
 
-  loadSavedData(){
-    if(!this.marketInit) return;
 
-    let id = this.marketInit.exchange +'-'+ this.marketInit.base +'-'+this.marketInit.coin;
 
-      let str = localStorage.getItem(id);
 
-      if(str) this.ordersHistory  = JSON.parse(str);
-   // }
-    console.log(this.ordersHistory);
-  }
 
-  private addOrder(order:VOOrder){
+  private addOrderHistory(order:VOOrder){
 
     console.log('add oredr ', order);
     let exists = this.ordersHistory.find(function (item) { return item.uuid === order.uuid; });
@@ -135,22 +149,36 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   private calculateSummary(){
+    if(!this.marketInit || !this.ordersHistory) return;
     console.log(' calculateSummary ', this.marketInit.priceBaseUS, this.ordersHistory);
+
     let totalFee = 0;
 
+    let totalBuy = 0;
+    let totalSell = 0;
     this.ordersHistory.forEach(function (item) {
-      totalFee += item.feeUS
+      totalFee += item.fee;
+      if(item.action === 'BUY') totalBuy += (item.amountCoin * item.rate);
+      else if(item.action ==='SELL') totalSell+= (item.amountCoin * item.rate);
+      else console.error(' no action ', item);
     });
 
-    this.totalFee = totalFee.toFixed(2);
+    let profit = (totalSell - totalBuy) ;
+    console.log('profit   '+ (profit * this.marketInit.priceBaseUS));
+    this.summary = +(profit * this.marketInit.priceBaseUS).toFixed(2);
+
+    this.totalFee = +totalFee.toFixed(2);
   }
 
   private mapOrder(order:VOOrder, priceBaseUS:number):VOOrderDisplay{
 
-    console.log('mapOrder ', order)
+    //console.log('mapOrder ' + priceBaseUS, order)
 
     return {
       uuid:order.uuid,
+      amountBase:order.amountBase,
+      amountCoin:order.amountCoin,
+      amountCoinUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
       amountBaseUS: Math.round(order.amountBase * priceBaseUS),
       priceUS:+(order.rate * priceBaseUS).toPrecision(4) ,
       rate:order.rate,
@@ -158,14 +186,53 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       isOpen:order.isOpen,
       coin:order.coin,
       base:order.base,
-      fee:order.fee,
-      feeUS:+(order.fee * priceBaseUS).toPrecision(4)
+      fee:order.fee
     }
   }
 
+
   private saveData(){
-    let id = this.marketInit.exchange +'-'+ this.marketInit.base +'-'+this.marketInit.coin;
-    localStorage.setItem(id, JSON.stringify(this.ordersHistory));
+
+    let base = this.marketInit.base;
+    let coin = this.marketInit.coin;
+    let exchange = this.marketInit.exchange;
+
+    let id = exchange +'-'+ base+'-'+coin;
+
+    let data = this.ordersHistory.map(function (item) {
+      return{
+        uuid:item.uuid,
+        amountBase:item.amountBase,
+        amountCoin:item.amountCoin,
+        rate:item.rate,
+        action:item.action,
+        fee:item.fee,
+        isOpen:item.isOpen
+      }
+    });
+
+    localStorage.setItem(id, JSON.stringify(data));
+  }
+
+  loadSavedData(){
+    if(!this.marketInit) return;
+    let base = this.marketInit.base;
+    let coin = this.marketInit.coin;
+    let exchange = this.marketInit.exchange;
+
+    let id = exchange +'-'+ base+'-'+coin;
+
+    let str = localStorage.getItem(id);
+
+    let price = this.marketInit.priceBaseUS;
+
+    if(str) this.ordersHistory  = JSON.parse(str).map( (item)=> {
+      item.base = base;
+      item.coin = coin;
+      return this.mapOrder(item, price);
+    });
+    // }
+    //console.log(this.ordersHistory);
   }
 
   onClearSummaryClick(){
@@ -173,6 +240,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       let id = this.marketInit.exchange +'-'+ this.marketInit.base +'-'+this.marketInit.coin;
       localStorage.removeItem(id);
       this.ordersHistory = [];
+      this.checkOrder = null;
     }
   }
 

@@ -45,27 +45,41 @@
 
     </section>
 
-    <app-my-books
-            [market]="market"
-            [priceBaseUS]="priceBaseUS"
-            [amountBase]="amountBase"
-            (rateForAmount)="onRateForAmount($event)"
-    > </app-my-books>
+
     <section>
-        <table>
-            <tr>
-                <td>
-                    <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
-                </td>
-                <td>
+        <div class="myFlex">
+            <div class="myFlexCol">
+                <app-my-books
+                        [market]="market"
+                        [priceBaseUS]="priceBaseUS"
+                        [amountBase]="amountBase"
+                        (rateForAmount)="onRateForAmount($event)"
+                > </app-my-books>
 
-                </td>
-                <td>
-                    <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
-                </td>
-            </tr>
+                <table>
+                    <tr>
+                        <td>
+                            <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
+                        </td>
+                        <td>
 
-        </table>
+                        </td>
+                        <td>
+                            <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="myFlexCol">
+                <app-trading-history
+                        [marketInit]="marketInit"
+                        [newOrder]="newOrder"
+                        (completeOrder)="onOrderComplete($event)"
+                ></app-trading-history>
+            </div>
+        </div>
+
     </section>
 
     <hr/>

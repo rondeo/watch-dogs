@@ -42,6 +42,7 @@ export class ApiBittrex extends ApiBase  {
   trackOrder(orderId):Observable<VOOrder>{
     console.log(' getOrderById  ' + orderId);
     let url = 'https://bittrex.com/api/v1.1/account/getorder';
+    console.log(url);
     return this.call(url, {uuid: orderId}).map(res => {
       let r = <any>res.result;
       console.log('getOrderById ',r);
@@ -65,7 +66,6 @@ export class ApiBittrex extends ApiBase  {
 
   downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
 
-    //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
     let market = base+'-'+coin;
 
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
@@ -86,52 +86,37 @@ export class ApiBittrex extends ApiBase  {
     })
   }
 
+  isMarketHistoryDoawnloading:boolean
   downloadMarketHistory(base:string, coin:string){
-    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-   url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
-   // console.log(url)
+    if(this.isMarketHistoryDoawnloading) return;
+    this.isMarketHistoryDoawnloading = true;
+    let market = base + '-'+coin;
+    let url = 'api/bittrex/getmarkethistory/'+ market;
+    console.log(url);
+
     this.http.get(url).map((res:any)=>{
-      console.log(res)
-      return res.map(function(item) {
-        return {
-          action:item.type.toUpperCase(),
-          uuid: item.tradeID,
-          exchange: 'poloniex',
-          rate:+item.rate,
-          amountBase:+item.total,
-          base: base,
-          coin: coin,
-          date:item.date,
-          timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
 
-      }
-      })
+      console.log(res);
+      return  (<any>res).result.map(function (item:VOMarketHistory) {
 
-      /*
- amount
-:
-"426.99207834"
-date
-:
-"2018-01-21 14:59:06"
-globalTradeID
-:
-332735146
-rate
-:
-"0.00000063"
-total
-:
-"0.00026900"
-tradeID
-:
-5047797
-type
-:
-"sell"*/
+       return {
+         action:item.OrderType,
+         uuid:item.Id,
+         exchange:'bittrex',
+         rate:item.Price,
+         amountBase:item.Total,
+         coin:coin,
+         base:base,
+         timestamp:(new Date(item.TimeStamp +'Z')).getTime(),
+         date:item.TimeStamp
+        }
+      });
+
     }).toPromise().then(res=>{
+      this.isMarketHistoryDoawnloading = false;
       this.dispatchMarketHistory(res)
     }).catch(err=>{
+      this.isMarketHistoryDoawnloading = false;
       console.error(err)
     })
   }
@@ -181,32 +166,20 @@ type
 
     if(this.isBooksDownloading) return;
     this.isBooksDownloading = true;
-    let url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair='+base+'_'+coin+'&depth=100'
-
-    //let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
+    let url = 'api/bittrex/getorderbook/' +base +'-' +coin + '/' + 50;
     console.log(url)
     this.http.get(url).map((res:any)=>{
       this.isBooksDownloading = false;
       console.log(res);
-      let buy = res.bids.map(function (item) {
-        return{
-          Quantity:+item[1],
-          Rate:+item[0]
-        }
-      })
 
-      let sell = res.asks.map(function (item) {
-        return{
-          Quantity:+item[1],
-          Rate:+item[0]
-      }
-      });
+      let r = (<any>res).result;
+      console.log('books ', r);
 
       return {
         market:base+'_'+coin,
         exchange:this.exchange,
-        buy:buy,
-        sell:sell
+        buy:r.buy,
+        sell:r.sell
       }
 
     }).toPromise().then(res=>{
@@ -267,8 +240,6 @@ type
     console.log('%c bittrex  loadAllMarketSummaries   ', 'color:orange');
     if (this.isLoadinMarkets) return;
     this.isLoadinMarkets = true;
-
-   // let url = '/api/poloniex/markets-summary';
     let url = 'api/bittrex/summaries';
     console.log(url);
 

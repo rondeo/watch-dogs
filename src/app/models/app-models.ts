@@ -116,6 +116,7 @@ export interface VOOrder{
   exchange?:string;
   priceBaseUS?:number;
   amountBaseUS?:number;
+  amountCoinUS?:number;
   priceUS?:number;
   amountCoin?:number;
   amountBase?:number;

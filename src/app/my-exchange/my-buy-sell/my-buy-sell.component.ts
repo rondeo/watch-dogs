@@ -52,12 +52,29 @@ export class MyBuySellComponent implements OnInit {
   currentAPI:ApiBase;
 
 
+  marketInit:{}
+
   private pair;
   constructor(
     private route:ActivatedRoute,
     private apiService:ConnectorApiService,
     private snackBar:MatSnackBar
-  ) { }
+  ) {
+
+    this.newOrder; /*= {
+      isOpen:true,
+      uuid:'uuuuu',
+      amountBase:0.01,
+      amountCoin:300,
+      action:'B',
+      rate:0.0002,
+      base:'',
+      coin:'',
+      fee:0.009
+    }*/
+
+
+  }
 
 
 
@@ -115,10 +132,11 @@ export class MyBuySellComponent implements OnInit {
 
   }
 
-  currentOrder:VOOrder;
+  newOrder:VOOrder;
   processAction(action,  amountBase, isMax){
     console.log(action, amountBase, isMax);
 
+    action = action.toUpperCase();
 
     let base:string = this.base;
     let coin:string = this.coin;
@@ -141,7 +159,7 @@ export class MyBuySellComponent implements OnInit {
 
       let rate = 0
       let amountCoin = 0;
-      if(action === 'Sell'){
+      if(action === 'SELL'){
         rate = BooksService.getRateForAmountBase(books.buy, amountBase);
         amountCoin = amountBase / rate
         let balance = this.balanceCoin;
@@ -159,6 +177,8 @@ export class MyBuySellComponent implements OnInit {
         amountCoin = amountBase / rate;
       }
 
+      let amountUS = (amountCoin * rate * priceBaseUS);
+
       rate = parseFloat(rate+'');
       amountCoin = +(amountCoin).toPrecision(5);
 
@@ -173,20 +193,21 @@ export class MyBuySellComponent implements OnInit {
 
       let amountBaseUS = +(amountBase * priceBaseUS).toFixed(2);
 
-      let fee = (amountBaseUS * 0.0025).toFixed(2);
+
+      let feeUS = (amountUS * 0.0025);
 
       //setTimeout(()=>{
 
       console.log(action + ' '+base +'_'+ coin + ' '+amountCoin +' '+rate);
 
-        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountBaseUS +  '\nFee: $' + fee)){
+        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountUS +  '\nFee: $' + feeUS.toFixed(2))){
 
          // let service:APIBuySellService = this.privateService;
           let obs:Observable<VOOrder>;
 
 
-          if(action ==='Sell') obs =  this.currentAPI.sellLimit(base, coin, amountCoin, rate );
-          else if(action ==='Buy')obs = this.currentAPI.buyLimit(base, coin, amountCoin, rate );
+          if(action ==='SELL') obs =  this.currentAPI.sellLimit(base, coin, amountCoin, rate );
+          else if(action ==='BUY')obs = this.currentAPI.buyLimit(base, coin, amountCoin, rate );
 
           if(!obs) {
             console.error(action);
@@ -198,10 +219,24 @@ export class MyBuySellComponent implements OnInit {
             console.log(res);
             if(res && res.uuid){
 
-              this.currentOrder = res;
+              let order = {
+                action:action,
+                uuid:res.uuid,
+                isOpen:true,
+                base:base,
+                coin:coin,
+                amountBase:amountBase,
+                amountCoin:amountCoin,
+                rate:rate,
+                fee:feeUS,
+                priceBaseUS:priceBaseUS
+              };
 
-              //this.startCheckingOrder(res.uuid);
-              this.snackBar.open('Order Set. Checking...'+res.message || '', 'x', {extraClasses:'alert-green', duration:2000});
+              this.newOrder = order;
+
+              let msg = action + ' ' + coin + ' $' +amountUS;
+
+              this.snackBar.open('Order Set! '+msg, 'x', {extraClasses:'alert-green', duration:2000});
             } else{
               this.snackBar.open('Error '+res.message, 'x', {extraClasses:'alert-red', duration:3000})
             }
@@ -211,16 +246,19 @@ export class MyBuySellComponent implements OnInit {
           })
 
         }
-      //}, 200);
-
-
-      //this.modelBuySell.balanceCoin
-
 
     })
   }
 
+  onOrderComplete(order:VOOrder){
+    console.warn(order)
+    let amountBase = order.amountCoin * order.rate;
+    let action = order.action;
+    let amountUS  = amountBase * this.priceBaseUS;
 
+    this.snackBar.open('Order Complete! '+action +' ' +order.coin+' $'+amountUS.toFixed(2), 'x', {duration:3000, extraClasses:'alert-green'});
+    if(this.currentAPI)this.currentAPI.refreshBalances();
+  }
 
   onAmountChanged(evt){
       if(!this.priceBaseUS) return;
@@ -244,17 +282,27 @@ export class MyBuySellComponent implements OnInit {
      return item.symbol === base;
    })
     let coin = this.coin;
+
     let coinBal:VOBalance = this.balances.find(function (item) {
       return item.symbol === coin;
-    });
+    })
+
+    if(!coinBal){
+      coinBal = new VOBalance()
+      coinBal.balance = 0;
+      coinBal.balanceUS = 0;
+    }
 
     this.balanceBase = baseBal.balance;
+
     this.balanceCoin = coinBal.balance;
+
 
     this.priceBaseUS = baseBal.priceUS;
     this.amountBase = +(this.amountUS /baseBal.priceUS).toPrecision(8);
 
     this.balanceBaseUS = baseBal.balanceUS;
+
     this.balanceCoinUS = coinBal.balanceUS;
   }
 
@@ -280,6 +328,11 @@ export class MyBuySellComponent implements OnInit {
       this.market = this.base+'_' + this.coin;
       this.currentAPI.getPriceForBase(this.base).then(res=>{
         this.priceBaseUS = res;
+        this.marketInit = {
+          priceBaseUS:res,
+          coin:this.coin,
+          base:this.base
+        }
         this.downloadHistory();
       }).catch(err=>{
         this.downloadHistory();
