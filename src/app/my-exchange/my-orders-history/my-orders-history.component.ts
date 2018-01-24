@@ -8,9 +8,7 @@ import {VOOrder} from "../../models/app-models";
 })
 export class MyOrdersHistoryComponent implements OnInit {
 
-  @Input() addOrder:VOOrder;
-
-  @Input() market:string;
+  @Input() newOrder:VOOrder;
 
   @Output() onOrderCopmlete:EventEmitter<VOOrder> = new EventEmitter<VOOrder>();
 
@@ -22,6 +20,8 @@ export class MyOrdersHistoryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+
   }
 
 }

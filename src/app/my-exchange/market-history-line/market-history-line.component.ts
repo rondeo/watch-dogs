@@ -61,7 +61,8 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
  // @Input() market:string;
  // @Input() priceBaseUS:number;
 
-  @Input() marketHistory:MarketHistoryData
+  @Input() marketHistory:MarketHistoryData;
+  @Input() removeMaxMin:boolean;
 
   private currentAPI:ApiBase;
 
@@ -105,12 +106,20 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
    // console.warn(priceBaseUS);
     //console.log(charts);
 
-    this.lineChartData = [
-      {data:charts.sold.reverse(), fill:false, label:'Sell'},
-      {data:charts.bought.reverse(), fill:false, label:'Buy'},
-      {data:min, fill:false, label:'min'},
-      {data:max, fill:false, label:'max'}
-    ];
+    if(this.removeMaxMin){
+      this.lineChartData = [
+        {data:charts.sold.reverse(), fill:false, label:'Sell'},
+        {data:charts.bought.reverse(), fill:false, label:'Buy'}
+      ];
+    }else{
+      this.lineChartData = [
+        {data:charts.sold.reverse(), fill:false, label:'Sell'},
+        {data:charts.bought.reverse(), fill:false, label:'Buy'},
+        {data:min, fill:false, label:'min'},
+        {data:max, fill:false, label:'max'}
+      ];
+    }
+
 
     let M = diff/60;
 

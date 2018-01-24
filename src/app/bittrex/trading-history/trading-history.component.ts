@@ -23,7 +23,9 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   @Input() ordersHistory:VOOrder[];
 
-  constructor() {
+  constructor(
+
+  ) {
 
 
   }

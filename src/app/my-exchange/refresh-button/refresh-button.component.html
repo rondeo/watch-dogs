@@ -1,0 +1,7 @@
+<div>
+    &nbsp;&nbsp;&nbsp;
+    <a [ngClass]="isHistoryLoading?'scale05':''" class="btn dgreen fa fa-refresh fa-3x" title="History " (click)="refreshMarketHistory()"></a>
+    <sub>{{refreshCount}}</sub>
+    &nbsp;&nbsp;&nbsp;
+    <mat-checkbox #baseUSDT  (change)="onAutoClick($event)">Auto </mat-checkbox>
+</div>

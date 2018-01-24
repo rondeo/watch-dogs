@@ -68,16 +68,26 @@
         </table>
     </section>
 
+    <hr/>
+    <section>
+        <app-refresh-button
+                [durationMin2]="durationInMin"
+                (onRefresh)="onRfreshHistory()"
+        ></app-refresh-button>
+    </section>
+
 
     <section>
         <market-history-line
                 [marketHistory]="marketHistory"
+                [removeMaxMin]="true"
         ></market-history-line>
     </section>
 
     <section>
         <market-history-table
                 [marketHistoryData]="marketHistory"
+                (durationMin)="onDurationMin($event)"
         ></market-history-table>
     </section>
 

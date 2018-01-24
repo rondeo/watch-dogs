@@ -10,6 +10,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {ApiCryptopia} from "./api-cryptopia";
 import {ApiPoloniex} from "./api-poloniex";
 import {ApiBase} from "./api-base";
+import {ApiBittrex} from "./api-bittrex";
 
 @Injectable()
 export class ConnectorApiService {
@@ -51,6 +52,7 @@ export class ConnectorApiService {
     let connector:ApiBase;
     switch(exchange){
       case 'bittrex':
+        connector = new ApiBittrex(this.http, this.storage, this.marketCap);
         break;
 
       case 'cryptopia':
@@ -71,6 +73,9 @@ export class ConnectorApiService {
 
 
 
+  getCurrentAPI(){
+    return this.currentService;
+  }
   getExchangeName() {
     return this.currentService.exchange;
   }

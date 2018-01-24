@@ -152,7 +152,7 @@ export abstract class ApiBase {
   isLoadinMarkets:boolean = false;
 
   bases:string[];
-  protected setMarketsData( marketsAr, indexed, bases){
+  protected dispatchMarketsData( marketsAr, indexed, bases){
     this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
@@ -202,6 +202,8 @@ export abstract class ApiBase {
     this.apiKey = apiKey;
     this.password = password;
     //console.log(this.apiKey, password);
+
+
     if (isSave) this.storage.setItem(this.exchange + '-credentials', JSON.stringify({
       apiKey: apiKey,
       password: password
@@ -216,6 +218,7 @@ export abstract class ApiBase {
 
   autoLogin(): void {
     //if (!this.storage.isLoggedIn()) return ;
+
     let str = this.storage.getItem(this.exchange + '-credentials', true);
     //console.warn('autoLogin ', str);
     if (str) {

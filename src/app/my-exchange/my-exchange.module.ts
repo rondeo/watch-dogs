@@ -21,6 +21,8 @@ import { MyBooksComponent } from './my-books/my-books.component';
 import { MarketHistoryLineComponent } from './market-history-line/market-history-line.component';
 import {ChartsModule} from "ng2-charts";
 import { MarketHistoryTableComponent } from './market-history-table/market-history-table.component';
+import {TradingHistoryComponent} from "./trading-history/trading-history.component";
+import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 
 
 const routes: Routes = [
@@ -71,7 +73,9 @@ const routes: Routes = [
     MarketSelectComponent,
     MyBooksComponent,
     MarketHistoryLineComponent,
-    MarketHistoryTableComponent
+    MarketHistoryTableComponent,
+    TradingHistoryComponent,
+    RefreshButtonComponent
   ],
   providers:[
     ConnectorApiService

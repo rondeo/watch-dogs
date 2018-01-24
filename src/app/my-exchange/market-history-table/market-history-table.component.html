@@ -1,24 +1,36 @@
 <div>
-    <div >
-        <table class="table-small">
-            <tbody>
-            <tr class="small">
-                <td>Last</td>
-                <td>Low</td>
-                <td>High</td>
-                <td>Ask</td>
-                <td>Bid</td>
-            </tr>
-            <tr>
-                <td>{{marketDetails.Last}}</td>
-                <td>{{marketDetails.Low}}</td>
-                <td>{{marketDetails.High}}</td>
-                <td>{{marketDetails.Ask}}</td>
-                <td>{{marketDetails.Bid}}</td>
-            </tr>
-            </tbody>
-        </table>
+    <div>
+        <div class="inline-block" >
+
+            <table class="table-small">
+                <tbody>
+                <tr class="small">
+                    <td>Last</td>
+                    <td>Low</td>
+                    <td>High</td>
+                    <td>Ask</td>
+                    <td>Bid</td>
+
+                </tr>
+                <tr>
+                    <td>{{marketDetails.Last}}</td>
+                    <td>{{marketDetails.Low}}</td>
+                    <td>{{marketDetails.High}}</td>
+                    <td>{{marketDetails.Ask}}</td>
+                    <td>{{marketDetails.Bid}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="inline-block" style="vertical-align: text-bottom;">
+
+        </div>
+
     </div>
+
+
     <br/>
     <span>{{durationD}} <small>min</small></span>    &nbsp;&nbsp;
     <span> {{speedD}} /<small>min</small></span> &nbsp;&nbsp;
@@ -105,12 +117,11 @@
         </div>
         <div>
             &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-            <mat-checkbox #baseUSDT  (change)="onAutoClick($event)">Auto </mat-checkbox>
+
             <br/>
             <br/>
             &nbsp;&nbsp;
-            <a [ngClass]="isHistoryLoading?'scale05':''" class="btn dgreen fa fa-refresh fa-3x" title="History " (click)="refreshMarketHistory()"></a>
-            <sub>{{refreshCount}}</sub>
+
         </div>
 
     </div>

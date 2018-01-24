@@ -48,7 +48,6 @@ export class MyBuySellComponent implements OnInit {
 
   marketsArAll:VOMarket[];
 
-
   balances:VOBalance[];
   currentAPI:ApiBase;
 
@@ -59,6 +58,15 @@ export class MyBuySellComponent implements OnInit {
     private apiService:ConnectorApiService,
     private snackBar:MatSnackBar
   ) { }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -282,6 +290,22 @@ export class MyBuySellComponent implements OnInit {
 
   }
 
+  durationInMin:number = 0;
+
+  onDurationMin(min){
+    setTimeout(()=>{
+      this.durationInMin = min;
+    }, 200)
+
+  }
+
+
+  onRfreshHistory(evt){
+
+    console.warn(evt)
+    this.durationInMin = 0;
+    this.downloadHistory();
+  }
 
   private sub1:Subscription;
   private sub2:Subscription;

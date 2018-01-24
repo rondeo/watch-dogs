@@ -14,54 +14,64 @@ import {SelectedSaved} from "../../com/selected-saved";
 import {ApiBase} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Mappers} from "../../com/mappers";
-import {SOMarketPoloniex} from "../../models/sos";
+import {SOMarketBittrex, SOMarketPoloniex} from "../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
+import * as cryptojs from 'crypto-js';
 
-export class ApiPoloniex extends ApiBase  {
+export class ApiBittrex extends ApiBase  {
 
   constructor(
     private http:HttpClient,
     storage:StorageService,
     marketCap:MarketCapService
   ) {
-    super(storage, 'poloniex', marketCap);
+    super(storage, 'bittrex', marketCap);
 
   }
 
-  cancelOrder(orderId):Observable<VOOrder>{
-    return this.call({
-      command:'cancelOrder',
-      orderNumber:orderId
-    }).map(res=>{
-      if(res)
+  cancelOrder(uuid: string): Observable<VOOrder> {
+    let uri = 'https://bittrex.com/api/v1.1/market/cancel';
+    return this.call(uri, {uuid: uuid}).map(res=>{
+      console.log(' cancelOrder ', res);
+      return res;
+    });
+  }
+
+  trackOrder(orderId):Observable<VOOrder>{
+    console.log(' getOrderById  ' + orderId);
+    let url = 'https://bittrex.com/api/v1.1/account/getorder';
+    return this.call(url, {uuid: orderId}).map(res => {
+      let r = <any>res.result;
+      console.log('getOrderById ',r);
+      let a = r.Exchange.split('-');
+
       return {
-        uuid:orderId,
-        isOpen:false,
-        coin:null,
-        base:null,
-        rate:0
+        uuid:r.OrderUuid,
+        action:r.Type.split('_')[1].substr(0,1),
+        isOpen:r.IsOpen,
+        base:a[0],
+        coin:a[1],
+        rate:+r.PricePerUnit,
+        amountBase:r.Price,
+        amountCoin:r.Quantity,
+        fee:r.CommissionPaid
       }
-      else return null;
-    })
+    });
+
   }
-
-
-   trackOrder(orderId):Observable<VOOrder>{
-     return this.call({
-       command:'returnOrderTrades',
-       orderNumber:orderId
-     });
-   }
 
 
   downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
 
     //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
-    return this.call({
-      command:'returnTradeHistory',
-      currencyPair: base+'_'+coin
+    let market = base+'-'+coin;
+
+    let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
+    return this.call(uri, {market: market}).map(res=>{
+      console.log(' getOpenOrders  '+ market , res);
+      return res;
     })
   }
 
@@ -129,51 +139,39 @@ type
 
 
   buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'_'+coin;
+    let market = base+'-'+coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-
-    return this.call( {
-      command:'buy',
-      currencyPair:market,
-      rate:rate,
-      amount:quantity
+    let uri = 'https://bittrex.com/api/v1.1/market/buylimit';
+    return this.call(uri, {
+      market: market,
+      quantity: quantity,
+      rate: rate
     }).map(res=>{
       console.log(' buyLimit market ' + market , res);
 
-      return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        base:base,
-        coin:coin,
-        type:res.type
-      };
+      return res.result;
     });
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
 
   sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'_'+coin;
+
+    let market = base+'-'+coin;
     console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
-    return this.call( {
-        command:'sell',
-        currencyPair:market,
-        rate:rate,
-        amount:quantity
-
+    let uri = 'https://bittrex.com/api/v1.1/market/selllimit';
+    return this.call(uri, {
+      market: market,
+      quantity: quantity,
+      rate: rate
     }).map(res=>{
       console.log(' sellLimit market '+market , res);
-      return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        base:base,
-        coin:coin,
-        type:res.type
-      };
-
+      if(res.success) return res.result;
+      else return {
+        uuid:'',
+        message:res.message
+      }
     });
   }
 
@@ -220,7 +218,6 @@ type
   }
 
 
-
   isLoadingBalances:boolean;
   refreshBalances():void {
     if(!this.isLogedInSub.getValue()){
@@ -228,56 +225,51 @@ type
       return;
     }
 
+
     if(this.isLoadingBalances) return;
     this.isLoadingBalances = true;
 
-    //console.log('%c refreshBalances  ','color:pink');
 
-    this.call( {command:'returnBalances'}).map(res => {
-      //console.log(res);
+    console.log('%c refreshBalances  ','color:pink');
 
+    let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
+    this.call(uri, {}).map(res => {
 
       if(!res){
-        console.warn('refreshBalances null')
-        return null;
-      }
-      if(res.error){
-        res.api='returnBalances';
-        this.onError(res);
-
+        console.log('refreshBalances null')
         return null;
       }
 
-      let out =[];
+      return res.result.map(function (item) {
 
-      for(let str in res) {
-        let bal = new VOBalance();
-        bal.balance = +res[str];
-        bal.symbol = str;
-        out.push(bal)
-      }
-
-      return out;
+        return {
+          symbol: item.Currency,
+          address: item.CryptoAddress,
+          balance: item.Balance,
+          available: item.Available,
+          pending: item.Pending,
+          priceUS:0,
+          balanceUS:0
+        }
+      })
     }).toPromise().then(res=>{
       this.isLoadingBalances = false;
       this.dispatchBalances(res);
-
     }).catch(err=>{
       this.isLoadingBalances = false;
-      err.api='poloniex returnBalances';
       this.onError(err);
 
     });
-
   }
 
+
   loadAllMarketSummaries():void {
-    console.log('%c ploniex  loadAllMarketSummaries   ', 'color:orange');
+    console.log('%c bittrex  loadAllMarketSummaries   ', 'color:orange');
     if (this.isLoadinMarkets) return;
     this.isLoadinMarkets = true;
 
    // let url = '/api/poloniex/markets-summary';
-    let url = 'https://poloniex.com/public?command=returnTicker';
+    let url = 'api/bittrex/summaries';
     console.log(url);
 
 
@@ -288,13 +280,13 @@ type
 
       let baseCoins: string[] = [];
 
-
       let selected: string[] = this.getMarketsSelected();
 
       let indexed:{} = {}
       let bases:string[] = [];
 
-      ApiPoloniex.mapMarkets(result, marketsAr, indexed, bases, selected);
+      ApiBittrex.mapMarkets(result, marketsAr, indexed, bases, selected);
+
       this.dispatchMarketsData(marketsAr, indexed, bases);
 
       this.isLoadinMarkets = false;
@@ -304,112 +296,80 @@ type
 
 
   static mapMarkets(
-    result:{[index:string]:SOMarketPoloniex},
+    result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},
     bases:string[],
     selected:string[]
-    //marketCap:{[symbol:string]:VOMarketCap}
   ):number{
 
-    let i = 0;
-    for (let str in result) {
+    let ar:SOMarketBittrex[] = result.result;
+    let BASES ={};
 
-      i++;
-      let market: VOMarket = new VOMarket();
+    ar.forEach(function (item:SOMarketBittrex) {
 
-      let data = result[str];
+      let ar:string[] = item.MarketName.split('-');
 
-      let ar: string[] = str.split('_');
+      let market:VOMarket = new VOMarket();
+
       market.base = ar[0];
       if (bases.indexOf(market.base) === -1) bases.push(market.base);
       market.coin = ar[1];
-      market.pair = str;
-      market.selected = selected.indexOf(str) !==-1;
-      market.id = str;
-      market.exchange = 'poloniex';
+      // if(market.coin ==='BCC') market.coin= 'BCH';
+      //market.marketCap = marketCap[market.coin];
+      market.pair = ar.join('_');
+      market.selected = selected.indexOf( market.pair) !==-1;
 
-      market.Volume = +data.quoteVolume;
-      market.Last = +data.last;
-      market.High = +data.highestBid;
-      market.Low = +data.lowestAsk;
-      market.Ask = +data.lowestAsk;
-      market.Bid = +data.highestBid;
-      market.BaseVolume = +data.baseVolume;
-      market.disabled = data.isFrozen !=='0';
+      market.id = item.MarketName;
+      market.exchange = 'bittrex';
 
-      market.PrevDay = (+data.high24hr + +data.low24hr) / 2;
-
-     // let mcBase = marketCap[market.base];
-      //let basePrice = mcBase ? mcBase.price_usd : 1;
-
-      //Mappers.mapDisplayValues(market, basePrice, 4, marketCap[market.coin]);
-
-      //let mc = marketCap[market.coin];
-      //if (!mc) {
-      //  //console.log('no mc for ' + market.coin);
-       // market.usMC = '';
-
-     // } else market.usMC = mc.price_usd.toFixed(2);
-
+      market.Volume = +item.Volume;
+      market.Last = +item.Last;
+      market.High = +item.High;
+      market.Low = +item.Low;
+      market.Ask = +item.Ask;
+      market.Bid = +item.Bid;
+      market.BaseVolume = +item.BaseVolume;
+      market.PrevDay = item.PrevDay;
+      market.OpenBuyOrders = item.OpenBuyOrders;
+      market.OpenSellOrders = item.OpenSellOrders;
       indexed[market.pair] = market;
       marketsAr.push(market);
-    }
-    return i;
+
+    })
+
+    return result.length;
   }
 
-
   callInprogress:boolean;
-  private call( post: any): Observable<any> {
 
-
-
+  private call(uri: string, post: any): Observable<any> {
     if (!this.apiKey) {
       console.error(' no key')
-      return new BehaviorSubject(null).asObservable();    }
-
-    if(this.callInprogress){
-
-      setTimeout(()=>this.call(post), 300);
+      return new BehaviorSubject(null).asObservable();
     }
-    this.callInprogress = true;
 
-    post.nonce = Date.now();
+    post.apikey = this.apiKey;
+    post.nonce = Math.ceil(Date.now() / 1000);
+
 
     let load = Object.keys(post).map(function (item) {
       return item + '=' + this.post[item];
     }, {post: post}).join('&');
 
+    uri += '?' + load;
+    console.log(uri);
+    let signed = this.hash_hmac(uri, this.password);
+    let url = '/api/bittrex/private';
 
-    let signed = this.hash_hmac(load, this.password);
-    let url = '/api/poloniex/private';
-   // let url = 'https://poloniex.com/tradingApi';
-
-   /* let headers = new HttpHeaders();
-
-    headers = headers
-      //.set('Content-Type',' text/plain')
-      .set('Sign', signed)
-      .set('Key', this.apiKey);
-
-    console.log(headers.get('Key'));
-
-
-
-    return this.http.post(url, post,{headers:headers}).map(res=>{
-      this.callInprogress = false;
-      return res
-    })*/
-
-    return this.http.post(url, {apiKey: this.apiKey, signed: signed, postData:load}).map(res=>{
-      this.callInprogress = false
-
-      return res
-    })
-
+    return this.http.post(url, {uri: uri, signed: signed});
 
   }
 
+  hash_hmac(text, password) {
+    let dg: any = cryptojs.HmacSHA512(text, password);
+    return dg.toString(cryptojs.enc.Hex);
+  }
 
 
 

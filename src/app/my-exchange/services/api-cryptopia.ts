@@ -309,7 +309,7 @@ type
 
       ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
 
-      this.setMarketsData(marketsAr, indexed, bases);
+      this.dispatchMarketsData(marketsAr, indexed, bases);
 
       this.isLoadinMarkets = false;
     })

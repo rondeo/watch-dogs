@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
 import {VOMarket, VOMarketHistory, VOOrder} from "../../models/app-models";
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
@@ -14,6 +14,8 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   @Input() marketHistoryData:MarketHistoryData;
 
+  @Output() durationMin:EventEmitter<number> = new EventEmitter()
+
   constructor() { }
 
 
@@ -27,25 +29,14 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   //market:string;
   speedD:string;
-  durationD:string;
+
   historyLength:string;
-  isHistoryLoading:boolean;
+
 
   isBuying:boolean;
 
   isSellUp:boolean;
   isBuyUp:boolean;
-
-
-  refreshCount:number;
-
-  MC:any;
-
-  timeoutAutoRefresh;
-  intervalCount;
-
-  isAuto:boolean;
-
 
 
   ngOnInit() {
@@ -114,7 +105,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
     this.speedD = speed<10?speed.toFixed(2):speed.toFixed(0);
 
-    this.durationD = (sec/60).toPrecision(2);
+    this.durationMin.emit( +(sec/60).toPrecision(2));
     //this.duration.emit(parseFloat(this.durationD));
 
     this.historyLength = l+'';
@@ -139,4 +130,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   */
   }
+
+////////////////////////////
+
 }
