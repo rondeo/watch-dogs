@@ -78,63 +78,22 @@ export class MyBuySellComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
   onBuyClick(){
-    if(!this.rates){
-      console.warn('download books first')
-      return
-    }
-    let action = 'Buy';
-
-    let balance = this.balanceBase;
-
-    let amounBase = this.amountUS / this.priceBaseUS;
-
-    let isMax = (amounBase > balance);
-    if(isMax) amounBase = (balance - (balance * 0.0025));
-    this.processAction(action, amounBase, isMax);
+    let action = 'BUY';
+    this.processAction(action);
   }
 
   onSellClick(){
-
-    if(!this.rates){
-      console.warn('download books first');
-      return
-    }
-    let action = 'Sell';
-    let balance = this.balanceCoin;
-    let rate = this.rates.rateToSell;
-
-    let amountBase = this.amountUS / this.priceBaseUS;
-
-
-
-    let amountCoin = amountBase / rate;
-
-
-
-
-    let isMax = (amountCoin > balance);
-
-    if(isMax){
-      amountBase = (balance-(balance * 0.0025) )/ rate;
-    }
-
-    this.processAction(action, amountBase, isMax);
-
+    let action = 'SELL';
+    this.processAction(action);
   }
 
   newOrder:VOOrder;
-  processAction(action,  amountBase, isMax){
-    console.log(action, amountBase, isMax);
+  processAction(action){
+
+    let amountBase = this.amountUS / this.priceBaseUS;
+
+    //console.log(action, amountBase, isMax);
 
     action = action.toUpperCase();
 
@@ -148,19 +107,22 @@ export class MyBuySellComponent implements OnInit {
       return
     }
 
-    //let amountBase = +(amountUS / priceBase).toFixed(8);
-
     console.log('amountBase ' + amountBase + ' priceBaseUS ' + priceBaseUS );
 
-    this.currentAPI.downloadBooks(this.base,  this.coin);
+    let rateToBuy = this.rates.rateToBuy;
+    let rateToSell = this.rates.rateToSell;
 
-    let subBooks = this.currentAPI.books$().subscribe((books:VOBooks)=>{
-      subBooks.unsubscribe();
+
+    if(!rateToBuy || !rateToSell){
+      this.snackBar.open('Refresh Books! ', 'x', {extraClasses:'alert-red', duration:2000});
+      return
+    }
 
       let rate = 0
       let amountCoin = 0;
       if(action === 'SELL'){
-        rate = BooksService.getRateForAmountBase(books.buy, amountBase);
+
+        rate = rateToSell;//BooksService.getRateForAmountBase(books.buy, amountBase);
         amountCoin = amountBase / rate
         let balance = this.balanceCoin;
         balance = (balance - (balance * 0.0025));
@@ -169,17 +131,17 @@ export class MyBuySellComponent implements OnInit {
 
 
       } else {
+
         let balance = this.balanceBase;
         balance = (balance - (balance * 0.0025));
-
         if(amountBase > balance) amountBase = balance;
-        rate = BooksService.getRateForAmountBase(books.sell, amountBase);
+        rate = rateToBuy;//BooksService.getRateForAmountBase(books.sell, amountBase);
         amountCoin = amountBase / rate;
       }
 
       let amountUS = (amountCoin * rate * priceBaseUS);
 
-      rate = parseFloat(rate+'');
+      ///rate = parseFloat(rate+'');
       amountCoin = +(amountCoin).toPrecision(5);
 
 
@@ -200,7 +162,7 @@ export class MyBuySellComponent implements OnInit {
 
       console.log(action + ' '+base +'_'+ coin + ' '+amountCoin +' '+rate);
 
-        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountUS +  '\nFee: $' + feeUS.toFixed(2))){
+        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountUS.toFixed(2) +  '\nFee: $' + feeUS.toFixed(2))){
 
          // let service:APIBuySellService = this.privateService;
           let obs:Observable<VOOrder>;
@@ -234,7 +196,7 @@ export class MyBuySellComponent implements OnInit {
 
               this.newOrder = order;
 
-              let msg = action + ' ' + coin + ' $' +amountUS;
+              let msg = action + ' ' + coin + ' $' +amountUS.toFixed(0);
 
               this.snackBar.open('Order Set! '+msg, 'x', {extraClasses:'alert-green', duration:2000});
             } else{
@@ -247,7 +209,7 @@ export class MyBuySellComponent implements OnInit {
 
         }
 
-    })
+   // })
   }
 
   onOrderComplete(order:VOOrder){
@@ -270,6 +232,7 @@ export class MyBuySellComponent implements OnInit {
   private rates:{amountBas:number, rateToBuy:number, rateToSell:number};
   onRateForAmount(rates){
     console.log(rates);
+
     this.rates = rates;
   }
 
@@ -278,9 +241,19 @@ export class MyBuySellComponent implements OnInit {
   setBalances(){
    if(!this.balances || !this.base || !this.coin) return;
    let base = this.base;
+
    let baseBal:VOBalance = this.balances.find(function (item) {
      return item.symbol === base;
-   })
+   });
+
+    if(!baseBal){
+      baseBal = new VOBalance();
+      baseBal.balance = 0;
+      baseBal.balanceUS = 0;
+    }
+
+
+
     let coin = this.coin;
 
     let coinBal:VOBalance = this.balances.find(function (item) {
@@ -309,7 +282,7 @@ export class MyBuySellComponent implements OnInit {
   downloadHistory(){
     if(!this.base || !this.currentAPI) return;
     this.currentAPI.getMarketSummary(this.base, this.coin).then(res=>{
-      console.log(res);
+     // console.log(res);
       this.marketSummary = res;
       this.currentAPI.downloadMarketHistory(this.base, this.coin);
     })
@@ -318,7 +291,7 @@ export class MyBuySellComponent implements OnInit {
   setMarket(){
     let pair = this.pair;
     if(!pair || pair.indexOf('_') ===-1) return;
-    console.warn(' setMarket ' + pair);
+
 
     let ar =  pair.split('_');
 
@@ -343,21 +316,35 @@ export class MyBuySellComponent implements OnInit {
 
   }
 
+  speedMin = 0
   durationInMin:number = 0;
-
+  //durationMin = 0;
   onDurationMin(min){
+
+   // this.durationMin = min.durationMin;
+    let speed = min.speedMin;
+    let duration = min.durationMin;
+
+
+    this.speedMin = speed<10?speed.toFixed(2):speed.toFixed(0);
+
     setTimeout(()=>{
-      this.durationInMin = min;
+      this.durationInMin = duration<10?duration.toFixed(2):duration.toFixed(0);;
     }, 200)
 
   }
 
-
+  onRefreshBooks:number
+  downlaodBooks(){
+    this.onRefreshBooks = Date.now();
+  }
   onRfreshHistory(evt){
 
-    console.warn(evt)
+   // console.warn(evt)
     this.durationInMin = 0;
     this.downloadHistory();
+    this.downlaodBooks();
+
   }
 
   private sub1:Subscription;
@@ -394,7 +381,7 @@ export class MyBuySellComponent implements OnInit {
 
 
       this.sub3 = connector.marketHistory$().subscribe(history=>{
-        console.log(history);
+       // console.log(history);
         let data:MarketHistoryData = {
           history:history,
           priceBaseUS:this.priceBaseUS,

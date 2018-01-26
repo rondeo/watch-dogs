@@ -47,14 +47,102 @@ export class ApiPoloniex extends ApiBase  {
     })
   }
 
+  trackOrder(orderId):Observable<VOOrder> {
+    return this.call({
+      command: 'returnOrderTrades',
+      orderNumber: orderId
+    }).map(res=>{
+      console.log(res);
 
-   trackOrder(orderId):Observable<VOOrder>{
+
+      if(Array.isArray(res) && res.length){
+        let r = res[0];
+        let a = r.currencyPair;
+
+        return{
+          uuid:orderId,
+          amountCoin:+r.amount,
+          amountBase:+r.total,
+          isOpen: !r.tradeID,
+          action:r.type.toUpperCase(),
+          coin: a[1],
+          base: a[0],
+          rate:+r.rate,
+          date:r.date,
+          timestamp:(new Date(r.date.replace(' ','T'))).getTime()
+
+        }
+      }else return{
+        uuid:orderId,
+        isOpen: true,
+        action:null,
+        coin: null,
+        base: null,
+        rate:0
+      }
+
+
+    })
+  }
+
+
+   /*trackOrder(orderId):Observable<VOOrder>{
      return this.call({
        command:'returnOrderTrades',
        orderNumber:orderId
+     }).switchMap(res=>{
+       console.log(res);
+
+
+
+       let a = res.currencyPair;
+       if(!a) {
+         console.error(res);
+         return res;
+       }
+
+//116813692494
+
+       return this.call({
+         command:'returnOpenOrders',
+         currencyPair:res.currencyPair
+       }).map(res2=> {
+
+         console.log(res2);
+
+         let uuid = res2.orderNumber;
+
+         if(uuid !==orderId){
+           console.error(orderId, res, res2);
+         }
+
+         let trades:{
+           amount:string,
+           date:string,
+           rate:string,
+           total:string,
+           tradeID:string,
+           type:string
+         }[] = res2.resultingTrades;
+
+
+         return {
+           action: res.type.toUpperCase(),
+           uuid: res.tradeID,
+           isOpen: true,
+           coin: a[0],
+           base: a[1],
+           rate: res.rate,
+           amountCooin: res.amount,
+           amountBase: res.total,
+           fee: res.fee
+
+         }
+
+       });
      });
    }
-
+*/
 
   downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
 
@@ -97,28 +185,7 @@ export class ApiPoloniex extends ApiBase  {
       }
       })
 
-      /*
- amount
-:
-"426.99207834"
-date
-:
-"2018-01-21 14:59:06"
-globalTradeID
-:
-332735146
-rate
-:
-"0.00000063"
-total
-:
-"0.00026900"
-tradeID
-:
-5047797
-type
-:
-"sell"*/
+
     }).toPromise().then(res=>{
       this.dispatchMarketHistory(res)
     }).catch(err=>{
@@ -138,6 +205,8 @@ type
       rate:rate,
       amount:quantity
     }).map(res=>{
+
+
       console.log(' buyLimit market ' + market , res);
 
       return {
@@ -223,11 +292,11 @@ type
 
   isLoadingBalances:boolean;
   refreshBalances():void {
+
     if(!this.isLogedInSub.getValue()){
       console.warn(' not logged in');
       return;
     }
-
     if(this.isLoadingBalances) return;
     this.isLoadingBalances = true;
 
@@ -402,7 +471,7 @@ type
     })*/
 
     return this.http.post(url, {apiKey: this.apiKey, signed: signed, postData:load}).map(res=>{
-      this.callInprogress = false
+      this.callInprogress = false;
 
       return res
     })

@@ -17,6 +17,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 /*  @Input() amountCoin:number;*/
   @Input() market:string;
   @Input() priceBaseUS:number;
+  @Input() refresh:number;
   percentDiff:number;
   isBooksLoading:boolean;
   bookingColor:string;
@@ -28,7 +29,13 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   base:string;
   coin:string;
 
-  @Output() rateForAmount:EventEmitter<{amountBase:number, rateToBuy:number, rateToSell:number}> = new EventEmitter<{amountBase: number, rateToBuy: number, rateToSell: number}>();
+  isError:boolean
+
+  @Output() rateForAmount:EventEmitter<{
+    amountBase:number,
+    rateToBuy:number,
+    rateToSell:number
+  }> = new EventEmitter<{amountBase: number, rateToBuy: number, rateToSell: number}>();
 
   rateToSellUS:number;
   rateToBuyUS:number;
@@ -57,17 +64,26 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
       if(this.sub2) this.sub2.unsubscribe();
       this.sub2 = connector.books$().subscribe(books=>{
         console.log(books);
-
+        this.bookingColor = '';
+        this.isBooksLoading = false;
+        this.isError = false;
         this.books = books;
         this.calculateBooks();
 
       })
       this.downloadBooks();
+    },err=>{
+      this.isError = true;
+      this.bookingColor = 'red';
+      this.isBooksLoading = false;
     });
 
   }
 
   ngOnChanges(changes){
+    if(changes.refresh){
+      this.downloadBooks();
+    }
     if(changes.market){
       console.log(changes.market);
       if(!this.market) return;
@@ -143,6 +159,14 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   downloadBooks(){
     if(!this.base || !this.coin || !this.currentAPI) return;
 
+    if(this.isBooksLoading){
+      this.isBooksLoading = false;
+      this.bookingColor = 'red';
+      return;
+    }
+
+    this.bookingColor = 'text-blur';
+    this.isBooksLoading = true;
     this.currentAPI.downloadBooks(this.base, this.coin);
 
   }

@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "start": "ng serve --port 4201 --proxy-config proxy.conf.json",
+    "start": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload false",
     "verify": "ng eject --target=production",
     "prod": "ng build --prod -sm",
     "test": "karma start ./karma.conf.js",

@@ -5,6 +5,8 @@
     <span>{{coin}}</span>
     <span> ${{balanceCoinUS}}</span>
 
+    <hr/>
+
     <section class="line">
         <div class="scrollmenu">
             <mat-radio-group [(ngModel)] = "amountUS" (ngModelChange)="onAmountChanged($event)" >
@@ -45,6 +47,7 @@
 
     </section>
 
+    <hr/>
 
     <section>
         <div class="myFlex">
@@ -53,6 +56,7 @@
                         [market]="market"
                         [priceBaseUS]="priceBaseUS"
                         [amountBase]="amountBase"
+                        [refresh]="onRefreshBooks"
                         (rateForAmount)="onRateForAmount($event)"
                 > </app-my-books>
 
@@ -83,11 +87,21 @@
     </section>
 
     <hr/>
-    <section>
-        <app-refresh-button
-                [durationMin2]="durationInMin"
-                (onRefresh)="onRfreshHistory()"
-        ></app-refresh-button>
+    <section class="right">
+
+
+       &nbsp;&nbsp;&nbsp;
+        <strong class="large">{{durationInMin}} min</strong>
+        &nbsp;&nbsp;
+        <strong class="large">{{speedMin}}/min</strong>
+        &nbsp;&nbsp;&nbsp;
+        <div class="inline-block">
+            <app-refresh-button
+                    [durationMin2]="durationInMin"
+                    (onRefresh)="onRfreshHistory($event)"
+
+            ></app-refresh-button>
+        </div>
     </section>
 
 

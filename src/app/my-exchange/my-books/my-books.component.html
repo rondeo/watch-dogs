@@ -9,13 +9,13 @@
             </tr>
             <tr  (click)="onRefreshBooksClick()">
                 <td>
-                    <strong  [ngClass]="isBooksLoading?'blur-text':''" class="large">{{rateToSellUS}}</strong>
+                    <strong  [ngClass]="bookingColor" class="large">{{rateToSellUS}}</strong>
                 </td>
                 <td>
-                    <span [ngClass]="bookingColor" class="btn fa fa-refresh green"></span>
+                    <span class="btn fa fa-refresh green"></span>
                 </td>
                 <td>
-                    <strong  [ngClass]="isBooksLoading?'blur-text':''" class="large">  {{rateToBuyUS}}  </strong>
+                    <strong  [ngClass]="bookingColor" class="large">  {{rateToBuyUS}}  </strong>
                 </td>
             </tr>
 

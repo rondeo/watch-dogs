@@ -14,7 +14,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   @Input() marketHistoryData:MarketHistoryData;
 
-  @Output() durationMin:EventEmitter<number> = new EventEmitter()
+  @Output() durationMin:EventEmitter<{durationMin:number, speedMin:number, volumeBase:number}> = new EventEmitter()
 
   constructor() { }
 
@@ -105,7 +105,11 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
     this.speedD = speed<10?speed.toFixed(2):speed.toFixed(0);
 
-    this.durationMin.emit( +(sec/60).toPrecision(2));
+    this.durationMin.emit( {
+      durationMin: +(sec/60),
+      speedMin:speed,
+      volumeBase:this.marketDetails.BaseVolume
+    });
     //this.duration.emit(parseFloat(this.durationD));
 
     this.historyLength = l+'';

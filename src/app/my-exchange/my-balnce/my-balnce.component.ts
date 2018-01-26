@@ -43,10 +43,12 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
   private sub2;
   ngOnInit() {
 
-    console.log(this.apiService.getExchangeName())
+
     this.sub1 = this.apiService.connector$().subscribe(connector => {
       this.currentConnector = connector;
       if (!connector) return;
+
+      if(this.sub2)this.sub2.unsubscribe();
 
       this.sub2 =  connector.balances$().subscribe(res=>{
         console.log ('balances res', res);
@@ -56,13 +58,12 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
         });
 
         this.render();
-
-
       });
-      connector.isLogedIn$().subscribe(logedIn => {
-        connector.loadBalances();
 
-      })
+      /*connector.isLogedIn$().subscribe(logedIn => {
+        connector.
+
+      })*/
 
     });
 

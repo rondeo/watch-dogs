@@ -84,13 +84,12 @@ export abstract class ApiBase {
 
 
   private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
-  isLoaded: boolean;
+  isBalancesLoading: boolean;
 
-  loadBalances() {
-    if (this.isLoaded) return;
-    this.isLoaded = true;
+  /*loadBalances() {
+    if(this.isBalancesLoading) return;
     this.refreshBalances();
-  }
+  }*/
 
   abstract refreshBalances():void;
 
@@ -98,7 +97,7 @@ export abstract class ApiBase {
 
   balances$(){
     let bals =  this.balancesSub.getValue();
-    if(!bals) this.loadBalances();
+    if(!bals && !this.isBalancesLoading) this.refreshBalances();
     return this.balancesSub.asObservable();
   }
   dispatchBalances(balances:VOBalance[]):void{
@@ -228,6 +227,9 @@ export abstract class ApiBase {
     }
   }
 
+  hasLogin(){
+    return  this.isLogedInSub.getValue();
+  }
   isLogedIn$(): Observable<boolean> {
     return this.isLogedInSub.asObservable();
   }

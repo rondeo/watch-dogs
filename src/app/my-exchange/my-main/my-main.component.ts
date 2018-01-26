@@ -26,8 +26,33 @@ export class MyMainComponent implements OnInit {
 
   private sub1:Subscription;
   private subLogin:Subscription;
+  private sub2;
+  private sub3;
+
 
   ngOnInit() {
+
+    this.sub2 = this.apiService.connector$().subscribe(api=>{
+      if(!api) return
+
+      if(!api.hasLogin()) return;
+
+      if(this.sub3) this.sub3.unsubscribe();
+
+      this.sub3 = api.balances$().subscribe(balances=>{
+        //console.log(balances)
+
+        if(!balances) return;
+
+        setTimeout(()=> {
+
+          this.snackBar.open('Logged in '+ api.exchange +' account', 'x', {duration:3000});
+          this.sub3.unsubscribe()
+        }, 2000);
+
+      })
+    })
+
     this.sub1 = this.route.params.subscribe(params=>{
       let exchange = params.exchange;
       console.log(params);
@@ -40,6 +65,9 @@ export class MyMainComponent implements OnInit {
         this.subLogin = this.apiService.isLogedIn$.subscribe(login=>{
           this.isLogedIn = login;
           if(!login) return;
+
+
+
 
           /* this.privateService.withdrawHistory().toPromise().then(res=>{
              let local = this.storage.getItem('bittrex-withdraw');
@@ -71,12 +99,10 @@ export class MyMainComponent implements OnInit {
 
   showBar(){
 
-
     if(!this.apiService.isLogedIn$) return;
     this.apiService.isLogedIn$.subscribe(res=>{
-      let exchange = this.apiService.getExchangeName()
-      if(res) this.snackBar.open('Logged in '+ exchange +' account', 'x', {duration:3000});
-      else  this.snackBar.open(exchange + ' Login Required ' +'', 'x', {duration:3000});
+      let exchange = this.apiService.getExchangeName();
+      if(!res)  this.snackBar.open(exchange + ' Login Required ' +'', 'x', {duration:3000});
     })
   }
 
