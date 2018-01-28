@@ -15,9 +15,13 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() amountBase:number;
 /*  @Input() amountCoin:number;*/
-  @Input() market:string;
-  @Input() priceBaseUS:number;
+  //@Input() market:string;
+  //@Input() priceBaseUS:number;
   @Input() refresh:number;
+
+  @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, pair:string};
+
+
   percentDiff:number;
   isBooksLoading:boolean;
   bookingColor:string;
@@ -26,8 +30,8 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
   sellChange:number;
   buyChange:number;
-  base:string;
-  coin:string;
+ // base:string;
+ // coin:string;
 
   isError:boolean
 
@@ -40,6 +44,9 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   rateToSellUS:number;
   rateToBuyUS:number;
 
+ /* @Output() rateToSellUSEmit:EventEmitter<number> = new EventEmitter();
+  @Output() rateToBuyUSEmit:EventEmitter<number> = new EventEmitter();*/
+
 
   private books:VOBooks;
 
@@ -49,6 +56,27 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   ) {
 
   }
+
+  isRateToSell = false;
+  onRateToSellClick(){
+    this.isRateToSell = !this.isRateToSell
+  }
+
+  isRateToBuy = false;
+  onRateToBuyClick(){
+    this.isRateToBuy = !this.isRateToBuy;
+
+  }
+
+
+  onRateToSellFocus(){
+
+  }
+
+  onRateToBuyFocus(){
+
+  }
+
 
   ngOnDestroy(){
     if(this.sub1) this.sub1.unsubscribe();
@@ -61,8 +89,8 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.sub1 = this.apiService.connector$().subscribe(connector => {
       this.currentAPI = connector;
       if (!connector) return;
-      if(this.sub2) this.sub2.unsubscribe();
-      this.sub2 = connector.books$().subscribe(books=>{
+     // if(this.sub2) this.sub2.unsubscribe();
+     /* this.sub2 = connector.books$().subscribe(books=>{
         console.log(books);
         this.bookingColor = '';
         this.isBooksLoading = false;
@@ -70,12 +98,12 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
         this.books = books;
         this.calculateBooks();
 
-      })
-      this.downloadBooks();
+      })*/
+     // this.downloadBooks();
     },err=>{
       this.isError = true;
-      this.bookingColor = 'red';
-      this.isBooksLoading = false;
+     // this.bookingColor = 'red';
+     // this.isBooksLoading = false;
     });
 
   }
@@ -84,22 +112,24 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     if(changes.refresh){
       this.downloadBooks();
     }
-    if(changes.market){
-      console.log(changes.market);
-      if(!this.market) return;
-      let a = this.market.split('_');
-      if(a.length === 2){
-        this.base = a[0];
-        this.coin = a[1];
-        this.downloadBooks();
-      }else{
-        this.base = null;
-        this.coin = null;
-      }
-    }
 
-    if(changes.priceBaseUS){
-      if(this.priceBaseUS) this.calculateBooks();
+    if(changes.marketInit) {
+      console.log(changes.market);
+      this.downloadBooks();
+      /*  let a = this.market.split('_');
+        if(a.length === 2){
+          this.base = a[0];
+          this.coin = a[1];
+          this.downloadBooks();
+        }else{
+          this.base = null;
+          this.coin = null;
+        }
+      }
+
+      if(changes.priceBaseUS){
+        if(this.priceBaseUS) this.calculateBooks();
+      }*/
     }
 
     if(changes.amountBase){
@@ -109,26 +139,29 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   calculateBooks(){
-    console.log(this.amountBase, !this.books, this.priceBaseUS);
+    //console.log(this.amountBase, !this.books, this.marketInit.priceBaseUS);
 
-    if(!this.amountBase || !this.books || !this.priceBaseUS) return;
+
+    if(!this.amountBase || !this.books || !this.marketInit) return;
     //let amountBase = this.amountBaseUS / this.priceBaseUS;
 
-    console.log(this.books);
+    let priceBaseUS = this.marketInit.priceBaseUS;
+
+    //console.log(this.books);
 
     let rateBuy =  BooksService.getRateForAmountBase(this.books.buy, this.amountBase);
     let rateSell = BooksService.getRateForAmountBase(this.books.sell, this.amountBase);
 
-    console.log('rateBuy '+ rateBuy);
-    console.log('rateSell '+ rateSell);
+   // console.log('rateBuy '+ rateBuy);
+   // console.log('rateSell '+ rateSell);
 
-    let rateToSellUS = +(rateBuy * this.priceBaseUS).toPrecision(4);
-    let rateToBuyUS = +(rateSell * this.priceBaseUS).toPrecision(4);
+    let rateToSellUS = +(rateBuy * priceBaseUS).toPrecision(4);
+    let rateToBuyUS = +(rateSell * priceBaseUS).toPrecision(4);
 
     this.percentDiff = +(100 * (rateToBuyUS - rateToSellUS)/rateToBuyUS).toFixed(2);
    // let oldBooks = this.rateByBooks;
 
-    if(this.rateToBuyUS){
+    /*if(this.rateToBuyUS){
 
       this.buyChange = +(100 * (rateToBuyUS - this.rateToBuyUS)/this.rateToBuyUS).toFixed(2);
       if(this.buyChange > 0)this.buyColor = 'green';
@@ -142,7 +175,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
       if(this.sellChange > 0)this.sellColor = 'green';
       else if(this.sellChange < 0)this.sellColor = 'red';
       else this.sellColor = '';
-    }
+    }*/
 
     this.rateForAmount.emit( {
       amountBase:this.amountBase,
@@ -150,15 +183,20 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
       rateToSell:rateBuy
     });
 
-    this.rateToBuyUS = rateToSellUS;
-    this.rateToSellUS = rateToBuyUS;
+    this.rateToBuyUS = rateToBuyUS;
+    this.rateToSellUS = rateToSellUS;
 
   }
 
+  reset(){
+    this.rateToBuyUS = 0;
+    this.rateToSellUS = 0;
+  }
 
   downloadBooks(){
-    if(!this.base || !this.coin || !this.currentAPI) return;
+    if(!this.marketInit) return this.reset();
 
+    let cur = this.marketInit;
     if(this.isBooksLoading){
       this.isBooksLoading = false;
       this.bookingColor = 'red';
@@ -167,7 +205,22 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
     this.bookingColor = 'text-blur';
     this.isBooksLoading = true;
-    this.currentAPI.downloadBooks(this.base, this.coin);
+    //console.warn('downloadBooks ' + cur.base + ' '+ cur.coin);
+   let sub =  this.currentAPI.downloadBooks(cur.base, cur.coin).subscribe(books=>{
+    // console.warn(books);
+     this.bookingColor = '';
+     this.isBooksLoading = false;
+     this.isError = false;
+     this.books = books;
+     this.calculateBooks();
+     sub.unsubscribe();
+
+     }, err => {
+     this.isError = true;
+     this.bookingColor = 'red';
+     this.isBooksLoading = false;
+     sub.unsubscribe();
+   })
 
   }
   onRefreshBooksClick(){

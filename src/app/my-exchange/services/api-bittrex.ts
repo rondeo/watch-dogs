@@ -11,7 +11,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
 import {SelectedSaved} from "../../com/selected-saved";
-import {ApiBase} from "./api-base";
+import {ApiBase, VOBooks} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Mappers} from "../../com/mappers";
 import {SOMarketBittrex, SOMarketPoloniex} from "../../models/sos";
@@ -63,62 +63,89 @@ export class ApiBittrex extends ApiBase  {
 
   }
 
-
-  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
-
+  getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
     let market = base+'-'+coin;
-
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
+    console.log(uri);
     return this.call(uri, {market: market}).map(res=>{
       console.log(' getOpenOrders  '+ market , res);
       return res;
     })
   }
 
-
-  getMarketSummary(base:string, coin:string):Promise<VOMarket>{
-    let sub = this.marketsObj$();
-
-    return new Promise(function(resolve, reject) {
-      sub.subscribe(res=>{
-        if(res) resolve(res[base+'_'+coin]);
-      })
+  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
+    let market = base+'-'+coin;
+    let uri = 'https://bittrex.com/api/v1.1/account/getorderhistory';
+    //console.log(uri);
+    return this.call(uri, {market: market}).map(res=>{
+      console.log(' getorderhistory  '+ market , res);
+      return res.result.map(function(o){
+        return {
+          uuid:o.OrderUuid,
+          action:o.OrderType.substr(6),
+          isOpen:!o.Closed,
+          rate:o.PricePerUnit,
+          coin:this.coin,
+          base:this.base,
+          exchange:'bittrex',
+          amountCoin:o.Quantity,
+          amountBase:o.Price,
+          date:o.TimeStamp,
+          fee:o.Commission,
+          timestamp:new Date(o.TimeStamp).getTime()
+        }
+      },{base:base, coin:coin});
     })
   }
 
-  isMarketHistoryDoawnloading:boolean
-  downloadMarketHistory(base:string, coin:string){
-    if(this.isMarketHistoryDoawnloading) return;
-    this.isMarketHistoryDoawnloading = true;
-    let market = base + '-'+coin;
-    let url = 'api/bittrex/getmarkethistory/'+ market;
-    console.log(url);
 
-    this.http.get(url).map((res:any)=>{
+  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+    return this.marketsObj$().map(res=>{
 
-      console.log(res);
-      return  (<any>res).result.map(function (item:VOMarketHistory) {
-
-       return {
-         action:item.OrderType,
-         uuid:item.Id,
-         exchange:'bittrex',
-         rate:item.Price,
-         amountBase:item.Total,
-         coin:coin,
-         base:base,
-         timestamp:(new Date(item.TimeStamp +'Z')).getTime(),
-         date:item.TimeStamp
-        }
-      });
-
-    }).toPromise().then(res=>{
-      this.isMarketHistoryDoawnloading = false;
-      this.dispatchMarketHistory(res)
-    }).catch(err=>{
-      this.isMarketHistoryDoawnloading = false;
-      console.error(err)
+     if(res) return res[base+'_'+coin];
     })
+
+  }
+
+  isMarketHistoryDoawnloading:boolean
+  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
+
+
+      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
+      this.isMarketHistoryDoawnloading = true;
+      let market = base + '-' + coin;
+      let url = 'api/bittrex/getmarkethistory/' + market;
+      console.log(url);
+
+      this.http.get(url).map((res: any) => {
+
+        console.log(res);
+        return (<any>res).result.map(function (item: VOMarketHistory) {
+
+          return {
+            action: item.OrderType,
+            uuid: item.Id,
+            exchange: 'bittrex',
+            rate: item.Price,
+            amountBase: item.Total,
+            coin: coin,
+            base: base,
+            timestamp: (new Date(item.TimeStamp + 'Z')).getTime(),
+            date: item.TimeStamp
+          }
+        });
+
+      }).toPromise().then(res => {
+        this.isMarketHistoryDoawnloading = false;
+        this.dispatchMarketHistory(res)
+        return res;
+      }).catch(err => {
+
+        this.isMarketHistoryDoawnloading = false;
+        console.error(err);
+        return err;
+      })
+    return this.marketHistorySub.asObservable();
   }
 
 
@@ -162,7 +189,7 @@ export class ApiBittrex extends ApiBase  {
 
 
   isBooksDownloading:boolean
-  downloadBooks(base:string, coin:string){
+  downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
     if(this.isBooksDownloading) return;
     this.isBooksDownloading = true;
@@ -183,11 +210,11 @@ export class ApiBittrex extends ApiBase  {
       }
 
     }).toPromise().then(res=>{
-
       this.dispatchBook(res)
     }).catch(err=>{
       this.isBooksDownloading = false;
     })
+    return this.books$()
   }
 
 

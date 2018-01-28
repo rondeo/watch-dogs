@@ -1,8 +1,9 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {ConnectorApiService} from "../services/connector-api.service";
 import {ApiBase} from "../services/api-base";
 import {VOMarket, VOMarketHistory, VOOrder} from "../../models/app-models";
 import {UtilsOrder} from "../utils-order";
+import * as _ from 'lodash';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 
 
 
+  @Output() tolerance:EventEmitter<number> = new EventEmitter();
   lineChartData
   lineChartLabels:Array<any> =[];
   lineChartOptions:any = {
@@ -61,7 +63,8 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
  // @Input() market:string;
  // @Input() priceBaseUS:number;
 
-  @Input() marketHistory:MarketHistoryData;
+  @Input() marketHistory:{history:VOOrder[],priceBaseUS:number};
+  @Input() marketSummary:{summary:VOMarket, priceBaseUS:number};
   @Input() removeMaxMin:boolean;
 
   private currentAPI:ApiBase;
@@ -77,53 +80,64 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
   chartHovered(evt){
 
   }
+
   chartClicked(evt){
 
   }
+
   ngOnInit() {
   }
 
-  render(){
+  renderHistory(){
     if(!this.marketHistory) return;
 
     let priceBaseUS = this.marketHistory.priceBaseUS;
 
     let history = this.marketHistory.history;
 
-    let marketSummary = this.marketHistory.marketSummary;
+    //let marketSummary = this.marketSummary.summary;
     let start = history[0].timestamp;
     let end = history[history.length -1].timestamp;
     let diff = Math.round((end - start)/1000);
     let speed =  history.length / diff;
 
-    let min = UtilsOrder.makeLine(marketSummary.Low * priceBaseUS,10);
-    let max = UtilsOrder.makeLine(marketSummary.High * priceBaseUS, 10);
+   // let min = UtilsOrder.makeLine(marketSummary.Low * priceBaseUS,10);
+   // let max = UtilsOrder.makeLine(marketSummary.High * priceBaseUS, 10);
 
     let charts = UtilsOrder.createCharts(history);
 
     charts.bought = charts.bought.map(function (item) { return item * this.b },{b:priceBaseUS});
     charts.sold = charts.sold.map(function (item) { return item * this.b },{b:priceBaseUS});
+
+
+    let maxValue = _.max(charts.bought);
+    let minValue = _.min(charts.sold);
+    let tolerance = ((maxValue - minValue)/minValue) * 100;
+    this.tolerance.next(tolerance);
+
    // console.warn(priceBaseUS);
     //console.log(charts);
 
-    if(this.removeMaxMin){
+    //if(this.removeMaxMin){
       this.lineChartData = [
         {data:charts.sold.reverse(), fill:false, label:'Sell'},
         {data:charts.bought.reverse(), fill:false, label:'Buy'}
       ];
-    }else{
+   /* }else{
       this.lineChartData = [
         {data:charts.sold.reverse(), fill:false, label:'Sell'},
         {data:charts.bought.reverse(), fill:false, label:'Buy'},
-        {data:min, fill:false, label:'min'},
-        {data:max, fill:false, label:'max'}
+      //  {data:min, fill:false, label:'min'},
+       // {data:max, fill:false, label:'max'}
       ];
-    }
+    }*/
 
 
     let M = diff/60;
 
     this.lineChartLabels  = ['', '', '', '', '', '', '', '','',''];
+
+
 
   }
 
@@ -160,7 +174,7 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
   private sub2;
 
   ngOnChanges(changes){
-   this.render();
+    if(changes.marketHistory) this.renderHistory();
   /*  if(changes.market){
 
       this.marketSummary = null;
@@ -182,5 +196,4 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 export interface MarketHistoryData{
   priceBaseUS:number;
   history:VOOrder[];
-  marketSummary:VOMarket;
 }

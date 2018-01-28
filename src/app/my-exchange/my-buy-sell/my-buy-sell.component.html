@@ -53,8 +53,8 @@
         <div class="myFlex">
             <div class="myFlexCol">
                 <app-my-books
-                        [market]="market"
-                        [priceBaseUS]="priceBaseUS"
+                        [marketInit]="marketInit"
+
                         [amountBase]="amountBase"
                         [refresh]="onRefreshBooks"
                         (rateForAmount)="onRateForAmount($event)"
@@ -76,6 +76,10 @@
                 </table>
             </div>
             <div class="myFlexCol">
+                <my-orders-history
+                        [marketInit]="marketInit"
+                        [newOrder]="newOrder"
+                ></my-orders-history>
                 <app-trading-history
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
@@ -90,6 +94,7 @@
     <section class="right">
 
 
+        <strong class="large">{{tolerance}}</strong>%
        &nbsp;&nbsp;&nbsp;
         <strong class="large">{{durationInMin}} min</strong>
         &nbsp;&nbsp;
@@ -107,14 +112,17 @@
 
     <section>
         <market-history-line
-                [marketHistory]="marketHistory"
+                [marketHistory]="marketHistoryData"
+                [marketSummary]="marketSummaryData"
                 [removeMaxMin]="true"
+                (tolerance)="onTolerance($event)"
         ></market-history-line>
     </section>
 
     <section>
         <market-history-table
-                [marketHistoryData]="marketHistory"
+                [marketHistory]="marketHistoryData"
+                [marketSummary]="marketSummaryData"
                 (durationMin)="onDurationMin($event)"
         ></market-history-table>
     </section>

@@ -12,7 +12,8 @@ import * as _ from 'lodash';
 })
 export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
-  @Input() marketHistoryData:MarketHistoryData;
+  @Input() marketHistory:{history:VOOrder[],priceBaseUS:number};
+  @Input() marketSummary:{summary:VOMarket, priceBaseUS:number};
 
   @Output() durationMin:EventEmitter<{durationMin:number, speedMin:number, volumeBase:number}> = new EventEmitter()
 
@@ -20,7 +21,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
 
   marketVolumeChange:number = 0;
-  marketHistory:VOOrder[];
+ // marketHistory:VOOrder[];
   historyStats:VOHistoryStats;
   historyStats1:VOHistoryStats;
   historyStats2:VOHistoryStats;
@@ -43,13 +44,13 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
   }
 
 
-  render(){
-    if(!this.marketHistoryData) return;
+  renderSummary(){
+    if(!this.marketSummary) return;
 
 
 
-    let basePrice = this.marketHistoryData.priceBaseUS;
-    let res = this.marketHistoryData.marketSummary;
+    let basePrice = this.marketSummary.priceBaseUS;
+    let res = this.marketSummary.summary;
 
 
     let out:VOMarket = {
@@ -74,12 +75,12 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   }
 
-  render2(){
-    if(!this.marketHistoryData) return;
+  renderHistory(){
+    if(!this.marketHistory) return;
 
-    let basePrice = this.marketHistoryData.priceBaseUS;
-    let res = this.marketHistoryData.history;
-    this.marketHistory = res;
+    let basePrice = this.marketHistory.priceBaseUS;
+    let res = this.marketHistory.history;
+    //this.marketHistory = res;
     this.historyStats = MappersHistory.parseData2(res, basePrice);
 
     this.isBuying = (+this.historyStats.sold.amount < +this.historyStats.bought.amount);
@@ -117,8 +118,8 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes){
-    this.render();
-    this.render2();
+    if(changes.marketHistory) this.renderHistory();
+    if(changes.marketSummary) this.renderSummary();
     /*  if(changes.market){
 
         this.marketSummary = null;

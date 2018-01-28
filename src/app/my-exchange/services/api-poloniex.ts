@@ -11,7 +11,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
 import {SelectedSaved} from "../../com/selected-saved";
-import {ApiBase} from "./api-base";
+import {ApiBase, VOBooks} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Mappers} from "../../com/mappers";
 import {SOMarketPoloniex} from "../../models/sos";
@@ -150,47 +150,55 @@ export class ApiPoloniex extends ApiBase  {
     return this.call({
       command:'returnTradeHistory',
       currencyPair: base+'_'+coin
-    })
+    });
   }
 
 
-  getMarketSummary(base:string, coin:string):Promise<VOMarket>{
-    let sub = this.marketsObj$();
-
-    return new Promise(function(resolve, reject) {
-      sub.subscribe(res=>{
-        if(res) resolve(res[base+'_'+coin]);
-      })
-    })
+  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+    return this.marketsObj$().map(res=>{
+      if(res)return res[base+'_'+coin];
+    });
   }
 
-  downloadMarketHistory(base:string, coin:string){
-    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-   url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
-   // console.log(url)
-    this.http.get(url).map((res:any)=>{
-      console.log(res)
-      return res.map(function(item) {
-        return {
-          action:item.type.toUpperCase(),
-          uuid: item.tradeID,
-          exchange: 'poloniex',
-          rate:+item.rate,
-          amountBase:+item.total,
-          base: base,
-          coin: coin,
-          date:item.date,
-          timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
-      }
-      })
+      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
+      this.isMarketHistoryDoawnloading = true;
+      let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+      url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
+      // console.log(url)
+      this.http.get(url).map((res:any)=>{
+        console.log(res)
+        return res.map(function(item) {
+          return {
+            action:item.type.toUpperCase(),
+            isOpen:false,
+            uuid: item.tradeID,
+            exchange: 'poloniex',
+            rate:+item.rate,
+            amountBase:+item.total,
+            base: base,
+            coin: coin,
+            date:item.date,
+            timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+          };
+        });
+
+      }).toPromise().then(res=>{
+        this.isMarketHistoryDoawnloading = false;
+        this.dispatchMarketHistory(res);
+        return res;
+      }).catch(err=>{
+        this.isMarketHistoryDoawnloading = false;
+        console.error(err);
+        return err;
+      });
 
 
-    }).toPromise().then(res=>{
-      this.dispatchMarketHistory(res)
-    }).catch(err=>{
-      console.error(err)
-    })
+
+  return this.marketHistorySub.asObservable()
+
+
   }
 
 
@@ -248,7 +256,7 @@ export class ApiPoloniex extends ApiBase  {
 
 
   isBooksDownloading:boolean
-  downloadBooks(base:string, coin:string){
+  downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
     if(this.isBooksDownloading) return;
     this.isBooksDownloading = true;
@@ -286,6 +294,7 @@ export class ApiPoloniex extends ApiBase  {
     }).catch(err=>{
       this.isBooksDownloading = false;
     })
+    return this.books$();
   }
 
 

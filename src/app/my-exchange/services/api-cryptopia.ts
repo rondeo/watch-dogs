@@ -13,7 +13,7 @@ import {SelectedSaved} from "../../com/selected-saved";
 import {applyMixins} from "rxjs/util/applyMixins";
 import {SOMarketCryptopia} from "../../models/sos";
 import {Mappers} from "../../com/mappers";
-import {ApiBase} from "./api-base";
+import {ApiBase, VOBooks} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 
 
@@ -68,54 +68,42 @@ export class ApiCryptopia extends ApiBase {
     })
   }
 
-  downloadMarketHistory(base:string, coin:string){
-    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-    url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
-    // console.log(url)
-    this.http.get(url).map((res:any)=>{
-      console.log(res)
-      return res.map(function(item) {
-        return {
-          action:item.type,
-          uuid: item.tradeID,
-          exchange: 'poloniex',
-          rate:+item.rate,
-          amountBase:+item.total,
-          base: base,
-          coin: coin,
-          date:item.date,
-          timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+  downloadMarketHistory(base:string, coin:string):Promise<VOOrder[]>{
 
-        }
+    return new Promise<VOOrder[]>((resolve, reject)=> {
+      if (this.isMarketHistoryDoawnloading) return;
+      this.isMarketHistoryDoawnloading = true;
+
+      let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+      url = url.replace('{{base}}', base).replace('{{coin}}', coin);
+      // console.log(url)
+      this.http.get(url).map((res: any) => {
+        console.log(res)
+        return res.map(function (item) {
+          return {
+            action: item.type,
+            uuid: item.tradeID,
+            exchange: 'poloniex',
+            rate: +item.rate,
+            amountBase: +item.total,
+            base: base,
+            coin: coin,
+            date: item.date,
+            timestamp: (new Date(item.date.split(' ').join('T') + 'Z')).getTime()
+
+          }
+        })
+
+
+      }).toPromise().then(res => {
+        resolve(res);
+        this.dispatchMarketHistory(res)
+        return res;
+      }).catch(err => {
+        reject(err);
+        console.error(err)
       })
-
-      /*
- amount
-:
-"426.99207834"
-date
-:
-"2018-01-21 14:59:06"
-globalTradeID
-:
-332735146
-rate
-:
-"0.00000063"
-total
-:
-"0.00026900"
-tradeID
-:
-5047797
-type
-:
-"sell"*/
-    }).toPromise().then(res=>{
-      this.dispatchMarketHistory(res)
-    }).catch(err=>{
-      console.error(err)
-    })
+    });
   }
 
 
@@ -158,12 +146,13 @@ type
   }
 
 
-  downloadBooks(base:string, coin:string){
+  downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
     let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
-    this.http.get(url).map(res=>{
+    return this.http.get(url).map(res=>{
       console.log(res);
-    }).toPromise()
+      return res
+    })
   }
 
 

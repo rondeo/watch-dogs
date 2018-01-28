@@ -38,6 +38,11 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   }
 
+
+  onCancelOrderClick(order:VOOrder){
+
+  }
+
   ngOnChanges(changes:any){
    // console.log('trading-history-component', changes);
     if(changes.marketInit && changes.marketInit.currentValue){

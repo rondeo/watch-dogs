@@ -48,10 +48,11 @@ export abstract class ApiBase {
   private ordersSub:Subject<VOOrder[]> = new Subject();
 
 
-  abstract getMarketSummary(base:string, coin:string):Promise<VOMarket>
+  abstract getMarketSummary(base:string, coin:string):Observable<VOMarket>
 
 
-  abstract downloadMarketHistory(base:string, coin:string):void;
+  isMarketHistoryDoawnloading:boolean;
+  abstract downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>;
 
   dispatchMarketHistory(history){
     this.marketHistorySub.next(history);
@@ -68,9 +69,12 @@ export abstract class ApiBase {
 
   abstract buyLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
 
-  abstract downloadBooks(base:string, coin:string):void;
+  abstract downloadBooks(base:string, coin:string):Observable<VOBooks>;
+
+
+
   isBooksLoading:boolean;
- private booksSub:Subject<VOBooks>;// = new BehaviorSubject<VOBooks>(null);
+ protected booksSub:Subject<VOBooks>;// = new BehaviorSubject<VOBooks>(null);
 
   books$(){
     if(!this.booksSub) this.booksSub = new Subject<VOBooks>()

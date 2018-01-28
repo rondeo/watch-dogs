@@ -7,15 +7,17 @@
                     <small>{{percentDiff}}%</small>
                 </td>
             </tr>
-            <tr  (click)="onRefreshBooksClick()">
+            <tr >
                 <td>
-                    <strong  [ngClass]="bookingColor" class="large">{{rateToSellUS}}</strong>
+                    <input [(ngModel)] = "rateToBuyUS"  class="large w3"  type="number" (focus)="onRateToSellFocus()" />
+                   <!-- <strong  [ngClass]="bookingColor" class="large" (click)="onRateToSellClick()">{{rateToSellUS}}</strong>-->
                 </td>
                 <td>
-                    <span class="btn fa fa-refresh green"></span>
+                  <!--  <span class="btn fa fa-refresh green"></span>-->
                 </td>
                 <td>
-                    <strong  [ngClass]="bookingColor" class="large">  {{rateToBuyUS}}  </strong>
+                    <input [(ngModel)] = "rateToSellUS"  class="large w3"  type="number" (focus)="onRateToBuyFocus()" />
+                   <!-- <strong  [ngClass]="bookingColor" class="large"  (click)="onRateToBuyClick()">  {{rateToBuyUS}}  </strong>-->
                 </td>
             </tr>
 

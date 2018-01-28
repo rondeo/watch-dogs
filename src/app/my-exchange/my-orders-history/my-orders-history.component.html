@@ -14,7 +14,7 @@
     <div class="scrollY100">
         <table class="table-small">
             <tr *ngFor="let order of ordersHistory">
-                <td>{{order.action}}</td>
+                <td>{{order.act}}</td>
                 <td>{{order.amountCoinUS}}</td>
                 <td>{{order.priceUS}}</td>
                 <td><span *ngIf="order.isOpen" class="btn fa fa-minus-circle dred fa-2x" (click)="onCancelOrderClick(order)"></span></td>
