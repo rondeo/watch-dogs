@@ -1,19 +1,12 @@
 <div>
     <div>
-        <small *ngIf="marketInit" class="btn" (click)="onClearSummaryClick()">{{marketInit.base}}-{{marketInit.coin}}:</small>
+        <small *ngIf="marketInit" [ngClass]="(loadingOpenOrders || loadingOrdersHistory)?'text-blur':''" class="btn" (click)="onRefreshOrdersClick()">{{marketInit.base}}-{{marketInit.coin}}:</small>
         <span [ngClass]="summaryColor">{{summary}}</span>
         &nbsp;&nbsp;<small>fee: $</small><span>{{totalFee}}</span>
     </div>
-    <div *ngIf="checkOrder">
-        <span>{{checkOrder.action}}</span>
-        <span>{{checkOrder.amountBaseUS}}</span>
-        <span>{{checkOrder.priceUS}}</span>
-        &nbsp; &nbsp;&nbsp;
-        <span class="btn fa fa-minus-circle dred fa-2x" (click)="onCancelNewOrderClick()"></span>
-    </div>
     <div class="scrollY100">
-        <table class="table-small">
-            <tr *ngFor="let order of ordersHistory">
+        <table class="table-small" (mousedown)="onTableTap()">
+            <tr *ngFor="let order of allOrders">
                 <td>{{order.act}}</td>
                 <td>{{order.amountCoinUS}}</td>
                 <td>{{order.priceUS}}</td>

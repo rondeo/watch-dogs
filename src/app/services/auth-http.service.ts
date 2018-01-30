@@ -40,10 +40,26 @@ export class AuthHttpService {
     //this.user$ = this.userSub.asObservable();
 
     this.isLogedInSub= new BehaviorSubject(null);
+
+    this.isOnlineSub = new BehaviorSubject(window.navigator.onLine);
+    window.addEventListener('online', () => {
+
+      this.isOnlineSub.next( true);
+    })
+
+    window.addEventListener('offline', () => {
+      this.isOnlineSub.next( false);
+    })
     //setTimeout(() => this.autoLogin(), 2000);
   }
 
-  isLogedIn():boolean{
+  isOnlineSub:BehaviorSubject<boolean>;
+
+  isOnline$(){
+    return this.isOnlineSub.asObservable();
+  }
+
+    isLogedIn():boolean{
     return !!this.user;
   }
   getUserEmail():string{

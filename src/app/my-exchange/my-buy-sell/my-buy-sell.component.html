@@ -1,8 +1,8 @@
 <div>
     <app-market-select></app-market-select>
-    <span>{{base}}: ${{balanceBaseUS}}</span>
-    <span> ${{priceBaseUS}}</span>
-    <span>{{coin}}</span>
+    <span>{{base}}: ${{balanceBaseUS}} </span>
+    <span> </span>
+    <span> {{coin}}</span>
     <span> ${{balanceCoinUS}}</span>
 
     <hr/>
@@ -80,11 +80,11 @@
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
                 ></my-orders-history>
-                <app-trading-history
+               <!-- <app-trading-history
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
                         (completeOrder)="onOrderComplete($event)"
-                ></app-trading-history>
+                ></app-trading-history>-->
             </div>
         </div>
 
@@ -102,7 +102,7 @@
         &nbsp;&nbsp;&nbsp;
         <div class="inline-block">
             <app-refresh-button
-                    [durationMin2]="durationInMin"
+                    [durationMin]="durationInMin"
                     (onRefresh)="onRfreshHistory($event)"
 
             ></app-refresh-button>

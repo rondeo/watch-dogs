@@ -97,7 +97,15 @@ export class AppComponent implements OnInit {
       localStorage.clear();
     }
   }
+
+
+  imageClass = '';
+
   ngOnInit():void{
+    this.auth.isOnline$().subscribe(res=>{
+      this.imageClass =  res?'':'img-blur';
+    });
+
 
     this.storage.onSalt().subscribe(salt=>{
 

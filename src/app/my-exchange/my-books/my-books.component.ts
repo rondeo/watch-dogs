@@ -23,7 +23,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
 
   percentDiff:number;
-  isBooksLoading:boolean;
+  isLoading:boolean;
   bookingColor:string;
   sellColor:string;
   buyColor:string;
@@ -70,13 +70,12 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
 
   onRateToSellFocus(){
-
+    this.isLoading = false;
   }
 
   onRateToBuyFocus(){
-
+    this.isLoading = false;
   }
-
 
   ngOnDestroy(){
     if(this.sub1) this.sub1.unsubscribe();
@@ -110,12 +109,12 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes){
     if(changes.refresh){
-      this.downloadBooks();
+      this.downloadBooks((err, res)=>{ });
     }
 
     if(changes.marketInit) {
       console.log(changes.market);
-      this.downloadBooks();
+      this.downloadBooks((err, res)=>{ });
       /*  let a = this.market.split('_');
         if(a.length === 2){
           this.base = a[0];
@@ -193,38 +192,35 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.rateToSellUS = 0;
   }
 
-  downloadBooks(){
+  downloadBooks(callBack:(err, res)=>void){
     if(!this.marketInit) return this.reset();
 
     let cur = this.marketInit;
-    if(this.isBooksLoading){
-      this.isBooksLoading = false;
-      this.bookingColor = 'red';
-      return;
-    }
+    if(this.isLoading)  return;
 
-    this.bookingColor = 'text-blur';
-    this.isBooksLoading = true;
+    this.isLoading = true;
     //console.warn('downloadBooks ' + cur.base + ' '+ cur.coin);
    let sub =  this.currentAPI.downloadBooks(cur.base, cur.coin).subscribe(books=>{
     // console.warn(books);
      this.bookingColor = '';
-     this.isBooksLoading = false;
+     this.isLoading = false;
      this.isError = false;
      this.books = books;
      this.calculateBooks();
      sub.unsubscribe();
+     callBack(null, books)
 
      }, err => {
      this.isError = true;
-     this.bookingColor = 'red';
-     this.isBooksLoading = false;
      sub.unsubscribe();
+     callBack(err, null);
    })
 
   }
   onRefreshBooksClick(){
-    this.downloadBooks();
+    this.downloadBooks((err, res)=>{
+
+    });
 
   }
 

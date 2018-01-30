@@ -38,6 +38,12 @@ export abstract class ApiBase {
 
   abstract downloadOrders(base:string, coin:string):Observable<VOOrder[]>;
 
+  getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
+
+    return null;
+  }
+
+
   dispatchOrders(orders){
     this.marketHistorySub.next(orders);
   }

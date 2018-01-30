@@ -8,13 +8,13 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
 export class RefreshButtonComponent implements OnInit, OnChanges {
 
   @Output() onRefresh:EventEmitter<number> = new EventEmitter();
-  @Input() durationMin2:number = 0;
+  @Input() durationMin:number = 0;
   constructor() { }
 
 
   ngOnChanges(change){
-    if(change.durationMin2){
-      this.isHistoryLoading = false;
+    if(change.durationMin){
+      if(this.durationMin)  this.isHistoryLoading = false;
     }
   }
 
@@ -48,7 +48,7 @@ export class RefreshButtonComponent implements OnInit, OnChanges {
   }
 
   startAutoRefresh(){
-    if(!this.durationMin2) {
+    if(!this.durationMin) {
       console.warn('durationD required ');
       return
     }
@@ -65,7 +65,7 @@ export class RefreshButtonComponent implements OnInit, OnChanges {
   }
 
   private setRefreshCount(){
-    let min = this.durationMin2/2;
+    let min = this.durationMin/2;
     if(min < 0.5) min = 0.5;
     let sec = (min * 60);
     this.refreshCount = Math.round(sec);

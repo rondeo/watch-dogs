@@ -19,66 +19,65 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 
-export class ApiPoloniex extends ApiBase  {
+export class ApiPoloniex extends ApiBase {
 
-  constructor(
-    private http:HttpClient,
-    storage:StorageService,
-    marketCap:MarketCapService
-  ) {
+  constructor(private http: HttpClient,
+              storage: StorageService,
+              marketCap: MarketCapService) {
     super(storage, 'poloniex', marketCap);
 
   }
 
-  cancelOrder(orderId):Observable<VOOrder>{
+  cancelOrder(orderId): Observable<VOOrder> {
     return this.call({
-      command:'cancelOrder',
-      orderNumber:orderId
-    }).map(res=>{
-      if(res)
-      return {
-        uuid:orderId,
-        isOpen:false,
-        coin:null,
-        base:null,
-        rate:0
-      }
+      command: 'cancelOrder',
+      orderNumber: orderId
+    }).map(res => {
+      console.log(res);
+      if (res)
+        return {
+          uuid: orderId,
+          isOpen: (res.success !==1),
+          coin: null,
+          base: null,
+          rate: 0
+        }
       else return null;
     })
   }
 
-  trackOrder(orderId):Observable<VOOrder> {
+  trackOrder(orderId): Observable<VOOrder> {
     return this.call({
       command: 'returnOrderTrades',
       orderNumber: orderId
-    }).map(res=>{
+    }).map(res => {
       console.log(res);
 
 
-      if(Array.isArray(res) && res.length){
+      if (Array.isArray(res) && res.length) {
         let r = res[0];
         let a = r.currencyPair;
 
-        return{
-          uuid:orderId,
-          amountCoin:+r.amount,
-          amountBase:+r.total,
+        return {
+          uuid: orderId,
+          amountCoin: +r.amount,
+          amountBase: +r.total,
           isOpen: !r.tradeID,
-          action:r.type.toUpperCase(),
+          action: r.type.toUpperCase(),
           coin: a[1],
           base: a[0],
-          rate:+r.rate,
-          date:r.date,
-          timestamp:(new Date(r.date.replace(' ','T'))).getTime()
+          rate: +r.rate,
+          date: r.date,
+          timestamp: (new Date(r.date.replace(' ', 'T'))).getTime()
 
         }
-      }else return{
-        uuid:orderId,
+      } else return {
+        uuid: orderId,
         isOpen: true,
-        action:null,
+        action: null,
         coin: null,
         base: null,
-        rate:0
+        rate: 0
       }
 
 
@@ -86,73 +85,43 @@ export class ApiPoloniex extends ApiBase  {
   }
 
 
-   /*trackOrder(orderId):Observable<VOOrder>{
-     return this.call({
-       command:'returnOrderTrades',
-       orderNumber:orderId
-     }).switchMap(res=>{
-       console.log(res);
 
-
-
-       let a = res.currencyPair;
-       if(!a) {
-         console.error(res);
-         return res;
-       }
-
-//116813692494
-
-       return this.call({
-         command:'returnOpenOrders',
-         currencyPair:res.currencyPair
-       }).map(res2=> {
-
-         console.log(res2);
-
-         let uuid = res2.orderNumber;
-
-         if(uuid !==orderId){
-           console.error(orderId, res, res2);
-         }
-
-         let trades:{
-           amount:string,
-           date:string,
-           rate:string,
-           total:string,
-           tradeID:string,
-           type:string
-         }[] = res2.resultingTrades;
-
-
-         return {
-           action: res.type.toUpperCase(),
-           uuid: res.tradeID,
-           isOpen: true,
-           coin: a[0],
-           base: a[1],
-           rate: res.rate,
-           amountCooin: res.amount,
-           amountBase: res.total,
-           fee: res.fee
-
-         }
-
-       });
-     });
-   }
-*/
-
-  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
+  downloadOrders(base: string, coin: string): Observable<VOOrder[]> {
 
     //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
     return this.call({
-      command:'returnTradeHistory',
-      currencyPair: base+'_'+coin
+      command: 'returnTradeHistory',
+      currencyPair: base + '_' + coin
     });
   }
 
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]>{
+    return this.call({
+      command: 'returnOpenOrders',
+      currencyPair: base + '_' + coin
+    }).map(res=>{
+
+      console.warn(res);
+      return res.map(function (o) {
+        return{
+          uuid:o.orderNumber,
+          action:o.type.toUpperCase(),
+          isOpen:true,
+          rate:+o.rate,
+          coin:coin,
+          base:base,
+          exchange:'poloniex',
+          amountCoin:o.amount,
+          amountBase:o.amount * o.rate,
+          date:o.date,
+          timestamp:new Date(o.date).getTime(),
+          fee:0
+
+        }
+      })
+    })
+
+  }
 
   getMarketSummary(base:string, coin:string):Observable<VOMarket>{
     return this.marketsObj$().map(res=>{

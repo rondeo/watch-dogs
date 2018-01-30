@@ -58,20 +58,17 @@ export class ApiCryptopia extends ApiBase {
   }
 
 
-  getMarketSummary(base:string, coin:string):Promise<VOMarket>{
-    let sub = this.marketsObj$();
+  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+    let sub = this.marketsObj$().map(res=>{
+      return res[base+'_'+coin];
+    });
+    return sub;
 
-    return new Promise(function(resolve, reject) {
-      sub.subscribe(res=>{
-        if(res) resolve(res[base+'_'+coin]);
-      })
-    })
   }
 
-  downloadMarketHistory(base:string, coin:string):Promise<VOOrder[]>{
+  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
-    return new Promise<VOOrder[]>((resolve, reject)=> {
-      if (this.isMarketHistoryDoawnloading) return;
+      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
       this.isMarketHistoryDoawnloading = true;
 
       let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
@@ -96,14 +93,14 @@ export class ApiCryptopia extends ApiBase {
 
 
       }).toPromise().then(res => {
-        resolve(res);
+
         this.dispatchMarketHistory(res)
         return res;
       }).catch(err => {
-        reject(err);
+
         console.error(err)
       })
-    });
+    return this.marketHistorySub.asObservable();
   }
 
 

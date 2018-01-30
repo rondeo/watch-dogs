@@ -35,11 +35,12 @@ export class ApiBittrex extends ApiBase  {
     let uri = 'https://bittrex.com/api/v1.1/market/cancel';
     return this.call(uri, {uuid: uuid}).map(res=>{
       console.log(' cancelOrder ', res);
-      return res;
+      if(res.success) return {uuid:uuid}
+      else return res;
     });
   }
 
-  trackOrder(orderId):Observable<VOOrder>{
+ trackOrder(orderId):Observable<VOOrder>{
     console.log(' getOrderById  ' + orderId);
     let url = 'https://bittrex.com/api/v1.1/account/getorder';
     console.log(url);
@@ -69,7 +70,24 @@ export class ApiBittrex extends ApiBase  {
     console.log(uri);
     return this.call(uri, {market: market}).map(res=>{
       console.log(' getOpenOrders  '+ market , res);
-      return res;
+
+      return res.result.map(function(o){
+        let a = o.Exchange.split('-')
+        return {
+          uuid:o.OrderUuid,
+          action:o.OrderType.substr(6),
+          isOpen:!o.Closed,
+          rate:o.Limit,
+          coin:a[1],
+          base:a[0],
+          exchange:'bittrex',
+          amountCoin:o.Quantity,
+          amountBase:o.Price,
+          date:o.Opened,
+          fee:0,
+          timestamp:new Date(o.Opened).getTime()
+        }
+      });
     })
   }
 

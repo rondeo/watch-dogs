@@ -291,8 +291,7 @@ export class MyBuySellComponent implements OnInit {
     this.balanceCoinUS = coinBal.balanceUS;
   }
 
-  downloadHistory(){
-    console.warn(this.marketInit)
+  downloadHistory(callBack:(err, res)=>void){
     if(!this.marketInit) return;
     let cur = this.marketInit;
 
@@ -308,7 +307,8 @@ export class MyBuySellComponent implements OnInit {
 
       this.marketHistoryData = data;
       sub1.unsubscribe()
-    })
+     callBack(null, history);
+    });
 
     let sub2 = this.currentAPI.getMarketSummary(cur.base, cur.coin).subscribe(marketSummary=>{
       if(!marketSummary) return;
@@ -346,9 +346,11 @@ export class MyBuySellComponent implements OnInit {
         }
         console.log('market Init ', this.marketInit);
         this.setBalances();
-        this.downloadHistory();
+        this.downloadHistory((err, res)=>{
+
+        });
       }).catch(err=>{
-        this.downloadHistory();
+        alert('cant get price for base '+this.base)
         this.priceBaseUS = 0
       });
 
@@ -379,8 +381,10 @@ export class MyBuySellComponent implements OnInit {
   onRfreshHistory(evt){
 
    // console.warn(evt)
-    this.durationInMin = 0;
-    this.downloadHistory();
+   // this.durationInMin = 0;
+    this.downloadHistory((err, res)=>{
+
+    });
     this.downlaodBooks();
 
   }
