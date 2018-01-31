@@ -35,10 +35,15 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
       console.log(' connector.exchange  ' + connector.exchange);
 
       this.apiConnector = connector;
-      connector.loadAllMarketSummaries();
+
+      //connector.loadAllMarketSummaries();
+
+      connector.getAllMarkets().toPromise().then(res=>{
+        console.warn(res);
+      })
 
       if(this.subMarkets) this.subMarkets.unsubscribe();
-      this.subMarkets = connector.marketsAr$().subscribe(res=>{
+      this.subMarkets = connector.getAllMarkets().subscribe(res=>{
         this.marketsArAll = res;
         this.render();
       })

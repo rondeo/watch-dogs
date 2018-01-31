@@ -9,7 +9,18 @@ import * as _ from 'lodash';
 
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
+import {HttpClient} from "@angular/common/http";
 
+
+export enum PrivateCalls{
+  ORDERS_HISTORY,
+  BALANCES,
+  CANCEL_ORDER,
+  OPEN_ORDERS,
+  BUY_LIMIT,
+  SELL_LIMIT
+
+}
 export abstract class ApiBase {
 
   apiKey: string;
@@ -23,28 +34,18 @@ export abstract class ApiBase {
   constructor(
     storage: StorageService,
     exchange: string,
-    marketCap:MarketCapService
+    marketCap:MarketCapService,
+    public http:HttpClient
   ) {
     this.exchange = exchange;
     this.storage = storage;
     this.marketCap = marketCap;
   }
 
-  abstract cancelOrder(orderId):Observable<VOOrder>;
 
 
-  abstract trackOrder(orderId):Observable<VOOrder>;
 
-
-  abstract downloadOrders(base:string, coin:string):Observable<VOOrder[]>;
-
-  getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
-
-    return null;
-  }
-
-
-  dispatchOrders(orders){
+   dispatchOrders(orders){
     this.marketHistorySub.next(orders);
   }
 
@@ -54,11 +55,16 @@ export abstract class ApiBase {
   private ordersSub:Subject<VOOrder[]> = new Subject();
 
 
-  abstract getMarketSummary(base:string, coin:string):Observable<VOMarket>
+  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+    return this.marketsObjSub.map(allMarkets=>{
+      if(!allMarkets) return null;
+      return allMarkets[base+'_'+coin];
+    })
+  }
 
 
   isMarketHistoryDoawnloading:boolean;
-  abstract downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>;
+
 
   dispatchMarketHistory(history){
     this.marketHistorySub.next(history);
@@ -71,45 +77,47 @@ export abstract class ApiBase {
 
 
 
+  abstract cancelOrder(orderId):Observable<VOOrder>;
+
   abstract sellLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
 
   abstract buyLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
 
-  abstract downloadBooks(base:string, coin:string):Observable<VOBooks>;
+  abstract getOpenOrders(base:string, coin:string):Observable<VOOrder[]>
+
+  abstract downloadOrders(base:string, coin:string):Observable<VOOrder[]>
+
+ abstract downloadBalances():Observable<VOBalance[]>
 
 
 
-  isBooksLoading:boolean;
- protected booksSub:Subject<VOBooks>;// = new BehaviorSubject<VOBooks>(null);
-
-  books$(){
-    if(!this.booksSub) this.booksSub = new Subject<VOBooks>()
-    return this.booksSub.asObservable();
-  }
-
-  dispatchBook(books:VOBooks){
-    this.booksSub.next(books);
-  }
-
+/////////////////////////// balances //////////////////////////////////////////
 
 
   private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
-  isBalancesLoading: boolean;
+  isLoadingBalances: boolean;
 
-  /*loadBalances() {
-    if(this.isBalancesLoading) return;
-    this.refreshBalances();
-  }*/
+  refreshBalances():void{
+    if(!this.isLogedInSub.getValue()){
+      console.warn(' not logged in');
+      return;
+    }
 
-  abstract refreshBalances():void;
+    if(this.isLoadingBalances) return;
+    this.isLoadingBalances = true;
+   this.downloadBalances().subscribe(res=>{
+     // console.warn(res);
+      this.dispatchBalances(res);
 
-
+    })
+  }
 
   balances$(){
     let bals =  this.balancesSub.getValue();
-    if(!bals && !this.isBalancesLoading) this.refreshBalances();
+    if(!bals) this.refreshBalances();
     return this.balancesSub.asObservable();
   }
+
   dispatchBalances(balances:VOBalance[]):void{
     if(!balances) return;
     this.marketCap.getCoinsObs().subscribe(MC=>{
@@ -132,30 +140,98 @@ export abstract class ApiBase {
 
   }
 
+//////////////////////////////////////books //////////////////////////////////////////////////////////
+
+  urlMarketHistory:string;
+  mapMarketHistory(res):VOOrder[]{
+    return res
+  }
+
+  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
+
+    let url = this.urlMarketHistory.replace('{{base}}', base).replace('{{coin}}', coin);
+    console.log(url);
+    return this.http.get(url).map(this.mapMarketHistory);
+  }
+
+
+
+
+  isBooksLoading:boolean;
+  protected booksSub:Subject<VOBooks>;
+
+  urlBooks:string;
+  abstract urlMarkets:string
+   mapBooks(res):any{
+
+   };
+
+  downloadBooks(base:string, coin:string):Observable<VOBooks>{
+    let url = this.urlBooks.replace('{{base}}', base).replace('{{coin}}', coin);
+    console.log(url);
+    return this.http.get(url).map(this.mapBooks)
+  }
 
   private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
   getCurrencies():Observable<{[symbol:string]:VOMarketCap}> {
-    if(!this.coinsSub.getValue())this.loadAllMarketSummaries();
-
+    if(!this.coinsSub.getValue())this.getAllMarkets();
     return this.coinsSub.asObservable();
+  }
+
+  abstract mapMarkets(
+    result:any,
+    marketsAr:VOMarket[],
+    indexed:{[pair:string]:VOMarket},
+    bases:string[],
+    selected:string[]
+  ):number;
+
+
+  getAllMarkets():Observable<VOMarket[]>{
+    let markets = this.marketsArSub.getValue();
+
+    if(!markets && !this.isLoadinMarkets){
+      let url = this.urlMarkets;
+      this.isLoadinMarkets = true;
+      console.log(url);
+        this.http.get(url).subscribe(result=>{
+
+        let marketsAr: VOMarket[] = [];
+
+        let baseCoins: string[] = [];
+
+        let selected: string[] = this.getMarketsSelected();
+        let indexed:{} = {}
+        let bases:string[] = [];
+        this.mapMarkets(result, marketsAr, indexed, bases, selected);
+
+        this.dispatchMarketsData(marketsAr, indexed, bases);
+
+        this.isLoadinMarkets = false;
+      }, error=>{
+          this.isLoadinMarkets = false;
+        });
+
+    };
+
+    return this.marketsArSub.asObservable();
 
   }
 
 
-  abstract loadAllMarketSummaries():void;
 
-  marketsAr$():Observable<VOMarket[]>{
+ /* marketsAr$():Observable<VOMarket[]>{
     let markets = this.marketsArSub.getValue();
     if(!markets)this.loadAllMarketSummaries();
     return this.marketsArSub.asObservable();
-  }
-  marketsObj$():Observable<{[pair:string]:VOMarket}>{
+  }*/
+  /*marketsObj$():Observable<{[pair:string]:VOMarket}>{
     let markets = this.marketsArSub.getValue();
     if(!markets)this.loadAllMarketSummaries();
 
     return this.marketsObjSub.asObservable();
   }
-
+*/
   private marketsObjSub:BehaviorSubject<{[pair:string]:VOMarket}> = new BehaviorSubject<{[pair:string]:VOMarket}>(null);
   private marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
   isLoadinMarkets:boolean = false;
@@ -183,6 +259,7 @@ export abstract class ApiBase {
       this.coinsSub.next(localCoins);
       this.bases = bases;
       this.marketsObjSub.next(indexed);
+     // console.log(marketsAr);
       this.marketsArSub.next(marketsAr);
     })
 
@@ -268,6 +345,7 @@ export abstract class ApiBase {
       this.marketCap.getCoinsObs().subscribe(MC=>{
         if(!MC) return;
         let mc = MC[base];
+        if(!mc)console.error(' no price ', MC);
         mc?resolve(mc.price_usd):reject(0);
       })
     })

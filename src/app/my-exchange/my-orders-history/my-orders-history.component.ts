@@ -76,13 +76,17 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
   loadingOpenOrders = false;
 
   refreshOpenOrders(callBack:(err, res)=>void){
+
     this.loadingOpenOrders = true;
 
     clearTimeout(this.checkTimeout);
     let api = this.apiService.getCurrentAPI();
 
+    if(!api.hasLogin()) return;
+
     let sub = api.getOpenOrders(this.marketInit.base,this.marketInit.coin ).subscribe(res=> {
 
+      console.warn(res);
       this.loadingOpenOrders = false;
       sub.unsubscribe();
       if(res.length) {
@@ -113,11 +117,14 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
   refreshOrdersHistory(callBack:Function){
     let api = this.apiService.getCurrentAPI();
 
+
+
     this.loadingOrdersHistory = true;
     let sub = api.downloadOrders(this.marketInit.base,this.marketInit.coin ).subscribe(res=>{
       sub.unsubscribe();
 
       res = _.orderBy(res, 'timestamp', 'desc');
+      //console.warn(res);
       this.ordersHistory = res.map(function (item) {
         item.amountCoinUS = Math.round(item.amountCoin * item.rate * this.pB);
         item.priceUS = +(item.rate * this.pB).toPrecision(3);
@@ -128,13 +135,13 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
       this.allOrders =  this.openOrders.concat(this.ordersHistory);
 
-
       this.calculateSummary();
       this.loadingOrdersHistory = false;
       if(callBack)callBack(null, this.ordersHistory);
 
     }, err => {
-      sub.unsubscribe();
+
+     if(sub)sub.unsubscribe() ;
       if(callBack)callBack(err, null);
       this.loadingOrdersHistory = false;
     })

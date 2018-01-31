@@ -108,12 +108,15 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes){
+
+   // console.warn(changes);
     if(changes.refresh){
       this.downloadBooks((err, res)=>{ });
     }
 
-    if(changes.marketInit) {
-      console.log(changes.market);
+    if(changes.marketInit && changes.marketInit.currentValue) {
+
+
       this.downloadBooks((err, res)=>{ });
       /*  let a = this.market.split('_');
         if(a.length === 2){
@@ -132,13 +135,14 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if(changes.amountBase){
+
       this.calculateBooks();
     }
 
   }
 
   calculateBooks(){
-    //console.log(this.amountBase, !this.books, this.marketInit.priceBaseUS);
+    console.log(this.amountBase, !this.books, this.marketInit);
 
 
     if(!this.amountBase || !this.books || !this.marketInit) return;
@@ -201,7 +205,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading = true;
     //console.warn('downloadBooks ' + cur.base + ' '+ cur.coin);
    let sub =  this.currentAPI.downloadBooks(cur.base, cur.coin).subscribe(books=>{
-    // console.warn(books);
+     //console.warn(books);
      this.bookingColor = '';
      this.isLoading = false;
      this.isError = false;

@@ -21,10 +21,10 @@ import {Subject} from "rxjs/Subject";
 
 export class ApiPoloniex extends ApiBase {
 
-  constructor(private http: HttpClient,
+  constructor(http: HttpClient,
               storage: StorageService,
               marketCap: MarketCapService) {
-    super(storage, 'poloniex', marketCap);
+    super(storage, 'poloniex', marketCap, http);
 
   }
 
@@ -123,11 +123,11 @@ export class ApiPoloniex extends ApiBase {
 
   }
 
-  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+  /*getMarketSummary(base:string, coin:string):Observable<VOMarket>{
     return this.marketsObj$().map(res=>{
       if(res)return res[base+'_'+coin];
     });
-  }
+  }*/
 
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
@@ -224,6 +224,7 @@ export class ApiPoloniex extends ApiBase {
   }
 
 
+/*
   isBooksDownloading:boolean
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
@@ -265,11 +266,13 @@ export class ApiPoloniex extends ApiBase {
     })
     return this.books$();
   }
-
+*/
+//TODO
+  urlBalances = 'api/2/trading/balance';
 
 
   isLoadingBalances:boolean;
-  refreshBalances():void {
+ /* refreshBalances():void {
 
     if(!this.isLogedInSub.getValue()){
       console.warn(' not logged in');
@@ -315,10 +318,86 @@ export class ApiPoloniex extends ApiBase {
       this.onError(err);
 
     });
+  }*/
+
+  downloadBalances():Observable<VOBalance[]>{
+
+    return this.call( {command:'returnBalances'}).map(res => {
+      //console.log(res);
+
+
+      if (!res) {
+        console.warn('refreshBalances null')
+        return null;
+      }
+      if (res.error) {
+        res.api = 'returnBalances';
+        this.onError(res);
+
+        return null;
+      }
+
+      let out = [];
+
+      for (let str in res) {
+        let bal = new VOBalance();
+        bal.balance = +res[str];
+        bal.symbol = str;
+        out.push(bal)
+      }
+
+      return out;
+    });
+  }
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+
+
+  urlMarketHistory = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+  mapMarketHistory(res):VOOrder[]{
+    return res.map(function(item) {
+      return {
+        action:item.type.toUpperCase(),
+        isOpen:false,
+        uuid: item.tradeID,
+        exchange: 'poloniex',
+        rate:+item.rate,
+        amountBase:+item.total,
+        date:item.date,
+        timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+      };
+    });
+  }
+
+
+  urlBooks = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100';
+  urlMarkets = 'https://poloniex.com/public?command=returnTicker';
+
+
+  mapBooks(res:any){
+    let buy = res.bids.map(function (item) {
+      return{
+        Quantity:+item[1],
+        Rate:+item[0]
+      }
+    })
+
+    let sell = res.asks.map(function (item) {
+      return{
+        Quantity:+item[1],
+        Rate:+item[0]
+      }
+    });
+
+    return {
+      buy:buy,
+      sell:sell
+    }
 
   }
 
-  loadAllMarketSummaries():void {
+  /*loadAllMarketSummaries():void {
     console.log('%c ploniex  loadAllMarketSummaries   ', 'color:orange');
     if (this.isLoadinMarkets) return;
     this.isLoadinMarkets = true;
@@ -347,10 +426,10 @@ export class ApiPoloniex extends ApiBase {
       this.isLoadinMarkets = false;
     })
 
-  }
+  }*/
 
 
-  static mapMarkets(
+  mapMarkets(
     result:{[index:string]:SOMarketPoloniex},
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},

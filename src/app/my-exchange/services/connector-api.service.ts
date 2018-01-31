@@ -11,6 +11,7 @@ import {ApiCryptopia} from "./api-cryptopia";
 import {ApiPoloniex} from "./api-poloniex";
 import {ApiBase} from "./api-base";
 import {ApiBittrex} from "./api-bittrex";
+import {ApiHitbtc} from "./api-hitbtc";
 
 @Injectable()
 export class ConnectorApiService {
@@ -57,11 +58,14 @@ export class ConnectorApiService {
 
       case 'cryptopia':
 
-        connector = new ApiCryptopia(this.auth, this.storage, this.marketCap);
+        connector = new ApiCryptopia(this.http, this.storage, this.marketCap);
         break;
 
       case 'poloniex':
         connector = new ApiPoloniex(this.http, this.storage, this.marketCap);
+        break;
+      case 'hitbtc':
+        connector = new ApiHitbtc(this.http, this.storage, this.marketCap);
         break;
     }
 

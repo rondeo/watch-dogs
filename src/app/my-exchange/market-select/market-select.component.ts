@@ -61,7 +61,7 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
 
   onMarketClick(){
 
-    let sub = this.currentAPI.marketsAr$().subscribe(markets=>{
+    let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
       console.log(markets)
       if(!markets) return;
       this.markets = markets.filter(function (item) {

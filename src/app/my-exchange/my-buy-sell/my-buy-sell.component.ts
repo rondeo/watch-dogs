@@ -283,22 +283,18 @@ export class MyBuySellComponent implements OnInit {
     this.balanceCoin = coinBal.balance;
 
 
-    this.priceBaseUS = baseBal.priceUS;
-    this.amountBase = +(this.amountUS /baseBal.priceUS).toPrecision(8);
-
     this.balanceBaseUS = baseBal.balanceUS;
 
     this.balanceCoinUS = coinBal.balanceUS;
   }
 
   downloadHistory(callBack:(err, res)=>void){
+
     if(!this.marketInit) return;
     let cur = this.marketInit;
-
    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
 
-     //console.warn(history)
-     if(!history) return
+     if(!history) return;
 
       let data:MarketHistoryData = {
         history:history,
@@ -335,7 +331,11 @@ export class MyBuySellComponent implements OnInit {
       this.marketInit = null;
 
       this.currentAPI.getPriceForBase(this.base).then(res=>{
+        if(!res) return;
+        console.warn(res);
         this.priceBaseUS = res;
+
+        this.amountBase =  +(this.amountUS / this.priceBaseUS).toPrecision(8);
 
         this.marketInit = {
           priceBaseUS:res,
@@ -349,8 +349,10 @@ export class MyBuySellComponent implements OnInit {
         this.downloadHistory((err, res)=>{
 
         });
+
       }).catch(err=>{
-        alert('cant get price for base '+this.base)
+
+        console.error('cant get price for base ' + this.base, err)
         this.priceBaseUS = 0
       });
 

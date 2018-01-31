@@ -23,11 +23,11 @@ import * as cryptojs from 'crypto-js';
 export class ApiBittrex extends ApiBase  {
 
   constructor(
-    private http:HttpClient,
+    http:HttpClient,
     storage:StorageService,
     marketCap:MarketCapService
   ) {
-    super(storage, 'bittrex', marketCap);
+    super(storage, 'bittrex', marketCap, http);
 
   }
 
@@ -117,13 +117,13 @@ export class ApiBittrex extends ApiBase  {
   }
 
 
-  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
+ /* getMarketSummary(base:string, coin:string):Observable<VOMarket>{
     return this.marketsObj$().map(res=>{
 
      if(res) return res[base+'_'+coin];
     })
 
-  }
+  }*/
 
   isMarketHistoryDoawnloading:boolean
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
@@ -228,16 +228,17 @@ export class ApiBittrex extends ApiBase  {
       }
 
     }).toPromise().then(res=>{
-      this.dispatchBook(res)
+      //this.dispatchBook(res)
     }).catch(err=>{
       this.isBooksDownloading = false;
     })
-    return this.books$()
+    //return this.books$()
   }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO
+  //urlBalances = 'api/2/trading/balance';
   isLoadingBalances:boolean;
-  refreshBalances():void {
+ /* refreshBalances():void {
     if(!this.isLogedInSub.getValue()){
       console.warn(' not logged in');
       return;
@@ -251,12 +252,21 @@ export class ApiBittrex extends ApiBase  {
     console.log('%c refreshBalances  ','color:pink');
 
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
-    this.call(uri, {}).map(res => {
+    this.getBalances().toPromise().then(res=>{
 
-      if(!res){
-        console.log('refreshBalances null')
-        return null;
-      }
+      this.isLoadingBalances = false;
+      this.dispatchBalances(res);
+    }).catch(err=>{
+      this.isLoadingBalances = false;
+      this.onError(err);
+
+    });
+  }*/
+
+  downloadBalances():Observable<VOBalance[]>{
+    let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
+
+    return this.call(uri, {}).map(res => {
 
       return res.result.map(function (item) {
 
@@ -266,22 +276,15 @@ export class ApiBittrex extends ApiBase  {
           balance: item.Balance,
           available: item.Available,
           pending: item.Pending,
-          priceUS:0,
-          balanceUS:0
+          priceUS: 0,
+          balanceUS: 0
         }
       })
-    }).toPromise().then(res=>{
-      this.isLoadingBalances = false;
-      this.dispatchBalances(res);
-    }).catch(err=>{
-      this.isLoadingBalances = false;
-      this.onError(err);
 
-    });
+    })
   }
 
-
-  loadAllMarketSummaries():void {
+  /*loadAllMarketSummaries():void {
     console.log('%c bittrex  loadAllMarketSummaries   ', 'color:orange');
     if (this.isLoadinMarkets) return;
     this.isLoadinMarkets = true;
@@ -308,10 +311,43 @@ export class ApiBittrex extends ApiBase  {
       this.isLoadinMarkets = false;
     })
 
+  }*/
+
+/////////////////////////////////////////////////////////////////////
+
+  urlMarketHistory = 'api/bittrex/getmarkethistory/{{base}}-{{coin}}';
+  mapMarketHistory(res):VOOrder[]{
+    return (<any>res).result.map(function (item: VOMarketHistory) {
+
+      return {
+        action: item.OrderType,
+        uuid: item.Id,
+        exchange: 'bittrex',
+        rate: item.Price,
+        amountBase: item.Total,
+        timestamp: (new Date(item.TimeStamp + 'Z')).getTime(),
+        date: item.TimeStamp
+      }
+    });
+  }
+
+  mapBooks(res){
+    let r = (<any>res).result;
+    console.log('books ', r);
+
+    return {
+      buy:r.buy,
+      sell:r.sell
+    }
+
   }
 
 
-  static mapMarkets(
+  urlBooks = 'api/bittrex/getorderbook/{{base}}-{{coin}}/100';
+  urlMarkets = '/api/bittrex/summaries';
+
+
+  mapMarkets(
     result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},

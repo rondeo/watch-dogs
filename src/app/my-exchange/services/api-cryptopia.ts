@@ -15,17 +15,18 @@ import {SOMarketCryptopia} from "../../models/sos";
 import {Mappers} from "../../com/mappers";
 import {ApiBase, VOBooks} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
+import {HttpClient} from "@angular/common/http";
 
 
 export class ApiCryptopia extends ApiBase {
 
 
   constructor(
-    private http:AuthHttpService,
+    http:HttpClient,
     storage:StorageService,
     marketCap:MarketCapService
   ) {
-    super(storage, 'cryptopia', marketCap);
+    super(storage, 'cryptopia', marketCap, http);
 
   }
 
@@ -57,14 +58,14 @@ export class ApiCryptopia extends ApiBase {
     })
   }
 
-
+/*
   getMarketSummary(base:string, coin:string):Observable<VOMarket>{
     let sub = this.marketsObj$().map(res=>{
       return res[base+'_'+coin];
     });
     return sub;
 
-  }
+  }*/
 
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
@@ -143,14 +144,14 @@ export class ApiCryptopia extends ApiBase {
   }
 
 
-  downloadBooks(base:string, coin:string):Observable<VOBooks>{
+  /*downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
     let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
     return this.http.get(url).map(res=>{
       console.log(res);
-      return res
+      return <any>res
     })
-  }
+  }*/
 
 
   isLoadingBalances:boolean;
@@ -248,7 +249,7 @@ export class ApiCryptopia extends ApiBase {
 
     let url = '/api/cryptopia/pairs';
     return this.http.get(url).map(res=>{
-      let obj = res.json();
+      let obj = <any>res;
       // let out:VOCryptopia[]=[];
       return obj.markets.map(function (item) {
         return item;
@@ -262,7 +263,7 @@ export class ApiCryptopia extends ApiBase {
 
     let url = '/api/cryptopia/markets';
     return this.http.get(url).map(res=>{
-      let obj = res.json();
+      let obj = <any>res;
       return obj.markets.map(function (item) {
         return item;
 
@@ -273,6 +274,7 @@ export class ApiCryptopia extends ApiBase {
 
 
 
+/*
 
   loadAllMarketSummaries():void {
     console.log('%c cruptopia  loadAllMarketSummaries   ','color:orange');
@@ -302,8 +304,46 @@ export class ApiCryptopia extends ApiBase {
 
 
   }
+*/
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-  static mapMarkets(
+  //TODO
+  urlBalances = 'api/2/trading/balance';
+
+
+  urlMarketHistory = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+  mapMarketHistory(res):VOOrder[]{
+    return res.map(function(item) {
+      return {
+        action:item.type.toUpperCase(),
+        isOpen:false,
+        uuid: item.tradeID,
+        exchange: 'poloniex',
+        rate:+item.rate,
+        amountBase:+item.total,
+        date:item.date,
+        timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+      };
+    });
+  }
+
+
+  urlBooks = '/api/hitbtc/public/ticker';
+  urlMarkets = '/api/hitbtc/public/ticker';
+
+  mapBooks(res){
+    let r = (<any>res).result;
+    console.log('books ', r);
+
+    return {
+      buy:r.buy,
+      sell:r.sell
+    }
+
+  }
+
+
+  mapMarkets(
     result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},
