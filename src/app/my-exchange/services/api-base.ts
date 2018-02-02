@@ -63,7 +63,7 @@ export abstract class ApiBase {
   }
 
 
-  isMarketHistoryDoawnloading:boolean;
+
 
 
   dispatchMarketHistory(history){
@@ -161,7 +161,7 @@ export abstract class ApiBase {
   protected booksSub:Subject<VOBooks>;
 
   urlBooks:string;
-  abstract urlMarkets:string
+  urlMarkets:string
    mapBooks(res):any{
 
    };
@@ -178,13 +178,16 @@ export abstract class ApiBase {
     return this.coinsSub.asObservable();
   }
 
-  abstract mapMarkets(
+  mapMarkets(
     result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},
     bases:string[],
     selected:string[]
-  ):number;
+  ):number{
+    return 0;
+  }
+
 
 
   getAllMarkets():Observable<VOMarket[]>{
@@ -232,8 +235,8 @@ export abstract class ApiBase {
     return this.marketsObjSub.asObservable();
   }
 */
-  private marketsObjSub:BehaviorSubject<{[pair:string]:VOMarket}> = new BehaviorSubject<{[pair:string]:VOMarket}>(null);
-  private marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
+  protected marketsObjSub:BehaviorSubject<{[pair:string]:VOMarket}> = new BehaviorSubject<{[pair:string]:VOMarket}>(null);
+  protected marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
   isLoadinMarkets:boolean = false;
 
   bases:string[];

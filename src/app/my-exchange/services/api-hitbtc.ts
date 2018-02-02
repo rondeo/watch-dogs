@@ -6,7 +6,7 @@ import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
 import {IExchangeConnector} from "./connector-api.service";
-import {ApiCryptopia, VOCtopia} from "./api-cryptopia";
+
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
@@ -240,6 +240,7 @@ export class ApiHitbtc extends ApiBase  {
     })
   }
 
+  downloadMarketHistory$
 
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
     if(base ==='USDT') base='USD';
@@ -307,7 +308,6 @@ export class ApiHitbtc extends ApiBase  {
  // urlBooks = '/api/hitbtc/public/orderbook/{{coin}}{{base}}';
   urlMarkets = '/api/hitbtc/public/ticker';
 
-
   mapMarkets(
     result:any,
     marketsAr:VOMarket[],
@@ -343,31 +343,6 @@ export class ApiHitbtc extends ApiBase  {
     });
 
     return result.length;
-  }
-
-  callInprogress:boolean;
-
-  private call(uri: string, post: any): Observable<any> {
-    if (!this.apiKey) {
-      console.error(' no key')
-      return new BehaviorSubject(null).asObservable();
-    }
-
-    post.apikey = this.apiKey;
-    post.nonce = Math.ceil(Date.now() / 1000);
-
-
-    let load = Object.keys(post).map(function (item) {
-      return item + '=' + this.post[item];
-    }, {post: post}).join('&');
-
-    uri += '?' + load;
-    console.log(uri);
-    let signed = this.hash_hmac(uri, this.password);
-    let url = '/api/bittrex/private';
-
-    return this.http.post(url, {uri: uri, signed: signed});
-
   }
 
   hash_hmac(text, password) {

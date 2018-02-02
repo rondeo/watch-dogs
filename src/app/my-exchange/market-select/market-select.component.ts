@@ -13,8 +13,9 @@ import {VOMarket} from "../../models/app-models";
 export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() market:string;
+  currentValue:string;
 
-  @Output() currentMarket:string;
+  //@Output() currentMarket:string;
 
   pair:string;
 
@@ -35,19 +36,34 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
     this.apiService.connector$().subscribe(s=>{
 
       this.currentAPI = s;
+
+      let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
+        console.log(markets)
+        if(!markets) return;
+        this.markets = markets.filter(function (item) {
+          return item.selected;
+        });
+
+        //this.currentValue = this.market;
+
+        setTimeout(()=>sub.unsubscribe(),100);
+      })
+
+
     })
   }
 
   ngOnChanges(changes){
     if(changes.market){
 
+
     }
   }
 
 
   setMarket(){
-    if(!this.pair && this.pair.indexOf('_') ===-1) return;
-    this.currentMarket = this.pair;
+    //if(!this.pair && this.pair.indexOf('_') ===-1) return;
+    //this.currentMarket = this.pair;
   }
   private sub1:Subscription;
   private sub2:Subscription;
@@ -59,7 +75,7 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  onMarketClick(){
+ /* onMarketClick(){
 
     let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
       console.log(markets)
@@ -69,12 +85,12 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
       })
       setTimeout(()=>sub.unsubscribe(),100);
     })
-  }
+  }*/
 
 
 
   onMarketSelected(evt:{value:string}){
-    this.markets = null;
+    //this.markets = null;
     this.router.navigate(['../'+evt.value], {relativeTo: this.route});
   }
 

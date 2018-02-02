@@ -1,369 +1,358 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../services/auth-http.service';
 import {APIBooksService} from "../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../models/app-models";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrder, VOOrderBook} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
 import {IExchangeConnector} from "./connector-api.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
-//import {applyMixins} from "../../shared/utils";
+import {applyMixins} from "../../shared/utils";
 import {SelectedSaved} from "../../com/selected-saved";
-import {applyMixins} from "rxjs/util/applyMixins";
-import {SOMarketCryptopia} from "../../models/sos";
-import {Mappers} from "../../com/mappers";
-import {ApiBase, VOBooks} from "./api-base";
+import {ApiBase, PrivateCalls, VOBooks} from "./api-base";
 import {MarketCapService} from "../../market-cap/market-cap.service";
-import {HttpClient} from "@angular/common/http";
+import {Mappers} from "../../com/mappers";
+import {SOMarketBittrex, SOMarketCryptopia, SOMarketPoloniex} from "../../models/sos";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Subject} from "rxjs/Subject";
+
+import * as cryptojs from 'crypto-js';
 
 
-export class ApiCryptopia extends ApiBase {
-
+export class ApiCryptopia extends ApiBase  {
 
   constructor(
     http:HttpClient,
     storage:StorageService,
-    marketCap:MarketCapService
+    marketCap:MarketCapService,
+
   ) {
     super(storage, 'cryptopia', marketCap, http);
 
   }
 
-
-
-  cancelOrder(orderId):Observable<VOOrder>{
-    return this.call({
-      command:'cancelOrder',
-      orderNumber:orderId
-    })
+  cancelOrder(uuid: string): Observable<VOOrder> {
+    return this.privateCall(PrivateCalls.CANCEL_ORDER, {uuid:uuid})
   }
 
-
-  trackOrder(orderId):Observable<VOOrder>{
-    return this.call({
-      command:'returnOrderTrades',
-      orderNumber:orderId
-    })
-
-  }
-
-
-  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
-
-    //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
-    return this.call({
-      command:'returnTradeHistory',
-      currencyPair: base+'_'+coin
-    })
-  }
-
-/*
-  getMarketSummary(base:string, coin:string):Observable<VOMarket>{
-    let sub = this.marketsObj$().map(res=>{
-      return res[base+'_'+coin];
-    });
-    return sub;
-
-  }*/
-
-  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
-
-      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
-      this.isMarketHistoryDoawnloading = true;
-
-      let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-      url = url.replace('{{base}}', base).replace('{{coin}}', coin);
-      // console.log(url)
-      this.http.get(url).map((res: any) => {
-        console.log(res)
-        return res.map(function (item) {
-          return {
-            action: item.type,
-            uuid: item.tradeID,
-            exchange: 'poloniex',
-            rate: +item.rate,
-            amountBase: +item.total,
-            base: base,
-            coin: coin,
-            date: item.date,
-            timestamp: (new Date(item.date.split(' ').join('T') + 'Z')).getTime()
-
-          }
-        })
-
-
-      }).toPromise().then(res => {
-
-        this.dispatchMarketHistory(res)
-        return res;
-      }).catch(err => {
-
-        console.error(err)
-      })
-    return this.marketHistorySub.asObservable();
-  }
-
-
-
-  ////////////////////////////////////////
 
 
   buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'-'+coin;
-    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-    let ri = 'https://bittrex.com/api/v1.1/market/buylimit';
-    return this.call( {
-      market: market,
-      quantity: quantity,
-      rate: rate
-    }).map(res=>{
-      console.log(' buyLimit market ' + market , res);
-
-      return res.result;
-    });
+    return this.privateCall(PrivateCalls.BUY_LIMIT,
+      {
+        action:'BUY',
+        amount:quantity,
+        rate:rate,
+        base:base,
+        coin:coin
+      })
   }
+
 
   sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'-'+coin;
-    console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+    return this.privateCall(PrivateCalls.SELL_LIMIT,
+      {
+        action:'SELL',
+        amount:quantity,
+        rate:rate,
+        base:base,
+        coin:coin
+      })
 
-    let uri = 'https://bittrex.com/api/v1.1/market/selllimit';
-    return this.call( {
-      market: market,
-      quantity: quantity,
-      rate: rate
-    }).map(res=>{
-      console.log(' sellLimit market '+market , res);
-      if(res.success) return res.result;
-      else return {
-        uuid:'',
-        message:res.message
-      }
-    });
   }
 
-
-  /*downloadBooks(base:string, coin:string):Observable<VOBooks>{
-
-    let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
-    return this.http.get(url).map(res=>{
-      console.log(res);
-      return <any>res
-    })
-  }*/
+  privateCall(method:PrivateCalls, data:any):Observable<any>{
 
 
-  isLoadingBalances:boolean;
-  refreshBalances():void {
-    if(!this.isLogedInSub.getValue()){
-      console.warn(' not logged in');
-      return;
+    let headers: HttpHeaders;
+
+
+    let url:string;
+    switch(method){
+      case PrivateCalls.BALANCES:
+        url = 'https://www.cryptopia.co.nz/api/GetBalance?apikey='+this.apiKey+'&nonce='+Math.floor(Date.now()/1000);
+
+        //let signature = this.apiKey + 'POST'+ url + Math.floor(Date.now()/1000);
+
+        let signed = this.hash_hmac(url, this.password);
+
+
+        headers = new HttpHeaders().set("apisign", signed);//this.apiKey + btoa(this.apiKey + ":" +this.password));
+
+
+        console.log(url);
+
+        return this.http.post(url, null, {headers})
+          .map((res:any[])=>{
+            console.warn(res);
+            res.map(function (item:any) {
+
+
+              return{
+                symbol:item.currency,
+                balance:+item.available + (+item.reserved),
+                available:+item.available
+              }
+            })
+          });
+      case PrivateCalls.ORDERS_HISTORY:
+        url = 'api/hitbtc/history/trades?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
+        console.log(url);
+        return this.http.get(url, {headers})
+          .map(res=>{
+            //console.log(res);
+            let result:any = res;
+            return result.map(function (item) {
+              return{
+                uuid:item.orderId,
+                action:item.side.toUpperCase(),
+                fee:+item.fee,
+                rate:+item.price,
+                amountCoin:+item.quantity,
+                amountBase:+item.quantity * +item.price,
+                date:item.timestamp,
+                timestamp:new Date(item.timestamp).getTime()
+
+              }
+            })
+
+
+          });
+
+      case PrivateCalls.CANCEL_ORDER:
+        url = 'api/hitbtc-delete/'+data.uuid;
+        return this.http.get(url, {headers})
+          .map((res:any)=>{
+            console.log(res);
+            let result:any = res;
+            return {
+              uuid:res.clientOrderId,
+              isOpened:!(res.status==='canceled'),
+              action:res.side.toUpperCase(),
+              rate:+res.price,
+              amountCoin:+res.quantity,
+              date:res.createdAt,
+              timestamp:new Date(res.createdAt).getTime()
+            }
+          });
+
+      case PrivateCalls.OPEN_ORDERS:
+        url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
+        console.log(url);
+        return this.http.get(url, {headers})
+          .map((res:any[])=>{
+            console.log(res);
+
+            return res.map(function (item) {
+              return{
+                isOpen:true,
+                id:item.id,
+                uuid:item.clientOrderId,
+                action:item.side.toUpperCase(),
+                rate:+item.price,
+                amountCoin:+item.quantity,
+                amountBase:+item.price * +item.quantity,
+                date:item.createdAt,
+                timestamp:new Date(item.createdAt).getTime(),
+                status:item.status
+              }
+            });
+          });
+
+      case PrivateCalls.BUY_LIMIT:
+
+        let dataB= {
+          side:data.action.toLowerCase(),
+          quantity:data.amount,
+          price:data.rate,
+          symbol:data.coin+data.base
+        }
+
+        url = 'api/hitbtc/order';
+        console.log(url, dataB)
+        return this.http.post(url, dataB,{headers})
+
+          .map((res:any)=>{
+            console.log(res);
+            let result:any = res;
+            return {
+              id:res.id,
+              uuid:res.clientOrderId,
+              isOpen:res.status ==='new',
+              action:res.side.toUpperCase(),
+              amountCoin:+res.quantity,
+              rate:+res.price,
+              status:res.status
+            }
+          });
+
+      case PrivateCalls.SELL_LIMIT:
+        let dataS= {
+          side:data.action.toLowerCase(),
+          quantity:data.amount,
+          price:data.rate,
+          symbol:data.coin+data.base
+        }
+        url = 'api/hitbtc/order';
+        console.log(url, dataS)
+        return this.http.post(url, dataS,{headers})
+          .map((res:any)=>{
+            console.log(res);
+
+            let result:any = res;
+
+            return {
+              id:res.id,
+              isOpen:res.status ==='new',
+              uuid:res.clientOrderId,
+              action:res.side.toUpperCase(),
+              amountCoin:+res.quantity,
+              rate:+res.price,
+              status:res.status
+
+            }
+          });
+
+
     }
 
-    if(this.isLoadingBalances) return;
-    this.isLoadingBalances = true;
-
-    //console.log('%c refreshBalances  ','color:pink');
-
-    this.call( {command:'returnBalances'}).map(res => {
-      console.log(res);
-
-
-      if(!res){
-        console.warn('refreshBalances null')
-        return null;
-      }
-      if(res.error){
-
-        this.onError(res);
-
-        return null;
-      }
-
-      let out =[];
-
-      for(let str in res) {
-        let bal = new VOBalance();
-        bal.balance = +res[str];
-        bal.symbol = str;
-        out.push(bal)
-      }
-
-      return out;
-    }).toPromise().then(res=>{
-      this.isLoadingBalances = false;
-      this.dispatchBalances(res);
-
-    }).catch(err=>{
-      this.isLoadingBalances = false;
-      this.onError(err);
-
-    });
-
-    /*   })
-
-       let sb = this._getBalances().subscribe(bals => {
-         if (!bals) return;
-         this.balances = bals;
-         this.balancesSub.next(bals);
-         sb.unsubscribe();
-       })*/
   }
 
 
+  getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
+    return this.privateCall(PrivateCalls.OPEN_ORDERS, {base,coin})
+  }
 
-  private booksObs:Observable<any>;
-  getOrderBook(base:string, coin: string, depthMax = '50') {
+  downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
+    return this.privateCall(PrivateCalls.ORDERS_HISTORY, {base,coin})
+  }
 
-    let url = 'api/cryptopia/getorderbook/' +base +'-' +coin + '/' + depthMax;
-    if(!!this.booksObs) return this.booksObs;
+  downloadBalances(){
+    return  this.privateCall(PrivateCalls.BALANCES, null)
+  }
+
+//////////////////////////////////////////   PUBLIC ///////////////////////////
+
+
+  downloadBooks(base:string, coin:string):Observable<VOBooks>{
+
+    let url = 'https://www.cryptopia.co.nz/api/GetMarketOrders/{{coin}}_{{base}}/100'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    this.booksObs =  this.http.get(url).map(res => {
-      let r = (<any>res).result;
-      console.log('books ', r);
-      this.booksObs = null
-      return r;// MappersBooks.bittrex(r, price);
+    return this.http.get(url).map((res:any)=>{
+     // console.log(res);
+      res = res.Data;
 
-    });
-    return this.booksObs;
-
-  }
-
- /* getCurrencies():Observable<VOCtopia[]>{
-
-    let url = '/api/cryptopia/currencies';
-    return this.http.get(url).map(res=>{
-      let obj = res.json();
-      // console.log(obj);
-      //let out:VOCryptopia[]=[];
-      return obj.Data.map(function (item) {
-        return item;
-
+      let buy = res.Buy.map(function (item) {
+        return{
+          Quantity:+item.Total,
+          Rate:+item.Price
+        }
       });
 
-    })
-  }*/
-
-  getPairs():Observable<VOCtopia[]>{
-
-    let url = '/api/cryptopia/pairs';
-    return this.http.get(url).map(res=>{
-      let obj = <any>res;
-      // let out:VOCryptopia[]=[];
-      return obj.markets.map(function (item) {
-        return item;
-
+      let sell = res.Sell.map(function (item) {
+        return{
+          Quantity:+item.Total,
+          Rate:+item.Price
+        }
       });
 
-    })
-  }
-
-  getMarkets():Observable<VOCtopia[]>{
-
-    let url = '/api/cryptopia/markets';
-    return this.http.get(url).map(res=>{
-      let obj = <any>res;
-      return obj.markets.map(function (item) {
-        return item;
-
-      });
-
-    })
-  }
-
-
-
-/*
-
-  loadAllMarketSummaries():void {
-    console.log('%c cruptopia  loadAllMarketSummaries   ','color:orange');
-    if(this.isLoadinMarkets) return;
-    this.isLoadinMarkets = true;
-
-    let url = '/api/cryptopia/summaries';
-    // let url = 'https://bittrex.com/api/v1.1/public/getmarketsummaries';
-
-    //let marketCap = this.marketCap.getAllCoinsData();
-
-    this.http.get(url).subscribe(result=>{
-
-      console.log(result);
-      let marketsAr:VOMarket[] = [];
-      let bases:string[] = [];
-
-      let selected:string[] = this.getMarketsSelected();
-      let indexed = {};
-
-      ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
-
-      this.dispatchMarketsData(marketsAr, indexed, bases);
-
-      this.isLoadinMarkets = false;
-    })
-
-
-  }
-*/
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-  //TODO
-  urlBalances = 'api/2/trading/balance';
-
-
-  urlMarketHistory = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-  mapMarketHistory(res):VOOrder[]{
-    return res.map(function(item) {
       return {
-        action:item.type.toUpperCase(),
-        isOpen:false,
-        uuid: item.tradeID,
-        exchange: 'poloniex',
-        rate:+item.rate,
-        amountBase:+item.total,
-        date:item.date,
-        timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
-      };
+        market:null,
+        exchange:null,
+        buy:buy,
+        sell:sell
+      }
+
+    })
+  }
+
+  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
+
+
+    let url ='https://www.cryptopia.co.nz/api/GetMarketHistory/{{coin}}_{{base}}/1'.replace('{{base}}', base).replace('{{coin}}', coin);
+    console.log(url);
+    return this.http.get(url).map((res:any)=>{
+      res = res.Data
+      console.warn(res);
+
+      return res.map(function(item) {
+        return {
+          action:item.Type.toUpperCase(),
+          isOpen:false,
+          uuid:item.Timestamp,
+          exchange: 'cryptopia',
+          rate:+item.Price,
+          amountBase:+item.Total,
+          amountCoin:+item.Amount,
+          date:item.Timestamp,
+          timestamp:item.Timestamp *1000
+        };
+      });
     });
   }
 
 
-  urlBooks = '/api/hitbtc/public/ticker';
-  urlMarkets = '/api/hitbtc/public/ticker';
 
-  mapBooks(res){
-    let r = (<any>res).result;
-    console.log('books ', r);
+//////////////////////////////////////////////////////////////////////////////////////MARKETS
 
-    return {
-      buy:r.buy,
-      sell:r.sell
-    }
+  getAllMarkets():Observable<VOMarket[]>{
+
+    let markets = this.marketsArSub.getValue();
+
+    if(!markets && !this.isLoadinMarkets){
+      let url = 'https://www.cryptopia.co.nz/api/GetMarkets';
+      this.isLoadinMarkets = true;
+      console.log(url);
+      this.http.get(url).subscribe((res:any)=>{
+       let  result = res.Data;
+
+        let marketsAr: VOMarket[] = [];
+
+        let baseCoins: string[] = [];
+
+        let selected: string[] = this.getMarketsSelected();
+
+        let indexed:{} = {}
+        let bases:string[] = [];
+        ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
+
+        this.dispatchMarketsData(marketsAr, indexed, bases);
+
+        this.isLoadinMarkets = false;
+      }, error=>{
+        this.isLoadinMarkets = false;
+      });
+
+    };
+
+    return this.marketsArSub.asObservable();
 
   }
 
-
-  mapMarkets(
+  static mapMarkets(
     result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},
     bases:string[],
     selected:string[]
   ):number{
-    let ar: SOMarketCryptopia[] = result.Data;
+
+    let ar:any = result;
+    console.log(ar);
     ar.forEach(function (item:SOMarketCryptopia) {
       let ar:string[] = item.Label.split('/');
 
       let market:VOMarket = new VOMarket();
       market.base = ar[1];
-      if(this.bases.indexOf(market.base) === -1) this.bases.push(market.base);
+      if(bases.indexOf(market.base) === -1) bases.push(market.base);
       market.coin = ar[0];
 
       market.pair =  ar[1] + '_' +  ar[0];
+      market.selected = selected.indexOf( market.pair) !==-1;
+
       market.id = item.Label;
       market.exchange = 'cryptopia';
-
-      market.selected = this.selected.indexOf(market.pair) !==-1;
 
       market.Volume = +item.Volume;
       market.Last = item.LastPrice;
@@ -376,106 +365,19 @@ export class ApiCryptopia extends ApiBase {
       market.OpenBuyOrders = item.BuyVolume;
       market.OpenSellOrders = item.SellVolume;
 
-      this.indexed[market.pair] = market;
-      this.marketsAr.push(market);
+      indexed[market.pair] = market;
+      marketsAr.push(market);
 
-    },{bases:bases,indexed:indexed, marketsAr:marketsAr, selected:selected });
+    })
 
     return result.length;
   }
 
-
-  private call( post: any): Observable<any> {
-    if (!this.apiKey) {
-      console.error(' no key')
-      return new BehaviorSubject(null).asObservable();
-    }
-
-    // post.apikey = this.apiKey;
-    post.nonce = Date.now();
-
-    let load = Object.keys(post).map(function (item) {
-      return item + '=' + this.post[item];
-    }, {post: post}).join('&');
-
-
-    let signed = this.hash_hmac(load, this.password);
-    let url = '/api/poloniex/private';
-
-    return this.http.post(url, {key: this.apiKey, signed: signed, postData:load});
-
+  hash_hmac(text, password) {
+    let dg: any = cryptojs.HmacSHA512(text, password);
+    return dg.toString(cryptojs.enc.Hex);
   }
 
 
-
-}
-/*
-0.00011745
-BaseVolume
-  :
-  3.52946064
-BidPrice
-  :
-  0.00011153
-BuyBaseVolume
-  :
-  0.9521777
-BuyVolume
-  :
-  1063210.49169201
-Change
-  :
-  -3.67
-Close
-  :
-  0.00011138
-High
-  :
-  0.000249
-Label
-  :
-  "AUR/BTC"
-LastPrice
-  :
-  0.00011138
-Low
-  :
-  0.00009056
-Open
-  :
-  0.00011562
-SellBaseVolume
-  :
-  542.08534169
-SellVolume
-  :
-  21441.73847993
-TradePairId
-  :
-  2671
-Volume
-  :
-  26239.32002954
-*/
-
-applyMixins (ApiCryptopia, [SelectedSaved]);
-
-export interface VOCtopia{
-  Id:number;
-  Name:string;
-  Symbol:string;
-  Algorithm:string;
-  WithdrawFee:number;
-  MinWithdraw:number;
-  MinBaseTrade:number;
-  IsTipEnabled:boolean;
-  MinTip:number;
-  DepositConfirmations:number;
-  Status:string;
-  StatusMessage:string;
-  ListingStatus:string;
-}
-
-export interface VOCtopiaPair{
 
 }

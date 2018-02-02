@@ -96,9 +96,9 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
 
-  checkingOrder(myOrder:VOOrder){
+  checkingOrder(myOrder:VOOrder) {
 
-    if(!myOrder.isOpen){
+    if (!myOrder.isOpen) {
       this.checkOrder = null;
       this.completeOrder.emit(myOrder);
       this.addOrderHistory(myOrder);
@@ -108,43 +108,42 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     }
 
 
+    let api = this.apiService.getCurrentAPI();
 
-   let api =  this.apiService.getCurrentAPI();
+    console.log('checkingOrder ', myOrder);
 
-   console.log('checkingOrder ', myOrder);
+    /*api.trackOrder(myOrder.uuid).toPromise().then(res=>{
+      console.log(res);
 
-   api.trackOrder(myOrder.uuid).toPromise().then(res=>{
-     console.log(res);
+      if(res.isOpen) {
 
-     if(res.isOpen) {
+        let msg = myOrder.action + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
 
-       let msg = myOrder.action + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
+        this.snackBar.open('Open ' + msg + 'wait 3sec', 'x', {duration:2000});
 
-       this.snackBar.open('Open ' + msg + 'wait 3sec', 'x', {duration:2000});
+        this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 30000);
+      }else{
 
-       this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 30000);
-     }else{
+        if(res.uuid !== myOrder.uuid){
+         console.error(res);
+        }else {
+          myOrder.isOpen = false;
+          this.checkOrder = null;
+          this.completeOrder.emit(myOrder);
+          this.addOrderHistory(myOrder);
+          this.calculateSummary();
+        }
+      }
 
-       if(res.uuid !== myOrder.uuid){
-        console.error(res);
-       }else {
-         myOrder.isOpen = false;
-         this.checkOrder = null;
-         this.completeOrder.emit(myOrder);
-         this.addOrderHistory(myOrder);
-         this.calculateSummary();
-       }
-     }
+    }).catch(err=>{
+      console.warn(err);
+      this.snackBar.open('Check Order Error wait 5sec', 'x', {duration:2000, extraClasses:'alert-red'});
+      this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 5000);
+    })
+   }*/
 
-   }).catch(err=>{
-     console.warn(err);
-     this.snackBar.open('Check Order Error wait 5sec', 'x', {duration:2000, extraClasses:'alert-red'});
-     this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 5000);
-   })
+
   }
-
-
-
 
 
   private addOrderHistory(order:VOOrder){

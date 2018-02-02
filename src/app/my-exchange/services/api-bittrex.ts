@@ -6,7 +6,7 @@ import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
 import {IExchangeConnector} from "./connector-api.service";
-import {ApiCryptopia, VOCtopia} from "./api-cryptopia";
+
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
@@ -34,19 +34,19 @@ export class ApiBittrex extends ApiBase  {
   cancelOrder(uuid: string): Observable<VOOrder> {
     let uri = 'https://bittrex.com/api/v1.1/market/cancel';
     return this.call(uri, {uuid: uuid}).map(res=>{
-      console.log(' cancelOrder ', res);
+     // console.log(' cancelOrder ', res);
       if(res.success) return {uuid:uuid}
       else return res;
     });
   }
 
  trackOrder(orderId):Observable<VOOrder>{
-    console.log(' getOrderById  ' + orderId);
+   // console.log(' getOrderById  ' + orderId);
     let url = 'https://bittrex.com/api/v1.1/account/getorder';
-    console.log(url);
+    //console.log(url);
     return this.call(url, {uuid: orderId}).map(res => {
       let r = <any>res.result;
-      console.log('getOrderById ',r);
+     // console.log('getOrderById ',r);
       let a = r.Exchange.split('-');
 
       return {
@@ -67,9 +67,8 @@ export class ApiBittrex extends ApiBase  {
   getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
     let market = base+'-'+coin;
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
-    console.log(uri);
     return this.call(uri, {market: market}).map(res=>{
-      console.log(' getOpenOrders  '+ market , res);
+     // console.log(' getOpenOrders  '+ market , res);
 
       return res.result.map(function(o){
         let a = o.Exchange.split('-')
@@ -96,7 +95,7 @@ export class ApiBittrex extends ApiBase  {
     let uri = 'https://bittrex.com/api/v1.1/account/getorderhistory';
     //console.log(uri);
     return this.call(uri, {market: market}).map(res=>{
-      console.log(' getorderhistory  '+ market , res);
+      //console.log(' getorderhistory  '+ market , res);
       return res.result.map(function(o){
         return {
           uuid:o.OrderUuid,
@@ -125,19 +124,20 @@ export class ApiBittrex extends ApiBase  {
 
   }*/
 
-  isMarketHistoryDoawnloading:boolean
+  downloadMarketHistory$;
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
 
-      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
-      this.isMarketHistoryDoawnloading = true;
+      if (this.downloadMarketHistory$) return this.downloadMarketHistory$;
+
       let market = base + '-' + coin;
       let url = 'api/bittrex/getmarkethistory/' + market;
       console.log(url);
 
-      this.http.get(url).map((res: any) => {
+    this.downloadMarketHistory$ = this.http.get(url).map((res: any) => {
 
-        console.log(res);
+       /// console.log(res);
+      this.downloadMarketHistory$ = null;
         return (<any>res).result.map(function (item: VOMarketHistory) {
 
           return {
@@ -153,17 +153,11 @@ export class ApiBittrex extends ApiBase  {
           }
         });
 
-      }).toPromise().then(res => {
-        this.isMarketHistoryDoawnloading = false;
-        this.dispatchMarketHistory(res)
-        return res;
-      }).catch(err => {
+      }, err=>{
+      this.downloadMarketHistory$ = null;
+    });
 
-        this.isMarketHistoryDoawnloading = false;
-        console.error(err);
-        return err;
-      })
-    return this.marketHistorySub.asObservable();
+    return this.downloadMarketHistory$;
   }
 
 
@@ -206,19 +200,20 @@ export class ApiBittrex extends ApiBase  {
   }
 
 
-  isBooksDownloading:boolean
+
+  downloadBooks$
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
-    if(this.isBooksDownloading) return;
-    this.isBooksDownloading = true;
     let url = 'api/bittrex/getorderbook/' +base +'-' +coin + '/' + 50;
     console.log(url)
-    this.http.get(url).map((res:any)=>{
-      this.isBooksDownloading = false;
-      console.log(res);
+    if(this.downloadBooks$) return this.downloadBooks$;
+    this.downloadBooks$ =  this.http.get(url).map((res:any)=>{
+
+      //console.log(res);
+      this.downloadBooks$= null;
 
       let r = (<any>res).result;
-      console.log('books ', r);
+     // console.log('books ', r);
 
       return {
         market:base+'_'+coin,
@@ -227,17 +222,16 @@ export class ApiBittrex extends ApiBase  {
         sell:r.sell
       }
 
-    }).toPromise().then(res=>{
-      //this.dispatchBook(res)
-    }).catch(err=>{
-      this.isBooksDownloading = false;
+    }, error=>{
+      this.downloadBooks$= null;
     })
+    return this.downloadBooks$;
     //return this.books$()
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO
   //urlBalances = 'api/2/trading/balance';
-  isLoadingBalances:boolean;
+  //isLoadingBalances:boolean;
  /* refreshBalances():void {
     if(!this.isLogedInSub.getValue()){
       console.warn(' not logged in');

@@ -6,7 +6,7 @@ import {StorageService} from "../../services/app-storage.service";
 
 import {ApiLogin} from "../../shared/api-login";
 import {IExchangeConnector} from "./connector-api.service";
-import {ApiCryptopia, VOCtopia} from "./api-cryptopia";
+
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
 import {applyMixins} from "../../shared/utils";
@@ -129,15 +129,17 @@ export class ApiPoloniex extends ApiBase {
     });
   }*/
 
+  downloadMarketHistory$;
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
-      if (this.isMarketHistoryDoawnloading) return this.marketHistorySub.asObservable();
-      this.isMarketHistoryDoawnloading = true;
+      if (this.downloadMarketHistory$) return this.downloadMarketHistory$;
+
       let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
       url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
       // console.log(url)
-      this.http.get(url).map((res:any)=>{
-        console.log(res)
+     this.downloadMarketHistory$ = this.http.get(url).map((res:any)=>{
+       // console.log(res)
+       this.downloadMarketHistory$ = null;
         return res.map(function(item) {
           return {
             action:item.type.toUpperCase(),
@@ -153,20 +155,10 @@ export class ApiPoloniex extends ApiBase {
           };
         });
 
-      }).toPromise().then(res=>{
-        this.isMarketHistoryDoawnloading = false;
-        this.dispatchMarketHistory(res);
-        return res;
-      }).catch(err=>{
-        this.isMarketHistoryDoawnloading = false;
-        console.error(err);
-        return err;
-      });
-
-
-
-  return this.marketHistorySub.asObservable()
-
+      }, err=>{
+       this.downloadMarketHistory$ = null;
+     })
+  return this.downloadMarketHistory$
 
   }
 

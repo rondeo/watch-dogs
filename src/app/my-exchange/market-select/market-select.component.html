@@ -1,14 +1,9 @@
-<div>
-    <strong class="btn small" (click)="onMarketClick()">{{currentMarket}}</strong>
 
-    <div *ngIf="markets">
         <mat-form-field class="w9" >
-            <mat-select placeholder="Select Market" (change)="onMarketSelected($event)">
+            <mat-select [ngModel]="market"  placeholder="Select Market" (change)="onMarketSelected($event)">
                 <mat-option *ngFor="let market of markets" [value]="market.pair">
                     {{market.pair}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-    </div>
 
-</div>

@@ -294,6 +294,7 @@ export class MyBuySellComponent implements OnInit {
     let cur = this.marketInit;
    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
 
+     console.log(history, this.priceBaseUS);
      if(!history) return;
 
       let data:MarketHistoryData = {
