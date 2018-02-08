@@ -75,8 +75,6 @@ export abstract class ApiBase {
   }
   marketHistorySub:Subject<VOOrder[]> = new Subject();
 
-
-
   abstract cancelOrder(orderId):Observable<VOOrder>;
 
   abstract sellLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
@@ -89,6 +87,7 @@ export abstract class ApiBase {
 
  abstract downloadBalances():Observable<VOBalance[]>
 
+  abstract getMarketURL(base:string, coin:string):string;
 
 
 /////////////////////////// balances //////////////////////////////////////////
@@ -96,6 +95,7 @@ export abstract class ApiBase {
 
   private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
   isLoadingBalances: boolean;
+
 
   refreshBalances():void{
     if(!this.isLogedInSub.getValue()){
@@ -106,10 +106,11 @@ export abstract class ApiBase {
     if(this.isLoadingBalances) return;
     this.isLoadingBalances = true;
    this.downloadBalances().subscribe(res=>{
-     // console.warn(res);
+     this.isLoadingBalances = false;
       this.dispatchBalances(res);
-
-    })
+    }, err=>{
+     this.isLoadingBalances = false;
+   })
   }
 
   balances$(){

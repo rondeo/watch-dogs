@@ -86,7 +86,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
     let sub = api.getOpenOrders(this.marketInit.base,this.marketInit.coin ).subscribe(res=> {
 
-      console.warn(res);
+      //console.warn(res);
       this.loadingOpenOrders = false;
       sub.unsubscribe();
       if(res.length) {

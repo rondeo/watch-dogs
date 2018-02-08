@@ -35,7 +35,7 @@ export class ConnectorApiService {
 
     storage.onSalt().subscribe(res=>{
 
-      console.log(' on salt '+res);
+      //console.log(' on salt '+res);
       this.salt = res;
 
       if(res && this.currentService){

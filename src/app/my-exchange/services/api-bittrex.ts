@@ -31,6 +31,10 @@ export class ApiBittrex extends ApiBase  {
 
   }
 
+  getMarketURL(base:string, coin:string){
+    return 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   cancelOrder(uuid: string): Observable<VOOrder> {
     let uri = 'https://bittrex.com/api/v1.1/market/cancel';
     return this.call(uri, {uuid: uuid}).map(res=>{
@@ -136,9 +140,11 @@ export class ApiBittrex extends ApiBase  {
 
     this.downloadMarketHistory$ = this.http.get(url).map((res: any) => {
 
-       /// console.log(res);
+      console.log(res);
       this.downloadMarketHistory$ = null;
         return (<any>res).result.map(function (item: VOMarketHistory) {
+
+          let time = (new Date(item.TimeStamp + 'Z'));
 
           return {
             action: item.OrderType,
@@ -146,10 +152,14 @@ export class ApiBittrex extends ApiBase  {
             exchange: 'bittrex',
             rate: item.Price,
             amountBase: item.Total,
+            amointCoin:+item.Quantity,
             coin: coin,
             base: base,
-            timestamp: (new Date(item.TimeStamp + 'Z')).getTime(),
-            date: item.TimeStamp
+
+            timestamp: time.getTime(),
+            date: item.TimeStamp,
+            minutes:time.getMinutes() +':'+ time.getSeconds(),
+            local:time.toLocaleTimeString()
           }
         });
 
@@ -257,11 +267,13 @@ export class ApiBittrex extends ApiBase  {
     });
   }*/
 
+
   downloadBalances():Observable<VOBalance[]>{
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
+    this.isLoadingBalances = true;
 
     return this.call(uri, {}).map(res => {
-
+      this.isLoadingBalances = false;
       return res.result.map(function (item) {
 
         return {

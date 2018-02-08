@@ -84,6 +84,22 @@ export class MyBuySellComponent implements OnInit {
 
 
 
+  onOpenMarketClick(){
+    if(this.base && this.coin) {
+     let url = this.currentAPI.getMarketURL(this.base, this.coin);
+      window.open(url,'_blank');
+    }
+
+  }
+  isLoadinBalances:boolean;
+  onRefreshBalancesClick(){
+
+    this.isLoadinBalances=true;
+    this.currentAPI.refreshBalances();
+
+  }
+
+
   onBuyClick(){
     let action = 'BUY';
     this.processAction(action);
@@ -113,12 +129,12 @@ export class MyBuySellComponent implements OnInit {
       return
     }
 
-    console.log('amountBase ' + amountBase + ' priceBaseUS ' + priceBaseUS );
+    ///console.log('amountBase ' + amountBase + ' priceBaseUS ' + priceBaseUS );
 
     let rateToBuyUS = this.booksComponent.rateToBuyUS;
     let rateToSellUS = this.booksComponent.rateToSellUS;
 
-    console.warn(rateToBuyUS, rateToSellUS);
+   // console.warn(rateToBuyUS, rateToSellUS);
 
 
     let rateToBuy = rateToBuyUS / this.priceBaseUS;//// this.rates.rateToBuy;
@@ -225,6 +241,7 @@ export class MyBuySellComponent implements OnInit {
    // })
   }
 
+
   onOrderComplete(order:VOOrder){
     console.warn(order)
     let amountBase = order.amountCoin * order.rate;
@@ -247,8 +264,6 @@ export class MyBuySellComponent implements OnInit {
 
     this.rates = rates;
   }
-
-
 
   setBalances(){
    if(!this.balances || !this.base || !this.coin) return;
@@ -283,9 +298,17 @@ export class MyBuySellComponent implements OnInit {
     this.balanceCoin = coinBal.balance;
 
 
-    this.balanceBaseUS = baseBal.balanceUS;
+    this.balanceBaseUS  = this.priceBaseUS?+(baseBal.balance * this.priceBaseUS).toFixed(2): baseBal.balanceUS;
 
-    this.balanceCoinUS = coinBal.balanceUS;
+    let rateToBuyUS = this.booksComponent.rateToBuyUS;
+    let rateToSellUS = this.booksComponent.rateToSellUS;
+    if( this.priceBaseUS && rateToBuyUS && rateToSellUS){
+      let rate = (rateToBuyUS + rateToSellUS)/2;
+     // console.warn(rate)
+
+      this.balanceCoinUS =  +(coinBal.balance * rate ).toFixed(2);
+
+    }else this.balanceCoinUS = coinBal.balanceUS;
   }
 
   downloadHistory(callBack:(err, res)=>void){
@@ -294,11 +317,24 @@ export class MyBuySellComponent implements OnInit {
     let cur = this.marketInit;
    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
 
-     console.log(history, this.priceBaseUS);
+     //console.log(history);
      if(!history) return;
+
+     let buy = [];
+     let sell = [];
+     history.forEach(function (item) {
+
+       item.priceBaseUS = +(this.b * item.rate).toPrecision(4);
+       item.amountBaseUS = Math.round(this.b * item.amountBase);
+       if(item.action === 'BUY') this.buy.push(item);
+       if(item.action === 'SELL') this.sell.push(item);
+     },{b:this.priceBaseUS, buy:buy, sell:sell});
+
 
       let data:MarketHistoryData = {
         history:history,
+        buy:buy,
+        sell:sell,
         priceBaseUS:this.priceBaseUS
       };
 
@@ -333,7 +369,7 @@ export class MyBuySellComponent implements OnInit {
 
       this.currentAPI.getPriceForBase(this.base).then(res=>{
         if(!res) return;
-        console.warn(res);
+       // console.warn(res);
         this.priceBaseUS = res;
 
         this.amountBase =  +(this.amountUS / this.priceBaseUS).toPrecision(8);
@@ -381,12 +417,13 @@ export class MyBuySellComponent implements OnInit {
   downlaodBooks(){
     this.onRefreshBooks = Date.now();
   }
-  onRfreshHistory(evt){
-
+  isRefreshingHistory
+  onRefreshHistory(){
+  this.isRefreshingHistory = true;
    // console.warn(evt)
    // this.durationInMin = 0;
     this.downloadHistory((err, res)=>{
-
+      this.isRefreshingHistory = false;
     });
     this.downlaodBooks();
 
@@ -429,6 +466,7 @@ export class MyBuySellComponent implements OnInit {
       this.currentAPI.balances$().subscribe(balances=>{
         this.balances = balances;
         //  console.log(balances);
+        this.isLoadinBalances = false;
         this.setBalances()
       });
 

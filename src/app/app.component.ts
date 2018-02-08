@@ -99,11 +99,14 @@ export class AppComponent implements OnInit {
   }
 
 
+  bgColor ='';
   imageClass = '';
 
   ngOnInit():void{
+
     this.auth.isOnline$().subscribe(res=>{
-      this.imageClass =  res?'':'img-blur';
+      this.imageClass =  res?'':'glow-red';
+      this.bgColor = res?'':'bg-red';
     });
 
 

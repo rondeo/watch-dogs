@@ -58,6 +58,8 @@ import {CoinsListComponent} from "./all-in-one/coins-list/coins-list.component";
 
 export const rootRouterConfig: Routes = [
 
+
+
   { path: 'exchanges/search', component: SearchCoinComponent },
   {path: 'coinslist', component:CoinsListComponent, outlet: 'popup'},
 

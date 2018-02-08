@@ -1,9 +1,0 @@
-<div>
-    <nav>
-        <strong>My Balances</strong>
-        <a *ngIf="!(isHasPassword)"  class="btn fa fa-sign-in fa-flip-horizontal fa-lg dgreen" (click)="onLoginClick()" ></a>
-        <a *ngIf="isHasPassword" class="btn fa fa-sign-out fa-lg dred"  (click)="onLogoutClick()" ></a>
-    </nav>
-
-    <router-outlet></router-outlet>
-</div>

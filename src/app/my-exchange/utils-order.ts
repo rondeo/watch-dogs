@@ -21,16 +21,18 @@ export class UtilsOrder{
     return out;
   }
 
-  static createCharts(history:VOOrder[]):{bought:number[], sold:number[]}{
+  static createCharts(history:VOOrder[]):{bought:number[], sold:number[], timestamps:number[]}{
 
     let start = history[0].timestamp;
     let end = history[history.length -1].timestamp;
+
+
 
    // let step = (end - start) /10;
 
     //let nextTime  = start + step;
 
-    let step = (start - end) /10;
+    let step = Math.round((start - end) /10);
 
     let nextTime  = start - step;
     //let nextTimeB  = start + step;
@@ -42,10 +44,17 @@ export class UtilsOrder{
     let groupS:VOOrder[] = [];
     let groupB:VOOrder[] = [];
 
-    let avgB:number;
-    let avgS:number;
+    let avgB:number =0;
+    let avgS:number =0;
+//
+    //console.warn(Math.round(step/1000))
+    //console.warn(nextTime);
 
-    console.warn(nextTime);
+    let startTime = new Date(start);
+    let nextTimed = new Date(nextTime);
+    //console.log(startTime.getMinutes()  + ':'+ startTime.getSeconds())
+   // console.log(nextTimed.getMinutes()  + ':'+ nextTimed.getSeconds())
+
 
     history.forEach(function (item, i) {
       if(item.timestamp > nextTime) {
@@ -55,18 +64,35 @@ export class UtilsOrder{
       }else{
         // console.log(i + ' go next ' + item.timestamp + '  nextTime '+ nextTime);
 
-        timestamps.push(nextTime);
+        //console.log(nextTimed.getMinutes()  + ':'+ nextTimed.getSeconds())
+
+        //console.log(new Date(item.timestamp).toTimeString());
+
+        let time = new Date((item.timestamp + (step)));
+
+        timestamps.push(time.getMinutes());
+
         avgB = UtilsOrder.takeAvarage(groupB, avgB);
 
-        buys.push(avgB);
+        if(!avgB) avgB = avgS;
+        avgB = +avgB.toPrecision(5);
 
+        buys.push(avgB);
+        if(!avgS) avgS = avgB;
         avgS = UtilsOrder.takeAvarage(groupS, avgS);
 
+        avgS = +avgS.toPrecision(5);
         sells.push(avgS);
+
+
+       //  console.log(i + ' nextTime ' + nextTime +' min ' +item.minutes + '  avgB  '+  avgB +' avgS ' + avgS, groupB, groupS);
+
         groupB = [];
         groupS = [];
+
         nextTime -=step
       }
+
       /* timestamps.push(item.timestamp);
        if(item.action === 'buy') buys.push(item);
        else if(item.action === 'sell') sells.push(item);
@@ -74,9 +100,25 @@ export class UtilsOrder{
     });
 
 
+    let time = new Date((end ));
+    timestamps.push(time.getMinutes());
+
+    avgB = UtilsOrder.takeAvarage(groupB, avgB);
+
+    avgB = +avgB.toPrecision(5);
+
+    buys.push(avgB);
+    avgS = UtilsOrder.takeAvarage(groupS, avgS);
+
+    avgS = +avgS.toPrecision(5);
+    sells.push(avgS);
+
+
+
     return{
       bought:buys,
-      sold:sells
+      sold:sells,
+      timestamps:timestamps
     }
   }
 

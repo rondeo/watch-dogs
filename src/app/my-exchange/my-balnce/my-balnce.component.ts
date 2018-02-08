@@ -5,7 +5,7 @@ import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Router} from "@angular/router";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {ApiBase} from "../services/api-base";
-
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-my-balnce',
@@ -19,6 +19,7 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
   data:VOBalance[];
   total:string;
   transfers:VOTransfer[];
+
 
   isPendingOrders:boolean;
   MC;
@@ -51,7 +52,7 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
       if(this.sub2)this.sub2.unsubscribe();
 
       this.sub2 =  connector.balances$().subscribe(res=>{
-        console.log ('balances res', res);
+        this.isBalancesLoading = false;
         if(!res) return;
         this.data = res.filter(function (item) {
           return !!item.id;
@@ -84,15 +85,48 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
     this.balancesAr = ar.sort(function (a, b) { return +a.balanceUS > +b.balanceUS?-1:1; });
   }
 
+  sortByBalance(){
+
+    if(this.sortBy === 'balanceUS') {
+      this.asc_desc = (this.asc_desc === 'asc')?'desc':'asc';
+    }
+    this.sortBy = 'balanceUS';
+    this.balancesAr = _.orderBy(this.balancesAr,'balanceUS', this.asc_desc);//.sort(function (a, b) { return +a.balanceUS > +b.balanceUS?-1:1; });
+  }
   onShowAll(evt){
     this.isShowAll = evt.checked;
     this.render()
   }
 
 
+  isBalancesLoading= false
   refreshBalance(){
-    if(this.currentConnector) this.currentConnector.refreshBalances();
+    if(this.currentConnector) {
+      this.isBalancesLoading = true;
+      this.currentConnector.refreshBalances();
+    }
   }
 
+  sortBy:string;
+  asc_desc = 'desc';
+
+  onSortClick(criteria:string):void{
+    console.log(criteria);
+
+    if(this.sortBy === criteria) {
+      this.asc_desc = (this.asc_desc === 'asc')?'desc':'asc';
+    }
+
+    this.sortBy = criteria;
+    this.sortData();
+  }
+
+  sortData(){
+
+    this.balancesAr = _.orderBy(this.balancesAr, this.sortBy, this.asc_desc);
+
+    // console.log(sorted);
+
+  }
 
 }

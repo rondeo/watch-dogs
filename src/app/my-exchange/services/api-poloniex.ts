@@ -28,6 +28,11 @@ export class ApiPoloniex extends ApiBase {
 
   }
 
+  getMarketURL(base:string, coin:string){
+    return 'https://poloniex.com/exchange#{{base}}_{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
+
   cancelOrder(orderId): Observable<VOOrder> {
     return this.call({
       command: 'cancelOrder',
@@ -138,20 +143,26 @@ export class ApiPoloniex extends ApiBase {
       url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
       // console.log(url)
      this.downloadMarketHistory$ = this.http.get(url).map((res:any)=>{
-       // console.log(res)
+       // console.log(res);
+
        this.downloadMarketHistory$ = null;
         return res.map(function(item) {
+          let time = (new Date(item.date.split(' ').join('T')+'Z'));
+
           return {
             action:item.type.toUpperCase(),
             isOpen:false,
             uuid: item.tradeID,
             exchange: 'poloniex',
             rate:+item.rate,
+            amountCoin:+item.amount,
             amountBase:+item.total,
             base: base,
             coin: coin,
             date:item.date,
-            timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+            minutes:time.getMinutes(),
+            timestamp:time.getTime(),
+            local:time.toLocaleTimeString()
           };
         });
 

@@ -8,6 +8,26 @@
     }
 }
 
+.text-narrow{
+    transform: scaleX(0.5);
+    font-family: "Helvetica Narrow","Arial Narrow",sans-serif;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.lowercase {
+    text-transform: lowercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.bg-red{
+    background-color: #fff3f3;
+}
 
 .scrollY100{
     height: 100px;
@@ -164,6 +184,11 @@ body {
 
 }
 
+
+.glow-red {
+    -webkit-filter: drop-shadow(0 0 3px red);
+    filter: drop-shadow(0 0 3px red);
+}
 
 /*table th{
   text-align: left;

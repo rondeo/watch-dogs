@@ -9,14 +9,14 @@
             </tr>
             <tr>
                 <td>
-                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToBuyUS"  class="large w3"  type="number" (focus)="onRateToSellFocus()" />
+                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToBuyUS"  class="large w4"  type="number" (focus)="onRateToSellFocus()" />
                    <!-- <strong  [ngClass]="bookingColor" class="large" (click)="onRateToSellClick()">{{rateToSellUS}}</strong>-->
                 </td>
                 <td>
                   <!--  <span class="btn fa fa-refresh green"></span>-->
                 </td>
                 <td>
-                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToSellUS"  class="large w3"  type="number" (focus)="onRateToBuyFocus()" />
+                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToSellUS"  class="large w4"  type="number" (focus)="onRateToBuyFocus()" />
                    <!-- <strong  [ngClass]="bookingColor" class="large"  (click)="onRateToBuyClick()">  {{rateToBuyUS}}  </strong>-->
                 </td>
             </tr>
@@ -32,6 +32,18 @@
                     <small  [ngClass]="buyColor">{{buyChange}}%</small>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <ng-content select=".green-color"></ng-content>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <ng-content select=".btn-sell"></ng-content>
+                </td>
+            </tr>
+
             </tbody>
 
         </table>

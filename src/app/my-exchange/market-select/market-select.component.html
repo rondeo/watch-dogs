@@ -1,6 +1,6 @@
 
-        <mat-form-field class="w9" >
-            <mat-select [ngModel]="market"  placeholder="Select Market" (change)="onMarketSelected($event)">
+        <mat-form-field class="w8" >
+            <mat-select [ngModel] = "currentValue"  placeholder="Select Market" (change)="onMarketSelected($event)">
                 <mat-option *ngFor="let market of markets" [value]="market.pair">
                     {{market.pair}}
                 </mat-option>

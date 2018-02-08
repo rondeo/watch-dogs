@@ -1,11 +1,13 @@
 <div>
-    <app-market-select></app-market-select>
-    <span class="large">
-    <span >{{base}}: ${{balanceBaseUS}} </span>
-    <span> </span>
-    <span> {{coin}}</span>
-    <span> ${{balanceCoinUS}}</span>
-        </span>
+    <app-market-select [market]="market"></app-market-select>
+    {{base}}
+    <span class="large"><sup>$</sup>{{balanceBaseUS}}</span>
+    &nbsp;
+    {{coin}}
+    <span class="large"><sup>$</sup>{{balanceCoinUS}}</span>
+    &nbsp;
+    <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshBalancesClick()"></a>
+
 
     <hr/>
 
@@ -60,22 +62,11 @@
                         [amountBase]="amountBase"
                         [refresh]="onRefreshBooks"
                         (rateForAmount)="onRateForAmount($event)"
-                > </app-my-books>
+                >
+                    <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
+                    <button mat-fab  class="btn-sell"  color="accent" (click)="onSellClick()" >Sell</button>
 
-                <table>
-                    <tr>
-                        <td>
-                            <button mat-fab  class="green-color" (click)="onBuyClick()" >Buy</button>
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-                            <button mat-fab  color="accent" (click)="onSellClick()" >Sell</button>
-                        </td>
-                    </tr>
-
-                </table>
+                </app-my-books>
             </div>
             <div class="myFlexCol">
                 <my-orders-history
@@ -93,24 +84,28 @@
     </section>
 
     <hr/>
-    <section class="right">
+    <section>
 
+        <a class="btn" (click)="onOpenMarketClick()">{{market}}</a>
 
+        &nbsp; &nbsp;
         <strong class="large">{{tolerance}}</strong>%
        &nbsp;&nbsp;&nbsp;
         <strong class="large">{{durationInMin}} min</strong>
         &nbsp;&nbsp;
         <strong class="large">{{speedMin}}/min</strong>
         &nbsp;&nbsp;&nbsp;
-        <div class="inline-block">
-            <app-refresh-button
+        <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
+       <!-- <div class="inline-block">
+         &lt;!&ndash;   <app-refresh-button
                     [durationMin]="durationInMin"
                     (onRefresh)="onRfreshHistory($event)"
 
-            ></app-refresh-button>
-        </div>
+            ></app-refresh-button>&ndash;&gt;
+        </div>-->
     </section>
 
+    <br/>
 
     <section>
         <market-history-line
@@ -120,6 +115,8 @@
                 (tolerance)="onTolerance($event)"
         ></market-history-line>
     </section>
+
+
 
     <section>
         <market-history-table

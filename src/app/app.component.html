@@ -10,7 +10,7 @@
                <!-- <a mat-list-item routerLink='/all-in-one'>All In One&nbsp; </a>-->
 
                 <hr/>
-                <a mat-list-item routerLink='/my-bittrex/data'>Bittrex &nbsp; <small> (Las Vegas, USA)</small></a>
+               <!-- <a mat-list-item routerLink='/my-bittrex/data'>Bittrex &nbsp; <small> (Las Vegas, USA)</small></a>-->
                 <a mat-list-item routerLink='/my-exchange/bittrex/markets'>Bittrex &nbsp; <small> (Las Vegas, USA)</small></a>
                 <a mat-list-item routerLink='/my-exchange/cryptopia/markets'>Cryptopia &nbsp;<small>(New Zealand)</small></a>
                 <a mat-list-item routerLink='/my-exchange/poloniex/markets'>Poloniex  &nbsp;<small>(Delaware, USA)</small></a>
@@ -62,7 +62,7 @@
 
 
         </div>
-        <div id="MainOutlet">
+        <div id="MainOutlet" [ngClass]="bgColor">
             <br/>
 
             <router-outlet></router-outlet>

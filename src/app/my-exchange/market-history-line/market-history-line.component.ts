@@ -95,11 +95,23 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 
     let history = this.marketHistory.history;
 
+    if(history.length===0){
+      this.lineChartData = [
+        {data:[], fill:false, label:'Sell'},
+        {data:[], fill:false, label:'Buy'}
+      ];
+
+      return
+    };
+
     //let marketSummary = this.marketSummary.summary;
+
     let start = history[0].timestamp;
     let end = history[history.length -1].timestamp;
     let diff = Math.round((end - start)/1000);
     let speed =  history.length / diff;
+
+
 
    // let min = UtilsOrder.makeLine(marketSummary.Low * priceBaseUS,10);
    // let max = UtilsOrder.makeLine(marketSummary.High * priceBaseUS, 10);
@@ -108,6 +120,8 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 
     charts.bought = charts.bought.map(function (item) { return item * this.b },{b:priceBaseUS});
     charts.sold = charts.sold.map(function (item) { return item * this.b },{b:priceBaseUS});
+
+    console.log(charts);
 
 
     let maxValue = _.max(charts.bought);
@@ -135,7 +149,7 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 
     let M = diff/60;
 
-    this.lineChartLabels  = ['', '', '', '', '', '', '', '','',''];
+    this.lineChartLabels  = ['', '', '', '', '', '', '', '','','',''];//charts.timestamps.reverse();// ['', '', '', '', '', '', '', '','',''];
 
 
 
@@ -196,4 +210,6 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 export interface MarketHistoryData{
   priceBaseUS:number;
   history:VOOrder[];
+  buy:VOOrder[];
+  sell:VOOrder[];
 }

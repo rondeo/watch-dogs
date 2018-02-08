@@ -180,6 +180,7 @@ export class MarketCapService {
     });
 
     this.coins = _.keyBy(ar,'symbol');
+    this.coins['USDT'].price_usd = 1;
     this.coinsAr = ar;
    // console.log(ar);
 

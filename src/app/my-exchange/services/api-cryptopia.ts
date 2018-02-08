@@ -32,204 +32,235 @@ export class ApiCryptopia extends ApiBase  {
 
   }
 
+
+  getMarketURL(base:string, coin:string){
+    return 'https://www.cryptopia.co.nz/Exchange?market={{coin}}_{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   cancelOrder(uuid: string): Observable<VOOrder> {
-    return this.privateCall(PrivateCalls.CANCEL_ORDER, {uuid:uuid})
+    let url = 'https://www.cryptopia.co.nz/Api/CancelTrade';
+    let params = {
+      Type:'Trade',
+      OrderId: uuid
+    };
+
+    var header_value = this.createHeader(url, params);
+    console.log(url, params)
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    })
+      .map((res: any) => {
+        console.log(res);
+       res = res.Data
+        return {
+          uuid: res[0],
+          isOpen:false
+        }
+      });
   }
 
 
 
-  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
-    return this.privateCall(PrivateCalls.BUY_LIMIT,
-      {
-        action:'BUY',
-        amount:quantity,
-        rate:rate,
-        base:base,
-        coin:coin
-      })
+  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<any> {
+
+    let url = 'https://www.cryptopia.co.nz/Api/SubmitTrade';
+    let params= {
+      Type: 'Buy',
+      Amount: quantity,
+      Rate: rate,
+      Market: coin + '/' + base
+    };
+
+    var header_value = this.createHeader(url, params);
+    console.log(url, params)
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    }).map((res: any) => {
+        console.log(res);
+         res = res.Data;
+         if(res.FilledOrders){
+           return {
+             uuid: res.res.FilledOrders[0],
+             isOpen: false
+           }
+         }else{
+           return {
+             uuid: res.OrderId,
+             isOpen: true
+           }
+
+         }
+
+      });
   }
 
 
   sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
-    return this.privateCall(PrivateCalls.SELL_LIMIT,
-      {
-        action:'SELL',
-        amount:quantity,
-        rate:rate,
-        base:base,
-        coin:coin
-      })
+
+   let  url = 'https://www.cryptopia.co.nz/Api/SubmitTrade';
+    let params = {
+      Type: 'Sell',
+      Amount: quantity,
+      Rate: rate,
+      Market: coin + '/' + base
+    };
+
+    var header_value = this.createHeader(url, params);
+
+    console.log(url, params)
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    })
+      .map((res: any) => {
+        console.log(res);
+        res = res.Data;
+
+        if(res.FilledOrders && res.FilledOrders.length){
+          return {
+            uuid: res.FilledOrders[0],
+            isOpen: false
+          }
+        }else{
+          return {
+            uuid: res.OrderId,
+            isOpen: true
+          }
+
+        }
+      });
+
 
   }
 
-  privateCall(method:PrivateCalls, data:any):Observable<any>{
 
+  private createHeader(url, params){
+    let   API_KEY= this.apiKey;
+    let  API_SECRET= this.password;
+    var requestContentBase64String = cryptojs.MD5( JSON.stringify(params) ).toString(cryptojs.enc.Base64);
+    var nonce = new Date().getTime();
+    var signature = this.apiKey + "POST" + encodeURIComponent(url).toLowerCase() + nonce + requestContentBase64String;
+    let hmacsignature = cryptojs.HmacSHA256(signature, cryptojs.enc.Base64.parse(API_SECRET)).toString(cryptojs.enc.Base64);
 
-    let headers: HttpHeaders;
-
-
-    let url:string;
-    switch(method){
-      case PrivateCalls.BALANCES:
-        url = 'https://www.cryptopia.co.nz/api/GetBalance?apikey='+this.apiKey+'&nonce='+Math.floor(Date.now()/1000);
-
-        //let signature = this.apiKey + 'POST'+ url + Math.floor(Date.now()/1000);
-
-        let signed = this.hash_hmac(url, this.password);
-
-
-        headers = new HttpHeaders().set("apisign", signed);//this.apiKey + btoa(this.apiKey + ":" +this.password));
-
-
-        console.log(url);
-
-        return this.http.post(url, null, {headers})
-          .map((res:any[])=>{
-            console.warn(res);
-            res.map(function (item:any) {
-
-
-              return{
-                symbol:item.currency,
-                balance:+item.available + (+item.reserved),
-                available:+item.available
-              }
-            })
-          });
-      case PrivateCalls.ORDERS_HISTORY:
-        url = 'api/hitbtc/history/trades?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
-        console.log(url);
-        return this.http.get(url, {headers})
-          .map(res=>{
-            //console.log(res);
-            let result:any = res;
-            return result.map(function (item) {
-              return{
-                uuid:item.orderId,
-                action:item.side.toUpperCase(),
-                fee:+item.fee,
-                rate:+item.price,
-                amountCoin:+item.quantity,
-                amountBase:+item.quantity * +item.price,
-                date:item.timestamp,
-                timestamp:new Date(item.timestamp).getTime()
-
-              }
-            })
-
-
-          });
-
-      case PrivateCalls.CANCEL_ORDER:
-        url = 'api/hitbtc-delete/'+data.uuid;
-        return this.http.get(url, {headers})
-          .map((res:any)=>{
-            console.log(res);
-            let result:any = res;
-            return {
-              uuid:res.clientOrderId,
-              isOpened:!(res.status==='canceled'),
-              action:res.side.toUpperCase(),
-              rate:+res.price,
-              amountCoin:+res.quantity,
-              date:res.createdAt,
-              timestamp:new Date(res.createdAt).getTime()
-            }
-          });
-
-      case PrivateCalls.OPEN_ORDERS:
-        url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
-        console.log(url);
-        return this.http.get(url, {headers})
-          .map((res:any[])=>{
-            console.log(res);
-
-            return res.map(function (item) {
-              return{
-                isOpen:true,
-                id:item.id,
-                uuid:item.clientOrderId,
-                action:item.side.toUpperCase(),
-                rate:+item.price,
-                amountCoin:+item.quantity,
-                amountBase:+item.price * +item.quantity,
-                date:item.createdAt,
-                timestamp:new Date(item.createdAt).getTime(),
-                status:item.status
-              }
-            });
-          });
-
-      case PrivateCalls.BUY_LIMIT:
-
-        let dataB= {
-          side:data.action.toLowerCase(),
-          quantity:data.amount,
-          price:data.rate,
-          symbol:data.coin+data.base
-        }
-
-        url = 'api/hitbtc/order';
-        console.log(url, dataB)
-        return this.http.post(url, dataB,{headers})
-
-          .map((res:any)=>{
-            console.log(res);
-            let result:any = res;
-            return {
-              id:res.id,
-              uuid:res.clientOrderId,
-              isOpen:res.status ==='new',
-              action:res.side.toUpperCase(),
-              amountCoin:+res.quantity,
-              rate:+res.price,
-              status:res.status
-            }
-          });
-
-      case PrivateCalls.SELL_LIMIT:
-        let dataS= {
-          side:data.action.toLowerCase(),
-          quantity:data.amount,
-          price:data.rate,
-          symbol:data.coin+data.base
-        }
-        url = 'api/hitbtc/order';
-        console.log(url, dataS)
-        return this.http.post(url, dataS,{headers})
-          .map((res:any)=>{
-            console.log(res);
-
-            let result:any = res;
-
-            return {
-              id:res.id,
-              isOpen:res.status ==='new',
-              uuid:res.clientOrderId,
-              action:res.side.toUpperCase(),
-              amountCoin:+res.quantity,
-              rate:+res.price,
-              status:res.status
-
-            }
-          });
-
-
-    }
-
+    return "amx " + API_KEY + ":" + hmacsignature + ":" + nonce;
   }
+
 
 
   getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
-    return this.privateCall(PrivateCalls.OPEN_ORDERS, {base,coin})
+
+    let url = 'https://www.cryptopia.co.nz/Api/GetOpenOrders';
+    let params = {
+      Market: coin + '/' + base
+    };
+
+    var header_value = this.createHeader(url, params);
+    console.log(url, params)
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    })
+      .map((res: any) => {
+        //console.log(res);
+        res = res.Data;
+
+        return res.map(function (item) {
+          let a = item.Market.split('/');
+          return {
+            uuid:item.OrderId,
+            isOpen:true,
+            amountCoin:item.Amount,
+            amountBase:item.Total,
+            rate:item.Rate,
+            action:item.Type,
+            base:a[1],
+            coin:a[0],
+            exchange:'cryptopia'
+
+          }
+        })
+      });
   }
 
   downloadOrders(base:string, coin:string):Observable<VOOrder[]>{
-    return this.privateCall(PrivateCalls.ORDERS_HISTORY, {base,coin})
+    let url = 'https://www.cryptopia.co.nz/Api/GetTradeHistory';
+    let params = {
+      Market: coin + '/' + base
+    };
+
+    var header_value = this.createHeader(url, params);
+    console.log(url, params)
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    })
+      .map((res: any) => {
+       // console.log(res);
+        res = res.Data;
+        return res.map(function (item) {
+          let a = item.Market.split('/');
+          return{
+            uuid:item.TradeId,
+            isOpen:false,
+            action:item.Type.toUpperCase(),
+            amountCoin:+item.Amount,
+            amountBase:+item.Total,
+            rate:+item.Rate,
+            fee:item.Fee,
+            base:a[1],
+            coin:a[0],
+            date:item.TimeStamp,
+            timestamp:new Date(item.TimeStamp).getTime()
+
+          }
+        })
+      });
+    //return this.privateCall(PrivateCalls.ORDERS_HISTORY, {base,coin})
   }
 
+
+
   downloadBalances(){
-    return  this.privateCall(PrivateCalls.BALANCES, null)
+   // console.error('bals');
+
+    let url = 'https://www.cryptopia.co.nz/Api/GetBalance';
+    // params = { Currency: 'USDT' }
+    let params = {
+
+    }
+    var header_value = this.createHeader(url, params);
+    console.log(url);
+    return this.http.post('api/cryptopia/private', {
+      method: url,
+      header_value: header_value,
+      params: params
+    })
+      .map((res: any) => {
+        // console.warn(res);
+        return res.Data.map(function (item: any) {
+          return {
+            symbol: item.Symbol,
+            balance: +item.Total,
+            available: +item.Available
+          }
+        })
+      });
+
+
+
+  //return this.privateCall(PrivateCalls.BALANCES, {})
+
+/*this.isBal.subscribe(res=>{
+  console.warn(res);
+})*/
+
   }
 
 //////////////////////////////////////////   PUBLIC ///////////////////////////
@@ -269,14 +300,13 @@ export class ApiCryptopia extends ApiBase  {
 
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
-
     let url ='https://www.cryptopia.co.nz/api/GetMarketHistory/{{coin}}_{{base}}/1'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res:any)=>{
-      res = res.Data
-      console.warn(res);
-
+      res = res.Data;
+      console.log('MarketHistory '+res.length);
       return res.map(function(item) {
+        let time = new Date(item.Timestamp *1000);
         return {
           action:item.Type.toUpperCase(),
           isOpen:false,
@@ -285,8 +315,10 @@ export class ApiCryptopia extends ApiBase  {
           rate:+item.Price,
           amountBase:+item.Total,
           amountCoin:+item.Amount,
-          date:item.Timestamp,
-          timestamp:item.Timestamp *1000
+          date:time.toUTCString(),
+          minutes:time.getMinutes(),
+          timestamp:item.Timestamp *1000,
+          local:time.toLocaleTimeString()
         };
       });
     });
@@ -339,7 +371,7 @@ export class ApiCryptopia extends ApiBase  {
   ):number{
 
     let ar:any = result;
-    console.log(ar);
+    //console.log(ar);
     ar.forEach(function (item:SOMarketCryptopia) {
       let ar:string[] = item.Label.split('/');
 
@@ -375,6 +407,11 @@ export class ApiCryptopia extends ApiBase  {
 
   hash_hmac(text, password) {
     let dg: any = cryptojs.HmacSHA512(text, password);
+    return dg.toString(cryptojs.enc.Hex);
+  }
+
+  hash_hmac256(text, password) {
+    let dg: any = cryptojs.HmacSHA256(text, password);
     return dg.toString(cryptojs.enc.Hex);
   }
 

@@ -7,6 +7,19 @@
 import {Observable} from 'rxjs/Observable';
 
 
+export class VOTransaction{
+
+  txid:string;
+  from:string;
+  to:string;
+  amount:number;
+  timestamp:number;
+  date:string;
+  incoming:boolean;
+  hex?:string
+}
+
+
 export class ConfigApp{
   exchangesPublic:ConfigAPI[]=[
     {
@@ -113,7 +126,7 @@ export interface VOOrder{
   act?:string
   date?:string;
   timestamp?:number;
-  rate:number;
+  rate?:number;
   exchange?:string;
   priceBaseUS?:number;
   amountBaseUS?:number;
@@ -123,8 +136,10 @@ export interface VOOrder{
   amountBase?:number;
   fee?:number;
   feeUS?:number;
-  base:string;
-  coin:string;
+  base?:string;
+  coin?:string;
+  local?:string;
+  minutes?:string;
 }
 
 
@@ -458,6 +473,7 @@ export class VOBalance{
   address?:string;
   symbol:string;
   balance:number;
+  index?:number;
   available?:number;
   pending?:number
   balanceUS?:number;

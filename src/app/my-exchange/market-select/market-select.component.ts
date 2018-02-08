@@ -38,13 +38,16 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
       this.currentAPI = s;
 
       let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
-        console.log(markets)
+       // console.log(markets)
         if(!markets) return;
+        this.currentValue = this.market;
+
         this.markets = markets.filter(function (item) {
           return item.selected;
         });
 
-        //this.currentValue = this.market;
+
+
 
         setTimeout(()=>sub.unsubscribe(),100);
       })
@@ -55,8 +58,6 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes){
     if(changes.market){
-
-
     }
   }
 

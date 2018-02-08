@@ -74,13 +74,38 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
     this.marketDetails = out;
 
   }
+  marketHistrySell:VOOrder[];
+  marketHistryBuy:VOOrder[];
+  sumBuy:number;
+  sumSell:number
 
   renderHistory(){
     if(!this.marketHistory) return;
 
     let basePrice = this.marketHistory.priceBaseUS;
+
     let res = this.marketHistory.history;
+    if(res.length === 0){
+
+     // this.historyStats.bought = [];
+      //this.historyStats.sold =[];
+      return
+    }
     //this.marketHistory = res;
+
+    this.marketHistryBuy = res.filter(function (item) {
+      return item.action === 'BUY';
+    });
+
+    this.marketHistrySell = res.filter(function (item) {
+      return item.action === 'SELL';
+    });
+
+    this.sumBuy = Math.round( _.sumBy(this.marketHistryBuy, 'amountBaseUS'));
+
+    this.sumSell = Math.round(_.sumBy(this.marketHistrySell, 'amountBaseUS'));
+
+
     this.historyStats = MappersHistory.parseData2(res, basePrice);
 
     this.isBuying = (+this.historyStats.sold.amount < +this.historyStats.bought.amount);

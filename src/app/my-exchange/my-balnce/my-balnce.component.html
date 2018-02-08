@@ -2,15 +2,16 @@
     <section>
         <mat-checkbox (change)="onShowAll($event)">Show All</mat-checkbox>
         <h5>Total ${{total}}</h5>
-        <h4><span class="btn fa fa-refresh fa-lg" (click)="refreshBalance()"></span></h4>
+        &nbsp; &nbsp;
+        <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x" (click)="refreshBalance()"></span>
         <table class="small">
             <tbody>
             <tr>
                 <th>Coin</th>
-                <th>Balance</th>
-                <th>% 1h</th>
-                <th>% 24h</th>
-                <th>% 7d</th>
+                <th  class="btn large" (click)="sortByBalance()">Balance</th>
+                <th  class="btn large" (click)="onSortClick('percent_change_1h')">1h%</th>
+                <th  class="btn large" (click)="onSortClick('percent_change_24h')" >24h%</th>
+                <th  class="btn large" (click)="onSortClick('percent_change_7d')">7d%</th>
                 <th>Price</th>
             </tr>
             <ng-container *ngFor="let balance of balancesAr">

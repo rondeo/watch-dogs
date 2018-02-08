@@ -32,6 +32,10 @@ export class ApiHitbtc extends ApiBase  {
 
   }
 
+  getMarketURL(base:string, coin:string){
+    return 'https://hitbtc.com/exchange/{{coin}}-to-{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   cancelOrder(uuid: string): Observable<VOOrder> {
   return this.privateCall(PrivateCalls.CANCEL_ORDER, {uuid:uuid})
   }
@@ -248,7 +252,9 @@ export class ApiHitbtc extends ApiBase  {
     console.log(url);
     return this.http.get(url).map((res:any)=>{
       ///console.warn(res);
+
       return res.map(function(item) {
+        let time = new Date(item.timestamp)
         return {
           action:item.side.toUpperCase(),
           isOpen:false,
@@ -258,7 +264,9 @@ export class ApiHitbtc extends ApiBase  {
           amountBase:+item.quantity * +item.price,
           amountCoin:+item.quantity,
           date:item.timestamp,
-          timestamp:new Date(item.timestamp).getTime()
+          minutes:time.getMinutes(),
+          local:time.toLocaleTimeString(),
+          timestamp:time.getTime()
         };
       });
     });
@@ -317,7 +325,7 @@ export class ApiHitbtc extends ApiBase  {
   ):number{
 
     let ar:any = result;
-    console.log(ar);
+   // console.log(ar);
     ar.forEach(function (item) {
       let market:VOMarket = new VOMarket();
       market.base = item.symbol.slice(-3);

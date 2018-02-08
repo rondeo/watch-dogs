@@ -1,8 +1,9 @@
 <div>
     <div>
-        <small *ngIf="marketInit" [ngClass]="(loadingOpenOrders || loadingOrdersHistory)?'text-blur':''" class="btn" (click)="onRefreshOrdersClick()">{{marketInit.base}}-{{marketInit.coin}}:</small>
         <span [ngClass]="summaryColor">{{summary}}</span>
         &nbsp;&nbsp;<small>fee: $</small><span>{{totalFee}}</span>
+        &nbsp;
+        <a [ngClass]="(loadingOpenOrders || loadingOrdersHistory)?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshOrdersClick()"></a>
     </div>
     <div class="scrollY100">
         <table class="table-small" (mousedown)="onTableTap()">
@@ -15,4 +16,5 @@
 
         </table>
     </div>
+
 </div>
