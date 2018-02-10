@@ -1,15 +1,16 @@
-import {StorageService} from "../../services/app-storage.service";
+import {StorageService} from "../../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrder, VOOrderBook} from "../../models/app-models";
-import {MarketCapService} from "../../market-cap/market-cap.service";
-import {Mappers} from "../../com/mappers";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {Mappers} from "../../../com/mappers";
 import * as _ from 'lodash';
 
 
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
+import {VOBooks, VOOrder} from "../my-models";
 
 
 export enum PrivateCalls{
@@ -154,9 +155,6 @@ export abstract class ApiBase {
     console.log(url);
     return this.http.get(url).map(this.mapMarketHistory);
   }
-
-
-
 
   isBooksLoading:boolean;
   protected booksSub:Subject<VOBooks>;
@@ -356,9 +354,3 @@ export abstract class ApiBase {
   }
 }
 
-export interface VOBooks{
-  market:string;
-  exchange:string;
-  buy:VOOrderBook[];
-  sell:VOOrderBook[];
-}

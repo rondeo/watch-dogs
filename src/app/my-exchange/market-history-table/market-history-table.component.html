@@ -34,13 +34,35 @@
 
     <mat-tab-group>
         <mat-tab label="Table">
-            <div class="myFlex" >
+
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        Bought {{historyStats0.sumBuy}}   <small> in </small>{{historyStats0.lenghtBuy}}
+                    </td>
+                    <td></td>
+                    <td colspan="2">
+                        Sold {{historyStats0.sumSell}}  <small> in </small>{{historyStats0.lenghtSell}}
+                    </td>
+                </tr>
+               <tr *ngFor="let order of marketHistoryTable" >
+                   <td>{{order.amountBuy}}</td>
+                   <td>{{order.rateBuy}}</td>
+                   <td></td>
+                   <td>{{order.amountSell}}</td>
+                   <td>{{order.rateSell}}</td>
+
+               </tr>
+                </tbody>
+            </table>
+           <!-- <div class="myFlex" >
                 <div class="myFlexCol">
-                    Sold {{sumSell}}
+                    Sold {{historyStats0.sumSell}}  <small> in </small>{{historyStats0.lenghtSell}}
                     <table>
                         <tbody>
 
-                        <tr *ngFor="let sold of marketHistrySell" >
+                        <tr *ngFor="let sold of historyStats0.historySell" >
                             <td>{{sold.amountBaseUS}}</td>
                             <td>{{sold.priceBaseUS}}</td>
                             <td class="x-small">{{sold.minutes}}</td>
@@ -50,11 +72,11 @@
                     </table>
                 </div>
                 <div  class="myFlexCol">
-                    Bought {{sumBuy}}
+                    Bought {{historyStats0.sumBuy}}   <small> in </small>{{historyStats0.lenghtBuy}}
                     <table>
                         <tbody>
 
-                        <tr *ngFor="let bought of marketHistryBuy" >
+                        <tr *ngFor="let bought of historyStats0.historyBuy" >
                             <td>{{bought.amountBaseUS}}</td>
                             <td>{{bought.priceBaseUS}}</td>
                             <td class="x-small">{{bought.minutes}}</td>
@@ -62,9 +84,9 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
+                </div>-->
 
-            </div>
+            <!--</div>-->
         </mat-tab>
         <mat-tab label="Stats">
 

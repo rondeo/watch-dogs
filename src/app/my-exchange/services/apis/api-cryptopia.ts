@@ -1,23 +1,24 @@
 import {Observable} from 'rxjs/Observable';
-import {AuthHttpService} from '../../services/auth-http.service';
-import {APIBooksService} from "../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrder, VOOrderBook} from "../../models/app-models";
-import {StorageService} from "../../services/app-storage.service";
+import {AuthHttpService} from '../../../services/auth-http.service';
+import {APIBooksService} from "../../../services/books-service";
+import { VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {StorageService} from "../../../services/app-storage.service";
 
-import {ApiLogin} from "../../shared/api-login";
-import {IExchangeConnector} from "./connector-api.service";
+import {ApiLogin} from "../../../shared/api-login";
+import {IExchangeConnector} from "../connector-api.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
-import {applyMixins} from "../../shared/utils";
-import {SelectedSaved} from "../../com/selected-saved";
-import {ApiBase, PrivateCalls, VOBooks} from "./api-base";
-import {MarketCapService} from "../../market-cap/market-cap.service";
-import {Mappers} from "../../com/mappers";
-import {SOMarketBittrex, SOMarketCryptopia, SOMarketPoloniex} from "../../models/sos";
+import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
+import {applyMixins} from "../../../shared/utils";
+import {SelectedSaved} from "../../../com/selected-saved";
+import {ApiBase, PrivateCalls} from "./api-base";
+import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {Mappers} from "../../../com/mappers";
+import {SOMarketBittrex, SOMarketCryptopia, SOMarketPoloniex} from "../../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
+import {VOOrder, VOBalance, VOBooks} from "../my-models";
 
 
 export class ApiCryptopia extends ApiBase  {
@@ -56,7 +57,9 @@ export class ApiCryptopia extends ApiBase  {
        res = res.Data
         return {
           uuid: res[0],
-          isOpen:false
+          isOpen:false,
+          amountCoin:0, //TODO get real value
+          rate:0 //TODO get real value
         }
       });
   }
@@ -124,12 +127,16 @@ export class ApiCryptopia extends ApiBase  {
         if(res.FilledOrders && res.FilledOrders.length){
           return {
             uuid: res.FilledOrders[0],
-            isOpen: false
+            isOpen: false,
+            amountCoin:0, //TODO get real value
+            rate:0 //TODO get real value
           }
         }else{
           return {
             uuid: res.OrderId,
-            isOpen: true
+            isOpen: true,
+            amountCoin:0, //TODO get real value
+            rate:0 //TODO get real value
           }
 
         }
@@ -227,7 +234,7 @@ export class ApiCryptopia extends ApiBase  {
 
 
 
-  downloadBalances(){
+  downloadBalances():Observable<VOBalance[]>{
    // console.error('bals');
 
     let url = 'https://www.cryptopia.co.nz/Api/GetBalance';
@@ -274,17 +281,17 @@ export class ApiCryptopia extends ApiBase  {
      // console.log(res);
       res = res.Data;
 
-      let buy = res.Buy.map(function (item) {
+      let buy:VOOrder[] = res.Buy.map(function (item) {
         return{
-          Quantity:+item.Total,
-          Rate:+item.Price
+          amountCoin:+item.Total,
+          rate:+item.Price
         }
       });
 
-      let sell = res.Sell.map(function (item) {
+      let sell:VOOrder[] = res.Sell.map(function (item) {
         return{
-          Quantity:+item.Total,
-          Rate:+item.Price
+          amountCoin:+item.Total,
+          rate:+item.Price
         }
       });
 

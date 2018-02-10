@@ -3,7 +3,7 @@ import {VOBalance, VOMarket, VOOrder} from "../../models/app-models";
 import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../services/connector-api.service";
-import {ApiBase, VOBooks} from "../services/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {APIBuySellService} from "../../services/buy-sell.service";
 import {Observable} from "rxjs/Observable";
 import {BooksService} from "../../services/books-service";

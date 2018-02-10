@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
-import {VOMarket, VOMarketHistory, VOOrder} from "../../models/app-models";
+import {VOMarket, VOMarketHistory} from "../../models/app-models";
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
 import {MappersBooks} from "../../com/mappers-books";
 import * as _ from 'lodash';
+import {MarketHistory} from "../services/utils/market-history";
+import {VOOrder} from "../services/my-models";
 
 @Component({
   selector: 'market-history-table',
@@ -22,6 +24,14 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
 
   marketVolumeChange:number = 0;
  // marketHistory:VOOrder[];
+  historyStats0 = {
+    historyBuy:[],
+    historySell:[],
+    sumBuy:0,
+    sumSell:0,
+    lenghtSell:0,
+    lenghtBuy:0
+  };
   historyStats:VOHistoryStats;
   historyStats1:VOHistoryStats;
   historyStats2:VOHistoryStats;
@@ -77,7 +87,11 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
   marketHistrySell:VOOrder[];
   marketHistryBuy:VOOrder[];
   sumBuy:number;
-  sumSell:number
+  sumSell:number;
+  lenghtSell:number;
+  lenghBuy:number;
+
+  marketHistoryTable:{amountBuy:string, rateBuy:string, amountSell:string, rateSell:string}[]
 
   renderHistory(){
     if(!this.marketHistory) return;
@@ -93,18 +107,10 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
     }
     //this.marketHistory = res;
 
-    this.marketHistryBuy = res.filter(function (item) {
-      return item.action === 'BUY';
-    });
+   // console.log(res);
+   this.historyStats0 =  MarketHistory.parseHistory(res);
 
-    this.marketHistrySell = res.filter(function (item) {
-      return item.action === 'SELL';
-    });
-
-    this.sumBuy = Math.round( _.sumBy(this.marketHistryBuy, 'amountBaseUS'));
-
-    this.sumSell = Math.round(_.sumBy(this.marketHistrySell, 'amountBaseUS'));
-
+   this.marketHistoryTable = MarketHistory.parseHistory2(res)
 
     this.historyStats = MappersHistory.parseData2(res, basePrice);
 

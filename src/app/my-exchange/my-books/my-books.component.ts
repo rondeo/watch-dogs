@@ -1,7 +1,8 @@
 import {Component, Input, Output, OnChanges, OnDestroy, OnInit, EventEmitter} from '@angular/core';
-import {ApiBase, VOBooks} from "../services/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {BooksService} from "../../services/books-service";
+import {VOBooks} from "../services/my-models";
 
 
 @Component({

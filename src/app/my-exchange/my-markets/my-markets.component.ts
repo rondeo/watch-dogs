@@ -4,7 +4,7 @@ import {ConnectorApiService} from "../services/connector-api.service";
 import {Subscription} from "rxjs/Subscription";
 import {VOMarket, VOMarketB} from "../../models/app-models";
 import * as _ from 'lodash';
-import {ApiBase} from "../services/api-base";
+import {ApiBase} from "../services/apis/api-base";
 
 
 @Component({

@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {ConnectorApiService} from "../services/connector-api.service";
-import {ApiBase} from "../services/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute, Router} from "@angular/router";
 import {VOMarket} from "../../models/app-models";

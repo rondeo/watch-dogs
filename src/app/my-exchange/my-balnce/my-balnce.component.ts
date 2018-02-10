@@ -4,7 +4,7 @@ import {VOBalance, VOTransfer} from "../../models/app-models";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {Router} from "@angular/router";
 import {MatDialog, MatSnackBar} from "@angular/material";
-import {ApiBase} from "../services/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import * as _ from 'lodash';
 
 @Component({

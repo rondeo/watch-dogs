@@ -7,11 +7,11 @@ import {AuthHttpService} from "../../services/auth-http.service";
 import {VOOrderBook} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {ApiCryptopia} from "./api-cryptopia";
-import {ApiPoloniex} from "./api-poloniex";
-import {ApiBase} from "./api-base";
-import {ApiBittrex} from "./api-bittrex";
-import {ApiHitbtc} from "./api-hitbtc";
+import {ApiCryptopia} from "./apis/api-cryptopia";
+import {ApiPoloniex} from "./apis/api-poloniex";
+import {ApiBase} from "./apis/api-base";
+import {ApiBittrex} from "./apis/api-bittrex";
+import {ApiHitbtc} from "./apis/api-hitbtc";
 
 @Injectable()
 export class ConnectorApiService {
@@ -49,33 +49,28 @@ export class ConnectorApiService {
     return this.connectorSub.asObservable();
   }
 
-  setExchange(exchange:string){
-    let connector:ApiBase;
+  httpConnectors:{[index:string]:ApiBase} ={};
+  private createHttpConnector(exchange):ApiBase{
     switch(exchange){
       case 'bittrex':
-        connector = new ApiBittrex(this.http, this.storage, this.marketCap);
-        break;
-
-      case 'cryptopia':
-
-        connector = new ApiCryptopia(this.http, this.storage, this.marketCap);
-        break;
-
-      case 'poloniex':
-        connector = new ApiPoloniex(this.http, this.storage, this.marketCap);
-        break;
+        return new ApiBittrex(this.http, this.storage, this.marketCap);
+        case 'cryptopia':
+         return new ApiCryptopia(this.http, this.storage, this.marketCap);
+         case 'poloniex':
+        return new ApiPoloniex(this.http, this.storage, this.marketCap);
       case 'hitbtc':
-        connector = new ApiHitbtc(this.http, this.storage, this.marketCap);
-        break;
+        return new ApiHitbtc(this.http, this.storage, this.marketCap);
     }
+  }
 
+  setExchange(exchange:string):ApiBase{
+    let connector:ApiBase = this.httpConnectors[exchange] || this.createHttpConnector(exchange);
     this.currentService = connector;
     this.isLogedIn$ = connector.isLogedIn$();
     if(this.salt)  this.currentService.autoLogin();
     this.connectorSub.next(connector);
+    return connector;
   }
-
-
 
   getCurrentAPI(){
     return this.currentService;

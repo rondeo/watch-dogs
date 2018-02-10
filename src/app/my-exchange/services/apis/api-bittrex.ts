@@ -1,24 +1,25 @@
 import {Observable} from 'rxjs/Observable';
-import {AuthHttpService} from '../../services/auth-http.service';
-import {APIBooksService} from "../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrder, VOOrderBook} from "../../models/app-models";
-import {StorageService} from "../../services/app-storage.service";
+import {AuthHttpService} from '../../../services/auth-http.service';
+import {APIBooksService} from "../../../services/books-service";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {StorageService} from "../../../services/app-storage.service";
 
-import {ApiLogin} from "../../shared/api-login";
-import {IExchangeConnector} from "./connector-api.service";
+import {ApiLogin} from "../../../shared/api-login";
+import {IExchangeConnector} from "../connector-api.service";
 
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../exchanges/services/cryptopia.service";
-import {applyMixins} from "../../shared/utils";
-import {SelectedSaved} from "../../com/selected-saved";
-import {ApiBase, VOBooks} from "./api-base";
-import {MarketCapService} from "../../market-cap/market-cap.service";
-import {Mappers} from "../../com/mappers";
-import {SOMarketBittrex, SOMarketPoloniex} from "../../models/sos";
+import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
+import {applyMixins} from "../../../shared/utils";
+import {SelectedSaved} from "../../../com/selected-saved";
+import {ApiBase} from "./api-base";
+import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {Mappers} from "../../../com/mappers";
+import {SOMarketBittrex, SOMarketPoloniex} from "../../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
+import {VOBooks, VOOrder} from "../my-models";
 
 export class ApiBittrex extends ApiBase  {
 
@@ -228,8 +229,8 @@ export class ApiBittrex extends ApiBase  {
       return {
         market:base+'_'+coin,
         exchange:this.exchange,
-        buy:r.buy,
-        sell:r.sell
+        buy:r.buy.map(function (o) { return{  amountCoin:o.Quantity, rate:o.Rate } }),
+        sell:r.sell.map(function (o) { return{  amountCoin:o.Quantity, rate:o.Rate } })
       }
 
     }, error=>{
@@ -337,19 +338,18 @@ export class ApiBittrex extends ApiBase  {
     });
   }
 
-  mapBooks(res){
+  /*mapBooks(res){
     let r = (<any>res).result;
     console.log('books ', r);
-
     return {
-      buy:r.buy,
-      sell:r.sell
+      buy:r.buy.map(function (o) { return{  amountCoin:o.Quantity, rate:o.Rate } }),
+      sell:r.sell.map(function (o) { return{  amountCoin:o.Quantity, rate:o.Rate } })
     }
 
-  }
+  }*/
 
 
-  urlBooks = 'api/bittrex/getorderbook/{{base}}-{{coin}}/100';
+  //urlBooks = 'api/bittrex/getorderbook/{{base}}-{{coin}}/100';
   urlMarkets = '/api/bittrex/summaries';
 
 

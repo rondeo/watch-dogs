@@ -3,9 +3,10 @@ import {Observable} from "rxjs/Observable";
 import {MappersBooks} from "../com/mappers-books";
 import {VOOrderBook} from "../models/app-models";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {VOOrder} from "../my-exchange/services/my-models";
 
 export interface APIBooksService{
-  getOrderBook(base:string, coin:string):Observable<{buy:VOOrderBook[], sell:VOOrderBook[]}>
+  getOrderBook(base:string, coin:string):Observable<{buy:VOOrder[], sell:VOOrder[]}>
 }
 
 
@@ -24,8 +25,8 @@ export class BooksService {
   base:string;
   coin:string;
 
-  booksSell:VOOrderBook[];
-  booksBuy:VOOrderBook[];
+  booksSell:VOOrder[];
+  booksBuy:VOOrder[];
   exchangeService:APIBooksService;
 
   rateForAmountSub:BehaviorSubject<VOBooksRate> = new BehaviorSubject<VOBooksRate>(null);
@@ -48,7 +49,7 @@ export class BooksService {
   }
 
 
-  private downloadBooks():Observable<{sell:VOOrderBook[], buy:VOOrderBook[]}>{
+  private downloadBooks():Observable<{sell:VOOrder[], buy:VOOrder[]}>{
     if(!this.base || !this.coin) return;
 
     return this.exchangeService.getOrderBook(this.base, this.coin).map(res=>{
@@ -93,24 +94,25 @@ export class BooksService {
     })
   }
 
-  static getRateForAmountBase(ar:VOOrderBook[], amountBase:number):number{
+  static getRateForAmountBase(ar:VOOrder[], amountBase:number):number{
     let sum=0;
+   // console.error(ar);
     for(let i =0, n=ar.length; i<n; i++){
       let item = ar[i];
-      sum+= +item.Quantity * item.Rate;
-      if(sum>=amountBase) return item.Rate;
+      sum+= +item.amountCoin * item.rate;
+      if(sum>=amountBase) return item.rate;
     }
 
     return 0;
   }
 
-  static getRateForAmountCoin(ar:VOOrderBook[], amountCoin:number):number{
+  static getRateForAmountCoin(ar:VOOrder[], amountCoin:number):number{
     let prices:number[] = [];
     let sum=0;
     for(let i =0, n=ar.length; i<n; i++){
       let item = ar[i];
-      sum+= +item.Quantity;
-      if(sum>=amountCoin) return item.Rate;
+      sum+= +item.amountCoin;
+      if(sum>=amountCoin) return item.rate;
     }
     return 0;
   }
