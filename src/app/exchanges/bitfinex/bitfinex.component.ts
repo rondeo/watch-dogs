@@ -23,6 +23,8 @@ export class BitfinexComponent implements OnInit {
     })
   }
 
+
+
   onMarketClick(market: VOBFMarket) {
     let pair = market.pair;
     this.service.getMarket(pair).subscribe(res=>{

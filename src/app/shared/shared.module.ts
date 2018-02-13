@@ -8,11 +8,15 @@ import { LogoutFormComponent } from './logout-form/logout-form.component';
 import {LoginFormComponent} from './login-form/login-form.component';
 import {FormsModule} from '@angular/forms';
 import { MarketViewComponent } from './market-view/market-view.component';
+import { TradesHistoryComponent } from './trades-history/trades-history.component';
+import { BubbleChartComponent } from './bubble-chart/bubble-chart.component';
 
 
 @NgModule({
   exports:[
-    SortableTableComponent
+    SortableTableComponent,
+    TradesHistoryComponent,
+    BubbleChartComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,9 @@ import { MarketViewComponent } from './market-view/market-view.component';
     CrossTableComponent,
     LogoutFormComponent,
     LoginFormComponent,
-    MarketViewComponent
+    MarketViewComponent,
+    TradesHistoryComponent,
+    BubbleChartComponent
   ],
   entryComponents: [DialogSimpleComponent, LoginFormComponent, LogoutFormComponent]
 })

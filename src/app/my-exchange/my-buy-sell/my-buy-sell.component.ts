@@ -10,12 +10,14 @@ import {BooksService} from "../../services/books-service";
 import {MatSnackBar} from "@angular/material";
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
 import {MyBooksComponent} from "../my-books/my-books.component";
+import {UtilsOrder} from "../utils-order";
 
 @Component({
   selector: 'app-my-buy-sell',
   templateUrl: './my-buy-sell.component.html',
   styleUrls: ['./my-buy-sell.component.css']
 })
+
 export class MyBuySellComponent implements OnInit {
 
 
@@ -23,6 +25,24 @@ export class MyBuySellComponent implements OnInit {
     private booksComponent:MyBooksComponent;
 
 
+
+  analytics: {
+    buy:VOOrder[],
+    sell:VOOrder[],
+    bubbles:any[],
+    min:number,
+    max:number,
+    sumBuy:number,
+    sumSell:number,
+    dustCountBuy:number,
+    dustCountSell:number,
+    fishes:VOOrder[],
+    speed:number,
+    duration:number
+  }
+
+
+  bubbles:any[];
   base:string;
   coin:string;
 
@@ -59,14 +79,28 @@ export class MyBuySellComponent implements OnInit {
 
 
   marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, pair:string};
-
   private pair;
+
   constructor(
     private route:ActivatedRoute,
     private apiService:ConnectorApiService,
     private snackBar:MatSnackBar
   ) {
 
+    this.analytics = {
+      buy:[],
+      sell:[],
+      bubbles:[],
+      min:0,
+      max:0,
+      sumBuy:0,
+      sumSell:0,
+      dustCountBuy:0,
+      dustCountSell:0,
+      speed:0,
+      duration:0,
+      fishes:[]
+    };
     this.newOrder; /*= {
       isOpen:true,
       uuid:'uuuuu',
@@ -311,34 +345,17 @@ export class MyBuySellComponent implements OnInit {
     }else this.balanceCoinUS = coinBal.balanceUS;
   }
 
+
   downloadHistory(callBack:(err, res)=>void){
 
     if(!this.marketInit) return;
     let cur = this.marketInit;
    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
-
      //console.log(history);
      if(!history) return;
 
-     let buy = [];
-     let sell = [];
-     history.forEach(function (item) {
+     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
 
-       item.priceBaseUS = +(this.b * item.rate).toPrecision(4);
-       item.amountBaseUS = Math.round(this.b * item.amountBase);
-       if(item.action === 'BUY') this.buy.push(item);
-       if(item.action === 'SELL') this.sell.push(item);
-     },{b:this.priceBaseUS, buy:buy, sell:sell});
-
-
-      let data:MarketHistoryData = {
-        history:history,
-        buy:buy,
-        sell:sell,
-        priceBaseUS:this.priceBaseUS
-      };
-
-      this.marketHistoryData = data;
       sub1.unsubscribe()
      callBack(null, history);
     });

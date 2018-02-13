@@ -152,8 +152,8 @@ export class ApiBittrex extends ApiBase  {
             uuid: item.Id,
             exchange: 'bittrex',
             rate: item.Price,
-            amountBase: item.Total,
-            amointCoin:+item.Quantity,
+            amountBase: +item.Total,
+            amountCoin:+item.Quantity,
             coin: coin,
             base: base,
 

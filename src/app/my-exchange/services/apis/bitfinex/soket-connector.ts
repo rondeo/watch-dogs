@@ -1,13 +1,11 @@
-import {ChannelTrades, IChannel, ISocketData} from "./channel-trades";
+import {ChannelTrades} from "./channel-trades";
+import {Channels, IChannel, ISocketData} from "../socket-models";
 
 
 export class SoketConnector {
-  static CH_TRADES = 'trades';
-  static CH_BOOKS = 'books';
-  static CH_TICKER = 'ticker';
-
 
   ws: WebSocket;
+  channelsInd: { [index: string]: ISocketData } = {};
 
   constructor() {
 
@@ -21,11 +19,19 @@ export class SoketConnector {
 
   }
 
+  parseChannelId(data:{ channel: string, chanId: number, symbol: string, pair: string }){
+    let base = data.pair.substr(3);
+    if(base ==='USD') base = 'USDT';
+    let coin = data.pair.substr(0,3);
+
+    return data.channel +'_'+ base +'_'+coin;
+  }
   onSubscribed(data: { channel: string, chanId: number, symbol: string, pair: string }) { //{event:"subscribed","channel":"trades","chanId":106,"symbol":"tBTCUSD","pair":"BTCUSD"}
 
-    let channel: ISocketData = this.subscriptions[data.channel + data.symbol];
+    let id = this.parseChannelId(data);
+    let channel: ISocketData = this.channelsInd[id];
     if (!channel) {
-      console.error(' no channel for ', data);
+      console.error(' no channel for ' +id, data);
     } else {
       channel.init(data);
       this.channels[data.chanId] = channel;
@@ -33,8 +39,14 @@ export class SoketConnector {
 
   }
 
+  onUnSubscribed(data:{status:string, chanId:number }){
+    let index = this.channels[data.chanId].index;
+    this.channels[data.chanId] = this.channels[data.chanId].destroy();
+    if(!this.channels[data.chanId]) delete this.channelsInd[index];
+  }
 
-  onMessage(m) {
+
+  private onMessage(m) {
     let data = JSON.parse(m.data);
     // console.log(data);
 
@@ -46,6 +58,11 @@ export class SoketConnector {
         case 'subscribed':
           this.onSubscribed(data);
           break;
+        case 'unsubscribed':
+          this.onUnSubscribed(data);
+          break;
+        default:
+          console.warn('unknown event ', data);
       }
 
     } else {
@@ -68,50 +85,72 @@ export class SoketConnector {
   }
 
 
-  subscriptions: { [index: string]: ISocketData } = {};
 
 
-  createChannel(type: string, options): ISocketData {
-    switch (type) {
-      case 'trades':
-        return new ChannelTrades(options);
+  cerateId
+
+  createChannel(index:string,channel:Channels, base:string, coin:string): ISocketData {
+    switch (channel) {
+      case Channels.TRADES:
+        return new ChannelTrades(index, base, coin);
     }
   }
 
-  subscribe(channel: string, base: string, coin: string): IChannel {
-    let callBack = function (res) {
 
-    };
+  getChannel(channel:Channels, base: string, coin: string): IChannel {
 
-    let symbol = 't' + coin + base;
-    let params = {
-      event: "subscribe",
-      channel: channel,
-      symbol: symbol
-    };
-//if(!this.subscriptions[channe ])
-    console.log(params);
-    this.ws.send(JSON.stringify(params));
+    let index = channel +'_'+ base + '_'+coin;
 
-    if (!this.subscriptions[channel + symbol]) this.subscriptions[channel + symbol] = this.createChannel(channel, params);
+    let newChannel:ISocketData;
 
-    return <IChannel> this.subscriptions[channel + symbol];
+    if (!this.channelsInd[index]) {
+      newChannel = this.createChannel(index, channel,  base, coin);
+      this.channelsInd[index] = newChannel;
+    }
+
+
+   this.createSocket((err, ws:WebSocket)=>{
+     if(newChannel) newChannel.connect(ws);
+
+   });
+
+    return <IChannel> this.channelsInd[index];
   }
 
-  createSocket(callBack) {
-    let ws = new WebSocket('wss://api.bitfinex.com/ws/2');
-    ws.onopen = (e) => {
-      callBack(null, e);
-      console.log(' open ');
-    };
+  isOpen = false;
+  onOpen=[];
 
-    ws.onclose = (closeEvent) => {
-      console.log('close ')
+  private createSocket(callBack) {
 
-    };
+    if(this.isOpen){
+      return callBack(null, this.ws);
+    } else this.onOpen.push(callBack);
 
-    ws.onmessage = (m) => this.onMessage(m);
-    this.ws = ws;
+    if(!this.ws){
+      let ws =  new WebSocket('wss://api.bitfinex.com/ws/2');
+
+      ws.onopen = (e) => {
+        this.isOpen = true;
+        this.onOpen.forEach(function (fn) {
+          fn(null, ws);
+        });
+        console.log(' open bitfinex');
+      };
+
+      ws.onclose = (closeEvent) => {
+        console.warn ('close bitfinex');
+        this.ws = null;
+
+      };
+      ws.onmessage = (m) => this.onMessage(m);
+      this.ws = ws;
+    }
+
+
+
+
+
+
 
   }
 

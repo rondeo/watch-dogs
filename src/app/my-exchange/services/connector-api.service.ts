@@ -12,10 +12,17 @@ import {ApiPoloniex} from "./apis/api-poloniex";
 import {ApiBase} from "./apis/api-base";
 import {ApiBittrex} from "./apis/api-bittrex";
 import {ApiHitbtc} from "./apis/api-hitbtc";
+import {ApiBitfinex} from "./apis/bitfinex/api-bitfinex";
 
 @Injectable()
 export class ConnectorApiService {
 
+
+  mainTrades:string[] = ['USDT_BTC', 'USDT_ETH', 'USDT_LTC'];
+  exchangesPrivate:string[] = ['bittrex', 'poloniex', 'hitbtc', 'cryptopia'];
+  exchangesPublic:string[] = ['bitfinex'];
+
+  bitfinex:ApiBitfinex;
 
   private currentService:ApiBase;
 
@@ -33,6 +40,8 @@ export class ConnectorApiService {
     private auth:AuthHttpService
   ) {
 
+    this.bitfinex = new ApiBitfinex(http);
+
     storage.onSalt().subscribe(res=>{
 
       //console.log(' on salt '+res);
@@ -49,8 +58,9 @@ export class ConnectorApiService {
     return this.connectorSub.asObservable();
   }
 
-  httpConnectors:{[index:string]:ApiBase} ={};
-  private createHttpConnector(exchange):ApiBase{
+
+  httpConnectors:{[index:string]:ApiBase} = {};
+  private createHttpConnector(exchange):any{
     switch(exchange){
       case 'bittrex':
         return new ApiBittrex(this.http, this.storage, this.marketCap);
@@ -60,11 +70,19 @@ export class ConnectorApiService {
         return new ApiPoloniex(this.http, this.storage, this.marketCap);
       case 'hitbtc':
         return new ApiHitbtc(this.http, this.storage, this.marketCap);
+      case 'bitfinex':
+        return new ApiBitfinex(this.http);
+      default:
+        return null;
     }
   }
 
+  getHttpConnector(exchange:string):ApiBase{
+    return this.httpConnectors[exchange] || this.createHttpConnector(exchange);
+  }
+
   setExchange(exchange:string):ApiBase{
-    let connector:ApiBase = this.httpConnectors[exchange] || this.createHttpConnector(exchange);
+    let connector:ApiBase = this.getHttpConnector(exchange);
     this.currentService = connector;
     this.isLogedIn$ = connector.isLogedIn$();
     if(this.salt)  this.currentService.autoLogin();

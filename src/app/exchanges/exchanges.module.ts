@@ -19,6 +19,7 @@ import { NovaexchangeComponent } from './novaexchange/novaexchange.component';
 import { CryptopiaComponent } from './cryptopia/cryptopia.component';
 
 
+
 @NgModule({
   imports: [
     CommonModule,

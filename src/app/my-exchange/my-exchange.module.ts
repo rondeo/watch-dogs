@@ -24,6 +24,9 @@ import { MarketHistoryTableComponent } from './market-history-table/market-histo
 import {TradingHistoryComponent} from "./trading-history/trading-history.component";
 import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
+import { SocketTradeComponent } from './socket-trade/socket-trade.component';
+import { AllMainCoinsComponent } from './all-main-coins/all-main-coins.component';
+import {SharedModule} from "../shared/shared.module";
 
 
 const routes: Routes = [
@@ -51,7 +54,8 @@ const routes: Routes = [
       {path: 'buy-sell/:market', component:  BittrexBuySellComponent}*/
 
     ]
-  }
+  },
+  { path: 'trader/:market/:exchange', component: AllMainCoinsComponent,}
 ];
 
 
@@ -62,6 +66,7 @@ const routes: Routes = [
     FormsModule,
     MaterialAppModule,
     ChartsModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -77,7 +82,9 @@ const routes: Routes = [
     MarketHistoryTableComponent,
     TradingHistoryComponent,
     RefreshButtonComponent,
-    MyOrdersHistoryComponent
+    MyOrdersHistoryComponent,
+    SocketTradeComponent,
+    AllMainCoinsComponent
   ],
   providers:[
     ConnectorApiService

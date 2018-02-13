@@ -82,8 +82,14 @@
         </div>
 
     </section>
-
     <hr/>
+    <!--<section>
+        <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'BTC'" [priceBaseUS]="1"></app-trades-history>
+        <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'LTC'" [priceBaseUS]="1"></app-trades-history>
+    </section>-->
+
+
+
     <section>
 
         <a class="btn" (click)="onOpenMarketClick()">{{market}}</a>
@@ -107,23 +113,30 @@
 
     <br/>
 
+    <app-bubble-chart [bubbles]="analytics.bubbles"></app-bubble-chart>
+
+    <br/>
     <section>
-        <market-history-line
-                [marketHistory]="marketHistoryData"
-                [marketSummary]="marketSummaryData"
-                [removeMaxMin]="true"
-                (tolerance)="onTolerance($event)"
-        ></market-history-line>
-    </section>
+        <small>Bought:</small> {{analytics.sumBuy.toFixed(0)}}
+        <small> Sold: </small> {{analytics.sumSell.toFixed(0)}}
+        <small>Dust:</small>
+        <sub class="green">b: {{analytics.dustCountBuy}}</sub>
+        <sup class="red">s: {{analytics.dustCountSell}}</sup>
+
+        <div>
+            <span class="fa fa-ship"></span>
+            <table>
+                <tbody>
+                <tr *ngFor="let fish of analytics.fishes">
+                    <td>{{fish.action}} </td>
+                    <td>{{fish.amountBaseUS}} </td>
+                    <td>{{fish.priceBaseUS}} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
 
-
-    <section>
-        <market-history-table
-                [marketHistory]="marketHistoryData"
-                [marketSummary]="marketSummaryData"
-                (durationMin)="onDurationMin($event)"
-        ></market-history-table>
     </section>
 
 
