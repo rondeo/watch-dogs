@@ -95,11 +95,11 @@
         <a class="btn" (click)="onOpenMarketClick()">{{market}}</a>
 
         &nbsp; &nbsp;
-        <strong class="large">{{tolerance}}</strong>%
+        <strong class="large">{{analytics.tolerance.toFixed(2)}}</strong>%
        &nbsp;&nbsp;&nbsp;
-        <strong class="large">{{durationInMin}} min</strong>
+        <strong class="large">{{(analytics.duration/60).toPrecision(2)}} min</strong>
         &nbsp;&nbsp;
-        <strong class="large">{{speedMin}}/min</strong>
+        <strong class="large">{{(analytics.speed*60).toPrecision(2)}}/min</strong>
         &nbsp;&nbsp;&nbsp;
         <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
        <!-- <div class="inline-block">

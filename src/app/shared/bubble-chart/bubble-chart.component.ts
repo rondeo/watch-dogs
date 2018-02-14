@@ -96,16 +96,17 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
       } else if(o.r > 50000) {
         ctx.font = "10px Arial";
         ctx.fillText((o.r / 1000).toFixed(0), x - 6, y - 6);
-        r = 4;
+        r = 5;
       }else if(o.r > 10000){
           ctx.font = "8px Arial";
           ctx.fillText((o.r/1000).toFixed(0),x-6,y-6);
-          r=3;
+          r=3.5;
         }
+        else if(o.r>100) r = 2;
 
       ctx.beginPath();
       ctx.arc(x, y, r , 0,  2 * Math.PI, false);
-      ctx.fillStyle = o.a?'rgba(126,0,0,0.8)':'rgba(255,0,0,0.8)';
+      ctx.fillStyle = o.a?'rgba(0,100,0,0.8)':'rgba(255,0,0,0.8)';
       ctx.fill();
     })
 

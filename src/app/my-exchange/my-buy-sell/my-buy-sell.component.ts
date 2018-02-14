@@ -38,7 +38,8 @@ export class MyBuySellComponent implements OnInit {
     dustCountSell:number,
     fishes:VOOrder[],
     speed:number,
-    duration:number
+    duration:number,
+    tolerance:number
   }
 
 
@@ -99,6 +100,7 @@ export class MyBuySellComponent implements OnInit {
       dustCountSell:0,
       speed:0,
       duration:0,
+      tolerance:0,
       fishes:[]
     };
     this.newOrder; /*= {

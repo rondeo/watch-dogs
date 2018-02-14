@@ -1,35 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="reuse API">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/all-main-coins/all-main-coins.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/all-main-coins/all-main-coins.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/all-main-coins/all-main-coins.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/api-bitfinex.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/socket-models.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/socket-trade/socket-trade.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/socket-trade/socket-trade.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-exchange/socket-trade/socket-trade.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/trades-history/trades-history.component.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/trades-history/trades-history.component.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/shared/trades-history/trades-history.component.ts" />
+    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bitfinex/bitfinex.component.ts" afterPath="$PROJECT_DIR$/src/app/exchanges/bitfinex/bitfinex.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/exchanges.module.ts" afterPath="$PROJECT_DIR$/src/app/exchanges/exchanges.module.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-bittrex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-bittrex.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/channel-trades.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/channel-trades.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/http-connector.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/http-connector.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/soket-connector.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/soket-connector.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/connector-api.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/my-models.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/my-models.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/shared.module.ts" afterPath="$PROJECT_DIR$/src/app/shared/shared.module.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" afterPath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -45,95 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="bubble-chart.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="35" column="16" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#92#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="my-buy-sell.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="16" column="33" lean-forward="false" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="shared.module.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/shared/shared.module.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bubble-chart.component.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="my-buy-sell.component.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="market-history-table.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/market-history-table/market-history-table.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="135" column="27" lean-forward="false" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mappers-history.ts" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mappers-history.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/com/mappers-history.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="market-history-line.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1904">
-              <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#99#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils-order.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/utils-order.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="64" column="32" lean-forward="false" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="32" />
+            <state relative-caret-position="595">
+              <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -261,10 +154,10 @@
         <option value="$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-bittrex.ts" />
         <option value="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.html" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" />
-        <option value="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" />
+        <option value="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" />
       </list>
     </option>
   </component>
@@ -301,6 +194,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -326,12 +221,37 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="apis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="apis" type="462c0819:PsiDirectoryNode" />
+              <item name="bitfinex" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -564,7 +484,8 @@
       <workItem from="1518135487477" duration="10272000" />
       <workItem from="1518224647618" duration="29930000" />
       <workItem from="1518362894015" duration="30839000" />
-      <workItem from="1518481984067" duration="3540000" />
+      <workItem from="1518481984067" duration="5575000" />
+      <workItem from="1518570247165" duration="183000" />
     </task>
     <task id="LOCAL-00001" summary="interfaces for services">
       <created>1515613193838</created>
@@ -797,11 +718,18 @@
       <option name="project" value="LOCAL" />
       <updated>1518266888388</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="bubbles">
+      <created>1518487612992</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1518487612992</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1256719000" />
+    <option name="totallyTimeSpent" value="1258937000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
@@ -815,7 +743,7 @@
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29044944" sideWeight="0.5060241" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19743863" sideWeight="0.48910674" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19117647" sideWeight="0.4939759" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1949891" sideWeight="0.4939759" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -914,7 +842,8 @@
     <MESSAGE value="ETH" />
     <MESSAGE value="table history" />
     <MESSAGE value="reuse API" />
-    <option name="LAST_COMMIT_MESSAGE" value="reuse API" />
+    <MESSAGE value="bubbles" />
+    <option name="LAST_COMMIT_MESSAGE" value="bubbles" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -996,7 +925,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7548">
           <caret line="444" column="6" lean-forward="false" selection-start-line="444" selection-start-column="6" selection-end-line="444" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1055,6 +983,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="884">
           <caret line="53" column="44" lean-forward="false" selection-start-line="53" selection-start-column="44" selection-end-line="53" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1204,9 +1135,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="63" column="17" lean-forward="false" selection-start-line="63" selection-start-column="17" selection-end-line="63" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1224,28 +1152,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/shared.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1904">
-          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#99#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-bittrex.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2261">
           <caret line="154" column="36" lean-forward="false" selection-start-line="154" selection-start-column="36" selection-end-line="154" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="99" column="16" lean-forward="false" selection-start-line="99" selection-start-column="16" selection-end-line="99" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#92#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="358" column="40" lean-forward="false" selection-start-line="358" selection-start-column="40" selection-end-line="358" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/shared/shared.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -1258,10 +1194,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/mappers-history.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+        <state relative-caret-position="233">
+          <caret line="100" column="20" lean-forward="false" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -1277,33 +1213,25 @@
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/utils-order.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="302">
-          <caret line="64" column="32" lean-forward="false" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="32" />
+          <caret line="67" column="24" lean-forward="false" selection-start-line="67" selection-start-column="24" selection-end-line="67" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="35" column="16" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
+        <state relative-caret-position="670">
+          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
           <folding>
-            <element signature="e#0#92#0" expanded="true" />
+            <element signature="e#0#99#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/com/mappers-history.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="33" lean-forward="false" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+        <state relative-caret-position="595">
+          <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
           <folding />
         </state>
       </provider>

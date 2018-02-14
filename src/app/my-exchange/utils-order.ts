@@ -65,8 +65,8 @@ export class UtilsOrder{
         a:item.action === 'BUY'?1:0
       }
 
-      if(amountUS > 100)  bubbles.push(bbl);
-      else item.action === 'BUY'?dustCountBuy++:dustCountSell++;
+      bubbles.push(bbl);
+      if(amountUS < 100)item.action === 'BUY'?dustCountBuy++:dustCountSell++;
 
       if(item.action === 'BUY'){
         sumBuy += amountUS;
