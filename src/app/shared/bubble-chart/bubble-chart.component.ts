@@ -52,6 +52,9 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
     let startTime  = bubbles[0].x
     let endTime = bubbles[bubbles.length-1].x;
     let rangeX = endTime - startTime;
+    let scaleX = rangeX/(width - offsetX);
+
+
     let min = _.minBy(bubbles, 'y').y;
     let max = _.maxBy(bubbles, 'y').y;
 
@@ -59,14 +62,14 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
     let rangeY = max - min;
 
-    let scaleY = rangeY/height;
+    let scaleY = rangeY/(height - offsetY);
 
     //console.warn(rangeY);
 
     let linesStep = rangeY/10;
 
 
-    for(let i = 0; i< 11 ; i++){
+    for(let i = 0; i< 11; i++){
 
       let pozY = (i * linesStep);
       let value = min + pozY;
@@ -86,9 +89,11 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
     bubbles.forEach(function (o:{x:number, y:number, r:number, a:number}) {
       let amount = o.y
 
-      let x  = offsetX + width *(o.x - startTime)/rangeX;
+      let x  = offsetX + ((o.x - startTime)/scaleX);
+
       let y = offsetY + height-((o.y - min) /scaleY);
       let r  = 1;
+      ctx.fillStyle = o.a?'rgba(0,100,0,0.8)':'rgba(255,0,0,0.8)';
       if(o.r > 100000){
         ctx.font = "18px Arial";
         ctx.fillText((o.r/1000).toFixed(0),x-6,y-6);
@@ -106,7 +111,7 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
       ctx.beginPath();
       ctx.arc(x, y, r , 0,  2 * Math.PI, false);
-      ctx.fillStyle = o.a?'rgba(0,100,0,0.8)':'rgba(255,0,0,0.8)';
+
       ctx.fill();
     })
 

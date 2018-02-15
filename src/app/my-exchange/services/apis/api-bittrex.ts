@@ -20,7 +20,7 @@ import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
 import {VOBooks, VOOrder} from "../my-models";
-
+import * as _ from 'lodash';
 export class ApiBittrex extends ApiBase  {
 
   constructor(
@@ -73,7 +73,7 @@ export class ApiBittrex extends ApiBase  {
     let market = base+'-'+coin;
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
     return this.call(uri, {market: market}).map(res=>{
-     // console.log(' getOpenOrders  '+ market , res);
+      console.log(' getOpenOrders  '+ market , res);
 
       return res.result.map(function(o){
         let a = o.Exchange.split('-')
@@ -269,14 +269,16 @@ export class ApiBittrex extends ApiBase  {
   }*/
 
 
+
   downloadBalances():Observable<VOBalance[]>{
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
     this.isLoadingBalances = true;
 
     return this.call(uri, {}).map(res => {
       this.isLoadingBalances = false;
-      return res.result.map(function (item) {
 
+      console.log(res);
+      return res.result.map(function (item) {
         return {
           symbol: item.Currency,
           address: item.CryptoAddress,

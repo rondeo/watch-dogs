@@ -20,12 +20,12 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   //@Input() priceBaseUS:number;
   @Input() refresh:number;
 
-  @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, pair:string};
+  @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string};
 
 
   percentDiff:number;
   isLoading:boolean;
-  bookingColor:string;
+
   sellColor:string;
   buyColor:string;
 
@@ -89,21 +89,9 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.sub1 = this.apiService.connector$().subscribe(connector => {
       this.currentAPI = connector;
       if (!connector) return;
-     // if(this.sub2) this.sub2.unsubscribe();
-     /* this.sub2 = connector.books$().subscribe(books=>{
-        console.log(books);
-        this.bookingColor = '';
-        this.isBooksLoading = false;
-        this.isError = false;
-        this.books = books;
-        this.calculateBooks();
-
-      })*/
-     // this.downloadBooks();
+      this.downloadBooks();
     },err=>{
       this.isError = true;
-     // this.bookingColor = 'red';
-     // this.isBooksLoading = false;
     });
 
   }
@@ -119,20 +107,6 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
 
       this.downloadBooks((err, res)=>{ });
-      /*  let a = this.market.split('_');
-        if(a.length === 2){
-          this.base = a[0];
-          this.coin = a[1];
-          this.downloadBooks();
-        }else{
-          this.base = null;
-          this.coin = null;
-        }
-      }
-
-      if(changes.priceBaseUS){
-        if(this.priceBaseUS) this.calculateBooks();
-      }*/
     }
 
     if(changes.amountBase){
@@ -197,28 +171,29 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.rateToSellUS = 0;
   }
 
-  downloadBooks(callBack:(err, res)=>void){
-    if(!this.marketInit) return this.reset();
+  downloadBooks(callBack?:(err, res)=>void){
+    if(!this.marketInit || !this.marketInit.market || !this.currentAPI) return this.reset();
 
     let cur = this.marketInit;
     if(this.isLoading)  return;
 
     this.isLoading = true;
+
     //console.warn('downloadBooks ' + cur.base + ' '+ cur.coin);
    let sub =  this.currentAPI.downloadBooks(cur.base, cur.coin).subscribe(books=>{
      //console.warn(books);
-     this.bookingColor = '';
+
      this.isLoading = false;
      this.isError = false;
      this.books = books;
      this.calculateBooks();
      sub.unsubscribe();
-     callBack(null, books)
+     if(callBack)callBack(null, books)
 
      }, err => {
      this.isError = true;
      sub.unsubscribe();
-     callBack(err, null);
+     if(callBack)callBack(err, null);
    })
 
   }

@@ -91,10 +91,39 @@ export abstract class ApiBase {
   abstract getMarketURL(base:string, coin:string):string;
 
 
+  getBalance(coin:string, isRefresh = false ):Promise<VOBalance>{
+    return new Promise((resolve, reject)=>{
+
+      this.balances$().subscribe(balances=>{
+        if(!balances) return;
+          let balance = _.find(balances, {symbol:coin});
+          if(balance) resolve(balance)
+           else resolve({balance:0, symbol:coin})
+      })
+
+
+    })
+  }
+
+  getRate(base:string, coin:string):Promise<number>{
+    return new Promise((resolve, reject)=>{
+      this.getAllMarkets().subscribe(res=>{
+
+        let indexed = this.marketsObjSub.getValue();
+       if(!indexed){
+         console.warn(' no indexed ', res)
+         return reject(0);
+       }
+        let vo = indexed[base+'_'+coin];
+        if(vo)resolve(vo.Last);
+        else reject(0);
+      })
+    })
+  }
 /////////////////////////// balances //////////////////////////////////////////
 
 
-  private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
+  protected balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject<VOBalance[]>(null);
   isLoadingBalances: boolean;
 
 
@@ -108,7 +137,7 @@ export abstract class ApiBase {
     this.isLoadingBalances = true;
    this.downloadBalances().subscribe(res=>{
      this.isLoadingBalances = false;
-      this.dispatchBalances(res);
+     this.mapBalancesToMC(res).then(res=>this.dispatchBalances(res)).catch(console.error);
     }, err=>{
      this.isLoadingBalances = false;
    })
@@ -120,26 +149,32 @@ export abstract class ApiBase {
     return this.balancesSub.asObservable();
   }
 
-  dispatchBalances(balances:VOBalance[]):void{
-    if(!balances) return;
-    this.marketCap.getCoinsObs().subscribe(MC=>{
-      if(!MC) return;
-      balances.forEach(function (balance: VOBalance) {
-        let mc = this.MC[balance.symbol];
-        if(mc){
+  mapBalancesToMC(balances:VOBalance[]){
+    return new Promise<VOBalance[]>( (resolve, reject)=> {
+      this.marketCap.getCoinsObs().subscribe(MC=>{
+        if(!MC) return;
+        balances.forEach(function (balance: VOBalance) {
+          let mc = this.MC[balance.symbol];
+          if(mc){
             balance.percent_change_1h = mc.percent_change_1h;
-          balance.percent_change_24h = mc.percent_change_24h;
-          balance.percent_change_7d = mc.percent_change_7d;
-          balance.priceUS = mc.price_usd;
-          balance.id = mc.id;
+            balance.percent_change_24h = mc.percent_change_24h;
+            balance.percent_change_7d = mc.percent_change_7d;
+            balance.priceUS = mc.price_usd;
+            balance.id = mc.id;
             balance.balanceUS = +(mc.price_usd*balance.balance).toFixed(2)
-        }else balance.balanceUS = +(balance.balance).toFixed(4);
+          }else balance.balanceUS = +(balance.balance).toFixed(4);
 
-
-      }, {MC:MC})
-      this.balancesSub.next(balances);
+        }, {MC:MC});
+        resolve(balances)
+      }, err=>reject(balances))
     })
 
+
+  }
+
+  dispatchBalances(balances:VOBalance[]):void{
+    if(!balances) balances = this.balancesSub.getValue();
+    this.balancesSub.next(balances);
   }
 
 //////////////////////////////////////books //////////////////////////////////////////////////////////

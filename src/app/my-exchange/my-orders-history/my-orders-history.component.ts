@@ -1,8 +1,9 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {ConnectorApiService} from "../services/connector-api.service";
 import {VOOrder} from "../../models/app-models";
 import * as _ from 'lodash';
 import {MatSnackBar} from "@angular/material";
+import set = Reflect.set;
 
 @Component({
   selector: 'my-orders-history',
@@ -13,8 +14,9 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
 
   @Input() newOrder:VOOrder;
-  @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, pair:string};
+  @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string};
 
+  @Output() fillOrder:EventEmitter<VOOrder> = new EventEmitter();
 
   ordersHistory:VOOrder[] = [];
   allOrders:VOOrder[];
@@ -47,7 +49,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
   }
 
   ngOnChanges(changes:any){
-    if(changes.marketInit && changes.marketInit.currentValue){
+    if(changes.marketInit && changes.marketInit.currentValue && changes.marketInit.currentValue.market){
       this.refreshOrdersHistory(null);
       this.refreshOpenOrders((err, res)=>{
 
@@ -55,13 +57,23 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
     }
 
     if(changes.newOrder && changes.newOrder.currentValue){
-
-      this.refreshOpenOrders((err, res)=> {
-        if (res.length === 0) this.refreshOpenOrders(null);
-      });
+     setTimeout(()=> this.downloadNewOrder(), 2000);
 
     }
 
+  }
+
+  downloadNewOrder(){
+    this.refreshOpenOrders((err, res)=> {
+      console.log('refreshOpenOrders ', res)
+      if (res.length === 0) {
+        console.warn('no open orders  looking in history ' )
+        this.refreshOrdersHistory(()=>{
+          if(this.newOrder) setTimeout(()=> this.downloadNewOrder(), 6000);
+
+        });
+      }
+    });
   }
 
 
@@ -77,6 +89,9 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
   refreshOpenOrders(callBack:(err, res)=>void){
 
+    let coin =this.marketInit.coin;
+    let base = this.marketInit.base;
+    if(!coin || !base) return;
     this.loadingOpenOrders = true;
 
     clearTimeout(this.checkTimeout);
@@ -84,7 +99,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
     if(!api.hasLogin()) return;
 
-    let sub = api.getOpenOrders(this.marketInit.base,this.marketInit.coin ).subscribe(res=> {
+    let sub = api.getOpenOrders(base, coin).subscribe(res=> {
 
       //console.warn(res);
       this.loadingOpenOrders = false;
@@ -113,17 +128,38 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
     });
   }
 
+  checkNewOrder(){
+    if(this.newOrder && this.ordersHistory){
+
+      let uuid = this.newOrder.uuid;
+      //console.log(' new order id '+uuid, this.ordersHistory)
+      let exists = this.ordersHistory.find(function (item) {
+        return item.uuid === uuid;
+      });
+      //console.log('exists ', exists)
+      if(exists){
+        this.fillOrder.emit(exists);
+      }
+    }
+  }
+
   loadingOrdersHistory = false;
   refreshOrdersHistory(callBack:Function){
     let api = this.apiService.getCurrentAPI();
+    let coin =this.marketInit.coin;
+    let base = this.marketInit.base;
 
+    if(!coin || !base) return;
 
 
     this.loadingOrdersHistory = true;
-    let sub = api.downloadOrders(this.marketInit.base,this.marketInit.coin ).subscribe(res=>{
+    let sub = api.downloadOrders(base, coin).subscribe(res=>{
       sub.unsubscribe();
 
+
+
       res = _.orderBy(res, 'timestamp', 'desc');
+
       //console.warn(res);
       this.ordersHistory = res.map(function (item) {
         item.amountCoinUS = Math.round(item.amountCoin * item.rate * this.pB);
@@ -133,6 +169,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
       }, {pB:this.marketInit.priceBaseUS});
      //console.warn(res);
 
+      this.checkNewOrder();
       this.allOrders =  this.openOrders.concat(this.ordersHistory);
 
       this.calculateSummary();
@@ -191,7 +228,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
     if(!confirm('Cancel order '+ order.action + ' ' + order.amountCoinUS +' '+ order.priceUS +'?')) return;
 
     api.cancelOrder(uuid).toPromise().then(res=>{
-      console.warn(res);
+      console.log('order canceled ', res);
       if(res.uuid){
         this.snackBar.open('Order canceled', 'x', {duration:3000, extraClasses:'alert-green'});
 

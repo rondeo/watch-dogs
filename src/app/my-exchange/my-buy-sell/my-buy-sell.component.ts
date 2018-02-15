@@ -11,6 +11,7 @@ import {MatSnackBar} from "@angular/material";
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
 import {MyBooksComponent} from "../my-books/my-books.component";
 import {UtilsOrder} from "../utils-order";
+import {placeOrder} from "./place-order";
 
 @Component({
   selector: 'app-my-buy-sell',
@@ -42,14 +43,8 @@ export class MyBuySellComponent implements OnInit {
     tolerance:number
   }
 
-
   bubbles:any[];
-  base:string;
-  coin:string;
-
-  /////////////////
-  market:string;
-  priceBaseUS:number;
+  //priceBaseUS:number;
   amountBase:number = 0;
 
  /////////////////////
@@ -59,15 +54,13 @@ export class MyBuySellComponent implements OnInit {
 
   isSetOrder:boolean = false;
   amountUS:number = 100;
-  //amountBaseUS:number;
-  //amountCoinUS:number;
 
   balanceBase:number;
   balanceCoin:number;
   balanceBaseUS:number;
   balanceCoinUS:number;
 
-  rate:number;
+ // rate:number;
 
   selectMarket:VOMarket[];
 
@@ -75,11 +68,10 @@ export class MyBuySellComponent implements OnInit {
 
   marketsArAll:VOMarket[];
 
-  balances:VOBalance[];
   currentAPI:ApiBase;
 
+  marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0};
 
-  marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, pair:string};
   private pair;
 
   constructor(
@@ -120,9 +112,16 @@ export class MyBuySellComponent implements OnInit {
 
 
 
+  onFillOrder(order:VOOrder){
+    console.log('order fill ', order);
+    if(order.uuid === this.newOrder.uuid) this.newOrder = null;
+    this.currentAPI.refreshBalances()
+  }
+
+
   onOpenMarketClick(){
-    if(this.base && this.coin) {
-     let url = this.currentAPI.getMarketURL(this.base, this.coin);
+    if(this.marketInit) {
+     let url = this.currentAPI.getMarketURL(this.marketInit.base, this.marketInit.coin);
       window.open(url,'_blank');
     }
 
@@ -149,147 +148,37 @@ export class MyBuySellComponent implements OnInit {
   newOrder:VOOrder;
   processAction(action){
 
-    let amountBase = this.amountUS / this.priceBaseUS;
-
-    //console.log(action, amountBase, isMax);
-
-    action = action.toUpperCase();
-
-    let base:string = this.base;
-    let coin:string = this.coin;
-    // let balanceCoin = this.balanceCoin;
-    let priceBaseUS = this.priceBaseUS;
-
-    if((amountBase * priceBaseUS) <10){
-      this.snackBar.open(' You have '+ (amountBase * priceBaseUS).toFixed(0) + ' min $10 ','x', {duration:3000, extraClasses:'alert-red'});
-      return
-    }
-
-    ///console.log('amountBase ' + amountBase + ' priceBaseUS ' + priceBaseUS );
-
-    let rateToBuyUS = this.booksComponent.rateToBuyUS;
-    let rateToSellUS = this.booksComponent.rateToSellUS;
-
-   // console.warn(rateToBuyUS, rateToSellUS);
-
-
-    let rateToBuy = rateToBuyUS / this.priceBaseUS;//// this.rates.rateToBuy;
-    let rateToSell = rateToSellUS / this.priceBaseUS;// this.rates.rateToSell;
-
-
-    if(!rateToBuy || !rateToSell){
-      this.snackBar.open('Refresh Books! ', 'x', {extraClasses:'alert-red', duration:2000});
-      return
-    }
-
-      let rate = 0
-      let amountCoin = 0;
-      if(action === 'SELL'){
-
-        rate = rateToSell;//BooksService.getRateForAmountBase(books.buy, amountBase);
-        amountCoin = amountBase / rate
-        let balance = this.balanceCoin;
-        balance = (balance - (balance * 0.0025));
-        if(amountCoin > balance) amountCoin = balance;
-
-
-
-      } else {
-
-        let balance = this.balanceBase;
-        balance = (balance - (balance * 0.0025));
-        if(amountBase > balance) amountBase = balance;
-        rate = rateToBuy;//BooksService.getRateForAmountBase(books.sell, amountBase);
-        amountCoin = amountBase / rate;
-      }
-
-      rate = +(+rate.toFixed(8)).toPrecision(5);
-      let amountUS = (amountCoin * rate * priceBaseUS);
-
-      ///rate = parseFloat(rate+'');
-      amountCoin = +(amountCoin).toPrecision(5);
-
-
-      let rateUS = +(rate * priceBaseUS).toPrecision(4);
-
-
-      // if(rate<1e-3) rate = +(rate.toFixed(8));
-      console.log(' rateUS  ' + rateUS + ' rate ' + rate);
-
-      console.log(' amountCoin ' + amountCoin + ' on balance ');
-
-      let amountBaseUS = +(amountBase * priceBaseUS).toFixed(2);
-
-
-      let feeUS = (amountUS * 0.0025);
-
-      //setTimeout(()=>{
-
-      console.log(action + ' '+base +'_'+ coin + ' '+amountCoin +' '+rate + ' baseUS ' + this.priceBaseUS);
-
-        if(confirm( action +' x '+rateUS + ' \n' +coin  +' $'+ amountUS.toFixed(2) +  '\nFee: $' + feeUS.toFixed(2))){
-
-         // let service:APIBuySellService = this.privateService;
-          let obs:Observable<VOOrder>;
-
-
-          if(action ==='SELL') obs =  this.currentAPI.sellLimit(base, coin, amountCoin, rate );
-          else if(action ==='BUY')obs = this.currentAPI.buyLimit(base, coin, amountCoin, rate );
-
-          if(!obs) {
-            console.error(action);
-            return;
-          }
-
-          obs.subscribe((res:VOOrder)=>{
-
-            console.log(res);
-            if(res && res.uuid){
-
-              let order = {
-                action:action,
-                uuid:res.uuid,
-                isOpen:true,
-                base:base,
-                coin:coin,
-                amountBase:amountBase,
-                amountCoin:amountCoin,
-                rate:rate,
-                fee:feeUS,
-                priceBaseUS:priceBaseUS
-              };
-
-              this.newOrder = order;
-
-              let msg = action + ' ' + coin + ' $' +amountUS.toFixed(0);
-
-              this.snackBar.open('Order Set! '+msg, 'x', {extraClasses:'alert-green', duration:2000});
-            } else{
-              this.snackBar.open('Error '+res.message, 'x', {extraClasses:'alert-red', duration:3000})
-            }
-
-          }, error=>{
-            this.snackBar.open('Error '+ error.message, 'x',{extraClasses:'alert-red'});
-          })
-
-        }
-
-   // })
+    placeOrder(
+      action,
+      this.marketInit.base,
+      this.marketInit.coin,
+      this.booksComponent.rateToBuyUS,
+      this.booksComponent.rateToSellUS,
+      this.marketInit.priceBaseUS,
+      +this.amountUS,
+      this.balanceBase,
+      this.balanceCoin,
+      this.currentAPI,
+      this.snackBar
+    ).then(order=>{
+      console.log('new order ', order);
+      this.newOrder = order;
+    }).catch(console.error);
   }
 
 
   onOrderComplete(order:VOOrder){
-    console.warn(order)
+    console.warn('Order complete ', order);
     let amountBase = order.amountCoin * order.rate;
     let action = order.action;
-    let amountUS  = amountBase * this.priceBaseUS;
+    let amountUS  = amountBase * this.marketInit.priceBaseUS;
     this.snackBar.open('Order Complete! '+action +' ' +order.coin+' $'+amountUS.toFixed(2), 'x', {duration:3000, extraClasses:'alert-green'});
     if(this.currentAPI)this.currentAPI.refreshBalances();
   }
 
   onAmountChanged(evt){
-      if(!this.priceBaseUS) return;
-      let amountBase = +(this.amountUS / this.priceBaseUS).toPrecision(8);
+      if(!this.marketInit.priceBaseUS) return;
+      let amountBase = +(this.amountUS / this.marketInit.priceBaseUS).toPrecision(8);
     console.log(amountBase);
       this.amountBase = amountBase ;
 
@@ -302,104 +191,83 @@ export class MyBuySellComponent implements OnInit {
   }
 
   setBalances(){
-   if(!this.balances || !this.base || !this.coin) return;
-   let base = this.base;
+   let base =  this.marketInit.base;
+   let coin = this.marketInit.coin;
+   let priceBaseUS = this.marketInit.priceBaseUS;
+   //console.warn('setBalances');
+   this.currentAPI.getBalance(base).then(balB=> {
 
-   let baseBal:VOBalance = this.balances.find(function (item) {
-     return item.symbol === base;
+     this.currentAPI.getBalance(coin).then(balC=> {
+
+
+       this.currentAPI.getRate(base,coin).then(rate=>{
+         console.warn(rate)
+         this.balanceBase = balB.balance;
+         this.balanceCoin = balC.balance;
+         this.balanceBaseUS  = +(balB.balance * priceBaseUS).toFixed(2);
+         this.balanceCoinUS =  +(balC.balance * rate * priceBaseUS).toFixed(2);
+       })
+
+     });
+
    });
 
-    if(!baseBal){
-      baseBal = new VOBalance();
-      baseBal.balance = 0;
-      baseBal.balanceUS = 0;
-    }
-
-
-
-    let coin = this.coin;
-
-    let coinBal:VOBalance = this.balances.find(function (item) {
-      return item.symbol === coin;
-    })
-
-    if(!coinBal){
-      coinBal = new VOBalance()
-      coinBal.balance = 0;
-      coinBal.balanceUS = 0;
-    }
-
-    this.balanceBase = baseBal.balance;
-
-    this.balanceCoin = coinBal.balance;
-
-
-    this.balanceBaseUS  = this.priceBaseUS?+(baseBal.balance * this.priceBaseUS).toFixed(2): baseBal.balanceUS;
-
-    let rateToBuyUS = this.booksComponent.rateToBuyUS;
-    let rateToSellUS = this.booksComponent.rateToSellUS;
-    if( this.priceBaseUS && rateToBuyUS && rateToSellUS){
-      let rate = (rateToBuyUS + rateToSellUS)/2;
-     // console.warn(rate)
-
-      this.balanceCoinUS =  +(coinBal.balance * rate ).toFixed(2);
-
-    }else this.balanceCoinUS = coinBal.balanceUS;
   }
 
-
-  downloadHistory(callBack:(err, res)=>void){
-
-    if(!this.marketInit) return;
+  downloadMarketSummary(){
     let cur = this.marketInit;
-   let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
-     //console.log(history);
-     if(!history) return;
-
-     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
-
-      sub1.unsubscribe()
-     callBack(null, history);
-    });
-
     let sub2 = this.currentAPI.getMarketSummary(cur.base, cur.coin).subscribe(marketSummary=>{
       if(!marketSummary) return;
       setTimeout(()=>sub2.unsubscribe(), 100);
       this.marketSummaryData = {
         summary:marketSummary,
-        priceBaseUS:this.priceBaseUS
+        priceBaseUS:this.marketInit.priceBaseUS
       }
 
     })
+  }
+
+  downloadHistory(callBack:(err, res)=>void){
+    if(!this.marketInit) return;
+    let cur = this.marketInit;
+   let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
+     //console.log(history);
+     if(!history) return;
+     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.marketInit.priceBaseUS);
+      sub1.unsubscribe()
+     callBack(null, history);
+    });
+
+
+
   }
 
   onMarketChange(){
     let pair = this.pair;
     if(!pair || pair.indexOf('_') ===-1) return;
 
-
     let ar =  pair.split('_');
-
      // this.modelBuySell.market = pair;
-      this.base = ar[0];
-      this.coin = ar[1];
-      this.market = this.base+'_' + this.coin;
-      this.marketInit = null;
 
-      this.currentAPI.getPriceForBase(this.base).then(res=>{
+      //this.market = this.base+'_' + this.coin;
+      this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0};
+      console.warn('onMarketChange');
+      this.currentAPI.getPriceForBase(ar[0]).then(res=>{
+
+        console.warn(res);
         if(!res) return;
        // console.warn(res);
-        this.priceBaseUS = res;
 
-        this.amountBase =  +(this.amountUS / this.priceBaseUS).toPrecision(8);
+        this.amountBase =  +(this.amountUS / res).toPrecision(8);
 
         this.marketInit = {
           priceBaseUS:res,
-          coin:this.coin,
-          base:this.base,
-          pair:pair,
+          coin:ar[1],
+          base:ar[0],
+          market:pair,
           exchange:this.currentAPI.exchange
-        }
+        };
+
         console.log('market Init ', this.marketInit);
         this.setBalances();
         this.downloadHistory((err, res)=>{
@@ -408,29 +276,14 @@ export class MyBuySellComponent implements OnInit {
 
       }).catch(err=>{
 
-        console.error('cant get price for base ' + this.base, err)
-        this.priceBaseUS = 0
+        console.error('cant get price for base ' +ar[0], err)
+
       });
 
   }
 
   speedMin = 0
   durationInMin:number = 0;
-  //durationMin = 0;
-  onDurationMin(min){
-
-   // this.durationMin = min.durationMin;
-    let speed = min.speedMin;
-    let duration = min.durationMin;
-
-
-    this.speedMin = speed<10?speed.toFixed(2):speed.toFixed(0);
-
-    setTimeout(()=>{
-      this.durationInMin = duration<10?duration.toFixed(2):duration.toFixed(0);;
-    }, 200)
-
-  }
 
   onRefreshBooks:number
   downlaodBooks(){
@@ -472,48 +325,20 @@ export class MyBuySellComponent implements OnInit {
 
   ngOnInit() {
 
-
-
     this.sub2 = this.apiService.connector$().subscribe(connector=>{
       this.currentAPI = connector;
       if(!connector) return;
+
+      this.currentAPI.balances$().subscribe(balances=>{
+        this.setBalances();
+      })
+
+
       this.sub1 = this.route.params.subscribe(params=>{
+        console.log(params)
         this.pair = params.market;
         this.onMarketChange();
       });
-
-      this.currentAPI.balances$().subscribe(balances=>{
-        this.balances = balances;
-        //  console.log(balances);
-        this.isLoadinBalances = false;
-        this.setBalances()
-      });
-
-
-
-/*
-
-      this.sub3 = connector.marketHistory$().subscribe(history=>{
-       // console.log(history);
-        let data:MarketHistoryData = {
-          history:history,
-          priceBaseUS:this.priceBaseUS,
-          marketSummary:this.marketSummary
-        }
-
-       this.marketHistory = data;
-      });
-*/
-
-      //this.downloadHistory();
-
-      //connector.loadAllMarketSummaries();
-      //if(this.subMarkets) this.subMarkets.unsubscribe();
-      /*this.subMarkets = connector.marketsAr$().subscribe(res=>{
-        this.marketsArAll = res;
-        this.setMarket();
-      })*/
-
 
     })
 
