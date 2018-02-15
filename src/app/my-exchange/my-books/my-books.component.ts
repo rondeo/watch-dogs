@@ -15,9 +15,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   currentAPI:ApiBase;
 
   @Input() amountBase:number;
-/*  @Input() amountCoin:number;*/
-  //@Input() market:string;
-  //@Input() priceBaseUS:number;
+
   @Input() refresh:number;
 
   @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string};
@@ -31,8 +29,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
 
   sellChange:number;
   buyChange:number;
- // base:string;
- // coin:string;
+
 
   isError:boolean
 
@@ -117,7 +114,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   calculateBooks(){
-    console.log(this.amountBase, !this.books, this.marketInit);
+    //console.log(this.amountBase, !this.books, this.marketInit);
 
 
     if(!this.amountBase || !this.books || !this.marketInit) return;

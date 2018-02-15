@@ -10,17 +10,12 @@ import {VOMarket} from "../../models/app-models";
   templateUrl: './market-select.component.html',
   styleUrls: ['./market-select.component.css']
 })
-export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
+export class MarketSelectComponent implements OnInit, OnDestroy {
 
-  @Input() market:string;
   currentValue:string;
-
-  //@Output() currentMarket:string;
-
-  pair:string;
-
   markets:VOMarket[];
   currentAPI:ApiBase;
+
   constructor(
     private apiService:ConnectorApiService,
     private route:ActivatedRoute,
@@ -29,25 +24,19 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
 
-    this.sub1 = this.route.params.subscribe(params=>{
-      this.pair = params.market;
-      this.setMarket();
+    let sub1 = this.route.params.subscribe(params=>{
+      this.currentValue = params.market;
+      setTimeout(()=>sub1.unsubscribe(), 200);
     });
-    this.apiService.connector$().subscribe(s=>{
 
+    this.apiService.connector$().subscribe(s=>{
       this.currentAPI = s;
 
       let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
-       // console.log(markets)
         if(!markets) return;
-        this.currentValue = this.market;
-
         this.markets = markets.filter(function (item) {
           return item.selected;
         });
-
-
-
 
         setTimeout(()=>sub.unsubscribe(),100);
       })
@@ -56,39 +45,9 @@ export class MarketSelectComponent implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  ngOnChanges(changes){
-    if(changes.market){
-    }
-  }
-
-
-  setMarket(){
-    //if(!this.pair && this.pair.indexOf('_') ===-1) return;
-    //this.currentMarket = this.pair;
-  }
-  private sub1:Subscription;
-  private sub2:Subscription;
-  private subMarkets:Subscription;
 
   ngOnDestroy(){
-    if(this.sub1) this.sub1.unsubscribe();
-    if(this.sub2) this.sub2.unsubscribe();
   }
-
-
- /* onMarketClick(){
-
-    let sub = this.currentAPI.getAllMarkets().subscribe(markets=>{
-      console.log(markets)
-      if(!markets) return;
-      this.markets = markets.filter(function (item) {
-        return item.selected;
-      })
-      setTimeout(()=>sub.unsubscribe(),100);
-    })
-  }*/
-
-
 
   onMarketSelected(evt:{value:string}){
     //this.markets = null;

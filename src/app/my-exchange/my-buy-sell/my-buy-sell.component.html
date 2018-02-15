@@ -1,5 +1,5 @@
 <div>
-    <app-market-select [market]="marketInit.market"></app-market-select>
+    <app-market-select></app-market-select>
     {{marketInit.base}}
     <span class="large"><sup>$</sup>{{balanceBaseUS}}</span>
     &nbsp;
@@ -7,7 +7,6 @@
     <span class="large"><sup>$</sup>{{balanceCoinUS}}</span>
     &nbsp;
     <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshBalancesClick()"></a>
-
 
     <hr/>
 

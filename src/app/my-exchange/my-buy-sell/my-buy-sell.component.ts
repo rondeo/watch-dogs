@@ -70,7 +70,7 @@ export class MyBuySellComponent implements OnInit {
 
   currentAPI:ApiBase;
 
-  marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0};
+  marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
 
   private pair;
 
@@ -134,28 +134,34 @@ export class MyBuySellComponent implements OnInit {
 
   }
 
-
   onBuyClick(){
     let action = 'BUY';
-    this.processAction(action);
+    let rate = this.booksComponent.rateToBuyUS/this.marketInit.priceBaseUS
+    let amountBase:number = +this.amountUS/this.marketInit.priceBaseUS;
+    if(amountBase > this.balanceBase) amountBase = this.balanceBase - (this.balanceBase* 0.0025);
+    let amountCoin =  amountBase/rate;
+    this.processAction(action, amountCoin, rate);
   }
 
   onSellClick(){
     let action = 'SELL';
-    this.processAction(action);
+    let rate = this.booksComponent.rateToSellUS/this.marketInit.priceBaseUS;
+    let amountCoin =  +this.amountUS/this.marketInit.priceBaseUS/rate;
+    if(amountCoin > this.balanceCoin) amountCoin  = this.balanceCoin - (this.balanceCoin * 0.0025);
+
+    this.processAction(action, amountCoin, rate);
   }
 
   newOrder:VOOrder;
-  processAction(action){
+  processAction(action:string, amountCoin:number, rate:number){
 
     placeOrder(
       action,
       this.marketInit.base,
       this.marketInit.coin,
-      this.booksComponent.rateToBuyUS,
-      this.booksComponent.rateToSellUS,
       this.marketInit.priceBaseUS,
-      +this.amountUS,
+      +rate.toPrecision(5),
+      amountCoin,
       this.balanceBase,
       this.balanceCoin,
       this.currentAPI,
@@ -193,20 +199,19 @@ export class MyBuySellComponent implements OnInit {
   setBalances(){
    let base =  this.marketInit.base;
    let coin = this.marketInit.coin;
+
    let priceBaseUS = this.marketInit.priceBaseUS;
+   let rate = this.marketInit.rate;
    //console.warn('setBalances');
    this.currentAPI.getBalance(base).then(balB=> {
 
      this.currentAPI.getBalance(coin).then(balC=> {
 
-
-       this.currentAPI.getRate(base,coin).then(rate=>{
-         console.warn(rate)
          this.balanceBase = balB.balance;
          this.balanceCoin = balC.balance;
          this.balanceBaseUS  = +(balB.balance * priceBaseUS).toFixed(2);
          this.balanceCoinUS =  +(balC.balance * rate * priceBaseUS).toFixed(2);
-       })
+
 
      });
 
@@ -247,10 +252,12 @@ export class MyBuySellComponent implements OnInit {
     if(!pair || pair.indexOf('_') ===-1) return;
 
     let ar =  pair.split('_');
+    let base= ar[0];
+    let coin = ar[1];
      // this.modelBuySell.market = pair;
 
       //this.market = this.base+'_' + this.coin;
-      this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0};
+      this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0, rate:0};
       console.warn('onMarketChange');
       this.currentAPI.getPriceForBase(ar[0]).then(res=>{
 
@@ -258,21 +265,27 @@ export class MyBuySellComponent implements OnInit {
         if(!res) return;
        // console.warn(res);
 
-        this.amountBase =  +(this.amountUS / res).toPrecision(8);
+        this.currentAPI.getRate(base, coin).then(rate=>{
 
-        this.marketInit = {
-          priceBaseUS:res,
-          coin:ar[1],
-          base:ar[0],
-          market:pair,
-          exchange:this.currentAPI.exchange
-        };
+          this.amountBase =  +(this.amountUS / res).toPrecision(8);
 
-        console.log('market Init ', this.marketInit);
-        this.setBalances();
-        this.downloadHistory((err, res)=>{
+          this.marketInit = {
+            priceBaseUS:res,
+            rate:rate,
+            coin:coin,
+            base:base,
+            market:pair,
+            exchange:this.currentAPI.exchange
+          };
 
-        });
+          console.log('market Init ', this.marketInit);
+          this.setBalances();
+          this.downloadHistory((err, res)=>{
+
+          });
+
+        })
+
 
       }).catch(err=>{
 
@@ -331,7 +344,7 @@ export class MyBuySellComponent implements OnInit {
 
       this.currentAPI.balances$().subscribe(balances=>{
         this.setBalances();
-      })
+      });
 
 
       this.sub1 = this.route.params.subscribe(params=>{
