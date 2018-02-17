@@ -15,6 +15,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
 import {SharedModule} from "../shared/shared.module";
+import { BotNewComponent } from './bot-new/bot-new.component';
 
 
 const routes: Routes = [
@@ -40,6 +41,6 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [BotMainComponent, BotRunComponent, BotsListComponent, BotEditComponent]
+  declarations: [BotMainComponent, BotRunComponent, BotsListComponent, BotEditComponent, BotNewComponent]
 })
 export class MyBotModule { }
