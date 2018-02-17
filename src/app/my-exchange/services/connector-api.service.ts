@@ -58,7 +58,6 @@ export class ConnectorApiService {
     return this.connectorSub.asObservable();
   }
 
-
   httpConnectors:{[index:string]:ApiBase} = {};
   private createHttpConnector(exchange):any{
     switch(exchange){
@@ -115,6 +114,7 @@ export class ConnectorApiService {
   autoLogin(){
     this.currentService.autoLogin();
   }
+
 
 
 }

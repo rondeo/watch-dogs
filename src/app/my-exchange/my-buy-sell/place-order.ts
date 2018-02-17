@@ -35,6 +35,7 @@ export function placeOrder(
         // let service:APIBuySellService = this.privateService;
         let obs:Observable<VOOrder>;
 
+        //obs = currentAPI.stopLoss(base, coin, amountCoin, rate );
 
         if(action ==='SELL') obs =  currentAPI.sellLimit(base, coin, amountCoin, rate );
         else if(action ==='BUY')obs = currentAPI.buyLimit(base, coin, amountCoin, rate );

@@ -171,6 +171,39 @@ export class ApiBittrex extends ApiBase  {
     return this.downloadMarketHistory$;
   }
 
+  getMarketDetails(){
+    let url = 'https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin'
+  }
+
+
+  stopLoss(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
+    let uri = 'https://bittrex.com/Api/v2.0/key/market/TradeSell';
+    let market = base+'-'+coin;
+    let Rate = +(rate - (rate*0.02)).toPrecision(5);
+
+    /*
+    * MarketName: 'BTC-ZEC',
+  OrderType: 'LIMIT',
+  Quantity: 1.00000000,
+  Rate: 0.04423432,
+  TimeInEffect: 'IMMEDIATE_OR_CANCEL', // supported options are 'IMMEDIATE_OR_CANCEL', 'GOOD_TIL_CANCELLED', 'FILL_OR_KILL'
+  ConditionType: 'NONE', // supported options are 'NONE', 'GREATER_THAN', 'LESS_THAN'
+  Target: 0, // used in conjunction with ConditionType*/
+    return this.call(uri, {
+      MarketName: market,
+      Quantity: quantity,
+      Rate: Rate,
+      TimeInEffect:'GOOD_TIL_CANCELLED',
+      ConditionType:'LESS_THAN',
+      Target:rate
+    }).map(res=>{
+      console.log(' stopLoss market ' + market , res);
+
+      return res.result;
+    });
+
+  }
+
 
 
   buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
@@ -423,6 +456,37 @@ export class ApiBittrex extends ApiBase  {
     let url = '/api/bittrex/private';
 
     return this.http.post(url, {uri: uri, signed: signed});
+
+  }
+
+  private callStraight(uri: string, post: any): Observable<any> {
+    if (!this.apiKey) {
+      console.error(' no key')
+      return new BehaviorSubject(null).asObservable();
+    }
+
+
+    post.apikey = this.apiKey;
+    post.nonce = Math.ceil(Date.now() / 1000);
+
+
+    let load = Object.keys(post).map(function (item) {
+      return item + '=' + this.post[item];
+    }, {post: post}).join('&');
+
+    uri += '?' + load;
+
+    console.log(uri);
+    let signed = this.hash_hmac(uri, this.password);
+    uri+='&apisign='+signed;
+    //let url = '/api/bittrex/private';
+
+    let headers = new HttpHeaders({'apisign':signed})
+   // headers.set('apisign', signed);
+
+    console.warn(headers.get('apisign'));
+
+    return this.http.get(uri, {headers:headers});
 
   }
 

@@ -2,6 +2,19 @@ import {VOOrder} from "../models/app-models";
 import * as _ from 'lodash';
 
 
+export const BUBBLE = {
+  x:0,
+  y:0,
+  r:0,
+  a:0
+};
+export interface VOBubble{
+  x:number
+  y:number
+  r:number
+  a:number
+
+}
 export class UtilsOrder{
   static takeAvarage(oredrs:VOOrder[], prev:number):number{
     if(oredrs.length === 0) return prev;
@@ -83,7 +96,7 @@ export class UtilsOrder{
     return{
       buy:buy,
       sell:sell,
-      bubbles:bubbles,
+      bubbles:bubbles.reverse(),
       dustCountBuy:dustCountBuy,
       dustCountSell:dustCountSell,
       min:min,

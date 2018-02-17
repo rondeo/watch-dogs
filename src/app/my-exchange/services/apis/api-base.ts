@@ -20,8 +20,8 @@ export enum PrivateCalls{
   OPEN_ORDERS,
   BUY_LIMIT,
   SELL_LIMIT
-
 }
+
 export abstract class ApiBase {
 
   apiKey: string;
@@ -78,6 +78,11 @@ export abstract class ApiBase {
 
   abstract cancelOrder(orderId):Observable<VOOrder>;
 
+
+  stopLoss(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder>{
+return null;
+  }
+
   abstract sellLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
 
   abstract buyLimit(base:string, coin:string, amountCoin:number, rate:number):Observable<VOOrder>;
@@ -107,7 +112,10 @@ export abstract class ApiBase {
 
   getRate(base:string, coin:string):Promise<number>{
     return new Promise((resolve, reject)=>{
-      this.getAllMarkets().subscribe(res=>{
+
+      let sub = this.getAllMarkets().subscribe(res=>{
+
+        if(!res) return;
 
         let indexed = this.marketsObjSub.getValue();
        if(!indexed){

@@ -89,8 +89,6 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
       this.accummulate.push(data);
     }
 
-
-
   }
 
   sub;

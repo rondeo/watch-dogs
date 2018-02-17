@@ -15,9 +15,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
   currentAPI:ApiBase;
 
   @Input() amountBase:number;
-
   @Input() refresh:number;
-
   @Input() marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, market:string};
 
 
@@ -53,6 +51,11 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     private apiService:ConnectorApiService,
   ) {
 
+  }
+
+  onRateChanged(evt){
+
+    this.percentDiff = +(100 * (this.rateToBuyUS - this.rateToSellUS)/this.rateToBuyUS).toFixed(2);
   }
 
   isRateToSell = false;
@@ -133,7 +136,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     let rateToSellUS = +(rateBuy * priceBaseUS).toPrecision(4);
     let rateToBuyUS = +(rateSell * priceBaseUS).toPrecision(4);
 
-    this.percentDiff = +(100 * (rateToBuyUS - rateToSellUS)/rateToBuyUS).toFixed(2);
+
    // let oldBooks = this.rateByBooks;
 
     /*if(this.rateToBuyUS){
@@ -161,6 +164,7 @@ export class MyBooksComponent implements OnInit, OnChanges, OnDestroy {
     this.rateToBuyUS = rateToBuyUS;
     this.rateToSellUS = rateToSellUS;
 
+    this.onRateChanged(null);
   }
 
   reset(){

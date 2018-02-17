@@ -66,6 +66,7 @@ import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
 import { WebsocketService} from "./shared/websocket-service";
 import {MyExchangeModule} from "./my-exchange/my-exchange.module";
+import {MyBotModule} from "./my-bot/my-bot.module";
 
 
 //import {WebsocketService} from "./shared/websocket-service";
@@ -91,6 +92,7 @@ declare const Buffer:any;
     BittrexModule,
     AllExchangesModule,
     MyExchangeModule,
+    MyBotModule,
    // AuthModule,
     RouterModule.forRoot(rootRouterConfig, { useHash: true })
   ],

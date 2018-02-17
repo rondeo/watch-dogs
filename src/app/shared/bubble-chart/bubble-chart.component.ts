@@ -35,14 +35,11 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   drawBubbles(){
     let ctx = this.ctx;
-    ctx.clearRect(0, 0, 420, 340);
+    ctx.clearRect(0, 0, 360, 240);
     ctx.fillStyle = 'black';
     if(!this.bubbles.length) return;
 
-    let bubbles = this.bubbles.reverse();
-
-
-
+    let bubbles = this.bubbles;
 
     let height = 200;
     let width = 340;
@@ -75,8 +72,15 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
       let value = min + pozY;
       pozY = height - (pozY/scaleY);
       pozY += offsetY;
+      let display
+      if(value >=10000){
+        display = (value/1e3).toFixed(2).replace('.', ',');
+      }else{
+        display = (value).toPrecision(4);
+      }
+
       ctx.font = "9px Arial";
-      ctx.fillText((value).toPrecision(4),4,pozY);
+      ctx.fillText(display,4,pozY);
       ctx.beginPath();
       ctx.moveTo(offsetX, pozY);
       ctx.lineTo(width,pozY);

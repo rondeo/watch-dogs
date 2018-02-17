@@ -9,14 +9,22 @@
             </tr>
             <tr>
                 <td>
-                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToBuyUS"  class="large w4"  type="number" (focus)="onRateToSellFocus()" />
+                    <input  [ngClass]="isLoading?'text-blur':''"
+                            [(ngModel)] = "rateToBuyUS"  class="large w4"  type="number"
+                            (focus)="onRateToSellFocus()"
+                            (ngModelChange)="onRateChanged($event)"
+                    />
                    <!-- <strong  [ngClass]="bookingColor" class="large" (click)="onRateToSellClick()">{{rateToSellUS}}</strong>-->
                 </td>
                 <td>
                   <!--  <span class="btn fa fa-refresh green"></span>-->
                 </td>
                 <td>
-                    <input  [ngClass]="isLoading?'text-blur':''" [(ngModel)] = "rateToSellUS"  class="large w4"  type="number" (focus)="onRateToBuyFocus()" />
+                    <input  [ngClass]="isLoading?'text-blur':''"
+                            [(ngModel)] = "rateToSellUS"  class="large w4"  type="number"
+                            (focus)="onRateToBuyFocus()"
+                            (ngModelChange)="onRateChanged($event)"
+                    />
                    <!-- <strong  [ngClass]="bookingColor" class="large"  (click)="onRateToBuyClick()">  {{rateToBuyUS}}  </strong>-->
                 </td>
             </tr>
