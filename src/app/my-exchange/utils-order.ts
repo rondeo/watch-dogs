@@ -1,5 +1,6 @@
 import {VOOrder} from "../models/app-models";
 import * as _ from 'lodash';
+import {IOrdersStats} from "./services/my-models";
 
 
 export const BUBBLE = {
@@ -8,14 +9,82 @@ export const BUBBLE = {
   r:0,
   a:0
 };
+
 export interface VOBubble{
   x:number
   y:number
   r:number
-  a:number
-
 }
+
+export const ANALYTICS:VOAnalytics = {
+  exchange:'',
+  base:'',
+  coin:'',
+  dust:0,
+  bubbles:[],
+  min:0,
+  max:0,
+  sumBuyUS:0,
+  sumSellUS:0,
+  countBuy:0,
+  countSell:0,
+  dustCountBuy:0,
+  dustCountSell:0,
+  speed:0,
+  duration:0,
+  tolerance:0,
+ rateLast:0
+};
+
+export interface VOAnalytics{
+  dust:number;
+  bubbles:VOBubble[];
+  min:number;
+  max:number;
+  sumBuyUS:number;
+  sumSellUS:number;
+  countBuy:number;
+  countSell:number;
+  dustCountBuy:number;
+  dustCountSell:number;
+  speed:number;
+  duration:number;
+  tolerance:number;
+  exchange:string;
+  base:string;
+  coin:string;
+  rateLast:number;
+};
+
+
+
+export interface VOTradesStats{
+  time:string;
+  timestamp:number;
+  amountBuy:number;
+  amountSell:number;
+  amountBuyUS:number;
+  amountSellUS:number;
+  speed:number;
+  avgRate:number;
+  avgRateUS:number;
+  vol:number;
+  minUS:number;
+  maxUS:number;
+}
+
+
 export class UtilsOrder{
+
+  static  calculateLength(ar:VOOrder[]):number{
+    if(!ar.length) return 0;
+    let l = ar[ar.length-1].timestamp;
+    let f = ar[0].timestamp
+    let diff = l-f;
+    return Math.round(diff/1000/60);
+  }
+
+
   static takeAvarage(oredrs:VOOrder[], prev:number):number{
     if(oredrs.length === 0) return prev;
     let res = {S: 0, Q: 0};
@@ -35,11 +104,200 @@ export class UtilsOrder{
   }
 
 
+  static caluculateTradesStats(trades:VOOrder[], timestamp:number, step:number, priceBaseUS:number):VOTradesStats{
+    if(trades.length === 0){
+      let date = new Date(timestamp);
+      return {
+        time:date.getHours()+':'+date.getMinutes(),
+        timestamp:timestamp,
+        amountBuy:0,
+        amountBuyUS:0,
+        amountSell:0,
+        amountSellUS:0,
+        speed:0,
+        avgRate:0,
+        avgRateUS:0,
+        vol:0,
+        minUS:0,
+        maxUS:0
+      }
+    }
+
+    let stats = {
+      priceB:priceBaseUS,
+      amountBuy: 0,
+      amountBuyUS:0,
+      amountSell:0,
+      amountSellUS:0,
+      amountCoin:0,
+      totalSpent:0,
+      US:0,
+      vol:0,
+      from:timestamp - step,
+      to:timestamp,
+      max:0,
+      min:1e10
+    };
+
+    trades.forEach(function (o) {
+
+      if(o.timestamp < this.from || o.timestamp > this.to ) console.warn(' not in a range ' + new Date(this.from) + '  '+ new Date(this.to) + '  ' +new Date(o.timestamp))
+
+      let priceUS = o.rate * this.priceB;
+      let vol = o.rate * o.amountCoin;
+      let volUS = Math.round(o.amountCoin * priceUS);
+
+      if(this.max < priceUS) this.max = priceUS;
+      if(this.min > priceUS) this.min = priceUS;
+
+      this.US+=volUS;
+      this.vol +=vol;
+      this.amountCoin +=o.amountCoin;
+      if(o.action === 'BUY') {
+        this.amountBuy+=o.amountCoin;
+        this.amountBuyUS += volUS;
+      }
+      else {
+        this.amountSellUS +=volUS;
+        this.amountSell += o.amountCoin;
+      }
+
+    }, stats);
+
+    let date = new Date(timestamp);
+
+    return{
+      timestamp:timestamp,
+      time:date.getHours()+':'+date.getMinutes(),
+      amountBuyUS:stats.amountBuyUS,
+      amountBuy:stats.amountBuy,
+      amountSell:stats.amountSell,
+      amountSellUS:stats.amountSellUS,
+      speed:trades.length,
+      vol:stats.US,
+      avgRateUS:stats.US/stats.amountCoin,
+      avgRate:stats.vol/stats.amountCoin,
+      minUS:stats.min,
+      maxUS:stats.max
+    }
+  }
+
+
+  static tradeStatsOneMinutes(trades:VOOrder[], fromTime:number, step:number, priceBaseUS:number):VOTradesStats[]{
+
+    let timestamps = [];
+    let out:VOTradesStats[] = [];
+    let group:VOOrder[] = [];
+
+    let endTime = fromTime + step;
+
+    for (let i=0, n=trades.length;i<n; i++){
+      let trade = trades[i];
+      if(trade.timestamp < fromTime) continue;
+      if(trade.timestamp >= endTime){
+        out.push(UtilsOrder.caluculateTradesStats(group, endTime, step, priceBaseUS));
+        endTime +=step;
+        group = trade.timestamp < endTime ? [trade]:[];
+      }else{
+        group.push(trade);
+      }
+
+    }
+
+    return out
+  }
+
+  static analizeOrdersHistory2(history:VOOrder[], priceBaseUS, dust=100){
+
+    let l = history.length;
+    let end = history[l-1].timestamp;
+
+
+    let first = history[0];
+
+   let start = history[0].timestamp;
+
+    let duration = Math.round((end - start)/1000);
+    let speed = l/duration;
+
+
+    let out = {
+      last10:l-(l/10),
+      sumBaseLast10:0,
+      sumCoinLast10:0,
+      rateLast:0,
+      priceLastUS:0,
+      dust:dust,
+      bubbles:[],
+      dustCountSell:0,
+      dustCountBuy:0,
+      countSell:0,
+      countBuy:0,
+      min:1e10,
+      max:0,
+      sumBuyUS:0,
+      sumSellUS:0,
+      duration:duration,
+      speed: l/duration,
+      tolerance: 0,
+      base:first.base,
+      coin:first.coin,
+      exchange:first.exchange
+    };
+
+    history.forEach(function (item, i) {
+
+
+
+      if(i > this.out.last10){
+
+        this.out.sumBaseLast10 += item.amountCoin  * item.rate;
+        this.out.sumCoinLast10 += item.amountCoin;
+      }
+      let priceUS = this.b * item.rate;
+      let amountUS =  item.amountCoin  * item.rate * this.b;
+
+      item.priceBaseUS = +priceUS.toPrecision(4);
+      item.amountBaseUS = Math.round(amountUS);
+
+      if(priceUS < this.out.min )this.out.min = priceUS;
+      if(priceUS > this.out.max )this.out.max = priceUS;
+
+      this.out.bubbles.push({
+        x:item.timestamp,
+        y:priceUS,
+        r:item.action === 'BUY'?amountUS:-amountUS
+      });
+
+      if(amountUS < this.out.dust)item.action === 'BUY'?this.out.dustCountBuy++:this.out.dustCountSell++;
+
+      if(item.action === 'BUY'){
+        this.out.sumBuyUS += amountUS;
+        this.out.countBuy++;
+
+      }
+      if(item.action === 'SELL'){
+        this.out.sumSellUS += amountUS;
+        this.out.countSell++;
+
+      }
+    },{b:priceBaseUS, out:out});
+
+
+    out.tolerance = (100*(out.max - out.min)/out.max);
+    out.rateLast = out.sumBaseLast10/out.sumCoinLast10;
+    out.priceLastUS =  +(out.rateLast * priceBaseUS).toPrecision(5);
+
+    return out;
+
+  }
+
+
  static analizeOrdersHistory(history:VOOrder[], priceBaseUS){
 
     let buy = [];
     let sell = [];
-    let bubbles = [];
+    let bubbles:VOBubble[] = [];
     let dustCountSell = 0;
     let dustCountBuy = 0;
     let l = history.length;
@@ -66,19 +324,21 @@ export class UtilsOrder{
       item.priceBaseUS = +priceUS.toPrecision(4);
       item.amountBaseUS = Math.round(amountUS);
 
-      if(amountUS > 50000) fishes.push(item);
+
 
       if(priceUS < min )min = priceUS;
       if(priceUS > max )max = priceUS;
 
-      let bbl = {
+      let bbl:VOBubble = {
         x:item.timestamp,
         y:priceUS,
-        r:amountUS,
-        a:item.action === 'BUY'?1:0
-      }
+        r:item.action === 'BUY'?amountUS:-amountUS
+      };
 
       bubbles.push(bbl);
+
+      if(amountUS > 50000) fishes.push(bbl);
+
       if(amountUS < 100)item.action === 'BUY'?dustCountBuy++:dustCountSell++;
 
       if(item.action === 'BUY'){
@@ -107,7 +367,6 @@ export class UtilsOrder{
       tolerance:tolerance,
       speed:speed,
       duration:duration
-
     }
 
   }

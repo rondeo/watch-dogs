@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BotsListComponent implements OnInit {
 
-  constructor() { }
+
+
+  constructor(
+
+  ) { }
 
   ngOnInit() {
+
+
+
+
   }
 
 }

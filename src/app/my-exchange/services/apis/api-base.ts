@@ -1,7 +1,7 @@
 import {StorageService} from "../../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {IVOMarket, VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
 import {MarketCapService} from "../../../market-cap/market-cap.service";
 import {Mappers} from "../../../com/mappers";
 import * as _ from 'lodash';
@@ -10,8 +10,17 @@ import * as _ from 'lodash';
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
-import {VOBooks, VOOrder} from "../my-models";
+import {IOrdersStats, VOBooks, VOOrder} from "../my-models";
 
+
+
+export interface IApiPublic{
+  exchange:string;
+  downloadTrades(base:string, coin:string):Observable<VOOrder[]>
+  downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number):Observable<any>
+  getMarkets():Promise<IVOMarket[]>
+  getCurrency():Promise<string[]>
+}
 
 export enum PrivateCalls{
   ORDERS_HISTORY,
@@ -44,7 +53,18 @@ export abstract class ApiBase {
   }
 
 
+  mongoInsert(follow:IOrdersStats){
+   return this.http.post('http://localhost:8080/mongodb',{follow:follow})
+  }
 
+  downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number):Observable<any>{
+    return null
+  }
+
+
+  downloadTrades(base:string, coin:string):Observable<VOOrder[]>{
+    return null;
+  }
 
    dispatchOrders(orders){
     this.marketHistorySub.next(orders);
@@ -230,16 +250,49 @@ return null;
     return 0;
   }
 
+  private marketsSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject([]);
+  isMarkets = false;
+  getMarkets(refresh = false):Observable<VOMarket[]>{
+    if(!this.isMarkets){
+      this.isMarkets = true;
+      let url = this.urlMarkets;
+      this.http.get(url).subscribe(result=>{
+
+      })
+
+    }
+    return this.marketsSub.asObservable()
+
+  }
+
+  marketsList:string[];
+
+  getMarketsList(){
+    return new Promise((resolve, reject)=>{
+      if(this.marketsList) resolve(this.marketsList);
+      else{
+        let url = this.urlMarkets;
+
+        this.http.get(url).toPromise().then(result=>{
+
+        });
+      }
+    })
 
 
-  getAllMarkets():Observable<VOMarket[]>{
+  }
+
+  getAllMarkets(refresh = false):Observable<VOMarket[]>{
     let markets = this.marketsArSub.getValue();
 
-    if(!markets && !this.isLoadinMarkets){
+    if(refresh)this.isMarketsLoaded = false;
+    if(!this.isMarketsLoaded){
+
       let url = this.urlMarkets;
-      this.isLoadinMarkets = true;
+      this.isMarketsLoaded = true;
       console.log(url);
         this.http.get(url).subscribe(result=>{
+
 
         let marketsAr: VOMarket[] = [];
 
@@ -251,10 +304,9 @@ return null;
         this.mapMarkets(result, marketsAr, indexed, bases, selected);
 
         this.dispatchMarketsData(marketsAr, indexed, bases);
-
-        this.isLoadinMarkets = false;
       }, error=>{
-          this.isLoadinMarkets = false;
+          this.isMarketsLoaded = false;
+
         });
 
     };
@@ -279,11 +331,11 @@ return null;
 */
   protected marketsObjSub:BehaviorSubject<{[pair:string]:VOMarket}> = new BehaviorSubject<{[pair:string]:VOMarket}>(null);
   protected marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
-  isLoadinMarkets:boolean = false;
+  isMarketsLoaded:boolean = false;
 
   bases:string[];
   protected dispatchMarketsData( marketsAr, indexed, bases){
-    this.marketCap.getCoinsObs().subscribe(MC=>{
+    let sub = this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
       let localCoins:{[symbol:string]:VOMarketCap} = {};
@@ -294,6 +346,7 @@ return null;
           percent_change_24h:0,
           percent_change_7d:0
         };
+
         let mcCoin = MC[item.coin];
         if(mcCoin) localCoins[item.coin]= mcCoin;
 

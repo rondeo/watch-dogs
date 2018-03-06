@@ -9,10 +9,7 @@ import {Router} from "@angular/router";
 export class BotMainComponent implements OnInit {
 
   isLogedIn:boolean;
-  currentExchange:string;
-  currentMarket:string;
-  exchanges:string[];
-  markets:string[];
+
 
   constructor(
     private router:Router
@@ -31,13 +28,5 @@ export class BotMainComponent implements OnInit {
   }
 
 
-  onExchangeChanged(){
-    if(this.currentExchange && this.currentMarket)
-    this.router.navigateByUrl('/my-bot/run/'+ this.currentExchange+'/'+ this.currentMarket)
-  }
-
-  onMarketChanged(){
-
-  }
 
 }

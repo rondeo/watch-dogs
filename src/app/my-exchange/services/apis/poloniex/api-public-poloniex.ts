@@ -1,0 +1,106 @@
+import {IApiPublic} from "../api-base";
+import {IVOMarket, VOMarket, VOMarketHistory} from "../../../../models/app-models";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+import {VOOrder} from "../../my-models";
+import {SOMarketPoloniex} from "../../../../models/sos";
+import {reject} from "q";
+
+export class ApiPublicPoloniex implements IApiPublic {
+  exchange = 'poloniex';
+
+  constructor(private http:HttpClient){
+
+  }
+
+
+
+  downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number){
+    return null;
+  }
+
+
+  getCurrency():Promise<string[]>{
+    return new Promise((resolve, reject)=>{
+      this.getMarkets().then(markets=>{
+        let ar:string[] = [];
+        markets.forEach(function (item) {
+          if(ar.indexOf(item.coin) ===-1)ar.push(item.coin);
+        });
+        resolve(ar);
+      })
+    })
+  }
+
+  private marketsAr:IVOMarket[];
+  getMarkets():Promise<IVOMarket[]>{
+    if(this.marketsAr){
+      return new Promise((resolve, reject)=>{
+        resolve(this.marketsAr);
+      })
+    }else return this.downloadMarkets().toPromise();
+  }
+
+  downloadMarkets():Observable<IVOMarket[]>{
+    let url  = 'https://poloniex.com/public?command=returnTicker';
+    console.log(url);
+    return this.http.get(url).map(result=>{
+      let marketsAr:IVOMarket[] = [];
+      let i = 0;
+      for (let str in result) {
+        i++;
+        let data = result[str];
+
+        let ar: string[] = str.split('_');
+        let market = {
+          base:ar[0],
+          coin:ar[1],
+          pair : str,
+          id : str,
+          exchange :'poloniex',
+          Volume:+data.quoteVolume,
+          Last : +data.last,
+          High : +data.highestBid,
+          Low :+data.lowestAsk,
+          Ask : +data.lowestAsk,
+          Bid : +data.highestBid,
+          BaseVolume : +data.baseVolume,
+          disabled :data.isFrozen !=='0',
+          PrevDay :(+data.high24hr + +data.low24hr) / 2
+      };
+        marketsAr.push(market);
+      }
+      return marketsAr;
+    }).do(markets=>this.marketsAr = markets);
+  }
+
+
+
+  downloadTrades(base:string, coin:string):Observable<VOOrder[]> {
+
+    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+    url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
+     console.log(url)
+    return this.http.get(url).map((res:any)=>{
+      // console.log(res);
+
+      return res.map(function(item) {
+        let time = (new Date(item.date.split(' ').join('T')+'Z'));
+        return {
+          action:item.type.toUpperCase(),
+          isOpen:false,
+          uuid: item.tradeID,
+          exchange: 'poloniex',
+          rate:+item.rate,
+          amountCoin:+item.amount,
+          amountBase:+item.total,
+          base: base,
+          coin: coin,
+          date:item.date,
+          timestamp:time.getTime()
+        };
+      });
+
+    })
+  }
+}

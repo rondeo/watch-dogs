@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from "@angular/material";
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ApiBase} from "../../my-exchange/services/apis/api-base";
-import {UtilsOrder, VOBubble} from "../../my-exchange/utils-order";
+import {ApiBase, IApiPublic} from "../../my-exchange/services/apis/api-base";
+import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble, VOTradesStats} from "../../my-exchange/utils-order";
 import {VOOrder} from "../../my-exchange/services/my-models";
+import {BotServiceService} from "../services/bot-service.service";
+import {TradesData} from "../services/trades-data";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-bot-run',
@@ -18,43 +21,30 @@ export class BotRunComponent implements OnInit {
   currentAPI:ApiBase;
 
 
-  balanceBase
-  balanceCoin
+  balanceBase;
+  balanceCoin;
   balanceBaseUS;
   balanceCoinUS;
   marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0, rate:0};
   amountBase;
   amountUS = 50;
 
-  analytics = {
-    buy:[],
-    sell:[],
-    bubbles:[],
-    min:0,
-    max:0,
-    sumBuy:0,
-    sumSell:0,
-    dustCountBuy:0,
-    dustCountSell:0,
-    speed:0,
-    duration:0,
-    tolerance:0,
-    fishes:[]
-  };
+  analytics:VOAnalytics = ANALYTICS;
 
   constructor(
     private route:ActivatedRoute,
     private router:Router,
     private apiService:ConnectorApiService,
-    private snackBar:MatSnackBar
+    private snackBar:MatSnackBar,
+    private botService:BotServiceService
   ) { }
-
 
   isLogedIn:boolean;
 
   onLoginClick(){
 
   }
+
 
 
   onRefreshBalancesClick(){
@@ -66,7 +56,7 @@ export class BotRunComponent implements OnInit {
       this.exchange = params.exchange;
       this.market = params.market;
       console.log(params);
-      this.currentAPI = this.apiService.getHttpConnector(this.exchange);
+      this.currentAPI = this.apiService.getPrivateAPI(this.exchange);
       if(!this.currentAPI){
         console.error(' no API '+ this.exchange);
         return
@@ -78,17 +68,10 @@ export class BotRunComponent implements OnInit {
       });
       this.currentAPI.autoLogin();
     })
-
-    let arch = this.getArchive();
-
-    this.history = arch.orders;
-
-    let l = this.calculateLength(this.history)
-    console.log(' history length '+ l + ' min')
   }
 
 
-
+/*
   calculateLength(ar:VOBubble[]):number{
     if(!ar.length) return 0;
     let l = ar[ar.length-1].x;
@@ -110,7 +93,7 @@ export class BotRunComponent implements OnInit {
       callBack(err, null);
     });
 
-  }
+  }*/
 
 
   setBalances(){
@@ -128,8 +111,6 @@ export class BotRunComponent implements OnInit {
         this.balanceCoin = balC.balance;
         this.balanceBaseUS  = +(balB.balance * priceBaseUS).toFixed(2);
         this.balanceCoinUS =  +(balC.balance * rate * priceBaseUS).toFixed(2);
-
-
       });
 
     });
@@ -163,137 +144,80 @@ export class BotRunComponent implements OnInit {
     this.processAction(action, amountCoin);
   }
 
-  getArchive(){
-    if(!this.oredrsArchive){
-      let id = this.exchange + '_'+this.market;
-      let str = localStorage.getItem(id)
-      if(!str) this.oredrsArchive = {
-        exchange:this.exchange,
-        lastTimestamp:Date.now(),
-        market:this.market,
-        orders:[]
-      }
-      else {
-        this.oredrsArchive = JSON.parse(str);
-        this.oredrsArchive.orders = this.oredrsArchive.orders.map(function (o) {
-          return {
-            x:o[0]*1000,
-            y:o[1],
-            r:Math.abs(o[2]),
-            a:o[2]>0?1:0
-          }
-        })
 
-      }
+  //allStats:{[id:string]:VOTradesStats[]} = {};
+
+  runBot(){
+
+
+   // let fromTime = (Math.ceil(Date.now()/1000/60) - 180) *60 *1000;
+   // let analytics =  UtilsOrder.tradeStatsOneMinutes(lastTrades, fromTime, this.marketInit.priceBaseUS,100, 20000);
+
+
+   // console.log(analytics);
+  }
+/*
+
+  saveStats(id){
+    //console.log(' saving '+ id, this.allStats[id]);
+    localStorage.setItem('stats' +id, JSON.stringify(this.allStats[id]));
+  }
+
+  removeOldStats(id:string, amountMin:number){
+    let last = Date.now() - (amountMin * 60 * 1000);
+    let stats:VOTradesStats[] = this.allStats[id];
+    this.allStats[id] = stats.filter(function (item) {
+      return item.timestamp > last;
+    })
+  }
+
+  getStatsById(id){
+    if(!this.allStats[id]){
+      let str = localStorage.getItem('stats' +id) || '[]';
+      this.allStats[id] = JSON.parse(str);
+    }
+    return this.allStats[id];
+  }
+*/
+
+
+
+
+  /*addTrades(trades:VOOrder[]){
+    let id = trades[0].exchange + '_'+ trades[0].base + '_'+trades[0].coin;
+    let stats:VOTradesStats[]  = this.getStatsById(id);
+    if(stats.length){
+      let last = stats[stats.length-1].timestamp;
+      //let newTrades =
+
+      //console.log(' last stat '+ new Date(last).toLocaleTimeString());
+
+      /!*console.log(trades.map(function (item) {
+        return new Date(item.timestamp).toLocaleTimeString();
+      }));
+*!/
+
+
+      //if(trades[0].timestamp < last)
+      let newstats = UtilsOrder.tradeStatsOneMinutes(trades, last, this.marketInit.priceBaseUS,100, 20000);
+      //console.log(id + ' stats ' ,stats[stats.length-1], newstats);
+      //console.log( 'new  stats ' , newstats);
+
+      this.allStats[id] = stats.concat(newstats);
+    }else {
+      let fromTime = (Math.ceil(Date.now()/1000/60) - 180) *60 *1000;
+
+      stats = UtilsOrder.tradeStatsOneMinutes(trades,fromTime, this.marketInit.priceBaseUS,100, 20000);
+      this.allStats[id] = stats;
     }
 
-    return this.oredrsArchive;
-  }
+    this.removeOldStats(id, 180);
+    this.saveStats(id);
+  }*/
 
-  removeOldAndSmallBubbles(orders:VOBubble[]):VOBubble[]{
-    let last = orders[orders.length-1].x;
-    let h3 = 3*60*60*1000;
-    let first = last - h3;
-   return orders.filter(function (item) {
-      return item.x > this.first && item.r>100;
-    },{first:first})
-  }
+  dusts=[];
 
-  saveHistory(){
-
-    // out:number[][]=[];
-    let history = this.history;
-
-    if(!history.length) return;
-    let length = this.calculateLength(history);
-
-    let out = history.map(function (o) {
-      let amount = o.a?o.r:-o.r;
-
-      return [Math.round(o.x/1000),+(o.y).toPrecision(4),Math.round(amount)];
-    });
-
-    let arch = {
-      exchange:this.exchange,
-      lastTimestamp:Date.now(),
-      market:this.market,
-      orders:out
-    };
-
-    console.log(' saving data  for '+ length + ' min', arch);
-    let id = this.exchange + '_'+this.market;
-
-
-    localStorage.setItem(id, JSON.stringify(arch));
-  }
-
-  oredrsArchive:{
-    lastTimestamp:number,
-    exchange:string,
-    market:string;
-    orders:{x:number,y:number,r:number,a:number}[]
-  }
-
-
-
-  runBot(bubbles:{x:number,y:number,r:number,a:number}[]){
-    let history = this.history;
-    if(!history.length) this.history = bubbles;
-    else{
-
-      let last = history[history.length-1].x;
-      console.log(' was last '+ last +'  now last '+ bubbles[bubbles.length - 1].x);
-
-      let newData = bubbles.filter(function (o) {
-        return o.x > last;
-      });
-
-      console.log(' new data ' + this.calculateLength(newData) + ' min');
-
-      console.log('adding new orders '+ newData.length + ' hisyoty length '+ this.history.length);
-
-      this.history =  this.removeOldAndSmallBubbles(history.concat(newData));
-
-    }
-
-    this.saveHistory();
-
-    //console.warn('running bot', bubbles);
-
-  }
-
-  downloadHistoryTimeout;
-  redownloadHistory(){
-
-    this.downloadHistory((err, bubbles:{x:number,y:number,r:number,a:number}[])=>{
-
-      let delay = 20000;
-      if(!err){
-
-        if(bubbles.length){
-          let diff = bubbles[bubbles.length-1].x - bubbles[0].x;
-          console.warn(diff);
-          delay = Math.round(diff/2);
-          if(delay<20000) {
-            console.warn('delay ' + delay);
-            delay = 20000;
-          }
-
-          this.runBot(bubbles)
-        }
-      }
-
-      console.log(' reload in '+ (delay/1000/60).toPrecision(4) + ' min');
-
-      this.downloadHistoryTimeout = setTimeout(()=>{
-        this.redownloadHistory();
-      }, delay );
-
-    });
-  }
-
-
-
+  tradesData:TradesData[] =[];
   onMarketChange(){
     let pair = this.market;
     if(!pair || pair.indexOf('_') ===-1) return;
@@ -306,18 +230,20 @@ export class BotRunComponent implements OnInit {
     //this.market = this.base+'_' + this.coin;
     this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0, rate:0};
     console.warn('onMarketChange');
-    this.currentAPI.getPriceForBase(ar[0]).then(res=>{
+    this.currentAPI.getPriceForBase(ar[0]).then(priceBaseUS=>{
 
-      console.warn(res);
-      if(!res) return;
+      //console.warn(res);
+      if(!priceBaseUS) return;
       // console.warn(res);
 
       this.currentAPI.getRate(base, coin).then(rate=>{
 
-        this.amountBase =  +(this.amountUS / res).toPrecision(8);
+        let priceCoin = +(priceBaseUS * rate).toPrecision(5);
+
+        this.amountBase =  +(this.amountUS / priceBaseUS).toPrecision(8);
 
         this.marketInit = {
-          priceBaseUS:res,
+          priceBaseUS:priceBaseUS,
           rate:rate,
           coin:coin,
           base:base,
@@ -327,10 +253,35 @@ export class BotRunComponent implements OnInit {
 
         console.log('market Init ', this.marketInit);
         this.setBalances();
-        clearTimeout(this.downloadHistoryTimeout);
 
-      this.redownloadHistory();
+        let publicApi:any = this.currentAPI
+       /* publicApi.downloadMarketHistoryForPeriod(base, coin, 180, 5).subscribe(res=>{
+          console.warn(res);
+        })*/
 
+       this.tradesData =  this.botService.getTrades(base, coin, priceBaseUS)
+
+       this.tradesData.forEach( (item) =>{
+          item.start();
+          item.dust$().subscribe(dust=>{
+
+            this.dusts = dust.reverse().concat(this.dusts);
+            if(this.dusts.length> 100) this.dusts = _.takeLeft(this.dusts, 100)
+          })
+        })
+
+       /* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(history=>{
+
+          console.log(this.marketInit.exchange + '  ' + UtilsOrder.calculateLength(history)  + ' min');
+
+          if(history.length)this.analytics = UtilsOrder.analizeOrdersHistory2(history, this.marketInit.priceBaseUS);
+
+         // console.log(analytics)
+         // this.analytics = analytics
+         // this.runBot(analytics);
+
+        })
+*/
       })
 
 

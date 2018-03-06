@@ -1,27 +1,29 @@
 import {Observable} from 'rxjs/Observable';
-import {AuthHttpService} from '../../../services/auth-http.service';
-import {APIBooksService} from "../../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
-import {StorageService} from "../../../services/app-storage.service";
+import {AuthHttpService} from '../../../../services/auth-http.service';
+import {APIBooksService} from "../../../../services/books-service";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../../models/app-models";
+import {StorageService} from "../../../../services/app-storage.service";
 
-import {ApiLogin} from "../../../shared/api-login";
-import {IExchangeConnector} from "../connector-api.service";
+import {ApiLogin} from "../../../../shared/api-login";
+import {IExchangeConnector} from "../../connector-api.service";
 
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
-import {applyMixins} from "../../../shared/utils";
-import {SelectedSaved} from "../../../com/selected-saved";
-import {ApiBase} from "./api-base";
-import {MarketCapService} from "../../../market-cap/market-cap.service";
-import {Mappers} from "../../../com/mappers";
-import {SOMarketBittrex, SOMarketPoloniex} from "../../../models/sos";
+import {CryptopiaService} from "../../../../exchanges/services/cryptopia.service";
+import {applyMixins} from "../../../../shared/utils";
+import {SelectedSaved} from "../../../../com/selected-saved";
+import {ApiBase} from "../api-base";
+import {MarketCapService} from "../../../../market-cap/market-cap.service";
+import {Mappers} from "../../../../com/mappers";
+import {SOMarketBittrex, SOMarketPoloniex} from "../../../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
-import {VOBooks, VOOrder} from "../my-models";
+import {VOBooks, VOOrder} from "../../my-models";
 import * as _ from 'lodash';
-export class ApiBittrex extends ApiBase  {
+
+
+export class ApiBittrex extends ApiBase   {
 
   constructor(
     http:HttpClient,
@@ -31,6 +33,29 @@ export class ApiBittrex extends ApiBase  {
     super(storage, 'bittrex', marketCap, http);
 
   }
+
+  private getResolution(resolutionMin:number):string{
+    switch (resolutionMin){
+      default :
+        return 'fiveMin';
+    }
+  }
+
+  downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number = 180, resolutionMin:number = 5):Observable<any>{
+    let timestamp = Date.now() - (periodMin*60*1000);
+    let tickInterval = this.getResolution(resolutionMin);
+
+    let url = '/api/proxy/bittrex.com/Api/v2.0/pub/market/GetTicks?marketName={{base}}-{{coin}}&tickInterval={{tickInterval}}&_='.replace('{{tickInterval}}', tickInterval).replace('{{base}}', base).replace('{{coin}}', coin)+timestamp;
+   return  this.http.get(url).map(res=>{
+      console.log(res)
+     return (<any>res).result.filter(function (o) {
+       o.timestamp=new Date(o.T).getTime();
+       return o.timestamp > this.t;
+     },{t:timestamp})
+    })
+
+  }
+
 
   getMarketURL(base:string, coin:string){
     return 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);

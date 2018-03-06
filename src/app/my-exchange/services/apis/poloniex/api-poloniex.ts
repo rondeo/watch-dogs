@@ -1,23 +1,23 @@
 import {Observable} from 'rxjs/Observable';
-import {AuthHttpService} from '../../../services/auth-http.service';
-import {APIBooksService} from "../../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
-import {StorageService} from "../../../services/app-storage.service";
+import {AuthHttpService} from '../../../../services/auth-http.service';
+import {APIBooksService} from "../../../../services/books-service";
+import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../../models/app-models";
+import {StorageService} from "../../../../services/app-storage.service";
 
-import {ApiLogin} from "../../../shared/api-login";
-import {IExchangeConnector} from "../connector-api.service";
+import {ApiLogin} from "../../../../shared/api-login";
+import {IExchangeConnector} from "../../connector-api.service";
 
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
-import {applyMixins} from "../../../shared/utils";
-import {SelectedSaved} from "../../../com/selected-saved";
-import {ApiBase} from "./api-base";
-import {MarketCapService} from "../../../market-cap/market-cap.service";
-import {Mappers} from "../../../com/mappers";
-import {SOMarketPoloniex} from "../../../models/sos";
+import {CryptopiaService} from "../../../../exchanges/services/cryptopia.service";
+import {applyMixins} from "../../../../shared/utils";
+import {SelectedSaved} from "../../../../com/selected-saved";
+import {ApiBase} from "../api-base";
+import {MarketCapService} from "../../../../market-cap/market-cap.service";
+import {Mappers} from "../../../../com/mappers";
+import {SOMarketPoloniex} from "../../../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
-import {VOOrder} from "../my-models";
+import {VOOrder} from "../../my-models";
 
 
 export class ApiPoloniex extends ApiBase {

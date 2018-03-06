@@ -95,7 +95,7 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
   subscribe(){
     console.log('subscribe ', this.base, this.coin, this.exchange);
     if(this.base && this.coin && this.exchange){
-      let ch:IChannel = this.connector.bitfinex.getChannel(Channels.TRADES, this.base, this.coin);
+     /* let ch:IChannel = this.connector.bitfinex.getChannel(Channels.TRADES, this.base, this.coin);
 
      this.sub =  ch.subscribe(ChannelEvents.DATA, res=>{
         //console.log(res);
@@ -106,6 +106,7 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
       let cb2 = ch.subscribe(ChannelEvents.HEART_BEAT, hb=>{
         console.log('HB '+ hb);
       });
+      */
 
     }
 

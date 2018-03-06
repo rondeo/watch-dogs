@@ -23,9 +23,9 @@ export class AllMainCoinsComponent implements OnInit {
       console.log(params);
     });
 
-    this.connector.bitfinex.downloadTrades('USDT', 'BTC').subscribe(res=>{
+    /*this.connector.bitfinex.downloadTrades('USDT', 'BTC').subscribe(res=>{
       console.log(res);
-    })
+    })*/
 
 
   }

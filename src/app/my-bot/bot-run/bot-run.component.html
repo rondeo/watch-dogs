@@ -82,7 +82,27 @@
 
     <br/>
 
-    <app-bubble-chart [bubbles]="analytics.bubbles"></app-bubble-chart>
+
+
+
+
+   <!-- <app-bubble-chart [bubbles]="analytics.bubbles"></app-bubble-chart>-->
+
+    <section>
+        <span>Dust</span>
+      <ul>
+          <li *ngFor="let dust of dusts" >{{dust.r}} {{dust.y}}</li>
+      </ul>
+
+
+    </section>
+    <section>
+        <div *ngFor="let tradeData of tradesData">
+            <h3>{{tradeData.id.split('_').join(' ')}}</h3>
+            <app-bubble-chart [bubbles]="tradeData.bubbles"></app-bubble-chart>
+
+        </div>
+    </section>
 
     <br/>
     <section>

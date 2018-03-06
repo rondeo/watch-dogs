@@ -42,7 +42,7 @@ export class MarketCapService {
   isRunning:boolean;
 
   constructor(
-    private http: HttpClient,
+    public http: HttpClient,
     private storage:StorageService
     ) {
 
@@ -67,6 +67,8 @@ export class MarketCapService {
     setInterval(()=>this.doCountDown(), 1000);
     this.start();
   }
+
+
 
   doCountDown(){
     this.countDown --;

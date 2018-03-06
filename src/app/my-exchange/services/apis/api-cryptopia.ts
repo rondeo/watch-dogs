@@ -334,6 +334,7 @@ export class ApiCryptopia extends ApiBase  {
 
 
 //////////////////////////////////////////////////////////////////////////////////////MARKETS
+  isLoadinMarkets
 
   getAllMarkets():Observable<VOMarket[]>{
 

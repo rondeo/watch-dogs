@@ -16,6 +16,11 @@ import {FormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
 import {SharedModule} from "../shared/shared.module";
 import { BotNewComponent } from './bot-new/bot-new.component';
+import {BotServiceService} from "./services/bot-service.service";
+import { BotFollowCoinComponent } from './bot-follow-coin/bot-follow-coin.component';
+import { BotBuyCoinComponent } from './bot-buy-coin/bot-buy-coin.component';
+import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
+import {BuyCoinService} from "./services/buy-coin.service";
 
 
 const routes: Routes = [
@@ -24,6 +29,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'list', pathMatch: 'full'},
       {path: 'list', component: BotsListComponent},
+      {path: 'follow-coin', component: BotFollowCoinComponent},
+      {path: 'buy-coin/:exchange', component: BotBuyCoinComponent},
       {path: 'run/:exchange/:market', component: BotRunComponent},
       {path: 'edit/:exchange/:market', component: BotEditComponent}
     ]
@@ -41,6 +48,18 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [BotMainComponent, BotRunComponent, BotsListComponent, BotEditComponent, BotNewComponent]
+  declarations: [
+    BotMainComponent,
+    BotRunComponent,
+    BotsListComponent,
+    BotEditComponent,
+    BotNewComponent,
+    BotFollowCoinComponent,
+    BotBuyCoinComponent,
+    BotSellCoinComponent],
+  providers:[
+    BuyCoinService,
+    BotServiceService
+  ]
 })
 export class MyBotModule { }

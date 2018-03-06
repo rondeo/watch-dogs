@@ -6,6 +6,7 @@ import {BittrexService} from "../../exchanges/services/bittrex.service";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {MarketViewComponent} from "../../shared/market-view/market-view.component";
 import {ConnectorApiService} from "../services/connector-api.service";
+import {GainersService} from "../my-exchange-bot/bot/gainers.service";
 
 @Component({
   selector: 'app-my-gainers-losers',
@@ -25,7 +26,8 @@ export class MyGainersLosersComponent implements OnInit, OnDestroy {
     private router:Router,
     private apiService:ConnectorApiService,
     private dialog:MatDialog,
-    private snackBar:MatSnackBar
+    private snackBar:MatSnackBar,
+    private myService:GainersService
   ) { }
 
 
@@ -56,6 +58,7 @@ export class MyGainersLosersComponent implements OnInit, OnDestroy {
 
 
     })
+
 
 
   }

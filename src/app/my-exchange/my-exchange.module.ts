@@ -27,6 +27,12 @@ import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.
 import { SocketTradeComponent } from './socket-trade/socket-trade.component';
 import { AllMainCoinsComponent } from './all-main-coins/all-main-coins.component';
 import {SharedModule} from "../shared/shared.module";
+import {GainersService} from "./my-exchange-bot/bot/gainers.service";
+import { MyExchangeBotComponent } from './my-exchange-bot/my-exchange-bot.component';
+import {MyTradingService} from "./my-exchange-bot/bot/my-trading.service";
+import {MarketCollectorService} from "./my-exchange-bot/bot/market-collector.service";
+import {BuyCoinService} from "./my-exchange-bot/bot/buy-coin.service";
+import {FollowCoinService} from "./my-exchange-bot/bot/follow-coin.service";
 
 
 const routes: Routes = [
@@ -38,7 +44,8 @@ const routes: Routes = [
       {path: 'markets', component: MyMarketsComponent},
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
-      {path: 'buy-sell/:market', component: MyBuySellComponent}
+      {path: 'buy-sell/:market', component: MyBuySellComponent},
+      {path: 'bot', component: MyExchangeBotComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
 
@@ -57,6 +64,7 @@ const routes: Routes = [
   },
   { path: 'trader/:market/:exchange', component: AllMainCoinsComponent,}
 ];
+
 
 
 @NgModule({
@@ -84,10 +92,16 @@ const routes: Routes = [
     RefreshButtonComponent,
     MyOrdersHistoryComponent,
     SocketTradeComponent,
-    AllMainCoinsComponent
+    AllMainCoinsComponent,
+    MyExchangeBotComponent
   ],
   providers:[
-    ConnectorApiService
+    ConnectorApiService,
+    GainersService,
+    MyTradingService,
+    MarketCollectorService,
+    BuyCoinService,
+    FollowCoinService
   ]
 
 })
