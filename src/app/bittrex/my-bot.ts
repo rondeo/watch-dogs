@@ -3,13 +3,13 @@ import {VOMarket, VOMarketCap} from "../models/app-models";
 import {MarketCapService} from "../market-cap/market-cap.service";
 import {Subscription} from "rxjs/Subscription";
 import {AutoTransferProcess} from "./auto-transfer-process";
-import {TransferReqest} from "./transfer-reqest";
+
 import {Utils} from "./Utils";
 import * as _ from 'lodash';
 import {SlackService} from "../services/slack.service";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
-import {BittrexService} from "../exchanges/services/bittrex.service";
+
 
 
 export class AutoTransfer {
@@ -97,10 +97,10 @@ export class MyBot {
   success$:Observable<string>;
   isRunning:boolean;
 
-  private marketService:BittrexService;
+  private marketService:any;
 
   constructor(
-              private privateService: BittrexPrivateService,
+              private privateService: any,
               private marketCap: MarketCapService,
               private slack:SlackService,
               botData: VOBot
@@ -124,6 +124,7 @@ export class MyBot {
 
     this.errorSub = new Subject();
     this.error$ = this.errorSub.asObservable();
+
 
   }
 
@@ -166,7 +167,7 @@ export class MyBot {
 
     if(this.botData.isTransfer){
 
-      let request: TransferReqest = new TransferReqest(this.privateService, this.privateService.publicService);
+      /*let request: TransferReqest = new TransferReqest(this.privateService, this.privateService.publicService);
 
       let market: string = this.botData.market,
         action: string = transfer.action;
@@ -184,8 +185,8 @@ export class MyBot {
           console.error(err)
         }
       });
-
-      request.startProcess();
+*/
+      //request.startProcess();
     } else message += 'NOT Transferriong';
 
 

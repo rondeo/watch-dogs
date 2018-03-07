@@ -3,8 +3,8 @@ import {MatSnackBar} from "@angular/material";
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiBase, IApiPublic} from "../../my-exchange/services/apis/api-base";
-import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble, VOTradesStats} from "../../my-exchange/utils-order";
-import {VOOrder} from "../../my-exchange/services/my-models";
+import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble, VOTradesStats} from "../../services/utils-order";
+
 import {BotServiceService} from "../services/bot-service.service";
 import {TradesData} from "../services/trades-data";
 import * as _ from 'lodash';

@@ -1,4 +1,4 @@
-import {VOMarketHistory, VOOrder} from "../models/app-models";
+import {VOOrder} from "../models/app-models";
 import * as moment from "moment";
 import {VOUser} from "../services/auth-http.service";
 
@@ -81,7 +81,7 @@ export class MappersHistory{
 
   }
 
-  static parseData(ar:VOMarketHistory[], priceBase:number):VOHistoryStats{
+  static parseData(ar:any[], priceBase:number):VOHistoryStats{
 
     let totalSell:number = 0;
     let totalBuy:number = 0;

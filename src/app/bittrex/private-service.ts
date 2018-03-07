@@ -8,7 +8,6 @@ import {SlackService} from "../services/slack.service";
 import {HttpClient} from "@angular/common/http";
 import {AuthHttpService} from "../services/auth-http.service";
 import {StorageService} from "../services/app-storage.service";
-import {BittrexService} from "../exchanges/services/bittrex.service";
 import * as cryptojs from 'crypto-js';
 import {MappersPrivate} from "../com/MappersPrivate";
 
@@ -40,7 +39,7 @@ export class PrivateService {
     private config:any,
   private http: HttpClient,
   public marketCap: MarketCapService,
-  public publicService: BittrexService,
+  //public publicService: BittrexService,
   private slack:SlackService,
   public storage: StorageService,
   private auth:AuthHttpService
@@ -55,11 +54,9 @@ export class PrivateService {
     this.transfersSub = new Subject();
     this.transfers$ = this.transfersSub.asObservable();
 
-    this.publicService.serachResults$.subscribe(serachResult => {
 
-    });
 
-    this.publicService.marketCap.getCoinsObs().subscribe(MC => {
+    this.marketCap.getCoinsObs().subscribe(MC => {
       this.MC = MC;
       console.log(this.id + ' MC ready');
       this.mapBalancesToMC();

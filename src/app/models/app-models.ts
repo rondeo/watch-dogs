@@ -4,8 +4,36 @@
 
 
 import {Observable} from 'rxjs/Observable';
-import {IOrdersStats} from "../my-exchange/services/my-models";
 
+
+export interface VOBooksStats{
+  exchange:string;
+  coin:string;
+  base: string;
+  coinMC:VOMarketCap;
+  baseMC:VOMarketCap;
+  booksDiff:number;
+  rateToBuy: number;
+  rateToSell: number;
+  priceToSellUS: number;
+  priceToBuyUS: number;
+  priceToMC:number;
+  priceBaseUS:number;
+}
+
+export interface VOTrade{
+  amountCoin:number;
+  timestamp:number;
+  rate:number;
+}
+
+
+export interface VOBooks{
+  market:string;
+  exchange:string;
+  buy:VOTrade[];
+  sell:VOTrade[];
+}
 
 export class VOTransaction {
 
@@ -20,6 +48,7 @@ export class VOTransaction {
 }
 
 
+/*
 export class ConfigApp {
   exchangesPublic: ConfigAPI[] = [
     {
@@ -107,6 +136,7 @@ export class ConfigApp {
     }
   ]
 }
+*/
 
 export const VOORDER: VOOrder = {
   uuid: '',
@@ -219,19 +249,7 @@ export interface VOLoginResult {
   result: any;
 }
 
-export interface IMarketRecommended extends IVOMarket{
-
-  LowUS:number
-  HighUS:number;
-  BidUS:number;
-  AskUS:number;
-  LastUS:number;
-  action:string;
-  result:string;
-  date:string;
-  reason:string;
-
-}
+/*
 
 export interface IVOMarket {
 
@@ -253,12 +271,8 @@ export interface IVOMarket {
   baseMC?: VOMarketCap;
   stats?:IOrdersStats;
 }
+*/
 
-
-export interface IVOMarketMC extends IVOMarket{
-  coinMC: VOMarketCap;
-  baseMC: VOMarketCap;
-}
 
 export class VOMarket {
   pair: string;
@@ -323,11 +337,10 @@ export class VOMarket {
   percent_change_24h?: number;
   percent_change_7d?: number;
 
-  history?: VOMarketHistory[];
-
 
 }
 
+/*
 export interface VOMarketHistory {
   Id: number
   TimeStamp: string;
@@ -337,6 +350,7 @@ export interface VOMarketHistory {
   FillType: string;
   OrderType: string;//": "SELL"
 }
+*/
 
 export class VOMarketCap {
   id?: string;
@@ -364,6 +378,7 @@ export class VOMarketCap {
 }
 
 
+/*
 export interface VOMarketB {
   pair: string;
   coinToBuy: string;
@@ -398,8 +413,9 @@ export interface VOMarketB {
   Created: string
   DisplayMarketName: string
 }
+*/
 
-export interface VOCoin {
+/*export interface VOCoin {
   name: string;
   symbol: string;
   rank?: number;
@@ -410,8 +426,9 @@ export interface VOCoin {
   market_cap_usd?: number;
   market?: VOMarketCap;
 
-}
+}*/
 
+/*
 export interface VOExchange {
   id: number;
   pair: string;
@@ -443,7 +460,9 @@ export interface VOExchange {
   is_last_up?: boolean;
   mid24?: number;
 }
+*/
 
+/*
 
 export interface CoinConfig {
   symbol: string;
@@ -461,6 +480,7 @@ export interface CoinConfig {
   shapeshift: any;
   transactionType: string;
 }
+*/
 
 
 export class UTXO {
@@ -475,13 +495,15 @@ export interface UserProfile {
   timestamp: number;
   date: string;
   filename: string;
-  coins: CoinConfig[]
+  //coins: CoinConfig[]
 }
+/*
 
 export class CoinsAvailable {
   coins: CoinConfig[]
   tokens: CoinConfig[]
 }
+*/
 
 
 export interface VOOrderBook {
@@ -491,7 +513,7 @@ export interface VOOrderBook {
   Price: string;
 }
 
-
+/*
 export interface VOOpenOrder {
   Uuid: string;
   OrderUuid: string;
@@ -510,7 +532,7 @@ export interface VOOpenOrder {
   IsConditional: boolean;
   Condition: string;
   ConditionTarget: string;
-}
+}*/
 
 export class VOBalance {
   address?: string;
@@ -527,6 +549,7 @@ export class VOBalance {
   id?: string;
   isDetails?: boolean;
 }
+/*
 
 export class Analitycs {
 
@@ -535,7 +558,9 @@ export class Analitycs {
   price_usd_historyDisplay: string;
 
 }
+*/
 
+/*
 export class WalletModel {
   // config:CoinConfig;
   id: string;
@@ -560,6 +585,7 @@ export class WalletModel {
   updatedAt: string;
 
 }
+*/
 
 
 export class VOWatchdog {

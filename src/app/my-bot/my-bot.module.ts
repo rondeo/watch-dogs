@@ -20,7 +20,8 @@ import {BotServiceService} from "./services/bot-service.service";
 import { BotFollowCoinComponent } from './bot-follow-coin/bot-follow-coin.component';
 import { BotBuyCoinComponent } from './bot-buy-coin/bot-buy-coin.component';
 import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
-import {BuyCoinService} from "./services/buy-coin.service";
+import {CollectMarketDataService} from "./services/collect-market-data.service";
+
 
 
 const routes: Routes = [
@@ -58,8 +59,8 @@ const routes: Routes = [
     BotBuyCoinComponent,
     BotSellCoinComponent],
   providers:[
-    BuyCoinService,
-    BotServiceService
+    BotServiceService,
+    CollectMarketDataService
   ]
 })
 export class MyBotModule { }

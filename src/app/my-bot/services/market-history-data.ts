@@ -1,10 +1,11 @@
 import {ApiBase} from "../../my-exchange/services/apis/api-base";
-import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble} from "../../my-exchange/utils-order";
+import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble} from "../../services/utils-order";
 import {EventEmitter} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOOrder} from "../../my-exchange/services/my-models";
+import {VOOrder} from "../../models/app-models";
+
 
 export class MarketHistoryData{
 

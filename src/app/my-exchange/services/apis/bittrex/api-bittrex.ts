@@ -1,14 +1,14 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../../services/auth-http.service';
 import {APIBooksService} from "../../../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../../models/app-models";
+import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../../../models/app-models";
 import {StorageService} from "../../../../services/app-storage.service";
 
 import {ApiLogin} from "../../../../shared/api-login";
 import {IExchangeConnector} from "../../connector-api.service";
 
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../../../exchanges/services/cryptopia.service";
+
 import {applyMixins} from "../../../../shared/utils";
 import {SelectedSaved} from "../../../../com/selected-saved";
 import {ApiBase} from "../api-base";
@@ -19,7 +19,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
-import {VOBooks, VOOrder} from "../../my-models";
+
 import * as _ from 'lodash';
 
 
@@ -168,7 +168,7 @@ export class ApiBittrex extends ApiBase   {
 
       console.log(res);
       this.downloadMarketHistory$ = null;
-        return (<any>res).result.map(function (item: VOMarketHistory) {
+        return (<any>res).result.map(function (item: any) {
 
           let time = (new Date(item.TimeStamp + 'Z'));
 
@@ -384,7 +384,7 @@ export class ApiBittrex extends ApiBase   {
 
   urlMarketHistory = 'api/bittrex/getmarkethistory/{{base}}-{{coin}}';
   mapMarketHistory(res):VOOrder[]{
-    return (<any>res).result.map(function (item: VOMarketHistory) {
+    return (<any>res).result.map(function (item: any) {
 
       return {
         action: item.OrderType,

@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {VOMarketCap} from "../../../models/app-models";
-import {IOrdersStats, VOOrder} from "../../services/my-models";
+import {VOMarketCap, VOOrder} from "../../../models/app-models";
+
 import {Subject} from "rxjs/Subject";
 
 import {ApiBase} from "../../services/apis/api-base";
 import {ConnectorApiService} from "../../services/connector-api.service";
 import {FollowCoinController, IBotData} from "./follow-coin-controller";
 import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {VOTradesStats} from "../../../services/utils-order";
 
 @Injectable()
 export class FollowCoinService {
@@ -42,7 +43,7 @@ export class FollowCoinService {
     });
   }
 
-  followCoin(api: ApiBase, marketStats: IOrdersStats, order: VOOrder, reasons: string[]) {
+  followCoin(api: ApiBase, marketStats: VOTradesStats, order: VOOrder, reasons: string[]) {
 
     let botData: IBotData = {
       startStats: marketStats,

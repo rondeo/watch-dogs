@@ -1,7 +1,7 @@
-import {VOBubble} from "../utils-order";
-import {IVOMarket, VOMarketCap} from "../../models/app-models";
+import {VOBubble} from "../../services/utils-order";
+import {VOMarketCap, VOOrder} from "../../models/app-models";
 
-
+/*
 export interface IBooksStats{
   base: string;
   coin: string;
@@ -16,9 +16,9 @@ export interface IBooksStats{
   priceToMC: number;
   priceBaseUS: number;
 
-}
+}*/
 
-export interface IOrdersStats{
+/*export interface IOrdersStats{
   base: string;
   coin: string;
   exchange:string;
@@ -37,7 +37,7 @@ export interface IOrdersStats{
   priceLastUS:number;
   priceBaseUS:number;
   priceToMC:number;
-}
+}*/
 
 /*
 export interface IMarketSummary {
@@ -66,6 +66,7 @@ export interface IMarketSummary {
   bubbles:VOBubble[]
 
 }*/
+/*
 
 export interface VOOrder{
   uuid:string;
@@ -91,7 +92,9 @@ export interface VOOrder{
   minutes?:string;
   marketStats?:IOrdersStats
 }
+*/
 
+/*
 export class VOBalance{
   address?:string;
   symbol:string;
@@ -122,4 +125,4 @@ export function applyMixins(derivedCtor: any, baseCtors: any[]) {
       }
     });
   });
-}
+}*/

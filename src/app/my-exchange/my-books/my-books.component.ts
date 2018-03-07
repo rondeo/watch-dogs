@@ -2,7 +2,8 @@ import {Component, Input, Output, OnChanges, OnDestroy, OnInit, EventEmitter} fr
 import {ApiBase} from "../services/apis/api-base";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {BooksService} from "../../services/books-service";
-import {VOBooks} from "../services/my-models";
+import {VOBooks} from "../../models/app-models";
+
 
 
 @Component({

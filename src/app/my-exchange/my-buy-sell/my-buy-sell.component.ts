@@ -10,7 +10,7 @@ import {BooksService} from "../../services/books-service";
 import {MatSnackBar} from "@angular/material";
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
 import {MyBooksComponent} from "../my-books/my-books.component";
-import {UtilsOrder} from "../utils-order";
+import {UtilsOrder} from "../../services/utils-order";
 import {placeOrder} from "./place-order";
 
 @Component({

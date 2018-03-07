@@ -1,6 +1,6 @@
 import {Component, OnInit } from '@angular/core';
 import {ExchangeSsService} from './exchange-ss.service';
-import {VOMarketCap, WalletModel} from '../models/app-models';
+import {VOMarketCap} from '../models/app-models';
 /*
 import {WalletsAllService} from '../wallets/wallets-all.service';*/
 
@@ -16,8 +16,8 @@ import {SendAlertService} from './send-alert.service';
 })
 export class ExchangeSsComponent implements OnInit {
 
-  myWallets:WalletModel[];
-  _myWallets:WalletModel[];
+  myWallets:any[];
+  _myWallets:any[];
   myCoins:VOMarketCap[];
   market:any;
   counter:number;
@@ -136,7 +136,7 @@ export class ExchangeSsComponent implements OnInit {
     }
   }
 
-  updateBalance(wallet:WalletModel) {
+  updateBalance(wallet:any) {
 
     this.api.getBalance(wallet.symbol, wallet.address).subscribe(balance=>{
       console.log(balance);

@@ -5,7 +5,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 import {Http} from '@angular/http';
 import * as _ from 'lodash';
-import {VOCoin, VOMarketCap} from '../models/app-models';
+import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 

@@ -1,5 +1,6 @@
-import {VOBubble, VOTradesStats} from "../../my-exchange/utils-order";
-import {VOOrder} from "../../my-exchange/services/my-models";
+import {VOBubble, VOTradesStats} from "../../services/utils-order";
+import {VOOrder} from "../../models/app-models";
+
 
 export class TradesReport {
   bubbles:VOBubble[];

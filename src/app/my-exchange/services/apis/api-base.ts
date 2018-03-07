@@ -1,7 +1,7 @@
 import {StorageService} from "../../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {IVOMarket, VOBalance, VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../../models/app-models";
 import {MarketCapService} from "../../../market-cap/market-cap.service";
 import {Mappers} from "../../../com/mappers";
 import * as _ from 'lodash';
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
-import {IOrdersStats, VOBooks, VOOrder} from "../my-models";
+
 
 
 
@@ -18,7 +18,8 @@ export interface IApiPublic{
   exchange:string;
   downloadTrades(base:string, coin:string):Observable<VOOrder[]>
   downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number):Observable<any>
-  getMarkets():Promise<IVOMarket[]>
+  downloadMarkets():Observable<VOMarket[]>
+  downloadMarket(base:string, coin:string):Observable<VOMarket>
   getCurrency():Promise<string[]>
 }
 
@@ -53,7 +54,7 @@ export abstract class ApiBase {
   }
 
 
-  mongoInsert(follow:IOrdersStats){
+  mongoInsert(follow:any){
    return this.http.post('http://localhost:8080/mongodb',{follow:follow})
   }
 

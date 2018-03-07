@@ -39,7 +39,7 @@ export class BotEditComponent implements OnInit, OnDestroy {
   sub1;
   ngOnInit() {
 
-   this.sub1 =  this.privateService.publicService.getMarketsAr().subscribe(res=>{
+   /*this.sub1 =  this.privateService.publicService.getMarketsAr().subscribe(res=>{
       if(!res) return;
       this.markets = res;
     });
@@ -59,7 +59,7 @@ export class BotEditComponent implements OnInit, OnDestroy {
         alert('no bot with id '+ id);
       }
     }
-
+*/
   }
 
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {VOMarketCap, WalletModel} from '../models/app-models';
+import {VOMarketCap} from '../models/app-models';
 
 
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -9,9 +9,9 @@ import {ApiServerService} from '../api-server.service';
 @Injectable()
 export class ExchangeSsService {
 
-  private myWallets:WalletModel[];
-  private myWalletsSub:BehaviorSubject<WalletModel[]>;
-  myWallets$:Observable<WalletModel[]>
+  private myWallets:any[];
+  private myWalletsSub:BehaviorSubject<any[]>;
+  myWallets$:Observable<any[]>
 
   private myCoins:VOMarketCap[];
   private myCoinsSub:BehaviorSubject<VOMarketCap[]>;
@@ -27,7 +27,7 @@ export class ExchangeSsService {
     private api:ApiServerService
   ) {
 
-    this.myWalletsSub =  new BehaviorSubject<WalletModel[]>([])
+    this.myWalletsSub =  new BehaviorSubject<any[]>([])
     this.myWallets$ = this.myWalletsSub.asObservable();
     /*allWallets.myWallets$.subscribe(res=>{
       this.myWallets = res;
@@ -54,7 +54,7 @@ export class ExchangeSsService {
   }
 
 
-  updateBalance(wallet:WalletModel){
+  updateBalance(wallet:any){
 
     this.api.getBalance(wallet.symbol, wallet.address).subscribe(res=>{
       console.log(res);
@@ -77,7 +77,7 @@ export class ExchangeSsService {
 
 
 
-  filterWalletsSymbolsUnique(wallets:WalletModel[]):string[]{
+  filterWalletsSymbolsUnique(wallets:any[]):string[]{
     let ar:string[]=[]
     wallets.forEach(function (wallet) {
       if(ar.indexOf(wallet.symbol) ===-1) ar.push(wallet.symbol)

@@ -1,14 +1,14 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../services/auth-http.service';
 import {APIBooksService} from "../../../services/books-service";
-import {VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../models/app-models";
 import {StorageService} from "../../../services/app-storage.service";
 
 import {ApiLogin} from "../../../shared/api-login";
 import {IExchangeConnector} from "../connector-api.service";
 
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
+
 import {applyMixins} from "../../../shared/utils";
 import {SelectedSaved} from "../../../com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
@@ -19,7 +19,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
-import {VOBooks, VOOrder} from "../my-models";
+
 
 export class ApiHitbtc extends ApiBase  {
 
@@ -221,7 +221,7 @@ export class ApiHitbtc extends ApiBase  {
     return this.http.get(url).map((res:any)=>{
       console.log(res);
 
-      let buy:VOOrder[] = res.bid.map(function (item) {
+      let buy:VOTrade[] = res.bid.map(function (item) {
         return{
           amountCoin:+item.size,
           rate:+item.price

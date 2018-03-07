@@ -1,13 +1,13 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../services/auth-http.service';
 import {APIBooksService} from "../../../services/books-service";
-import { VOMarket, VOMarketCap, VOMarketHistory, VOOrderBook} from "../../../models/app-models";
+import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../models/app-models";
 import {StorageService} from "../../../services/app-storage.service";
 
 import {ApiLogin} from "../../../shared/api-login";
 import {IExchangeConnector} from "../connector-api.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {CryptopiaService} from "../../../exchanges/services/cryptopia.service";
+
 import {applyMixins} from "../../../shared/utils";
 import {SelectedSaved} from "../../../com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
@@ -18,7 +18,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
-import {VOOrder, VOBalance, VOBooks} from "../my-models";
+
 
 
 export class ApiCryptopia extends ApiBase  {
@@ -281,14 +281,14 @@ export class ApiCryptopia extends ApiBase  {
      // console.log(res);
       res = res.Data;
 
-      let buy:VOOrder[] = res.Buy.map(function (item) {
+      let buy:VOTrade[] = res.Buy.map(function (item) {
         return{
           amountCoin:+item.Total,
           rate:+item.Price
         }
       });
 
-      let sell:VOOrder[] = res.Sell.map(function (item) {
+      let sell:VOTrade[] = res.Sell.map(function (item) {
         return{
           amountCoin:+item.Total,
           rate:+item.Price

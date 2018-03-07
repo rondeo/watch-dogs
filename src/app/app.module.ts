@@ -37,7 +37,7 @@ import {AuthHttpService} from './services/auth-http.service';
 import {LoginModule} from './login/login.module';
 import {ShapeShiftModule} from './shape-shift/shape-shift.module';
 import {MarketCapService} from './market-cap/market-cap.service';
-import {PoloniexService} from './exchanges/services/poloniex.service';
+
 
 import {MarketCapModule} from './market-cap/market-cap.module';
 
@@ -46,21 +46,11 @@ import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-tab
 
 
 import {StorageService} from './services/app-storage.service';
-import {KrakenService} from './exchanges/services/kraken.service';
-import {ExchangesModule} from './exchanges/exchanges.module';
-import {BitfinexService} from './exchanges/services/bitfinex.service';
 
-import {ChangellyService} from './exchanges/services/changelly.service';
-import {CoinEchangeService} from './exchanges/services/coin-echange.service';
-import {BittrexService} from './exchanges/services/bittrex.service';
-import {CoinbaseService} from './exchanges/services/coinbase.service';
-import {YoBitService} from './exchanges/services/yo-bit.service';
-import {SearchCoinComponent} from './search-coin/search-coin.component';
-import {HitBtcService} from './exchanges/services/hit-btc.service';
-import {SearchCoinService} from './exchanges/search-coin.service';
-import {NovaexchangeService} from './exchanges/services/novaexchange.service';
+
+
 import {BittrexModule} from './bittrex/bittrex.module';
-import {AllExchangesModule} from './all-in-one/all-exchanges.module';
+
 import {CompareService} from './services/compare.service';
 import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
@@ -88,9 +78,7 @@ declare const Buffer:any;
     EmailServiceModule,
     LoginModule,
     ShapeShiftModule,
-    ExchangesModule,
     BittrexModule,
-    AllExchangesModule,
     MyExchangeModule,
     MyBotModule,
    // AuthModule,
@@ -106,8 +94,7 @@ declare const Buffer:any;
     HomeComponent,
     ContactComponent,*/
     ExchangeSsComponent,
-    Login2Component,
-    SearchCoinComponent
+    Login2Component
   ],
   providers: [
     WebsocketService,
@@ -121,18 +108,8 @@ declare const Buffer:any;
    // ApiServerService,
     SendAlertService,
     MarketCapService,
-    PoloniexService,
+
     StorageService,
-    KrakenService,
-    BitfinexService,
-    SearchCoinService,
-    ChangellyService,
-    CoinEchangeService,
-    BittrexService,
-    CoinbaseService,
-    YoBitService,
-    HitBtcService,
-    NovaexchangeService,
     CompareService
    // WebsocketService
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {VOCoin} from '../../models/app-models';
+
 
 @Component({
   selector: 'app-cross-table',
@@ -10,7 +10,7 @@ export class CrossTableComponent implements OnInit {
 
   tableHeaders:string[];
   tableBody:string[][];
-  coinsAvailable:VOCoin[];
+  coinsAvailable:any[];
 
   constructor() { }
 

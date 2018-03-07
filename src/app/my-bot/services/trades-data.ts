@@ -1,10 +1,11 @@
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {Observable} from "rxjs/Observable";
-import {VOOrder} from "../../my-exchange/services/my-models";
+
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
 import * as _ from 'lodash';
-import {UtilsOrder, VOBubble, VOTradesStats} from "../../my-exchange/utils-order";
+import {UtilsOrder, VOBubble, VOTradesStats} from "../../services/utils-order";
+import {VOOrder} from "../../models/app-models";
 
 export class TradesData{
   exchange:string;

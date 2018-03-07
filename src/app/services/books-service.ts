@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {MappersBooks} from "../com/mappers-books";
-import {VOOrderBook} from "../models/app-models";
+import {VOOrderBook, VOTrade} from "../models/app-models";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {VOOrder} from "../my-exchange/services/my-models";
+
 
 export interface APIBooksService{
-  getOrderBook(base:string, coin:string):Observable<{buy:VOOrder[], sell:VOOrder[]}>
+  getOrderBook(base:string, coin:string):Observable<{buy:VOTrade[], sell:VOTrade[]}>
 }
 
 
@@ -25,8 +25,8 @@ export class BooksService {
   base:string;
   coin:string;
 
-  booksSell:VOOrder[];
-  booksBuy:VOOrder[];
+  booksSell:VOTrade[];
+  booksBuy:VOTrade[];
   exchangeService:APIBooksService;
 
   rateForAmountSub:BehaviorSubject<VOBooksRate> = new BehaviorSubject<VOBooksRate>(null);
@@ -49,7 +49,7 @@ export class BooksService {
   }
 
 
-  private downloadBooks():Observable<{sell:VOOrder[], buy:VOOrder[]}>{
+  private downloadBooks():Observable<{sell:VOTrade[], buy:VOTrade[]}>{
     if(!this.base || !this.coin) return;
 
     return this.exchangeService.getOrderBook(this.base, this.coin).map(res=>{
@@ -94,7 +94,7 @@ export class BooksService {
     })
   }
 
-  static getRateForAmountBase(ar:VOOrder[], amountBase:number):number{
+  static getRateForAmountBase(ar:VOTrade[], amountBase:number):number{
     let sum=0;
    // console.error(ar);
     for(let i =0, n=ar.length; i<n; i++){
@@ -106,7 +106,7 @@ export class BooksService {
     return 0;
   }
 
-  static getRateForAmountCoin(ar:VOOrder[], amountCoin:number):number{
+  static getRateForAmountCoin(ar:VOTrade[], amountCoin:number):number{
     let prices:number[] = [];
     let sum=0;
     for(let i =0, n=ar.length; i<n; i++){

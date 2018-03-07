@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {BooksService} from "../../../services/books-service";
-import {UtilsOrder} from "../../utils-order";
+import {UtilsOrder, VOTradesStats} from "../../../services/utils-order";
 import {ApiBase} from "../../services/apis/api-base";
-import {IBooksStats, IOrdersStats} from "../../services/my-models";
-import {VOMarketCap} from "../../../models/app-models";
+
+
 import {promise} from "selenium-webdriver";
+import {VOBooksStats, VOMarketCap} from "../../../models/app-models";
 
 @Injectable()
 export class MarketCollectorService {
@@ -53,7 +54,7 @@ export class MarketCollectorService {
 
   }
 
-  static getBooksStats(api:ApiBase, coinMC:VOMarketCap, baseMC:VOMarketCap):Promise<IBooksStats>{
+  static getBooksStats(api:ApiBase, coinMC:VOMarketCap, baseMC:VOMarketCap):Promise<VOBooksStats>{
 
     let priceBaseUS = baseMC.price_usd;
     let base = baseMC.symbol;
@@ -78,7 +79,7 @@ export class MarketCollectorService {
 
         let priceToMC = Math.round(10000 * (rateToBuyUS - priceCoinMC) / priceCoinMC) / 100;
 
-        let stats: IBooksStats = {
+        let stats: VOBooksStats = {
           exchange: api.exchange,
           coin:coin,
           base: base,
@@ -101,7 +102,7 @@ export class MarketCollectorService {
   }
 
 
-  static getOrdersStats(api:ApiBase, coinMC:VOMarketCap, baseMC:VOMarketCap):Promise<IOrdersStats> {
+  static getOrdersStats(api:ApiBase, coinMC:VOMarketCap, baseMC:VOMarketCap):Promise<VOTradesStats> {
 
     let priceBaseUS = baseMC.price_usd;
     let base = baseMC.symbol;
@@ -115,21 +116,25 @@ export class MarketCollectorService {
         //console.log(res);
         let history = UtilsOrder.analizeOrdersHistory2(res, priceBaseUS);
 
-            let stats: IOrdersStats = {
+            let stats: VOTradesStats = {
               exchange: api.exchange,
               timestamp:Date.now(),
-              date:new Date().toLocaleTimeString(),
-              coinMC: coinMC,
-              baseMC:baseMC,
+              time:new Date().toLocaleTimeString(),
+              amountBuy:0,
+              amountSell:0,
+              speed:0,
+              volUS:0,
+              //coinMC: coinMC,
+              //baseMC:baseMC,
               priceBaseUS:priceBaseUS,
               rateLast:history.rateLast,
-              priceLastUS:history.priceLastUS,
+              rateLastUS:history.priceLastUS,
               priceToMC: Math.round(10000 * (history.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
               //bubbles: history.bubbles,
               duratinMin: history.duration / 60,
               speedPerMin: (history.speed * 60),
-              sumBuyUS: history.sumBuyUS,
-              sumSellUS: history.sumSellUS,
+              amountBuyUS: history.sumBuyUS,
+              amountSellUS: history.sumSellUS,
               perHourBuy: history.sumBuyUS / (history.duration / 60 / 60),
               perHourSell: history.sumSellUS / (history.duration / 60 / 60),
               coin: history.coin,

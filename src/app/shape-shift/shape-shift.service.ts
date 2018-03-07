@@ -3,17 +3,18 @@ import {AuthHttpService} from '../services/auth-http.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
-import {VOCoin, VOMarketCap, VOSearch} from '../models/app-models';
+import {VOMarketCap, VOSearch} from '../models/app-models';
 import {Subject} from 'rxjs/Subject';
+
 
 
 @Injectable()
 export class ShapeShiftService {
 
-  private coinsAvailable:VOCoin[];
-  private coinsIndexed:{[symbol:string]:VOCoin};
-  private coinsAvailableSub:BehaviorSubject<VOCoin[]>;
-  coinsAvailable$:Observable<VOCoin[]>;
+  private coinsAvailable:any[];
+  private coinsIndexed:{[symbol:string]:any};
+  private coinsAvailableSub:BehaviorSubject<any[]>;
+  coinsAvailable$:Observable<any[]>;
   constructor(private http:AuthHttpService) {
 
     this.coinsAvailableSub = new BehaviorSubject([]);
@@ -21,7 +22,7 @@ export class ShapeShiftService {
     this.getCoins();
   }
 
-  getCoins():Observable<VOCoin[]>{
+  getCoins():Observable<any[]>{
     let url = '/api/exchange/shapeshift/getcoins';
     this.http.get(url).map(res=>{
 
@@ -38,7 +39,7 @@ export class ShapeShiftService {
     return this.coinsAvailable$;
   }
 
-  private _searchCoin(symbol:string, ar:VOCoin[]):VOSearch[]{
+  private _searchCoin(symbol:string, ar:any[]):VOSearch[]{
     return ar.filter(function (item) {
       return item.symbol.indexOf(symbol) !== -1;
     }).map(function (item) {

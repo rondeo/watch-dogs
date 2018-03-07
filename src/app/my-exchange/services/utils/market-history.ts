@@ -1,5 +1,6 @@
-import {VOOrder} from "../my-models";
+
 import * as _ from 'lodash';
+import {VOOrder} from "../../../models/app-models";
 
 export class MarketHistory{
 

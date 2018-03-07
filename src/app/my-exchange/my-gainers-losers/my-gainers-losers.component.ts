@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {VOMarketCap} from "../../models/app-models";
 import {Router} from "@angular/router";
 import * as _ from 'lodash';
-import {BittrexService} from "../../exchanges/services/bittrex.service";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {MarketViewComponent} from "../../shared/market-view/market-view.component";
 import {ConnectorApiService} from "../services/connector-api.service";

@@ -1,11 +1,11 @@
-import {IOrdersStats, VOBooks, VOOrder} from "../../services/my-models";
-import {VOMarketCap} from "../../../models/app-models";
+import {VOBooks, VOMarketCap, VOOrder} from "../../../models/app-models";
 import {ApiBase} from "../../services/apis/api-base";
 import {MarketCollectorService} from "./market-collector.service";
 import {BooksService} from "../../../services/books-service";
+import {VOTradesStats} from "../../../services/utils-order";
 
 export interface IBotData{
-  startStats:IOrdersStats;
+  startStats:VOTradesStats;
   timestamp:number;
   reports:string[];
   buyOrder:VOOrder;
@@ -28,7 +28,7 @@ export class FollowCoinController {
   currentRate:number;
   priceToMC:number;
 
-  currentStats:IOrdersStats
+  currentStats:VOTradesStats;
 
 
   constructor(private data:IBotData){
@@ -49,7 +49,7 @@ export class FollowCoinController {
 
 
   getMarketStats(){
-    MarketCollectorService.getOrdersStats(this.api, this.coinMC, this.baseMC).then((summary:IOrdersStats)=>{
+    MarketCollectorService.getOrdersStats(this.api, this.coinMC, this.baseMC).then((summary:VOTradesStats)=>{
       //console.log(summary);
       this.currentStats = summary;
       this.currentRate = summary.rateLast;
@@ -63,7 +63,7 @@ export class FollowCoinController {
 
    // console.log(this.data);
 
-    let startPrice = this.data.startStats.coinMC.price_usd;
+   /* let startPrice = this.data.startStats.coinMC.price_usd;
     let newPrice = this.coinMC.price_usd;
 
     console.log(' from ' +new Date(this.data.buyOrder.timestamp) + ' rank ' + this.coinMC.rank);
@@ -76,7 +76,7 @@ export class FollowCoinController {
     let priceDiffLocal =(100* (this.currentRate - this.rateStarted)/this.rateStarted).toFixed(2);
     console.log('ON '+ this.exchange +' ' +priceDiffLocal + ' % rate started '+ (this.rateStarted *this.pricaeBaseUSStart).toPrecision(5) + ' last price ' + (this.currentRate *this.pricaeBaseUSStart).toPrecision(5));
     console.log(' volume ' + this.currentStats.totalUS);
-    console.log(this.data.reports);
+    console.log(this.data.reports);*/
 
   }
 

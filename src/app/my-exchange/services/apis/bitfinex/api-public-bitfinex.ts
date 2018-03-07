@@ -1,11 +1,12 @@
 import {Observable} from "rxjs/Observable";
-import {applyMixins, VOOrder} from "../../my-models";
+
 import {HttpConnector} from "./http-connector";
 import {SoketConnector} from "./soket-connector";
 
 import {HttpClient} from "@angular/common/http";
 import {Channels, IChannel} from "../socket-models";
 import {IApiPublic} from "../api-base";
+import {VOMarket} from "../../../../models/app-models";
 
 
 export class ApiPublicBitfinex  implements IApiPublic{
@@ -14,6 +15,17 @@ export class ApiPublicBitfinex  implements IApiPublic{
 
   }
 
+  downloadMarket(base:string, coin:string):Observable<VOMarket>{
+    return null;
+  }
+
+
+  downloadMarkets():Observable<VOMarket[]>{
+    return null;
+  }
+  getCurrency():Promise<string[]>{
+    return null;
+  }
 
   downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number){
 

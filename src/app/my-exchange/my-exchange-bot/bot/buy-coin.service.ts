@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {ApiBase} from "../../services/apis/api-base";
-import {VOOrder} from 'app/my-exchange/services/my-models';
+
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
+import {VOOrder} from "../../../models/app-models";
 
 
 export enum SetOrderErros{

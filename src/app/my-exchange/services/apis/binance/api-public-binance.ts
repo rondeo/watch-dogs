@@ -1,5 +1,8 @@
 import {HttpClient} from "@angular/common/http";
 import {IApiPublic} from "../api-base";
+import {VOMarket} from "../../../../models/app-models";
+import {Observable} from "rxjs/Observable";
+
 
 export class ApiPublicBinance implements IApiPublic{
   exchange = 'binance';
@@ -7,7 +10,17 @@ export class ApiPublicBinance implements IApiPublic{
 
   }
 
+  downloadMarket(base:string, coin:string):Observable<VOMarket>{
+    return null;
+  }
 
+  downloadMarkets():Observable<VOMarket[]>{
+    return null;
+  }
+
+  getCurrency():Promise<string[]>{
+    return null;
+  }
   downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number){
 
     return null

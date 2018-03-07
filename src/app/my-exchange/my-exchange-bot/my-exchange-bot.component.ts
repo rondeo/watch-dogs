@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {GainersService} from "./bot/gainers.service";
 import {ConnectorApiService} from "../services/connector-api.service";
-import {VOMarket, VOMarketCap} from "../../models/app-models";
+import {VOBalance, VOBooksStats, VOMarket, VOMarketCap, VOOrder} from "../../models/app-models";
 import {MyTradingService} from "./bot/my-trading.service";
-import {IBooksStats, IOrdersStats, VOBalance, VOOrder} from "../services/my-models";
+
 import {ApiBase} from "../services/apis/api-base";
 import {Subscription} from "rxjs/Subscription";
 import * as _ from 'lodash';
@@ -47,9 +47,7 @@ export class MyExchangeBotComponent implements OnInit {
   balanceCoinUS:number;
 
 
-
-
-  buyTest(first:IOrdersStats, reasons:string[]){
+  buyTest(first:any, reasons:string[]){
 
     let amountBase = this.botValueUS/ this.baseMC.price_usd;
     let coinAmount =  amountBase/first.rateLast;
@@ -58,7 +56,7 @@ export class MyExchangeBotComponent implements OnInit {
 
 
     MarketCollectorService.getBooksStats(this.currentAPI, first.coinMC, first.baseMC)
-      .then((booksStats:IBooksStats)=>{
+      .then((booksStats:VOBooksStats)=>{
        // console.log(booksStats);
         let rateToBuy = booksStats.rateToBuy
         let diff = (100*(booksStats.priceToBuyUS - first.priceLastUS) /first.priceLastUS).toFixed(2);
@@ -162,7 +160,7 @@ export class MyExchangeBotComponent implements OnInit {
   }*/
 
 
-  buyCoin(marketSummary:IOrdersStats, reason:string):void{
+  buyCoin(marketSummary:any, reason:string):void{
 
     let amountBase = this.botValueUS/ marketSummary.priceBaseUS;
     let coinAmount =  amountBase/marketSummary.rateLast;
@@ -184,7 +182,7 @@ export class MyExchangeBotComponent implements OnInit {
 
   reason:string = 'priceToMC';
 
-  summaries:IOrdersStats[];
+  summaries:any[];
 
   analyzeGainers(gainers:VOMarketCap[]){
 
@@ -217,7 +215,7 @@ export class MyExchangeBotComponent implements OnInit {
 console.log(' newCoins   ', newCoins.map(function (item) { return item.symbol}));
 
 
-      this.marketCollector.collectMarketHistories(this.currentAPI, newCoins, this.baseMC,(summary:IOrdersStats[])=>{
+      this.marketCollector.collectMarketHistories(this.currentAPI, newCoins, this.baseMC,(summary:any[])=>{
 
         summary.forEach(function (item) {
           //item.priceToBuyUS = +item.priceToBuyUS.toPrecision(4);

@@ -1,8 +1,11 @@
 import {IApiPublic} from "../api-base";
 import {HttpClient} from "@angular/common/http";
-import {VOOrder} from "../../my-models";
+
 import {Observable} from "rxjs/Observable";
-import {VOMarketHistory} from "../../../../models/app-models";
+import {VOMarket} from "../../../../models/app-models";
+
+
+
 
 export class ApiPublicBittrex implements IApiPublic{
 
@@ -11,6 +14,22 @@ export class ApiPublicBittrex implements IApiPublic{
   constructor(private http:HttpClient){
 
   }
+
+  downloadMarket(base:string, coin:string):Observable<VOMarket>{
+    return null
+  }
+
+
+  downloadMarkets():Observable<VOMarket[]>{
+    return null
+  }
+
+  getCurrency():Promise<string[]>  {
+
+    return null;
+  }
+
+
 
   downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number){
 
@@ -26,7 +45,7 @@ export class ApiPublicBittrex implements IApiPublic{
 
     return this.http.get(url).map((res: any) => {
       console.log(res);
-      return (<any>res).result.map(function (item: VOMarketHistory) {
+      return (<any>res).result.map(function (item:any) {
 
         let time = (new Date(item.TimeStamp + 'Z'));
 

@@ -1,51 +1,86 @@
 import {IApiPublic} from "../api-base";
-import {IVOMarket, VOMarket, VOMarketHistory} from "../../../../models/app-models";
+import {VOMarket, VOOrder} from "../../../../models/app-models";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {VOOrder} from "../../my-models";
+
 import {SOMarketPoloniex} from "../../../../models/sos";
 import {reject} from "q";
+import {Subject} from "rxjs/Subject";
 
 export class ApiPublicPoloniex implements IApiPublic {
   exchange = 'poloniex';
 
-  constructor(private http:HttpClient){
+  constructor(private http: HttpClient) {
 
   }
 
 
-
-  downloadMarketHistoryForPeriod(base:string, coin:string, periodMin:number, resolutionMin:number){
+  downloadMarketHistoryForPeriod(base: string, coin: string, periodMin: number, resolutionMin: number) {
     return null;
   }
 
 
-  getCurrency():Promise<string[]>{
-    return new Promise((resolve, reject)=>{
-      this.getMarkets().then(markets=>{
-        let ar:string[] = [];
+  getCurrency(): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      this.downloadMarkets().subscribe(markets => {
+        let ar: string[] = [];
         markets.forEach(function (item) {
-          if(ar.indexOf(item.coin) ===-1)ar.push(item.coin);
+          if (ar.indexOf(item.coin) === -1) ar.push(item.coin);
         });
         resolve(ar);
       })
     })
   }
 
-  private marketsAr:IVOMarket[];
-  getMarkets():Promise<IVOMarket[]>{
-    if(this.marketsAr){
-      return new Promise((resolve, reject)=>{
+  private marketsAr: VOMarket[];
+
+ /* downloadMarkets(): Promise<VOMarket[]> {
+    if (this.marketsAr) {
+      return new Promise((resolve, reject) => {
         resolve(this.marketsAr);
       })
-    }else return this.downloadMarkets().toPromise();
+    } else return this.downloadMarkets().toPromise();
+  }
+*/
+  marketTimestamp: number = 0;
+
+  downloadMarket(base: string, coin: string): Observable<VOMarket> {
+    let subj:Subject<VOMarket> = new Subject();
+    let market:VOMarket;
+    if (Date.now() - this.marketTimestamp > 60000){
+      this.downloadMarkets().subscribe(res=>{
+        this.marketTimestamp = Date.now();
+
+        market = this.marketsAr.find(function (item) {
+          return item.coin ===coin && item.base === base;
+        });
+        subj.next(market)
+      })
+
+    }else {
+      setTimeout( ()=> {
+        market = this.marketsAr.find(function (item) {
+          return item.coin ===coin && item.base === base;
+        })
+        subj.next(market)
+      }, 100)
+    }
+
+
+    return subj.asObservable();
+
   }
 
-  downloadMarkets():Observable<IVOMarket[]>{
+
+ // private marketTicker:{[market:string]:VOMarket};
+
+  downloadMarkets():Observable<VOMarket[]>{
     let url  = 'https://poloniex.com/public?command=returnTicker';
     console.log(url);
+
     return this.http.get(url).map(result=>{
-      let marketsAr:IVOMarket[] = [];
+
+      let marketsAr:VOMarket[] = [];
       let i = 0;
       for (let str in result) {
         i++;

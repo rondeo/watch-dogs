@@ -1,13 +1,11 @@
-import {VOOrder} from "../models/app-models";
+import {VOMarketCap, VOOrder} from "../models/app-models";
 import * as _ from 'lodash';
-import {IOrdersStats} from "./services/my-models";
 
 
 export const BUBBLE = {
   x:0,
   y:0,
-  r:0,
-  a:0
+  r:0
 };
 
 export interface VOBubble{
@@ -59,6 +57,9 @@ export interface VOAnalytics{
 
 
 export interface VOTradesStats{
+  exchange:string;
+  base:string;
+  coin:string;
   time:string;
   timestamp:number;
   amountBuy:number;
@@ -66,13 +67,53 @@ export interface VOTradesStats{
   amountBuyUS:number;
   amountSellUS:number;
   speed:number;
-  avgRate:number;
-  avgRateUS:number;
-  vol:number;
-  minUS:number;
-  maxUS:number;
+  speedPerMin:number;
+  duratinMin:number;
+  avgRate?:number;
+  avgRateUS?:number;
+
+  volUS:number;
+
+  minUS?:number;
+  maxUS?:number;
+  priceBaseUS:number;
+  rateLast:number;
+  rateLastUS:number;
+  priceToMC?:number;
+
+  perHourBuy?:number;
+  perHourSell?:number;
+  totalUS?:number
+  buyToSellPercent?:number
 }
 
+export interface VOMarketsStats{
+  Low:number
+  High:number;
+  Bid:number;
+  Ask:number;
+  Last:number;
+  LowUS?:number
+  HighUS?:number;
+  BidUS?:number;
+  AskUS?:number;
+  LastUS?:number;
+}
+
+
+export interface IMarketRecommended {
+  exchange:string;
+  action:string;
+  result:string;
+  date:string;
+  reason:string;
+  base:string,
+  coin:string;
+  coinMC?: VOMarketCap;
+  baseMC?: VOMarketCap;
+  tradesStats?:VOTradesStats;
+  marketStats?:VOMarketsStats;
+}
 
 export class UtilsOrder{
 
@@ -108,6 +149,14 @@ export class UtilsOrder{
     if(trades.length === 0){
       let date = new Date(timestamp);
       return {
+        exchange:'',
+        base:'',
+        coin:'',
+        speedPerMin:0,
+        duratinMin:0,
+        rateLastUS:0,
+        rateLast:0,
+        priceBaseUS:priceBaseUS,
         time:date.getHours()+':'+date.getMinutes(),
         timestamp:timestamp,
         amountBuy:0,
@@ -117,7 +166,7 @@ export class UtilsOrder{
         speed:0,
         avgRate:0,
         avgRateUS:0,
-        vol:0,
+        volUS:0,
         minUS:0,
         maxUS:0
       }
@@ -167,6 +216,14 @@ export class UtilsOrder{
     let date = new Date(timestamp);
 
     return{
+      exchange:'',
+      base:'',
+      coin:'',
+      speedPerMin:0,
+      duratinMin:0,
+      rateLastUS:0,
+      rateLast:0,
+      priceBaseUS:priceBaseUS,
       timestamp:timestamp,
       time:date.getHours()+':'+date.getMinutes(),
       amountBuyUS:stats.amountBuyUS,
@@ -174,7 +231,7 @@ export class UtilsOrder{
       amountSell:stats.amountSell,
       amountSellUS:stats.amountSellUS,
       speed:trades.length,
-      vol:stats.US,
+      volUS:stats.US,
       avgRateUS:stats.US/stats.amountCoin,
       avgRate:stats.vol/stats.amountCoin,
       minUS:stats.min,
@@ -225,8 +282,8 @@ export class UtilsOrder{
       last10:l-(l/10),
       sumBaseLast10:0,
       sumCoinLast10:0,
-      rateLast:0,
-      priceLastUS:0,
+      rateLast10:0,
+      priceLast10US:0,
       dust:dust,
       bubbles:[],
       dustCountSell:0,
@@ -285,8 +342,8 @@ export class UtilsOrder{
 
 
     out.tolerance = (100*(out.max - out.min)/out.max);
-    out.rateLast = out.sumBaseLast10/out.sumCoinLast10;
-    out.priceLastUS =  +(out.rateLast * priceBaseUS).toPrecision(5);
+    out.rateLast10 = out.sumBaseLast10/out.sumCoinLast10;
+    out.priceLast10US =  +(out.rateLast10 * priceBaseUS).toPrecision(5);
 
     return out;
 

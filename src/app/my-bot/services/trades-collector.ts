@@ -1,4 +1,4 @@
-import {VOOrder} from "../../my-exchange/services/my-models";
+
 import {Observable} from "rxjs/Observable";
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";

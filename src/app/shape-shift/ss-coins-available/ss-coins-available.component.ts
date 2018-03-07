@@ -3,7 +3,7 @@ import {ShapeShiftService} from '../shape-shift.service';
 import {MarketCapService} from '../../market-cap/market-cap.service';
 
 import * as _ from 'lodash';
-import {VOCoin, VOMarketCap} from '../../models/app-models';
+import {VOMarketCap} from '../../models/app-models';
 
 @Component({
   selector: 'app-ss-coins-available',
@@ -12,8 +12,8 @@ import {VOCoin, VOMarketCap} from '../../models/app-models';
 })
 export class SSCoinsAvailableComponent implements OnInit {
 
-  coinsAvailable:VOCoin[];
-  coinsSorted:VOCoin[];
+  coinsAvailable:any[];
+  coinsSorted:any[];
   markets:{[symbol:string]:VOMarketCap};
 
 

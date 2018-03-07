@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {Subscription} from "rxjs/Subscription";
-import {VOMarket, VOMarketB} from "../../models/app-models";
+import {VOMarket} from "../../models/app-models";
 import * as _ from 'lodash';
 import {ApiBase} from "../services/apis/api-base";
 
@@ -142,7 +142,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
     this.apiConnector.saveMarketsSelected();
 
   }
-  onChartClick(market:VOMarketB){
+  onChartClick(market:any){
     let symbolTo:string = market.MarketName.split('-')[1];
 
     /*  let mc = this.marketCap.getBySymbol(symbolTo);

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {MarketCapService} from "../../market-cap/market-cap.service";
-import {IMarketRecommended, IVOMarket, VOMarketCap} from "../../models/app-models";
+
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
-import {UtilsOrder} from "../../my-exchange/utils-order";
+import {IMarketRecommended, UtilsOrder} from "../../services/utils-order";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
 import {reject} from "q";
+import {VOMarket, VOMarketCap} from "../../models/app-models";
 
 @Injectable()
 export class BotBuyCoinService {
 
 
-  private markets:IVOMarket[]
+  private markets:any[]
   private MC:{[symbol:string]:VOMarketCap};
   private publicAPI:IApiPublic;
   private recommendedSub:Subject<IMarketRecommended[]> = new Subject();
@@ -60,7 +61,7 @@ export class BotBuyCoinService {
     }, resject);
   }
 
-  saveMarket(market:IVOMarket){
+  saveMarket(market:any){
     let url ='http://localhost:8080/mongodb';
     console.log(url);
 
@@ -71,7 +72,7 @@ export class BotBuyCoinService {
 
   getRecommended(api:IApiPublic):Observable<IMarketRecommended[]>{
     this.publicAPI = api;
-    this.publicAPI.getMarkets().then(markets=> {
+    this.publicAPI.downloadMarkets().subscribe(markets=> {
       this.markets = markets;
       this.filterGainers();
     });
@@ -89,7 +90,7 @@ export class BotBuyCoinService {
 
    // console.log(gainers);
 
-    this.collectOrdersData(gainers).then(res=>{
+    /*this.collectOrdersData(gainers).then(res=>{
 
 
       let recommended:IMarketRecommended[] = res.map(function (market:IMarketRecommended) {
@@ -99,33 +100,33 @@ export class BotBuyCoinService {
         market.date= new Date().toLocaleTimeString();
         market.reason = 'percent_change_1h > 2';
         market.result = null;
-        market.LastUS = +(market.Last * priceBase).toPrecision(5);
+     /!*   market.LastUS = +(market.Last * priceBase).toPrecision(5);
         market.AskUS = +(market.Ask * priceBase).toPrecision(5);
         market.BidUS = +(market.Bid * priceBase).toPrecision(5);
         market.LowUS = +(market.Low * priceBase).toPrecision(5);
         market.HighUS = +(market.High * priceBase).toPrecision(5);
-
+*!/
 
         return market;
       }, );
 
       this.recommendedSub.next(recommended);
      // console.log(res);
-    })
+    })*/
   }
 
 
-  collectOrdersData(gainers:IVOMarket[]):Promise<IVOMarket[]>{
+ /* collectOrdersData(gainers:IMarketRecommended[]):Promise<IMarketRecommended[]>{
     let api = this.publicAPI;
 
-    return  new Promise<IVOMarket[]>((resolve, reject)=>{
+    return  new Promise<IMarketRecommended[]>((resolve, reject)=>{
       this.getNextMarket(api, gainers, -1, resolve, reject)
     });
 
   }
+*/
 
-
-  private getNextMarket(publicAPI:IApiPublic, markets:IVOMarket[], i, resolve, reject ){
+  /*private getNextMarket(publicAPI:IApiPublic, markets:IMarketRecommended[], i, resolve, reject ){
     i++;
     if(i>= markets.length){
       resolve(markets);
@@ -136,8 +137,8 @@ export class BotBuyCoinService {
     let market = markets[i];
     let coinMC = market.coinMC;
     let baseMC = market.baseMC;
-    let base = market.base;
-    let coin = market.coin;
+    let base = market.baseMC.symbol;
+    let coin = market.coinMC.symbol;
     let exchange = market.exchange;
     let priceBaseUS = baseMC.price_usd;
 
@@ -147,25 +148,29 @@ export class BotBuyCoinService {
       result.reverse();
       let history = UtilsOrder.analizeOrdersHistory2(result, priceBaseUS);
 
-      market.stats =  {
-        exchange: exchange,
+      market.tradesStats =  {
+        exchange:'',
         timestamp:Date.now(),
-        date:new Date().toLocaleTimeString(),
-        coinMC: coinMC,
-        baseMC:baseMC,
+        time:new Date().toLocaleTimeString(),
+        avgRate:0,
+        avgRateUS:0,
         priceBaseUS:priceBaseUS,
         rateLast:history.rateLast,
-        priceLastUS:history.priceLastUS,
+        rateLastUS:history.priceLastUS,
         priceToMC: Math.round(10000 * (history.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
         //bubbles: history.bubbles,
         duratinMin: history.duration / 60,
         speedPerMin: (history.speed * 60),
-        sumBuyUS: history.sumBuyUS,
-        sumSellUS: history.sumSellUS,
+        speed:history.speed,
+        amountBuy:0,
+        amountSell:0,
+        amountBuyUS: history.sumBuyUS,
+        amountSellUS: history.sumSellUS,
         perHourBuy: history.sumBuyUS / (history.duration / 60 / 60),
         perHourSell: history.sumSellUS / (history.duration / 60 / 60),
         coin: history.coin,
         base: history.base,
+        volUS:history.sumBuyUS +  history.sumSellUS,
         totalUS: history.sumBuyUS - history.sumSellUS
 
       };
@@ -173,6 +178,6 @@ export class BotBuyCoinService {
       setTimeout(()=>this.getNextMarket(publicAPI, markets, i, resolve, reject), 5000)
     })
   }
-
+*/
 
 }

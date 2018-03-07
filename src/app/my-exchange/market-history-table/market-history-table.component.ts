@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
-import {VOMarket, VOMarketHistory} from "../../models/app-models";
+import {VOMarket, VOOrder} from "../../models/app-models";
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
 import {MappersBooks} from "../../com/mappers-books";
 import * as _ from 'lodash';
 import {MarketHistory} from "../services/utils/market-history";
-import {VOOrder} from "../services/my-models";
+
 
 @Component({
   selector: 'market-history-table',

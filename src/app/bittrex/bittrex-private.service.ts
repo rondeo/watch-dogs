@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AuthHttpService} from '../services/auth-http.service';
-import {VOBalance, VOMarketB, VOMarketCap, VOOrder, VOOrderBook, VOSearch, VOTransfer} from '../models/app-models';
+import {VOBalance, VOMarketCap, VOOrder, VOOrderBook, VOSearch, VOTransfer} from '../models/app-models';
 import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
 
@@ -13,7 +13,7 @@ import * as cryptojs from 'crypto-js';
 //import sha256, { Hash, HMAC } from "fast-sha256";
 
 import {MarketCapService} from '../market-cap/market-cap.service';
-import {BittrexService} from '../exchanges/services/bittrex.service';
+
 import {StorageService} from '../services/app-storage.service';
 
 //import {Http} from '@angular/http';
@@ -55,7 +55,7 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
   constructor(
     private http: HttpClient,
               public marketCap: MarketCapService,
-              public publicService: BittrexService,
+              //public publicService: BittrexService,
               private slack:SlackService,
               public storage: StorageService,
               private auth:AuthHttpService
@@ -71,11 +71,8 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
     this.transfersSub = new Subject();
     this.transfers$ = this.transfersSub.asObservable();
 
-    this.publicService.serachResults$.subscribe(serachResult => {
 
-    });
-
-   this.publicService.marketCap.getCoinsObs().subscribe(MC => {
+   this.marketCap.getCoinsObs().subscribe(MC => {
      this.MC = MC;
      this.mapBalancesToMC();
     });
@@ -645,7 +642,7 @@ TimeStamp
   }
 
 
-  static formatMarketsUS2(ar: VOMarketB[], baseBTC: number, baseETH: number, marketkap: { [symbol: string]: VOMarketCap }): VOMarketB[] {
+  static formatMarketsUS2(ar: any[], baseBTC: number, baseETH: number, marketkap: { [symbol: string]: VOMarketCap }): any[] {
 
 
     ar.forEach(function (item) {

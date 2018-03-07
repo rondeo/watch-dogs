@@ -3,12 +3,12 @@ import {MarketHistoryData} from "./market-history-data";
 import {ApiBase, IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {Observable} from "rxjs/Observable";
-import {VOAnalytics, VOBubble, VOTradesStats} from "../../my-exchange/utils-order";
-import {BittrexService} from "../../exchanges/services/bittrex.service";
+import {VOAnalytics, VOBubble, VOTradesStats} from "../../services/utils-order";
+
 import {ApiPublicBittrex} from "../../my-exchange/services/apis/bittrex/api-public-bittrex";
 import {HttpClient} from "@angular/common/http";
 import {ApiPublicBitfinex} from "../../my-exchange/services/apis/bitfinex/api-public-bitfinex";
-import {VOOrder} from "../../my-exchange/services/my-models";
+
 import {TradesData} from "./trades-data";
 import {Subject} from "rxjs/Subject";
 import {ApiPublicPoloniex} from "../../my-exchange/services/apis/poloniex/api-public-poloniex";
