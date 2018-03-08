@@ -47,7 +47,7 @@ export class ApiPublicPoloniex implements IApiPublic {
   downloadMarket(base: string, coin: string): Observable<VOMarket> {
     let subj:Subject<VOMarket> = new Subject();
     let market:VOMarket;
-    if (Date.now() - this.marketTimestamp > 60000){
+    if (Date.now() - this.marketTimestamp > 3 * 60 * 1000){
       this.downloadMarkets().subscribe(res=>{
         this.marketTimestamp = Date.now();
 
@@ -95,8 +95,8 @@ export class ApiPublicPoloniex implements IApiPublic {
           exchange :'poloniex',
           Volume:+data.quoteVolume,
           Last : +data.last,
-          High : +data.highestBid,
-          Low :+data.lowestAsk,
+          High : +data.high24hr,
+          Low :+data.low24hr,
           Ask : +data.lowestAsk,
           Bid : +data.highestBid,
           BaseVolume : +data.baseVolume,

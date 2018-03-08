@@ -34,19 +34,19 @@ export class CollectMarketDataService {
     if(!exists){
       exists = new CollectMarketData(this.connector.getPublicApi(exchange));
       this.collectors.push(exists);
+
+        exists.marketData$().subscribe(res=>{
+        this.marketDataSub.next(res);
+
+      });
     }
     return exists;
   }
 
   collectMarketData(exchange:string, markets:IMarketRecommended[]){
-
+    if(markets.length ===0) return;
    let collector:CollectMarketData = this.getCollector(exchange);
-   collector.marketData$().subscribe(res=>{
-     this.marketDataSub.next(res);
-   });
-
     collector.addMarkets(markets);
-
   }
 
   private subMC

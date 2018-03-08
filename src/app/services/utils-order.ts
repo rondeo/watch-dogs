@@ -84,7 +84,7 @@ export interface VOTradesStats{
   perHourBuy?:number;
   perHourSell?:number;
   totalUS?:number
-  buyToSellPercent?:number
+  percentBuy?:number
 }
 
 export interface VOMarketsStats{
@@ -105,10 +105,22 @@ export interface IMarketRecommended {
   exchange:string;
   action:string;
   result:string;
-  date:string;
+
   reason:string;
   base:string,
   coin:string;
+
+
+  date?:string;
+  timestamp?:number;
+
+  percent_1h_ToBase?:number;
+  percentBuy?:number;
+  persent_1h?:number;
+  price_US?:number;
+  price_B?:number;
+  last_US?:number;
+
   coinMC?: VOMarketCap;
   baseMC?: VOMarketCap;
   tradesStats?:VOTradesStats;

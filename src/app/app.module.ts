@@ -57,6 +57,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { WebsocketService} from "./shared/websocket-service";
 import {MyExchangeModule} from "./my-exchange/my-exchange.module";
 import {MyBotModule} from "./my-bot/my-bot.module";
+import {DatabaseService} from "./services/database.service";
 
 
 //import {WebsocketService} from "./shared/websocket-service";
@@ -86,26 +87,17 @@ declare const Buffer:any;
   ],
   declarations: [
     AppComponent,
-    // TestComponent,
- /*   AboutComponent,
-    RepoBrowserComponent,
-    RepoListComponent,
-    RepoDetailComponent,
-    HomeComponent,
-    ContactComponent,*/
     ExchangeSsComponent,
     Login2Component
   ],
   providers: [
+    DatabaseService,
     WebsocketService,
-    //DataService,
-    //AuthHttp,
-  //  GithubService,
     AuthHttpService,
 
     SlackService,
     ExchangeSsService,
-   // ApiServerService,
+
     SendAlertService,
     MarketCapService,
 

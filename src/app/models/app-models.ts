@@ -353,28 +353,39 @@ export interface VOMarketHistory {
 */
 
 export class VOMarketCap {
-  id?: string;
-  name?: string;
+  id: string;
+  name: string;
   symbol: string;
 
   rank: number;
   price_usd: number;
+  price_btc: number;
+
   percent_change_1h: number;
   percent_change_24h: number;
   percent_change_7d: number;
+
   tobtc_change_1h?: number;
   tobtc_change_24h?: number;
   tobtc_change_7d?: number;
 
   network?: string;
   age?: number;
-  price_btc?: number;
+
+
   volume_usd_24h?: number;
-  available_supply?: number;
-  total_supply?: number;
+  market_cap_usd?:number;
+  available_supply?:number;
+  total_supply?:number;
+  max_supply?:number;
   last_updated?: number;
+
+
   last_updated_date?: string;
   selected?: boolean;
+
+  rankUP?:number;
+  percent_1h_UP?:number;
 }
 
 

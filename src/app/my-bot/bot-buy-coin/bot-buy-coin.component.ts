@@ -37,10 +37,10 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
       let api  = this.connector.getPublicApi(this.exchange);
       this.buyCoinService.getRecommended(api).subscribe(recommended=>{
 
-        this.buyCoinService.saveMarkets(recommended).then(res=>{
+        /*this.buyCoinService.saveMarkets(recommended).then(res=>{
           console.log(res);
         })
-
+*/
       })
 
     });

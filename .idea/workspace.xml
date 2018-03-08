@@ -2,206 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/services/database.service.ts" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-balances/all-balances.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-balances/all-balances.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-balances/all-balances.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-coins.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-compare/all-compare.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-compare/all-compare.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-compare/all-compare.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-exchanges.module.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-gainers-losers/all-gainers-losers.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-gainers-losers/all-gainers-losers.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-gainers-losers/all-gainers-losers.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-main/all-main.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-main/all-main.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-main/all-main.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-overview/all-overview.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-overview/all-overview.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-overview/all-overview.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-private.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-search/all-search.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-search/all-search.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-search/all-search.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-v2/all-v2.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-v2/all-v2.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-v2/all-v2.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/coin-sercice-base.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/coins-list/coins-list.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/coins-list/coins-list.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/coins-list/coins-list.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-base.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-exchange/v2-exchange.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-exchange/v2-exchange.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-exchange/v2-exchange.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-search/v2-search.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-search/v2-search.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-search/v2-search.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2.service.ts" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/app/app.module.ts" afterPath="$PROJECT_DIR$/src/app/app.module.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.routes.ts" afterPath="$PROJECT_DIR$/src/app/app.routes.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-balances/bittrex-balances.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-balances/bittrex-balances.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-balances/bittrex-balances.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-buy-sell/bittrex-buy-sell.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-markets/bittrex-markets.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-markets/bittrex-markets.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-markets/bittrex-markets.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-private.service.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex-private.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-transfer/bittrex-transfer.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-transfer/bittrex-transfer.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex-transfer/bittrex-transfer.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bittrex.module.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bittrex.module.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/bot-edit/bot-edit.component.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/bot-edit/bot-edit.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/buy-sell-control/buy-sell-control.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-books/market-books.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-books/market-books.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-books/market-books.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-history/market-history.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-history/market-history.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/market-history/market-history.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/markets-summary/markets-summary.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/markets-summary/markets-summary.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/markets-summary/markets-summary.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/markets-summary/markets-summary.dialog.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/my-bot.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/my-bot.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/my-gainers-losers/my-gainers-losers.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/my-gainers-losers/my-gainers-losers.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/my-gainers-losers/my-gainers-losers.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/open-orders/open-orders.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/open-orders/open-orders.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/open-orders/open-orders.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/open-orders/open-orders.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/orders-history/orders-history.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/orders-history/orders-history.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/orders-history/orders-history.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/private-service.ts" afterPath="$PROJECT_DIR$/src/app/bittrex/private-service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/trading-history/trading-history.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/trading-history/trading-history.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/trading-history/trading-history.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/bittrex/transfer-reqest.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/mappers-history.ts" afterPath="$PROJECT_DIR$/src/app/com/mappers-history.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.component.ts" afterPath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.ts" afterPath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bitfinex/bitfinex.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bitfinex/bitfinex.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bitfinex/bitfinex.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex-available/bittrex-available.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex-available/bittrex-available.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex-available/bittrex-available.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex/bittrex-market.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex/bittrex-market.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/bittrex/bittrex-market.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/ch-market/ch-market.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/ch-market/ch-market.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/ch-market/ch-market.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coin-exchange-market/coin-exchange-market.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coin-exchange-market/coin-exchange-market.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coin-exchange-market/coin-exchange-market.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coinbase-currencies/coinbase-currencies.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coinbase-currencies/coinbase-currencies.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/coinbase-currencies/coinbase-currencies.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/cryptopia/cryptopia.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/cryptopia/cryptopia.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/cryptopia/cryptopia.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/exchanges.module.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/hit-btc-market/hit-btc-market.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/hit-btc-market/hit-btc-market.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/hit-btc-market/hit-btc-market.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/kraken/kraken.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/kraken/kraken.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/kraken/kraken.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/kraken/kraken.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/novaexchange/novaexchange.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/novaexchange/novaexchange.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/novaexchange/novaexchange.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/novaexchange/novaexchange.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-data/poloniex-data.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-data/poloniex-data.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-data/poloniex-data.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-data/poloniex-data.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-ticker/poloniex-ticker.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-ticker/poloniex-ticker.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-ticker/poloniex-ticker.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/poloniex-ticker/poloniex-ticker.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/search-coin.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/bitfinex.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/bittrex.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/changelly.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/coin-echange.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/coinbase.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/cryptopia.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/hit-btc.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/kraken.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/novaexchange.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/poloniex.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/services/yo-bit.service.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/yo-bit-market/yo-bit-market.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/yo-bit-market/yo-bit-market.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/yo-bit-market/yo-bit-market.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/exchanges/yo-bit-market/yo-bit-market.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts" afterPath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" afterPath="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts" afterPath="$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/models/app-models.ts" afterPath="$PROJECT_DIR$/src/app/models/app-models.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/bot-sell-coin.service.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/bot-sell-coin.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/bot-service.service.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/bot-service.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/market-history-data.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/market-history-data.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/trades-collector.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/trades-collector.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/trades-data.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/trades-data.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/trades-report.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/trades-report.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/market-history-table/market-history-table.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/market-history-table/market-history-table.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-books/my-books.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-books/my-books.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/buy-coin.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/buy-coin.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/follow-coin-controller.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/follow-coin-controller.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/follow-coin.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/follow-coin.service.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts" afterPath="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/my-trading.service.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/my-trading.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/my-exchange-bot.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/my-exchange-bot.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-gainers-losers/my-gainers-losers.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-gainers-losers/my-gainers-losers.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/binance/api-public-binance.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/binance/api-public-binance.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/api-public-bitfinex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/api-public-bitfinex.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-public-bittrex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-public-bittrex.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-poloniex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-poloniex.ts" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/my-models.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/my-models.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/utils/market-history.ts" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/utils/market-history.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" afterPath="$PROJECT_DIR$/src/app/services/utils-order.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/search-coin/search-coin.component.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/search-coin/search-coin.component.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/search-coin/search-coin.component.spec.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/search-coin/search-coin.component.ts" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/books-service.ts" afterPath="$PROJECT_DIR$/src/app/services/books-service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/buy-sell.service.ts" afterPath="$PROJECT_DIR$/src/app/services/buy-sell.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.service.ts" afterPath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.service.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.ts" afterPath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" afterPath="$PROJECT_DIR$/src/app/shared/bubble-chart/bubble-chart.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/cross-table/cross-table.component.ts" afterPath="$PROJECT_DIR$/src/app/shared/cross-table/cross-table.component.ts" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/trades-history/trades-history.component.ts" afterPath="$PROJECT_DIR$/src/app/shared/trades-history/trades-history.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/app/services/utils-order.ts" afterPath="$PROJECT_DIR$/src/app/services/utils-order.ts" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -216,114 +31,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="collect-market-data.ts" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="58" column="42" lean-forward="false" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils-order.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/services/utils-order.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="336" column="29" lean-forward="false" selection-start-line="336" selection-start-column="29" selection-end-line="336" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bot-buy-coin.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api-public-binance.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/binance/api-public-binance.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="25" column="15" lean-forward="false" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#48#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="collect-market-data.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="38" column="3" lean-forward="false" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bot-follow-coin.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="79" column="8" lean-forward="false" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api-public-poloniex.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="48" column="24" lean-forward="false" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api-public-bittrex.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-public-bittrex.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api-base.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="20" column="42" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api-public-bitfinex.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/api-public-bitfinex.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -335,8 +43,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>amountUS</find>
-      <find>priceBaseUS</find>
       <find>this</find>
       <find>pair</find>
       <find>percentDiff</find>
@@ -365,6 +71,8 @@
       <find>currentAPI</find>
       <find>mongodb</find>
       <find>ApiPublicPoloniex</find>
+      <find>mongo</find>
+      <find>setData</find>
     </findStrings>
     <replaceStrings>
       <replace>MatD</replace>
@@ -388,10 +96,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/com/mappers-history.ts" />
-        <option value="$PROJECT_DIR$/src/app/bittrex/markets-summary/markets-summary.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/private-service.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/my-gainers-losers/my-gainers-losers.component.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/bittrex-data/bittrex-data.component.ts" />
@@ -399,11 +103,9 @@
         <option value="$PROJECT_DIR$/src/app/bittrex/bot-edit/bot-edit.component.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/transfer-reqest.ts" />
         <option value="$PROJECT_DIR$/src/app/bittrex/my-bot.ts" />
-        <option value="$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/market-history-line/market-history-line.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/my-models.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/services/bot-service.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/services/market-history-data.ts" />
@@ -415,9 +117,7 @@
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/my-exchange-bot.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts" />
         <option value="$PROJECT_DIR$/src/app/services/books-service.ts" />
-        <option value="$PROJECT_DIR$/src/app/models/app-models.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/my-trading.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/market-history-table/market-history-table.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-books/my-books.component.ts" />
@@ -429,16 +129,24 @@
         <option value="$PROJECT_DIR$/src/app/services/buy-sell.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/utils-order.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/bitfinex/api-public-bitfinex.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-public-bittrex.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/binance/api-public-binance.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/services/utils-order.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/services/database.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/services/utils-order.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/models/app-models.ts" />
+        <option value="$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" />
       </list>
     </option>
   </component>
@@ -454,10 +162,9 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="61" />
-    <option name="y" value="7" />
+    <option name="x" value="38" />
     <option name="width" value="1874" />
-    <option name="height" value="1090" />
+    <option name="height" value="1077" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -498,54 +205,15 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-bot" type="462c0819:PsiDirectoryNode" />
+              <item name="email-service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-bot" type="462c0819:PsiDirectoryNode" />
-              <item name="bot-follow-coin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-bot" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-              <item name="apis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="email-service" type="462c0819:PsiDirectoryNode" />
+              <item name="edit-script" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -802,7 +470,7 @@
       <workItem from="1519950707262" duration="3819000" />
       <workItem from="1520042025859" duration="47939000" />
       <workItem from="1520295721578" duration="9539000" />
-      <workItem from="1520432066518" duration="20324000" />
+      <workItem from="1520432066518" duration="35364000" />
     </task>
     <task id="LOCAL-00001" summary="interfaces for services">
       <created>1515613193838</created>
@@ -1077,26 +745,34 @@
       <option name="project" value="LOCAL" />
       <updated>1520296100546</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="refactoring">
+      <created>1520457501729</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1520457501729</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1598512000" />
+    <option name="totallyTimeSpent" value="1613552000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="61" y="7" width="1874" height="1090" extended-state="0" />
+    <frame x="38" y="0" width="1874" height="1077" extended-state="0" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2764141" sideWeight="0.3267974" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14930183" sideWeight="0.49237472" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15141612" sideWeight="0.49237472" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29044944" sideWeight="0.5060241" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.396348" sideWeight="0.67320263" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39542484" sideWeight="0.67320263" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21623094" sideWeight="0.4939759" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26960784" sideWeight="0.4939759" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -1106,7 +782,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24972437" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1173,7 +848,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="buy sell basic works" />
     <MESSAGE value="buy sell control" />
     <MESSAGE value=" final" />
     <MESSAGE value="nooks percent" />
@@ -1198,7 +872,8 @@
     <MESSAGE value="bubbles" />
     <MESSAGE value="build transaction" />
     <MESSAGE value="sel coin service" />
-    <option name="LAST_COMMIT_MESSAGE" value="sel coin service" />
+    <MESSAGE value="refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1207,64 +882,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/trades-data.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="30" column="2" lean-forward="false" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#68#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/market-history-data.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="11" column="44" lean-forward="false" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-service.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-sell-coin.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-sell-coin.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="80" column="25" lean-forward="false" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/models/app-models.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/my-exchange-bot.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/services/books-service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1407,16 +1024,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="126" column="29" lean-forward="false" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/my-trading.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -1469,16 +1076,6 @@
           <caret line="7" column="43" lean-forward="false" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
           <folding>
             <element signature="e#1#29#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="47" lean-forward="false" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#59#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1586,7 +1183,7 @@
         <state relative-caret-position="198">
           <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1596,7 +1193,7 @@
         <state relative-caret-position="255">
           <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1606,55 +1203,135 @@
         <state relative-caret-position="408">
           <caret line="25" column="15" lean-forward="false" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
           <folding>
-            <element signature="e#0#48#0" expanded="true" />
+            <element signature="e#0#48#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange-bot/bot/market-collector.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="48" column="24" lean-forward="false" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+        <state relative-caret-position="154">
+          <caret line="130" column="47" lean-forward="false" selection-start-line="130" selection-start-column="47" selection-end-line="130" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="92" column="14" lean-forward="false" selection-start-line="92" selection-start-column="14" selection-end-line="92" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#58#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/services/database.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="58" lean-forward="false" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="92" column="25" lean-forward="false" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-sell-coin.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="80" column="25" lean-forward="false" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/email-service/email-service.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="57" column="16" lean-forward="true" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/market-cap/market-cap.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="160" column="0" lean-forward="true" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-bot/bot-follow-coin/bot-follow-coin.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="79" column="8" lean-forward="false" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/services/utils-order.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="336" column="29" lean-forward="false" selection-start-line="336" selection-start-column="29" selection-end-line="336" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/bot-buy-coin.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        <state relative-caret-position="220">
+          <caret line="50" column="40" lean-forward="false" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="38" column="3" lean-forward="false" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
+        <state relative-caret-position="646">
+          <caret line="45" column="2" lean-forward="false" selection-start-line="45" selection-start-column="2" selection-end-line="45" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/models/app-models.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="354" column="13" lean-forward="false" selection-start-line="354" selection-start-column="13" selection-end-line="354" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/services/utils-order.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="121" column="18" lean-forward="false" selection-start-line="118" selection-start-column="1" selection-end-line="121" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-bot/services/collect-market-data.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="58" column="42" lean-forward="false" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
+        <state relative-caret-position="189">
+          <caret line="38" column="13" lean-forward="false" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-bot/bot-buy-coin/bot-buy-coin.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="35" column="38" lean-forward="false" selection-start-line="35" selection-start-column="38" selection-end-line="35" selection-end-column="38" />
           <folding />
         </state>
       </provider>

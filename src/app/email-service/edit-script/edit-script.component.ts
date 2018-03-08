@@ -131,6 +131,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
       symbol:oldValue.symbol,
       rank: oldValue.rank,
       price_usd:values['price_usd'],
+      price_btc:values['price_btc'],
       percent_change_1h:values['percent_change_1h'],
       percent_change_24h:values['percent_change_24h'],
       percent_change_7d:values['percent_change_7d']

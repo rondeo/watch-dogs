@@ -9,6 +9,7 @@ import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
 import {reject} from "q";
 import {VOMarket, VOMarketCap} from "../../models/app-models";
+import {DatabaseService} from "../../services/database.service";
 
 @Injectable()
 export class BotBuyCoinService {
@@ -31,7 +32,8 @@ export class BotBuyCoinService {
   constructor(
     private http:HttpClient,
     private connector:ConnectorApiService,
-    private marketCap:MarketCapService
+    private marketCap:MarketCapService,
+    private database:DatabaseService
 
   ) {
 
@@ -41,7 +43,7 @@ export class BotBuyCoinService {
     });
   }
 
-  saveMarkets(markets:IMarketRecommended[]){
+ /* saveMarkets(markets:IMarketRecommended[]){
     return new Promise((resolve, reject)=>{
       this._saveMarkets(markets, -1, resolve, reject);
     })
@@ -55,19 +57,14 @@ export class BotBuyCoinService {
       return;
     }
     let market = markets[i];
-    this.saveMarket(market).subscribe(res=>{
+
+    this.database.saveMarket(market).subscribe(res=>{
       market.result = JSON.stringify(res);
       this._saveMarkets(markets, i, resolve, resject);
     }, resject);
   }
 
-  saveMarket(market:any){
-    let url ='http://localhost:8080/mongodb';
-    console.log(url);
-
-    return this.http.post(url,{follow:market})
-
-  }
+*/
 
 
   getRecommended(api:IApiPublic):Observable<IMarketRecommended[]>{

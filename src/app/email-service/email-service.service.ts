@@ -55,7 +55,8 @@ export class EmailServiceService {
       price_usd: 0,
       percent_change_1h: 0,
       percent_change_24h: 0,
-      percent_change_7d: 0
+      percent_change_7d: 0,
+      price_btc:0,
     }
   }
   }

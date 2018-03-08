@@ -22,16 +22,26 @@ export class CollectMarketData {
 
   addMarkets(recommended: IMarketRecommended[]) {
 
-    if (this.Q.length === 0) setTimeout(() => this.getNextMarket(), 1000);
+    if (this.Q.length === 0){
+      console.log(' np Q starting in 1 sec')
+      setTimeout(() => this.getNextMarket(), 1000);
+    }
+    console.warn(' adding to Q ' + recommended.length);
     this.Q = this.Q.concat(recommended);
 
   }
 
   private getNextMarket() {
 
+    if (this.Q.length !== 0) setTimeout(() => this.getNextMarket(), 10000);
+    else{
+      console.log(' no more Q')
+      return;
+    }
+
     let recommended = <IMarketRecommended>this.Q.shift();
 
-    if (this.Q.length !== 0) setTimeout(() => this.getNextMarket(), 10000);
+
 
     let coinMC = recommended.coinMC;
     let baseMC = recommended.baseMC;
@@ -41,6 +51,7 @@ export class CollectMarketData {
     let priceBaseUS = baseMC.price_usd;
 
 
+    console.log(' collectong data for ' + coin + ' left ' + this.Q.length);
     this.publicAPI.downloadTrades(base, coin).toPromise().then(result => {
 
       result.reverse();
@@ -69,7 +80,7 @@ export class CollectMarketData {
         perHourBuy: history.sumBuyUS / (history.duration / 60 / 60),
         perHourSell: history.sumSellUS / (history.duration / 60 / 60),
         totalUS: history.sumBuyUS - history.sumSellUS,
-        buyToSellPercent: +(100*(history.sumBuyUS - history.sumSellUS)/history.sumSellUS).toFixed(2),
+        percentBuy: +(100*(history.sumBuyUS - history.sumSellUS)/history.sumSellUS).toFixed(2),
         volUS: history.sumBuyUS + history.sumSellUS
       };
 
@@ -78,6 +89,7 @@ export class CollectMarketData {
       if (recommended.baseMC.symbol === 'USDT') priceBase = 1;
 
       setTimeout(()=>{
+
         this.publicAPI.downloadMarket(base, coin).subscribe(market=>{
           let marketStats = market as VOMarketsStats;
           marketStats.LastUS = +(market.Last * priceBase).toPrecision(5);
@@ -88,6 +100,7 @@ export class CollectMarketData {
 
           recommended.marketStats = marketStats;
 
+          console.log('ready data for ' + coin);
           this.marketDataSub.next(recommended);
 
         }, error2 => {
