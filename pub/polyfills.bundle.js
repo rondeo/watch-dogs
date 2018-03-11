@@ -2653,7 +2653,7 @@ var Zone$1 = (function (global) {
                 // should set task's state to unknown when scheduleTask throw error
                 // because the err may from reschedule, so the fromState maybe notScheduled
                 task._transitionTo(unknown, scheduling, notScheduled);
-                // TODO: @JiaLiPassion, should we check the result from handleError?
+                // TODO: @JiaLiPassion, should we check the reports from handleError?
                 this._zoneDelegate.handleError(this, err);
                 throw err;
             }
@@ -3497,7 +3497,7 @@ function patchProperty(obj, prop, prototype) {
             return target[_prop];
         }
         else if (originalDescGet) {
-            // result will be null when use inline event attribute,
+            // reports will be null when use inline event attribute,
             // such as <button onclick="func();">OK</button>
             // because the onclick function is internal raw uncompiled handler
             // the onclick will be evaluated when first time event was triggered or

@@ -61,16 +61,11 @@ export class GainersService {
 
   subtractBTC(coins:VOMarketCap[], btc:VOMarketCap):VOMarketCap[]{
   return coins.map(function (item: VOMarketCap) {
-      return {
-        id:item.id,
-        symbol:item.symbol,
-        rank: item.rank,
-        price_usd:item.price_usd,
-        percent_change_1h:+(item.percent_change_1h - this.b.percent_change_1h).toFixed(2),
-        percent_change_24h:+(item.percent_change_24h - this.b.percent_change_24h).toFixed(2),
-        percent_change_7d:+(item.percent_change_7d - this.b.percent_change_7d).toFixed(2)
-
-      }
+    let coin = _.clone(item);
+      coin.percent_change_1h = +(item.percent_change_1h - this.b.percent_change_1h).toFixed(2);
+      coin.percent_change_24h = +(item.percent_change_24h - this.b.percent_change_24h).toFixed(2);
+      coin.percent_change_7d = +(item.percent_change_7d - this.b.percent_change_7d).toFixed(2);
+      return coin
     }, {b:btc});
   }
 

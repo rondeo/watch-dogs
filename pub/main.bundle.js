@@ -1138,7 +1138,7 @@ var AllCoinsService = (function () {
         this.http.get(this.url).map(function (res) {
             return res.json().map(_this.mapExchangeData);
         }).subscribe(function (result) {
-            //localStorage.setItem('exchange',JSON.stringify(result));
+            //localStorage.setItem('exchange',JSON.stringify(reports));
             /*let now = Date.now();
             let diff=  - (item.last_updated*1000);
             item.last_updated_date = Math.round(diff/1000/60)+ 'm';*/

@@ -365,9 +365,12 @@ export class VOMarketCap {
   percent_change_24h: number;
   percent_change_7d: number;
 
+
+  btcUS?:number
   tobtc_change_1h?: number;
   tobtc_change_24h?: number;
   tobtc_change_7d?: number;
+
 
   network?: string;
   age?: number;

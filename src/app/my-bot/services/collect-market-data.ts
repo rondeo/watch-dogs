@@ -3,11 +3,14 @@ import {IMarketRecommended, UtilsOrder, VOMarketsStats, VOTradesStats} from "../
 
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
+import {EventEmitter} from "@angular/core";
 
 export class CollectMarketData {
 
   public exchange: string;
   Q: IMarketRecommended[] = [];
+
+  onDone:EventEmitter<string> = new EventEmitter();
 
   private marketDataSub: Subject<IMarketRecommended> = new Subject();
 
@@ -35,13 +38,12 @@ export class CollectMarketData {
 
     if (this.Q.length !== 0) setTimeout(() => this.getNextMarket(), 10000);
     else{
+      this.onDone.emit(this.publicAPI.exchange);
       console.log(' no more Q')
       return;
     }
 
     let recommended = <IMarketRecommended>this.Q.shift();
-
-
 
     let coinMC = recommended.coinMC;
     let baseMC = recommended.baseMC;
@@ -49,7 +51,6 @@ export class CollectMarketData {
     let coin = recommended.coinMC.symbol;
     let exchange = recommended.exchange;
     let priceBaseUS = baseMC.price_usd;
-
 
     console.log(' collectong data for ' + coin + ' left ' + this.Q.length);
     this.publicAPI.downloadTrades(base, coin).toPromise().then(result => {

@@ -162,6 +162,15 @@ export class MarketCapService {
     this.coins = MC
     this.coins['USDT'].price_usd = 1;
     this.coinsAr = Object.values(MC);
+    let btc = MC['BTC'];
+
+    this.coinsAr.forEach(function (item) {
+      item.tobtc_change_1h = +(item.percent_change_1h - this.btc.percent_change_1h).toFixed(2);
+      item.tobtc_change_24h = +(item.percent_change_24h - this.btc.percent_change_24h).toFixed(2);
+      item.tobtc_change_7d = +(item.percent_change_7d - this.btc.percent_change_7d).toFixed(2);
+      item.btcUS = this.btc.price_usd;
+    },{btc:btc});
+
     this.coinsSubB.next(this.coins);
     // console.log(ar);
 

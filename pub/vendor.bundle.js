@@ -176,7 +176,7 @@ function toComment(sourceMap) {
     ['rearg', WRAP_REARG_FLAG]
   ];
 
-  /** `Object#toString` result references. */
+  /** `Object#toString` reports references. */
   var argsTag = '[object Arguments]',
       arrayTag = '[object Array]',
       asyncTag = '[object AsyncFunction]',
@@ -575,7 +575,7 @@ function toComment(sourceMap) {
    * @param {Function} func The function to invoke.
    * @param {*} thisArg The `this` binding of `func`.
    * @param {Array} args The arguments to invoke `func` with.
-   * @returns {*} Returns the result of `func`.
+   * @returns {*} Returns the reports of `func`.
    */
   function apply(func, thisArg, args) {
     switch (args.length) {
@@ -1719,7 +1719,7 @@ function toComment(sourceMap) {
      * `lowerCase`, `lowerFirst`, `lt`, `lte`, `max`, `maxBy`, `mean`, `meanBy`,
      * `min`, `minBy`, `multiply`, `noConflict`, `noop`, `now`, `nth`, `pad`,
      * `padEnd`, `padStart`, `parseInt`, `pop`, `random`, `reduce`, `reduceRight`,
-     * `repeat`, `result`, `round`, `runInContext`, `sample`, `shift`, `size`,
+     * `repeat`, `reports`, `round`, `runInContext`, `sample`, `shift`, `size`,
      * `snakeCase`, `some`, `sortedIndex`, `sortedIndexBy`, `sortedLastIndex`,
      * `sortedLastIndexBy`, `startCase`, `startsWith`, `stubArray`, `stubFalse`,
      * `stubObject`, `stubString`, `stubTrue`, `subtract`, `sum`, `sumBy`,
@@ -3026,7 +3026,7 @@ function toComment(sourceMap) {
      * @param {number} depth The maximum recursion depth.
      * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
      * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
-     * @param {Array} [result=[]] The initial result value.
+     * @param {Array} [result=[]] The initial reports value.
      * @returns {Array} Returns the new flattened array.
      */
     function baseFlatten(array, depth, predicate, isStrict, result) {
@@ -3307,7 +3307,7 @@ function toComment(sourceMap) {
      * @param {Object} object The object to query.
      * @param {Array|string} path The path of the method to invoke.
      * @param {Array} args The arguments to invoke the method with.
-     * @returns {*} Returns the result of the invoked method.
+     * @returns {*} Returns the reports of the invoked method.
      */
     function baseInvoke(object, path, args) {
       path = castPath(path, object);
@@ -3555,7 +3555,7 @@ function toComment(sourceMap) {
      * @returns {Function} Returns the iteratee.
      */
     function baseIteratee(value) {
-      // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
+      // Don't store the `typeof` reports in a variable to avoid a JIT bug in Safari 9.
       // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
       if (typeof value == 'function') {
         return value;
@@ -4109,7 +4109,7 @@ function toComment(sourceMap) {
      *
      * @private
      * @param {Function} func The function to modify.
-     * @param {Function} string The `toString` result.
+     * @param {Function} string The `toString` reports.
      * @returns {Function} Returns `func`.
      */
     var baseSetToString = !defineProperty ? identity : function(func, string) {
@@ -4449,7 +4449,7 @@ function toComment(sourceMap) {
     }
 
     /**
-     * The base implementation of `wrapperValue` which returns the result of
+     * The base implementation of `wrapperValue` which returns the reports of
      * performing a sequence of actions on the unwrapped `value`, where each
      * successive action is supplied the return value of the previous.
      *
@@ -6040,12 +6040,12 @@ function toComment(sourceMap) {
      * Gets the appropriate "iteratee" function. If `_.iteratee` is customized,
      * this function returns the custom method, otherwise it returns `baseIteratee`.
      * If arguments are provided, the chosen function is invoked with them and
-     * its result is returned.
+     * its reports is returned.
      *
      * @private
      * @param {*} [value] The value to convert to an iteratee.
      * @param {number} [arity] The arity of the created iteratee.
-     * @returns {Function} Returns the chosen function or its result.
+     * @returns {Function} Returns the chosen function or its reports.
      */
     function getIteratee() {
       var result = lodash.iteratee || iteratee;
@@ -6756,7 +6756,7 @@ function toComment(sourceMap) {
      *
      * @private
      * @param {Function} func The function to modify.
-     * @param {Function} string The `toString` result.
+     * @param {Function} string The `toString` reports.
      * @returns {Function} Returns `func`.
      */
     var setToString = shortOut(baseSetToString);
@@ -7031,7 +7031,7 @@ function toComment(sourceMap) {
     /**
      * Creates an array of `array` values not included in the other given arrays
      * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-     * for equality comparisons. The order and references of result values are
+     * for equality comparisons. The order and references of reports values are
      * determined by the first array.
      *
      * **Note:** Unlike `_.pullAll`, this method returns a new array.
@@ -7058,7 +7058,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.difference` except that it accepts `iteratee` which
      * is invoked for each element of `array` and `values` to generate the criterion
-     * by which they're compared. The order and references of result values are
+     * by which they're compared. The order and references of reports values are
      * determined by the first array. The iteratee is invoked with one argument:
      * (value).
      *
@@ -7094,7 +7094,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.difference` except that it accepts `comparator`
      * which is invoked to compare elements of `array` to `values`. The order and
-     * references of result values are determined by the first array. The comparator
+     * references of reports values are determined by the first array. The comparator
      * is invoked with two arguments: (arrVal, othVal).
      *
      * **Note:** Unlike `_.pullAllWith`, this method returns a new array.
@@ -7586,7 +7586,7 @@ function toComment(sourceMap) {
     /**
      * Creates an array of unique values that are included in all given arrays
      * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-     * for equality comparisons. The order and references of result values are
+     * for equality comparisons. The order and references of reports values are
      * determined by the first array.
      *
      * @static
@@ -7610,7 +7610,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.intersection` except that it accepts `iteratee`
      * which is invoked for each element of each `arrays` to generate the criterion
-     * by which they're compared. The order and references of result values are
+     * by which they're compared. The order and references of reports values are
      * determined by the first array. The iteratee is invoked with one argument:
      * (value).
      *
@@ -7647,7 +7647,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.intersection` except that it accepts `comparator`
      * which is invoked to compare elements of `arrays`. The order and references
-     * of result values are determined by the first array. The comparator is
+     * of reports values are determined by the first array. The comparator is
      * invoked with two arguments: (arrVal, othVal).
      *
      * @static
@@ -8478,7 +8478,7 @@ function toComment(sourceMap) {
      * Creates a duplicate-free version of an array, using
      * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
      * for equality comparisons, in which only the first occurrence of each element
-     * is kept. The order of result values is determined by the order they occur
+     * is kept. The order of reports values is determined by the order they occur
      * in the array.
      *
      * @static
@@ -8499,7 +8499,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.uniq` except that it accepts `iteratee` which is
      * invoked for each element in `array` to generate the criterion by which
-     * uniqueness is computed. The order of result values is determined by the
+     * uniqueness is computed. The order of reports values is determined by the
      * order they occur in the array. The iteratee is invoked with one argument:
      * (value).
      *
@@ -8525,7 +8525,7 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.uniq` except that it accepts `comparator` which
-     * is invoked to compare elements of `array`. The order of result values is
+     * is invoked to compare elements of `array`. The order of reports values is
      * determined by the order they occur in the array.The comparator is invoked
      * with two arguments: (arrVal, othVal).
      *
@@ -8646,7 +8646,7 @@ function toComment(sourceMap) {
     /**
      * Creates an array of unique values that is the
      * [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)
-     * of the given arrays. The order of result values is determined by the order
+     * of the given arrays. The order of reports values is determined by the order
      * they occur in the arrays.
      *
      * @static
@@ -8668,7 +8668,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.xor` except that it accepts `iteratee` which is
      * invoked for each element of each `arrays` to generate the criterion by
-     * which by which they're compared. The order of result values is determined
+     * which by which they're compared. The order of reports values is determined
      * by the order they occur in the arrays. The iteratee is invoked with one
      * argument: (value).
      *
@@ -8698,7 +8698,7 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.xor` except that it accepts `comparator` which is
-     * invoked to compare elements of `arrays`. The order of result values is
+     * invoked to compare elements of `arrays`. The order of reports values is
      * determined by the order they occur in the arrays. The comparator is invoked
      * with two arguments: (arrVal, othVal).
      *
@@ -8812,7 +8812,7 @@ function toComment(sourceMap) {
 
     /**
      * Creates a `lodash` wrapper instance that wraps `value` with explicit method
-     * chain sequences enabled. The result of such sequences must be unwrapped
+     * chain sequences enabled. The reports of such sequences must be unwrapped
      * with `_#value`.
      *
      * @static
@@ -8874,7 +8874,7 @@ function toComment(sourceMap) {
     }
 
     /**
-     * This method is like `_.tap` except that it returns the result of `interceptor`.
+     * This method is like `_.tap` except that it returns the reports of `interceptor`.
      * The purpose of this method is to "pass thru" values replacing intermediate
      * results in a method chain sequence.
      *
@@ -8884,7 +8884,7 @@ function toComment(sourceMap) {
      * @category Seq
      * @param {*} value The value to provide to `interceptor`.
      * @param {Function} interceptor The function to invoke.
-     * @returns {*} Returns the result of `interceptor`.
+     * @returns {*} Returns the reports of `interceptor`.
      * @example
      *
      * _('  abc  ')
@@ -8972,7 +8972,7 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Executes the chain sequence and returns the wrapped result.
+     * Executes the chain sequence and returns the wrapped reports.
      *
      * @name commit
      * @memberOf _
@@ -9743,7 +9743,7 @@ function toComment(sourceMap) {
     }, function() { return [[], []]; });
 
     /**
-     * Reduces `collection` to a value which is the accumulated result of running
+     * Reduces `collection` to a value which is the accumulated reports of running
      * each element in `collection` thru `iteratee`, where each successive
      * invocation is supplied the return value of the previous. If `accumulator`
      * is not given, the first element of `collection` is used as the initial
@@ -9773,9 +9773,9 @@ function toComment(sourceMap) {
      * }, 0);
      * // => 3
      *
-     * _.reduce({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
-     *   (result[value] || (result[value] = [])).push(key);
-     *   return result;
+     * _.reduce({ 'a': 1, 'b': 2, 'c': 1 }, function(reports, value, key) {
+     *   (reports[value] || (reports[value] = [])).push(key);
+     *   return reports;
      * }, {});
      * // => { '1': ['a', 'c'], '2': ['b'] } (iteration order is not guaranteed)
      */
@@ -10130,7 +10130,7 @@ function toComment(sourceMap) {
     /**
      * Creates a function that invokes `func`, with the `this` binding and arguments
      * of the created function, while it's called less than `n` times. Subsequent
-     * calls to the created function return the result of the last `func` invocation.
+     * calls to the created function return the reports of the last `func` invocation.
      *
      * @static
      * @memberOf _
@@ -10261,7 +10261,7 @@ function toComment(sourceMap) {
 
     /**
      * Creates a function that accepts arguments of `func` and either invokes
-     * `func` returning its result, if at least `arity` number of arguments have
+     * `func` returning its reports, if at least `arity` number of arguments have
      * been provided, or returns a function that accepts the remaining `func`
      * arguments, and so on. The arity of `func` may be specified if `func.length`
      * is not sufficient.
@@ -10360,7 +10360,7 @@ function toComment(sourceMap) {
      * Provide `options` to indicate whether `func` should be invoked on the
      * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
      * with the last arguments provided to the debounced function. Subsequent
-     * calls to the debounced function return the result of the last `func`
+     * calls to the debounced function return the reports of the last `func`
      * invocation.
      *
      * **Note:** If `leading` and `trailing` options are `true`, `func` is
@@ -10596,8 +10596,8 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Creates a function that memoizes the result of `func`. If `resolver` is
-     * provided, it determines the cache key for storing the result based on the
+     * Creates a function that memoizes the reports of `func`. If `resolver` is
+     * provided, it determines the cache key for storing the reports based on the
      * arguments provided to the memoized function. By default, the first argument
      * provided to the memoized function is used as the map cache key. The `func`
      * is invoked with the `this` binding of the memoized function.
@@ -10631,7 +10631,7 @@ function toComment(sourceMap) {
      * values(object);
      * // => [1, 2]
      *
-     * // Modify the result cache.
+     * // Modify the reports cache.
      * values.cache.set(object, ['a', 'b']);
      * values(object);
      * // => ['a', 'b']
@@ -10663,7 +10663,7 @@ function toComment(sourceMap) {
     memoize.Cache = MapCache;
 
     /**
-     * Creates a function that negates the result of the predicate `func`. The
+     * Creates a function that negates the reports of the predicate `func`. The
      * `func` predicate is invoked with the `this` binding and arguments of the
      * created function.
      *
@@ -10960,7 +10960,7 @@ function toComment(sourceMap) {
      * should be invoked on the leading and/or trailing edge of the `wait`
      * timeout. The `func` is invoked with the last arguments provided to the
      * throttled function. Subsequent calls to the throttled function return the
-     * result of the last `func` invocation.
+     * reports of the last `func` invocation.
      *
      * **Note:** If `leading` and `trailing` options are `true`, `func` is
      * invoked on the trailing edge of the timeout only if the throttled function
@@ -11849,7 +11849,7 @@ function toComment(sourceMap) {
 
     /**
      * Checks if `value` is object-like. A value is object-like if it's not `null`
-     * and has a `typeof` result of "object".
+     * and has a `typeof` reports of "object".
      *
      * @static
      * @memberOf _
@@ -12004,7 +12004,7 @@ function toComment(sourceMap) {
      * **Note:** This method can't reliably detect native functions in the presence
      * of the core-js package because core-js circumvents this kind of detection.
      * Despite multiple requests, the core-js maintainer has made it clear: any
-     * attempt to fix the detection will be obstructed. As a result, we're left
+     * attempt to fix the detection will be obstructed. As a reports, we're left
      * with little choice but to throw an error. Unfortunately, this also affects
      * packages, like [babel-polyfill](https://www.npmjs.com/package/babel-polyfill),
      * which rely on core-js.
@@ -12169,7 +12169,7 @@ function toComment(sourceMap) {
 
     /**
      * Checks if `value` is a safe integer. An integer is safe if it's an IEEE-754
-     * double precision number which isn't the result of a rounded unsafe integer.
+     * double precision number which isn't the reports of a rounded unsafe integer.
      *
      * **Note:** This method is based on
      * [`Number.isSafeInteger`](https://mdn.io/Number/isSafeInteger).
@@ -13331,7 +13331,7 @@ function toComment(sourceMap) {
      * @param {Object} object The object to query.
      * @param {Array|string} path The path of the method to invoke.
      * @param {...*} [args] The arguments to invoke the method with.
-     * @returns {*} Returns the result of the invoked method.
+     * @returns {*} Returns the reports of the invoked method.
      * @example
      *
      * var object = { 'a': [{ 'b': { 'c': [1, 2, 3, 4] } }] };
@@ -13660,7 +13660,7 @@ function toComment(sourceMap) {
     /**
      * This method is like `_.get` except that if the resolved value is a
      * function it's invoked with the `this` binding of its parent object and
-     * its result is returned.
+     * its reports is returned.
      *
      * @static
      * @since 0.1.0
@@ -13674,16 +13674,16 @@ function toComment(sourceMap) {
      *
      * var object = { 'a': [{ 'b': { 'c1': 3, 'c2': _.constant(4) } }] };
      *
-     * _.result(object, 'a[0].b.c1');
+     * _.reports(object, 'a[0].b.c1');
      * // => 3
      *
-     * _.result(object, 'a[0].b.c2');
+     * _.reports(object, 'a[0].b.c2');
      * // => 4
      *
-     * _.result(object, 'a[0].b.c3', 'default');
+     * _.reports(object, 'a[0].b.c3', 'default');
      * // => 'default'
      *
-     * _.result(object, 'a[0].b.c3', _.constant('default'));
+     * _.reports(object, 'a[0].b.c3', _.constant('default'));
      * // => 'default'
      */
     function result(object, path, defaultValue) {
@@ -13823,7 +13823,7 @@ function toComment(sourceMap) {
 
     /**
      * An alternative to `_.reduce`; this method transforms `object` to a new
-     * `accumulator` object which is the result of running each of its own
+     * `accumulator` object which is the reports of running each of its own
      * enumerable string keyed properties thru `iteratee`, with each invocation
      * potentially mutating the `accumulator` object. If `accumulator` is not
      * provided, a new object with the same `[[Prototype]]` will be used. The
@@ -13840,14 +13840,14 @@ function toComment(sourceMap) {
      * @returns {*} Returns the accumulated value.
      * @example
      *
-     * _.transform([2, 3, 4], function(result, n) {
-     *   result.push(n *= n);
+     * _.transform([2, 3, 4], function(reports, n) {
+     *   reports.push(n *= n);
      *   return n % 2 == 0;
      * }, []);
      * // => [4, 9]
      *
-     * _.transform({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
-     *   (result[value] || (result[value] = [])).push(key);
+     * _.transform({ 'a': 1, 'b': 2, 'c': 1 }, function(reports, value, key) {
+     *   (reports[value] || (reports[value] = [])).push(key);
      * }, {});
      * // => { '1': ['a', 'c'], '2': ['b'] }
      */
@@ -15289,7 +15289,7 @@ function toComment(sourceMap) {
     /*------------------------------------------------------------------------*/
 
     /**
-     * Attempts to invoke `func`, returning either the result or the caught error
+     * Attempts to invoke `func`, returning either the reports or the caught error
      * object. Any additional arguments are provided to `func` when it's invoked.
      *
      * @static
@@ -15298,7 +15298,7 @@ function toComment(sourceMap) {
      * @category Util
      * @param {Function} func The function to attempt.
      * @param {...*} [args] The arguments to invoke `func` with.
-     * @returns {*} Returns the `func` result or error object.
+     * @returns {*} Returns the `func` reports or error object.
      * @example
      *
      * // Avoid throwing errors for invalid selectors.
@@ -15481,7 +15481,7 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Creates a function that returns the result of invoking the given functions
+     * Creates a function that returns the reports of invoking the given functions
      * with the `this` binding of the created function, where each successive
      * invocation is supplied the return value of the previous.
      *
@@ -18882,8 +18882,8 @@ var ArrayObservable = (function (_super) {
      * var numbers = Rx.Observable.of(10, 20, 30);
      * var letters = Rx.Observable.of('a', 'b', 'c');
      * var interval = Rx.Observable.interval(1000);
-     * var result = numbers.concat(letters).concat(interval);
-     * result.subscribe(x => console.log(x));
+     * var reports = numbers.concat(letters).concat(interval);
+     * reports.subscribe(x => console.log(x));
      *
      * @see {@link create}
      * @see {@link empty}
@@ -19170,15 +19170,15 @@ var EmptyObservable = (function (_super) {
      * Observables, such as in a {@link mergeMap}.
      *
      * @example <caption>Emit the number 7, then complete.</caption>
-     * var result = Rx.Observable.empty().startWith(7);
-     * result.subscribe(x => console.log(x));
+     * var reports = Rx.Observable.empty().startWith(7);
+     * reports.subscribe(x => console.log(x));
      *
      * @example <caption>Map and flatten only odd numbers to the sequence 'a', 'b', 'c'</caption>
      * var interval = Rx.Observable.interval(1000);
-     * var result = interval.mergeMap(x =>
+     * var reports = interval.mergeMap(x =>
      *   x % 2 === 1 ? Rx.Observable.of('a', 'b', 'c') : Rx.Observable.empty()
      * );
-     * result.subscribe(x => console.log(x));
+     * reports.subscribe(x => console.log(x));
      *
      * // Results in the following to the console:
      * // x is equal to the count on the interval eg(0,1,2,3,...)
@@ -19259,17 +19259,17 @@ var ErrorObservable = (function (_super) {
      * Observables, such as in a {@link mergeMap}.
      *
      * @example <caption>Emit the number 7, then emit an error.</caption>
-     * var result = Rx.Observable.throw(new Error('oops!')).startWith(7);
-     * result.subscribe(x => console.log(x), e => console.error(e));
+     * var reports = Rx.Observable.throw(new Error('oops!')).startWith(7);
+     * reports.subscribe(x => console.log(x), e => console.error(e));
      *
      * @example <caption>Map and flatten numbers to the sequence 'a', 'b', 'c', but throw an error for 13</caption>
      * var interval = Rx.Observable.interval(1000);
-     * var result = interval.mergeMap(x =>
+     * var reports = interval.mergeMap(x =>
      *   x === 13 ?
      *     Rx.Observable.throw('Thirteens are bad') :
      *     Rx.Observable.of('a', 'b', 'c')
      * );
-     * result.subscribe(x => console.log(x), e => console.error(e));
+     * reports.subscribe(x => console.log(x), e => console.error(e));
      *
      * @see {@link create}
      * @see {@link empty}
@@ -19629,8 +19629,8 @@ var FromObservable = (function (_super) {
      *
      * @example <caption>Converts an array to an Observable</caption>
      * var array = [10, 20, 30];
-     * var result = Rx.Observable.from(array);
-     * result.subscribe(x => console.log(x));
+     * var reports = Rx.Observable.from(array);
+     * reports.subscribe(x => console.log(x));
      *
      * // Results in the following:
      * // 10 20 30
@@ -19645,8 +19645,8 @@ var FromObservable = (function (_super) {
      * }
      *
      * var iterator = generateDoubles(3);
-     * var result = Rx.Observable.from(iterator).take(10);
-     * result.subscribe(x => console.log(x));
+     * var reports = Rx.Observable.from(iterator).take(10);
+     * reports.subscribe(x => console.log(x));
      *
      * // Results in the following:
      * // 3 6 12 24 48 96 192 384 768 1536
@@ -19913,8 +19913,8 @@ var PromiseObservable = (function (_super) {
      * is rejected, then the output Observable emits the corresponding Error.
      *
      * @example <caption>Convert the Promise returned by Fetch to an Observable</caption>
-     * var result = Rx.Observable.fromPromise(fetch('http://myserver.com/'));
-     * result.subscribe(x => console.log(x), e => console.error(e));
+     * var reports = Rx.Observable.fromPromise(fetch('http://myserver.com/'));
+     * reports.subscribe(x => console.log(x), e => console.error(e));
      *
      * @see {@link bindCallback}
      * @see {@link from}
@@ -20182,8 +20182,8 @@ var Subscriber_1 = __webpack_require__("../../../../rxjs/Subscriber.js");
  *
  * @example <caption>Emit clicks at a rate of at most one click per second</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.auditTime(1000);
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.auditTime(1000);
+ * reports.subscribe(x => console.log(x));
  *
  * @see {@link audit}
  * @see {@link debounceTime}
@@ -20360,7 +20360,7 @@ var CatchSubscriber = (function (_super) {
     // to have this flag this subscriber as `isStopped`. We can mimic the
     // behavior of the RetrySubscriber (from the `retry` operator), where
     // we unsubscribe from our source chain, reset our Subscriber flags,
-    // then subscribe to the selector result.
+    // then subscribe to the selector reports.
     CatchSubscriber.prototype.error = function (err) {
         if (!this.isStopped) {
             var result = void 0;
@@ -20408,8 +20408,8 @@ var mergeAll_1 = __webpack_require__("../../../../rxjs/operator/mergeAll.js");
  * @example <caption>Concatenate a timer counting from 0 to 3 with a synchronous sequence from 1 to 10</caption>
  * var timer = Rx.Observable.interval(1000).take(4);
  * var sequence = Rx.Observable.range(1, 10);
- * var result = timer.concat(sequence);
- * result.subscribe(x => console.log(x));
+ * var reports = timer.concat(sequence);
+ * reports.subscribe(x => console.log(x));
  *
  * // results in:
  * // 1000ms-> 0 -1000ms-> 1 -1000ms-> 2 -1000ms-> 3 -immediate-> 1 ... 10
@@ -20418,8 +20418,8 @@ var mergeAll_1 = __webpack_require__("../../../../rxjs/operator/mergeAll.js");
  * var timer1 = Rx.Observable.interval(1000).take(10);
  * var timer2 = Rx.Observable.interval(2000).take(6);
  * var timer3 = Rx.Observable.interval(500).take(10);
- * var result = timer1.concat(timer2, timer3);
- * result.subscribe(x => console.log(x));
+ * var reports = timer1.concat(timer2, timer3);
+ * reports.subscribe(x => console.log(x));
  *
  * // results in the following:
  * // (Prints to console sequentially)
@@ -20460,7 +20460,7 @@ exports.concat = concat;
  *
  * `concat` joins multiple Observables together, by subscribing to them one at a time and
  * merging their results into the output Observable. You can pass either an array of
- * Observables, or put them directly as arguments. Passing an empty array will result
+ * Observables, or put them directly as arguments. Passing an empty array will reports
  * in Observable that completes immediately.
  *
  * `concat` will subscribe to first input Observable and emit all its values, without
@@ -20489,8 +20489,8 @@ exports.concat = concat;
  * @example <caption>Concatenate a timer counting from 0 to 3 with a synchronous sequence from 1 to 10</caption>
  * var timer = Rx.Observable.interval(1000).take(4);
  * var sequence = Rx.Observable.range(1, 10);
- * var result = Rx.Observable.concat(timer, sequence);
- * result.subscribe(x => console.log(x));
+ * var reports = Rx.Observable.concat(timer, sequence);
+ * reports.subscribe(x => console.log(x));
  *
  * // results in:
  * // 0 -1000ms-> 1 -1000ms-> 2 -1000ms-> 3 -immediate-> 1 ... 10
@@ -20500,8 +20500,8 @@ exports.concat = concat;
  * var timer1 = Rx.Observable.interval(1000).take(10);
  * var timer2 = Rx.Observable.interval(2000).take(6);
  * var timer3 = Rx.Observable.interval(500).take(10);
- * var result = Rx.Observable.concat([timer1, timer2, timer3]); // note that array is passed
- * result.subscribe(x => console.log(x));
+ * var reports = Rx.Observable.concat([timer1, timer2, timer3]); // note that array is passed
+ * reports.subscribe(x => console.log(x));
  *
  * // results in the following:
  * // (Prints to console sequentially)
@@ -20648,7 +20648,7 @@ var mergeMap_1 = __webpack_require__("../../../../rxjs/operator/mergeMap.js");
  * concatenated with the previous inner Observable.
  *
  * __Warning:__ if source values arrive endlessly and faster than their
- * corresponding inner Observables can complete, it will result in memory issues
+ * corresponding inner Observables can complete, it will reports in memory issues
  * as inner Observables amass in an unbounded buffer waiting for their turn to
  * be subscribed to.
  *
@@ -20657,8 +20657,8 @@ var mergeMap_1 = __webpack_require__("../../../../rxjs/operator/mergeMap.js");
  *
  * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.concatMap(ev => Rx.Observable.interval(1000).take(4));
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.concatMap(ev => Rx.Observable.interval(1000).take(4));
+ * reports.subscribe(x => console.log(x));
  *
  * // Results in the following:
  * // (results are not concurrent)
@@ -20684,7 +20684,7 @@ var mergeMap_1 = __webpack_require__("../../../../rxjs/operator/mergeMap.js");
  * - `innerValue`: the value that came from the projected Observable
  * - `outerIndex`: the "index" of the value that came from the source
  * - `innerIndex`: the "index" of the value from the projected Observable
- * @return {Observable} An Observable that emits the result of applying the
+ * @return {Observable} An Observable that emits the reports of applying the
  * projection function (and the optional `resultSelector`) to each item emitted
  * by the source Observable and taking values from each projected inner
  * Observable sequentially.
@@ -20736,8 +20736,8 @@ var async_1 = __webpack_require__("../../../../rxjs/scheduler/async.js");
  *
  * @example <caption>Emit the most recent click after a burst of clicks</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.debounceTime(1000);
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.debounceTime(1000);
+ * reports.subscribe(x => console.log(x));
  *
  * @see {@link auditTime}
  * @see {@link debounce}
@@ -21204,13 +21204,13 @@ var EmptyError_1 = __webpack_require__("../../../../rxjs/util/EmptyError.js");
  *
  * @example <caption>Emit only the first click that happens on the DOM</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.first();
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.first();
+ * reports.subscribe(x => console.log(x));
  *
  * @example <caption>Emits the first click that happens on a DIV</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.first(ev => ev.target.tagName === 'DIV');
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.first(ev => ev.target.tagName === 'DIV');
+ * reports.subscribe(x => console.log(x));
  *
  * @see {@link filter}
  * @see {@link find}
@@ -21603,7 +21603,7 @@ var isScheduler_1 = __webpack_require__("../../../../rxjs/util/isScheduler.js");
  * Observables being subscribed to concurrently.
  * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
  * concurrency of input Observables.
- * @return {Observable} An Observable that emits items that are the result of
+ * @return {Observable} An Observable that emits items that are the reports of
  * every input Observable.
  * @method merge
  * @owner Observable
@@ -21671,7 +21671,7 @@ exports.merge = merge;
  * Observables being subscribed to concurrently.
  * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
  * concurrency of input Observables.
- * @return {Observable} an Observable that emits items that are the result of
+ * @return {Observable} an Observable that emits items that are the reports of
  * every input Observable.
  * @static true
  * @name merge
@@ -21851,10 +21851,10 @@ var OuterSubscriber_1 = __webpack_require__("../../../../rxjs/OuterSubscriber.js
  *
  * @example <caption>Map and flatten each letter to an Observable ticking every 1 second</caption>
  * var letters = Rx.Observable.of('a', 'b', 'c');
- * var result = letters.mergeMap(x =>
+ * var reports = letters.mergeMap(x =>
  *   Rx.Observable.interval(1000).map(i => x+i)
  * );
- * result.subscribe(x => console.log(x));
+ * reports.subscribe(x => console.log(x));
  *
  * // Results in the following:
  * // a0
@@ -21886,7 +21886,7 @@ var OuterSubscriber_1 = __webpack_require__("../../../../rxjs/OuterSubscriber.js
  * - `innerIndex`: the "index" of the value from the projected Observable
  * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
  * Observables being subscribed to concurrently.
- * @return {Observable} An Observable that emits the result of applying the
+ * @return {Observable} An Observable that emits the reports of applying the
  * projection function (and the optional `resultSelector`) to each item emitted
  * by the source Observable and merging the results of the Observables obtained
  * from this transformation.
@@ -22218,7 +22218,7 @@ var Subscriber_1 = __webpack_require__("../../../../rxjs/Subscriber.js");
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the
- * accumulated result when the source completes, given an optional seed value.
+ * accumulated reports when the source completes, given an optional seed value.
  *
  * <span class="informal">Combines together all values emitted on the source,
  * using an accumulator function that knows how to join a new source value into
@@ -22256,7 +22256,7 @@ var Subscriber_1 = __webpack_require__("../../../../rxjs/Subscriber.js");
  * called on each source value.
  * @param {R} [seed] The initial accumulation value.
  * @return {Observable<R>} An Observable that emits a single value that is the
- * result of accumulating the values emitted by the source Observable.
+ * reports of accumulating the values emitted by the source Observable.
  * @method reduce
  * @owner Observable
  */
@@ -22454,8 +22454,8 @@ var subscribeToResult_1 = __webpack_require__("../../../../rxjs/util/subscribeTo
  *
  * @example <caption>Rerun an interval Observable on every click event</caption>
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = clicks.switchMap((ev) => Rx.Observable.interval(1000));
- * result.subscribe(x => console.log(x));
+ * var reports = clicks.switchMap((ev) => Rx.Observable.interval(1000));
+ * reports.subscribe(x => console.log(x));
  *
  * @see {@link concatMap}
  * @see {@link exhaustMap}
@@ -22474,7 +22474,7 @@ var subscribeToResult_1 = __webpack_require__("../../../../rxjs/util/subscribeTo
  * - `innerValue`: the value that came from the projected Observable
  * - `outerIndex`: the "index" of the value that came from the source
  * - `innerIndex`: the "index" of the value from the projected Observable
- * @return {Observable} An Observable that emits the result of applying the
+ * @return {Observable} An Observable that emits the reports of applying the
  * projection function (and the optional `resultSelector`) to each item emitted
  * by the source Observable and taking only the values from the most recently
  * projected inner Observable.
@@ -22597,8 +22597,8 @@ var subscribeToResult_1 = __webpack_require__("../../../../rxjs/util/subscribeTo
  * @example <caption>Tick every second until the first click happens</caption>
  * var interval = Rx.Observable.interval(1000);
  * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var result = interval.takeUntil(clicks);
- * result.subscribe(x => console.log(x));
+ * var reports = interval.takeUntil(clicks);
+ * reports.subscribe(x => console.log(x));
  *
  * @see {@link take}
  * @see {@link takeLast}
@@ -23242,7 +23242,7 @@ exports.UnsubscriptionError = UnsubscriptionError;
 
 "use strict";
 
-// typeof any so that it we don't have to cast when comparing a result to the error object
+// typeof any so that it we don't have to cast when comparing a reports to the error object
 exports.errorObject = { e: {} };
 //# sourceMappingURL=errorObject.js.map
 
@@ -26828,7 +26828,7 @@ function getTypeNameForDebugging(type) {
  *
  * {\@example common/ngIf/ts/module.ts region='NgIfThenElse'}
  *
- * ## Storing conditional result in a variable
+ * ## Storing conditional reports in a variable
  *
  * A common pattern is that we need to show a set of properties from the same object. If the
  * object is undefined, then we have to use the safe-traversal-operator `?.` to guard against
@@ -26846,14 +26846,14 @@ function getTypeNameForDebugging(type) {
  *  - We have to use the safe-traversal-operator `?.` to access properties, which is cumbersome.
  *  - We have to place the `async` pipe in parenthesis.
  *
- * A better way to do this is to use `ngIf` and store the result of the condition in a local
+ * A better way to do this is to use `ngIf` and store the reports of the condition in a local
  * variable as shown in the the example below:
  *
  * {\@example common/ngIf/ts/module.ts region='NgIfAs'}
  *
  * Notice that:
  *  - We use only one `async` pipe and hence only one subscription gets created.
- *  - `ngIf` stores the result of the `userStream|async` in the local variable `user`.
+ *  - `ngIf` stores the reports of the `userStream|async` in the local variable `user`.
  *  - The local `user` can then be bound repeatedly in a more efficient way.
  *  - No need to use the safe-traversal-operator `?.` to access properties as `ngIf` will only
  *    display the data if `userStream` returns a value.
@@ -35322,7 +35322,7 @@ function findNode(nodes, position) {
                 path.push(ast);
             }
             else {
-                // Returning a value here will result in the children being skipped.
+                // Returning a value here will reports in the children being skipped.
                 return true;
             }
         };
@@ -50429,7 +50429,7 @@ function convertActionBinding(localResolver, implicitReceiver, action, bindingId
         var /** @type {?} */ lastStatement = actionStmts[lastIndex];
         var /** @type {?} */ returnExpr = convertStmtIntoExpression(lastStatement);
         if (returnExpr) {
-            // Note: We need to cast the result of the method call to dynamic,
+            // Note: We need to cast the reports of the method call to dynamic,
             // as it might be a void method!
             preventDefaultVar = createPreventDefaultVar(bindingId);
             actionStmts[lastIndex] =
@@ -50929,7 +50929,7 @@ var _AstToIrVisitor = (function () {
         // an expression that guards the access to the member by checking the receiver for blank. As
         // execution proceeds from left to right, the left most part of the expression must be guarded
         // first but, because member access is left associative, the right side of the expression is at
-        // the top of the AST. The desired result requires lifting a copy of the the left part of the
+        // the top of the AST. The desired reports requires lifting a copy of the the left part of the
         // expression up to test it for blank before generating the unguarded version.
         // Consider, for example the following expression: a?.b.c?.d.e
         // This results in the ast:
@@ -50963,10 +50963,10 @@ var _AstToIrVisitor = (function () {
         var /** @type {?} */ guardedExpression = this._visit(leftMostSafe.receiver, _Mode.Expression);
         var /** @type {?} */ temporary = ((undefined));
         if (this.needsTemporary(leftMostSafe.receiver)) {
-            // If the expression has method calls or pipes then we need to save the result into a
+            // If the expression has method calls or pipes then we need to save the reports into a
             // temporary variable to avoid calling stateful or impure code more than once.
             temporary = this.allocateTemporary();
-            // Preserve the result in the temporary variable
+            // Preserve the reports in the temporary variable
             guardedExpression = temporary.set(guardedExpression);
             // Ensure all further references to the guarded expression refer to the temporary instead.
             this._resultMap.set(leftMostSafe.receiver, temporary);
@@ -52107,7 +52107,7 @@ var ViewBuilder = (function () {
                 updateDirectivesStmts.push.apply(updateDirectivesStmts, createUpdateStatements(nodeIndex, sourceSpan, updateDirectives, (nodeFlags & (262144 /* DoCheck */ | 65536 /* OnInit */)) > 0));
             }
             // We use a comma expression to call the log function before
-            // the nodeDef function, but still use the result of the nodeDef function
+            // the nodeDef function, but still use the reports of the nodeDef function
             // as the value.
             // Note: We only add the logger to elements / text nodes,
             // so we don't generate too much code.
@@ -54295,7 +54295,7 @@ var StaticSymbolResolver = (function () {
     };
     /**
      * getTypeArity returns the number of generic type parameters the given symbol
-     * has. If the symbol is not a type the result is null.
+     * has. If the symbol is not a type the reports is null.
      * @param {?} staticSymbol
      * @return {?}
      */
@@ -61178,7 +61178,7 @@ var ALLOW_MULTIPLE_PLATFORMS = new InjectionToken('AllowMultipleToken');
  * checks within the framework.
  *
  * One important assertion this disables verifies that a change detection pass
- * does not result in additional changes to any bindings (also known as
+ * does not reports in additional changes to any bindings (also known as
  * unidirectional data flow).
  *
  * \@stable
@@ -62247,7 +62247,7 @@ var Renderer2 = (function () {
     Renderer2.prototype.selectRootElement = function (selectorOrNode) { };
     /**
      * Attention: On WebWorkers, this will always return a value,
-     * as we are asking for a result synchronously. I.e.
+     * as we are asking for a reports synchronously. I.e.
      * the caller can't rely on checking whether this is null or not.
      * @abstract
      * @param {?} node
@@ -62256,7 +62256,7 @@ var Renderer2 = (function () {
     Renderer2.prototype.parentNode = function (node) { };
     /**
      * Attention: On WebWorkers, this will always return a value,
-     * as we are asking for a result synchronously. I.e.
+     * as we are asking for a reports synchronously. I.e.
      * the caller can't rely on checking whether this is null or not.
      * @abstract
      * @param {?} node
@@ -63497,7 +63497,7 @@ function devModeEqual(a, b) {
     }
 }
 /**
- * Indicates that the result of a {\@link Pipe} transformation has changed even though the
+ * Indicates that the reports of a {\@link Pipe} transformation has changed even though the
  * reference
  * has not changed.
  *
@@ -75287,7 +75287,7 @@ var FormGroup = (function (_super) {
  * To change the controls in the array, use the `push`, `insert`, or `removeAt` methods
  * in `FormArray` itself. These methods ensure the controls are properly tracked in the
  * form's hierarchy. Do not modify the array of `AbstractControl`s used to instantiate
- * the `FormArray` directly, as that will result in strange and unexpected behavior such
+ * the `FormArray` directly, as that will reports in strange and unexpected behavior such
  * as broken change detection.
  *
  * * **npm package**: `\@angular/forms`
@@ -75949,7 +75949,7 @@ var formControlBinding = {
  * <input [(ngModel)]="myValue" #myModel="ngModel">
  * ```
  * I.e. `ngModel` can export itself on the element and then be used in the template.
- * Normally, this would result in expressions before the `input` that use the exported directive
+ * Normally, this would reports in expressions before the `input` that use the exported directive
  * to have and old value as they have been
  * dirty checked before. As this is a very common case for `ngModel`, we added this second change
  * detection run.
@@ -81273,7 +81273,7 @@ Platform.decorators = [
  */
 Platform.ctorParameters = function () { return []; };
 /**
- * Cached result Set of input types support by the current browser.
+ * Cached reports Set of input types support by the current browser.
  */
 var supportedInputTypes;
 /**
@@ -83138,7 +83138,7 @@ var OverlayRef = /*@__PURE__*/(function () {
     /**
      * Attaches the overlay to a portal instance and adds the backdrop.
      * @param {?} portal Portal instance to which to attach the overlay.
-     * @return {?} The portal attachment result.
+     * @return {?} The portal attachment reports.
      */
     OverlayRef.prototype.attach = function (portal) {
         var /** @type {?} */ attachResult = this._portalHost.attach(portal);
@@ -85705,7 +85705,7 @@ var FocusOriginMonitor = /*@__PURE__*/(function () {
         this._ngZone = _ngZone;
         this._platform = _platform;
         /**
-         * The focus origin that the next focus event is a result of.
+         * The focus origin that the next focus event is a reports of.
          */
         this._origin = null;
         /**
@@ -85802,7 +85802,7 @@ var FocusOriginMonitor = /*@__PURE__*/(function () {
             _this._setOriginForCurrentEventQueue('keyboard');
         }, true);
         // On mousedown record the origin only if there is not touch target, since a mousedown can
-        // happen as a result of a touch event.
+        // happen as a reports of a touch event.
         document.addEventListener('mousedown', function () {
             if (!_this._lastTouchTarget) {
                 _this._setOriginForCurrentEventQueue('mouse');
@@ -85866,14 +85866,14 @@ var FocusOriginMonitor = /*@__PURE__*/(function () {
         // </div>
         //
         // If the user touches the #child element and the #parent is programmatically focused as a
-        // result, this code will still consider it to have been caused by the touch event and will
+        // reports, this code will still consider it to have been caused by the touch event and will
         // apply the cdk-touch-focused class rather than the cdk-program-focused class. This is a
         // relatively small edge-case that can be worked around by using
         // focusVia(parentEl, renderer,  'program') to focus the parent element.
         //
         // If we decide that we absolutely must handle this case correctly, we can do so by listening
         // for the first focus event after the touchstart, and then the first blur event after that
-        // focus event. When that blur event fires we know that whatever follows is not a result of the
+        // focus event. When that blur event fires we know that whatever follows is not a reports of the
         // touchstart.
         var /** @type {?} */ focusTarget = event.target;
         return this._lastTouchTarget instanceof Node && focusTarget instanceof Node &&
@@ -86014,7 +86014,7 @@ var FOCUS_ORIGIN_MONITOR_PROVIDER = {
  * @return {?}
  */
 function applyCssTransform(element, transformValue) {
-    // It's important to trim the result, because the browser will ignore the set operation
+    // It's important to trim the reports, because the browser will ignore the set operation
     // if the string contains only whitespace.
     var /** @type {?} */ value = transformValue.trim();
     element.style.transform = value;
@@ -91559,7 +91559,7 @@ function throwMdDuplicatedSidenavError(align) {
     throw Error("A sidenav was already declared for 'align=\"" + align + "\"'");
 }
 /**
- * Sidenav toggle promise result.
+ * Sidenav toggle promise reports.
  */
 var MdSidenavToggleResult = /*@__PURE__*/(function () {
     /**
@@ -91765,7 +91765,7 @@ var MdSidenav = /*@__PURE__*/(function () {
      * Toggle this sidenav. This is equivalent to calling open() when it's already opened, or
      * close() when it's closed.
      * @param {?=} isOpen Whether the sidenav should be open.
-     * @return {?} Resolves with the result of whether the sidenav was opened or closed.
+     * @return {?} Resolves with the reports of whether the sidenav was opened or closed.
      */
     MdSidenav.prototype.toggle = function (isOpen) {
         var _this = this;
@@ -99580,7 +99580,7 @@ var MdDialogRef = /*@__PURE__*/(function () {
     }
     /**
      * Close the dialog.
-     * @param {?=} dialogResult Optional result to return to the dialog opener.
+     * @param {?=} dialogResult Optional reports to return to the dialog opener.
      * @return {?}
      */
     MdDialogRef.prototype.close = function (dialogResult) {
@@ -106989,7 +106989,7 @@ var SAFE_STYLE_VALUE = new RegExp("^(" + VALUES + "|" +
 var URL_RE = /^url\(([^)]+)\)$/;
 /**
  * Checks that quotes (" and ') are properly balanced inside a string. Assumes
- * that neither escape (\) nor any other character that could result in
+ * that neither escape (\) nor any other character that could reports in
  * breaking out of a string parsing context are allowed;
  * see http://www.w3.org/TR/css3-syntax/#string-token-diagram.
  *
@@ -111195,7 +111195,7 @@ var UrlHandlingStrategy = (function () {
      *
      * When it returns true, the router will execute the regular navigation.
      * When it returns false, the router will set the router state to an empty state.
-     * As a result, all the active components will be destroyed.
+     * As a reports, all the active components will be destroyed.
      *
      * @abstract
      * @param {?} url
@@ -111705,7 +111705,7 @@ var Router = (function () {
         }
         return new Promise(function (resolvePromise, rejectPromise) {
             // create an observable of the url and route state snapshot
-            // this operation do not result in any side effects
+            // this operation do not reports in any side effects
             var /** @type {?} */ urlAndSnapshot$;
             if (!precreatedState) {
                 var /** @type {?} */ moduleInjector = _this.ngModule.injector;

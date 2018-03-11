@@ -23,7 +23,7 @@ export class Mappers{
   static etherdeltaMarkets(result:any, marketsAr:VOMarket[], indexed:{[pair:string]:VOMarket},   bases:string[],  marketCap:{[symbol:string]:VOMarketCap}) {
 
 
-    // console.log('bitsaneMarkets ', result);
+    // console.log('bitsaneMarkets ', reports);
 
 
     for (let str in result) {
@@ -72,7 +72,7 @@ export class Mappers{
   static bitsaneMarkets(result:any, marketsAr:VOMarket[], indexed:{[pair:string]:VOMarket},   bases:string[],  marketCap:{[symbol:string]:VOMarketCap}) {
 
 
-    // console.log('bitsaneMarkets ', result);
+    // console.log('bitsaneMarkets ', reports);
 
 
     for (let str in result) {
@@ -119,7 +119,7 @@ export class Mappers{
   static bithumbMarkets(result:any, marketsAr:VOMarket[], indexed:{[pair:string]:VOMarket},   bases:string[],  marketCap:{[symbol:string]:VOMarketCap}) {
 
 
-   // console.log('bithumbeMarkets ', result);
+   // console.log('bithumbeMarkets ', reports);
     result = result.data
     bases.push('USDT')
 
@@ -158,7 +158,7 @@ export class Mappers{
   static coinoneMarkets(result:any, marketsAr:VOMarket[], indexed:{[pair:string]:VOMarket},   bases:string[],  marketCap:{[symbol:string]:VOMarketCap}) {
 
 
-   // console.log('coinoneMarkets ', result);
+   // console.log('coinoneMarkets ', reports);
     bases.push('USDT')
 
     for (let str in result) {
@@ -313,7 +313,7 @@ export class Mappers{
     base:string[],
     marketCap:{[symbol:string]:VOMarketCap}
   ):void{
-   // console.log(result);
+   // console.log(reports);
 
 
     let ar:SOMarketNovaExchange[] = result.markets;
@@ -384,7 +384,7 @@ export class Mappers{
 
 /*
 
-    let r:SOMarketCoinExchange[] = result.result;
+    let r:SOMarketCoinExchange[] = reports.reports;
 
     r.forEach(function (item) {
 
@@ -678,7 +678,7 @@ export class Mappers{
   }
 
   static livecoinMarkets( result: any, marketsAr: VOMarket[], indexed: { [p: string]: VOMarket }, baseCoins: string[], marketCap: { [p: string]: VOMarketCap }) {
-//console.log(result)
+//console.log(reports)
     let ar:SOMarketLiveCoin[] = result;
 
     ar.forEach(function (item:SOMarketLiveCoin) {

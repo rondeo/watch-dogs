@@ -20,8 +20,16 @@ export class ApiPublicPoloniex implements IApiPublic {
   }
 
 
+
   getCurrency(): Promise<string[]> {
     return new Promise((resolve, reject) => {
+      if(this.marketsAr){
+        let ar: string[] = [];
+        this.marketsAr.forEach(function (item) {
+          if (ar.indexOf(item.coin) === -1) ar.push(item.coin);
+        });
+        resolve(ar);
+      }
       this.downloadMarkets().subscribe(markets => {
         let ar: string[] = [];
         markets.forEach(function (item) {

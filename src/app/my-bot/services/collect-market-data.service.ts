@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {CollectMarketData} from "./collect-market-data";
@@ -9,6 +9,8 @@ import {MarketCapService} from "../../market-cap/market-cap.service";
 
 @Injectable()
 export class CollectMarketDataService {
+
+  onDone:EventEmitter<string> = new EventEmitter();
 
   constructor(
     private connector:ConnectorApiService,
@@ -39,6 +41,7 @@ export class CollectMarketDataService {
         this.marketDataSub.next(res);
 
       });
+        exists.onDone.subscribe(exchange=>this.onDone.emit(exchange));
     }
     return exists;
   }

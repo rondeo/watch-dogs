@@ -320,7 +320,7 @@ QuantityRemaining
 TimeStamp
 :
 "2018-01-13T13:48:21.23"*/
-  //{"success":false,"message":"ADDRESS_GENERATING","result":null}
+  //{"success":false,"message":"ADDRESS_GENERATING","reports":null}
   createWallet(symbol: string): Observable<{ result: { Currency: string, Address: string }, message: string }> {
     let uri = 'https://bittrex.com/api/v1.1/account/getdepositaddress';
     return this.call(uri, {currency: symbol})
@@ -543,13 +543,13 @@ TimeStamp
         if (!res) return null;
          console.log('_getBalances  null  ');
 
-        if (!res.result) {
+        if (!res.reports) {
           console.log("wrong respond", res);
           return;
         }
 
         // console.log(r)
-        return res.result.map(function (item) {
+        return res.reports.map(function (item) {
           let mc = MC[item.Currency];
           let price = !mc?0:mc.price_usd;
 

@@ -54,9 +54,9 @@ export class ExchangeSsComponent implements OnInit {
    // this.exchangeService.init();
     //this.exchangeService.myWallets$.subscribe(res=>this.myWallets= res);
 
-    //this.exchangeService.myCoins$.subscribe(res=>{
+    //this.exchangeService.myMarkets$.subscribe(res=>{
     //  console.log(res);
-     // this.myCoins = res
+     // this.myMarkets = res
    // });
 
   }

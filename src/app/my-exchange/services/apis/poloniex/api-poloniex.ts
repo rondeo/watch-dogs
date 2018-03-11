@@ -415,9 +415,9 @@ export class ApiPoloniex extends ApiBase {
     console.log(url);
 
 
-    this.http.get(url).subscribe((result:any) => {
+    this.http.get(url).subscribe((reports:any) => {
 
-     // console.log(result);
+     // console.log(reports);
       let marketsAr: VOMarket[] = [];
 
       let baseCoins: string[] = [];
@@ -428,7 +428,7 @@ export class ApiPoloniex extends ApiBase {
       let indexed:{} = {}
       let bases:string[] = [];
 
-      ApiPoloniex.mapMarkets(result, marketsAr, indexed, bases, selected);
+      ApiPoloniex.mapMarkets(reports, marketsAr, indexed, bases, selected);
       this.dispatchMarketsData(marketsAr, indexed, bases);
 
       this.isLoadinMarkets = false;

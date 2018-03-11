@@ -104,7 +104,8 @@ export interface VOMarketsStats{
 export interface IMarketRecommended {
   exchange:string;
   action:string;
-  result:string;
+  reports?:string[];
+
 
   reason:string;
   base:string,
@@ -125,6 +126,9 @@ export interface IMarketRecommended {
   baseMC?: VOMarketCap;
   tradesStats?:VOTradesStats;
   marketStats?:VOMarketsStats;
+
+  history?:IMarketRecommended[]
+  errors?:string[];
 }
 
 export class UtilsOrder{

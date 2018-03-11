@@ -41,9 +41,9 @@ export class EmailAllCoinsComponent implements OnInit {
 
 
     /*
-        let selectedCoinsNames = this.allCoins.reduce(function (result, item) {
-          if(item.selected)  result.push(item.symbol);
-          return result;
+        let selectedCoinsNames = this.allCoins.reduce(function (reports, item) {
+          if(item.selected)  reports.push(item.symbol);
+          return reports;
         },[]);
 
 

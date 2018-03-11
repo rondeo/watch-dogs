@@ -59,7 +59,7 @@ export class BotBuyCoinService {
     let market = markets[i];
 
     this.database.saveMarket(market).subscribe(res=>{
-      market.result = JSON.stringify(res);
+      market.reports = JSON.stringify(res);
       this._saveMarkets(markets, i, resolve, resject);
     }, resject);
   }
@@ -96,7 +96,7 @@ export class BotBuyCoinService {
         market.action='BUY';
         market.date= new Date().toLocaleTimeString();
         market.reason = 'percent_change_1h > 2';
-        market.result = null;
+        market.reports = null;
      /!*   market.LastUS = +(market.Last * priceBase).toPrecision(5);
         market.AskUS = +(market.Ask * priceBase).toPrecision(5);
         market.BidUS = +(market.Bid * priceBase).toPrecision(5);
@@ -140,10 +140,10 @@ export class BotBuyCoinService {
     let priceBaseUS = baseMC.price_usd;
 
 
-    publicAPI.downloadTrades(base, coin).toPromise().then(result=>{
+    publicAPI.downloadTrades(base, coin).toPromise().then(reports=>{
 
-      result.reverse();
-      let history = UtilsOrder.analizeOrdersHistory2(result, priceBaseUS);
+      reports.reverse();
+      let history = UtilsOrder.analizeOrdersHistory2(reports, priceBaseUS);
 
       market.tradesStats =  {
         exchange:'',

@@ -37,7 +37,7 @@ export class SelectedCoinsComponent implements OnInit {
     this.marketCapService.coinsAr$.subscribe(res=>{
      // console.log(res);
       if(!res){
-        console.log(' no result refreshing MC')
+        console.log(' no reports refreshing MC')
         this.marketCapService.refresh();
         return;
       }
