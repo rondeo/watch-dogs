@@ -1,5 +1,8 @@
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
-import {IMarketRecommended, UtilsOrder, VOMarketsStats, VOTradesStats} from "../../services/utils-order";
+import {
+  IMarketDataCollect, IMarketRecommended, UtilsOrder, VOMarketsStats,
+  VOTradesStats
+} from "../../services/utils-order";
 
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
@@ -8,11 +11,11 @@ import {EventEmitter} from "@angular/core";
 export class CollectMarketData {
 
   public exchange: string;
-  Q: IMarketRecommended[] = [];
+  Q: IMarketDataCollect[] = [];
 
   onDone:EventEmitter<string> = new EventEmitter();
 
-  private marketDataSub: Subject<IMarketRecommended> = new Subject();
+  private marketDataSub: Subject<IMarketDataCollect> = new Subject();
 
   marketData$() {
     return this.marketDataSub.asObservable();
@@ -23,14 +26,14 @@ export class CollectMarketData {
   }
 
 
-  addMarkets(recommended: IMarketRecommended[]) {
+  addMarkets(markets: IMarketDataCollect[]) {
 
     if (this.Q.length === 0){
       console.log(' np Q starting in 1 sec')
       setTimeout(() => this.getNextMarket(), 1000);
     }
-    console.warn(' adding to Q ' + recommended.length);
-    this.Q = this.Q.concat(recommended);
+    console.warn(' adding to Q ' + markets.length);
+    this.Q = this.Q.concat(markets);
 
   }
 
@@ -43,14 +46,15 @@ export class CollectMarketData {
       return;
     }
 
-    let recommended = <IMarketRecommended>this.Q.shift();
+    let recommended = <IMarketDataCollect>this.Q.shift();
 
-    let coinMC = recommended.coinMC;
-    let baseMC = recommended.baseMC;
-    let base = recommended.baseMC.symbol;
-    let coin = recommended.coinMC.symbol;
+    //let coinMC = recommended.coinMC;
+    //let baseMC = recommended.baseMC;
+    let base = recommended.base;
+    let coin = recommended.coin;
     let exchange = recommended.exchange;
-    let priceBaseUS = baseMC.price_usd;
+    let priceBaseUS = recommended.priceBaseUS;
+
 
     console.log(' collectong data for ' + coin + ' left ' + this.Q.length);
     this.publicAPI.downloadTrades(base, coin).toPromise().then(result => {
@@ -58,18 +62,16 @@ export class CollectMarketData {
       result.reverse();
       let history = UtilsOrder.analizeOrdersHistory2(result, priceBaseUS);
 
-
       recommended.tradesStats = {
 
         exchange: exchange,
         timestamp: Date.now(),
         time: new Date().toLocaleTimeString(),
-        coin: coinMC.symbol,
-        base: baseMC.symbol,
+        coin:coin,
+        base: base,
         priceBaseUS: priceBaseUS,
         rateLast: history.rateLast10,
         rateLastUS: history.priceLast10US,
-        priceToMC: Math.round(10000 * (history.priceLast10US - coinMC.price_usd) / coinMC.price_usd) / 100,
         //bubbles: history.bubbles,
         duratinMin: history.duration / 60,
         speedPerMin: (history.speed * 60),
@@ -86,18 +88,18 @@ export class CollectMarketData {
       };
 
 
-      let priceBase = recommended.baseMC.price_usd;
-      if (recommended.baseMC.symbol === 'USDT') priceBase = 1;
+
+
 
       setTimeout(()=>{
 
         this.publicAPI.downloadMarket(base, coin).subscribe(market=>{
           let marketStats = market as VOMarketsStats;
-          marketStats.LastUS = +(market.Last * priceBase).toPrecision(5);
-          marketStats.AskUS = +(market.Ask * priceBase).toPrecision(5);
-          marketStats.BidUS = +(market.Bid * priceBase).toPrecision(5);
-          marketStats.LowUS = +(market.Low * priceBase).toPrecision(5);
-          marketStats.HighUS = +(market.High * priceBase).toPrecision(5);
+          marketStats.LastUS = +(market.Last * priceBaseUS).toPrecision(5);
+          marketStats.AskUS = +(market.Ask * priceBaseUS).toPrecision(5);
+          marketStats.BidUS = +(market.Bid * priceBaseUS).toPrecision(5);
+          marketStats.LowUS = +(market.Low * priceBaseUS).toPrecision(5);
+          marketStats.HighUS = +(market.High * priceBaseUS).toPrecision(5);
 
           recommended.marketStats = marketStats;
 

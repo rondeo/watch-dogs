@@ -4,7 +4,7 @@ import {ConnectorApiService} from "../../my-exchange/services/connector-api.serv
 import {CollectMarketData} from "./collect-market-data";
 
 import {Subject} from "rxjs/Subject";
-import {IMarketRecommended} from "../../services/utils-order";
+import {IMarketDataCollect, IMarketRecommended} from "../../services/utils-order";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 
 @Injectable()
@@ -13,19 +13,23 @@ export class CollectMarketDataService {
   onDone:EventEmitter<string> = new EventEmitter();
 
   constructor(
-    private connector:ConnectorApiService,
-    private marketCap:MarketCapService
+    private connector:ConnectorApiService
   ) {
 
   }
 
 
 
+  downloadBooks(exchange, markets:IMarketRecommended[] ){
+
+  }
+
+
   marketData$(){
     return this.marketDataSub.asObservable();
   }
 
-  private marketDataSub: Subject<IMarketRecommended> = new Subject();
+  private marketDataSub: Subject<IMarketDataCollect> = new Subject();
   collectors:CollectMarketData[] = [];
 
   getCollector(exchange:string):CollectMarketData{
@@ -46,21 +50,11 @@ export class CollectMarketDataService {
     return exists;
   }
 
-  collectMarketData(exchange:string, markets:IMarketRecommended[]){
+  collectMarketData(exchange:string, markets:IMarketDataCollect[]){
     if(markets.length ===0) return;
    let collector:CollectMarketData = this.getCollector(exchange);
     collector.addMarkets(markets);
   }
-
-  private subMC
-  subdcribeForMC(){
-    this.subMC = this.marketCap.getCoinsObs().subscribe(MC =>{
-      this.collectors.forEach(function (item:CollectMarketData) {
-
-      })
-    })
-  }
-
 
 
 }

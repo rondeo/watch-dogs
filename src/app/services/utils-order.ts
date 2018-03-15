@@ -101,33 +101,55 @@ export interface VOMarketsStats{
 }
 
 
+export interface IMarketDataCollect{
+  coin:string;
+  base:string
+  exchange:string;
+  priceBaseUS:number;
+  tradesStats:VOTradesStats;
+  marketStats:VOMarketsStats;
+}
+
+
 export interface IMarketRecommended {
   exchange:string;
   action:string;
   reports?:string[];
 
+  newData?:number;
 
   reason:string;
   base:string,
   coin:string;
 
 
+  timeStats?:string
   date?:string;
   timestamp?:number;
 
   percent_1h_ToBase?:number;
   percentBuy?:number;
-  persent_1h?:number;
-  price_US?:number;
+  persent_1h?:number[];
+  SumPersent1h?:number;
+
+  LastsUS?:number[];
+  MCUS?:number[];
+  lastToMC?:number;
+
+  lastToMCTrades?:number;
+
+  speedPerMinute?:number;
+
+  AskToBid?:number
+
   price_B?:number;
   last_US?:number;
+  askUS?:number;
 
   coinMC?: VOMarketCap;
   baseMC?: VOMarketCap;
-  tradesStats?:VOTradesStats;
-  marketStats?:VOMarketsStats;
 
-  history?:IMarketRecommended[]
+  history?:IMarketDataCollect[]
   errors?:string[];
 }
 
