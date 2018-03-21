@@ -21,7 +21,11 @@ import { BotFollowCoinComponent } from './bot-follow-coin/bot-follow-coin.compon
 import { BotBuyCoinComponent } from './bot-buy-coin/bot-buy-coin.component';
 import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
 import {CollectMarketDataService} from "./services/collect-market-data.service";
+import {FrontDeskService} from "./services/front-desk.service";
+import { CoinDayComponent } from './coin-day/coin-day.component';
+import {CoinDayService} from "./services/coin-day.service";
 
+import {ChartsModule} from "ng2-charts";
 
 
 const routes: Routes = [
@@ -33,7 +37,8 @@ const routes: Routes = [
       {path: 'follow-coin', component: BotFollowCoinComponent},
       {path: 'buy-coin/:exchange', component: BotBuyCoinComponent},
       {path: 'run/:exchange/:market', component: BotRunComponent},
-      {path: 'edit/:exchange/:market', component: BotEditComponent}
+      {path: 'edit/:exchange/:market', component: BotEditComponent},
+      {path: 'coin-day/:coin', component: CoinDayComponent}
     ]
   }
 
@@ -42,6 +47,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    ChartsModule,
     CommonModule,
     BrowserModule,
     FormsModule,
@@ -57,10 +63,14 @@ const routes: Routes = [
     BotNewComponent,
     BotFollowCoinComponent,
     BotBuyCoinComponent,
-    BotSellCoinComponent],
+    BotSellCoinComponent,
+    CoinDayComponent
+  ],
   providers:[
     BotServiceService,
-    CollectMarketDataService
+    CollectMarketDataService,
+    FrontDeskService,
+    CoinDayService
   ]
 })
 export class MyBotModule { }

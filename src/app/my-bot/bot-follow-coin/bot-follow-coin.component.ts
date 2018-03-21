@@ -14,6 +14,7 @@ import {AnalizeData} from "./analize-data";
 import {BuySellCoins} from "./buy-sell-coins";
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {NewGainers} from "./new-gainers";
+import {FrontDeskService} from "../services/front-desk.service";
 
 @Component({
   selector: 'app-bot-follow-coin',
@@ -27,6 +28,7 @@ export class BotFollowCoinComponent implements OnInit {
 
   isCollectiongData: boolean;
   myMarkets: IMarketRecommended[] = [];
+  exchangeCoins: string[];
 
   private historyMC: { [symbol: string]: VOMarketCap }[] = [];
 
@@ -34,34 +36,77 @@ export class BotFollowCoinComponent implements OnInit {
   constructor(private allApis: ConnectorApiService,
               private marketCap: MarketCapService,
               private collectMarketDataService: CollectMarketDataService,
+              private frontDesk: FrontDeskService,
               private database: DatabaseService) {
 
   }
 
 
+
   analizeData() {
     console.log('%c  --------------------------------------------------------- have: ' + this.myMarkets.length, 'color:green');
     FollowCoinHelper.removeDuplicates(this.myMarkets);
+
     let myMarkets = this.myMarkets.filter(function (item) {
-      return item.newData;
+      return item.updatedAt;
     });
+
+
+    console.log('%c   updates: ' + myMarkets.length, 'color:green');
 
     if (!myMarkets.length) {
       console.log(' NO new data ');
       return;
     }
 
-    AnalizeData.analizeData(myMarkets);
+    let gainers = _.filter(myMarkets, {'action': ACTIONS.GAINER});
 
-    BuySellCoins.buySell(myMarkets, this.database);
+    FollowCoinAnalytics.analizeGaners(gainers);
 
+
+    this.database.saveMarkets(gainers);
+    //AnalizeData.analizeData(myMarkets);
+
+    //BuySellCoins.buySell(myMarkets, this.database);
+    //FollowCoinHelper.removeCoins(myMarkets, ACTIONS.NONE);
+    myMarkets.forEach(function (item) { item.updatedAt = 0; });
+    FollowCoinHelper.saveMyMarkets(this.myMarkets);
   }
 
 
   ngOnInit() {
+
+    this.frontDesk.getMarketCapHistory('POT', 100).subscribe(res =>{
+      console.log(res);
+    })
+
+    let api: IApiPublic = this.allApis.getPublicApi(this.exchange);
+
+    api.getCurrency().then(currency => {
+
+      this.exchangeCoins = currency;
+      this.marketCap.getLast10(currency).toPromise().then(res=>{
+       this.historyMC = res;
+        let sub = this.marketCap.getCoinsObs().subscribe(MC => {
+          if (!MC) return;
+
+          let myMC = {};
+          currency.forEach(function (item) {
+            if(MC[item])myMC[item] = MC[item];
+          });
+
+          this.onMC(myMC);
+        });
+
+      });
+
+
+
+    });
+
     this.myMarkets = FollowCoinHelper.loadMyMarkets();
 
-    setInterval(() => this.analizeData(), 60000);
+    setInterval(() => this.analizeData(), 33360000);
     this.analizeData();
 
 
@@ -76,28 +121,31 @@ export class BotFollowCoinComponent implements OnInit {
       FollowCoinHelper.updateStatsHistory(newStats, this.myMarkets);
     });
 
-    let sub = this.marketCap.getCoinsObs().subscribe(MC => {
-      if (!MC) return;
-      this.onMC(MC);
-    });
   }
 
   onMC(MC) {
+    if (this.historyMC.length > 10) this.historyMC.shift();
+    if(this.historyMC.length){
 
-    if (this.historyMC.length > 100) this.historyMC.shift();
-    this.historyMC.push(MC);
-    this.collectDataExists();
+      let last = this.historyMC[this.historyMC.length -1];
+      let lastBTC:VOMarketCap = last['BTC'];
+      let btc:VOMarketCap = MC['BTC'];
+      //console.log(lastBTC.last_updated, btc.last_updated);
+      if(lastBTC.last_updated < btc.last_updated)  this.historyMC.push(MC);
+        //console.warn(' Last  ' +lastBTC.last_updated + ' new ' +  btc.last_updated);
+
+    } else  this.historyMC.push(MC);
+
+    this.myMarkets.forEach(function (item) {
+      item.coinMC = MC[item.coin];
+      item.baseMC = MC[item.base];
+    });
+
+    this.collectDataExists(MC);
     this.checkNewGainers();
   }
 
-  collectDataExists() {
-
-    let MC = _.last(this.historyMC);
-    this.myMarkets.forEach(function (item) {
-      item.coinMC = MC[item.coin];
-      item.baseMC = MC[item.base]
-      item.newData = 2;
-    });
+  collectDataExists(MC) {
 
     let toSellCoins = this.myMarkets.filter(function (item) {
       return item.action === ACTIONS.TO_SELL;
@@ -109,7 +157,6 @@ export class BotFollowCoinComponent implements OnInit {
 
     console.log(' collect data TO_SELL ' + toSellCoins.length);
     console.log(' collect data GAINERS ' + gainers.length);
-
 
     let reqired: IMarketDataCollect[] = FollowCoinHelper.cloneRecommendedBasic(toSellCoins.concat(gainers), MC);
 
@@ -126,11 +173,16 @@ export class BotFollowCoinComponent implements OnInit {
       return;
     }
 
-    let api: IApiPublic = this.allApis.getPublicApi(this.exchange);
 
-    NewGainers.checkNewGainers(this.historyMC, this.myMarkets, api, (toCollect) => {
+    NewGainers.checkNewGainers(this.historyMC, this.myMarkets, this.exchange, (newGainers) => {
 
       this.isCollectiongData = true;
+
+      this.myMarkets = this.myMarkets.concat(newGainers);
+
+      let MC: { [symbol: string]: VOMarketCap } = _.last(this.historyMC);
+
+      let toCollect = FollowCoinHelper.cloneRecommendedBasic(newGainers, MC);
 
       this.collectMarketDataService.collectMarketData(this.exchange, toCollect);
 

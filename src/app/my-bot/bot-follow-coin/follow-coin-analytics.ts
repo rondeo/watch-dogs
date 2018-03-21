@@ -1,5 +1,6 @@
 import {IMarketRecommended} from "../../services/utils-order";
 import {ACTIONS, FollowCoinHelper} from "./follow-coin-helper";
+import * as _ from 'lodash';
 
 export class FollowCoinAnalytics {
 
@@ -7,52 +8,56 @@ export class FollowCoinAnalytics {
   static analizeToBuy(markets: IMarketRecommended[]) {
     let changes = [];
     markets.forEach(function (item: IMarketRecommended) {
-      if (item.coinMC.percent_change_1h < 1) {
-        item.action = ACTIONS.NONE;
-        console.log('%c to remove  TO_BUY ' + item.coin + ' ' + item.coinMC.percent_change_1h, 'color:red');
-      } else {
+     // if (item.coinMC.percent_change_1h < 1) {
+       // item.action = ACTIONS.NONE;
+        //console.log('%c to remove  TO_BUY ' + item.coin + ' ' + item.coinMC.percent_change_1h, 'color:red');
+     // } else {
         if (!item.reports) item.reports = [];
+
         item.reports.push(new Date().toLocaleTimeString() + ' US '+item.coinMC.price_usd);
         if (item.percentBuy < 0) {
           let msg = ' percentBuy  '+ item.percentBuy;
-          console.log('%c changing BUY' + item.coin +msg, 'color:#25383C');
+          console.log('%c changing BUY ' + item.coin +msg, 'color:red');
           item.action = ACTIONS.BUY;
           item.reports.push(new Date().toLocaleTimeString() + msg);
           changes.push(item);
         }
-      }
+     // }
 
     });
   }
 
   static analizeGaners(gainers: IMarketRecommended[]): IMarketRecommended[] {
+
     let toBuy = [];
     gainers.forEach(function (gainer) {
-      if (gainer.coinMC.percent_change_1h < 1) {
-        gainer.action = ACTIONS.NONE;
-        console.log('%c to remove GAINER ' + gainer.coin + '  ' + gainer.coinMC.percent_change_1h, 'color:red');
-      } else {
-        if (!gainer.reports) gainer.reports = [];
+     // if (gainer.coinMC.percent_change_1h < 1) {
+       // gainer.action = ACTIONS.NONE;
+       // console.log('%c to remove GAINER ' + gainer.coin + '  ' + gainer.coinMC.percent_change_1h, 'color:red');
+      //} else {
+      if (!gainer.reports) gainer.reports = [];
+
         gainer.reports.push(new Date().toLocaleTimeString() + ' US ' + gainer.coinMC.price_usd);
        // console.log(gainer);
 
-        if(gainer.percentBuy < -1){
-          gainer.action = ACTIONS.BUY;
+        //if(gainer.percentBuy < -1){
+         // gainer.action = ACTIONS.BUY;
 
-          console.log('%c changing BUY' + gainer.coin, 'color:brown');
-          gainer.reports.push(new Date().toLocaleTimeString() + ' BUY percentBuy: ' + gainer.percentBuy);
+         /// let report = ' BUY percentBuy: ' + gainer.percentBuy;
+         // console.log('%c changing BUY ' + gainer.coin + report, 'color:red');
+         // gainer.reports.push(new Date().toLocaleTimeString() + report);
 
-        }else if (gainer.history && gainer.history.length > 2) {
+       // }else if (gainer.history && gainer.history.length > 2) {
 
-          console.log('%c changing TO_BUY' + gainer.coin, 'color:brown');
+         // console.log('%c changing TO_BUY' + gainer.coin, 'color:brown');
 
-          gainer.reports.push(new Date().toLocaleTimeString() + ' TO BUY percent_change_1h:' + gainer.coinMC.percent_change_1h);
-          gainer.action = ACTIONS.TO_BUY;
-        }
-      }
+        //  gainer.reports.push(new Date().toLocaleTimeString() + ' TO BUY percent_change_1h:' + gainer.coinMC.percent_change_1h);
+         // gainer.action = ACTIONS.TO_BUY;
+       // }
+     // }
 
     });
-    return toBuy;
+    return gainers;
   }
 
 

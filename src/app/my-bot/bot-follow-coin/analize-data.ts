@@ -5,16 +5,7 @@ import * as _ from 'lodash';
 
 export class AnalizeData {
 
-  static analizeData(allMarkets:IMarketRecommended[]) {
-    console.log('%c  --------------------------------------------------------- have: ' + allMarkets.length, 'color:green');
-    let myMarkets = allMarkets.filter(function (item) {
-      return item.newData;
-    });
-
-    if(!myMarkets.length) {
-      console.log(' NO new data ');
-      return;
-    }
+  static analizeData(myMarkets:IMarketRecommended[]) {
 
     console.log(' new data ', myMarkets);
 
@@ -70,15 +61,8 @@ export class AnalizeData {
 
       //this.saveInDB(boughtCoins);
     }
-
-
-    FollowCoinHelper.removeCoins(allMarkets, ACTIONS.NONE);
     //FollowCoinHelper.removeCoins(this.myMarkets, ACTIONS.SOLD);
-    allMarkets.forEach(function (item) {
-      item.newData = 0;
-    })
 
-    FollowCoinHelper.saveMyMarkets(allMarkets);
     console.log('%c ----------------------------------------------------------------', 'color:green');
   }
 }

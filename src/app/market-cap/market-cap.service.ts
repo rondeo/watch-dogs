@@ -27,7 +27,7 @@ export class MarketCapService {
   // private coinsSub: Subject<{[symbol:string]:VOMarketCap}> = new Subject();
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
-  delay = 6 * 60;
+  delay = 6.1 * 60;
   counter: number;
   coinsById: { [id: string]: VOMarketCap };
 
@@ -65,6 +65,15 @@ export class MarketCapService {
     this.start();
   }
 
+
+  getLast10(coins:string[]):Observable<any>{
+    return this.http.get('api/marketcap/coinsLast10/' + coins.toString()).map((res:any[])=>{
+      //console.log(res);
+      return res.map(function (item) {
+        return MarketCapService.mapServerValues(item);
+      })
+    })
+  }
 
   doCountDown() {
     this.countDown--;
@@ -241,6 +250,35 @@ export class MarketCapService {
            +item.last_updated*/
 
 
+  static mapServerValues(ar:any[]){
+    let MC:{[symbol:string]:VOMarketCap} = {};
+
+    ar.forEach(function (item: any[]) {
+      if(item){
+        this.MC[item[2]] = {
+          id: item[0],
+          name: item[1],
+          symbol: item[2],
+          rank: item[3],
+          price_usd: item[4],
+          price_btc: item[5],
+          percent_change_1h: item[6],
+          percent_change_24h: item[7],
+          percent_change_7d: item[8],
+          volume_usd_24h: item[9],
+          market_cap_usd: item[10],
+          available_supply: item[11],
+          total_supply: item[12],
+          max_supply: item[13],
+          last_updated: item[14]
+        }
+
+      }
+
+
+    }, {MC:MC});
+    return MC;
+  }
   refresh() {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -249,9 +287,10 @@ export class MarketCapService {
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).map((res: any) => {
 
-      let MC:{[symbol:string]:VOMarketCap} = {};
-
-      res.forEach(function (item: any[]) {
+     // let MC:{[symbol:string]:VOMarketCap} = {};
+     let MC =  MarketCapService.mapServerValues( Object.values(res))
+/*
+      Object.values(res).forEach(function (item: any[]) {
         this.MC[item[2]] = {
           id: item[0],
           name: item[1],
@@ -271,7 +310,7 @@ export class MarketCapService {
         }
 
 
-      }, {MC:MC});
+      }, {MC:MC});*/
 
       this.setData(MC);
       this.countDown = this.delay;

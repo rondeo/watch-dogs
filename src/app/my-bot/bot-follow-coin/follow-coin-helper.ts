@@ -27,8 +27,7 @@ export class FollowCoinHelper {
         base: item.base,
         exchange: item.exchange,
         action: item.action,
-        coinMC: item.coinMC,
-        newData: item.newData
+        coinMC: item.coinMC
       }
     })
     localStorage.setItem('bot-data', JSON.stringify(toSaveData));
@@ -48,12 +47,13 @@ export class FollowCoinHelper {
       return item.base === marketData.base && item.coin === marketData.coin;
     });
 
+
     if (!market) {
       console.warn(' no market ' + marketData.coin);
     }
     else {
 
-      market.newData = 4;
+      market.updatedAt = Date.now();
       market.timeStats = new Date().toLocaleTimeString();
       FollowCoinHelper.updateValues(market, marketData);
       if (!market.history) market.history = [];
@@ -100,6 +100,32 @@ export class FollowCoinHelper {
 
 
   }
+
+  static logData(curMC:VOMarketCap, prevMC:VOMarketCap){
+
+    let price_usd = +((curMC.price_usd - prevMC.price_usd)/ prevMC.price_usd).toFixed(5);
+
+    let price_btc = +((curMC.price_btc - prevMC.price_btc)/ prevMC.price_btc).toFixed(5);
+
+    let percent_change_1h = +((curMC.percent_change_1h - prevMC.percent_change_1h)/ prevMC.percent_change_1h).toFixed(5);
+
+    let available_supply = +((curMC.available_supply - prevMC.available_supply)/ prevMC.available_supply).toFixed(5);
+
+    let max_supply = +((curMC.max_supply - prevMC.max_supply)/ prevMC.max_supply).toFixed(5);
+
+    let total_supply = +((curMC.total_supply - prevMC.total_supply)/ prevMC.total_supply).toFixed(5);
+
+    let volume_usd_24h = +((curMC.volume_usd_24h - prevMC.volume_usd_24h)/ prevMC.volume_usd_24h).toFixed(5);
+
+
+    let market_cap_usd = +((curMC.market_cap_usd - prevMC.market_cap_usd)/ prevMC.market_cap_usd).toFixed(5);
+
+
+    console.log('%c BTC market_cap_usd: ' + market_cap_usd + ' available_supply ' + available_supply + ' max_supply ' + max_supply
+      + ' total_supply ' + total_supply + ' volume_usd_24h  ' + volume_usd_24h
+      + ' percent_change_1h ' + percent_change_1h + ' price_usd '+ price_usd + ' price_btc ' + price_btc, 'color:purple');
+
+  }
 /*
   static transferBoughtToSell(myMarkets: IMarketRecommended[]) {
 
@@ -120,24 +146,22 @@ export class FollowCoinHelper {
     })
   }*/
 
-  static createGainers(baseMC: VOMarketCap, gainers: VOMarketCap[], MC: { [symbol: string]: VOMarketCap }, reason: string, exchange: string): IMarketRecommended[] {
+  static createGainer(baseMC: VOMarketCap, gainer: VOMarketCap, MC: { [symbol: string]: VOMarketCap }, reason: string, exchange: string): IMarketRecommended{
     let time = new Date().toLocaleTimeString();
-    return gainers.map(function (item) {
-      if (item.symbol === 'BTC') baseMC = MC['USDT'];
+    //if (gainer.symbol === 'BTC') baseMC = MC['USDT'];
       return {
         exchange: exchange,
-        coin: item.symbol,
+        coin: gainer.symbol,
         base: baseMC.symbol,
         action: ACTIONS.GAINER,
         timestamp: Date.now(),
         date: time,
-        newData: 1,
         reason: time + reason,
-        coinMC: MC[item.symbol],
+        coinMC: MC[gainer.symbol],
         baseMC: baseMC,
-        reports: [time + ' to btc: ' + item.tobtc_change_1h + ' full: ' + item.percent_change_1h + ' US ' + MC[item.symbol].price_usd]
+        reports: [time +' ' + reason]
       }
-    });
+
   }
 
 

@@ -9,13 +9,15 @@ export class BuySellCoins {
 
     let buyCoins = _.filter(myMarkets, {'action': ACTIONS.BUY});
 
+    console.log('BUY ' + buyCoins.length);
 
     if (buyCoins.length){
 
-      console.log('%c BUYING ' + _.map(buyCoins, 'coin'), 'color:red');
+      console.log('%c BUY ' + _.map(buyCoins, 'coin'), 'color:red');
 
       buyCoins.forEach(function (item) {
         item.action = ACTIONS.BUYING;
+        item.newData = 7;
       });
 
       database.saveMarkets(buyCoins).then(res => {
@@ -24,29 +26,34 @@ export class BuySellCoins {
         console.error(err);
       });
 
-     /* setTimeout(() => {
-
-        buyCoins.forEach(function (item:IMarketRecommended) {
-          item.newData = 6;
-          item.action = ACTIONS.BOUGHT;
-        });
-
-      }, 2000);*/
-
-      setTimeout(() => {
-
-        buyCoins.forEach(function (item:IMarketRecommended) {
-          item.newData = 6;
-          item.action = ACTIONS.TO_SELL;
-        });
-
-      }, 10000);
     }
 
 
 
-    let sellCoins = _.filter(myMarkets, {'action': ACTIONS.SELL});
 
+    let buyingCoins = _.filter(myMarkets, {'action': ACTIONS.BUYING});
+
+    console.log('BUYING ' + buyingCoins.length);
+
+    if(buyingCoins.length){
+
+      setTimeout(() => {
+
+        console.log('%c BOUGHT now TO_SELL ' + _.map(buyCoins, 'coin'), 'color:red');
+        buyingCoins.forEach(function (item:IMarketRecommended) {
+          //item.newData = 6;
+          item.action = ACTIONS.TO_SELL;
+        });
+
+      }, 10000);
+
+
+
+    }
+
+
+    let sellCoins = _.filter(myMarkets, {'action': ACTIONS.SELL});
+    console.log('SELL ' + sellCoins.length)
 
     if (sellCoins.length) {
 

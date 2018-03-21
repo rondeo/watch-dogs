@@ -116,7 +116,7 @@ export interface IMarketRecommended {
   action:string;
   reports?:string[];
 
-  newData?:number;
+  updatedAt?:number;
 
   reason:string;
   base:string,
