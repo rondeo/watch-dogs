@@ -1,16 +1,30 @@
 <div>
+    <section  [formGroup]="form">
+        <mat-form-field>
+            <!--<input matInput [matDatepicker]="myDatepicker" formControlName="dateTo" autocomplete="false">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>-->
 
-    <div *ngIf="lineChartData" style="display: block;">
+            <mat-placeholder>Start DateTime</mat-placeholder>
+            <mat-datetimepicker-toggle [for]="datetimePicker" matSuffix></mat-datetimepicker-toggle>
+            <mat-datetimepicker #datetimePicker type="datetime" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+            <input   class="small" matInput formControlName="dateTo" [matDatetimepicker]="datetimePicker" required autocomplete="false">
 
-        <canvas baseChart width="400" height="300"
-                [datasets]="lineChartData"
-                [labels]="lineChartLabels"
-                [options]="lineChartOptions"
-                [colors]="lineChartColors"
-                [legend]="lineChartLegend"
-                [chartType]="lineChartType"
-                (chartHover)="chartHovered($event)"
-                (chartClick)="chartClicked($event)"
-        ></canvas>
-    </div>
+
+        </mat-form-field>
+        <button class="mat-raised-button" (click)="onGoClick()">GO</button>
+        <button class="mat-raised-button" (click)="onMinus12h()">-12h</button>
+        <button class="mat-raised-button" (click)="onPlus12h()">+12h</button>
+
+        <div>
+            <div>{{fromMC}} - {{toMC}}</div>
+            <div>{{fromBittrex}} - {{toBittrex}}</div>
+        </div>
+
+
+    </section>
+
+    <section>
+        <app-line-chart [graphs]="myGraps"></app-line-chart>
+    </section>
 </div>

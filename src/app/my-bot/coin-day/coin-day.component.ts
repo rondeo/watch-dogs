@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {CoinDayService} from "../services/coin-day.service";
+import {CoinDayService, MarketDay} from "../services/coin-day.service";
 import * as _ from 'lodash';
+import {ActivatedRoute} from "@angular/router";
+import * as moment from "moment";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {VOGraphs} from "../../shared/line-chart/line-chart.component";
 
 @Component({
   selector: 'app-coin-day',
@@ -8,140 +12,182 @@ import * as _ from 'lodash';
   styleUrls: ['./coin-day.component.css']
 })
 export class CoinDayComponent implements OnInit {
+  myGraps: VOGraphs;
+  fromMC: string;
+  toMC: string;
+  fromBittrex: string;
+  toBittrex: string;
 
+  form: FormGroup;
+  private coin;
 
-  lineChartData;
-  lineChartLabels: Array<any> = [];
+  constructor(private coinDay: CoinDayService,
+              private fb: FormBuilder,
+              private route: ActivatedRoute) {
 
-  lineChartOptions: any = {
-    responsive: true
-  };
+    this.form = fb.group({
+      dateTo: [moment(), Validators.required]
 
-
-  lineChartColors: Array<any> = [
-    { // grey
-      // backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(255,0,0,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      //pointHoverBackgroundColor: '#fff',
-      //pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // dark grey
-      // backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(0,255,0,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
-      pointBorderColor: '#fff',
-      //pointHoverBackgroundColor: '#fff',
-      //pointHoverBorderColor: 'rgba(77,83,96,1)'
-    },
-    { // grey
-      // backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      // pointHoverBackgroundColor: '#fff',
-      // pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // grey
-      // backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      // pointHoverBackgroundColor: '#fff',
-      // pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-  public lineChartLegend: boolean = false;
-  public lineChartType: string = 'line';
-
-
-
-  static convertToScale(ar:number[], offset = 0):number[]{
-
-    let min = _.min(ar);
-    let max = _.max(ar);
-    let range = max - min;
-    return ar.map(function (item) {
-      return  offset + (30 * (item-min))/range;
-    });
+    })
   }
 
-  constructor(private coinDay: CoinDayService) {
+  onChartClicked(evt) {
+    console.log(evt);
   }
 
 
-  ngOnInit() {
-    this.coinDay.getCoinDayMarketCap('BTC').subscribe((res: any) => {
-      console.log(res);
+  onMinus12h() {
+    this.form.value.dateTo.subtract(12, 'hours');
+    this.onGoClick();
+  }
 
-      let volume_usd_24h = [];
-      let available_supply = [];
+  onPlus12h() {
+    this.form.value.dateTo.add(12, 'hours');
 
-      let market_cap_usd = [];
+    this.onGoClick();
+  }
 
+  onGoClick() {
 
-      let max_supply = [];
-      let percent_change_1h = [];
-      let percent_change_24h = [];
+    let values = this.form.value;
 
-      let price_btc = [];
+    let to = values.dateTo.format().slice(0, -6);
 
-      let price_usd = [];
-      let price_usdMin = 1e10;
-      let price_usdMax = 0;
+    console.log(to);
 
-      let total_supply = [];
-      let labels = [];
+    //this.to = to.replace('T',' ');
+    let from = values.dateTo.clone().subtract(1, 'day').format().slice(0, -6);
+    //this.from = from.replace('T',' ');
+    console.log(from);
+    let coin = this.coin;
 
+    this.coinDay.getCoinDayMarketCap(coin, from, to).subscribe((mc: any) => {
+      // console.log(mc);
+      this.fromMC = _.first(mc.stamps).slice(5, -3).replace('-', '/');
+      this.toMC = _.last(mc.stamps).slice(5, -3).replace('-', '/');
+      let steps = mc.stamps;
 
-      res.data.forEach(function (item) {
+      let d = Math.round(steps.length / 11);
+      console.log(d);
 
+      let vals = steps.filter(function (item, i) {
+        return (i % d) == 0;
+      });
 
-        volume_usd_24h.push(+item['24h_volume_usd']);
-        available_supply.push(+item.available_supply);
-        market_cap_usd.push(+item.market_cap_usd);
-        max_supply.push(+item.max_supply);
-        percent_change_1h.push(+item.percent_change_1h);
-        percent_change_24h.push(+item.percent_change_24h);
-        price_btc.push(+item.price_btc);
-        price_usd.push(+item.price_usd);
-        total_supply.push(+item.total_supply);
-        labels.push(' ')
+      vals = vals.map(function (item: string) {
+        return item.slice(11, -3);
       });
 
 
-      //let market_cap_usdMin = _.min(market_cap_usd);
-     // let market_cap_usdMax = _.max(market_cap_usd);
-
-     // let market_cap_usdRange = market_cap_usdMax - market_cap_usdMin;
-
-     /* market_cap_usd = market_cap_usd.map(function (item) {
-
-        return  (100 * (item - market_cap_usdMin))/ market_cap_usdRange;
-      });*/
-
-      //let min =  (100 * market_cap_usdMin)/market_cap_usdRange
+      let base = 'BTC';
+      if (this.coin === 'BTC') base = 'USDT';
+      this.coinDay.getOrdersHistoryPoloniex(base, coin, from, to).subscribe(bitfibex_USDT_BTC=>{
+        console.log(bitfibex_USDT_BTC);
 
 
-      this.lineChartData = [
-        {data: CoinDayComponent.convertToScale(price_usd), fill: false, label: 'Sell'},
-        {data: CoinDayComponent.convertToScale(volume_usd_24h), fill: false, label: 'Sell'},
-        {data: percent_change_1h, fill: false, label: 'Sell'},
-        {data: percent_change_24h, fill: false, label: 'Sell'}
-      ];
-      /* }else{
-         this.lineChartData = [
-           {data:charts.sold.reverse(), fill:false, label:'Sell'},
-           {data:charts.bought.reverse(), fill:false, label:'Buy'},
-         //  {data:min, fill:false, label:'min'},
-          // {data:max, fill:false, label:'max'}
-         ];
-       }*/
+     // this.coinDay.getCoinDayBittrex(base, coin, from, to).subscribe((bittrex: MarketDay) => {
+       // this.coinDay.getCoinDayPoloniex(base, coin, from, to).subscribe((poloniex: MarketDay) => {
+          this.coinDay.getCoinDayBitfinex(base, coin, from, to).subscribe((bitfinex: MarketDay) => {
+            //this.coinDay.getCoinDayHitbtc(base, coin, from, to).subscribe((hitbtc: MarketDay) => {
+              //this.coinDay.getCoinDayCryptopia(base, coin, from, to).subscribe((cryptopia: MarketDay) => {
+              // console.log(bitfinex);
+
+              //this.fromBittrex = _.first(bittrex.stamps).slice(5, -3).replace('-', '/');
+              //this.toBittrex = _.last(bittrex.stamps).slice(5, -3).replace('-', '/');
 
 
-      this.lineChartLabels = labels;
-    })
+              this.myGraps = {
+                xs: vals,
+                graphs: [
+                  /* {
+                     ys: mc.price_usd,
+                     color: '#b57419',
+                     label: 'MC'
+                   },*/
+                   {
+                     ys: mc.volume_usd_24h,
+                     color: '#000000',
+                     label: 'Volume'
+                   },
+                  /*{
+                    ys: bittrex.Last,
+                    color: '#FF00FF',
+                    label: 'Bittrex'
+                  },*/
+                 /* {
+                    ys: poloniex.Last,
+                    color: '#14af60',
+                    label: 'Poloniex'
+                  },*/
+                  {
+                    ys: bitfinex.Last,
+                    color: '#779dff',
+                    label: 'Bitfinex'
+                  },
+                   {
+                 ys: bitfibex_USDT_BTC.totals,
+                 color: '#c1c037',
+                 label: 'Hitbtc'
+               },
+                 /* {
+                    ys: bitfibex_USDT_BTC.buys,
+                    color: '#1fc1a0',
+                    label: 'Hitbtc'
+                  },*/
+                  /* {
+                     ys: cryptopia.Last,
+                     color: '#c1c037',
+                     label: 'Hitbtc'
+                   }*/
+
+                  /* {
+                     ys: hitbtc.Last,
+                     color: '#c1c037',
+                     label: 'Hitbtc'
+                   },*/
+                 /* {
+                    ys: cryptopia.Last,
+                    color: '#c1c037',
+                    label: 'Hitbtc'
+                  }*/
+
+                ]
+              };
+
+            });
+      });
+         // });
+          //});
+        //});
+    });
+
   }
+
+  ngOnInit() {
+
+    this.myGraps = {
+      xs: ['one', 'two'],
+      graphs: [
+        {
+          ys: [0, 100, 200, 60, 300],
+          color: '#00FF00',
+          label: 'Volume'
+        },
+        {
+          ys: [100, 200, 0, 600, 100, 250],
+          color: '#FF0000',
+          label: 'Price'
+        }
+      ]
+    }
+
+    this.route.params.subscribe(paramas => {
+      let coin = paramas.coin;
+      console.log(coin);
+      this.coin = coin;
+
+    });
+  }
+
 
 }

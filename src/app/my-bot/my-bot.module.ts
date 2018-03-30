@@ -12,7 +12,7 @@ import {MyMainComponent} from "../my-exchange/my-main/my-main.component";
 import {MyBuySellComponent} from "../my-exchange/my-buy-sell/my-buy-sell.component";
 import {AllMainCoinsComponent} from "../my-exchange/all-main-coins/all-main-coins.component";
 import {BrowserModule} from "@angular/platform-browser";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
 import {SharedModule} from "../shared/shared.module";
 import { BotNewComponent } from './bot-new/bot-new.component';
@@ -26,6 +26,10 @@ import { CoinDayComponent } from './coin-day/coin-day.component';
 import {CoinDayService} from "./services/coin-day.service";
 
 import {ChartsModule} from "ng2-charts";
+import {MatDatepickerModule} from "@angular/material";
+import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {MatMomentDatetimeModule} from "@mat-datetimepicker/moment";
+import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
 
 
 const routes: Routes = [
@@ -53,6 +57,11 @@ const routes: Routes = [
     FormsModule,
     MaterialAppModule,
     SharedModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    ReactiveFormsModule,
+    MatMomentDatetimeModule,
+    MatDatetimepickerModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

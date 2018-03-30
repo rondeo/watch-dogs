@@ -45,6 +45,7 @@ const routes: Routes = [
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:market', component: MyBuySellComponent},
+      {path: 'trade/:market', component: SocketTradeComponent},
       {path: 'bot', component: MyExchangeBotComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
@@ -61,8 +62,7 @@ const routes: Routes = [
       {path: 'buy-sell/:market', component:  BittrexBuySellComponent}*/
 
     ]
-  },
-  { path: 'trader/:market/:exchange', component: AllMainCoinsComponent,}
+  }
 ];
 
 

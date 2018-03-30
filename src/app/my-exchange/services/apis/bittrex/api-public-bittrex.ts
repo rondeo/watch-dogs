@@ -68,7 +68,5 @@ export class ApiPublicBittrex implements IApiPublic{
 
     });
 
-
-
   }
 }

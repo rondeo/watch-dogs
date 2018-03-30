@@ -286,7 +286,6 @@ export class ApiHitbtc extends ApiBase  {
   }
 
 
-
   /* mapBooks(res){
      console.log(res);
 

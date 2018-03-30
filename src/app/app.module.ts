@@ -1,15 +1,15 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import {HttpModule} from '@angular/http';
 import {Router, RouterModule} from '@angular/router';
 import {rootRouterConfig} from './app.routes';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
-import { ChartsModule } from 'ng2-charts'
+import {ChartsModule} from 'ng2-charts'
 
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 //import { TestComponent } from '../../arch/test/test.component';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -26,7 +26,7 @@ import {MaterialAppModule} from './material/material-app.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from './shared/shared.module';
-import { ExchangeSsComponent } from './exchange-ss/exchange-ss.component';
+import {ExchangeSsComponent} from './exchange-ss/exchange-ss.component';
 import {ExchangeSsService} from './exchange-ss/exchange-ss.service';
 
 import {ApiServerService} from './api-server.service';
@@ -44,9 +44,7 @@ import {MarketCapModule} from './market-cap/market-cap.module';
 import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-table.component';
 
 
-
 import {StorageService} from './services/app-storage.service';
-
 
 
 import {BittrexModule} from './bittrex/bittrex.module';
@@ -54,15 +52,16 @@ import {BittrexModule} from './bittrex/bittrex.module';
 import {CompareService} from './services/compare.service';
 import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
-import { WebsocketService} from "./shared/websocket-service";
+import {WebsocketService} from "./shared/websocket-service";
 import {MyExchangeModule} from "./my-exchange/my-exchange.module";
 import {MyBotModule} from "./my-bot/my-bot.module";
 import {DatabaseService} from "./services/database.service";
+import {TraderModule} from "./trader/trader.module";
 
 
 //import {WebsocketService} from "./shared/websocket-service";
 
-declare const Buffer:any;
+declare const Buffer: any;
 
 
 @NgModule({
@@ -82,8 +81,9 @@ declare const Buffer:any;
     BittrexModule,
     MyExchangeModule,
     MyBotModule,
-   // AuthModule,
-    RouterModule.forRoot(rootRouterConfig, { useHash: true })
+    TraderModule,
+    // AuthModule,
+    RouterModule.forRoot(rootRouterConfig, {useHash: true})
   ],
   declarations: [
     AppComponent,
@@ -103,18 +103,19 @@ declare const Buffer:any;
 
     StorageService,
     CompareService
-   // WebsocketService
+    // WebsocketService
 
-   // provideAuth({
-     // headerName: 'Authorization',
+    // provideAuth({
+    // headerName: 'Authorization',
     //  headerPrefix: 'Bearer',
     //  tokenName: 'token',
-     // tokenGetter: (() => localStorage.getItem('id_token')),
+    // tokenGetter: (() => localStorage.getItem('id_token')),
     //  globalHeaders: [{ 'Content-Type': 'application/json' }],
     // noJwtError: true
-     // authError:(why:string)=>{ console.warn(why) }
-   // })
+    // authError:(why:string)=>{ console.warn(why) }
+    // })
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

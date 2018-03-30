@@ -10,13 +10,15 @@ import {FormsModule} from '@angular/forms';
 import { MarketViewComponent } from './market-view/market-view.component';
 import { TradesHistoryComponent } from './trades-history/trades-history.component';
 import { BubbleChartComponent } from './bubble-chart/bubble-chart.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 
 @NgModule({
   exports:[
     SortableTableComponent,
     TradesHistoryComponent,
-    BubbleChartComponent
+    BubbleChartComponent,
+    LineChartComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { BubbleChartComponent } from './bubble-chart/bubble-chart.component';
     LoginFormComponent,
     MarketViewComponent,
     TradesHistoryComponent,
-    BubbleChartComponent
+    BubbleChartComponent,
+    LineChartComponent
   ],
   entryComponents: [DialogSimpleComponent, LoginFormComponent, LogoutFormComponent]
 })
