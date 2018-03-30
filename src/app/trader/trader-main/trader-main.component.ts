@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 export class TraderMainComponent implements OnInit, OnDestroy {
 
 
-  private bitFinexTrades: IVOTrade[] = [];
+ /* private bitFinexTrades: IVOTrade[] = [];
 
   lastBuy: string;
   firstBuy: string;
@@ -19,17 +19,17 @@ export class TraderMainComponent implements OnInit, OnDestroy {
   amountPerMinute: string;
   totalPerMinute: string;
   avgRate: string;
-
+*/
 
   constructor(private sockets: SoketConnectorService) {
   }
 
-  private sub1;
-  private interval;
+  /*private sub1;
+  private interval;*/
 
   ngOnInit() {
-    const market = 'USDT_BTC';
-    const exchange = 'bitfinex';
+    /*const market = 'USDT_BTC';
+    const exchange = 'poloniex'; //'bitfinex';
     const channel = 'trades';
     this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
       // console.log(res);
@@ -37,20 +37,24 @@ export class TraderMainComponent implements OnInit, OnDestroy {
         console.warn(res);
         return;
       }
+
       if (Array.isArray(res.data)) {
         this.bitFinexTrades = res.data;
-      } else this.bitFinexTrades.push(res.data);
+      } else {
+        if(res.data.uuid)  this.bitFinexTrades.push(res.data);
+        else console.warn(res.data)
+      }
     })
 
-    this.interval = setInterval(() => this.myTick(), 1000);
+    this.interval = setInterval(() => this.myTick(), 1000);*/
   }
 
   ngOnDestroy() {
-    this.sub1.unsubscribe();
-    clearInterval(this.interval);
+   /* this.sub1.unsubscribe();
+    clearInterval(this.interval);*/
   }
 
-  myTick() {
+/*  myTick() {
     if (this.bitFinexTrades.length === 0) {
       console.log('length 0');
       return;
@@ -95,6 +99,6 @@ export class TraderMainComponent implements OnInit, OnDestroy {
 
     this.bitFinexTrades = lastMinute;
 
-  }
+  }*/
 
 }

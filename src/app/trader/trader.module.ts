@@ -9,6 +9,7 @@ import {ChartsModule} from "ng2-charts";
 import {TraderOutletComponent} from "./trader-outlet/trader-outlet.component";
 import {TraderMainComponent} from "./trader-main/trader-main.component";
 import {SoketConnectorService} from "../sockets/soket-connector.service";
+import { TraderSocketComponent } from './trader-socket/trader-socket.component';
 
 const routes: Routes = [
   {
@@ -33,7 +34,8 @@ const routes: Routes = [
   ],
   declarations: [
     TraderOutletComponent,
-    TraderMainComponent
+    TraderMainComponent,
+    TraderSocketComponent
   ],
   providers:[SoketConnectorService]
 })

@@ -1,9 +1,19 @@
 <div>
-    <div> First <span>{{firstBuy}}</span></div>
-    <div> avg {{avgRate}}</div>
-    <div> Last <span>{{lastBuy}}</span></div>
-    <div> speed {{speed}}</div>
-    <div> amountPerMinute {{amountPerMinute}}</div>
-    <div> totalPerMinute {{totalPerMinute}}</div>
+
+    <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-grid-tile>
+            <app-trader-socket [exchange]="'poloniex'" [market]="'USDT_BTC'"></app-trader-socket>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <app-trader-socket [exchange]="'bitfinex'" [market]="'USDT_BTC'"></app-trader-socket>
+        </mat-grid-tile>
+        <mat-grid-tile>3</mat-grid-tile>
+        <mat-grid-tile>4</mat-grid-tile>
+    </mat-grid-list>
+
+
+
+
+
 
 </div>
