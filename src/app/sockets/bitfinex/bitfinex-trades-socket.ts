@@ -3,6 +3,7 @@ import {ISocketChannel} from "../soket-connector.service";
 
 
 export class BitfinexTradesSocket implements ISocketChannel{
+  private ws:WebSocket;
   private version = 2;
   private chanId = 0;
   private hb: number;
@@ -10,11 +11,15 @@ export class BitfinexTradesSocket implements ISocketChannel{
   private _market:string;
   sub:Subject<any> = new Subject<any>();
 
-  constructor( public channel: string, public market: string, private ws: WebSocket) {
-    ws.addEventListener('message', (msg) => this.onMessage(msg));
+  constructor( public channel: string, public market: string) {
     const ar = market.split('_');
     this._market = 't' + ar[1]+ ar[0].replace('USDT', 'USD');
-    this.subscribe();
+  }
+
+  setSocket( ws: WebSocket){
+    this.ws = ws;
+    ws.addEventListener('message', (msg) => this.onMessage(msg));
+    setTimeout(()=>this.connect(), 1000);
   }
 
   private onMessage(m) {
@@ -85,7 +90,8 @@ export class BitfinexTradesSocket implements ISocketChannel{
 
     } else if (msg[1] === 'hb') {
       this.hb = Date.now();
-      this.ws.send('');
+      console.log(this.exchange + ' HB');
+      this.ws.send('.');
     } else {
       if (msg[0] !== this.chanId) {
         console.warn(' not my data');
@@ -107,7 +113,7 @@ export class BitfinexTradesSocket implements ISocketChannel{
     }
   }
 
-  private subscribe() {
+  private connect() {
     let params = {
       event: "subscribe",
       symbol: this._market,
@@ -119,7 +125,7 @@ export class BitfinexTradesSocket implements ISocketChannel{
       this.ws.send(JSON.stringify(params));
 
     } else {
-      setTimeout(()=>this.subscribe(), 1000);
+      setTimeout(()=>this.connect(), 1000);
     }
 
   }
