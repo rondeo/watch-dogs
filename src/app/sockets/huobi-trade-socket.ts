@@ -1,49 +1,42 @@
 import {Subject} from "rxjs/Subject";
-import {ISocketChannel} from "./soket-connector.service";
 import * as pako from 'pako';
-import * as gzip from 'gzip';
+
+import * as JSZip from 'jszip';
+
+import {SocketBase} from "./soket-base";
 
 
-export class HuobiTradesSocket implements ISocketChannel {
-  private version = 2;
-  private chanId = 0;
-  private hb: number;
-  private exchange = 'huobi';
-  private _market: string;
-  sub: Subject<any> = new Subject<any>();
-  private ws: WebSocket
+export class HuobiTradesSocket extends SocketBase {
 
-  constructor(public channel: string, public market: string) {
-    //const ar = market.split('_');
-    this._market = market;
+  hb: number;
+  exchange = 'huobi'
+  socketUrl = 'wss://api.huobi.pro/ws';
 
-  }
-
-  setSocket(ws: WebSocket) {
-    this.ws = ws;
-    ws.onmessage = (msg) => this.onMessage(msg);
-    setTimeout(() => this.connect(), 1000);
-  }
-
-  private initData(data: { currencyPair: string, aordersBook: any[] }) {
-    if (data.currencyPair !== this._market) {
-      console.warn(' not my channel');
-      return;
-    }
-    const exchange = this.exchange;
-    const market = this.market;
-    const channel = this.channel;
-    // this.sub.next({data, exchange, market, channel})
+  constructor() {
+  super();
 
   }
 
-  private onMessage(m) {
+
+  onMessage(m) {
 
     console.log(m)
     //let blob = m.data;
 
-   let res = pako.inflate(m.data, { to: 'string' });
-    console.log(res);
+    var reader = new FileReader();
+    reader.onload = function() {
+      console.log(reader.result);
+      let res =  pako.inflate(reader.result);
+      console.log(res);
+    }
+    reader.readAsBinaryString(m.data)
+
+  // let res = unzip.Parse(m.data);
+
+
+   // console.log(res);
+
+
 
    /* var reader = new FileReader();
     reader.addEventListener("loadend", function(res) {
@@ -86,34 +79,19 @@ export class HuobiTradesSocket implements ISocketChannel {
 
   }
 
-  id:number;
-  private connect() {
+  subscriptions :any ={};
+
+  async createChannelId(channel, market): Promise<string> {
+
     const id = Date.now();
-    this.id = id;
     let params = {
-      req: 'market.' + this.market.split('_').reverse().join('').toLocaleLowerCase() + '.trade.detail',
+      req: 'market.' + market.split('_').reverse().join('').toLocaleLowerCase() + '.trade.detail',
       id: id
     };
 
-    console.log(this.ws);
-    console.warn(this.ws.readyState);
-    if (this.ws.readyState === this.ws.CLOSING) {
-      console.log('CLOSING');
+    this.send(JSON.stringify(params));
 
-    } else if (this.ws.readyState === this.ws.CONNECTING) {
-      console.log('CONNECTING');
-      setTimeout(() => this.connect(), 1000);
-
-    } else if (this.ws.readyState === this.ws.CLOSED) {
-      console.log('CLOSED');
-
-    } else if (this.ws.readyState === this.ws.OPEN) {
-      console.log(params);
-      this.ws.send(JSON.stringify(params));
-
-    } else {
-      setTimeout(() => this.connect(), 1000);
-    }
-
+    return Promise.resolve(this.exchange + market);
   }
+
 }

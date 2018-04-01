@@ -28,9 +28,9 @@ export class TraderMainComponent implements OnInit, OnDestroy {
   private interval;
 
   ngOnInit() {
-
+/*
     const market = 'USDT_BTC';
-    const exchange = 'binance'; //'bitfinex';
+    const exchange = 'huobi'; //'bitfinex';
     const channel = 'trades';
     this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
       console.log(res);
@@ -38,7 +38,7 @@ export class TraderMainComponent implements OnInit, OnDestroy {
         console.warn(res);
         return;
       }
-    });
+    });*/
 
   }
 

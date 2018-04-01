@@ -1,4 +1,5 @@
 import {Subject} from "rxjs/Subject";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 
 export interface ISocketData {
@@ -16,11 +17,14 @@ export interface IChannel {
 
 export abstract class SocketBase {
   ws: WebSocket;
- abstract socketUrl: string;
+  abstract socketUrl: string;
   hb: number;
   exchange: string;
   market: string;
 
+  statusSub:BehaviorSubject<string> = new BehaviorSubject('CLOSED');
+
+  HB: string;
   marketsMap: { [marketId: string]: string } = {};
 
   //sub: Subject<ISocketData> = new Subject<ISocketData>();
@@ -29,18 +33,51 @@ export abstract class SocketBase {
 
   }
 
+  private intevalHB;
+
+  onOpen() {
+
+    console.log('%c ' + this.exchange + ' OPEN', 'color:green');
+
+    clearInterval(this.intevalHB);
+    this.intevalHB = setInterval(() => {
+      this.checkState();
+      if (this.ws.readyState === this.ws.OPEN && this.HB) {
+        this.ws.send(this.HB);
+      }
+
+    }, 60000)
+
+  }
+
+  onClose(){
+    console.warn(this.exchange + ' CLOSE');
+  }
+  reconnect() {
+    this.ws = null;
+    let channelsAr: IChannel[] = Object.values(this.subscribers);
+
+    channelsAr.forEach((item) => {
+      this.createChannel(item.channel, item.market, item.sub);
+
+    })
+  }
+
   subscribers: { [id: string]: IChannel } = {};
 
 
-  createSocket(chanel, market) {
+  createSocket(chanel, market): WebSocket {
+    if (this.ws) return this.ws;
     const ws = new WebSocket(this.socketUrl);
     ws.addEventListener('message', (msg) => this.onMessage(msg));
-    this.ws = ws;
+    ws.addEventListener('open', () => this.onOpen());
+    ws.addEventListener('clode', () => this.onClose());
+    return ws;
   }
 
-  dispatch(id: string, data, newChannel:string = null) {
+  dispatch(id: string, data, newChannel: string = null) {
     let ch = this.subscribers[id]
-    if(!ch){
+    if (!ch) {
       console.warn(id);
       return;
     }
@@ -53,8 +90,9 @@ export abstract class SocketBase {
   abstract async createChannelId(chanel, market): Promise<string>
 
   async createChannel(channel, market, sub: Subject<any>) {
-
+    this.ws = this.createSocket(channel, market);
     let id = await this.createChannelId(channel, market);
+
     this.subscribers[id] = {
       channel,
       market,
@@ -67,7 +105,6 @@ export abstract class SocketBase {
 
   subscribe(chanel, market) {
     let sub = new Subject();
-    if (!this.ws) this.createSocket(chanel, market);
     this.createChannel(chanel, market, sub);
     return sub;
   }
@@ -88,7 +125,7 @@ export abstract class SocketBase {
 
     if (ws.readyState === ws.OPEN) {
       this.isQ = false;
-      console.log(params);
+      console.log(this.exchange + params);
       ws.send(params);
     } else {
       this.isQ = true;
@@ -101,23 +138,26 @@ export abstract class SocketBase {
 
   checkState() {
     const ws = this.ws;
-    console.log(ws.readyState);
+
     if (ws.readyState === ws.CLOSING) {
-      console.log('CLOSING');
+      this.statusSub.next('CLOSING');
+      console.log(this.exchange + ' CLOSING');
 
     } else if (ws.readyState === ws.CONNECTING) {
-      console.log('CONNECTING');
+      console.log(this.exchange + ' CONNECTING');
+      this.statusSub.next('CONNECTING');
+
       // setTimeout(() => this.connect(), 1000);
 
     } else if (ws.readyState === ws.CLOSED) {
-      console.log('CLOSED');
+      console.log(this.exchange + ' CLOSED');
+      this.statusSub.next('CLOSED');
+      setTimeout(() => this.reconnect(), 1000);
 
     } else if (ws.readyState === ws.OPEN) {
-      console.log('OPEN');
-
-      //this.ws.send(JSON.stringify(params));
-
-    }
+      console.log('%c ' + this.exchange + ' OPEN', 'color:green');
+      this.statusSub.next('OPEN');
+    } else  console.warn(ws.readyState);
   }
 
 

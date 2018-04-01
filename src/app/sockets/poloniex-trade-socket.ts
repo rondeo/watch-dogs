@@ -1,6 +1,5 @@
 import {Subject} from "rxjs/Subject";
-import {ISocketChannel} from "../soket-connector.service";
-import {SocketBase} from "../soket-base";
+import {SocketBase} from "./soket-base";
 
 
 export class PoloniexTradesSocket extends SocketBase {
@@ -8,11 +7,13 @@ export class PoloniexTradesSocket extends SocketBase {
   private chanId = 0;
   socketUrl = 'wss://api2.poloniex.com';
   exchange = 'poloniex';
+  HB = '.';
 
   constructor() {
     super();
 
   }
+
 
   private channels: any = {};
 
@@ -25,8 +26,6 @@ export class PoloniexTradesSocket extends SocketBase {
    // console.log(ar);
     if (ar[0] === 1010) {
       this.hb = Date.now();
-      this.ws.send('.');
-      console.log(this.exchange + ' HB');
       return
     }
 
@@ -36,6 +35,7 @@ export class PoloniexTradesSocket extends SocketBase {
       console.warn(ar);
       return;
     }
+
     const market = this.channels[ar[0]];
 
     dataAr.forEach((msg: any[]) => {
@@ -58,14 +58,13 @@ export class PoloniexTradesSocket extends SocketBase {
 
           break;
         case 't':
-          channel = 'trades';
           const data = {
             uuid: msg[1],
             timestamp: msg[5] * 1000,
             amountCoin: +(msg[2] ? msg[4] : -msg[4]),
             rate: +msg[3]
           };
-          this.dispatch(this.exchange + channel + market, data);
+          this.dispatch(this.exchange + market, data, 'trades');
 
           break
       }
@@ -75,21 +74,20 @@ export class PoloniexTradesSocket extends SocketBase {
 
   async createChannelId(channel, market): Promise<string> {
     console.log('createChannelId', channel, market);
-
     const id = Date.now();
-    const marketId = market;
+
     switch (channel) {
       case 'trades':
         let params = {
           command: "subscribe",
-          channel: marketId
+          channel: market
 
         };
         this.send(JSON.stringify(params));
         break;
     }
 
-    return Promise.resolve(this.exchange + channel + marketId);
+    return Promise.resolve(this.exchange + market);
   }
 
 

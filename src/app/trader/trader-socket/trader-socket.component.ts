@@ -11,6 +11,8 @@ export class TraderSocketComponent implements OnInit, OnChanges {
   private allTrades: IVOTrade[] = [];
 
   lastBuy: string;
+  lastSell:string;
+
   firstBuy: string;
   speed: string;
   amountPerMinute: string;
@@ -26,7 +28,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
 
   ngOnChanges(evt) {
 
-    console.log(evt);
+   // console.log(evt);
 
   }
 
@@ -52,12 +54,12 @@ export class TraderSocketComponent implements OnInit, OnChanges {
         return;
       }
 
-      if (Array.isArray(res.data)) {
-        this.allTrades = res.data;
-      } else {
+      //if (Array.isArray(res.data)) {
+       // this.allTrades = res.data;
+      //} else {
         if (res.data.uuid) this.allTrades.push(res.data);
         else console.warn(res.data)
-      }
+     // }
     })
 
   }
@@ -100,7 +102,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
       if (item.amountCoin > 0) {
         (firstBuy === 0) ? firstBuy = item.rate : lastBuy = item.rate;
       } else {
-
+        lastSell = item.rate;
       }
 
       amountBase += Math.abs(item.amountCoin) * item.rate;
@@ -113,7 +115,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
     this.totalPerMinute = Math.round(total).toLocaleString();
     this.firstBuy = Math.round(firstBuy).toLocaleString();
     this.lastBuy = Math.round(lastBuy).toLocaleString();
-
+    this.lastSell = Math.round(lastSell).toLocaleString();
     this.allTrades = lastMinute;
   }
 

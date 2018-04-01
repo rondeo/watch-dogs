@@ -1,9 +1,9 @@
 import {Subject} from "rxjs/Subject";
-import {ISocketChannel} from "../soket-connector.service";
+
 import * as  signalR from 'signalr-client';
 
 
-export class BittrexTradesSocket implements ISocketChannel {
+export class BittrexTradesSocket  {
   private version = 2;
   private chanId = 0;
   private hb: number;

@@ -1,21 +1,17 @@
 import {Subject} from "rxjs/Subject";
-import {ISocketChannel} from "../soket-connector.service";
-import {SocketBase} from "../soket-base";
+import {SocketBase} from "./soket-base";
 
 
 export class BitfinexTradesSocket extends SocketBase {
 
   socketUrl = 'wss://api.bitfinex.com/ws/2';
   private version = 2;
-  private chanId = 0
-
   exchange = 'bitfinex';
-  sub: Subject<any> = new Subject<any>();
+  HB = '.';
 
   constructor() {
     super();
   }
-
 
   async createChannelId(channel, market): Promise<string> {
     console.log('createChannelId', channel, market);
@@ -48,11 +44,12 @@ export class BitfinexTradesSocket extends SocketBase {
     switch (data.event) {
       case 'info':
         if (data.version !== this.version) {
+
           console.warn(' wrong version ' + this.version, data)
         }
         break;
       case 'subscribed':
-       // console.warn(data);
+        // console.warn(data);
         // {event:"subscribed","channel":"trades","chanId":106,"symbol":"tBTCUSD","pair":"BTCUSD"}
         const market = data.symbol;
         const chanId = data.chanId;
@@ -60,8 +57,8 @@ export class BitfinexTradesSocket extends SocketBase {
 
         break;
       case 'unsubscribed':
-        console.log('unsubscribed')
-        this.sub.next({evt: 2, message: 'unsubscribed'});
+        console.log(this.exchange + ' unsubscribed ', data)
+        // this.sub.next({evt: 2, message: 'unsubscribed'});
         break;
       default:
         this.onData(data);
@@ -75,7 +72,7 @@ export class BitfinexTradesSocket extends SocketBase {
   onData(msg) {
     // console.log('msg ', msg);
     let load: number[];
-    let data:any
+    let data: any
 
     let channel: string;
     const chanId = msg[0];
@@ -83,7 +80,7 @@ export class BitfinexTradesSocket extends SocketBase {
 
 
     if (!market) {
-      console.warn(' no market ' , msg);
+      console.warn(' no market ', msg);
       return;
     }
 
@@ -111,23 +108,23 @@ export class BitfinexTradesSocket extends SocketBase {
 
         break;
       case 'hb':
-        this.ws.send('.');
+       this.hb = Date.now();
         break
       default:
 
-        if(market && Array.isArray(msg[1])){
+        if (market && Array.isArray(msg[1])) {
           channel = 'trades';
-           data = msg[1].map(function (item: number[]) {
-             return {
-               uuid: item[0],
-               timestamp: item[1],
-               amountCoin: item[2],
-               rate: item[3]
-             };
-           });
+          data = msg[1].map(function (item: number[]) {
+            return {
+              uuid: item[0],
+              timestamp: item[1],
+              amountCoin: item[2],
+              rate: item[3]
+            };
+          });
 
-           this.dispatch(this.exchange + channel + market, data, 'inittrades');
-        }else console.warn(msg);
+          this.dispatch(this.exchange + channel + market, data, 'inittrades');
+        } else console.warn(msg);
 
         break;
 
