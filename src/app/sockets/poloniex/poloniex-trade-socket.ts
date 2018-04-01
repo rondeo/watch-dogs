@@ -1,128 +1,96 @@
 import {Subject} from "rxjs/Subject";
 import {ISocketChannel} from "../soket-connector.service";
+import {SocketBase} from "../soket-base";
 
 
-export class PoloniexTradesSocket implements ISocketChannel {
+export class PoloniexTradesSocket extends SocketBase {
   private version = 2;
   private chanId = 0;
-  private hb: number;
-  private exchange = 'poloniex';
-  private _market: string;
-  sub: Subject<any> = new Subject<any>();
-  private ws: WebSocket
+  socketUrl = 'wss://api2.poloniex.com';
+  exchange = 'poloniex';
 
-  constructor(public channel: string, public market: string) {
-    //const ar = market.split('_');
-    this._market = market;
+  constructor() {
+    super();
 
   }
 
-  setSocket( ws: WebSocket){
-    this.ws = ws;
-    ws.addEventListener('message', (msg) => this.onMessage(msg));
-    setTimeout(()=>this.connect(), 1000);
-  }
+  private channels: any = {};
 
-  private initData(data: { currencyPair: string, aordersBook: any[] }) {
-    if (data.currencyPair !== this._market) {
-      console.warn(' not my channel');
-      return;
-    }
-    const exchange = this.exchange;
-    const market = this.market;
-    const channel = this.channel;
-   // this.sub.next({data, exchange, market, channel})
-
-  }
-
-  private onMessage(m: MessageEvent) {
-
+  onMessage(m: MessageEvent) {
 
     // console.log(m);
-    let dataM: any[] = JSON.parse(m.data);
 
-   // console.log(dataM);
-
-    if (dataM.length === 1) {
+    let channel: string
+    const ar = JSON.parse(m.data);
+   // console.log(ar);
+    if (ar[0] === 1010) {
       this.hb = Date.now();
       this.ws.send('.');
       console.log(this.exchange + ' HB');
       return
     }
 
+    let dataAr: any[] = ar[2];
 
-    if (this.chanId && dataM[0] === this.chanId) {
-
-      let msgs: any[] = dataM[2];
-      if(!Array.isArray(msgs)){
-        console.log('not valid data ',dataM )
-        return;
-      }
-      msgs.forEach((msg: any[]) => {
-        switch (msg[0]) {
-          case 'i':
-            console.log(' i again ', msgs);
-            break;
-          case 'o':
-            break;
-          case 't':
-            const data = {
-              uuid: msg[1],
-              timestamp: msg[5] * 1000,
-              amountCoin: +(msg[2] ? msg[4] : -msg[4]),
-              rate: +msg[3]
-            };
-            const exchange = this.exchange;
-            const market = this.market;
-            const channel = this.channel;
-            this.sub.next({data, channel, exchange, market});
-
-            break
-        }
-      });
-
-    } else {
-
-      let msg: any[] = dataM[2];
-     // console.log(msg[0]);
-
-      if (msg[0][0] === 'i') {
-        console.log(' seting channel id ' + dataM[0]);
-        this.chanId = dataM[0];
-        this.initData(msg[0][1]);
-      }
-
+    if (!Array.isArray(dataAr)) {
+      console.warn(ar);
+      return;
     }
+    const market = this.channels[ar[0]];
+
+    dataAr.forEach((msg: any[]) => {
+
+      switch (msg[0]) {
+        case 'i':
+          const channelId = ar[0];
+          const currencyPair = msg[1].currencyPair;
+          const aordersBook = msg[1].aordersBook;
+          this.channels[channelId] = currencyPair;
+
+          break;
+        case 'o':
+          channel = 'books';
+
+          /*this.dispatch(this.exchange + channel + market, {
+            amountCoin: msg[1] ? +msg[3] : -msg[3],
+            rate: +msg[2]
+          });*/
+
+          break;
+        case 't':
+          channel = 'trades';
+          const data = {
+            uuid: msg[1],
+            timestamp: msg[5] * 1000,
+            amountCoin: +(msg[2] ? msg[4] : -msg[4]),
+            rate: +msg[3]
+          };
+          this.dispatch(this.exchange + channel + market, data);
+
+          break
+      }
+    });
 
   }
 
-  private connect() {
-    let params = {
-      command: "subscribe",
-      //symbol: this._market,
-      channel: this._market
+  async createChannelId(channel, market): Promise<string> {
+    console.log('createChannelId', channel, market);
 
-    };
+    const id = Date.now();
+    const marketId = market;
+    switch (channel) {
+      case 'trades':
+        let params = {
+          command: "subscribe",
+          channel: marketId
 
-    console.log(this.ws);
-    console.warn(this.ws.readyState);
-    if (this.ws.readyState === this.ws.CLOSING) {
-      console.log('CLOSING');
-
-    } else if (this.ws.readyState === this.ws.CONNECTING) {
-      console.log('CONNECTING');
-      setTimeout(() => this.connect(), 1000);
-
-    } else if (this.ws.readyState === this.ws.CLOSED) {
-      console.log('CLOSED');
-
-    } else if (this.ws.readyState === this.ws.OPEN) {
-      console.warn(params);
-      this.ws.send(JSON.stringify(params));
-
-    } else {
-      setTimeout(() => this.connect(), 1000);
+        };
+        this.send(JSON.stringify(params));
+        break;
     }
 
+    return Promise.resolve(this.exchange + channel + marketId);
   }
+
+
 }
