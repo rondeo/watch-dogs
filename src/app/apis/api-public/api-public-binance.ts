@@ -11,19 +11,6 @@ export class ApiPublicBinance implements IApiPublic {
 
   }
 
-  downloadMarket(base: string, coin: string): Observable<VOMarket> {
-
-    return null;
-  }
-
-  downloadMarkets(): Observable<VOMarket[]> {
-    return null;
-  }
-
-  getCurrency(): Promise<string[]> {
-    return null;
-  }
-
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
     return this.http.get(url).map((res: any[]) => {
@@ -71,17 +58,31 @@ export class ApiPublicBinance implements IApiPublic {
       })
       return indexed;
     })
-
-
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
+    let url = '/api/proxy/api.binance.com/api/v1/depth?symbol={{coin}}{{base}}&limit=100'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+    console.log(url);
+    return this.http.get(url).map((res: any) => {
+      let r = (<any>res);
 
-    return null
+      return {
+        market: base + '_' + coin,
+        exchange: 'binance',
+        buy: r.bids.map(function (o) {
+          return {amountCoin: +o[1], rate: +o[0]}
+        }),
+        sell: r.asks.map(function (o) {
+          return {amountCoin: +o[1], rate: +o[0]}
+        })
+      }
+    }, console.error);
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
-    let url = '/api/proxy/api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=300'.replace('{{base}}', base).replace('{{coin}}', coin);
+    let url = '/api/proxy/api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=300'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
 
