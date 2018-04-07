@@ -463,7 +463,7 @@ export class ApiPoloniex extends ApiBase {
       market.id = str;
       market.exchange = 'poloniex';
 
-      market.Volume = +data.quoteVolume;
+     // market.Volume = +data.quoteVolume;
       market.Last = +data.last;
       market.High = +data.highestBid;
       market.Low = +data.lowestAsk;

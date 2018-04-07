@@ -35,7 +35,7 @@ export abstract class SocketBase {
 
   private intevalHB;
 
-  onOpen() {
+  onOpen(evt) {
 
     console.log('%c ' + this.exchange + ' OPEN', 'color:green');
 
@@ -50,8 +50,11 @@ export abstract class SocketBase {
 
   }
 
-  onClose(){
+  onClose(evt){
     console.warn(this.exchange + ' CLOSE');
+  }
+  onError(err){
+    console.warn(err);
   }
   reconnect() {
     this.ws = null;
@@ -61,6 +64,7 @@ export abstract class SocketBase {
       this.createChannel(item.channel, item.market, item.sub);
 
     })
+
   }
 
   subscribers: { [id: string]: IChannel } = {};
@@ -69,9 +73,10 @@ export abstract class SocketBase {
   createSocket(chanel, market): WebSocket {
     if (this.ws) return this.ws;
     const ws = new WebSocket(this.socketUrl);
-    ws.addEventListener('message', (msg) => this.onMessage(msg));
-    ws.addEventListener('open', () => this.onOpen());
-    ws.addEventListener('clode', () => this.onClose());
+    ws.addEventListener('message', (evt) => this.onMessage(evt));
+    ws.addEventListener('open', (evt) => this.onOpen(evt));
+    ws.addEventListener('close', (evt) => this.onClose(evt));
+    ws.addEventListener('error', (evt) => this.onError(evt));
     return ws;
   }
 
@@ -152,7 +157,7 @@ export abstract class SocketBase {
     } else if (ws.readyState === ws.CLOSED) {
       console.log(this.exchange + ' CLOSED');
       this.statusSub.next('CLOSED');
-      setTimeout(() => this.reconnect(), 1000);
+     // setTimeout(() => this.reconnect(), 1000);
 
     } else if (ws.readyState === ws.OPEN) {
       console.log('%c ' + this.exchange + ' OPEN', 'color:green');

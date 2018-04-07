@@ -25,7 +25,9 @@ export class BinanceTradesSocket extends SocketBase {
     const suffix = marketId + '@' + channel.slice(0,-1);
     const ws = new WebSocket(this.socketUrl + suffix);
     ws.addEventListener('message', (msg) => this.onMessage(msg));
-    ws.addEventListener('open', ()=>this.onOpen());
+    ws.addEventListener('open', (evt) => this.onOpen(evt));
+    ws.addEventListener('close', (evt) => this.onClose(evt));
+    ws.addEventListener('error', (evt) => this.onError(evt));
     return ws;
   }
 

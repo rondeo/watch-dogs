@@ -331,8 +331,6 @@ export class ApiCryptopia extends ApiBase  {
     });
   }
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////MARKETS
   isLoadinMarkets
 
@@ -351,11 +349,9 @@ export class ApiCryptopia extends ApiBase  {
 
         let baseCoins: string[] = [];
 
-        let selected: string[] = this.getMarketsSelected();
-
         let indexed:{} = {}
         let bases:string[] = [];
-        ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases, selected);
+        ApiCryptopia.mapMarkets(result, marketsAr, indexed, bases);
 
         this.dispatchMarketsData(marketsAr, indexed, bases);
 
@@ -374,8 +370,7 @@ export class ApiCryptopia extends ApiBase  {
     result:any,
     marketsAr:VOMarket[],
     indexed:{[pair:string]:VOMarket},
-    bases:string[],
-    selected:string[]
+    bases:string[]
   ):number{
 
     let ar:any = result;
@@ -389,12 +384,11 @@ export class ApiCryptopia extends ApiBase  {
       market.coin = ar[0];
 
       market.pair =  ar[1] + '_' +  ar[0];
-      market.selected = selected.indexOf( market.pair) !==-1;
 
       market.id = item.Label;
       market.exchange = 'cryptopia';
 
-      market.Volume = +item.Volume;
+   //   market.Volume = +item.Volume;
       market.Last = item.LastPrice;
       market.High = item.High;
       market.Low = item.Low;

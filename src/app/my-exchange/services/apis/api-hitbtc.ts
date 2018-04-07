@@ -338,13 +338,13 @@ export class ApiHitbtc extends ApiBase  {
       market.id = item.symbol;
       market.exchange = 'hitbtc';
 
-      market.Volume = +item.volume;
+    //  market.Volume = +item.volume;
       market.Last = +item.last;
       market.High = +item.high;
       market.Low = +item.low;
       market.Ask = +item.ask;
       market.Bid = +item.bid;
-      market.BaseVolume = +item.volumeQuote;
+      market.BaseVolume =+item.volume *  +item.last;
       market.PrevDay = item.open;
       indexed[market.pair] = market;
       marketsAr.push(market);

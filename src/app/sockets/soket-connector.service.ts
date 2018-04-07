@@ -3,13 +3,13 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {BitfinexTradesSocket} from "./bitfinex-trades-socket";
 import {PoloniexTradesSocket} from "./poloniex-trade-socket";
-import {BittrexTradesSocket} from "./bittrex/bittrex-trades-socket";
 import {BinanceTradesSocket} from "./binance-trade-socket";
-import {BittrexSocket} from "./bittrex/bittrex-socket";
+
 import {HuobiTradesSocket} from "./huobi-trade-socket";
 import {OkexTradesSocket} from "./okex-trade-socket";
 import {HitbtcTradesSocket} from "./hitbtc-trade-socket";
 import {SocketBase} from "./soket-base";
+import {BittrexTradesSocket} from "./bittrex/bittrex-trades-socket";
 
 
 export interface IVOTrade {
@@ -58,6 +58,8 @@ export class SoketConnectorService {
         return new  OkexTradesSocket(); // WebSocket('wss://real.okex.com:10440/websocket/okexapi');
       case 'hitbtc':
         return new HitbtcTradesSocket()
+      case 'bittrex':
+        return new BittrexTradesSocket();
     }
     return null;
 

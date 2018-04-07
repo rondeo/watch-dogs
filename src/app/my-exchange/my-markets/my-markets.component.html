@@ -24,7 +24,7 @@
 
                 <th>%1h</th>
                 <th>%24h</th>
-                <th>%7d</th>
+                <th>to MC</th>
 
                 <th><span class="btn" (click)="onSortClick('Last')">Last</span></th>
                 <th>High</th>
@@ -42,7 +42,7 @@
 
                 <td><span [ngClass]="market.percent_change_1h>0?'green':'red'">{{market.percent_change_1h}}</span></td>
                 <td><span [ngClass]="market.percent_change_24h>0?'green':'red'">{{market.percent_change_24h}}</span></td>
-                <td><span [ngClass]="market.percent_change_7d>0?'green':'red'">{{market.percent_change_7d}}</span></td>
+                <td><span [ngClass]="market.toMC>0?'green':'red'">{{market.toMC}}</span></td>
 
                 <td>{{market.usLast}}</td>
                 <td>{{market.usHigh}}</td>

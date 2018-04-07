@@ -24,7 +24,6 @@ export const rootRouterConfig: Routes = [
   { path: 'coins-exchanges/:list', component: CoinsExchangesComponent},
 
   { path: 'shape-shift-market-cap', component: SSCoinsAvailableComponent},
-
   { path: 'login/:topic', component: LoginComponent },
   { path: 'login-confirm/:session', component:ConfirmComponent },
   { path: 'confirm-reset-password/:session', component:ConfirmResetPasswordComponent }

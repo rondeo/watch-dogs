@@ -272,10 +272,12 @@ export interface IVOMarket {
   stats?:IOrdersStats;
 }
 */
+export interface IVOMarketExt{
 
+}
 
 export class VOMarket {
-  pair: string;
+  pair?: string;
   exchange?: string;
   base: string;
   coin: string;
@@ -307,8 +309,8 @@ export class VOMarket {
   Low: number;
   dLow?: string;
   usLow?: number;
-  Volume: number;
-  dVolume?: string;
+  // Volume?: number;
+  // dVolume?: string;
   usVolume?: string;
 
 
@@ -322,7 +324,8 @@ export class VOMarket {
   dPrevDay?: string;
   usPrevDay?: string;
   change?: number;
-  usMC?: string;
+  usMC?: number;
+  toMC?:number;
   Created?: string
   DisplayMarketName?: string
   disabled?: any;

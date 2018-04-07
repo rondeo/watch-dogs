@@ -1,0 +1,19 @@
+<div>
+    <section>
+        <h2>{{baseCoin}}</h2>
+    </section>
+
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <th *ngFor="let exchangeName of tableHeaders">{{exchangeName}}</th>
+            </tr>
+            <tr *ngFor="let exchangesValues of tableDataset; let i = index">
+                <td (click)="onCoinClick(i, j)" *ngFor="let price of exchangesValues; let j = index">{{price}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>

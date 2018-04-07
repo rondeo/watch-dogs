@@ -254,7 +254,7 @@ export class MarketCapService {
     let MC:{[symbol:string]:VOMarketCap} = {};
 
     ar.forEach(function (item: any[]) {
-      if(item){
+      if(item && !this.MC[item[2]]){
         this.MC[item[2]] = {
           id: item[0],
           name: item[1],

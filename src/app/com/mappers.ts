@@ -41,7 +41,7 @@ export class Mappers{
         market.exchange = 'etherdelta';
 
 
-        market.Volume = +item.quoteVolume || 0;
+       // market.Volume = +item.quoteVolume || 0;
         market.BaseVolume = +item.baseVolume|| 0;
         market.Last = +item.last;
         market.High = 0;
@@ -90,7 +90,7 @@ export class Mappers{
         market.exchange = 'bitsane';
 
 
-        market.Volume = +item.quoteVolume || 0;
+        // market.Volume = +item.quoteVolume || 0;
         market.BaseVolume = +item.baseVolume|| 0;
         market.Last = +item.last;
         market.High = +item.high24hr;
@@ -134,8 +134,8 @@ export class Mappers{
         market.id = str;
         market.exchange = 'bithumb';
 
-        market.Volume = +item.volume_1day || 0;
-        market.BaseVolume = +item.volume_7day || 0;
+       // market.Volume = +item.volume_1day || 0;
+        market.BaseVolume = +item.volume_1day  * +item.average_price;
         market.Last = +item.closing_price;
         market.High = +item.max_price;
         market.Low = +item.min_price;
@@ -172,8 +172,8 @@ export class Mappers{
         market.id = str;
         market.exchange = 'coinone';
 
-        market.Volume = +item.volume || 0;
-        market.BaseVolume = +item.yesterday_volume || 0;
+       // market.Volume = +item.volume || 0;
+        market.BaseVolume =  +item.volume * +item.last;
         market.Last = +item.last;
         market.High = +item.high;
         market.Low = +item.low;
@@ -212,8 +212,8 @@ export class Mappers{
       market.id = str;
       market.exchange = 'bitz';
 
-      market.Volume = +item.vol || 0;
-      market.BaseVolume = 0;
+     // market.Volume = +item.vol || 0;
+      market.BaseVolume =+item.vol *  +item.last;
       market.Last = +item.last;
       market.High = +item.high;
       market.Low = +item.low;
@@ -246,8 +246,8 @@ export class Mappers{
       market.id = str;
       market.exchange = 'exmo';
 
-      market.Volume = +item.vol || 0;
-      market.BaseVolume = +item.vol_curr || 0;
+      // market.Volume = +item.vol || 0;
+      market.BaseVolume = +item.vol * +item.avg;;
       market.Last = +item.last_trade
       market.High = +item.high;
       market.Low = +item.low;
@@ -273,8 +273,8 @@ export class Mappers{
 
 
   static bitfinexMarketDetails(result:BitfinexMarket, market:VOMarket, base:number, mc:VOMarketCap){
-    market.Volume = +result.volume;
-    market.BaseVolume = -1;
+  //  market.Volume = +result.volume;
+    market.BaseVolume = +result.volume * +result.last_price;
     market.Last = +result.last_price;
     market.Low = +result.low;
     market.High = +result.high;
@@ -332,14 +332,14 @@ export class Mappers{
         market.id = item.marketname;
         market.exchange = 'novaexchange';
 
-        market.Volume = +item.volume24h;
+       // market.Volume = +item.volume24h;
         market.Last = +item.last_price;
         market.High = +item.high24h;
         market.Low = +item.low24h;
         market.Ask = +item.ask;
         market.Bid = +item.bid;
         market.disabled = item.disabled;
-        market.BaseVolume = +item.volume24h;
+        market.BaseVolume = +item.volume24h * +item.last_price;
         market.change = +item.change24h;
         market.PrevDay = -1;
 
@@ -417,8 +417,8 @@ export class Mappers{
       market.Low = +item.LowPrice;
       market.High = +item.HighPrice;
       market.change =  +item.Change;
-      market.Volume = +item.Volume;
-      market.BaseVolume =  +item.BTCVolume;
+      // market.Volume = +item.Volume;
+      market.BaseVolume =  +item.Volume * +item.LastPrice;
       market.OpenBuyOrders = +item.BuyOrderCount;
       market.OpenSellOrders =  +item.SellOrderCount;
 
@@ -430,9 +430,9 @@ export class Mappers{
       let mc = marketCap[market.coin];
       if (!mc) {
         //console.log('no mc for ' + market.coin);
-        market.usMC = '';
+        market.usMC = 0;
 
-      } else market.usMC = mc.price_usd.toFixed(2);
+      } else market.usMC = +mc.price_usd.toFixed(2);
 
 
       marketsAr.push(market);
@@ -472,7 +472,7 @@ export class Mappers{
       market.id = str;
       market.exchange = 'poloniex';
 
-      market.Volume = +data.quoteVolume;
+     // market.Volume = +data.quoteVolume;
       market.Last = +data.last;
       market.High = +data.highestBid;
       market.Low = +data.lowestAsk;
@@ -491,9 +491,9 @@ export class Mappers{
       let mc = marketCap[market.coin];
       if (!mc) {
         //console.log('no mc for ' + market.coin);
-        market.usMC = '';
+        market.usMC = 0;
 
-      } else market.usMC = mc.price_usd.toFixed(2);
+      } else market.usMC = +mc.price_usd.toFixed(2);
 
       marketsAr.push(market);
     }
@@ -527,8 +527,8 @@ export class Mappers{
 
 
 
-      market.Volume = +item.volume_quote;
-      market.BaseVolume = +item.volume;
+    //  market.Volume = +item.volume_quote;
+      market.BaseVolume = +item.volume *  +item.last;
       market.Ask = +item.ask;
       market.Bid = +item.bid;
 
@@ -590,7 +590,7 @@ export class Mappers{
       market.id = item.MarketName;
       market.exchange = 'bittrex';
 
-      market.Volume = +item.Volume;
+     // market.Volume = +item.Volume;
       market.Last = +item.Last;
       market.High = +item.High;
       market.Low = +item.Low;
@@ -654,7 +654,7 @@ export class Mappers{
       market.id = item.Label;
       market.exchange = 'cryptopia';
 
-      market.Volume = +item.Volume;
+     // market.Volume = +item.Volume;
       market.Last = item.LastPrice;
       market.High = item.High;
       market.Low = item.Low;
@@ -697,8 +697,8 @@ export class Mappers{
       market.Low = item.low;
       market.Ask = item.best_ask;
       market.Bid = item.best_bid;
-      market.Volume = item.volume;
-      market.BaseVolume = item.vwap;
+      //market.Volume = item.volume;
+      market.BaseVolume = item.volume *item.last ;
       market.PrevDay = -1;
       let mcB:VOMarketCap = marketCap[market.base];
 
@@ -713,7 +713,7 @@ export class Mappers{
   }
   static mapDisplayValues1(item:VOMarket, basePrice:number, base_1h:number, base_24h:number, base_7d:number, marketCap:VOMarketCap){
     let base = basePrice;
-    item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
+  //  item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toPrecision(2);
     item.usBid =(item.Bid * base).toPrecision(2);
@@ -727,14 +727,15 @@ export class Mappers{
       item.percent_change_7d = +(marketCap.percent_change_7d - base_7d).toFixed(2);
       item.percent_change_1h = +(marketCap.percent_change_1h - base_1h).toFixed(2);
       item.percent_change_24h = +(marketCap.percent_change_24h - base_24h).toFixed(2);
-      item.usMC = marketCap.price_usd.toPrecision(4);
+      item.usMC = +marketCap.price_usd.toPrecision(5);
+      item.toMC = Math.round(1000 * (item.usLast - item.usMC)/ item.usMC)/10;
     }
 
   }
 
   static mapDisplayValues(item:VOMarket, basePrice:number, prec:number, marketCap:VOMarketCap){
     let base = basePrice;
-    item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
+   // item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toFixed(2);
     item.usBid =(item.Bid * base).toFixed(2);
@@ -748,14 +749,14 @@ export class Mappers{
       item.percent_change_7d = marketCap.percent_change_7d
       item.percent_change_1h = marketCap.percent_change_1h;
       item.percent_change_24h = marketCap.percent_change_24h;
-      item.usMC = marketCap.price_usd.toPrecision(4);
+      item.usMC = +marketCap.price_usd.toPrecision(4);
     }
 
   }
   static mapDisplayValues2(item:VOMarket, base:number,  marketCap:VOMarketCap, prec:number=4){
 
 
-    item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
+ //   item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toPrecision(prec);
     item.usBid =(item.Bid * base).toPrecision(prec);
@@ -768,7 +769,7 @@ export class Mappers{
       item.percent_change_7d = marketCap.percent_change_7d
       item.percent_change_1h = marketCap.percent_change_1h;
       item.percent_change_24h = marketCap.percent_change_24h;
-      item.usMC = marketCap.price_usd.toPrecision(4);
+      item.usMC = +marketCap.price_usd.toPrecision(4);
     }
 
   }
@@ -799,8 +800,8 @@ export class Mappers{
 
     for(let str in res){
       let result = res[str];
-      market.Volume = result.vol;
-      market.BaseVolume = result.vol_cur;
+     // market.Volume = result.vol;
+      market.BaseVolume = result.vol * result.last;// result.vol_cur;
       market.Last = result.last;
       market.Low = result.low;
       market.High = result.high;

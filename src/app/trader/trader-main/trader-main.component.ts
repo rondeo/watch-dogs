@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IVOTrade, SoketConnectorService} from "../../sockets/soket-connector.service";
 import {setInterval} from "timers";
 import * as _ from 'lodash';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-trader-main',
@@ -20,25 +21,29 @@ export class TraderMainComponent implements OnInit, OnDestroy {
   totalPerMinute: string;
   avgRate: string;
 
-
-  constructor(private sockets: SoketConnectorService) {
+  constructor(private rote:ActivatedRoute, private sockets: SoketConnectorService) {
   }
 
   private sub1;
   private interval;
 
   ngOnInit() {
-/*
-    const market = 'USDT_BTC';
-    const exchange = 'huobi'; //'bitfinex';
-    const channel = 'trades';
-    this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
-      console.log(res);
-      if (res.channel !== channel || res.exchange !== exchange || res.market !== market) {
-        console.warn(res);
-        return;
-      }
-    });*/
+
+    this.rote.params.subscribe(params=>{
+
+      const market = params.market;
+      const exchange = 'bittrex'; //'bitfinex';
+      const channel = 'trades';
+      this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
+        console.log(res);
+        if (res.channel !== channel || res.exchange !== exchange || res.market !== market) {
+          console.warn(res);
+          return;
+        }
+      });
+    })
+
+
 
   }
 

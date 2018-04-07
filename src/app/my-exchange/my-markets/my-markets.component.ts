@@ -44,6 +44,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
 
       if(this.subMarkets) this.subMarkets.unsubscribe();
       this.subMarkets = connector.getAllMarkets().subscribe(res=>{
+        console.log(res);
         this.marketsArAll = res;
         this.render();
       })
@@ -128,7 +129,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
   }
 
   onMarketSelected(evt, market:VOMarket){
-    console.log(evt);
+   // console.log(evt);
 
     let selected = this.apiConnector.getMarketsSelected();
     let ind = selected.indexOf(market.pair);

@@ -298,36 +298,6 @@ export class ApiBittrex extends ApiBase   {
     //return this.books$()
   }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO
-  //urlBalances = 'api/2/trading/balance';
-  //isLoadingBalances:boolean;
- /* refreshBalances():void {
-    if(!this.isLogedInSub.getValue()){
-      console.warn(' not logged in');
-      return;
-    }
-
-
-    if(this.isLoadingBalances) return;
-    this.isLoadingBalances = true;
-
-
-    console.log('%c refreshBalances  ','color:pink');
-
-    let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
-    this.getBalances().toPromise().then(res=>{
-
-      this.isLoadingBalances = false;
-      this.dispatchBalances(res);
-    }).catch(err=>{
-      this.isLoadingBalances = false;
-      this.onError(err);
-
-    });
-  }*/
-
-
-
   downloadBalances():Observable<VOBalance[]>{
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
     this.isLoadingBalances = true;
@@ -429,7 +399,6 @@ export class ApiBittrex extends ApiBase   {
       let ar:string[] = item.MarketName.split('-');
 
       let market:VOMarket = new VOMarket();
-
       market.base = ar[0];
       if (bases.indexOf(market.base) === -1) bases.push(market.base);
       market.coin = ar[1];
@@ -441,7 +410,7 @@ export class ApiBittrex extends ApiBase   {
       market.id = item.MarketName;
       market.exchange = 'bittrex';
 
-      market.Volume = +item.Volume;
+     // market.Volume = +item.Volume;
       market.Last = +item.Last;
       market.High = +item.High;
       market.Low = +item.Low;
