@@ -78,16 +78,15 @@ export class CoinDayComponent implements OnInit {
         return item.slice(11, -3);
       });
 
-
       let base = 'BTC';
       if (this.coin === 'BTC') base = 'USDT';
-      this.coinDay.getOrdersHistoryPoloniex(base, coin, from, to).subscribe(bitfibex_USDT_BTC=>{
-        console.log(bitfibex_USDT_BTC);
+     // this.coinDay.getOrdersHistoryPoloniex(base, coin, from, to).subscribe(bitfibex_USDT_BTC=>{
+       // console.log(bitfibex_USDT_BTC);
 
 
      // this.coinDay.getCoinDayBittrex(base, coin, from, to).subscribe((bittrex: MarketDay) => {
        // this.coinDay.getCoinDayPoloniex(base, coin, from, to).subscribe((poloniex: MarketDay) => {
-          this.coinDay.getCoinDayBitfinex(base, coin, from, to).subscribe((bitfinex: MarketDay) => {
+        //  this.coinDay.getCoinDayBitfinex(base, coin, from, to).subscribe((bitfinex: MarketDay) => {
             //this.coinDay.getCoinDayHitbtc(base, coin, from, to).subscribe((hitbtc: MarketDay) => {
               //this.coinDay.getCoinDayCryptopia(base, coin, from, to).subscribe((cryptopia: MarketDay) => {
               // console.log(bitfinex);
@@ -99,16 +98,16 @@ export class CoinDayComponent implements OnInit {
               this.myGraps = {
                 xs: vals,
                 graphs: [
-                  /* {
+                   {
                      ys: mc.price_usd,
                      color: '#b57419',
                      label: 'MC'
-                   },*/
+                   },
                    {
                      ys: mc.volume_usd_24h,
                      color: '#000000',
                      label: 'Volume'
-                   },
+                   }
                   /*{
                     ys: bittrex.Last,
                     color: '#FF00FF',
@@ -119,16 +118,16 @@ export class CoinDayComponent implements OnInit {
                     color: '#14af60',
                     label: 'Poloniex'
                   },*/
-                  {
+                 /* {
                     ys: bitfinex.Last,
                     color: '#779dff',
                     label: 'Bitfinex'
-                  },
-                   {
+                  },*/
+                  /* {
                  ys: bitfibex_USDT_BTC.totals,
                  color: '#c1c037',
                  label: 'Hitbtc'
-               },
+               },*/
                  /* {
                     ys: bitfibex_USDT_BTC.buys,
                     color: '#1fc1a0',
@@ -154,8 +153,8 @@ export class CoinDayComponent implements OnInit {
                 ]
               };
 
-            });
-      });
+          //  });
+      //});
          // });
           //});
         //});

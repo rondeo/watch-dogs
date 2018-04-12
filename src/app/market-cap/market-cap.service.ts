@@ -250,6 +250,26 @@ export class MarketCapService {
            +item.last_updated*/
 
 
+  static mapMCValue(item){
+    return {
+      id: item[0],
+      name: item[1],
+      symbol: item[2],
+      rank: item[3],
+      price_usd: item[4],
+      price_btc: item[5],
+      percent_change_1h: item[6],
+      percent_change_24h: item[7],
+      percent_change_7d: item[8],
+      volume_usd_24h: item[9],
+      market_cap_usd: item[10],
+      available_supply: item[11],
+      total_supply: item[12],
+      max_supply: item[13],
+      last_updated: item[14]
+    }
+  }
+
   static mapServerValues(ar:any[]){
     let MC:{[symbol:string]:VOMarketCap} = {};
 

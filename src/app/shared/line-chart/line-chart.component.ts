@@ -63,7 +63,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   }
 
   drawData() {
-    console.warn('draw data');
+    //   console.warn('draw data');
     if (!this.graphs) return;
     this.redraw();
   }
@@ -77,7 +77,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     window.addEventListener('resize', event => {
-      clearTimeout(this.resise)
+      clearTimeout(this.resise);
       this.resise = setTimeout(() => this.onResise(), 500);
     });
   }
@@ -85,6 +85,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
   redraw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+    if (!this.graphs) return;
     this.drwaHorizonts();
     this.drwaVerticals();
     this.drawLines();
@@ -110,44 +111,34 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     this.ctx = el.getContext("2d");
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
-    //
-    //this.height = this.ctx.canvas.height;
-    //this.ratio =  this.ctx.canvas.width /this.ctx.canvas.height
-
   }
 
   ngOnChanges(evt) {
-    //console.log(evt);
+
     if (this.ctx) this.drawData();
 
   }
 
-  private drawXs(){
+  private drawXs() {
 
     let ctx = this.ctx;
     let ar = this.graphs.xs;
     let step = (this.widthG + 40) / ar.length;
     let y = this.height;
-    let x0  = this.paddingLeft - 20;
+    let x0 = this.paddingLeft - 20;
 
     ctx.fillStyle = '#000000';
     ctx.font = "12px Arial";
     ar.forEach(function (item, i) {
-      ctx.fillText(item, x0 + (i*step) , y);
+      ctx.fillText(item, x0 + (i * step), y);
     });
   }
 
   private drawLines() {
-    console.warn('drawLines  heightG: ' + this.heightG);
     if (!this.graphs) return;
-    //console.log(this.graphs)
-    let ctx = this.ctx;
-    let x0 = this.x0 + 50;
-    let y0 = this.y0;
-
-
+    const x0 = this.x0 + 50;
+    const y0 = this.y0;
     for (let i = 0, n = this.graphs.graphs.length; i < n; i++) {
-
       this.drawline(this.graphs.graphs[i]);
     }
 
@@ -159,31 +150,24 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     let ctx = this.ctx;
     let x0 = this.x0 + 50;
     let y0 = this.y0;
-    let n = this.graphs.graphs.length;
     this.graphs.graphs.forEach(function (graph, i) {
       ctx.fillStyle = graph.color;
       ctx.font = "12px Arial";
-      let percent = (100 * ((graph.max - graph.min)/graph.min)).toFixed(2);
+      let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
       let min = graph.min;
       let max = graph.max;
 
       ctx.fillText(graph.label + ' ' + percent + '%', x0 + i * 90, 12, 80);
-      ctx.fillText(min.toPrecision(4), 2,y0 - (i * 20), 40);
-      ctx.fillText(max.toPrecision(4), 2,30 + (i * 20), 40);
+      ctx.fillText(min.toPrecision(4), 2, y0 - (i * 20), 40);
+      ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
     });
-
-
   }
-
 
 
   private drawline(line: VOGraph) {
     let ctx = this.ctx;
-    // console.log(line.ys);
     ctx.strokeStyle = line.color;
     ctx.beginPath();
-
-    // console.log(line.color);
     ctx.lineWidth = 1;
     let y0 = this.y0;
     let x0 = this.x0;
@@ -191,7 +175,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     let min = _.min(ys);
     let max = _.max(ys);
 
-    if(min ===0 ) min = 1;
+    if (min === 0) min = 1;
     let range = max - min;
     line.min = min;
     line.max = max;
@@ -207,10 +191,9 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     ctx.stroke();
 
 
-    if(min < 0 ){
-      console.log(line.ys, ys)
+    if (min < 0) {
       let zero = (this.heightG * (0 - min)) / range;
-      zero = y0 - zero
+      zero = y0 - zero;
       ctx.moveTo(0, zero);
       ctx.lineTo(this.width, zero);
       ctx.stroke();
@@ -223,7 +206,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     ctx.lineWidth = 0.2;
     let n = this.horizont;
     let offsetY = this.paddingTop;
-    let offsetX = this.paddingLeft
+    let offsetX = this.paddingLeft;
     let width = this.widthG;
 
     let step = Math.round(this.heightG / n);
@@ -245,12 +228,8 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
-
-
     let step = Math.round(this.widthG / n);
-
     let height = this.heightG;
-
     for (let i = 0; i < n + 1; i++) {
       let posX = offsetX + (step * i);
       ctx.beginPath();

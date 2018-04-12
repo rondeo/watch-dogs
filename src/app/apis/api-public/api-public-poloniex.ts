@@ -13,6 +13,8 @@ export class ApiPublicPoloniex implements IApiPublic {
 
   }
 
+
+
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
     const url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);
@@ -42,20 +44,32 @@ export class ApiPublicPoloniex implements IApiPublic {
     })
   }
 
+
+  allCoins: {[coin:string]:{[base:string]:number}};
+
+  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+    if (this.allCoins) return Promise.resolve(this.allCoins);
+    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+  }
+
   downloadTicker():Observable<{[market:string]:VOMarket}>{
     let url  = 'https://poloniex.com/public?command=returnTicker';
     console.log(url);
 
     return this.http.get(url).map(result=>{
 
+      const allCoins = {}
+
       let marketsAr:VOMarket[] = [];
       const indexed ={};
       let i = 0;
+
       for (let str in result) {
         i++;
         let data = result[str];
 
         let ar: string[] = str.split('_');
+
         let market = {
           base:ar[0],
           coin:ar[1],
@@ -74,7 +88,12 @@ export class ApiPublicPoloniex implements IApiPublic {
         };
         indexed[ar[0] + '_' + ar[1]] = market;
         marketsAr.push(market);
+
+        if(!allCoins[market.coin])allCoins[market.coin] = {};
+        allCoins[market.coin][market.base] =  market.Last;
       }
+
+      this.allCoins = allCoins;
       this.marketsAr = marketsAr;
 
       return indexed;

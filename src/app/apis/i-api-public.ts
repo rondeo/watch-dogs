@@ -5,4 +5,5 @@ export interface IApiPublic {
   downloadBooks(base:string, coin:string):Observable<VOBooks>;
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>;
   downloadTicker():Observable<{[market:string]:VOMarket}>;
+  getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}>
 }

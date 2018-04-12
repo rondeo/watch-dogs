@@ -11,11 +11,19 @@ export class ApiPublicBinance implements IApiPublic {
 
   }
 
+  allCoins: {[coin:string]:{[base:string]:number}};
+
+  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+    if (this.allCoins) return Promise.resolve(this.allCoins);
+    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+  }
+
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
     return this.http.get(url).map((res: any[]) => {
       // console.log(res);
       const indexed = {};
+      const allCoins = {}
       res.forEach(function (item) {
 
         let coin: string;
@@ -42,6 +50,11 @@ export class ApiPublicBinance implements IApiPublic {
 
         var BaseVolume = 1e10, Volume, Bid, Ask, High, Low, Last = +item.price;
         const exchange = 'binance';
+
+
+        if(!allCoins[coin])allCoins[coin] = {};
+        allCoins[coin][base] =  +item.price;
+
         indexed[base + '_' + coin] = {
           exchange,
           id,
@@ -56,6 +69,7 @@ export class ApiPublicBinance implements IApiPublic {
           BaseVolume
         }
       })
+      this.allCoins = allCoins;
       return indexed;
     })
   }

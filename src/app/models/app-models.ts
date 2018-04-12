@@ -276,6 +276,8 @@ export interface IVOMarketExt{
 
 }
 
+
+
 export class VOMarket {
   pair?: string;
   exchange?: string;
@@ -380,6 +382,7 @@ export class VOMarketCap {
 
 
   volume_usd_24h?: number;
+
   market_cap_usd?:number;
   available_supply?:number;
   total_supply?:number;

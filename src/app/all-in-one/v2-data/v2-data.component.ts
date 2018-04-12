@@ -42,7 +42,6 @@ export class V2DataComponent implements OnInit {
   ) {
   }
 
-
   onRefreshDataClick(){
     this.downloadAllExchanges();
   }
@@ -97,8 +96,6 @@ export class V2DataComponent implements OnInit {
       this.tableHeaders = ['coin', 'base'].concat(this.exchanges);
       this.tableDataset = V2DataHelper.parseData(this.MC, this.bases, res);
     })
-
-
   }
 
 

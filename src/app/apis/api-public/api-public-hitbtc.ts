@@ -43,6 +43,14 @@ export class ApiPublicHitbtc implements IApiPublic {
     })
   }
 
+  allCoins: {[coin:string]:{[base:string]:number}};
+
+  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+    if (this.allCoins) return Promise.resolve(this.allCoins);
+    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+  }
+
+
   downloadTicker():Observable<{[market:string]:VOMarket}> {
     let url = '/api/hitbtc/public/ticker';
     console.log(url);
@@ -54,6 +62,7 @@ export class ApiPublicHitbtc implements IApiPublic {
       const indexed = {};
       const marketsAr = [];
       const bases = [];
+      const allCoins = {}
     //   console.log(ar);
       ar.forEach(function (item) {
         let market: VOMarket = new VOMarket();
@@ -72,8 +81,12 @@ export class ApiPublicHitbtc implements IApiPublic {
         market.BaseVolume = +item.volume * +item.last;
         indexed[market.pair] = market;
         if(item.open)marketsAr.push(market);
+
+        if(!allCoins[market.coin])allCoins[market.coin] = {};
+        allCoins[market.coin][market.base] =  market.Last;
       });
      // console.log(marketsAr);
+      this.allCoins = allCoins;
       return indexed;
     });
   }

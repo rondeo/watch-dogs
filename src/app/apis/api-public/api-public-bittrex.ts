@@ -25,6 +25,14 @@ export class ApiPublicBittrex implements IApiPublic {
     }, console.error);
   }
 
+
+  allCoins: {[coin:string]:{[base:string]:number}};
+
+  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+    if (this.allCoins) return Promise.resolve(this.allCoins);
+    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+  }
+
   downloadTicker(): Observable<{[market:string]:VOMarket}> {
     let url = '/api/bittrex/summaries';
     console.log(url);
@@ -33,6 +41,7 @@ export class ApiPublicBittrex implements IApiPublic {
       let ar:SOMarketBittrex[] = result.result;
       let bases =[];;
 
+      const allCoins = {};
       const marketsAr = [];
       const indexed = {};
       ar.forEach(function (item:SOMarketBittrex) {
@@ -56,7 +65,10 @@ export class ApiPublicBittrex implements IApiPublic {
         indexed[market.base + '_' +  market.coin] = market;
         marketsAr.push(market);
 
+        if(!allCoins[market.coin])allCoins[market.coin] = {};
+          allCoins[market.coin][market.base] = +item.Last;
       })
+      this.allCoins = allCoins;
       // console.log(marketsAr);
       return indexed;
     });
