@@ -11,13 +11,27 @@ export class TraderSocketComponent implements OnInit, OnChanges {
   private allTrades: IVOTrade[] = [];
 
   lastBuy: string;
-  lastSell:string;
+  lastSell: string;
 
+  firstSell: string;
   firstBuy: string;
+
+
+  totalBuy: string;
+  totalSell: string;
+
+  diffSellBuyPrice: string;
+
   speed: string;
   amountPerMinute: string;
   totalPerMinute: string;
+
+
   avgRate: string;
+
+  avgSellPrice:string;
+  avgBuyPrice:string;
+
 
   @Input() market: string;
   @Input() exchange: string;
@@ -28,7 +42,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
 
   ngOnChanges(evt) {
 
-   // console.log(evt);
+    // console.log(evt);
 
   }
 
@@ -55,11 +69,11 @@ export class TraderSocketComponent implements OnInit, OnChanges {
       }
 
       //if (Array.isArray(res.data)) {
-       // this.allTrades = res.data;
+      // this.allTrades = res.data;
       //} else {
-        if (res.data.uuid) this.allTrades.push(res.data);
-        else console.warn(res.data)
-     // }
+      if (res.data.uuid) this.allTrades.push(res.data);
+      else console.warn(res.data)
+      // }
     })
 
   }
@@ -95,14 +109,23 @@ export class TraderSocketComponent implements OnInit, OnChanges {
     let lastBuy = 0;
     let firstSell = 0;
     let lastSell = 0;
-
+    let amountBaseBuy = 0;
+    let amountCoinBuy = 0;
+    let amounrBaseSell = 0;
+    let amountCoinSell = 0;
 
     lastMinute.forEach(function (item: IVOTrade) {
 
       if (item.amountCoin > 0) {
+        amountCoinBuy += item.amountCoin;
+        amountBaseBuy += item.amountCoin * item.rate;
+
         (firstBuy === 0) ? firstBuy = item.rate : lastBuy = item.rate;
       } else {
-        lastSell = item.rate;
+        amountCoinSell +=  Math.abs(item.amountCoin);
+        amounrBaseSell +=  Math.abs(item.amountCoin) * item.rate;
+
+        (firstSell === 0) ? firstSell = item.rate : lastSell = item.rate;
       }
 
       amountBase += Math.abs(item.amountCoin) * item.rate;
@@ -110,12 +133,35 @@ export class TraderSocketComponent implements OnInit, OnChanges {
       total += item.amountCoin * item.rate;
     });
 
+    if(amountCoinSell && amountCoinBuy){
+      const avgSellPrice = amounrBaseSell / amountCoinSell;
+      const avgBuyPrice = amountBaseBuy / amountCoinBuy;
+      this.avgSellPrice = avgSellPrice.toLocaleString();
+      this.avgBuyPrice = avgBuyPrice.toLocaleString();
+
+      const diff = (100 * (avgSellPrice - avgBuyPrice) / avgBuyPrice).toFixed(2);
+
+      this.diffSellBuyPrice = diff;
+
+    } else this.diffSellBuyPrice = 'inf';
+
+
+
+    this.totalBuy = Math.round(amountBaseBuy).toLocaleString();
+    this.totalSell = Math.round(amounrBaseSell).toLocaleString();
+
     this.avgRate = Math.round(amountBase / amountCoin).toLocaleString();
+
     this.amountPerMinute = Math.round(amountBase).toLocaleString();
+
     this.totalPerMinute = Math.round(total).toLocaleString();
+
     this.firstBuy = Math.round(firstBuy).toLocaleString();
     this.lastBuy = Math.round(lastBuy).toLocaleString();
+
+    this.firstSell = Math.round(firstSell).toLocaleString();
     this.lastSell = Math.round(lastSell).toLocaleString();
+
     this.allTrades = lastMinute;
   }
 

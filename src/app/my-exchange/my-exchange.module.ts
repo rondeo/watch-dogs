@@ -24,7 +24,6 @@ import { MarketHistoryTableComponent } from './market-history-table/market-histo
 import {TradingHistoryComponent} from "./trading-history/trading-history.component";
 import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
-import { SocketTradeComponent } from './socket-trade/socket-trade.component';
 import { AllMainCoinsComponent } from './all-main-coins/all-main-coins.component';
 import {SharedModule} from "../shared/shared.module";
 import {GainersService} from "./my-exchange-bot/bot/gainers.service";
@@ -45,7 +44,6 @@ const routes: Routes = [
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:market', component: MyBuySellComponent},
-      {path: 'trade/:market', component: SocketTradeComponent},
       {path: 'bot', component: MyExchangeBotComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
@@ -91,7 +89,6 @@ const routes: Routes = [
     TradingHistoryComponent,
     RefreshButtonComponent,
     MyOrdersHistoryComponent,
-    SocketTradeComponent,
     AllMainCoinsComponent,
     MyExchangeBotComponent
   ],
