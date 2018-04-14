@@ -6,6 +6,7 @@ import {ApiPublicPoloniex} from "./api-public/api-public-poloniex";
 import {ApiPublicHitbtc} from "./api-public/api-public-hitbtc";
 import {ApiPublicBinance} from "./api-public/api-public-binance";
 import {ApiPublicBittrex} from "./api-public/api-public-bittrex";
+import {ApiPublicBitfinex} from "./api-public/api-public-bitfinex";
 
 
 @Injectable()
@@ -16,7 +17,7 @@ export class ApiAllPublicService {
   constructor(private http: HttpClient) {
   }
 
-  private availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'hitbtc', 'cryptopia'];
+  private availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc', 'cryptopia'];
 
   downloadTicker(exchange: string) {
     return this.getExchangeApi(exchange).downloadTicker();
@@ -70,6 +71,8 @@ export class ApiAllPublicService {
         return new ApiPublicBinance(this.http);
       case 'bittrex':
         return new ApiPublicBittrex(this.http);
+      case 'bitfinex':
+        return new ApiPublicBitfinex(this.http);
 
 
     }

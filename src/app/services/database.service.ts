@@ -30,4 +30,10 @@ export class DatabaseService {
     return this.http.post(url, {follow: market}).toPromise();
   }
 
+  saveData(table:string, payload:any): Promise<any> {
+    let url = 'http://localhost:8080/mongodb';
+    console.log(url);
+    return this.http.post(url, {table, payload}).toPromise();
+  }
+
 }

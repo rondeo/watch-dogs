@@ -1,8 +1,9 @@
 <div>
 
 
-    <mat-grid-list cols="2" rowHeight="2:1">
-        <mat-grid-tile>
+    <mat-grid-list cols="3" rowHeight="2:2">
+      <!--
+       <mat-grid-tile>
             <app-trader-socket [exchange]="'poloniex'" [market]="'USDT_BTC'"></app-trader-socket>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -14,7 +15,23 @@
         <mat-grid-tile>
             <app-trader-socket [exchange]="'hitbtc'" [market]="'USDT_BTC'"></app-trader-socket>
         </mat-grid-tile>
+        <mat-grid-tile>
+            <app-trader-socket [exchange]="'bittrex'" [market]="'USDT_BTC'"></app-trader-socket>
+        </mat-grid-tile>-->
+
+       <mat-grid-tile>
+            <app-trader-recorder [exchange]="'poloniex'" [market]="'USDT_BTC'"></app-trader-recorder>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <app-trader-recorder [exchange]="'bitfinex'" [market]="'USDT_BTC'"></app-trader-recorder>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <app-trader-recorder [exchange]="'binance'" [market]="'USDT_BTC'"></app-trader-recorder>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <app-trader-recorder [exchange]="'bittrex'" [market]="'USDT_BTC'"></app-trader-recorder>
+        </mat-grid-tile>
     </mat-grid-list>
-    <app-trader-socket [exchange]="'bittrex'" [market]="'USDT_BTC'"></app-trader-socket>
+
 
 </div>

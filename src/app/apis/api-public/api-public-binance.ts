@@ -95,13 +95,13 @@ export class ApiPublicBinance implements IApiPublic {
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
-    let url = '/api/proxy/api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=300'
+    let url = '/api/proxy/api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=200'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
 
       //console.log(res);
-      return res.map(function (o) {
+      return res.reverse().map(function (o) {
         return {
           uuid: o.id,
           isOpen: false,

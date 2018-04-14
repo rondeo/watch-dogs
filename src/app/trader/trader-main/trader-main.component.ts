@@ -31,7 +31,7 @@ export class TraderMainComponent implements OnInit, OnDestroy {
 
     this.rote.params.subscribe(params=>{
 
-      const market = params.market;
+     /* const market = params.market;
       const exchange = 'bittrex'; //'bitfinex';
       const channel = 'trades';
       this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
@@ -40,7 +40,7 @@ export class TraderMainComponent implements OnInit, OnDestroy {
           console.warn(res);
           return;
         }
-      });
+      });*/
     })
 
 

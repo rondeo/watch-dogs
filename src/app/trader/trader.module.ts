@@ -10,6 +10,9 @@ import {TraderOutletComponent} from "./trader-outlet/trader-outlet.component";
 import {TraderMainComponent} from "./trader-main/trader-main.component";
 import {SoketConnectorService} from "../sockets/soket-connector.service";
 import { TraderSocketComponent } from './trader-socket/trader-socket.component';
+import { TraderRecordingComponent } from './trader-recording/trader-recording.component';
+import {ApisModule} from "../apis/apis.module";
+import { TraderRecorderComponent } from './trader-recorder/trader-recorder.component';
 
 const routes: Routes = [
   {
@@ -30,12 +33,15 @@ const routes: Routes = [
     MaterialAppModule,
     ChartsModule,
     SharedModule,
+    ApisModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
     TraderOutletComponent,
     TraderMainComponent,
-    TraderSocketComponent
+    TraderSocketComponent,
+    TraderRecordingComponent,
+    TraderRecorderComponent
   ],
   providers:[SoketConnectorService]
 })

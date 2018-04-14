@@ -82,7 +82,6 @@ export class ApiPublicBittrex implements IApiPublic {
     console.log(url);
 
     return this.http.get(url).map((res: any) => {
-      console.log(res);
       return (<any>res).result.map(function (item:any) {
 
         let time = (new Date(item.TimeStamp + 'Z'));
@@ -96,7 +95,6 @@ export class ApiPublicBittrex implements IApiPublic {
           amountCoin:+item.Quantity,
           coin: coin,
           base: base,
-
           timestamp: time.getTime(),
           date: item.TimeStamp,
           minutes:time.getMinutes() +':'+ time.getSeconds(),
