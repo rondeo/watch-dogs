@@ -1,9 +1,10 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {ApiAllPublicService} from "../../apis/api-all-public.service";
-import {IApiPublic} from "../../apis/i-api-public";
+
 import {IMarketStats, MarketStats} from "../../parsers/market-stats";
 import {DatabaseService} from "../../services/database.service";
 import * as moment from 'moment';
+import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
 
 @Component({
   selector: 'app-trader-recorder',
@@ -27,7 +28,7 @@ export class TraderRecorderComponent implements OnInit, OnChanges {
   @Input() exchange: string;
   ////////////////////////////////////
 
-  private api: IApiPublic;
+  private api: ApiPublicAbstract;
 
   private interval;
 

@@ -36,23 +36,18 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   }
 
 
-  allCoins: { [coin: string]: { [base: string]: number } };
 
-  async getAllCoins(fromCache = true): Promise<{ [coin: string]: { [base: string]: number } }> {
-
-    if (this.allCoins) return Promise.resolve(this.allCoins);
+  getAllCoins(fromCache = true):Observable<{ [coin: string]: { [base: string]: number } }> {
+    if (this.allCoins) return Observable.of(this.allCoins);
     else {
-      if(fromCache){
-        const str =  localStorage.getItem(this.exchange+ '-coins');
-        if(str){
+      if (fromCache) {
+        const str = localStorage.getItem(this.exchange + '-coins');
+        if (str) {
           this.allCoins = JSON.parse(str);
-          return Promise.resolve(this.allCoins);
+          return Observable.of(this.allCoins);
         }
       }
-      return this.getSymbols().map(() => {
-        localStorage.setItem(this.exchange+ '-coins', JSON.stringify(this.allCoins));
-        return this.allCoins
-      }).toPromise();
+      return this.getSymbols().map(() => this.allCoins)
     }
   }
 

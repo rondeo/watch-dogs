@@ -26,22 +26,29 @@ export abstract class ApiPublicAbstract {
 
   }
 
-  async getAllCoins(fromCache = true): Promise<{ [coin: string]: { [base: string]: number } }> {
-    if (this.allCoins) return Promise.resolve(this.allCoins);
+  getAllCoins(fromCache = true):Observable<{ [coin: string]: { [base: string]: number } }> {
+    if (this.allCoins) return Observable.of(this.allCoins);
     else {
       if (fromCache) {
         const str = localStorage.getItem(this.exchange + '-coins');
         if (str) {
           this.allCoins = JSON.parse(str);
-          return Promise.resolve(this.allCoins);
+          return Observable.of(this.allCoins);
         }
       }
-      return this.downloadTicker().map(() => this.allCoins).toPromise();
+      return this.downloadTicker().map(() => this.allCoins)
     }
   }
 
   getMarketDay(base: string, coin: string, from: string, to: string): Observable<MarketDay> {
-    return this.http.get('/api/front-desk/' + this.exchange + '-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(this.mapCoinDay);
+
+    return this.getAllCoins().switchMap(allCoins =>{
+      if(!!allCoins[coin])  return this.http
+        .get('/api/front-desk/' + this.exchange + '-history?base=' + base
+          + '&coin=' + coin + '&from=' + from + '&to=' + to).map(this.mapCoinDay);
+      else return Observable.of(null);
+    })
+
   }
 
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;

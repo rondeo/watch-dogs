@@ -48,7 +48,7 @@ export class ApiAllPublicService {
       const allCoins = {};
       const ps = [];
       this.myExchanges.forEach((name) => {
-        const p = this.getExchangeApi(name).getAllCoins().then((coinsObj) => {
+        const p = this.getExchangeApi(name).getAllCoins().toPromise().then((coinsObj) => {
           allCoins[name] = coinsObj;
         })
         ps.push(p);

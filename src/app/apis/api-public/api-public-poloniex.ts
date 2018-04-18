@@ -43,7 +43,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
   }
 
 
-  allCoins: {[coin:string]:{[base:string]:number}};
+ /* allCoins: {[coin:string]:{[base:string]:number}};
 
   async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
     if (this.allCoins) return Promise.resolve(this.allCoins);
@@ -57,7 +57,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
       }
       return this.downloadTicker().map(() => this.allCoins).toPromise();
     }
-  }
+  }*/
 
   downloadTicker():Observable<{[market:string]:VOMarket}>{
     let url  = 'https://poloniex.com/public?command=returnTicker';

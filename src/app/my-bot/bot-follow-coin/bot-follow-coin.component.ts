@@ -244,11 +244,11 @@ export class BotFollowCoinComponent implements OnInit {
     const exchange = 'bittrex';
     this.allApis.getExchangeApi(exchange)
       .getAllCoins()
-      .then(myCoins => {
+     /* .then(myCoins => {
         this.analyseHistory();
         BotFollowCoinComponent.myCoins = myCoins
         console.log('mycoins ' + Object.keys(BotFollowCoinComponent.myCoins).length);
-      })
+      })*/
 
 
     // this.downloadHistory();

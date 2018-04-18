@@ -60,7 +60,7 @@ export class CoinDayComponent implements OnInit {
     console.log(from);
     let coin = this.coin;
 
-    this.coinDay.getCoinDayMarketCap(coin, from, to).subscribe((mc: any) => {
+   /* this.coinDay.getCoinDayMarketCap(coin, from, to).subscribe((mc: any) => {
       // console.log(mc);
       this.fromMC = _.first(mc.stamps).slice(5, -3).replace('-', '/');
       this.toMC = _.last(mc.stamps).slice(5, -3).replace('-', '/');
@@ -107,47 +107,47 @@ export class CoinDayComponent implements OnInit {
                      color: '#000000',
                      label: 'Volume'
                    }
-                  /*{
+                  /!*{
                     ys: bittrex.Last,
                     color: '#FF00FF',
                     label: 'Bittrex'
-                  },*/
-                 /* {
+                  },*!/
+                 /!* {
                     ys: poloniex.Last,
                     color: '#14af60',
                     label: 'Poloniex'
-                  },*/
-                 /* {
+                  },*!/
+                 /!* {
                     ys: bitfinex.Last,
                     color: '#779dff',
                     label: 'Bitfinex'
-                  },*/
-                  /* {
+                  },*!/
+                  /!* {
                  ys: bitfibex_USDT_BTC.totals,
                  color: '#c1c037',
                  label: 'Hitbtc'
-               },*/
-                 /* {
+               },*!/
+                 /!* {
                     ys: bitfibex_USDT_BTC.buys,
                     color: '#1fc1a0',
                     label: 'Hitbtc'
-                  },*/
-                  /* {
+                  },*!/
+                  /!* {
                      ys: cryptopia.Last,
                      color: '#c1c037',
                      label: 'Hitbtc'
-                   }*/
+                   }*!/
 
-                  /* {
+                  /!* {
                      ys: hitbtc.Last,
                      color: '#c1c037',
                      label: 'Hitbtc'
-                   },*/
-                 /* {
+                   },*!/
+                 /!* {
                     ys: cryptopia.Last,
                     color: '#c1c037',
                     label: 'Hitbtc'
-                  }*/
+                  }*!/
 
                 ]
               };
@@ -158,7 +158,7 @@ export class CoinDayComponent implements OnInit {
           //});
         //});
     });
-
+*/
   }
 
   ngOnInit() {

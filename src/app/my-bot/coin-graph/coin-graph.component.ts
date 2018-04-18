@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {VOMarketCap} from "../../models/app-models";
 import {CoinDayService} from "../../apis/coin-day.service";
 import {ApiAllPublicService} from "../../apis/api-all-public.service";
+import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
 @Component({
   selector: 'app-coin-graph',
   templateUrl: './coin-graph.component.html',
@@ -48,18 +49,21 @@ export class CoinGraphComponent implements OnInit {
     var exchange = 'bittrex';
     var coins:{[symbol:string]:any};
 
-    coins = await this.allPublic.getExchangeApi(exchange);
+
+
+    var api: ApiPublicAbstract =  this.allPublic.getExchangeApi(exchange);
+
     var bittrex;
     if(coins[coin]){
-      bittrex = await this.coinDay.getCoinDayBittrex(base, coin, from, to).toPromise();
+      bittrex = await api.getMarketDay(base, coin, from, to).toPromise();
     } else console.warn(coin +' not on ' + exchange);
 
 
-    const binance = await this.coinDay.getCoinDayBinance(base, coin, from, to).toPromise();
+   // const binance = await this.coinDay.getCoinDayBinance(base, coin, from, to).toPromise();
 
-    const hitbtc = await this.coinDay.getCoinDayHitbtc(base, coin, from, to).toPromise();
+   // const hitbtc = await this.coinDay.getCoinDayHitbtc(base, coin, from, to).toPromise();
 
-    console.log(binance);
+   // console.log(binance);
 
 
     this.marketcap.getCoinHistory(this.coin, from, to).subscribe(res => {
@@ -79,8 +83,8 @@ export class CoinGraphComponent implements OnInit {
             ys: res.price_usd,
             color: '#880b49',
             label: 'price'
-          },
-          {
+          }
+        /*  {
             ys: binance.Last,
             color: '#14886f',
             label: 'Binance'
@@ -89,7 +93,7 @@ export class CoinGraphComponent implements OnInit {
             ys: hitbtc.Last,
             color: '#c1c037',
             label: 'Hitbtc '
-          }
+          }*/
           /*
           {
             ys: res.total_supply,
