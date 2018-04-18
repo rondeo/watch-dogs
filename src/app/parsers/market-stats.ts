@@ -10,15 +10,18 @@ export interface IMarketStats {
   maxSell: number;
   dustSell: number;
   dustBuy: number;
-  speed:number;
+  speed: number;
   duration: number;
-  avgRate:number;
-  diff:string;
+  avgRate: number;
+  diff: string;
+  total: number;
+  buysell: number;
 }
+
 export class MarketStats {
-  static parseMarketHistory(history: VOOrder[]):IMarketStats{
-    const l =  history.length;
-    let duration = (history[0].timestamp -  history[l-1].timestamp)/1000/60;
+  static parseMarketHistory(history: VOOrder[]): IMarketStats {
+    const l = history.length;
+    let duration = (history[0].timestamp - history[l - 1].timestamp) / 1000 / 60;
 
     let speed = l / duration;
 
@@ -40,23 +43,23 @@ export class MarketStats {
 
     history.forEach(function (item: VOOrder) {
 
-      if (item.action ==='BUY') {
+      if (item.action === 'BUY') {
         amountCoinBuy += item.amountCoin;
         amountBaseBuy += item.amountCoin * item.rate;
-        if(amountBaseBuy > maxBuy) maxBuy = amountBaseBuy;
-        if(amountCoinBuy < 300) dustBuy ++;
+        if (amountBaseBuy > maxBuy) maxBuy = amountBaseBuy;
+        if (amountCoinBuy < 300) dustBuy++;
 
         (firstBuy === 0) ? firstBuy = item.rate : lastBuy = item.rate;
       } else {
-        amountCoinSell +=  item.amountCoin;
-        amountBaseSell +=  item.amountCoin * item.rate;
-        if(amountBaseSell > maxSell) maxSell = amountBaseSell;
-        if(amountCoinSell < 300) dustSell ++;
+        amountCoinSell += item.amountCoin;
+        amountBaseSell += item.amountCoin * item.rate;
+        if (amountBaseSell > maxSell) maxSell = amountBaseSell;
+        if (amountCoinSell < 300) dustSell++;
 
         (firstSell === 0) ? firstSell = item.rate : lastSell = item.rate;
       }
 
-      const amount =  item.amountCoin * item.rate
+      const amount = item.amountCoin * item.rate
 
 
       amountBase += item.amountCoin * item.rate;
@@ -66,9 +69,9 @@ export class MarketStats {
 
     let avgSellPrice;
     let avgBuyPrice;
-    let diff:string;
+    let diff: string;
 
-    if(amountCoinSell && amountCoinBuy){
+    if (amountCoinSell && amountCoinBuy) {
       avgSellPrice = amountBaseSell / amountCoinSell;
       avgBuyPrice = amountBaseBuy / amountCoinBuy;
 
@@ -76,10 +79,12 @@ export class MarketStats {
 
     } else diff = 'inf';
     const avgRate = +(amountBase / amountCoin).toPrecision(4);
-    amountBaseBuy = Math.round(amountBaseBuy/duration);
-    amountBaseSell = Math.round(amountBaseSell/duration);
-    maxBuy = Math.round(maxBuy/duration);
-    maxSell = Math.round(maxSell/duration);
+    amountBaseBuy = Math.round(amountBaseBuy / duration);
+    amountBaseSell = Math.round(amountBaseSell / duration);
+    maxBuy = Math.round(maxBuy / duration);
+    maxSell = Math.round(maxSell / duration);
+
+    const buysell = amountBaseBuy - amountBaseSell;
 
     return {
       amountBaseBuy,
@@ -93,7 +98,9 @@ export class MarketStats {
       speed,
       duration,
       avgRate,
-      diff
+      diff,
+      total,
+      buysell
     }
 
   }

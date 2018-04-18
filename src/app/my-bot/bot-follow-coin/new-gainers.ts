@@ -10,11 +10,13 @@ export interface CoinAnalytics {
   symbol: string;
   name: string;
   rank: number;
+  rankSpeed: number;
   price_usd: number;
-  orig: number;
+  volume: number;
   history: VOMarketCap[];
-  speed: number;
+  volumeSpeed: number;
   priceSpeed: number;
+  priceSpeedAbs: number;
 }
 
 
@@ -27,30 +29,13 @@ export class NewGainers {
     });
   }
 
-  static getrGanersMarketCap(MC1: { [symbol: string]: VOMarketCap }, MC2: { [symbol: string]: VOMarketCap }): CoinAnalytics[] {
-    const out: CoinAnalytics[] = [];
-    for (let str in MC1) {
-      const item1 = MC1[str];
-      const item2 = MC2[str];
-      if (item1.rank < 500 && item2 && item2.market_cap_usd && item1.market_cap_usd && item2.market_cap_usd > item1.market_cap_usd) {
-        out.push({
-          symbol: str,
-          name: item1.id,
-          price_usd: item1.price_usd,
-          orig: item1.market_cap_usd,
-          speed: +(100 * (item2.market_cap_usd - item1.market_cap_usd) / item1.market_cap_usd).toPrecision(6),
-          priceSpeed: +(100 * (item2.price_usd - item1.price_usd) / item1.price_usd).toFixed(2),
-          rank: item1.rank,
-          history: [item1, item2]
-        })
-      }
-    }
 
-    return out;
-  }
 
-  static getrGanersVolume2(MC1: { [symbol: string]: VOMarketCap }, MC2: { [symbol: string]: VOMarketCap }): CoinAnalytics[] {
+  static getrGanersByVolume(MC1: { [symbol: string]: VOMarketCap }, MC2: { [symbol: string]: VOMarketCap }): CoinAnalytics[] {
     const out: CoinAnalytics[] = [];
+    const btc1 = MC1['BTC'];
+    const btc2 = MC2['BTC'];
+    const btcSpeed =  (100 * (btc2.volume_usd_24h - btc1.volume_usd_24h) / btc1.volume_usd_24h);
     for (let str in MC1) {
       const item1 = MC1[str];
       const item2 = MC2[str];
@@ -58,10 +43,12 @@ export class NewGainers {
         out.push({
           symbol: str,
           name: item1.id,
-          price_usd: item1.price_usd,
-          orig: item1.volume_usd_24h,
-          speed: +(100 * (item2.volume_usd_24h - item1.volume_usd_24h) / item1.volume_usd_24h).toFixed(2),
-          priceSpeed: +(100 * (item2.price_usd - item1.price_usd) / item1.price_usd).toFixed(2),
+          price_usd: item2.price_usd,
+          volume: item2.volume_usd_24h,
+          rankSpeed:  item1.rank - item2.rank,
+          volumeSpeed: (100 * (item2.volume_usd_24h - item1.volume_usd_24h) / item1.volume_usd_24h),
+          priceSpeed: (100 * (item2.price_usd - item1.price_usd) / item1.price_usd),
+          priceSpeedAbs: (100 * (item2.price_usd - item1.price_usd) / item1.price_usd) - btcSpeed,
           rank: item1.rank,
           history: [item1, item2]
         })
@@ -71,27 +58,7 @@ export class NewGainers {
     return out;
   }
 
-  static getrGanersVolume(historyMC: VOMarketCap[][]): CoinAnalytics[] {
-    const out: CoinAnalytics[] = [];
-    historyMC.forEach(function (history: VOMarketCap[]) {
-      const last = history.length - 1;
-      if (last < 9) return 0;
-      if (history[last].volume_usd_24h > history[0].volume_usd_24h) {
-        out.push({
-          rank: history[last].rank,
-          symbol: history[last].symbol,
-          name: history[last].id,
-          price_usd: history[0].price_usd,
-          orig: history[0].volume_usd_24h,
-          speed: +(100 * (history[last].volume_usd_24h - history[0].volume_usd_24h) / history[0].volume_usd_24h).toFixed(2),
-          history: history,
-          priceSpeed: +(100 * (history[last].price_usd - history[0].price_usd) / history[0].price_usd).toFixed(2)
-        })
-      }
-      ;
-    });
-    return out;
-  }
+
 
   static checkNewGainers(historyMC: { [symbol: string]: VOMarketCap }[],
                          myMarkets: IMarketRecommended[],

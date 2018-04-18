@@ -41,7 +41,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   height: number = 400;
   widthG: number;
   heightG: number;
-  vertical = 10;
+  vertical = 12;
   horizont = 10;
   padding = 10;
   paddingTop = 30;
@@ -203,7 +203,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   private drwaHorizonts() {
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
-    ctx.lineWidth = 0.2;
+    ctx.lineWidth = 0.3;
     let n = this.horizont;
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
@@ -223,12 +223,14 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   private drwaVerticals() {
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
-    ctx.lineWidth = 0.2;
+    ctx.lineWidth = 0.3;
     let n = this.vertical;
+    //console.warn(n);
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
     let step = Math.round(this.widthG / n);
+   // console.warn(step);
     let height = this.heightG;
     for (let i = 0; i < n + 1; i++) {
       let posX = offsetX + (step * i);

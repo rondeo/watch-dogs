@@ -66,130 +66,133 @@ export class BotFollowCoinComponent implements OnInit {
     return out;
   }
 
-  analigeGaners(gainersVolumeSorted: CoinAnalytics[], newData){
+  analigeGaners(gainersVolumeSorted: CoinAnalytics[], newData) {
     const btcMC = newData.data['BTC'];
-
-    console.log(newData.createdAt + '   BTC 1h '+ btcMC.percent_change_1h);
-
+    if (!btcMC) return;
+    console.log(newData.createdAt + '   BTC 1h ' + btcMC.percent_change_1h);
     const MC = newData.data;
     gainersVolumeSorted.forEach(function (gainer: CoinAnalytics) {
-      const mc:VOMarketCap = MC[gainer.symbol];
-
-      const priceChange  = (100 *(mc.price_usd - gainer.price_usd)/gainer.price_usd).toFixed(2);
-      const change = (100 *(mc.market_cap_usd - gainer.orig)/gainer.orig).toFixed(2);
-      console.log(gainer.symbol + ' or: ' + gainer.speed + ' now: ' + change +'  P: ' + priceChange);
-
-
+      const mc: VOMarketCap = MC[gainer.symbol];
+      if (mc) {
+        const priceChange = (100 * (mc.price_usd - gainer.price_usd) / gainer.price_usd);
+        const rankchange = gainer.rank - mc.rank;
+         const vol =   (100 * (mc.volume_usd_24h - gainer.volume) / gainer.volume);
+        const color = +priceChange > 0 ? 'green' : 'red';
+        console.log('%c ' + gainer.symbol + ' P:'
+          + priceChange.toFixed(2) + ' was P '
+          + gainer.priceSpeed.toFixed(2)
+          + ' rank+ ' + rankchange
+          + ' v '+ vol.toFixed(2)
+          , 'color:' + color);
+      } else {
+        console.warn(gainer.symbol);
+      }
     })
   }
 
-  async getWeekForCoins(gainersVolumeSorted, moment){
+  async getWeekForCoins(gainersVolumeSorted, moment) {
     const out = {};
 
-    const step = 3;
+    const step = 15;
+    const stepOf ='m';
 
-    const data1 = await this.marketCap.downloadOneRecord(moment.add(step, 'h').format(), null).toPromise();
+    const data1 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
 
 
     this.analigeGaners(gainersVolumeSorted, data1);
-    const data2 = await this.marketCap.downloadOneRecord(moment.add(step, 'h').format(), null).toPromise();
+    const data2 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
 
     this.analigeGaners(gainersVolumeSorted, data2);
-    const data3 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data3 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data3);
 
-    const data4 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data4 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data4);
 
-    const data5 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data5 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data5);
 
-    const data6 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data6 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data6);
-    const data7 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data7 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data7);
-    const data8 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data8 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data8);
-    const data9 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data9 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data9);
-    const data10 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data10 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data10);
-    const data11 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data11 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data11);
-    const data12 = await this.marketCap.downloadOneRecord(moment.add(step, 'hours').format(), null).toPromise();
+    const data12 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data12);
     return out;
   }
 
+  private filterMyCoins(res: any): any {
+    const out = {};
+    for (let str in res.data) {
+      if (!!BotFollowCoinComponent.myCoins[str]) out[str] = res.data[str];
+    }
+    res.data = out;
+    return res;
+  }
+
+  static filterGainers(analytics: CoinAnalytics[]): CoinAnalytics[] {
+    return analytics.filter(function (gainer) {
+      return gainer.priceSpeed >= 0 && gainer.priceSpeedAbs > 0 && gainer.volumeSpeed  >= 0;
+    });
+  }
 
   async analyseHistory() {
-    const weekago = moment().subtract(2, 'd');
-    const data1 = await this.marketCap.downloadOneRecord(weekago.format(), null).toPromise();
-    //  console.log(mc);
 
-    const data2 = await this.marketCap.downloadOneRecord(weekago.add(1, 'h').format(), null).toPromise();
+    const weekago = moment().subtract(3, 'd');
+    weekago.add(10, 'h');
 
-
-
-    //const data3 = await this.marketCap.downloadOneRecord(weekago.add(3, 'hours').format(), null).toPromise();
-    // console.log(mc2);
-
-    const gainersMarketCap =  NewGainers.getrGanersMarketCap(data1.data, data2.data);
-    console.log(gainersMarketCap);
-
-    const gainerSorted =_.takeRight( _.orderBy(gainersMarketCap, 'speed'), 10).reverse();
-
-    this.getWeekForCoins(gainerSorted, weekago);
-
-    if(gainersMarketCap) return;
-
-    const gainersVolume =  NewGainers.getrGanersVolume2(data1.data, data2.data);
-    //const gainersVolume3 =  NewGainers.getrGanersVolume2(data1.data, data3.data);
-
-    const filtered = gainersVolume.filter(function (gainer) {
-      return gainer.speed > 0 && gainer.priceSpeed > 0;
-    })
-
-    //console.log(gainersVolume);;
-    //console.log(gainersVolume);;
-
-    const gainersVolumeSorted =_.takeRight( _.orderBy(filtered, 'speed'), 10).reverse();
-
-    this.analigeGaners(gainersVolumeSorted, data2);
-    //const gainersVolumeSorted3 =_.takeRight( _.orderBy(gainersVolume3, 'volumeSpeed'), 100).reverse();
+    const data0 = await this.marketCap.downloadOneRecord(weekago.format(), null).toPromise().then(this.filterMyCoins);
+    console.log(' my ' + Object.keys(data0.data).length);
 
 
-    const done = await this.getWeekForCoins(gainersVolumeSorted, weekago);
+    const data1 = await this.marketCap.downloadOneRecord(weekago.add(15, 'm').format(), null).toPromise();
+    let analytics1: CoinAnalytics[] = NewGainers.getrGanersByVolume(data0.data, data1.data);
+    analytics1 = BotFollowCoinComponent.filterGainers(analytics1);
+    const symbols1: string[] = _.map(analytics1, 'symbol');
 
+    console.log(symbols1.length);
+
+    const data2 = await this.marketCap.downloadOneRecord(weekago.add(15, 'm').format(), null).toPromise();
+    let analytics2: CoinAnalytics[] = NewGainers.getrGanersByVolume(data1.data, data2.data);
+    analytics2 = BotFollowCoinComponent.filterGainers(analytics2);
+    const symbols2: string[] = _.map(analytics2, 'symbol');
+
+    console.log(symbols2.length);
+/*
+    const data3 = await this.marketCap.downloadOneRecord(weekago.add(1, 'h').format(), null).toPromise();
+    let analytics3: CoinAnalytics[] = NewGainers.getrGanersByVolume(data0.data, data3.data);
+    analytics3 = BotFollowCoinComponent.filterGainers(analytics3);
+    const symbols3: string[] = _.map(analytics3, 'symbol');*/
+
+    //console.log(symbols3.length);
+
+    const gainers: CoinAnalytics[] = analytics2.filter(function (item) {
+      return symbols1.indexOf(item.symbol) !== -1 && symbols2.indexOf(item.symbol) !== -1;
+    });
+    console.log(gainers);
+
+    if (gainers.length === 0) return;
+
+    const gainersSorted = _.takeRight(gainers, 20);
+
+    const done = await this.getWeekForCoins(gainersSorted, weekago);
 
     console.log(done);
-
-  //  const allCoins = await this.allApis.getAllCoins();
-
-    // console.log(allCoins);
-    const collection1 = {};
-
-   /* for (let str in allCoins) {
-      collection1[str] = this.filterOnlyExchangeCoins(allCoins[str], mc.data);
-      console.log(str, Object.keys(collection1[str]).length)
-    }
-
-    const collection2 = {};
-
-    for (let str in allCoins) {
-      collection2[str] = this.filterOnlyExchangeCoins(allCoins[str], mc.data);
-    }
-
-    console.log(collection1, collection2);*/
-
-
   }
 
   async downloadHistory() {
 
 
 
-    //
+    /*//
     //console.log(mc);
 
     const history = await this.marketCap.downloadHistoryFromLatHours(10).toPromise();
@@ -205,7 +208,7 @@ export class BotFollowCoinComponent implements OnInit {
     const dataset = [];
 
 
-    /* gainersVolume.forEach(function (item: VOMarketCap[]) {
+    /!* gainersVolume.forEach(function (item: VOMarketCap[]) {
        const row = [item[0].symbol];
        const l = item.length - 1;
        if (l > 2) {
@@ -219,9 +222,9 @@ export class BotFollowCoinComponent implements OnInit {
        })
        dataset.push(row);
 
-     })*/
+     })*!/
 
-    this.dataset = dataset;
+    this.dataset = dataset;*/
   }
 
   onRefreshDataClick() {
@@ -235,8 +238,18 @@ export class BotFollowCoinComponent implements OnInit {
     // this.router.navigateByUrl()
   }
 
+  static myCoins: { [symbol: string]: any };
+
   ngOnInit() {
-    this.analyseHistory();
+    const exchange = 'bittrex';
+    this.allApis.getExchangeApi(exchange)
+      .getAllCoins()
+      .then(myCoins => {
+        this.analyseHistory();
+        BotFollowCoinComponent.myCoins = myCoins
+        console.log('mycoins ' + Object.keys(BotFollowCoinComponent.myCoins).length);
+      })
+
 
     // this.downloadHistory();
 

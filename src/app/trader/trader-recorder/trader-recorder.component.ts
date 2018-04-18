@@ -3,6 +3,7 @@ import {ApiAllPublicService} from "../../apis/api-all-public.service";
 import {IApiPublic} from "../../apis/i-api-public";
 import {IMarketStats, MarketStats} from "../../parsers/market-stats";
 import {DatabaseService} from "../../services/database.service";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-trader-recorder',
@@ -28,9 +29,9 @@ export class TraderRecorderComponent implements OnInit, OnChanges {
 
   private api: IApiPublic;
 
-  private interval
+  private interval;
 
-  constructor(private apis: ApiAllPublicService,  private database: DatabaseService) {
+  constructor(private apis: ApiAllPublicService, private database: DatabaseService) {
     this.marketStats = {
       amountBaseBuy: 0,
       amountBaseSell: 0,
@@ -43,7 +44,9 @@ export class TraderRecorderComponent implements OnInit, OnChanges {
       speed: 0,
       duration: 0,
       avgRate: 0,
-      diff: ''
+      diff: '',
+      total: 0,
+      buysell: 0
     }
   }
 
@@ -79,16 +82,23 @@ export class TraderRecorderComponent implements OnInit, OnChanges {
     const ar = this.market.split('_');
     const base = ar[0];
     const coin = ar[1];
-    const orders = await this.api.downloadMarketHistory(base, coin).toPromise();
-    console.log(this.exchange + '  ' + this.market + ' '+ orders.length);
-    const stats = MarketStats.parseMarketHistory(orders);
-    this.marketStats = stats;
-    this.saveInDB(stats);
-
+    let res: any;
+    try {
+      const orders = await this.api.downloadMarketHistory(base, coin).toPromise();
+     // console.log(this.exchange + '  ' + this.market + ' ' + orders.length);
+      const stats = MarketStats.parseMarketHistory(orders);
+      this.marketStats = stats;
+      res = stats;
+    } catch (e) {
+      res = e
+    }
+    this.saveInDB(res);
   }
 
-  saveInDB(data:any){
-    this.database.saveData(this.exchange + '_' + this.market, data).then(res=>{
+  saveInDB(data: any) {
+    data.stamp = moment().format();
+    data.createdAt = Date.now();
+    this.database.saveData(this.exchange + '_' + this.market, data).then(res => {
       console.log(res);
     });
   }

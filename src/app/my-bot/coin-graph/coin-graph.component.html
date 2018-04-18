@@ -1,6 +1,12 @@
 
 <section>
-
+<span *ngIf="coinMC" class="mat-h2" ><small>{{coinMC.id}}</small> {{coinMC.symbol}} <small>Rank: {{coinMC.rank}}</small></span>
+    <button class="mat-raised-button" (click)="onMinus12h()">-12h</button>
+    <button class="mat-raised-button" (click)="onPlus12h()">+12h</button>
+    <br/>
+    <small>From: {{from}}</small>
+    <br/>
+    <small>To: &nbsp;&nbsp;&nbsp;&nbsp;{{to}}</small>
 </section>
 <section>
     <app-line-chart [graphs]="myGraps"></app-line-chart>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CoinDayService, MarketDay} from "../services/coin-day.service";
+import {CoinDayService, MarketDay} from "../../apis/coin-day.service";
 import * as _ from 'lodash';
 import {ActivatedRoute} from "@angular/router";
 import * as moment from "moment";
@@ -17,7 +17,6 @@ export class CoinDayComponent implements OnInit {
   toMC: string;
   fromBittrex: string;
   toBittrex: string;
-
   form: FormGroup;
   private coin;
 

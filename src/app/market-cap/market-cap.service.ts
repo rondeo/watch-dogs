@@ -270,7 +270,7 @@ export class MarketCapService {
     }
   }
 
-  static mapServerValues(ar:any[]){
+  static mapServerValues(ar:any[]): {[symbol:string]:VOMarketCap}{
     let MC:{[symbol:string]:VOMarketCap} = {};
 
     ar.forEach(function (item: any[]) {

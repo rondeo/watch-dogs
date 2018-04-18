@@ -13,7 +13,6 @@ import {BotBuyCoinComponent} from './bot-buy-coin/bot-buy-coin.component';
 import {CollectMarketDataService} from "./services/collect-market-data.service";
 import {FrontDeskService} from "./services/front-desk.service";
 import {CoinDayComponent} from './coin-day/coin-day.component';
-import {CoinDayService} from "./services/coin-day.service";
 import {ChartsModule} from "ng2-charts";
 import {MatDatepickerModule} from "@angular/material";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
@@ -42,7 +41,6 @@ class Outlet implements OnInit {
 
 }
 
-
 const routes: Routes = [
   {
     path: 'my-bot', component: Outlet,
@@ -56,7 +54,6 @@ const routes: Routes = [
     ]
   }
 ];
-
 
 @NgModule({
   imports: [
@@ -86,8 +83,7 @@ const routes: Routes = [
   providers: [
     BotServiceService,
     CollectMarketDataService,
-    FrontDeskService,
-    CoinDayService
+    FrontDeskService
   ]
 })
 export class MyBotModule {

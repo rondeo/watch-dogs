@@ -23,10 +23,6 @@ export class BotSellCoinService {
   }
 
 
-
-
-
-
   destroy(){
 
     this.subMC.unsubscribe();
@@ -37,8 +33,6 @@ export class BotSellCoinService {
       this.MC = MC;
       this.amalize();
     });
-
-
   }
 
   private amalize(){
