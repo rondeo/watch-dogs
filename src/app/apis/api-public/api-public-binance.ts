@@ -1,25 +1,27 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {IApiPublic} from "../i-api-public";
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
+import {ApiPublicAbstract} from "./api-public-abstract";
 
 
-export class ApiPublicBinance implements IApiPublic {
+export class ApiPublicBinance extends ApiPublicAbstract {
   exchange = 'binance';
 
-  constructor(private http: HttpClient) {
+  constructor(http: HttpClient) {
+    super(http)
 
   }
 
-  allCoins: {[coin:string]:{[base:string]:number}};
+  allCoins: { [coin: string]: { [base: string]: number } };
 
-  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+  async getAllCoins(cashed = true): Promise<{ [coin: string]: { [base: string]: number } }> {
     if (this.allCoins) return Promise.resolve(this.allCoins);
     else return this.downloadTicker().map(() => this.allCoins).toPromise();
   }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
-    const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
+    // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
+    const url = 'https://api.binance.com/api/v1/ticker/24hr';
     return this.http.get(url).map((res: any[]) => {
       // console.log(res);
       const indexed = {};
@@ -48,12 +50,18 @@ export class ApiPublicBinance implements IApiPublic {
             break;
         }
 
-        var BaseVolume = 1e10, Volume, Bid, Ask, High, Low, Last = +item.price;
+        const BaseVolume = 1e10,
+          Volume = +item.volume,
+          Bid = +item.bidPrice,
+          Ask = +item.askPrice,
+          High = +item.highPrice,
+          Low = +item.lowPrice,
+          Last = +item.lastPrice;
         const exchange = 'binance';
 
 
-        if(!allCoins[coin])allCoins[coin] = {};
-        allCoins[coin][base] =  +item.price;
+        if (!allCoins[coin]) allCoins[coin] = {};
+        allCoins[coin][base] = Last;
 
         indexed[base + '_' + coin] = {
           exchange,
@@ -115,6 +123,53 @@ export class ApiPublicBinance implements IApiPublic {
         }
       })
     });
+  }
+
+  mapCoinDay(res) {
+    let ar: any[] = res.data;
+
+    let Ask = [];
+    let BaseVolume = [];
+
+    let Bid = [];
+
+
+    let High = [];
+    let Last = [];
+    let Low = [];
+
+    let percentChange = [];
+
+    let OpenSellOrders = [];
+
+    let Volume = [];
+
+    let stamps = [];
+
+    ar.forEach(function (item) {
+
+      Ask.push(+item.askPrice);
+      BaseVolume.push(+item.quoteVolume);
+      Bid.push(+item.bidPrice);
+      High.push(+item.highPrice);
+      Last.push(+item.lastPrice);
+      Low.push(+item.lowPrice);
+      percentChange.push(+item.priceChangePercent);
+      Volume.push(+item.volume);
+      stamps.push(item.stamp);
+    });
+
+    return {
+      Ask,
+      BaseVolume,
+      Bid,
+      High,
+      Last,
+      Low,
+      percentChange,
+      Volume,
+      stamps
+    }
   }
 
 }

@@ -1,29 +1,32 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {IApiPublic} from "./i-api-public";
+
 import {ApiPublicCryptopia} from "./api-public/api-public-cryptopia";
 import {ApiPublicPoloniex} from "./api-public/api-public-poloniex";
 import {ApiPublicHitbtc} from "./api-public/api-public-hitbtc";
 import {ApiPublicBinance} from "./api-public/api-public-binance";
 import {ApiPublicBittrex} from "./api-public/api-public-bittrex";
 import {ApiPublicBitfinex} from "./api-public/api-public-bitfinex";
+import {ApiPublicAbstract} from "./api-public/api-public-abstract";
 
 
 @Injectable()
 export class ApiAllPublicService {
 
-  private exchanges: { [index: string]: IApiPublic } = {};
+  private exchanges: { [index: string]: ApiPublicAbstract } = {};
 
   constructor(private http: HttpClient) {
   }
 
   private availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc', 'cryptopia'];
 
+  private myExchanges = ['poloniex'];
+
   downloadTicker(exchange: string) {
     return this.getExchangeApi(exchange).downloadTicker();
   }
 
-  getExchangeApi(exchange: string): IApiPublic {
+  getExchangeApi(exchange: string): ApiPublicAbstract {
     if (!this.exchanges[exchange]) {
       this.exchanges[exchange] = this.cerateExchange(exchange);
     }
@@ -44,7 +47,7 @@ export class ApiAllPublicService {
 
       const allCoins = {};
       const ps = [];
-      this.availableExhanges.forEach((name) => {
+      this.myExchanges.forEach((name) => {
         const p = this.getExchangeApi(name).getAllCoins().then((coinsObj) => {
           allCoins[name] = coinsObj;
         })
@@ -59,7 +62,7 @@ export class ApiAllPublicService {
     });
   }
 
-  private cerateExchange(exchange: string): IApiPublic {
+  private cerateExchange(exchange: string): ApiPublicAbstract {
     switch (exchange) {
       case 'cryptopia':
         return new ApiPublicCryptopia(this.http);

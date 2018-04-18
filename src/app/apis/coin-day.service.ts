@@ -28,6 +28,7 @@ export class CoinDayService {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 
   static mapHistoryBitfinex(res: any) {
     let ar:any[] = res.data;
@@ -103,12 +104,14 @@ export class CoinDayService {
     return this.http.get('/api/front-desk/poloniex_USDT_BTC?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapHistoryPoloniex);
 
   }
+*/
 
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+/*
 
   static mapDataMC(res: any) {
     let ar: any[] = res.data;
@@ -165,8 +168,10 @@ export class CoinDayService {
 
     return this.http.get('/api/front-desk/market-cap-history?coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataMC);
   }
+*/
 
 
+/*
   static mapDataBittrex(res: any) {
 
     let ar: any[] = res.data;
@@ -220,9 +225,10 @@ export class CoinDayService {
   getCoinDayBittrex(base: string, coin: string, from: string, to: string):Observable<MarketDay> {
     return this.http.get('/api/front-desk/bittrex-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataBittrex);
   }
+*/
 
 
-  static mapDataPoloniex(res){
+ /* static mapDataPoloniex(res){
 
     let ar: any[] = res.data;
 
@@ -273,10 +279,11 @@ export class CoinDayService {
   getCoinDayPoloniex(base: string, coin: string, from: string, to: string) {
     return this.http.get('/api/front-desk/poloniex-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataPoloniex);
 
-  }
+  }*/
 
 /////////////////////////////////////////
 
+/*
   static mapDataBitfinex(res){
 
     let ar: any[] = res.data;
@@ -342,9 +349,10 @@ export class CoinDayService {
     let BaseVolume = [];
 
     let Bid = [];
+*/
 
 
-    let High = [];
+   /* let High = [];
     let Last = [];
     let Low = [];
 
@@ -356,19 +364,19 @@ export class CoinDayService {
 
     let stamps = [];
 
-    /*  ar.forEach(function (item) {
+      ar.forEach(function (item) {
 
-        Ask.push(+item.lowestAsk);
-        BaseVolume.push(+item.baseVolume);
-        Bid.push(+item.highestBid);
-        High.push(+item.high24hr);
-        Last.push(+item.last);
-        Low.push(+item.low24hr);
-        percentChange.push(+item.percentChange);
-        Volume.push(+item.quoteVolume);
+        Ask.push(+item.askPrice);
+        BaseVolume.push(+item.quoteVolume);
+        Bid.push(+item.bidPrice);
+        High.push(+item.highPrice);
+        Last.push(+item.lastPrice);
+        Low.push(+item.lowPrice);
+        percentChange.push(+item.priceChangePercent);
+        Volume.push(+item.volume);
         stamps.push(item.stamp);
       });
-  */
+
     return {
       Ask,
       BaseVolume,
@@ -385,9 +393,9 @@ export class CoinDayService {
   getCoinDayBinance(base: string, coin: string, from: string, to: string) {
     return this.http.get('/api/front-desk/binance-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataBinance);
 
-  }
+  }*/
 
-  static mapDataHitbtc(res){
+ /* static mapDataHitbtc(res){
 
     console.log(res);
     let ar: any[] = res.data;
@@ -442,9 +450,9 @@ export class CoinDayService {
   getCoinDayHitbtc(base: string, coin: string, from: string, to: string) {
     return this.http.get('/api/front-desk/hitbtc-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataHitbtc);
 
-  }
+  }*/
 
-  static mapDataCryptopia(res){
+ /* static mapDataCryptopia(res){
 
    // console.log(res);
     let ar: any[] = res.data;
@@ -500,6 +508,6 @@ export class CoinDayService {
     return this.http.get('/api/front-desk/cryptopia-history?base=' + base + '&coin=' + coin + '&from=' + from + '&to=' + to).map(CoinDayService.mapDataCryptopia);
 
   }
-
+*/
 
 }

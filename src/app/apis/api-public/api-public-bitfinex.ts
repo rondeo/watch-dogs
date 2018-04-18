@@ -1,4 +1,3 @@
-import {IApiPublic} from "../i-api-public";
 import {HttpClient} from "@angular/common/http";
 import {VOBooks, VOMarket, VOTrade} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
@@ -8,11 +7,13 @@ import {from} from "rxjs/observable/from";
 import {of} from "rxjs/observable/of";
 import {concatMap, delay} from "rxjs/operators";
 import {timer} from "rxjs/observable/timer";
+import {ApiPublicAbstract} from "./api-public-abstract";
 
-export class ApiPublicBitfinex implements IApiPublic {
+export class ApiPublicBitfinex extends ApiPublicAbstract{
+  exchange = 'bitfinex';
 
-  constructor(private http: HttpClient) {
-
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
@@ -37,9 +38,22 @@ export class ApiPublicBitfinex implements IApiPublic {
 
   allCoins: { [coin: string]: { [base: string]: number } };
 
-  async getAllCoins(): Promise<{ [coin: string]: { [base: string]: number } }> {
+  async getAllCoins(fromCache = true): Promise<{ [coin: string]: { [base: string]: number } }> {
+
     if (this.allCoins) return Promise.resolve(this.allCoins);
-    else return this.getSymbols().map(() => this.allCoins).toPromise();
+    else {
+      if(fromCache){
+        const str =  localStorage.getItem(this.exchange+ '-coins');
+        if(str){
+          this.allCoins = JSON.parse(str);
+          return Promise.resolve(this.allCoins);
+        }
+      }
+      return this.getSymbols().map(() => {
+        localStorage.setItem(this.exchange+ '-coins', JSON.stringify(this.allCoins));
+        return this.allCoins
+      }).toPromise();
+    }
   }
 
 
@@ -158,5 +172,55 @@ export class ApiPublicBitfinex implements IApiPublic {
       })
     });
 
+  }
+
+  mapCoinDay(res: any) {
+
+    let ar: any[] = res.data;
+
+    let Ask = [];
+    let BaseVolume = [];
+
+    let Bid = [];
+
+
+    let High = [];
+    let Last = [];
+    let Low = [];
+
+    let OpenBuyOrders = [];
+
+    let OpenSellOrders = [];
+
+    let Volume = [];
+
+    let stamps = [];
+
+    ar.forEach(function (item) {
+
+      Ask.push(+item.Ask);
+      BaseVolume.push(+item.BaseVolume);
+      Bid.push(+item.Bid);
+      High.push(+item.High);
+      Last.push(+item.Last);
+      Low.push(+item.Low);
+      OpenBuyOrders.push(+item.OpenBuyOrders);
+      OpenSellOrders.push(+item.OpenSellOrders);
+      Volume.push(+item.Volume);
+      stamps.push(item.stamp);
+    });
+
+    return {
+      Ask,
+      BaseVolume,
+      Bid,
+      High,
+      Last,
+      Low,
+      OpenBuyOrders,
+      OpenSellOrders,
+      Volume,
+      stamps
+    }
   }
 }

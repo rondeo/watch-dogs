@@ -2,18 +2,16 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {reject} from "q";
 import {Subject} from "rxjs/Subject";
-import {IApiPublic} from "../i-api-public";
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
+import {ApiPublicAbstract} from "./api-public-abstract";
 
-export class ApiPublicPoloniex implements IApiPublic {
+export class ApiPublicPoloniex extends ApiPublicAbstract{
   exchange = 'poloniex';
   private marketsAr:VOMarket[];
 
-  constructor(private http: HttpClient) {
-
+  constructor(http: HttpClient) {
+    super(http);
   }
-
-
 
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
     const url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100'
@@ -47,9 +45,18 @@ export class ApiPublicPoloniex implements IApiPublic {
 
   allCoins: {[coin:string]:{[base:string]:number}};
 
-  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+  async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
     if (this.allCoins) return Promise.resolve(this.allCoins);
-    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+    else {
+      if(fromCache){
+        const str =  localStorage.getItem(this.exchange+ '-coins');
+        if(str){
+          this.allCoins = JSON.parse(str);
+          return Promise.resolve(this.allCoins);
+        }
+      }
+      return this.downloadTicker().map(() => this.allCoins).toPromise();
+    }
   }
 
   downloadTicker():Observable<{[market:string]:VOMarket}>{
@@ -126,5 +133,54 @@ export class ApiPublicPoloniex implements IApiPublic {
       });
 
     })
+  }
+
+
+  mapCoinDay(res) {
+
+    let ar: any[] = res.data;
+
+    let Ask = [];
+    let BaseVolume = [];
+
+    let Bid = [];
+
+
+    let High = [];
+    let Last = [];
+    let Low = [];
+
+    let percentChange = [];
+
+    let OpenSellOrders = [];
+
+    let Volume = [];
+
+    let stamps = [];
+
+    ar.forEach(function (item) {
+
+      Ask.push(+item.lowestAsk);
+      BaseVolume.push(+item.baseVolume);
+      Bid.push(+item.highestBid);
+      High.push(+item.high24hr);
+      Last.push(+item.last);
+      Low.push(+item.low24hr);
+      percentChange.push(+item.percentChange);
+      Volume.push(+item.quoteVolume);
+      stamps.push(item.stamp);
+    });
+
+    return {
+      Ask,
+      BaseVolume,
+      Bid,
+      High,
+      Last,
+      Low,
+      percentChange,
+      Volume,
+      stamps
+    }
   }
 }

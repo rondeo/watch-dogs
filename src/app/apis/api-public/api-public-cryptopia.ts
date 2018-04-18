@@ -3,11 +3,12 @@ import {SOMarketCryptopia} from "../../models/sos";
 import {ApiCryptopia} from "../../my-exchange/services/apis/api-cryptopia";
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
-import {IApiPublic} from "../i-api-public";
+import {ApiPublicAbstract} from "./api-public-abstract";
 
-export class ApiPublicCryptopia implements IApiPublic {
-  constructor(private http: HttpClient) {
-
+export class ApiPublicCryptopia extends ApiPublicAbstract{
+  exchange = 'cryptopia';
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
@@ -70,9 +71,18 @@ export class ApiPublicCryptopia implements IApiPublic {
 
   allCoins: {[coin:string]:{[base:string]:number}};
 
-  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+  async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
     if (this.allCoins) return Promise.resolve(this.allCoins);
-    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+    else {
+        if(fromCache){
+          const str =  localStorage.getItem(this.exchange+ '-coins');
+          if(str){
+            this.allCoins = JSON.parse(str);
+            return Promise.resolve(this.allCoins);
+          }
+        }
+      return this.downloadTicker().map(() => this.allCoins).toPromise();
+    }
   }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
@@ -179,5 +189,57 @@ export class ApiPublicCryptopia implements IApiPublic {
     })
 
     return result.length;
+  }
+
+  mapCoinDay(res){
+
+    // console.log(res);
+    let ar: any[] = res.data;
+
+    let Ask = [];
+    let BaseVolume = [];
+
+    let Bid = [];
+
+
+    let High = [];
+    let Last = [];
+    let Low = [];
+
+    let percentChange = [];
+
+    let OpenSellOrders = [];
+    let OpenBuyOrders = [];
+
+    let Volume = [];
+
+    let stamps = [];
+
+    ar.forEach(function (item) {
+
+      Ask.push(+item.AskPrice);
+      Bid.push(+item.BidPrice);
+      High.push(+item.High);
+      Last.push(+item.LastPrice);
+      Low.push(+item.Low);
+      Volume.push(+item.Volume);
+      OpenBuyOrders.push(+item.BuyBaseVolume);
+      OpenSellOrders.push(+item.SellBaseVolume);
+      percentChange.push(+item.Change);
+      BaseVolume.push(+item.BaseVolume);
+      stamps.push(item.stamp);
+    });
+
+    return {
+      Ask,
+      BaseVolume,
+      Bid,
+      High,
+      Last,
+      Low,
+      percentChange,
+      Volume,
+      stamps
+    }
   }
 }

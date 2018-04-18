@@ -1,14 +1,14 @@
 import {VOBooks, VOMarket, VOOrder, VOTrade} from "../../models/app-models";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {IApiPublic} from "../i-api-public";
+import {ApiPublicAbstract} from "./api-public-abstract";
 
-export class ApiPublicHitbtc implements IApiPublic {
+export class ApiPublicHitbtc extends ApiPublicAbstract{
   exchange = 'hitbtc';
   private marketsAr: VOMarket[];
 
-  constructor(private http: HttpClient) {
-
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
@@ -45,9 +45,19 @@ export class ApiPublicHitbtc implements IApiPublic {
 
   allCoins: {[coin:string]:{[base:string]:number}};
 
-  async getAllCoins(): Promise<{[coin:string]:{[base:string]:number}}> {
+  async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
     if (this.allCoins) return Promise.resolve(this.allCoins);
-    else return this.downloadTicker().map(() => this.allCoins).toPromise();
+    else {
+      if(fromCache){
+        const str =  localStorage.getItem(this.exchange+ '-coins');
+        if(str){
+          this.allCoins = JSON.parse(str);
+          return Promise.resolve(this.allCoins);
+        }
+      }
+
+      return this.downloadTicker().map(() => this.allCoins).toPromise();
+    }
   }
 
 
@@ -116,5 +126,57 @@ export class ApiPublicHitbtc implements IApiPublic {
         };
       });
     });
+  }
+
+  mapCoinDay(res){
+
+   // console.log(res);
+    let ar: any[] = res.data;
+
+    let Ask = [];
+    let BaseVolume = [];
+
+    let Bid = [];
+
+
+    let High = [];
+    let Last = [];
+    let Low = [];
+
+    let percentChange = [];
+
+    let OpenSellOrders = [];
+
+    let Volume = [];
+
+    let stamps = [];
+
+    ar.forEach(function (item) {
+
+      Ask.push(+item.ask);
+      Bid.push(+item.bid);
+      High.push(+item.high);
+      Last.push(+item.last);
+      Low.push(+item.low2);
+
+      percentChange.push(100*(+item.last - +item.open)+item.open);
+
+      Volume.push(+item.volume);
+
+      BaseVolume.push(+item.volumeQuote);
+      stamps.push(item.stamp);
+    });
+
+    return {
+      Ask,
+      BaseVolume,
+      Bid,
+      High,
+      Last,
+      Low,
+      percentChange,
+      Volume,
+      stamps
+    }
   }
 }
