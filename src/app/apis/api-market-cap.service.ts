@@ -3,6 +3,11 @@ import {MarketCapService} from "../market-cap/market-cap.service";
 import {HttpClient} from "@angular/common/http";
 import {VOMarketCap} from "../models/app-models";
 import {Observable} from "rxjs/Observable";
+import "rxjs/add/operator/concat";
+import * as _ from 'lodash';
+
+
+
 
 @Injectable()
 export class ApiMarketCapService {
@@ -14,10 +19,10 @@ export class ApiMarketCapService {
 
   async getCoin(symbol: string): Promise<VOMarketCap> {
     if (ApiMarketCapService.MC) return Promise.resolve(ApiMarketCapService.MC[symbol]);
-    return this.downloadAllCoins().toPromise().then(res => ApiMarketCapService.MC[symbol])
+    return this.downloadTicker().toPromise().then(res => ApiMarketCapService.MC[symbol])
   }
 
-  downloadAllCoins() {
+  downloadTicker() {
     let url = '/api/marketcap/ticker';
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).map((res: any) => {
@@ -37,9 +42,40 @@ export class ApiMarketCapService {
 
     });
   }
+  download2Recors(before1:string,before2:string ){
 
-  downloadHistoryForLast3Hours(length: number = 10): Observable<{ [coin: string]: VOMarketCap[] }> {
-    let url = '/api/marketcap/history/' + 10;
+    const url1 = '/api/front-desk/market-cap/one-record?before=' + before1;
+    const url2 = '/api/front-desk/market-cap/one-record?before=' + before2;
+
+      return this.http.get(url1).switchMap((res1: any) =>{
+        return  this.http.get(url2).map((res2: any)=>{
+         const indexed = _.keyBy(res1.data, 'symbol');
+         const out ={stamps:[res1.createdAt, res2.createdAt]};
+         res2.data.forEach(function (item:VOMarketCap) {
+           if(indexed[item.symbol]){
+             indexed[item.symbol].volume_usd_24h =  indexed[item.symbol]['24h_volume_usd'];
+             item.volume_usd_24h = item['24h_volume_usd'];
+             out[item.symbol] = [indexed[item.symbol], item];
+           }
+
+
+         })
+          return out;
+        })
+      }
+
+    )/*.map(res =>{
+      console.log(res);
+    }).subscribe(res =>{
+     // console.log(res)
+    })*/
+
+
+
+  }
+
+  downloadHistoryForLast3Hours(length: number = 11): Observable<{ [coin: string]: VOMarketCap[] }> {
+    let url = '/api/marketcap/history/' + length
     console.log(url);
     return this.http.get(url).map((res: any) => {
       // console.log(res);

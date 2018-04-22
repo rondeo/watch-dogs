@@ -17,7 +17,6 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
       .replace('{{base}}', base === 'USDT' ? 'USD' : base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any) => {
-      //  console.log(res);
 
       let buy: VOTrade[] = res.bid.map(function (item) {
         return {

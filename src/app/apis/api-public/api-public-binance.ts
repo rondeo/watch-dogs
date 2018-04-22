@@ -12,18 +12,11 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
   }
 
-/*  allCoins: { [coin: string]: { [base: string]: number } };
-
-  async getAllCoins(cashed = true): Promise<{ [coin: string]: { [base: string]: number } }> {
-    if (this.allCoins) return Promise.resolve(this.allCoins);
-    else return this.downloadTicker().map(() => this.allCoins).toPromise();
-  }*/
-
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
-    const url = 'https://api.binance.com/api/v1/ticker/24hr';
+    const url = '/api/proxy/api.binance.com/api/v1/ticker/24hr';
     return this.http.get(url).map((res: any[]) => {
-      // console.log(res);
+       console.log(res);
       const indexed = {};
       const allCoins = {}
       res.forEach(function (item) {

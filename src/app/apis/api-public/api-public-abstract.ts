@@ -1,6 +1,8 @@
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
+import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/empty';
 
 export interface MarketDay {
   Ask: number[];
@@ -36,7 +38,11 @@ export abstract class ApiPublicAbstract {
           return Observable.of(this.allCoins);
         }
       }
-      return this.downloadTicker().map(() => this.allCoins)
+      return this.downloadTicker().map((r) =>{
+        console.log(this.exchange , r);
+        localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
+        return this.allCoins
+      } )
     }
   }
 
@@ -46,7 +52,10 @@ export abstract class ApiPublicAbstract {
       if(!!allCoins[coin])  return this.http
         .get('/api/front-desk/' + this.exchange + '-history?base=' + base
           + '&coin=' + coin + '&from=' + from + '&to=' + to).map(this.mapCoinDay);
-      else return Observable.of(null);
+      else {
+       // console.log(' no coin ' + coin , allCoins);
+        return Observable.empty();
+      }
     })
 
   }

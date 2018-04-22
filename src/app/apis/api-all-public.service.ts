@@ -8,6 +8,8 @@ import {ApiPublicBinance} from "./api-public/api-public-binance";
 import {ApiPublicBittrex} from "./api-public/api-public-bittrex";
 import {ApiPublicBitfinex} from "./api-public/api-public-bitfinex";
 import {ApiPublicAbstract} from "./api-public/api-public-abstract";
+import {Observable} from "rxjs/Observable";
+import {forkJoin} from "rxjs/observable/forkJoin";
 
 
 @Injectable()
@@ -22,8 +24,64 @@ export class ApiAllPublicService {
 
   private myExchanges = ['poloniex'];
 
-  downloadTicker(exchange: string) {
-    return this.getExchangeApi(exchange).downloadTicker();
+
+  downloadTickers(exchanges:string[]){
+    const subs = [];
+    exchanges.forEach( async (item) => {
+      const api = this.getExchangeApi(item);
+      subs.push(api.downloadTicker());
+    });
+    return forkJoin(subs);
+  }
+
+
+  async downloadMarketHistory(exchanges:string[], base:string, coin:string):Promise<any>{
+    return new Promise((resolve, reject) =>{
+      const subs = [];
+      const l = exchanges.length -1;
+      var count = 0;
+      exchanges.forEach( async (item) => {
+        const api = this.getExchangeApi(item);
+        if(!api){
+          count++;
+          console.warn(item)
+        } else {
+          const coins = await api.getAllCoins().toPromise();
+          if(coins[coin]){
+            subs.push(api.downloadMarketHistory(base,coin));
+          }
+          else console.log(item + ' no ' + coin);
+          count++;
+          if(count >= l) resolve(forkJoin(subs));
+        }
+      });
+
+    });
+  }
+
+
+ async downloadBooks(exchanges:string[], base:string, coin:string):Promise<any>{
+    return new Promise((resolve, reject) =>{
+      const subs = [];
+      const l = exchanges.length -1;
+      var count = 0;
+      exchanges.forEach( async (item) => {
+        const api = this.getExchangeApi(item);
+        if(!api){
+          count++;
+          console.warn(item)
+        } else {
+          const coins = await api.getAllCoins().toPromise();
+          if(coins[coin]){
+            subs.push(api.downloadBooks(base,coin));
+          }
+          else console.log(item + ' no ' + coin);
+          count++;
+          if(count >= l) resolve(forkJoin(subs));
+        }
+      });
+
+    });
   }
 
   getExchangeApi(exchange: string): ApiPublicAbstract {

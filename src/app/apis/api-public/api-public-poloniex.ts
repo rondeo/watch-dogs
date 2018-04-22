@@ -16,6 +16,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
     const url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);
+    console.log(url);
     return this.http.get(url).map((res:any) =>{
       const market = base+'_'+coin;
       const exchange = 'poloniex';
@@ -24,7 +25,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
           amountCoin:+item[1],
           rate:+item[0]
         }
-      })
+      });
 
       const sell = res.asks.map(function (item) {
         return{

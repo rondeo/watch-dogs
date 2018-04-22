@@ -5,8 +5,9 @@ import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
 import {ApiPublicAbstract} from "./api-public-abstract";
 
-export class ApiPublicCryptopia extends ApiPublicAbstract{
+export class ApiPublicCryptopia extends ApiPublicAbstract {
   exchange = 'cryptopia';
+
   constructor(http: HttpClient) {
     super(http);
   }
@@ -34,8 +35,8 @@ export class ApiPublicCryptopia extends ApiPublicAbstract{
       });
 
       return {
-        market: null,
-        exchange: null,
+        market: base + '_' + coin,
+        exchange: this.exchange,
         buy: buy,
         sell: sell
       }
@@ -69,21 +70,21 @@ export class ApiPublicCryptopia extends ApiPublicAbstract{
     });
   }
 
- /* allCoins: {[coin:string]:{[base:string]:number}};
+  /* allCoins: {[coin:string]:{[base:string]:number}};
 
-  async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
-    if (this.allCoins) return Promise.resolve(this.allCoins);
-    else {
-        if(fromCache){
-          const str =  localStorage.getItem(this.exchange+ '-coins');
-          if(str){
-            this.allCoins = JSON.parse(str);
-            return Promise.resolve(this.allCoins);
-          }
-        }
-      return this.downloadTicker().map(() => this.allCoins).toPromise();
-    }
-  }*/
+   async getAllCoins(fromCache = true): Promise<{[coin:string]:{[base:string]:number}}> {
+     if (this.allCoins) return Promise.resolve(this.allCoins);
+     else {
+         if(fromCache){
+           const str =  localStorage.getItem(this.exchange+ '-coins');
+           if(str){
+             this.allCoins = JSON.parse(str);
+             return Promise.resolve(this.allCoins);
+           }
+         }
+       return this.downloadTicker().map(() => this.allCoins).toPromise();
+     }
+   }*/
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
 
@@ -134,8 +135,8 @@ export class ApiPublicCryptopia extends ApiPublicAbstract{
 
         indexed[market.base + '_' + market.coin] = market;
         marketsAr.push(market);
-        if(!allCoins[market.coin])allCoins[market.coin] = {};
-        allCoins[market.coin][market.base] =  market.Last;
+        if (!allCoins[market.coin]) allCoins[market.coin] = {};
+        allCoins[market.coin][market.base] = market.Last;
 
       })
 
@@ -191,7 +192,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract{
     return result.length;
   }
 
-  mapCoinDay(res){
+  mapCoinDay(res) {
 
     // console.log(res);
     let ar: any[] = res.data;
