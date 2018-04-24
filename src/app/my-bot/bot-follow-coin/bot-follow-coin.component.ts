@@ -15,8 +15,7 @@ import {AnalizeData} from "./analize-data";
 import {BuySellCoins} from "./buy-sell-coins";
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {CoinAnalytics, NewGainers} from "./new-gainers";
-import {FrontDeskService} from "../services/front-desk.service";
-import {ApiAllPublicService} from "../../apis/api-all-public.service";
+import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
@@ -38,12 +37,11 @@ export class BotFollowCoinComponent implements OnInit {
   private historyMC: { [symbol: string]: VOMarketCap }[] = [];
 
 
-  constructor(private allApis: ApiAllPublicService,
+  constructor(private allApis: ApisPublicService,
               private router: Router,
               private route: ActivatedRoute,
               private marketCap: ApiMarketCapService,
               private collectMarketDataService: CollectMarketDataService,
-              private frontDesk: FrontDeskService,
               private database: DatabaseService) {
 
   }

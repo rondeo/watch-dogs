@@ -2,4 +2,30 @@
  <section>
      <div>{{exchange}}</div>
  </section>
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <td> symbol</td>
+                <td> name</td>
+                <td> vDl</td>
+                <td> rankD</td>
+                <td> rank</td>
+                <td> price_to_btcD</td>
+                <td> priceD</td>
+                <td> to_btc_1h</td>
+            </tr>
+            <tr *ngFor="let item of display">
+                <td> {{item.symbol}}</td>
+                <td> {{item.name}}</td>
+                <td> {{item.vD}}</td>
+                <td> {{item.rankD}}</td>
+                <td> {{item.rank}}</td>
+                <td> {{item.price_to_btcD}}</td>
+                <td> {{item.priceD}}</td>
+                <td> {{item.to_btc_1h}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
 </div>

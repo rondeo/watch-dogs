@@ -3,17 +3,17 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {VOBooks} from "../models/app-models";
 import {Subject} from "rxjs/Subject";
-import {ApiAllPublicService} from "./api-all-public.service";
+import {ApisPublicService} from "./apis-public.service";
 import {forkJoin} from "rxjs/observable/forkJoin";
 
 @Injectable()
 export class ApisBooksService {
 
-  private booksSub:Subject<VOBooks> = new Subject()
+  private booksSub:Subject<VOBooks> = new Subject();
   books$() :Observable<VOBooks>{
     return this.booksSub.asObservable();
   }
-  constructor(private apis:ApiAllPublicService) { }
+  constructor(private apis:ApisPublicService) { }
 
   downloadBooks(exchanges:string[], base:string, coin:string):Observable<any>{
     const subs = []

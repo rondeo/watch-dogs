@@ -2,12 +2,12 @@ import {VOOrderBook} from "../models/app-models";
 import * as moment from "moment";
 import * as _ from 'lodash';
 
-export class MappersBooks{
+export class UtilsBooks{
   static bittrex(r:any, price:number){
 
     return {
-      buy:MappersBooks.groupBooksWithPrice(r.buy, price),
-      sell:MappersBooks.groupBooksWithPrice(r.sell, price)
+      buy:UtilsBooks.groupBooksWithPrice(r.buy, price),
+      sell:UtilsBooks.groupBooksWithPrice(r.sell, price)
     }
 
    /* return {
@@ -25,6 +25,20 @@ export class MappersBooks{
     }*/
   }
 
+
+  static getAvgBooksForAmountBase(ar:{amountCoin:number, rate:number}[], amountBase:number):number{
+    let prices:number[] = [];
+    let sum=0;
+    for(let i =0, n=ar.length; i<n; i++){
+      let item = ar[i];
+
+      sum+= item.amountCoin * item.rate;
+      prices.push(item.rate);
+      if(sum>=amountBase) break;
+    }
+
+    return parseFloat(( _.sum(prices)/prices.length).toPrecision(5));
+  }
   static calculateRateForAmountBase(ar:VOOrderBook[], amountBase:number):number{
     let prices:number[] = [];
     let sum=0;
@@ -39,17 +53,16 @@ export class MappersBooks{
     return parseFloat(( _.sum(prices)/prices.length).toPrecision(5));
   }
 
-  static calculateRateForAmountCoin(ar:VOOrderBook[], amountCoin:number):number{
+  static getRateForAmountCoin(ar:{amountCoin, rate:number}[], amountCoin:number):number{
     let prices:number[] = [];
     let sum=0;
     for(let i =0, n=ar.length; i<n; i++){
       let item = ar[i];
-      sum+= +item.Quantity;
-      prices.push(+item.Rate);
-      if(sum>=amountCoin) break;
+      sum+= +item.amountCoin;
+      if(sum>=amountCoin) return item.rate;
     }
 
-    return parseFloat(( _.sum(prices)/prices.length).toPrecision(5));
+    return 0
   }
 
 

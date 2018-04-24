@@ -18,10 +18,9 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
 
   watchDog:WatchDog;
-
   coinMarket:VOMarketCap;
   markets:{[symbol:string]:VOMarketCap};
- coinsSelected:VOMarketCap[] =[];
+  coinsSelected:VOMarketCap[] =[];
  // selectedCoins:{[symbol:string]:VOExchangeData};
   watchDogs:WatchDog[]=[];
 

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {VOMarketCap, VOWatchdog} from "../../models/app-models";
+import {Component, OnInit} from '@angular/core';
+import {VOMarketCap, VOWatchdog, WatchDog} from "../../models/app-models";
 import {ActivatedRoute} from "@angular/router";
 import {WatchDogService} from "../watch-dog.service";
 import {StorageService} from "../../services/app-storage.service";
 import {MarketCapService} from "../../market-cap/market-cap.service";
 import {MatSnackBar} from "@angular/material";
-
+import * as moment from "moment";
 
 
 @Component({
@@ -15,30 +15,62 @@ import {MatSnackBar} from "@angular/material";
 })
 export class WatchdogEditComponent implements OnInit {
 
-  watchDog:VOWatchdog;
+  watchDog: VOWatchdog;
 
-  selectedCoins:string[];
-  MC:{[symbol:string]:VOMarketCap};
-  coinMC:VOMarketCap = new VOMarketCap();
+  bases: string[] = ['BTC', 'USDT', 'ETH'];
+
+  exchanges: string[] = ['bittrex', 'poloniex'];
+
+  selectedCoins: string[];
+  MC: { [symbol: string]: VOMarketCap };
+  coinMC: VOMarketCap = new VOMarketCap();
 
   constructor(
-    private route:ActivatedRoute,
-    private watchdogService:WatchDogService,
-    private storage:StorageService,
-    private marketCap:MarketCapService,
-    private snackBar:MatSnackBar
+    private route: ActivatedRoute,
+    private watchdogService: WatchDogService,
+    private storage: StorageService,
+    private marketCap: MarketCapService,
+    private snackBar: MatSnackBar
   ) {
     this.watchDog = new VOWatchdog();
-    this.watchDog.active = true;
   }
 
   ngOnInit() {
     this.selectedCoins = this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
 
-    this.watchdogService.watchdogs$().subscribe(res=>{
+    this.watchdogService.watchdogs$().subscribe(res => {
       console.log(res);
-      if(!res){
+      if (!res) return
+
+      let dog = res.find(function (item) {
+        return item.id == undefined;
+      });
+      if (dog) dog.id = moment().toISOString();
+
+
+      dog = res.find(function (item) {
+        return item.id === id;
+      })
+
+      if (!dog) {
+        this.watchDog = new VOWatchdog();
+        this.watchDog.id = id;
+        this.watchDog.base = 'BTC';
+        this.watchDog.isEmail = false;
+        this.watchDog.exchange = 'bittrex';
+        this.watchDog.coin = 'ETH';
+        this.watchDog.name = 'My ETH';
+        this.watchDog.action = 'SELL';
+        this.watchDog.percent_change_1hLess = true;
+        this.watchDog.percent_change_1h = 1
+      }else  this.watchDog = dog;
+
+      this.marketCap.getCoinsObs().subscribe(MC=>{
+        this.MC = MC;
+        this.displayMC();
+      })
+      /*if(!res){
         this.watchdogService.refreshWatchdogs();
         return;
       }
@@ -52,64 +84,70 @@ export class WatchdogEditComponent implements OnInit {
       }else this.watchDog = dog;
 
 
-      this.displayMC();
+      this.displayMC();*/
 
     });
 
-
-    this.marketCap.getCoinsObs().subscribe(res=>{
-      this.MC = res;
-      this.displayMC();
-    })
+    /*
+        this.marketCap.getCoinsObs().subscribe(res=>{
+          this.MC = res;
+          this.displayMC();
+        })*/
 
   }
 
 
-  displayMC(){
-    if(!this.MC) return;
+  displayMC() {
+
+    if (!this.MC) return;
     let coin = this.watchDog.coin;
-    if(!coin) return;
+    if (!coin) return;
     this.coinMC = this.MC[coin];
 
   }
-  onMinusClick(){
-    if(this.watchDog.percent_change_1h) this.watchDog.percent_change_1h = -this.watchDog.percent_change_1h;
+
+  onMinusClick() {
+    if (this.watchDog.percent_change_1h) this.watchDog.percent_change_1h = -this.watchDog.percent_change_1h;
   }
-  onPercent1hLess(){
+
+  onPercent1hLess() {
     this.watchDog.percent_change_1hLess = !this.watchDog.percent_change_1hLess;
   }
 
-  onCoinChange(evt){
+  onCoinChange(evt) {
     //let coin = evt.value
     let coin = this.watchDog.coin;
     this.displayMC();
     console.log(coin);
   }
 
-  saveWatchdog(){
+  saveWatchdog() {
 
-    if(!this.watchDog.name || this.watchDog.name.length < 2){
+    if (!this.watchDog.name || this.watchDog.name.length < 2) {
 
-      this.snackBar.open('Name minimum length 2', 'x', {duration:3000});
+      this.snackBar.open('Name minimum length 2', 'x', {duration: 3000});
       return
     }
-    if(!this.watchDog.coin || this.watchDog.coin.length < 2){
-      this.snackBar.open('Coin minimum length 2', 'x', {duration:3000});
+    if (!this.watchDog.coin || this.watchDog.coin.length < 2) {
+      this.snackBar.open('Coin minimum length 2', 'x', {duration: 3000});
       return
     }
-    if(!this.watchDog.percent_change_1h){
-      this.snackBar.open('% 1h can not be null', 'x', {duration:3000});
+    if (!this.watchDog.percent_change_1h) {
+      this.snackBar.open('% 1h can not be null', 'x', {duration: 3000});
       return
     }
 
+    this.watchDog.script = 'if(percent_change_1h  ' + (this.watchDog.percent_change_1hLess ? '<' : '>') + ' ' + this.watchDog.percent_change_1h + ')  { SELL }';
 
-    this.watchdogService.saveWatchDog(this.watchDog).toPromise().then(res=>{
 
-      if(res.result){
-        this.snackBar.open(this.watchDog.name + ' Saved on server', 'x', {duration:2000});
+    this.watchdogService.saveWatchDog(this.watchDog).then(res => {
+      console.log(res);
+
+      if (res.result) {
+        this.snackBar.open(this.watchDog.name + ' Saved on server', 'x', {duration: 2000});
       }
 
-    }).catch(err=>{
+    }).catch(err => {
       console.error(err)
     })
   }

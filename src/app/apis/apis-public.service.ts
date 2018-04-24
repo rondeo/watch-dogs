@@ -13,7 +13,7 @@ import {forkJoin} from "rxjs/observable/forkJoin";
 
 
 @Injectable()
-export class ApiAllPublicService {
+export class ApisPublicService {
 
   private exchanges: { [index: string]: ApiPublicAbstract } = {};
 

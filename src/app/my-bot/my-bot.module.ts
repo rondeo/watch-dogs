@@ -7,11 +7,10 @@ import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
 import {SharedModule} from "../shared/shared.module";
-import {BotServiceService} from "./services/bot-service.service";
+
 import {BotFollowCoinComponent} from './bot-follow-coin/bot-follow-coin.component';
 import {BotBuyCoinComponent} from './bot-buy-coin/bot-buy-coin.component';
 import {CollectMarketDataService} from "./services/collect-market-data.service";
-import {FrontDeskService} from "./services/front-desk.service";
 import {CoinDayComponent} from './coin-day/coin-day.component';
 import {ChartsModule} from "ng2-charts";
 import {MatDatepickerModule} from "@angular/material";
@@ -21,6 +20,8 @@ import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
 import {Component, OnInit} from '@angular/core';
 import {ApisModule} from "../apis/apis.module";
 import { CoinGraphComponent } from './coin-graph/coin-graph.component';
+import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
+import {BotSellCoinService} from "./services/bot-sell-coin.service";
 
 @Component({
   template: `
@@ -50,7 +51,8 @@ const routes: Routes = [
       {path: 'coin-graph/:coin', component: CoinGraphComponent},
       {path: 'buy-coin/:exchange', component: BotBuyCoinComponent},
       {path: 'run/:exchange/:market', component: BotRunComponent},
-      {path: 'coin-day/:coin', component: CoinDayComponent}
+      {path: 'coin-day/:coin', component: CoinDayComponent},
+      {path: 'sell-coins/:markets', component: BotSellCoinComponent}
     ]
   }
 ];
@@ -77,13 +79,13 @@ const routes: Routes = [
     BotBuyCoinComponent,
     CoinDayComponent,
     Outlet,
-    CoinGraphComponent
+    CoinGraphComponent,
+    BotSellCoinComponent
 
   ],
   providers: [
-    BotServiceService,
     CollectMarketDataService,
-    FrontDeskService
+    BotSellCoinService
   ]
 })
 export class MyBotModule {

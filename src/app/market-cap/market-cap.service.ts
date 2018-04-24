@@ -61,7 +61,7 @@ export class MarketCapService {
 
     this.countDown = this.delay;
     this.isRunning = true;
-    setInterval(() => this.doCountDown(), 1000);
+   // setInterval(() => this.doCountDown(), 1000);
     this.start();
   }
 

@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
 import {MarketHistoryData} from "../market-history-line/market-history-line.component";
 import {VOMarket, VOOrder} from "../../models/app-models";
 import {MappersHistory, VOHistoryStats} from "../../com/mappers-history";
-import {MappersBooks} from "../../com/mappers-books";
+import {UtilsBooks} from "../../com/utils-books";
 import * as _ from 'lodash';
 import {MarketHistory} from "../services/utils/market-history";
 

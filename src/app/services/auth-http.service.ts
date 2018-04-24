@@ -53,6 +53,18 @@ export class AuthHttpService {
     //setTimeout(() => this.autoLogin(), 2000);
   }
 
+  autoLogin(){
+    let user =  this.storage.restoreUserSimple();
+    console.warn(user);
+    let password2 = this.storage.hashPassword1(user.p);
+    return this.login(user.u, password2).map((result: any) =>{
+      if(result.success ==='logedin'){
+        this.setUser(result.user);
+      }
+      return user;
+    })
+  }
+
   isOnlineSub:BehaviorSubject<boolean>;
 
   isOnline$(){
@@ -180,7 +192,9 @@ export class AuthHttpService {
 
   public get(url: string): Observable<any> {
 
-    return this.http.get(url)//, this.addHeaders(options));
+    return this.http.get(url).map(res =>{
+      return res;
+    })//, this.addHeaders(options));
   }
 
   public post(url: string, body: any) {

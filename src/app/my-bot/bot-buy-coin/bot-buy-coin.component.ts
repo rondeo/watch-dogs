@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MarketCapService} from "../../market-cap/market-cap.service";
+
 import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {ApiBase, IApiPublic} from "../../my-exchange/services/apis/api-base";
@@ -9,6 +9,11 @@ import {UtilsOrder} from "../../services/utils-order";
 
 import {VOMarket} from "../../models/app-models";
 import {BotBuyCoinService} from "../services/bot-buy-coin.service";
+import {ApisPublicService} from "../../apis/apis-public.service";
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
+import {Result1, UtilsBot} from "../../com/utils-bot";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-bot-buy-coin',
@@ -17,35 +22,71 @@ import {BotBuyCoinService} from "../services/bot-buy-coin.service";
 })
 export class BotBuyCoinComponent implements OnInit, OnDestroy {
 
+
+  display: Result1[];
+
+  result:{[symbol:string]:VOMarket[]};
+
+
   exchange:string;
   publicAPI:IApiPublic;
   exchangeMarkets:VOMarket[];
-
-
+  exchangeApi:ApiPublicAbstract;
   constructor(
     private route:ActivatedRoute,
-    private marketCap:MarketCapService,
-    private connector:ConnectorApiService,
-    private buyCoinService:BotBuyCoinService
+    private marketCap:ApiMarketCapService,
+    private apis:ApisPublicService
+   // private buyCoinService:BotBuyCoinService
   ) { }
 
   private sub1;
   private sub2;
+
   ngOnInit() {
     this.sub1 = this.route.params.subscribe(params=>{
       this.exchange = params.exchange;
-      let api  = this.connector.getPublicApi(this.exchange);
-      this.buyCoinService.getRecommended(api).subscribe(recommended=>{
-
-        /*this.buyCoinService.saveMarkets(recommended).then(res=>{
-          console.log(res);
-        })
-*/
-      })
-
+      this.exchangeApi = this.apis.getExchangeApi(this.exchange);
+      this.download2Records();
     });
+
   }
 
+
+  async download2Records(){
+    const now = moment().format()
+    const MC = await this.marketCap.download2Recors(moment().subtract(3,'h').format(), moment().format()).toPromise();
+    console.log(MC['stamps']);
+    const exchangeCoins =  await this.exchangeApi.getAllCoins().toPromise();
+
+
+    UtilsBot.filterMCandExchange(MC, exchangeCoins);
+    this.result = MC;
+
+    // console.log(MC);
+    const result = UtilsBot.mapResult(MC);
+
+    const ar = Object.values(result);
+    //console.log(ar);
+
+    const gainers = ar.filter(function (item:Result1) {
+      return item.price_to_btcD > 0. && item.rankD >0;
+    })
+
+    console.log(gainers);
+    this.display = gainers.length?gainers: ar;
+
+  }
+
+  async loadMarketCap(){
+    const MC = await  this.marketCap.downloadHistoryForLast3Hours().toPromise();
+
+    const exchangeCoins =  await this.exchangeApi.getAllCoins().toPromise();
+    UtilsBot.filterMCandExchange(MC, exchangeCoins);
+   // console.log(MC);
+    const percent_ih = UtilsBot.mapResult(MC);
+    console.log(percent_ih)
+
+  }
 
 
   ngOnDestroy(){

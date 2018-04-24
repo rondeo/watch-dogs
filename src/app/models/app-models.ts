@@ -608,8 +608,12 @@ export class WalletModel {
 */
 
 
+
 export class VOWatchdog {
   id: string;
+  script:string;
+  exchange:string;
+  base:string;
   coin: string;
   name: string;
   percent_change_1hLess: boolean;
@@ -617,6 +621,8 @@ export class VOWatchdog {
   active: boolean;
   mc?: VOMarketCap;
   isOpen?: boolean
+  action:string;
+  isEmail:boolean;
 }
 
 export class WatchDog {

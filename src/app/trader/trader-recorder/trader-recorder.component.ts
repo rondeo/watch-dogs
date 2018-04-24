@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {ApiAllPublicService} from "../../apis/api-all-public.service";
+import {ApisPublicService} from "../../apis/apis-public.service";
 
-import {IMarketStats, MarketStats} from "../../parsers/market-stats";
+import {IMarketStats, MarketStats} from "../../com/market-stats";
 import {DatabaseService} from "../../services/database.service";
 import * as moment from 'moment';
 import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
@@ -32,7 +32,7 @@ export class TraderRecorderComponent implements OnInit, OnChanges {
 
   private interval;
 
-  constructor(private apis: ApiAllPublicService, private database: DatabaseService) {
+  constructor(private apis: ApisPublicService, private database: DatabaseService) {
     this.marketStats = {
       amountBaseBuy: 0,
       amountBaseSell: 0,

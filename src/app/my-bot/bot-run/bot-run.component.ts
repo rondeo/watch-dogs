@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ApiBase, IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble, VOTradesStats} from "../../services/utils-order";
 
-import {BotServiceService} from "../services/bot-service.service";
+
 import {TradesData} from "../services/trades-data";
 import * as _ from 'lodash';
 
@@ -35,8 +35,7 @@ export class BotRunComponent implements OnInit {
     private route:ActivatedRoute,
     private router:Router,
     private apiService:ConnectorApiService,
-    private snackBar:MatSnackBar,
-    private botService:BotServiceService
+    private snackBar:MatSnackBar
   ) { }
 
   isLogedIn:boolean;
@@ -259,16 +258,6 @@ export class BotRunComponent implements OnInit {
           console.warn(res);
         })*/
 
-       this.tradesData =  this.botService.getTrades(base, coin, priceBaseUS)
-
-       this.tradesData.forEach( (item) =>{
-          item.start();
-          item.dust$().subscribe(dust=>{
-
-            this.dusts = dust.reverse().concat(this.dusts);
-            if(this.dusts.length> 100) this.dusts = _.takeLeft(this.dusts, 100)
-          })
-        })
 
        /* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(history=>{
 

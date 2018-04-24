@@ -31,16 +31,15 @@ export class BotBuyCoinService {
   }
   constructor(
     private http:HttpClient,
-    private connector:ConnectorApiService,
-    private marketCap:MarketCapService,
+   // private marketCap:MarketCapService,
     private database:DatabaseService
 
   ) {
 
-    this.subMC = marketCap.getCoinsObs().subscribe(MC=>{
+    /*this.subMC = marketCap.getCoinsObs().subscribe(MC=>{
       this.MC = MC;
       this.filterGainers();
-    });
+    });*/
   }
 
  /* saveMarkets(markets:IMarketRecommended[]){

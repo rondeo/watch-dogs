@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CoinDayService, MarketDay} from "../../apis/coin-day.service";
+
 import * as _ from 'lodash';
 import {ActivatedRoute} from "@angular/router";
 import * as moment from "moment";
@@ -20,7 +20,7 @@ export class CoinDayComponent implements OnInit {
   form: FormGroup;
   private coin;
 
-  constructor(private coinDay: CoinDayService,
+  constructor(
               private fb: FormBuilder,
               private route: ActivatedRoute) {
 

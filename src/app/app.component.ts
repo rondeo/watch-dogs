@@ -103,14 +103,13 @@ export class AppComponent implements OnInit {
   imageClass = '';
 
   ngOnInit():void{
-
     this.auth.isOnline$().subscribe(res=>{
       this.imageClass =  res?'':'glow-red';
       this.bgColor = res?'':'bg-red';
     });
 
 
-    this.storage.onSalt().subscribe(salt=>{
+   /* this.storage.onSalt().subscribe(salt=>{
 
     })
 
@@ -148,7 +147,7 @@ export class AppComponent implements OnInit {
     this.auth.getUser$().subscribe(user=> {
       this.nickname = user?user.nickname:'';
       this.isLogedIn = !!user
-    });
+    });*/
 
 
  /*   this.http.authError.subscribe((err:any)=>{

@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VOMarket, VOMarketCap} from '../../models/app-models';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {ApiAllPublicService} from "../../apis/api-all-public.service";
+import {ApisPublicService} from "../../apis/apis-public.service";
 import {forkJoin} from "rxjs/observable/forkJoin";
 import * as _ from 'lodash';
 import {V2DataHelper} from "./v2-data-helper";
@@ -25,7 +25,7 @@ interface IDisplayCoins {
 export class V2DataComponent implements OnInit {
 
   bases = ['BTC', 'USDT', 'ETH'];
-  exchanges = ['bittrex', 'poloniex', 'binance', 'hitbtc'];
+  exchanges = ['bittrex', 'poloniex', 'binance'];
   tableHeaders: string[];
   private MC: { [index: string]: VOMarketCap };
 
@@ -37,7 +37,7 @@ export class V2DataComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private marketCap: ApiMarketCapService,
-    private apisAll: ApiAllPublicService,
+    private apisAll: ApisPublicService,
     private snackBar: MatSnackBar
   ) {
   }
@@ -81,14 +81,11 @@ export class V2DataComponent implements OnInit {
   downloadAllExchanges() {
 
     const MC = this.MC;
-    const all = this.exchanges;
+
     const apis = [];
 
-    all.forEach((exchange) => {
-      apis.push(this.apisAll.downloadTicker(exchange));
-    })
-
-    forkJoin(apis).subscribe((res: { [market: string]: VOMarket }[]) => {
+    this.apisAll.downloadTickers(this.exchanges)
+      .subscribe((res: { [market: string]: VOMarket }[]) => {
       this.marketsResults = res;
       // console.log(res);
       const bases = this.bases;
@@ -100,7 +97,7 @@ export class V2DataComponent implements OnInit {
 
 
   ngOnInit() {
-    this.marketCap.downloadAllCoins().subscribe(MC => {
+    this.marketCap.downloadTicker().subscribe(MC => {
       this.MC = MC;
       this.downloadAllExchanges();
     })

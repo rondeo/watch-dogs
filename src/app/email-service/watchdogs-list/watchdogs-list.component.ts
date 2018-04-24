@@ -23,24 +23,28 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   private sub1;
   ngOnInit() {
-    this.markrtCap.getCoinsObs().subscribe(res=>{
+  /*  this.markrtCap.getCoinsObs().subscribe(res=>{
       this.MC = res;
-      this.mapMC();
-    });
+     // this.mapMC();
+    });*/
 
-   this.sub1 =  this.watchdogService.watchdogs$().subscribe((res:any)=>{
-      console.log(res);
+  this.sub1 =  this.watchdogService.watchdogs$().subscribe((res:any)=>{
+
+      console.warn(res);
       this.watchDogs = res;
-      this.mapMC();
+
+     //his.mapMC();
     })
 
-    this.auth.getUser$().subscribe(res=>{
-      console.log(res);
+   /* this.auth.getUser$().subscribe(res=>{
+      console.warn('user', res);
       if(res && res.session){
-        this.watchdogService.refreshWatchdogs();
+
+
+      //  this.watchdogService.refreshWatchdogs();
       }
 
-    })
+    })*/
   }
 
   ngOnDestroy(){
@@ -68,7 +72,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     if(!confirm('You want to '+action+' Watchdog '+ dog.name +'?')) return;
     dog.active = !dog.active;
 
-    this.watchdogService.saveWatchDogs().toPromise()
+    this.watchdogService.saveWatchDogs()
       .then(res=>{
       console.log(res);
         this.watchdogService.refreshWatchdogs();
@@ -80,7 +84,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   onDeleteClick(dog:VOWatchdog){
     console.log(dog);
     if(!confirm('You want to delete Watchdog '+ dog.name +'?')) return;
-    this.watchdogService.deleteWatchdog(dog).toPromise()
+    this.watchdogService.deleteWatchdog(dog)
       .then(res=>{
         this.watchdogService.refreshWatchdogs();
         console.log(res);

@@ -4,6 +4,7 @@ import * as CryptoJS from 'crypto-js';
 //import * as crypto from 'crypto';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
+import * as localforage from 'localforage';
 
 @Injectable()
 export class StorageService {
@@ -111,6 +112,16 @@ export class StorageService {
     let ar = this.getSelectedMC();
     for(let i= ar.length -1; i>=0; i--) if(ar[i] === symbol )ar.splice(i,1);
     this.saveSelected();
+  }
+
+
+  async upsert(index:string, item:any):Promise<any>{
+    return localforage.setItem(index, item);
+  }
+
+ async select(index:string):Promise<any>{
+
+    return localforage.getItem(index);
   }
 
   saveSelected(){

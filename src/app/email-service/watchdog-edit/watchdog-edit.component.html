@@ -1,27 +1,54 @@
 <div>
- <h4>Watchdog   <sup *ngIf="watchDog">{{watchDog.id}}</sup></h4>
+    <h4>Watchdog <sup *ngIf="watchDog">{{watchDog.id}}</sup></h4>
 
     <section>
+
+        <div>
+            <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>
+
+            <mat-form-field class="w6">
+                <mat-select placeholder="Exchange" [(ngModel)]="watchDog.exchange">
+                    <mat-option *ngFor="let exchange of exchanges" [value]="exchange">{{exchange}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w6">
+                <mat-select placeholder="Base" [(ngModel)]="watchDog.base">
+                    <mat-option *ngFor="let base of bases" [value]="base">{{base}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-radio-group  [(ngModel)]="watchDog.action">
+                <mat-radio-button value="SELL">SELL</mat-radio-button>
+                <mat-radio-button value="BUY">BUY</mat-radio-button>
+            </mat-radio-group>
+
+        </div>
+
+
+
+
         <mat-form-field class="w6">
-            <mat-select placeholder="Coin" [(ngModel)] = "watchDog.coin" (ngModelChange)="onCoinChange($event)" >
+            <mat-select placeholder="Coin" [(ngModel)]="watchDog.coin" (ngModelChange)="onCoinChange($event)">
                 <mat-option *ngFor="let coin of selectedCoins" [value]="coin">{{coin}}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-input-container>
-            <input  matInput placeholder="Name" type="text" [(ngModel)] = "watchDog.name" />
+            <input matInput placeholder="Name" type="text" [(ngModel)]="watchDog.name"/>
         </mat-input-container>
+
         <br/>
         <span>When %1h</span>
-        <span class="btn fa" (click)="onPercent1hLess()"  [ngClass] ="watchDog.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
+        <span class="btn fa" (click)="onPercent1hLess()"
+              [ngClass]="watchDog.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
 
-        <mat-input-container  class="w3" [ngClass]="watchDog.percent_change_1h>0?'green':'red'">
-            <input class="w5"  matInput placeholder="%1h" type="number" [(ngModel)] = "watchDog.percent_change_1h" />
+        <mat-input-container class="w3" [ngClass]="watchDog.percent_change_1h>0?'green':'red'">
+            <input class="w5" matInput placeholder="%1h" type="number" [(ngModel)]="watchDog.percent_change_1h"/>
         </mat-input-container>
         <span class="btn fa fa-minus" (click)="onMinusClick()"></span>
         &nbsp;
-        <mat-checkbox [(ngModel)] = "watchDog.active"  >Active</mat-checkbox>
-        <button  mat-raised-button color="accent" (click)="saveWatchdog()" >Save</button>
+        <mat-checkbox [(ngModel)]="watchDog.active">Active</mat-checkbox>
+        <button mat-raised-button color="accent" (click)="saveWatchdog()">Save</button>
 
     </section>
 
@@ -36,13 +63,16 @@
                 <th>% 7d</th>
                 <th>$US</th>
                 <th>$B</th>
-                <th><small>Rank</small></th>
+                <th>
+                    <small>Rank</small>
+                </th>
             </tr>
 
             <tr>
 
                 <td>
-                    <a href="https://coinmarketcap.com/currencies/{{coinMC.id}}" target="_blank" class="btn fa fa-line-chart"></a>
+                    <a href="https://coinmarketcap.com/currencies/{{coinMC.id}}" target="_blank"
+                       class="btn fa fa-line-chart"></a>
 
                     <span>{{coinMC.symbol}}</span>
                 </td>
@@ -56,7 +86,9 @@
                     <span [ngClass]="coinMC.percent_change_7d>0?'dgreen':'dred'">{{coinMC.percent_change_7d}}</span>
 
                 <td><span>{{coinMC.price_usd}}</span></td>
-                <td><small>{{coinMC.price_btc}}</small></td>
+                <td>
+                    <small>{{coinMC.price_btc}}</small>
+                </td>
                 <td>{{coinMC.rank}}</td>
 
             </tr>

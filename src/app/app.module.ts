@@ -18,6 +18,7 @@ import 'rxjs/add/operator/toPromise';
 //import 'rxjs/operator/publishLast';
 //import 'rxjs/add/operator/shareReplay';
 import 'rxjs/add/operator/do';
+import "rxjs/add/operator/concat";
 
 //import {AuthHttp, AuthModule, provideAuth, AuthConfig} from './libs/angular2-jwt';
 

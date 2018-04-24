@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {MappersBooks} from "../com/mappers-books";
+import {UtilsBooks} from "../com/utils-books";
 import {VOOrderBook, VOTrade} from "../models/app-models";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 

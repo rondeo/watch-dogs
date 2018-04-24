@@ -47,6 +47,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "ng2-charts": "^1.6.0",
+    "ng2-localforage": "^0.1.30",
     "node-bittrex-api": "^0.8.3",
     "nodemon": "^1.17.2",
     "pako": "^1.0.6",
