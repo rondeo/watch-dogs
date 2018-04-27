@@ -50,7 +50,7 @@ const routes: Routes = [
 
       {path: 'coin-markets/:symbols', component: BittrexMarketsComponent},
       {path: 'balances', component: BittrexBalancesComponent},
-      {path: 'exchange/:action/:symbol', component: BittrexBuySellComponent},
+      {path: 'exchange/:status/:symbol', component: BittrexBuySellComponent},
       {path: 'transfer/:symbol', component: BittrexTransferComponent},
       {path: 'bot-list', component: BotListComponent},
       {path: 'bot-edit/:id', component: BotEditComponent},

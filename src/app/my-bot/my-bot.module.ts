@@ -52,7 +52,7 @@ const routes: Routes = [
       {path: 'buy-coin/:exchange', component: BotBuyCoinComponent},
       {path: 'run/:exchange/:market', component: BotRunComponent},
       {path: 'coin-day/:coin', component: CoinDayComponent},
-      {path: 'sell-coins/:markets', component: BotSellCoinComponent}
+      {path: 'sell-coins', component: BotSellCoinComponent}
     ]
   }
 ];

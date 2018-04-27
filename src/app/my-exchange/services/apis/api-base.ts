@@ -157,12 +157,11 @@ return null;
 
 
   refreshBalances():void{
-    if(!this.isLogedInSub.getValue()){
-      console.warn(' not logged in');
-      return;
-    }
+    //if(!this.isLogedInSub.getValue()){
+   //   console.warn(' not logged in');
+//    }
 
-    if(this.isLoadingBalances) return;
+   // if(this.isLoadingBalances) return;
     this.isLoadingBalances = true;
    this.downloadBalances().subscribe(res=>{
      this.isLoadingBalances = false;
@@ -448,6 +447,24 @@ return null;
         mc?resolve(mc.price_usd):reject(0);
       })
     })
+  }
+
+  private credentials: { apiKey: string, password: string };
+
+  protected getCredentials(): Observable<{ apiKey: string, password: string }> {
+    if (!!this.credentials) return Observable.of(this.credentials);
+    let credentials = null;
+    const sub = new Subject<{ apiKey: string, password: string }>();
+
+    let str = this.storage.getItem(this.exchange + '-credentials', true);
+    if (str) {
+      let credentials: { apiKey: string, password: string } = JSON.parse(str);
+      if (credentials && credentials.apiKey && credentials.password) {
+        this.credentials = credentials;
+      }
+    }
+
+    return new BehaviorSubject(this.credentials).asObservable()
   }
 }
 

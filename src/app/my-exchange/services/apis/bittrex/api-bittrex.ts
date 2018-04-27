@@ -431,6 +431,25 @@ export class ApiBittrex extends ApiBase   {
   callInprogress:boolean;
 
   private call(uri: string, post: any): Observable<any> {
+
+    return this.getCredentials().switchMap(cred=>{
+      if(!cred) throw new Error('login reqired');
+      post.apikey = cred.apiKey;
+      post.nonce = Math.ceil(Date.now() / 1000);
+      let load = Object.keys(post).map(function (item) {
+        return item + '=' + this.post[item];
+      }, {post: post}).join('&');
+
+      uri += '?' + load;
+      console.log(uri);
+      let signed = this.hash_hmac(uri, cred.password);
+      let url = '/api/bittrex/private';
+      return this.http.post(url, {uri: uri, signed: signed});
+    });
+
+  }
+
+  /*private call(uri: string, post: any): Observable<any> {
     if (!this.apiKey) {
       console.error(' no key')
       return new BehaviorSubject(null).asObservable();
@@ -451,7 +470,7 @@ export class ApiBittrex extends ApiBase   {
 
     return this.http.post(url, {uri: uri, signed: signed});
 
-  }
+  }*/
 
   private callStraight(uri: string, post: any): Observable<any> {
     if (!this.apiKey) {

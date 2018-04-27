@@ -116,6 +116,7 @@ export interface IMarketRecommended {
   action:string;
   reports?:string[];
 
+  status: string;
   updatedAt?:number;
 
   reason:string;
@@ -528,8 +529,8 @@ export class UtilsOrder{
       }
 
       /* timestamps.push(item.timestamp);
-       if(item.action === 'buy') buys.push(item);
-       else if(item.action === 'sell') sells.push(item);
+       if(item.status === 'buy') buys.push(item);
+       else if(item.status === 'sell') sells.push(item);
        else console.warn(item);*/
     });
 
@@ -617,8 +618,8 @@ export class UtilsOrder{
       }
 
       /* timestamps.push(item.timestamp);
-       if(item.action === 'buy') buys.push(item);
-       else if(item.action === 'sell') sells.push(item);
+       if(item.status === 'buy') buys.push(item);
+       else if(item.status === 'sell') sells.push(item);
        else console.warn(item);*/
     });
 

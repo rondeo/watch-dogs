@@ -311,7 +311,7 @@ export class BotFollowCoinComponent implements OnInit {
       return;
     }
 
-    let gainers = _.filter(myMarkets, {'action': ACTIONS.GAINER});
+    let gainers = _.filter(myMarkets, {'status': ACTIONS.GAINER});
 
     FollowCoinAnalytics.analizeGaners(gainers);
 
@@ -351,11 +351,11 @@ export class BotFollowCoinComponent implements OnInit {
    collectDataExists(MC) {
 
      let toSellCoins = this.myMarkets.filter(function (item) {
-       return item.action === ACTIONS.TO_SELL;
+       return item.status === ACTIONS.TO_SELL;
      });
 
      let gainers = this.myMarkets.filter(function (item) {
-       return item.action === ACTIONS.GAINER;
+       return item.status === ACTIONS.GAINER;
      });
 
      console.log(' collect data TO_SELL ' + toSellCoins.length);

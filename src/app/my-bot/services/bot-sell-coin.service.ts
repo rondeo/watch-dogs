@@ -7,27 +7,36 @@ import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApisPrivateService} from "../../apis/apis-private.service";
 import * as moment from "moment";
 import {StorageService} from "../../services/app-storage.service";
-import {MY_WATCHDOGS} from "../../email-service/watch-dog.service";
+import {Subject} from "rxjs/Subject";
 
-export interface VOProcessCoin {
+import * as _ from 'lodash';
+
+export interface VOSellCoin {
+  id:string;
   exchange: string
   base: string
   coin: string
   coinPrice?: number
   basePrice?: number;
   balance?: number;
-  action: string;
+  status: string;
   priceDiff?: number;
   uuid?: string;
   timestamp?: string
   script?: string;
+  results?: string[];
 }
 
 @Injectable()
 export class BotSellCoinService {
 
-  toSell: VOProcessCoin[] = [];
+  toSell: VOSellCoin[] = [];
 
+  soldCoinSub: Subject<VOSellCoin> = new Subject()
+
+  soldCoin$() {
+    return this.soldCoinSub.asObservable();
+  }
 
   constructor(
     private http: HttpClient,
@@ -36,62 +45,61 @@ export class BotSellCoinService {
     private storage: StorageService
   ) {
 
-
+    setInterval(()=>this.tryAgain(), 60000);
   }
 
 
-  trackCoin(coin: VOProcessCoin) {
+  trackCoin(coin: VOSellCoin) {
     this.apisPrivate.getExchangeApi(coin.exchange).getOrder(coin.uuid).subscribe(res => {
       console.warn(res);
     })
 
   }
 
-  async getCoinsToSell():Promise<VOWatchdog[]> {
-    return this.storage.select(MY_WATCHDOGS).then(dogs => {
-      return dogs.filter(function (item) {
-        return item.action === 'SELL';
-      });
-    });
+  tryAgain(){
+    if(this.toSell.length === 0) return;
+
+    const sellCoin = this.toSell.pop();
+    this.sellCoin(sellCoin);
   }
 
-  sellCoin(market: VOProcessCoin): boolean {
+  sellCoin(sellCoin: VOSellCoin): boolean {
     const exists = this.toSell.find(function (item) {
-      return item.exchange === market.exchange && item.base === market.base && item.coin === market.coin;
+      return item.exchange === sellCoin.exchange && item.base === sellCoin.base && item.coin === sellCoin.coin;
     });
 
-
-    if (exists) return false
-    this.toSell.push(market);
-    this.sellAllCoins();
-    return true;
-  }
+    if (exists) return false;
 
 
-  private sellAllCoins() {
-    if (this.toSell.length === 0) {
-      console.log(' no coins to sell');
-      return;
-    }
-    const toSell = this.toSell;
-    const coin = toSell[0];
+    this.apisPrivate.getExchangeApi(sellCoin.exchange)
+      .sellCoin(sellCoin)
+      .subscribe((coin: VOSellCoin) => {
 
-    // coin.uuid = 'd01fef47-c02c-4b00-9fb5-56b9b71c905a';
-    if (coin.uuid) this.trackCoin(coin);
-    else this.apisPrivate.getExchangeApi(coin.exchange)
-      .sellCoin(coin)
-      .subscribe((coin: VOProcessCoin) => {
-        console.warn(coin);
 
-        this.saveOnServer(coin.exchange + coin.coin, coin).then(res => {
+
+        console.warn('SELL COIN RESULT ', coin);
+        if (!coin.balance) {
+          coin.results.push(moment().format() + ' balance 0');
+
+          this.toSell =   _.reject(this.toSell, {exchange: coin.exchange, base: coin.base, coin: coin.coin});
+          this.soldCoinSub.next(coin);
+
+        }else this.toSell.push(sellCoin);
+
+       /* this.saveOnServer(coin.exchange + coin.coin, coin).then(res => {
           console.warn(res);
-        })
+        })*/
+      }, err=>{
+
+        this.toSell.push(sellCoin);
       })
 
+    return true;
+
   }
 
 
-  saveOnServer(filename: string, payload: VOProcessCoin) {
+  saveOnServer(filename: string, payload: VOSellCoin) {
     payload.timestamp = moment().format();
     let url = 'api/save-data/';
     console.log(url);

@@ -90,15 +90,10 @@ export class ApiMarketCapService {
     });
   }
 
-  /* getCoinDay(coin: string) {
-     const url = '/api/front-desk/market-cap/coin-day?coin=' + coin;
-     return this.http.get(url).map(res =>{
-       return res;
-     });
-   }*/
 
-  getCoinHistory(coin: string, from: string, to: string) {
-    const url = '/api/front-desk/market-cap-history?coin=' + coin + '&from=' + from + '&to=' + to;
+
+  getCoinDay(coin: string, from: string, to: string) {
+    const url = '/api/front-desk/market-cap-coin-day?coin=' + coin + '&from=' + from + '&to=' + to;
     return this.http.get(url).map(ApiMarketCapService.mapDataCharts);
   }
 
@@ -134,7 +129,17 @@ export class ApiMarketCapService {
     let available_supply = [];
     let market_cap_usd = [];
     let max_supply = [];
+
+
     let percent_change_1h = [];
+    let btc_change_1h =[];
+
+    let tobtc_change_1h = [];
+
+    let tobtc_change_24h = [];
+
+
+
     let percent_change_24h = [];
     let price_btc = [];
     let price_usd = [];
@@ -142,16 +147,26 @@ export class ApiMarketCapService {
     let labels = [];
     let stamps = [];
 
+
     ar.forEach(function (item) {
 
       volume_usd_24h.push(+item['24h_volume_usd']);
       available_supply.push(+item.available_supply);
       market_cap_usd.push(+item.market_cap_usd);
       max_supply.push(+item.max_supply);
-      percent_change_1h.push(+item.percent_change_1h);
+
       percent_change_24h.push(+item.percent_change_24h);
       price_btc.push(+item.price_btc);
       price_usd.push(+item.price_usd);
+
+
+      percent_change_1h.push(+item.percent_change_1h);
+      btc_change_1h.push(+item.btc_change_1h);
+      tobtc_change_1h.push(+item.percent_change_1h - +item.btc_change_1h);
+
+
+      tobtc_change_24h.push(+item.percent_change_24h - +item.btc_change_24h);
+
       total_supply.push(+item.total_supply);
       stamps.push(item.stamp);
       labels.push(' ')
@@ -166,6 +181,10 @@ export class ApiMarketCapService {
       percent_change_24h,
       price_btc,
       price_usd,
+      tobtc_change_1h,
+      tobtc_change_24h,
+      btc_change_1h,
+
       total_supply,
       labels,
       stamps

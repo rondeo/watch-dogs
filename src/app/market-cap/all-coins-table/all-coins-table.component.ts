@@ -47,6 +47,7 @@ export class AllCoinsTableComponent implements OnInit {
   ngOnInit() {
     this.allCoinsService.coinsAr$.subscribe(res=>{
       if(res){
+
         this.storage.mapSelected(res);
         this.allCoinsData = res;
         this.calculateAvarage();

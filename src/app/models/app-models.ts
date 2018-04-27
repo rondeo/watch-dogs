@@ -4,6 +4,7 @@
 
 
 import {Observable} from 'rxjs/Observable';
+import {VOSellCoin} from "../my-bot/services/bot-sell-coin.service";
 
 
 export interface VOBooksStats{
@@ -357,6 +358,8 @@ export interface VOMarketHistory {
 }
 */
 
+
+
 export class VOMarketCap {
   id: string;
   name: string;
@@ -397,6 +400,12 @@ export class VOMarketCap {
   percent_1h_UP?:number;
 }
 
+export class VOMarketCapExt extends VOMarketCap{
+  tobase_change_1h: number;
+  tobase_change_24h: number;
+  tobase_change_7d: number;
+
+}
 
 /*
 export interface VOMarketB {
@@ -609,7 +618,7 @@ export class WalletModel {
 
 
 
-export class VOWatchdog {
+export class VOWatchdog implements VOSellCoin{
   id: string;
   script:string;
   exchange:string;
@@ -621,8 +630,9 @@ export class VOWatchdog {
   active: boolean;
   mc?: VOMarketCap;
   isOpen?: boolean
-  action:string;
+  status:string;
   isEmail:boolean;
+  results?:string[];
 }
 
 export class WatchDog {

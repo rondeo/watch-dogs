@@ -286,7 +286,7 @@ export class TradesData{
  /* getHistory():VOOrder[]{
     if(!this.trades) this.trades = (JSON.parse(localStorage.getItem(this.id) || '[]')).map(function (o) {
       return {
-        action:o[1] > 0?'BUY':'SELL',
+        status:o[1] > 0?'BUY':'SELL',
         amountCoin:Math.abs(o[1]),
         timestamp:o[0] * 1000,
         rate:o[2],
@@ -305,7 +305,7 @@ export class TradesData{
     let out = this.trades.filter(function (item) {
       return item.amountCoin > this.d;
     },{d:this.dust}).map(function (o:VOOrder) {
-      let amount = o.action ==='BUY'?o.amountCoin:-o.amountCoin;
+      let amount = o.status ==='BUY'?o.amountCoin:-o.amountCoin;
       return [Math.round(o.timestamp/1000),+(amount).toPrecision(4),+(o.rate).toPrecision(5)];
     });
 

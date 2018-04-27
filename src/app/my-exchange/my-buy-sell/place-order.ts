@@ -18,7 +18,7 @@ export function placeOrder(
 
   return new Promise<VOOrder>(function(resolve, reject){
 
-       //console.log(action, amountBase, isMax);
+       //console.log(status, amountBase, isMax);
       action = action.toUpperCase();
 
       amountCoin = +(amountCoin).toPrecision(5);
@@ -42,7 +42,7 @@ export function placeOrder(
 
         if(!obs) {
           console.error(action);
-          reject({message:'no action '+action});
+          reject({message:'no status '+action});
           return;
         }
 

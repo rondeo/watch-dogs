@@ -72,13 +72,13 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     if(!confirm('You want to '+action+' Watchdog '+ dog.name +'?')) return;
     dog.active = !dog.active;
 
-    this.watchdogService.saveWatchDogs()
+    /*this.watchdogService.saveWatchDogs()
       .then(res=>{
       console.log(res);
         this.watchdogService.refreshWatchdogs();
     }).catch(err=>{
       console.error(err);
-    })
+    })*/
   }
 
   onDeleteClick(dog:VOWatchdog){

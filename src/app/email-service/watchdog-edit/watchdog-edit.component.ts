@@ -17,6 +17,8 @@ export class WatchdogEditComponent implements OnInit {
 
   watchDog: VOWatchdog;
 
+  reports:string;
+
   bases: string[] = ['BTC', 'USDT', 'ETH'];
 
   exchanges: string[] = ['bittrex', 'poloniex'];
@@ -61,10 +63,15 @@ export class WatchdogEditComponent implements OnInit {
         this.watchDog.exchange = 'bittrex';
         this.watchDog.coin = 'ETH';
         this.watchDog.name = 'My ETH';
-        this.watchDog.action = 'SELL';
+        this.watchDog.status = 'SELL';
         this.watchDog.percent_change_1hLess = true;
         this.watchDog.percent_change_1h = 1
-      }else  this.watchDog = dog;
+      }else {
+        this.watchDog = dog;
+        console.log(dog);
+        ;
+        this.reports = dog.results.join('<br/>');
+      }
 
       this.marketCap.getCoinsObs().subscribe(MC=>{
         this.MC = MC;
@@ -137,7 +144,10 @@ export class WatchdogEditComponent implements OnInit {
       return
     }
 
-    this.watchDog.script = 'if(percent_change_1h  ' + (this.watchDog.percent_change_1hLess ? '<' : '>') + ' ' + this.watchDog.percent_change_1h + ')  { SELL }';
+
+    this.watchDog.script = 'if(percent_change_1h  ' + (this.watchDog.percent_change_1hLess ? '<' : '>') + ' ' + this.watchDog.percent_change_1h + ')  { SELL(percent_change_1h) }';
+
+
 
 
     this.watchdogService.saveWatchDog(this.watchDog).then(res => {
@@ -150,5 +160,14 @@ export class WatchdogEditComponent implements OnInit {
     }).catch(err => {
       console.error(err)
     })
+
+  }
+
+  onClearReportClick(){
+    if(confirm('Delete reports"')){
+      this.watchDog.results = [];
+      this.reports='';
+    }
+
   }
 }

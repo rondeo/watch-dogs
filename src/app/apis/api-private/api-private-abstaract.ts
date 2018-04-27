@@ -4,7 +4,7 @@ import {StorageService} from "../../services/app-storage.service";
 import {reject} from "q";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
-import {VOProcessCoin} from "../../my-bot/services/bot-sell-coin.service";
+import {VOSellCoin} from "../../my-bot/services/bot-sell-coin.service";
 
 export abstract class ApiPrivateAbstaract {
 
@@ -22,7 +22,8 @@ export abstract class ApiPrivateAbstaract {
   }
 
   abstract  getOrder(orderId):Observable<VOOrder>;
-  abstract sellCoin(coin:VOProcessCoin):Observable<VOProcessCoin>;
+  abstract sellCoin(coin:VOSellCoin):Observable<VOSellCoin>;
+  abstract downloadBalance(symbol: string): Observable<VOBalance>;
   abstract downloadBalances(): Observable<VOBalance[]>;
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>

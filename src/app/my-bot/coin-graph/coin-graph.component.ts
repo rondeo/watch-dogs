@@ -21,8 +21,8 @@ export class CoinGraphComponent implements OnInit {
   coinMC: VOMarketCap;
 
   coin: string;
-  from: string;
-  to: string;
+  from: string='';
+  to: string='';
 
   constructor(private route: ActivatedRoute,
               private marketcap: ApiMarketCapService,
@@ -44,11 +44,11 @@ export class CoinGraphComponent implements OnInit {
 
   async getCoinHistory(to :string) {
 
-    this.to = to;
-    const base = 'BTC';
+   // this.to = to;
+   // const base = 'BTC';
     const coin = this.coin;
     const ticker = await this.marketcap.downloadTicker().toPromise();
-    const btcMC = ticker['BTC'];
+   // const btcMC = ticker['BTC'];
     const coinMC = ticker[coin];
 
 
@@ -56,14 +56,32 @@ export class CoinGraphComponent implements OnInit {
 
     const from = moment(to).subtract(1, 'd').format();
 
-    const coinHistory = await this.marketcap.getCoinHistory(this.coin, from, to).toPromise()
+    const coinHistory = await this.marketcap.getCoinDay(this.coin, from, to).toPromise();
+
+    console.log(coinHistory);
+    const stamps = coinHistory.stamps;
+    this.from = stamps[0];
+    this.to = stamps[stamps.length -1];
+
 
     const labels = coinHistory.labels;
 
    graphs.push({
-      ys: coinHistory.percent_change_1h,
+      ys: coinHistory.available_supply,
       color: '#14886f',
-      label: 'percent_change_1h'
+      label: 'available_supply'
+    });
+
+
+    graphs.push({
+      ys: coinHistory.tobtc_change_1h,
+      color: '#252288',
+      label: '% to BTC 1h'
+    });
+    graphs.push({
+      ys: coinHistory.percent_change_1h,
+      color: '#0e8857',
+      label: '%  1h'
     });
 
     graphs.push({
@@ -72,125 +90,20 @@ export class CoinGraphComponent implements OnInit {
       label: 'price'
     });
 
+    graphs.push({
+      ys: coinHistory.price_btc,
+      color: '#888227',
+      label: 'price'
+    });
+
 
     this.myGraps = {
       xs: labels,
       graphs: graphs
     }
-    console.log(coinHistory);
-    /*const priceCoin = coinMC.price_usd;
-
-    const exchanges = ['hitbtc', 'binance', 'bittrex', 'poloniex', 'cryptopia'];
-
-    const fork = await this.allPublic.downloadBooks(exchanges, base, coin);
-
-    const books = await fork.toPromise();
-
-    const priceBTC = btcMC.price_usd;
-    console.log(books);
-
-    const amountBase = 1000 / priceBTC;
-
-
-    const out = books.map(function (item) {
-      const buy = MappersBooks.getAvgBooksForAmountBase(item.buy, amountBase) * priceBTC;
-      const sell = MappersBooks.getAvgBooksForAmountBase(item.sell, amountBase) * priceBTC;
-      return {
-        exchange: item.exchange,
-        buy: +(100 * (buy - priceCoin)/priceCoin ).toFixed(2),
-        sell:+(100 * (sell - priceCoin)/priceCoin ).toFixed(2),
-      }
-    });
-
-*/
-
-
-    //console.log(out);
-
-
-    /* console.log(fork)
-     fork.subscribe(books =>{
-
-     console.warn(books);
-   })*/
 
 
 
-       /* const from = moment(to).subtract(1, 'd').format();
-
-        var exchange = 'hitbtc';
-
-
-
-        var api: ApiPublicAbstract = this.allPublic.getExchangeApi(exchange);
-
-        var market = await api.getMarketDay(base, coin, from, to).toPromise();
-        if (market) graphs.push({
-
-        ys: market.Last,
-          color: '#14886f',
-          label: exchange
-        });
-
-        var exchange = 'binance';
-        var api: ApiPublicAbstract = this.allPublic.getExchangeApi(exchange);
-
-         market = await api.getMarketDay(base, coin, from, to).toPromise();
-
-        if (market) graphs.push({
-          ys: market.Last,
-          color: '#887337',
-          label: exchange
-        });
-
-       var exchange = 'bittrex';
-        var api: ApiPublicAbstract = this.allPublic.getExchangeApi(exchange);
-
-        market = await api.getMarketDay(base, coin, from, to).toPromise();
-
-        if (market) graphs.push({
-          ys: market.Last,
-          color: '#700788',
-          label: exchange
-        });
-
-*/
-
-        // const hitbtc = await this.coinDay.getCoinDayHitbtc(base, coin, from, to).toPromise();
-
-        // console.log(binance);
-
-/*
-        this.marketcap.getCoinHistory(this.coin, from, to).subscribe(res => {
-          //console.log(res);
-
-
-          graphs.push( {
-            ys: res.volume_usd_24h,
-            color: '#0d9abc',
-            label: 'Volume'
-          });
-          graphs.push({
-            ys: res.price_usd,
-            color: '#880b49',
-            label: 'price'
-          });
-            /!*graphs.push({
-              ys: res.percent_change_1h,
-              color: '#88881e',
-              label: 'price'
-            })
-
-
-          this.from = _.first(res.stamps);
-          this.to = _.last(res.stamps);
-
-          this.myGraps = {
-            xs: res.labels,
-            graphs: graphs
-          }
-
-        })*/
   }
 
   onMinus12h() {
@@ -200,6 +113,27 @@ export class CoinGraphComponent implements OnInit {
 
   onPlus12h() {
     const to = moment(this.to).add(12, 'hours').format();
+    this.getCoinHistory(to);
+  }
+
+
+  onMinus1D() {
+    const to = moment(this.to).subtract(1, 'd').format();
+    this.getCoinHistory(to);
+  }
+
+  onPlus1D() {
+    const to = moment(this.to).add(1, 'd').format();
+    this.getCoinHistory(to);
+  }
+
+  onMinus1W() {
+    const to = moment(this.to).subtract(1, 'w').format();
+    this.getCoinHistory(to);
+  }
+
+  onPlus1W() {
+    const to = moment(this.to).add(1, 'w').format();
     this.getCoinHistory(to);
   }
 

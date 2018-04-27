@@ -100,7 +100,7 @@ export class MyBuySellComponent implements OnInit {
       uuid:'uuuuu',
       amountBase:0.01,
       amountCoin:300,
-      action:'B',
+      status:'B',
       rate:0.0002,
       base:'',
       coin:'',

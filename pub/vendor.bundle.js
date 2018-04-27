@@ -4451,7 +4451,7 @@ function toComment(sourceMap) {
     /**
      * The base implementation of `wrapperValue` which returns the reports of
      * performing a sequence of actions on the unwrapped `value`, where each
-     * successive action is supplied the return value of the previous.
+     * successive status is supplied the return value of the previous.
      *
      * @private
      * @param {*} value The unwrapped value.
@@ -22741,7 +22741,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Subscription_1 = __webpack_require__("../../../../rxjs/Subscription.js");
 /**
- * A unit of work to be executed in a {@link Scheduler}. An action is typically
+ * A unit of work to be executed in a {@link Scheduler}. An status is typically
  * created from within a Scheduler and an RxJS user does not need to concern
  * themselves about creating and manipulating an Action.
  *
@@ -22760,7 +22760,7 @@ var Action = (function (_super) {
         _super.call(this);
     }
     /**
-     * Schedules this action on its parent Scheduler for execution. May be passed
+     * Schedules this status on its parent Scheduler for execution. May be passed
      * some context object, `state`. May happen at some point in the future,
      * according to the `delay` parameter, if specified.
      * @param {T} [state] Some contextual data that the `work` function uses when
@@ -22812,7 +22812,7 @@ var AsyncAction = (function (_super) {
         }
         // Always replace the current state with the new state.
         this.state = state;
-        // Set the pending flag indicating that this action has been scheduled, or
+        // Set the pending flag indicating that this status has been scheduled, or
         // has recursively rescheduled itself.
         this.pending = true;
         var id = this.id;
@@ -22833,8 +22833,8 @@ var AsyncAction = (function (_super) {
         // interval period, regardless of load.
         //
         // Therefore, we use `setInterval` to schedule single and repeat actions.
-        // If the action reschedules itself with the same delay, the interval is not
-        // canceled. If the action doesn't reschedule, or reschedules with a
+        // If the status reschedules itself with the same delay, the interval is not
+        // canceled. If the status doesn't reschedule, or reschedules with a
         // different delay, the interval will be canceled after scheduled callback
         // execution.
         //
@@ -22842,7 +22842,7 @@ var AsyncAction = (function (_super) {
             this.id = this.recycleAsyncId(scheduler, id, delay);
         }
         this.delay = delay;
-        // If this action has already an async Id, don't request a new one.
+        // If this status has already an async Id, don't request a new one.
         this.id = this.id || this.requestAsyncId(scheduler, this.id, delay);
         return this;
     };
@@ -22852,21 +22852,21 @@ var AsyncAction = (function (_super) {
     };
     AsyncAction.prototype.recycleAsyncId = function (scheduler, id, delay) {
         if (delay === void 0) { delay = 0; }
-        // If this action is rescheduled with the same delay time, don't clear the interval id.
+        // If this status is rescheduled with the same delay time, don't clear the interval id.
         if (delay !== null && this.delay === delay && this.pending === false) {
             return id;
         }
-        // Otherwise, if the action's delay time is different from the current delay,
-        // or the action has been rescheduled before it's executed, clear the interval id
+        // Otherwise, if the status's delay time is different from the current delay,
+        // or the status has been rescheduled before it's executed, clear the interval id
         return root_1.root.clearInterval(id) && undefined || undefined;
     };
     /**
-     * Immediately executes this action and the `work` it contains.
+     * Immediately executes this status and the `work` it contains.
      * @return {any}
      */
     AsyncAction.prototype.execute = function (state, delay) {
         if (this.closed) {
-            return new Error('executing a cancelled action');
+            return new Error('executing a cancelled status');
         }
         this.pending = false;
         var error = this._execute(state, delay);
@@ -22874,14 +22874,14 @@ var AsyncAction = (function (_super) {
             return error;
         }
         else if (this.pending === false && this.id != null) {
-            // Dequeue if the action didn't reschedule itself. Don't call
-            // unsubscribe(), because the action could reschedule later.
+            // Dequeue if the status didn't reschedule itself. Don't call
+            // unsubscribe(), because the status could reschedule later.
             // For example:
             // ```
             // scheduler.schedule(function doWork(counter) {
             //   /* ... I'm a busy worker bee ... */
             //   var originalAction = this;
-            //   /* wait 100ms before rescheduling the action */
+            //   /* wait 100ms before rescheduling the status */
             //   setTimeout(function () {
             //     originalAction.schedule(counter + 1);
             //   }, 100);
@@ -23182,7 +23182,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * An error thrown when an action is invalid because the object has been
+ * An error thrown when an status is invalid because the object has been
  * unsubscribed.
  *
  * @see {@link Subject}
@@ -34169,7 +34169,7 @@ var _ParseAST = (function () {
         var /** @type {?} */ result = this.parseExpression();
         if (this.optionalOperator('|')) {
             if (this.parseAction) {
-                this.error('Cannot have a pipe in an action expression');
+                this.error('Cannot have a pipe in an status expression');
             }
             do {
                 var /** @type {?} */ name = ((this.expectIdentifierOrKeyword()));
@@ -49254,7 +49254,7 @@ registerContext(__WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* SecurityConte
 // NB: no SCRIPT contexts here, they are never allowed due to the parser stripping them.
 registerContext(__WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* SecurityContext */].URL, [
     '*|formAction', 'area|href', 'area|ping', 'audio|src', 'a|href',
-    'a|ping', 'blockquote|cite', 'body|background', 'del|cite', 'form|action',
+    'a|ping', 'blockquote|cite', 'body|background', 'del|cite', 'form|status',
     'img|src', 'img|srcset', 'input|src', 'ins|cite', 'q|cite',
     'source|src', 'source|srcset', 'track|src', 'video|poster', 'video|src',
 ]);
@@ -49369,7 +49369,7 @@ var SCHEMA = [
     'embed^[HTMLElement]|align,height,name,src,type,width',
     'fieldset^[HTMLElement]|!disabled,name',
     'font^[HTMLElement]|color,face,size',
-    'form^[HTMLElement]|acceptCharset,action,autocomplete,encoding,enctype,method,name,!noValidate,target',
+    'form^[HTMLElement]|acceptCharset,status,autocomplete,encoding,enctype,method,name,!noValidate,target',
     'frame^[HTMLElement]|frameBorder,longDesc,marginHeight,marginWidth,name,!noResize,scrolling,src',
     'frameset^[HTMLElement]|cols,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,rows',
     'hr^[HTMLElement]|align,color,!noShade,size,width',
@@ -50395,7 +50395,7 @@ var ConvertActionBindingResult = (function () {
 }());
 /**
  * Converts the given expression AST into an executable output AST, assuming the expression is
- * used in an action binding (e.g. an event handler).
+ * used in an status binding (e.g. an event handler).
  * @param {?} localResolver
  * @param {?} implicitReceiver
  * @param {?} action
@@ -83285,7 +83285,7 @@ var OverlayRef = /*@__PURE__*/(function () {
         // in order to handle stacked overlays properly.
         this._pane.parentElement.insertBefore(this._backdropElement, this._pane);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
-        // action desired when such a click occurs (usually closing the overlay).
+        // status desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
         // Add class to fade-in the backdrop after one frame.
         requestAnimationFrame(function () {
@@ -88828,7 +88828,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
                 this.setPreviousItemActive();
                 break;
             case TAB:
-                // Note that we shouldn't prevent the default action on tab.
+                // Note that we shouldn't prevent the default status on tab.
                 this._tabOut.next(null);
                 return;
             default:
@@ -96342,13 +96342,13 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
          */
         this._afterClosed = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
         /**
-         * Subject for notifying the user that the snack bar action was called.
+         * Subject for notifying the user that the snack bar status was called.
          */
         this._onAction = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
         // Sets the readonly instance of the snack bar content component.
         this._instance = instance;
         this.containerInstance = containerInstance;
-        // Dismiss snackbar on action.
+        // Dismiss snackbar on status.
         this.onAction().subscribe(function () { return _this.dismiss(); });
         containerInstance._onExit().subscribe(function () { return _this._finishDismiss(); });
     }
@@ -96373,7 +96373,7 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Marks the snackbar action clicked.
+     * Marks the snackbar status clicked.
      * @return {?}
      */
     MdSnackBarRef.prototype._action = function () {
@@ -96416,7 +96416,7 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
         return this.containerInstance._onEnter();
     };
     /**
-     * Gets an observable that is notified when the snack bar action is called.
+     * Gets an observable that is notified when the snack bar status is called.
      * @return {?}
      */
     MdSnackBarRef.prototype.onAction = function () {
@@ -96604,7 +96604,7 @@ var SimpleSnackBar = /*@__PURE__*/(function () {
     };
     Object.defineProperty(SimpleSnackBar.prototype, "hasAction", {
         /**
-         * If the action button should be shown.
+         * If the status button should be shown.
          * @return {?}
          */
         get: function () {
@@ -96617,8 +96617,8 @@ var SimpleSnackBar = /*@__PURE__*/(function () {
 }());
 SimpleSnackBar.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'simple-snack-bar',
-                template: "{{message}} <button class=\"mat-simple-snackbar-action\" *ngIf=\"hasAction\" (click)=\"dismiss()\">{{action}}</button>",
-                styles: [".mat-simple-snackbar{display:flex;justify-content:space-between;color:#fff;line-height:20px}.mat-simple-snackbar-action{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;background:0 0;color:inherit;flex-shrink:0;margin-left:48px}[dir=rtl] .mat-simple-snackbar-action{margin-right:48px;margin-left:0}"],
+                template: "{{message}} <button class=\"mat-simple-snackbar-status\" *ngIf=\"hasAction\" (click)=\"dismiss()\">{{status}}</button>",
+                styles: [".mat-simple-snackbar{display:flex;justify-content:space-between;color:#fff;line-height:20px}.mat-simple-snackbar-status{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;background:0 0;color:inherit;flex-shrink:0;margin-left:48px}[dir=rtl] .mat-simple-snackbar-status{margin-right:48px;margin-left:0}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 host: {
                     'class': 'mat-simple-snackbar',
@@ -96740,9 +96740,9 @@ var MdSnackBar = /*@__PURE__*/(function () {
         return this._openedSnackBarRef;
     };
     /**
-     * Opens a snackbar with a message and an optional action.
+     * Opens a snackbar with a message and an optional status.
      * @param {?} message The message to show in the snackbar.
-     * @param {?=} action The label for the snackbar action.
+     * @param {?=} action The label for the snackbar status.
      * @param {?=} config Additional configuration options for the snackbar.
      * @return {?}
      */
@@ -96753,7 +96753,7 @@ var MdSnackBar = /*@__PURE__*/(function () {
         var /** @type {?} */ simpleSnackBarRef = this.openFromComponent(SimpleSnackBar, config);
         simpleSnackBarRef.instance.snackBarRef = simpleSnackBarRef;
         simpleSnackBarRef.instance.message = message;
-        simpleSnackBarRef.instance.action = action;
+        simpleSnackBarRef.instance.status = action;
         return simpleSnackBarRef;
     };
     /**
@@ -99133,7 +99133,7 @@ var MdMenu = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Handle a keyboard event from the menu, delegating to the appropriate action.
+     * Handle a keyboard event from the menu, delegating to the appropriate status.
      * @param {?} event
      * @return {?}
      */
@@ -100192,7 +100192,7 @@ MdDialogContent.decorators = [
  */
 MdDialogContent.ctorParameters = function () { return []; };
 /**
- * Container for the bottom action buttons in a dialog.
+ * Container for the bottom status buttons in a dialog.
  * Stays fixed to the bottom when scrolling.
  */
 var MdDialogActions = /*@__PURE__*/(function () {
@@ -102673,9 +102673,9 @@ var MdExpansionPanel = /*@__PURE__*/(function (_super) {
     return MdExpansionPanel;
 }(AccordionItem));
 MdExpansionPanel.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ styles: [".mat-expansion-panel{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);box-sizing:content-box;display:block}.mat-expansion-panel:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-expansion-panel-content{overflow:hidden}.mat-expansion-panel-body{padding:0 24px 16px}.mat-action-row{border-top-style:solid;border-top-width:1px;display:flex;flex-direction:row;justify-content:flex-end;padding:16px 8px 16px 24px}.mat-action-row button.mat-button{margin-left:8px}"],
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ styles: [".mat-expansion-panel{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);box-sizing:content-box;display:block}.mat-expansion-panel:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-expansion-panel-content{overflow:hidden}.mat-expansion-panel-body{padding:0 24px 16px}.mat-status-row{border-top-style:solid;border-top-width:1px;display:flex;flex-direction:row;justify-content:flex-end;padding:16px 8px 16px 24px}.mat-status-row button.mat-button{margin-left:8px}"],
                 selector: 'md-expansion-panel, mat-expansion-panel',
-                template: "<ng-content select=\"mat-expansion-panel-header, md-expansion-panel-header\"></ng-content><div [class.mat-expanded]=\"expanded\" class=\"mat-expansion-panel-content\" [@bodyExpansion]=\"_getExpandedState()\" [id]=\"id\"><div class=\"mat-expansion-panel-body\"><ng-content></ng-content></div><ng-content select=\"mat-action-row, md-action-row\"></ng-content></div>",
+                template: "<ng-content select=\"mat-expansion-panel-header, md-expansion-panel-header\"></ng-content><div [class.mat-expanded]=\"expanded\" class=\"mat-expansion-panel-content\" [@bodyExpansion]=\"_getExpandedState()\" [id]=\"id\"><div class=\"mat-expansion-panel-body\"><ng-content></ng-content></div><ng-content select=\"mat-status-row, md-status-row\"></ng-content></div>",
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 host: {
                     'class': 'mat-expansion-panel',
@@ -102717,9 +102717,9 @@ var MdExpansionPanelActionRow = /*@__PURE__*/(function () {
 }());
 MdExpansionPanelActionRow.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["J" /* Directive */], args: [{
-                selector: 'mat-action-row, md-action-row',
+                selector: 'mat-status-row, md-status-row',
                 host: {
-                    class: 'mat-action-row'
+                    class: 'mat-status-row'
                 }
             },] },
 ];

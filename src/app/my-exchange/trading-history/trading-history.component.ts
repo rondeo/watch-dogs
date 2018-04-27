@@ -117,7 +117,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
       if(res.isOpen) {
 
-        let msg = myOrder.action + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
+        let msg = myOrder.status + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
 
         this.snackBar.open('Open ' + msg + 'wait 3sec', 'x', {duration:2000});
 
@@ -173,7 +173,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       totalFee += item.fee;
       if(item.action === 'BUY') totalBuy += (item.amountCoin * item.rate);
       else if(item.action ==='SELL') totalSell+= (item.amountCoin * item.rate);
-      else console.error(' no action ', item);
+      else console.error(' no status ', item);
     });
 
     let profit = (totalSell - totalBuy) ;

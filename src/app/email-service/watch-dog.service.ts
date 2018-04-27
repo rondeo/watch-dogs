@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 import {StorageService} from "../services/app-storage.service";
 
 
-export const MY_WATCHDOGS = 'my-watchdogs';
+
 @Injectable()
 export class WatchDogService {
 
@@ -33,11 +33,17 @@ export class WatchDogService {
 
   async refreshWatchdogs() {
     if (this.isloading) return;
-    console.log('query ');
-    const dogs =  await this.storage.select(MY_WATCHDOGS);
-    console.log(dogs);
 
-    this.watchDogsSub.next(dogs);
+    const sellCoins:VOWatchdog[] = <VOWatchdog[]>await this.storage.getSellColins();
+    this.watchDogsSub.next(sellCoins);
+
+
+
+   // console.log('query ');
+   // const dogs =  await this.storage.select(SELL_COINS);
+  //  console.log(dogs);
+
+   // this.watchDogsSub.next(dogs);
 
   /*  let url = '/api/watchdogs/my';
 
@@ -78,15 +84,15 @@ export class WatchDogService {
     })
     if (!exists) {
       dogs.push(watchDog);
-
       this.watchDogsSub.next(dogs);
     }
 
-    return this.saveWatchDogs();
+   return this.storage.saveSellCoins(dogs)
+
   }
 
 
-  async saveWatchDogs(): Promise<any> {
+ /* async saveWatchDogs(): Promise<any> {
     let dogs: VOWatchdog[] = this.watchDogsSub.getValue() || [];
 
     dogs = dogs.map(function (item) {
@@ -100,12 +106,12 @@ export class WatchDogService {
         exchange: item.exchange,
         base: item.base,
         script: item.script,
-        action: item.action,
+        status: item.status,
         isEmail: item.isEmail
 
       };
-    });
-    return this.storage.upsert(MY_WATCHDOGS, dogs);
+    });*/
+   // return this.storage.upsert(SELL_COINS, dogs);
 
 
 
@@ -130,7 +136,7 @@ export class WatchDogService {
     let url = '/api/watchdogs/save';
 
     return this.auth.post(url, {email, scriptsActive, scriptsUnactive, emailActive, emailUnactive})*/
-  }
+ // }
 
   async deleteWatchdog(dog: VOWatchdog): Promise<any> {
     let dogs: VOWatchdog[] = this.watchDogsSub.getValue();
@@ -139,7 +145,7 @@ export class WatchDogService {
       if (dogs[i].id === dog.id) dogs.splice(i, 1);
     }
     this.watchDogsSub.next(dogs);
-    return this.saveWatchDogs();
 
+    return this.storage.saveSellCoins(dogs)
   }
 }

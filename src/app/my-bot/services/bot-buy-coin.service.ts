@@ -92,7 +92,7 @@ export class BotBuyCoinService {
       let recommended:IMarketRecommended[] = res.map(function (market:IMarketRecommended) {
         let priceBase = market.baseMC.price_usd;
         if(market.baseMC.symbol ==='USDT') priceBase = 1;
-        market.action='BUY';
+        market.status='BUY';
         market.date= new Date().toLocaleTimeString();
         market.reason = 'percent_change_1h > 2';
         market.reports = null;

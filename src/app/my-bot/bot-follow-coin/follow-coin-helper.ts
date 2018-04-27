@@ -130,17 +130,17 @@ export class FollowCoinHelper {
   static transferBoughtToSell(myMarkets: IMarketRecommended[]) {
 
     let boughtCoins = myMarkets.filter(function (item) {
-      return item.action === ACTIONS.BOUGHT;
+      return item.status === ACTIONS.BOUGHT;
     });
     if (boughtCoins.length === 0) return;
     let toSell = myMarkets.filter(function (item) {
-      return item.action === ACTIONS.TO_SELL;
+      return item.status === ACTIONS.TO_SELL;
     });
     let toSellExists: string[] = _.map(boughtCoins, 'coin');
 
     boughtCoins.forEach(function (item) {
       if (toSellExists.indexOf(item.coin) === -1) {
-        item.action = ACTIONS.TO_SELL;
+        item.status = ACTIONS.TO_SELL;
         myMarkets.unshift(item);
       }
     })
@@ -154,6 +154,7 @@ export class FollowCoinHelper {
         coin: gainer.symbol,
         base: baseMC.symbol,
         action: ACTIONS.GAINER,
+        status:'',
         timestamp: Date.now(),
         date: time,
         reason: time + reason,
@@ -198,13 +199,14 @@ export class FollowCoinHelper {
   }
 
 
-  static tosellCoins: IMarketRecommended[] = [
+  /*static tosellCoins: IMarketRecommended[] = [
     {
       exchange: 'poloniex',
       action: ACTIONS.TO_SELL,
       base: 'USDT',
       coin: 'BTC',
       reason: '',
+      status:'',
       reports: null
     },
     {
@@ -223,5 +225,5 @@ export class FollowCoinHelper {
       reason: '',
       reports: null
     }
-  ];
+  ];*/
 }

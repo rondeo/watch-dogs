@@ -170,11 +170,11 @@ export class MyBot {
       /*let request: TransferReqest = new TransferReqest(this.privateService, this.privateService.publicService);
 
       let market: string = this.botData.market,
-        action: string = transfer.action;
+        status: string = transfer.status;
 
-      message +=' Transferring !!! ' + market +' ' + action +' Coin amount '+ amountCoin + ' Base amount '+amountBase + ' Max Value $' + botValue;
+      message +=' Transferring !!! ' + market +' ' + status +' Coin amount '+ amountCoin + ' Base amount '+amountBase + ' Max Value $' + botValue;
 
-      request.setTransfer(market, action, amountCoin, amountBase).then(res => {
+      request.setTransfer(market, status, amountCoin, amountBase).then(res => {
         console.log(res);
           this.registerMessage(res.toString());
         this.loadBalances().toPromise();
