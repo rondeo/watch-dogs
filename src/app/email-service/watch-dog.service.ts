@@ -34,7 +34,7 @@ export class WatchDogService {
   async refreshWatchdogs() {
     if (this.isloading) return;
 
-    const sellCoins:VOWatchdog[] = <VOWatchdog[]>await this.storage.getSellColins();
+    const sellCoins:VOWatchdog[] = <VOWatchdog[]>await this.storage.getWatchDogs();
     this.watchDogsSub.next(sellCoins);
 
 
@@ -87,7 +87,7 @@ export class WatchDogService {
       this.watchDogsSub.next(dogs);
     }
 
-   return this.storage.saveSellCoins(dogs)
+   return this.storage.saveWatchDogs(dogs)
 
   }
 
@@ -146,6 +146,6 @@ export class WatchDogService {
     }
     this.watchDogsSub.next(dogs);
 
-    return this.storage.saveSellCoins(dogs)
+    return this.storage.saveWatchDogs(dogs)
   }
 }

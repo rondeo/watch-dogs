@@ -93,7 +93,7 @@ export class CoinGraphComponent implements OnInit {
     graphs.push({
       ys: coinHistory.price_btc,
       color: '#888227',
-      label: 'price'
+      label: 'BTC'
     });
 
 

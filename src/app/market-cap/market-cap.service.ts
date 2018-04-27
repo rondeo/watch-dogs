@@ -90,8 +90,8 @@ export class MarketCapService {
 
 
   getCoinsObs() {
-    if (!this.coins) this.refresh();
-    return this.coins$;
+    if(this.coins) return Observable.of(this.coins);
+    return this.downloadTicker();
   }
 
   getCoinsPromise(): Promise<{ [symbol: string]: VOMarketCap }> {
@@ -299,6 +299,16 @@ export class MarketCapService {
     }, {MC:MC});
     return MC;
   }
+
+  downloadTicker(){
+    let url = '/api/marketcap/ticker';
+    console.log(url);
+     return this.http.get(url).map((res: any) => {
+       let MC = MarketCapService.mapServerValues(Object.values(res))
+       this.coins = MC;
+       return MC;
+     });
+  }
   refresh() {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -307,35 +317,9 @@ export class MarketCapService {
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).map((res: any) => {
 
-     // let MC:{[symbol:string]:VOMarketCap} = {};
      let MC =  MarketCapService.mapServerValues( Object.values(res))
-/*
-      Object.values(res).forEach(function (item: any[]) {
-        this.MC[item[2]] = {
-          id: item[0],
-          name: item[1],
-          symbol: item[2],
-          rank: item[3],
-          price_usd: item[4],
-          price_btc: item[5],
-          percent_change_1h: item[6],
-          percent_change_24h: item[7],
-          percent_change_7d: item[8],
-          volume_usd_24h: item[9],
-          market_cap_usd: item[10],
-          available_supply: item[11],
-          total_supply: item[12],
-          max_supply: item[13],
-          last_updated: item[14]
-        }
-
-
-      }, {MC:MC});*/
-
       this.setData(MC);
       this.countDown = this.delay;
-      //if(!data) return;
-      //data.payload = data.payload.map(mapExchangeData);
       this.isLoading = false;
       return res
     }).toPromise();//subscribe(data=> this.setData(data));

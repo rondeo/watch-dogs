@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {VOMarketCap} from '../models/app-models';
+import {VOMarketCap, VOWatchdog, WatchDog} from '../models/app-models';
 import * as CryptoJS from 'crypto-js';
 //import * as crypto from 'crypto';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -14,7 +14,7 @@ export class StorageService {
 
   selected: string[];
 
-  readonly SELL_COINS = 'SELL_COINS';
+  readonly WATCH_DOGS = 'WATCH_DOGS';
   //email:string;
   email: string;
   //password:string;
@@ -126,7 +126,7 @@ export class StorageService {
 
   //////////////////////////////////////////////////////////
 
-
+/*
   processes: any[];
 
   async saveProcess(process: any) {
@@ -142,12 +142,11 @@ export class StorageService {
   async getProcesses() {
     if (this.processes) return Promise.resolve(this.processes)
     else return this.select('PROCESSES').then(res => this.processes = res);
-  }
+  }*/
 
 
-
-  async setSoldCoin(sellCoin: VOSellCoin) {
-    const sellCoins = await this.getSellColins();
+  /*async setSoldCoin(sellCoin: VOSellCoin) {
+    const sellCoins = await this.getWatchDogs();
     const sold: VOSellCoin = _.find(sellCoins, {
       exchange: sellCoin.exchange,
       base: sellCoin.base,
@@ -157,22 +156,36 @@ export class StorageService {
     if (sold) {
       sold.results = sellCoin.results;
       sold.status = "SOLD";
-      await this.saveSellCoins(sellCoins);
+      await this.saveWatchDogs(sellCoins);
     }
     return sold
+  }*/
+
+
+
+  private watchDogs: VOWatchdog[];
+  async upsertWatchDog(wd: VOWatchdog){
+    const exists = await this.getWatchDogByID(wd.id);
+    if(!exists) this.watchDogs.push(wd);
+    return this.saveWatchDogs();
+  }
+  async getWatchDogByID(id:string){
+    const wd = await this.getWatchDogs();
+    return _.find(wd, {id:id});
   }
 
-
-  private sellCoins: VOSellCoin[];
-
-  async getSellColins():Promise<VOSellCoin[]> {
-    if (this.sellCoins) return Promise.resolve(this.sellCoins);
-    else return this.select(this.SELL_COINS).then(res => this.sellCoins = res)
+  async getWatchDogs():Promise<VOWatchdog[]> {
+    if (this.watchDogs) return Promise.resolve(this.watchDogs);
+    else return this.select(this.WATCH_DOGS).then(res =>{
+      this.watchDogs = res || [];
+      console.log(res);
+      return this.watchDogs;
+    })
   }
 
-  async saveSellCoins(sellCoins = null) {
-    if (sellCoins) this.sellCoins = sellCoins;
-    if (this.sellCoins) return this.upsert(this.SELL_COINS, this.sellCoins);
+  async saveWatchDogs(watchDogs = null) {
+    if (watchDogs) this.watchDogs = watchDogs;
+    if (this.watchDogs) return this.upsert(this.WATCH_DOGS, this.watchDogs);
     else throw new Error('no watchdogs');
   }
 

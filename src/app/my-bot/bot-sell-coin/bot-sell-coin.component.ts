@@ -33,7 +33,7 @@ export class BotSellCoinComponent implements OnInit {
       //this.storage
       console.log(' SOLD coin ', sellCoin);
 
-      this.storage.setSoldCoin(sellCoin);
+      //this.storage.setSoldCoin(sellCoin);
     })
     this.initAsync();;
     this.startCheckMC();
@@ -42,7 +42,7 @@ export class BotSellCoinComponent implements OnInit {
 
   async initAsync(){
 
-    const allSellCoins:VOSellCoin[] = await this.storage.getSellColins();
+    const allSellCoins:VOSellCoin[] = await this.storage.getWatchDogs();
 
    // console.log(allSellCoins);
     const toSell = _.filter(allSellCoins, {status:'SELL'})

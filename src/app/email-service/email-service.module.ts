@@ -16,6 +16,7 @@ import { EditScriptComponent } from './edit-script/edit-script.component';
 import {SharedModule} from '../shared/shared.module';
 import { WatchdogsListComponent } from './watchdogs-list/watchdogs-list.component';
 import { WatchdogEditComponent } from './watchdog-edit/watchdog-edit.component';
+import { AddScriptComponent } from './add-script/add-script.component';
 
 
 
@@ -51,7 +52,8 @@ const routes: Routes = [
     EmailSelectedCoinsComponent,
     EditScriptComponent,
     WatchdogsListComponent,
-    WatchdogEditComponent
+    WatchdogEditComponent,
+    AddScriptComponent
   ],
   providers:[
     WatchDogService,

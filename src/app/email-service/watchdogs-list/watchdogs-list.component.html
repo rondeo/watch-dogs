@@ -6,41 +6,14 @@
             <tbody>
             <tr class="small">
                 <th>Name</th>
-                <th>Coin</th>
-                <th>%1h</th>
                 <th>Active</th>
                 <th>Delete</th>
             </tr>
             <ng-container *ngFor="let dog of watchDogs">
                 <tr>
                     <td><span class="btn" (click)="onNameClick(dog)">{{dog.name}}</span></td>
-                    <td><span class="btn" (click)="onSymbolClick(dog)">{{dog.coin}}</span></td>
-                    <td><span class="fa" [ngClass] ="dog.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span><span [ngClass]="dog.percent_change_1h>0?'green':'red'">{{dog.percent_change_1h}}</span></td>
-                    <td><span class="btn" (click)="onActiveClick(dog)">{{dog.active}}</span></td>
+                    <td><span>{{dog.active}}</span></td>
                     <td><span class="btn fa fa-trash dred" (click)="onDeleteClick(dog)"></span></td>
-                </tr>
-                <tr [ngClass]="dog.isOpen?'show':'hide'" *ngIf="dog.mc">
-                    <td>
-                        $B <br/>
-                        {{dog.mc.price_btc}}
-                    </td>
-                    <td>
-                        $US <br/>
-                        {{dog.mc.price_usd}}
-                    </td>
-                    <td>
-                        %1h <br/>
-                        <span  [ngClass]="dog.mc.percent_change_1h>0?'green':'red'">{{dog.mc.percent_change_1h}}</span>
-                    </td>
-                    <td>
-                        %24h <br/>
-                        <span  [ngClass]="dog.mc.percent_change_24h>0?'green':'red'">{{dog.mc.percent_change_24h}}</span>
-                    </td>
-                    <td>
-                        %7d <br/>
-                        <span  [ngClass]="dog.mc.percent_change_7d>0?'green':'red'">{{dog.mc.percent_change_7d}}</span>
-                    </td>
-
                 </tr>
             </ng-container>
             </tbody>

@@ -1,12 +1,10 @@
 <div>
     <h4>Watchdog <sup *ngIf="watchDog">{{watchDog.id}}</sup></h4>
     <a class="fa fa-line-chart btn" routerLink="/my-bot/coin-graph/{{watchDog.coin}}"></a>
+    <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>
 
     <section>
-
         <div>
-            <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>
-
             <mat-form-field class="w6">
                 <mat-select placeholder="Exchange" [(ngModel)]="watchDog.exchange">
                     <mat-option *ngFor="let exchange of exchanges" [value]="exchange">{{exchange}}</mat-option>
@@ -18,37 +16,35 @@
                     <mat-option *ngFor="let base of bases" [value]="base">{{base}}</mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <mat-form-field class="w6">
+                <mat-select placeholder="Coin" [(ngModel)]="watchDog.coin" (ngModelChange)="onCoinChange($event)">
+                    <mat-option *ngFor="let coin of selectedCoins" [value]="coin">{{coin}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-input-container class="w6">
+                    <input class="w5" matInput placeholder="Amount" type="number" [(ngModel)]="watchDog.amount"/>
+            </mat-input-container>
+
+
+<!--
             <mat-radio-group  [(ngModel)]="watchDog.status">
                 <mat-radio-button value="SELL">SELL</mat-radio-button>
                 <mat-radio-button value="BUY">BUY</mat-radio-button>
                 <mat-radio-button value="SOLD">SOLD</mat-radio-button>
-            </mat-radio-group>
+            </mat-radio-group>-->
 
         </div>
 
 
 
 
-        <mat-form-field class="w6">
-            <mat-select placeholder="Coin" [(ngModel)]="watchDog.coin" (ngModelChange)="onCoinChange($event)">
-                <mat-option *ngFor="let coin of selectedCoins" [value]="coin">{{coin}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+
 
         <mat-input-container>
             <input matInput placeholder="Name" type="text" [(ngModel)]="watchDog.name"/>
         </mat-input-container>
-
-        <br/>
-        <span>When %1h</span>
-        <span class="btn fa" (click)="onPercent1hLess()"
-              [ngClass]="watchDog.percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
-
-        <mat-input-container class="w3" [ngClass]="watchDog.percent_change_1h>0?'green':'red'">
-            <input class="w5" matInput placeholder="%1h" type="number" [(ngModel)]="watchDog.percent_change_1h"/>
-        </mat-input-container>
-        <span class="btn fa fa-minus" (click)="onMinusClick()"></span>
-        &nbsp;
         <mat-checkbox [(ngModel)]="watchDog.active">Active</mat-checkbox>
         <button mat-raised-button color="accent" (click)="saveWatchdog()">Save</button>
 
@@ -68,9 +64,7 @@
                     <small>Rank</small>
                 </th>
             </tr>
-
             <tr>
-
                 <td>
                     <a href="https://coinmarketcap.com/currencies/{{coinMC.id}}" target="_blank"
                        class="btn fa fa-line-chart"></a>
@@ -98,8 +92,12 @@
     </section>
 
     <section>
-        <h4>Script</h4>
-        <div>{{watchDog.script}}</div>
+        <h4>Sell Script</h4>
+        <app-add-script [scripAr]="watchDog.sellScript"></app-add-script>
+
+        <h4>Buy Script</h4>
+        <app-add-script [scripAr]="watchDog.buyScript"></app-add-script>
+
     </section>
     <section>
         <h4>Reports</h4>

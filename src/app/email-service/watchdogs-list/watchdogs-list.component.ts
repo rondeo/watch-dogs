@@ -4,6 +4,9 @@ import {WatchDogService} from "../watch-dog.service";
 import {AuthHttpService} from "../../services/auth-http.service";
 import {Router} from "@angular/router";
 import {MarketCapService} from "../../market-cap/market-cap.service";
+import {StorageService} from "../../services/app-storage.service";
+import * as moment from "moment";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-watchdogs-list',
@@ -15,40 +18,25 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   watchDogs:VOWatchdog[];
   MC:{[symbol:string]:VOMarketCap};
   constructor(
-    private watchdogService:WatchDogService,
+  //  private watchdogService:WatchDogService,
     private auth:AuthHttpService,
     private markrtCap:MarketCapService,
-    private router:Router
+    private router:Router,
+    private storage:StorageService
   ) { }
 
-  private sub1;
+
   ngOnInit() {
-  /*  this.markrtCap.getCoinsObs().subscribe(res=>{
-      this.MC = res;
-     // this.mapMC();
-    });*/
-
-  this.sub1 =  this.watchdogService.watchdogs$().subscribe((res:any)=>{
-
-      console.warn(res);
-      this.watchDogs = res;
-
-     //his.mapMC();
-    })
-
-   /* this.auth.getUser$().subscribe(res=>{
-      console.warn('user', res);
-      if(res && res.session){
-
-
-      //  this.watchdogService.refreshWatchdogs();
-      }
-
-    })*/
+    this.initAsync();
   }
 
+  async initAsync(){
+    this.watchDogs = await this.storage.getWatchDogs();
+  }
+
+
   ngOnDestroy(){
-    this.sub1.unsubscribe();
+   // this.sub1.unsubscribe();
   }
 
   mapMC(){
@@ -60,45 +48,23 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   onNewClick(){
-    let wd = new VOWatchdog();
-    wd.id = (new Date()).toISOString();
-    this.router.navigateByUrl('/email-service/watchdog-edit/' +wd.id );
+
+    this.router.navigateByUrl('/email-service/watchdog-edit/' +moment().toISOString() );
 
   }
 
-  onActiveClick(dog:VOWatchdog){
-    console.log(dog);
-    let action = dog.active?'Deactivate':'Activate';
-    if(!confirm('You want to '+action+' Watchdog '+ dog.name +'?')) return;
-    dog.active = !dog.active;
 
-    /*this.watchdogService.saveWatchDogs()
-      .then(res=>{
-      console.log(res);
-        this.watchdogService.refreshWatchdogs();
-    }).catch(err=>{
-      console.error(err);
-    })*/
-  }
-
-  onDeleteClick(dog:VOWatchdog){
+  async onDeleteClick(dog:VOWatchdog){
     console.log(dog);
     if(!confirm('You want to delete Watchdog '+ dog.name +'?')) return;
-    this.watchdogService.deleteWatchdog(dog)
-      .then(res=>{
-        this.watchdogService.refreshWatchdogs();
-        console.log(res);
-      }).catch(err=>{
-        console.error(err);
+    let allDogs = await this.storage.getWatchDogs();
+
+    allDogs = allDogs.filter(function (item) {
+      return item.id && item.id !== dog.id;
     })
 
-
-  }
-
-  onSymbolClick(dog:VOWatchdog){
-
-    dog.isOpen = !dog.isOpen;
-
+   await this.storage.saveWatchDogs(allDogs);
+   this.watchDogs = await this.storage.getWatchDogs();
   }
 
   onNameClick(dog:VOWatchdog){
