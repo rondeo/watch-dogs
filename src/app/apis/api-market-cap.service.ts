@@ -7,10 +7,54 @@ import "rxjs/add/operator/concat";
 import * as _ from 'lodash';
 
 
-
+interface MCdata {
+  n: string;
+  id: string;
+  usd: number;
+  btc: number;
+  rank: number;
+  vol: number;
+  h1: number;
+  t: number;
+  data: number[];
+  prev:number[];
+}
 
 @Injectable()
 export class ApiMarketCapService {
+
+  static mapServerValues(data: { [id: string]: MCdata }): { [symbol: string]: VOMarketCap } {
+    let MC: { [symbol: string]: VOMarketCap } = {};
+
+    for (let str in data) {
+      const item: MCdata = data[str];
+      MC[str] = {
+        id: item.id,
+        name: item.n,
+        symbol: str,
+        rank: item.rank,
+        price_usd: item.usd,
+        price_btc: item.btc,
+        percent_change_1h: item.h1,
+        percent_change_24h: +item.data[0],
+        percent_change_7d: +item.data[1],
+        volume_usd_24h: item.vol,
+        market_cap_usd: item.data[2],
+        available_supply: item.data[3],
+        total_supply: item.data[4],
+        max_supply: item.data[5],
+        last_updated: item.t,
+        prev: item.prev[0],
+        prev5:  item.prev[1],
+        prev10: item.prev[2],
+        prev20: item.prev[3],
+        ago2h: item.prev[4],
+        prev30: item.prev[5],
+        ago3h: item.prev[6]
+      }
+    }
+    return MC;
+  }
 
   static MC: { [symbol: string]: VOMarketCap };
 
@@ -22,11 +66,11 @@ export class ApiMarketCapService {
     return this.downloadTicker().toPromise().then(res => ApiMarketCapService.MC[symbol])
   }
 
-  downloadTicker() {
+  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
     let url = '/api/marketcap/ticker';
     console.log('%c ' + url, 'color:pink');
-    return this.http.get(url).map((res: any) => {
-      let MC = MarketCapService.mapServerValues(Object.values(res));
+    return this.http.get(url).map((res: { [id: string]: MCdata }) => {
+      let MC = ApiMarketCapService.mapServerValues(res);
       ApiMarketCapService.MC = MC;
       return MC;
     });
@@ -42,34 +86,34 @@ export class ApiMarketCapService {
 
     });
   }
-  download2Recors(before1:string,before2:string ){
+
+  download2Recors(before1: string, before2: string) {
 
     const url1 = '/api/front-desk/market-cap/one-record?before=' + before1;
     const url2 = '/api/front-desk/market-cap/one-record?before=' + before2;
 
-      return this.http.get(url1).switchMap((res1: any) =>{
-        return  this.http.get(url2).map((res2: any)=>{
-         const indexed = _.keyBy(res1.data, 'symbol');
-         const out ={stamps:[res1.createdAt, res2.createdAt]};
-         res2.data.forEach(function (item:VOMarketCap) {
-           if(indexed[item.symbol]){
-             indexed[item.symbol].volume_usd_24h =  indexed[item.symbol]['24h_volume_usd'];
-             item.volume_usd_24h = item['24h_volume_usd'];
-             out[item.symbol] = [indexed[item.symbol], item];
-           }
+    return this.http.get(url1).switchMap((res1: any) => {
+        return this.http.get(url2).map((res2: any) => {
+          const indexed = _.keyBy(res1.data, 'symbol');
+          const out = {stamps: [res1.createdAt, res2.createdAt]};
+          res2.data.forEach(function (item: VOMarketCap) {
+            if (indexed[item.symbol]) {
+              indexed[item.symbol].volume_usd_24h = indexed[item.symbol]['24h_volume_usd'];
+              item.volume_usd_24h = item['24h_volume_usd'];
+              out[item.symbol] = [indexed[item.symbol], item];
+            }
 
 
-         })
+          })
           return out;
         })
       }
-
-    )/*.map(res =>{
-      console.log(res);
-    }).subscribe(res =>{
-     // console.log(res)
-    })*/
-
+    )
+    /*.map(res =>{
+          console.log(res);
+        }).subscribe(res =>{
+         // console.log(res)
+        })*/
 
 
   }
@@ -89,7 +133,6 @@ export class ApiMarketCapService {
       return out;
     });
   }
-
 
 
   getCoinDay(coin: string, from: string, to: string) {
@@ -132,12 +175,11 @@ export class ApiMarketCapService {
 
 
     let percent_change_1h = [];
-    let btc_change_1h =[];
+    let btc_change_1h = [];
 
     let tobtc_change_1h = [];
 
     let tobtc_change_24h = [];
-
 
 
     let percent_change_24h = [];

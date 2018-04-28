@@ -61,7 +61,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
       console.log(' uid ' + uid);
       if(uid)this.setCurrentById(uid);
 
-      this.coinsSelected = this.emailService.marketCap.getSelected()
+      //this.coinsSelected = this.emailService.marketCap.getSelected()
     });
 
     this.emailService.getWatchDogs();

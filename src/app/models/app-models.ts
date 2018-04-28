@@ -7,33 +7,33 @@ import {Observable} from 'rxjs/Observable';
 import {VOSellCoin} from "../my-bot/services/bot-sell-coin.service";
 
 
-export interface VOBooksStats{
-  exchange:string;
-  coin:string;
+export interface VOBooksStats {
+  exchange: string;
+  coin: string;
   base: string;
-  coinMC:VOMarketCap;
-  baseMC:VOMarketCap;
-  booksDiff:number;
+  coinMC: VOMarketCap;
+  baseMC: VOMarketCap;
+  booksDiff: number;
   rateToBuy: number;
   rateToSell: number;
   priceToSellUS: number;
   priceToBuyUS: number;
-  priceToMC:number;
-  priceBaseUS:number;
+  priceToMC: number;
+  priceBaseUS: number;
 }
 
-export interface VOTrade{
-  amountCoin:number;
-  timestamp:number;
-  rate:number;
+export interface VOTrade {
+  amountCoin: number;
+  timestamp: number;
+  rate: number;
 }
 
 
-export interface VOBooks{
-  market:string;
-  exchange:string;
-  buy:VOTrade[];
-  sell:VOTrade[];
+export interface VOBooks {
+  market: string;
+  exchange: string;
+  buy: VOTrade[];
+  sell: VOTrade[];
 }
 
 export class VOTransaction {
@@ -273,10 +273,9 @@ export interface IVOMarket {
   stats?:IOrdersStats;
 }
 */
-export interface IVOMarketExt{
+export interface IVOMarketExt {
 
 }
-
 
 
 export class VOMarket {
@@ -285,7 +284,6 @@ export class VOMarket {
   base: string;
   coin: string;
   id: string;
-
 
 
   priceBaseUS?: number;
@@ -328,7 +326,7 @@ export class VOMarket {
   usPrevDay?: string;
   change?: number;
   usMC?: number;
-  toMC?:number;
+  toMC?: number;
   Created?: string
   DisplayMarketName?: string
   disabled?: any;
@@ -359,7 +357,6 @@ export interface VOMarketHistory {
 */
 
 
-
 export class VOMarketCap {
   id: string;
   name: string;
@@ -373,8 +370,15 @@ export class VOMarketCap {
   percent_change_24h: number;
   percent_change_7d: number;
 
+  prev?: number;
+  prev5?: number;
+  prev10?: number;
+  prev20?: number;
+  ago2h?: number;
+  prev30?: number;
+  ago3h?: number;
 
-  btcUS?:number
+  btcUS?: number
   tobtc_change_1h?: number;
   tobtc_change_24h?: number;
   tobtc_change_7d?: number;
@@ -386,21 +390,21 @@ export class VOMarketCap {
 
   volume_usd_24h?: number;
 
-  market_cap_usd?:number;
-  available_supply?:number;
-  total_supply?:number;
-  max_supply?:number;
+  market_cap_usd?: number;
+  available_supply?: number;
+  total_supply?: number;
+  max_supply?: number;
   last_updated?: number;
 
 
   last_updated_date?: string;
   selected?: boolean;
 
-  rankUP?:number;
-  percent_1h_UP?:number;
+  rankUP?: number;
+  percent_1h_UP?: number;
 }
 
-export class VOMarketCapExt extends VOMarketCap{
+export class VOMarketCapExt extends VOMarketCap {
   tobase_change_1h: number;
   tobase_change_24h: number;
   tobase_change_7d: number;
@@ -526,6 +530,7 @@ export interface UserProfile {
   filename: string;
   //coins: CoinConfig[]
 }
+
 /*
 
 export class CoinsAvailable {
@@ -578,6 +583,7 @@ export class VOBalance {
   id?: string;
   isDetails?: boolean;
 }
+
 /*
 
 export class Analitycs {
@@ -617,23 +623,22 @@ export class WalletModel {
 */
 
 
-
-export class VOWatchdog implements VOSellCoin{
+export class VOWatchdog implements VOSellCoin {
   id: string;
-  exchange:string;
-  base:string;
+  exchange: string;
+  base: string;
   coin: string;
   name: string;
   active: boolean;
-  status:string;
-  isEmail:boolean;
-  results?:string[];
-  sellScript:string[];
-  buyScript:string[];
-  balanceCoin:number;
-  balanceBase:number;
+  status: string;
+  isEmail: boolean;
+  results?: string[];
+  sellScript: string[];
+  buyScript: string[];
+  balanceCoin: number;
+  balanceBase: number;
 
-  amount:number;
+  amount: number;
 
   percent_change_1hLess: boolean;
   percent_change_1h: number;

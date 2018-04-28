@@ -178,7 +178,6 @@ export class StorageService {
     if (this.watchDogs) return Promise.resolve(this.watchDogs);
     else return this.select(this.WATCH_DOGS).then(res =>{
       this.watchDogs = res || [];
-      console.log(res);
       return this.watchDogs;
     })
   }

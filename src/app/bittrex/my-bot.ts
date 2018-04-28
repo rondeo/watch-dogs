@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import {SlackService} from "../services/slack.service";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
+import {ApiMarketCapService} from "../apis/api-market-cap.service";
 
 
 
@@ -111,7 +112,7 @@ export class MyBot {
     this.id = this.botData.id;
     this.created = (new Date(this.id)).toLocaleDateString();
 
-    this.subMc = this.marketCap.getCoinsObs().subscribe(res => {
+    this.subMc = this.marketCap.downloadTicker().subscribe(res => {
       if (!res) return;
       this.MC = res;
       console.log('%c Market cap data ' + this.botData.market, 'color:pink');
@@ -300,8 +301,8 @@ export class MyBot {
   isTest: boolean;
 
   test() {
-    let coins = this.marketCap.coins
-    this.runBot(coins);
+    //let coins = this.marketCap.coins
+   // this.runBot(coins);
   }
 
 

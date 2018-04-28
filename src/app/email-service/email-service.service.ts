@@ -9,6 +9,7 @@ import {AuthHttpService, VOUser} from '../services/auth-http.service';
 import {VOMarketCap, WatchDog} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {MarketCapService} from '../market-cap/market-cap.service';
+import {ApiMarketCapService} from "../apis/api-market-cap.service";
 
 
 
@@ -25,18 +26,18 @@ export class EmailServiceService {
   constructor(
     private http:AuthHttpService,
     private storage:StorageService,
-    public marketCap:MarketCapService
+    public marketCap:ApiMarketCapService
   ) {
 
     this.watchDogsSub = new BehaviorSubject(this.watchDogs);
     this.watchDogs$ = this.watchDogsSub.asObservable();
     this.currentWatchDog = this.getNewWatchDog();
 
-    this.marketCap.coinsAr$.subscribe( res=>{
+   /* this.marketCap.coinsAr$.subscribe( res=>{
       if(!res) return;
       this.marketCapData = this.marketCap.coins;
       this.mapMarketCap();
-    })
+    })*/
 
 
   }
@@ -99,7 +100,7 @@ export class EmailServiceService {
 
 
       }
-      this.marketCap.refresh();
+     // this.marketCap.refresh();
       this.watchDogs = ar;
     }
     return this.watchDogs;
@@ -114,7 +115,7 @@ export class EmailServiceService {
 
   mapMarketCap(){
 
-    let data = this.marketCap.getAllCoinsById();
+  /*  let data = this.marketCap.getAllCoinsById();
 
     let ar = this.watchDogs;
     console.log(ar);
@@ -130,7 +131,7 @@ export class EmailServiceService {
 
     this.watchDogs = ar
     this.watchDogsSub.next(this.watchDogs);
-
+*/
 
   }
 

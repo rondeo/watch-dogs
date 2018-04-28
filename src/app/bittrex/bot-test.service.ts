@@ -23,21 +23,21 @@ export class BotTestService{
 
 
   test(){
-    this.marketCap.refresh();
+   // this.marketCap.refresh();
   }
 
   private sub1;
   start(){
-    this.stop();
-   /* this.sub1 = this.marketCap.getCoins().subscribe(res=>{
+  /*  this.stop();
+   /!* this.sub1 = this.marketCap.getCoins().subscribe(res=>{
       console.log(res);
-    });*/
+    });*!/
     console.log('start interval');
     this.intervalMc = setInterval(()=>{
       this.marketCap.refresh();
     },60000);
 
-    this.marketCap.refresh();
+    this.marketCap.refresh();*/
   }
   stop(){
     if(this.sub1)this.sub1.unsubscribe();

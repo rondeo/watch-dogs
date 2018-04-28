@@ -91,12 +91,13 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract{
     });
 
   }
+
   downloadBalance(symbol:string):Observable<VOBalance>{
     const data = {
       currency:symbol
     };
-    const url = 'https://bittrex.com/api/v1.1/account/getbalance';
 
+    const url = 'https://bittrex.com/api/v1.1/account/getbalance';
     return this.call(url, data).map(item=>{
       item = item.result;
         return {

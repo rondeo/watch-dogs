@@ -42,6 +42,6 @@ export abstract class ApiPrivateAbstaract {
       }
     }
 
-    return new BehaviorSubject(this.credentials).asObservable()
+    return Observable.of(this.credentials);
   }
 }

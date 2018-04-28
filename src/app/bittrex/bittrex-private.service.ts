@@ -22,6 +22,7 @@ import {MyBot, VOBot} from "./my-bot";
 import {SlackService} from "../services/slack.service";
 import {APIBuySellService} from "../services/buy-sell.service";
 import {APIOrdersManager} from "../services/orders-manager.service";
+import {ApiMarketCapService} from "../apis/api-market-cap.service";
 
 
 
@@ -72,7 +73,7 @@ export class BittrexPrivateService implements APIBuySellService, APIOrdersManage
     this.transfers$ = this.transfersSub.asObservable();
 
 
-   this.marketCap.getCoinsObs().subscribe(MC => {
+   this.marketCap.downloadTicker().subscribe(MC => {
      this.MC = MC;
      this.mapBalancesToMC();
     });
