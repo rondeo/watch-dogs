@@ -4,6 +4,7 @@ import {ApisPublicService} from "./apis-public.service";
 import {ApiMarketCapService} from "./api-market-cap.service";
 import {ApisBooksService} from "./apis-books.service";
 import {ApisPrivateService} from "./apis-private.service";
+import {MongoService} from "./mongo.service";
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import {ApisPrivateService} from "./apis-private.service";
     ApisPublicService,
     ApiMarketCapService,
     ApisBooksService,
-    ApisPrivateService
+    ApisPrivateService,
+    MongoService
   ]
 })
 export class ApisModule { }

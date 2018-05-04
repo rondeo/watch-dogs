@@ -5,7 +5,8 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 
 import {ActivatedRoute} from '@angular/router';
 import {runDogScript} from '../run-watchdogs/script-analytics';
-import {VOMarketCap, WatchDog} from '../../models/app-models';
+import {VOMarketCap, VOWatchdog} from '../../models/app-models';
+import {WatchDog} from "../../my-bot/services/watch-dog";
 
 
 @Component({
@@ -49,8 +50,8 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     private route:ActivatedRoute
   ) {
 
-    this.currentDog = new WatchDog();
-    this.currentDog.marketCap = new VOMarketCap();
+    this.currentDog = new WatchDog(new VOWatchdog());
+   // this.currentDog.marketCap = new VOMarketCap();
   }
 
 
@@ -67,7 +68,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
       if(!dogs) return;
       console.log(dogs);
 
-      if(this.currentDog.uid) this.setCurrentDogByUid(this.currentDog.uid);
+      if(this.currentDog.uuid) this.setCurrentDogByUid(this.currentDog.uuid);
 
 
 
@@ -78,7 +79,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub1 = this.route.params.subscribe(params => {
       let uid = params['uid'];
       uid = uid.toUpperCase();
-      this.currentDog.uid = uid;
+      this.currentDog.uuid = uid;
       if(this.emailService.getWatchDogs()) this.setCurrentDogByUid(uid);
 
 
@@ -94,8 +95,9 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     if(!this.emailService.marketCapData) return;
 
 
+
     let dog = this.emailService.getWatchDogs().find(function (item) {
-      return item.uid === uid;
+      return item.uuid === uid;
     });
 
     if(dog) this.setCurrentDog(dog);
@@ -123,7 +125,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-    let oldValue:VOMarketCap = this.currentDog.marketCap;
+   let oldValue:any = {}
 
     let newValue:VOMarketCap = {
       id:oldValue.id,
@@ -143,7 +145,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if(results.length){
       let message = results.join('<br/>');
-      let subject = this.currentDog.uid + ' '+ this.currentDog.dogName +' '+this.currentDog.description ||'';
+      let subject = this.currentDog.uuid + ' '+ this.currentDog.name +' '+this.currentDog.name ||'';
       this.emailService.sendNotification(subject, message).subscribe(res=>{
         console.log(res);
 
@@ -243,10 +245,10 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setCurrentDog(dog:WatchDog){
     if(dog){
-      let script = (dog && dog.scriptText)?dog.scriptText:'';
+      let script = (dog && dog.sellScript)?dog.sellScript.toString():'';
       this.setCurrentScript(script);
       this.currentDog = dog;
-    }else this.currentDog = new WatchDog();
+    }else this.currentDog = new WatchDog(new VOWatchdog());
     console.log(' set dog ', dog);
   }
 
@@ -264,17 +266,17 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
       let text = this.getCurrentScript();
       if(text && text.length > 50){
         this.currentDog.status = 'full';
-        this.currentDog.scriptIcon = 'fa fa-battery-full';
+       // this.currentDog.scriptIcon = 'fa fa-battery-full';
       }
       else {
-        this.currentDog.scriptIcon ='fa fa-battery-empty';
-        this.currentDog.status = 'empty';
-        this.currentDog.statusIcon = 'fa fa-play';
+        //this.currentDog.scriptIcon ='fa fa-battery-empty';
+        //this.currentDog.status = 'empty';
+        //this.currentDog.statusIcon = 'fa fa-play';
       }
-      this.currentDog.scriptText = text;
+     // this.currentDog.scriptText = text;
       console.log(text);
       this.emailService.saveData();
-      this.snakBar.open(this.currentDog.dogName+ " Saved!",'',{duration:3000});
+      this.snakBar.open(this.currentDog.name+ " Saved!",'',{duration:3000});
     }else this.snakBar.open( "Error no Dog",'Error',{duration:3000});
 
   }

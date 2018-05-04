@@ -35,21 +35,21 @@ export class MyMainComponent implements OnInit {
     this.sub2 = this.apiService.connector$().subscribe(api=>{
       if(!api) return
 
-      if(!api.hasLogin()) return;
+      //if(!api.hasLogin()) return;
 
-      if(this.sub3) this.sub3.unsubscribe();
+      //if(this.sub3) this.sub3.unsubscribe();
 
       this.sub3 = api.balances$().subscribe(balances=>{
         //console.log(balances)
 
         if(!balances) return;
 
-        setTimeout(()=> {
+      /*  setTimeout(()=> {
 
           this.snackBar.open('Logged in '+ api.exchange +' account', 'x', {duration:3000});
           this.sub3.unsubscribe()
         }, 2000);
-
+*/
       })
     })
 
@@ -61,7 +61,7 @@ export class MyMainComponent implements OnInit {
 
         this.apiService.setExchange(exchange);
 
-       if(this.subLogin) this.subLogin.unsubscribe();
+      /* if(this.subLogin) this.subLogin.unsubscribe();
         this.subLogin = this.apiService.isLogedIn$.subscribe(login=>{
           this.isLogedIn = login;
           if(!login) return;
@@ -69,7 +69,7 @@ export class MyMainComponent implements OnInit {
 
 
 
-          /* this.privateService.withdrawHistory().toPromise().then(res=>{
+          /!* this.privateService.withdrawHistory().toPromise().then(res=>{
              let local = this.storage.getItem('bittrex-withdraw');
              if(!!local) {
                let localdata = JSON.parse(local);
@@ -79,10 +79,10 @@ export class MyMainComponent implements OnInit {
                }
              }else  this.storage.setItem('bittrex-withdraw', JSON.stringify(res));
 
-           })*/
+           })*!/
 
         })
-
+*/
       }
 
     });

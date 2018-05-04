@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../services/app-storage.service";
 import {ApiPrivateAbstaract} from "./api-private/api-private-abstaract";
 import {ApiPrivateBittrex} from "./api-private/api-private-bittrex";
+import {ApiPrivatePoloniex} from "./api-private/api-private-poloniex";
 
 
 @Injectable()
@@ -27,7 +28,8 @@ export class ApisPrivateService {
     switch (exchange) {
       case 'bittrex':
         return new ApiPrivateBittrex(this.http, this.storage);
-
+      case 'poloniex':
+        return new ApiPrivatePoloniex(this.http, this.storage);
 
     }
     return undefined;

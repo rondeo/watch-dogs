@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {VOMarketCap, VOWatchdog, WatchDog} from "../../models/app-models";
+import {VOMarketCap, VOWatchdog} from "../../models/app-models";
 import {ActivatedRoute} from "@angular/router";
 import {WatchDogService} from "../watch-dog.service";
 import {StorageService} from "../../services/app-storage.service";
@@ -7,6 +7,7 @@ import {MarketCapService} from "../../market-cap/market-cap.service";
 import {MatSnackBar} from "@angular/material";
 import * as moment from "moment";
 import * as _ from 'lodash';
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 
 @Component({
   selector: 'app-watchdog-edit',
@@ -28,7 +29,7 @@ export class WatchdogEditComponent implements OnInit {
     private route: ActivatedRoute,
     private watchdogService: WatchDogService,
     private storage: StorageService,
-    private marketCap: MarketCapService,
+    private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar
   ) {
     this.watchDog = new VOWatchdog();
@@ -45,7 +46,7 @@ export class WatchdogEditComponent implements OnInit {
   async initAsync() {
     this.selectedCoins = this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
-    const wd = await this.storage.getWatchDogByID(id);
+    let wd = await this.storage.getWatchDogByID(id);
 
     if (wd){
       if(!wd.sellScript)wd.sellScript = [];
@@ -53,14 +54,23 @@ export class WatchdogEditComponent implements OnInit {
       this.watchDog = wd;
       this.displayMC();
     }
-    else this.watchDog.id = id;
+    else {
+      wd = new VOWatchdog();
+      wd.sellScript = [];
+      wd.buyScript = []
+      wd.id = id;
+      this.watchDog = wd;
+    }
   }
 
   async displayMC() {
-    const MC = await this.marketCap.getCoinsObs().toPromise();
+    const MC = await this.marketCap.downloadTicker().toPromise();
+    console.log(MC);
     let coin = this.watchDog.coin;
     if (!coin) return;
-    this.coinMC = MC[coin];
+
+    console.log(MC[coin]);
+   // this.coinMC = MC[coin];
   }
 
   onCoinChange(evt) {

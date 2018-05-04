@@ -4,9 +4,10 @@ import * as _ from 'lodash';
 import {EmailServiceService} from '../email-service.service';
 import {DialogSimpleComponent} from '../../shared/dialog-simple/dialog-simple.component';
 import {MatDialog} from '@angular/material';
-import {VOMarketCap, WatchDog} from '../../models/app-models';
+import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {WatchDog} from "../../my-bot/services/watch-dog";
 
 
 @Component({
@@ -75,7 +76,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
     uid = uid.toUpperCase();
 
     let dog  = this.watchDogs.find(function (item) {
-      return item.uid === uid;
+      return item.uuid === uid;
     });
     if(dog) this.watchDog = dog;
 
@@ -95,7 +96,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
     let ref = this.dialog.open(DialogSimpleComponent, {data:{
       title:'Alert',
-      message:'You want to delete watch dog '+ dog.uid + ' '+ dog.coinId+'?',
+      message:'You want to delete watch dog '+ dog.uuid + ' '+ dog.coin+'?',
       buttons:['Yes','No']
     }})
 
@@ -116,7 +117,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
   saveDogClick(){
 
-    let exists = this.emailService.getDogByUid(this.watchDog.uid);
+    let exists = this.emailService.getDogByUid(this.watchDog.uuid);
     if(!exists){
 
       this.emailService.addDog(this.watchDog)
@@ -143,12 +144,12 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
 
   onDogClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.uid);
+    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.uuid);
    // this.watchDog = dog;
   }
 
   onScriptClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-script/'+dog.uid);
+    this.router.navigateByUrl('/email-service/edit-script/'+dog.uuid);
   }
 
   onCoinSelectChanged(evt){

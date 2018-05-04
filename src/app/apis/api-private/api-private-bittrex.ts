@@ -1,4 +1,4 @@
-import {VOBalance, VOOrder} from "../../models/app-models";
+import {VOBalance, VOOrder, VOWatchdog} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {ApiPrivateAbstaract} from "./api-private-abstaract";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -7,9 +7,10 @@ import * as _ from 'lodash';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../services/app-storage.service";
 import {ApiPublicBittrex} from "../api-public/api-public-bittrex";
-import {VOSellCoin} from "../../my-bot/services/bot-sell-coin.service";
+
 import {UtilsBooks} from "../../com/utils-books";
 import {Subject} from "rxjs/Subject";
+import {WatchDog} from "../../my-bot/services/watch-dog";
 
 export class ApiPrivateBittrex extends ApiPrivateAbstaract{
 
@@ -25,27 +26,27 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract{
     this.apiPublic  = new ApiPublicBittrex(http);
   }
 
-  sellCoin(sellCoin:VOSellCoin):Observable<VOSellCoin>{
-    if(!sellCoin.coinPrice) throw new Error(' need coin price')
+  sellCoin(sellCoin:WatchDog):Observable<WatchDog>{
+    if(!sellCoin.coinUS) throw new Error(' need coin price')
    return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
     // console.log(balance);
-     if(balance.balance * sellCoin.coinPrice < 10) {
-       sellCoin.balance = 0;
-     }else sellCoin.balance = balance.balance;
+     if(balance.balance * sellCoin.coinUS < 10) {
+       sellCoin.balanceCoin = 0;
+     }else sellCoin.balanceCoin = balance.balance;
 
-     if(!sellCoin.balance) {
-       sellCoin.balance = 0;
+     if(!sellCoin.balanceCoin) {
+       sellCoin.balanceCoin = 0;
        return Observable.of(sellCoin);
      }
 
      return this.apiPublic.downloadBooks(sellCoin.base, sellCoin.coin).switchMap(books => {
       // console.log(books);
 
-       let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balance);
-       const myCoinprice = sellCoin.basePrice * rate;
-       sellCoin.priceDiff = +(100*(myCoinprice - sellCoin.coinPrice)/sellCoin.coinPrice).toPrecision(2);
+       let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balanceCoin);
+       const myCoinprice = sellCoin.baseUS * rate;
+       sellCoin.booksDelta = +(100*(myCoinprice - sellCoin.coinUS)/sellCoin.coinUS).toPrecision(2);
        rate = +(rate - (rate* 0.01)).toFixed(8);
-       return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balance, rate).switchMap(order =>{
+       return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order =>{
          console.log(order);
          if(order.uuid){
            sellCoin.uuid = order.uuid;

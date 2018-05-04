@@ -10,29 +10,15 @@ import {StorageService} from "../../services/app-storage.service";
 import {Subject} from "rxjs/Subject";
 
 import * as _ from 'lodash';
+import {WatchDog} from "./watch-dog";
 
-export interface VOSellCoin {
-  id:string;
-  exchange: string
-  base: string
-  coin: string
-  coinPrice?: number
-  basePrice?: number;
-  balance?: number;
-  status: string;
-  priceDiff?: number;
-  uuid?: string;
-  timestamp?: string
-  script?: string;
-  results?: string[];
-}
 
 @Injectable()
 export class BotSellCoinService {
 
-  toSell: VOSellCoin[] = [];
+  toSell: WatchDog[] = [];
 
-  soldCoinSub: Subject<VOSellCoin> = new Subject()
+  soldCoinSub: Subject<WatchDog> = new Subject()
 
   soldCoin$() {
     return this.soldCoinSub.asObservable();
@@ -49,7 +35,8 @@ export class BotSellCoinService {
   }
 
 
-  trackCoin(coin: VOSellCoin) {
+  trackCoin(coin: WatchDog) {
+
     this.apisPrivate.getExchangeApi(coin.exchange).getOrder(coin.uuid).subscribe(res => {
       console.warn(res);
     })
@@ -63,7 +50,7 @@ export class BotSellCoinService {
     this.sellCoin(sellCoin);
   }
 
-  sellCoin(sellCoin: VOSellCoin): boolean {
+  sellCoin(sellCoin: WatchDog): boolean {
     const exists = this.toSell.find(function (item) {
       return item.exchange === sellCoin.exchange && item.base === sellCoin.base && item.coin === sellCoin.coin;
     });
@@ -73,12 +60,11 @@ export class BotSellCoinService {
 
     this.apisPrivate.getExchangeApi(sellCoin.exchange)
       .sellCoin(sellCoin)
-      .subscribe((coin: VOSellCoin) => {
-
+      .subscribe((coin: WatchDog) => {
 
 
         console.warn('SELL COIN RESULT ', coin);
-        if (!coin.balance) {
+        if (!coin.balanceCoin) {
           coin.results.push(moment().format() + ' balance 0');
 
           this.toSell =   _.reject(this.toSell, {exchange: coin.exchange, base: coin.base, coin: coin.coin});
@@ -98,14 +84,15 @@ export class BotSellCoinService {
 
   }
 
+/*
+  saveOnServer(filename: string, payload: WatchDog) {
+    payload.date = moment().format();
 
-  saveOnServer(filename: string, payload: VOSellCoin) {
-    payload.timestamp = moment().format();
     let url = 'api/save-data/';
     console.log(url);
     return this.http.post(url, {filename, payload}).toPromise();
 
-  }
+  }*/
 
 
   private _markets: any[];

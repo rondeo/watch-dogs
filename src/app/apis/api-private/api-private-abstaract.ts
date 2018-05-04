@@ -4,11 +4,13 @@ import {StorageService} from "../../services/app-storage.service";
 import {reject} from "q";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
-import {VOSellCoin} from "../../my-bot/services/bot-sell-coin.service";
+import {UtilsBooks} from "../../com/utils-books";
+import {WatchDog} from "../../my-bot/services/watch-dog";
 
 export abstract class ApiPrivateAbstaract {
 
   exchange: string;
+  apiPublic:any;
   /* credetialsSub:BehaviorSubject<{apiKey:string, password: string}> = new BehaviorSubject(null);
    credentials$(){
 
@@ -21,8 +23,50 @@ export abstract class ApiPrivateAbstaract {
 
   }
 
+  sellCoin(sellCoin:WatchDog):Observable<WatchDog>{
+    if(!sellCoin.coinUS) throw new Error(' need coin price')
+    return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
+      // console.log(balance);
+      if(balance.balance * sellCoin.coinUS < 10) {
+        sellCoin.balanceCoin = 0;
+      }else sellCoin.balanceCoin = balance.balance;
+
+      if(!sellCoin.balanceCoin) {
+        sellCoin.balanceCoin = 0;
+        return Observable.of(sellCoin);
+      }
+
+      return this.apiPublic.downloadBooks(sellCoin.base, sellCoin.coin).switchMap(books => {
+        // console.log(books);
+
+        let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balanceCoin);
+        const myCoinprice = sellCoin.baseUS * rate;
+        sellCoin.booksDelta = +(100*(myCoinprice - sellCoin.coinUS)/sellCoin.coinUS).toPrecision(2);
+        rate = +(rate - (rate* 0.01)).toFixed(8);
+        return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order =>{
+          console.log(order);
+          if(order.uuid){
+            sellCoin.uuid = order.uuid;
+            return this.getOrder(order.uuid).switchMap(order =>{
+
+              return Observable.of(sellCoin)
+            })
+
+          }else throw new Error(order.message)
+
+
+
+        })
+
+
+      })
+
+
+    })
+
+  }
+
   abstract  getOrder(orderId):Observable<VOOrder>;
-  abstract sellCoin(coin:VOSellCoin):Observable<VOSellCoin>;
   abstract downloadBalance(symbol: string): Observable<VOBalance>;
   abstract downloadBalances(): Observable<VOBalance[]>;
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>

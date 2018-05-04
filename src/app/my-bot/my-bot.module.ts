@@ -22,6 +22,8 @@ import {ApisModule} from "../apis/apis.module";
 import { CoinGraphComponent } from './coin-graph/coin-graph.component';
 import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
 import {BotSellCoinService} from "./services/bot-sell-coin.service";
+import {UsdtBtcService} from "./services/usdt-btc.service";
+import {UiModule} from "../ui/ui.module";
 
 @Component({
   template: `
@@ -39,7 +41,6 @@ class Outlet implements OnInit {
 
   ngOnInit() {
   }
-
 }
 
 const routes: Routes = [
@@ -71,6 +72,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatMomentDatetimeModule,
     MatDatetimepickerModule,
+    UiModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -85,7 +87,8 @@ const routes: Routes = [
   ],
   providers: [
     CollectMarketDataService,
-    BotSellCoinService
+    BotSellCoinService,
+    UsdtBtcService
   ]
 })
 export class MyBotModule {

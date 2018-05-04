@@ -59,6 +59,7 @@ import {MyBotModule} from "./my-bot/my-bot.module";
 import {DatabaseService} from "./services/database.service";
 import {TraderModule} from "./trader/trader.module";
 import {AllInOneModule} from "./all-in-one/all-in-one.module";
+import {UiModule} from "./ui/ui.module";
 
 
 //import {WebsocketService} from "./shared/websocket-service";
@@ -85,6 +86,7 @@ declare const Buffer: any;
     MyBotModule,
     TraderModule,
     AllInOneModule,
+    UiModule,
     // AuthModule,
     RouterModule.forRoot(rootRouterConfig, {useHash: true})
   ],

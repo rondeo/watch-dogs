@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {VOMarketCap, VOWatchdog, WatchDog} from '../models/app-models';
+import {VOMarketCap, VOWatchdog} from '../models/app-models';
 import * as CryptoJS from 'crypto-js';
 //import * as crypto from 'crypto';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import * as localforage from 'localforage';
-import {VOSellCoin} from "../my-bot/services/bot-sell-coin.service";
 import * as _ from 'lodash';
 
 

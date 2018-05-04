@@ -496,50 +496,55 @@ export class ApiPoloniex extends ApiBase {
   callInprogress:boolean;
   private call( post: any): Observable<any> {
 
+    return this.getCredentials().switchMap(cred=> {
+    //  console.log(cred);
+
+      this.isLogedInSub.next(cred.password?true: false)
+      if(!cred.password) throw new Error(' poloniex no password');
+
+      /*if (!this.apiKey) {
+        console.error(' no key')
+        return new BehaviorSubject(null).asObservable();    }
+
+      if(this.callInprogress){
+
+        setTimeout(()=>this.call(post), 300);
+      }
+      this.callInprogress = true;*/
+
+      post.nonce = Date.now();
+
+      let load = Object.keys(post).map(function (item) {
+        return item + '=' + this.post[item];
+      }, {post: post}).join('&');
 
 
-    if (!this.apiKey) {
-      console.error(' no key')
-      return new BehaviorSubject(null).asObservable();    }
+      let signed = this.hash_hmac(load, cred.password);
+      let url = '/api/poloniex/private';
+      // let url = 'https://poloniex.com/tradingApi';
 
-    if(this.callInprogress){
+      /* let headers = new HttpHeaders();
 
-      setTimeout(()=>this.call(post), 300);
-    }
-    this.callInprogress = true;
+       headers = headers
+         //.set('Content-Type',' text/plain')
+         .set('Sign', signed)
+         .set('Key', this.apiKey);
 
-    post.nonce = Date.now();
-
-    let load = Object.keys(post).map(function (item) {
-      return item + '=' + this.post[item];
-    }, {post: post}).join('&');
-
-
-    let signed = this.hash_hmac(load, this.password);
-    let url = '/api/poloniex/private';
-   // let url = 'https://poloniex.com/tradingApi';
-
-   /* let headers = new HttpHeaders();
-
-    headers = headers
-      //.set('Content-Type',' text/plain')
-      .set('Sign', signed)
-      .set('Key', this.apiKey);
-
-    console.log(headers.get('Key'));
+       console.log(headers.get('Key'));
 
 
 
-    return this.http.post(url, post,{headers:headers}).map(res=>{
-      this.callInprogress = false;
-      return res
-    })*/
+       return this.http.post(url, post,{headers:headers}).map(res=>{
+         this.callInprogress = false;
+         return res
+       })*/
 
-    return this.http.post(url, {apiKey: this.apiKey, signed: signed, postData:load}).map(res=>{
-      this.callInprogress = false;
+      return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).map(res => {
+        // this.callInprogress = false;
 
-      return res
-    })
+        return res
+      })
+    });
 
 
   }

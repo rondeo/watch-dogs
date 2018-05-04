@@ -1,3 +1,9 @@
-<p>
-  bot-sell-coin works!
-</p>
+<div>
+    <mat-list>
+        <mat-list-item *ngFor="let dog of sellCoins">
+            {{dog.base}} ${{dog.baseUS}} {{dog.coin}} ${{dog.coinUS}}
+            <app-mc-percent [marketcap]="dog.mcCoin"></app-mc-percent>
+        </mat-list-item>
+    </mat-list>
+
+</div>

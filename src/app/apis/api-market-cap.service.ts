@@ -5,6 +5,7 @@ import {VOMarketCap} from "../models/app-models";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/concat";
 import * as _ from 'lodash';
+import "rxjs/add/operator/share";
 
 
 interface MCdata {
@@ -28,29 +29,31 @@ export class ApiMarketCapService {
 
     for (let str in data) {
       const item: MCdata = data[str];
-      MC[str] = {
-        id: item.id,
-        name: item.n,
-        symbol: str,
-        rank: item.rank,
-        price_usd: item.usd,
-        price_btc: item.btc,
-        percent_change_1h: item.h1,
-        percent_change_24h: +item.data[0],
-        percent_change_7d: +item.data[1],
-        volume_usd_24h: item.vol,
-        market_cap_usd: item.data[2],
-        available_supply: item.data[3],
-        total_supply: item.data[4],
-        max_supply: item.data[5],
-        last_updated: item.t,
-        prev: item.prev[0],
-        prev5:  item.prev[1],
-        prev10: item.prev[2],
-        prev20: item.prev[3],
-        ago2h: item.prev[4],
-        prev30: item.prev[5],
-        ago3h: item.prev[6]
+      if(item.data) {
+        MC[str] = {
+          id: item.id,
+          name: item.n,
+          symbol: str,
+          rank: item.rank,
+          price_usd: item.usd,
+          price_btc: item.btc,
+          percent_change_1h: item.h1,
+          percent_change_24h: +item.data[0],
+          percent_change_7d: +item.data[1],
+          volume_usd_24h: item.vol,
+          market_cap_usd: item.data[2],
+          available_supply: item.data[3],
+          total_supply: item.data[4],
+          max_supply: item.data[5],
+          last_updated: item.t,
+          prev: item.prev[0],
+          prev5: item.prev[1],
+          prev10: item.prev[2],
+          prev20: item.prev[3],
+          ago2h: item.prev[4],
+          prev30: item.prev[5],
+          ago3h: item.prev[6]
+        }
       }
     }
     return MC;
@@ -69,7 +72,7 @@ export class ApiMarketCapService {
   downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
     let url = '/api/marketcap/ticker';
     console.log('%c ' + url, 'color:pink');
-    return this.http.get(url).map((res: { [id: string]: MCdata }) => {
+    return this.http.get(url).share().map((res: { [id: string]: MCdata }) => {
       let MC = ApiMarketCapService.mapServerValues(res);
       ApiMarketCapService.MC = MC;
       return MC;

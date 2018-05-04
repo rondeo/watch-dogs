@@ -32,6 +32,64 @@ export enum PrivateCalls{
   SELL_LIMIT
 }
 
+/*
+export class MyHttpOne{
+
+  Q:string[]
+  inProcess:boolean;
+
+
+  private call(url:string, sub:Subject<any>){
+
+    console.log(url);
+    this.http.get(url).subscribe((res:any) => {
+
+      setTimeout(()=>{
+        this.inProcess = false;
+      }, 500);
+
+      if(res.error){
+        console.warn(res.message);
+
+      }else {
+        sub.next(res);
+      }
+
+    }, err =>{
+
+      console.error(err);
+      setTimeout(()=>{
+        this.inProcess = false;
+      }, 1500);
+    })
+  }
+
+
+ private  recall(url:string, sub:Subject<any>){
+
+   if(this.inProcess)  setTimeout(()=>this.recall(url, sub), 500);
+   else {
+     this.call(url, sub);
+   }
+  }
+
+  get(url:string){
+    const sub = new Subject();
+
+    if(this.inProcess){
+      setTimeout(()=>this.recall(url, sub), 1000)
+    }else this.call(url, sub);
+
+    return sub;
+
+  }
+  constructor(private http:HttpClient){
+
+  }
+}
+*/
+
+
 export abstract class ApiBase {
 
   apiKey: string;
@@ -161,9 +219,10 @@ return null;
    //   console.warn(' not logged in');
 //    }
 
-   // if(this.isLoadingBalances) return;
-    this.isLoadingBalances = true;
+    if(this.isLoadingBalances) return;
+   this.isLoadingBalances = true;
    this.downloadBalances().subscribe(res=>{
+     if(!res) throw new Error(' no balances');
      this.isLoadingBalances = false;
      this.mapBalancesToMC(res).then(res=>this.dispatchBalances(res)).catch(console.error);
     }, err=>{
@@ -179,6 +238,7 @@ return null;
 
   mapBalancesToMC(balances:VOBalance[]){
     return new Promise<VOBalance[]>( (resolve, reject)=> {
+
       this.marketCap.getCoinsObs().subscribe(MC=>{
         if(!MC) return;
         balances.forEach(function (balance: VOBalance) {

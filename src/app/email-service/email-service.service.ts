@@ -6,10 +6,11 @@ import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import {AuthHttpService, VOUser} from '../services/auth-http.service';
 
-import {VOMarketCap, WatchDog} from '../models/app-models';
+import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {MarketCapService} from '../market-cap/market-cap.service';
 import {ApiMarketCapService} from "../apis/api-market-cap.service";
+import {WatchDog} from "../my-bot/services/watch-dog";
 
 
 
@@ -42,37 +43,38 @@ export class EmailServiceService {
 
   }
 
-  getNewWatchDog():WatchDog{
+  getNewWatchDog():any{
   return {
-    uid: '',
-    coinId: '',
-    dogName: '',
-    status: 'fa-battery-empty',
-    marketCap: {
-      id: '',
-      name: '',
-      symbol: '',
-      rank: 0,
-      price_usd: 0,
-      percent_change_1h: 0,
-      percent_change_24h: 0,
-      percent_change_7d: 0,
-      price_btc:0,
-    }
+    /*  uid: '',
+      coinId: '',
+      dogName: '',
+      status: 'fa-battery-empty',
+      marketCap: {
+        id: '',
+        name: '',
+        symbol: '',
+        rank: 0,
+        price_usd: 0,
+        percent_change_1h: 0,
+        percent_change_24h: 0,
+        percent_change_7d: 0,
+        price_btc:0,
+      }
+    }*/
   }
   }
   saveData(){
 
     let data = this.watchDogs.map(function (item) {
-      let script = item.scriptText;
+      let script = item.sellScript.toString();
       if(script && script.length < 50) script = '';
 
     return {
-      uid:item.uid,
-      coinId:item.coinId,
-      dogName:item.dogName,
-      status:item.status,
-      description:item.description,
+      uid:item.uuid,
+      coinId:item.coin,
+      dogName:item.name,
+      status:'',
+      description:item.name,
       scriptText:script
     }
   });
@@ -151,7 +153,7 @@ export class EmailServiceService {
 
 
  addDog(dog:WatchDog){
-   dog.scriptIcon = dog.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
+  /* dog.scriptIcon = dog.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
    dog.statusIcon = dog.status !=='active'?'fa fa-play':'fa fa-pause';
    dog.marketCap = this.marketCapData[dog.coinId];
    if(!dog.marketCap){
@@ -159,7 +161,7 @@ export class EmailServiceService {
      return;
    }
    this.watchDogs.push(dog);
-   this.watchDogsSub.next(this.watchDogs);
+   this.watchDogsSub.next(this.watchDogs);*/
  }
 
   /*editDog(dog:WatchDog){
@@ -189,7 +191,7 @@ export class EmailServiceService {
 
   deleteDog(dog: WatchDog) {
     this.watchDogs = _.filter(this.watchDogs,function (item) {
-      return item.uid !==dog.uid;
+      return item.uid !==dog.uuid;
     });
     this.saveData();
     this.watchDogsSub.next(this.watchDogs);
@@ -200,7 +202,7 @@ export class EmailServiceService {
   getDogByUid(uid: string):WatchDog {
 
     return this.getWatchDogs().find((item)=>{
-          return item.uid === uid;
+          return item.uuid === uid;
       });
 
    /* console.warn(uid);

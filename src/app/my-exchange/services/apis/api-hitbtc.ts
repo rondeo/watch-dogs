@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../services/auth-http.service';
 import {APIBooksService} from "../../../services/books-service";
-import {VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../models/app-models";
+import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../models/app-models";
 import {StorageService} from "../../../services/app-storage.service";
 
 import {ApiLogin} from "../../../shared/api-login";
@@ -19,10 +19,14 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
+import {HttpDelay} from "../../../apis/http-delay";
 
 
 export class ApiHitbtc extends ApiBase  {
 
+  inProcess: boolean;
+
+  myHttp: HttpDelay;
   constructor(
     http:HttpClient,
     storage:StorageService,
@@ -30,6 +34,7 @@ export class ApiHitbtc extends ApiBase  {
 
   ) {
     super(storage, 'hitbtc', marketCap, http);
+    this.myHttp = new HttpDelay(http);
 
   }
 
@@ -67,24 +72,41 @@ export class ApiHitbtc extends ApiBase  {
 
   }
 
+
+
   privateCall(method:PrivateCalls, data:any):Observable<any>{
+    if(!this.apiKey){
+
+      const cred = JSON.parse(this.storage.getItem(this.exchange + '-credentials', true));
+      this.apiKey = cred.apiKey;
+      this.password = cred.password;
+
+    }
+
     if(data && data.base && data.base ==='USDT') data.base = 'USD';
+
 
     let headers: HttpHeaders = new HttpHeaders().set("Authorization", "Basic " + btoa(this.apiKey + ":" +this.password));
     let url:string;
     switch(method){
       case PrivateCalls.BALANCES:
-        url = 'api/hitbtc/trading/balance';
-        console.log(url);
-        return this.http.get(url, {headers})
-          .map((res:any[])=>res.map(function (item:any) {
-            if(item.currency ==='USD')item.currency = 'USDT';
-          return{
-            symbol:item.currency,
-            balance:+item.available + (+item.reserved),
-            available:+item.available
-        }
-        }));
+      //  console.warn(' balances');
+
+
+          url = 'api/hitbtc/trading/balance';
+
+          console.log(url);
+
+          return this.http.get(url, {headers})
+            .map((res:any[])=>res.map(function (item:any) {
+              if(item.currency ==='USD')item.currency = 'USDT';
+              return{
+                symbol:item.currency,
+                balance:+item.available + (+item.reserved),
+                available:+item.available
+              }
+            }));
+
       case PrivateCalls.ORDERS_HISTORY:
         url = 'api/hitbtc/history/trades?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
         console.log(url);
@@ -177,6 +199,7 @@ export class ApiHitbtc extends ApiBase  {
           });
 
       case PrivateCalls.SELL_LIMIT:
+
         let dataS= {
           side:data.action.toLowerCase(),
           quantity:data.amount,
@@ -218,7 +241,7 @@ export class ApiHitbtc extends ApiBase  {
 
     let url = '/api/hitbtc/public/orderbook/{{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res:any)=>{
+    return this.myHttp.get(url).map((res:any)=>{
       console.log(res);
 
       let buy:VOTrade[] = res.bid.map(function (item) {
@@ -246,13 +269,16 @@ export class ApiHitbtc extends ApiBase  {
   }
 
   downloadMarketHistory$
+  downloadMarketHistorySub:Subject<VOOrder[]> = new Subject<VOOrder[]>()
 
   downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
+
     if(base ==='USDT') base='USD';
     let url ='/api/hitbtc/public/trades/{{coin}}{{base}}?sort=DESC'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res:any)=>{
-      ///console.warn(res);
+
+   this.myHttp.get(url).map((res:any)=>{
+      console.warn(res);
 
       return res.map(function(item) {
         let time = new Date(item.timestamp)
@@ -270,7 +296,8 @@ export class ApiHitbtc extends ApiBase  {
           timestamp:time.getTime()
         };
       });
-    });
+    }).subscribe(res =>this.downloadMarketHistorySub.next(res));
+    return this.downloadMarketHistorySub.asObservable();
   }
 
   getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{

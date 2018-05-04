@@ -5,9 +5,10 @@ import {EmailServiceService} from '../email-service.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
 import {runDogScript} from './script-analytics';
-import {VOMarketCap, WatchDog} from '../../models/app-models';
+import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/market-cap.service';
 import {Router} from '@angular/router';
+import {WatchDog} from "../../my-bot/services/watch-dog";
 
 
 
@@ -84,7 +85,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEditDog(dog:WatchDog){
 
-    this.router.navigateByUrl('/email-service/dog-edit/'+ dog.uid);
+    this.router.navigateByUrl('/email-service/dog-edit/'+ dog.uuid);
 
   }
 
@@ -109,9 +110,9 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     let subjects:string[] = [];
 
     ar.forEach(function (item) {
-      let newValue = newValues[item.coinId];
-      let oldValue = item.marketCap;
-      let script = item.scriptText;
+     /* let newValue = newValues[item.coin];
+     // let oldValue = item.marketCap;
+     // let script = item.scriptText;
 
       if(script && oldValue && newValue){
         let res =  runDogScript(oldValue, newValue, script);
@@ -122,7 +123,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
           results.push(' end '+ item.dogName +"\n\r");
         }
       }//else console.warn(script ,oldValue, newValue);
-
+*/
     })
 
 
@@ -157,14 +158,14 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   onScriptClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-script/'+dog.uid);
+    this.router.navigateByUrl('/email-service/edit-script/'+dog.uuid);
   }
   loadData(){
     this.marketCap.refresh();
   }
 
   onDogClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.uid);
+    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.uuid);
   }
 
   stopTimer(){
