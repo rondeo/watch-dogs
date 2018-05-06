@@ -3,6 +3,8 @@ import {VOMarketCap, VOWatchdog} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
 import * as _ from 'lodash';
 import {ApisPrivateService} from "../../apis/apis-private.service";
+import {VOMCAgregated} from "../../apis/api-market-cap.service";
+
 
 @Injectable()
 export class UsdtBtcService {
@@ -20,10 +22,10 @@ export class UsdtBtcService {
     this.wd = _.find(wds, {base:'USDT', coin:'BTC'})
   }
 
-  runMC(coinMC:VOMarketCap){
+  runMC(coinMC:VOMCAgregated){
     if(!this.wd) return;
 
-    const current =coinMC.price_usd;
+  /*  const current =coinMC.price_usd;
     const prev = +(100 * (current - coinMC.prev) / coinMC.prev).toFixed(4);
     const prev5 = +(100 * (current - coinMC.prev5) / coinMC.prev5).toFixed(4);
 
@@ -36,7 +38,7 @@ export class UsdtBtcService {
 
     console.log('BTC prev ' + prev + ' prev5 ' + prev5 + ' prev10 ' + prev10 + ' prev20 ' + prev20 + ' prev30 ' + prev30 + ' ago2h ' + ago2h + ' ago3h  ' + ago3h)
 
-
+*/
 
   }
 

@@ -16,6 +16,7 @@ import {forkJoin} from "rxjs/observable/forkJoin";
 import {UsdtBtcService} from "../services/usdt-btc.service";
 import {WatchDog} from "../services/watch-dog";
 import {MongoService} from "../../apis/mongo.service";
+import {GRAPHS} from "../../com/grpahs";
 
 
 @Component({
@@ -44,9 +45,10 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.mongo.downloadCoinHistory(moment().subtract(2,'d').format(), moment().subtract(1,'d').format(), 'CVC', 1000).then(res=>{
+    /*his.mongo.downloadCoinHistory(moment().format(), moment().subtract(1,'d').format(), 'CVC', 1000).then(res=>{
       console.warn(res);
     })
+*/
     this.sellService.soldCoin$().subscribe(sellCoin => {
       //this.storage
       console.log(' SOLD coin ', sellCoin);
@@ -94,11 +96,13 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
   }
 
+
+
   async addUSValues(wd:WatchDog[]){
 
     const MC = await  this.marketcap.downloadTicker().toPromise();
     wd.forEach(function (item) {
-      item.addUS(MC);
+    //  item.addUS(MC);
     })
   }
 
@@ -120,8 +124,9 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
     });
 
     console.log(sellCoins);
-    this.checkMC(sellCoins);
-    this.sellCoins = sellCoins
+    this.sellCoins = sellCoins;
+    this.downloadAgrigated();
+
 
     // console.log(allSellCoins);
     //  const toSell = _.filter(allSellCoins, {status:'SELL'})
@@ -135,25 +140,59 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
   interval
 
   startCheckMC() {
-    this.interval = setInterval(() => this.initAsync(), 3 * 60000);
+    this.interval = setInterval(() => this.downloadAgrigated(), 3 * 60000);
   }
 
 
-  async checkMC(sellCoins: VOWatchdog[]) {
-    const MC = await  this.marketcap.downloadTicker().toPromise();
+  async buildGraphs(){
+    console.log(this.sellCoins);
+    const coins:string[] = _.map(this.sellCoins, 'coin');
+    coins.push('ETH');
+    coins.push('RDD');
+    coins.push('GNT');
+    console.warn(coins)
 
-    const btcMC = MC['BTC'];
-    this.usdtBtc.runMC(btcMC);
+   const graphs = await this.mongo.downloadCoinsHistory(moment().format(), moment().subtract(1, 'd').format(), coins, 300);
+   console.warn(graphs);
+  }
+
+
+  async downloadAgrigated() {
+    this.buildGraphs();
+
+    const MC = await  this.marketcap.downloadAgrigated().toPromise();
+    const sellCoins = this.sellCoins;
+    console.log(sellCoins);
+
+    sellCoins.forEach(function (item) {
+      const coin = item.coin;
+      const data = MC[coin];
+      const integ = GRAPHS.integralData(data);
+      console.log(integ);
+      const trigger =
+        integ.cur_prev < 0  &&
+        integ.prev5_10 <0 &&
+        integ.prev10_20 < 0 &&
+        integ.prev5_10 < 0;
+      console.warn(trigger)
+    })
+
+    console.log(MC);
+
+
+
+   // const btcMC = MC['BTC'];
+   // this.usdtBtc.runMC(btcMC);
   //  console.log(MC);
 
 
 
     const result = [];
 
-    sellCoins.forEach((coin: VOWatchdog) => {
+  //  sellCoins.forEach((coin: VOWatchdog) => {
 
-
-      const coinMC: VOMarketCapExt = <VOMarketCapExt>MC[coin.coin];
+/*
+      const coinMC: VOMongo = <VOMongo>MC[coin.coin];
 
       console.log(coinMC);
 
@@ -188,16 +227,16 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
         }
 
-        coinMC.tobtc_change_1h = +(coinMC.percent_change_1h - btcMC.percent_change_1h).toFixed(3);
+       // coinMC.tobtc_change_1h = +(coinMC.percent_change_1h - btcMC.percent_change_1h).toFixed(3);
 
-        console.log(coin.coin + ' ' + coinMC.percent_change_1h + ' to BTC ' + coinMC.tobtc_change_1h);
+       // console.log(coin.coin + ' ' + coinMC.percent_change_1h + ' to BTC ' + coinMC.tobtc_change_1h);
 
         const sellResult = [];
 
         coin.sellScript.forEach(function (script) {
           console.log('Script : ' + script);
-          const scriptResults = RunScript.runScriptSell(coinMC, script);
-          console.log(scriptResults);
+          // const scriptResults = RunScript.runScriptSell(coinMC, script);
+        //  console.log(scriptResults);
           // sellResult.push();
         })
 
@@ -216,10 +255,10 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
           //  this.storage.upsert('SELL-' + coin.exchange + '-' + coin.base + '-' + coin.coin, coin);
           //  this.sellService.sellCoin(coin);
-        }
-      }
-    })
-    return result;
+        }*/
+      //}
+  //  })
+ //   return result;
 
   }
 

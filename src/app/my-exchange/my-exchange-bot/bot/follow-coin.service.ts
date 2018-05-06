@@ -25,10 +25,10 @@ export class FollowCoinService {
               private marketCap: MarketCapService) {
 
 
-    marketCap.getCoinsObs().subscribe(MC => {
+   /* marketCap.getCoinsObs().subscribe(MC => {
       this.onMCData(MC);
 
-    })
+    })*/
 
   }
 

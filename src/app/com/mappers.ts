@@ -18,6 +18,10 @@ interface BitfinexMarket{
   volume:string;// "18701.70895159"
 }
 
+
+
+
+
 export class Mappers{
 
   static etherdeltaMarkets(result:any, marketsAr:VOMarket[], indexed:{[pair:string]:VOMarket},   bases:string[],  marketCap:{[symbol:string]:VOMarketCap}) {

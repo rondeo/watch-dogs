@@ -371,13 +371,7 @@ export class VOMarketCap {
   percent_change_24h: number;
   percent_change_7d: number;
 
-  prev?: number;
-  prev5?: number;
-  prev10?: number;
-  prev20?: number;
-  ago2h?: number;
-  prev30?: number;
-  ago3h?: number;
+
 
   btcUS?: number
   tobtc_change_1h?: number;
@@ -406,10 +400,9 @@ export class VOMarketCap {
 }
 
 export class VOMarketCapExt extends VOMarketCap {
-  tobase_change_1h: number;
+  tobase_change_1h?: number;
   tobase_change_24h: number;
   tobase_change_7d: number;
-
 }
 
 /*

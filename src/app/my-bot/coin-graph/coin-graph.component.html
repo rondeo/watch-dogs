@@ -1,12 +1,27 @@
 
-<section>
+<section class="coin-graph">
 <span *ngIf="coinMC" class="mat-h2" ><small>{{coinMC.id}}</small> {{coinMC.symbol}} <small>Rank: {{coinMC.rank}}</small></span>
-    <button class="mat-raised-button" (click)="onMinus12h()">-12h</button>
-    <button class="mat-raised-button" (click)="onPlus12h()">+12h</button>
-    <button class="mat-raised-button" (click)="onMinus1D()">-1D</button>
-    <button class="mat-raised-button" (click)="onPlus1D()">+1D</button>
-    <button class="mat-raised-button" (click)="onMinus1W()">-1W</button>
-    <button class="mat-raised-button" (click)="onPlus1W()">+1W</button>
+
+    <button mat-raised-button (click)="onMinus12h()">-12h</button>
+    <button mat-raised-button (click)="onPlus12h()">+12h</button>
+    <button mat-raised-button (click)="onMinus1D()">-1D</button>
+    <button mat-raised-button (click)="onPlus1D()">+1D</button>
+    <button mat-raised-button (click)="onMinus1W()">-1W</button>
+    <button mat-raised-button (click)="onPlus1W()">+1W</button>
+
+    <br/>
+    <mat-form-field  [formGroup]="dateForm">
+        <!--<input matInput [matDatepicker]="myDatepicker" formControlName="dateTo" autocomplete="false">
+        <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #myDatepicker></mat-datepicker>-->
+
+        <mat-placeholder>From</mat-placeholder>
+        <mat-datetimepicker-toggle [for]="datetimePicker" matSuffix></mat-datetimepicker-toggle>
+        <mat-datetimepicker #datetimePicker type="datetime" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+        <input   class="small" matInput formControlName="dateTo" [matDatetimepicker]="datetimePicker" required autocomplete="false">
+
+    </mat-form-field>
+    <button mat-raised-button (click)="onGoClick()">From</button>
     <br/>
     <small>From: {{from.slice(5,-3)}}</small>
     <br/>
