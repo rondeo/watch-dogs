@@ -25,29 +25,35 @@ export class MongoService {
     return this.http.get(url).toPromise();
   }
 
-  downloadCoinsHistory(to: string, from: string, coins: string[], limit: number): Promise<VOMCAgregated[]> {
+  downloadCoinsBTCandUSD(to: string, from: string, coins: string[], limit: number): Promise<{[symbol:string]:{btc:number, usd:number}}[]> {
     const find = {
       timestamp: {$gt: moment(from).valueOf(), $lt: moment(to).valueOf()}
     }
 
-    console.log(coins)
     const fields: any = {};
     coins.forEach(function (item) {
-      fields[item] = 1;
+      fields[item+'.usd'] = 1;
+      fields[item+'.btc'] = 1;
     });
-    fields.date = 1;
 
-    console.warn(fields);
+    fields.date = 1;
     return this.geteData('last', find, fields, limit).then((res: any) => {
+     //  console.log(res);
       return res.payload.map(function (itemObj) {
-        const out = {};
+
+        const out = {
+          date:itemObj.date
+        };
+
         coins.forEach(function (coin) {
           const item = itemObj[coin];
-          out[coin] = ApiMarketCapService.mapAgrigated(item, coin);
+          out[coin] =  {
+            btc: item.btc,
+            usd:item.usd
+          }
         });
         return out;
       })
-
     });
   }
 

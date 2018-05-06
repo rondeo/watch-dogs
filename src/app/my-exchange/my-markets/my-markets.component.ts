@@ -38,9 +38,9 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
 
       //connector.loadAllMarketSummaries();
 
-      connector.getAllMarkets().toPromise().then(res=>{
+   /*   connector.getAllMarkets().toPromise().then(res=>{
         console.warn(res);
-      })
+      })*/
 
       if(this.subMarkets) this.subMarkets.unsubscribe();
       this.subMarkets = connector.getAllMarkets().subscribe(res=>{
@@ -90,6 +90,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
   @ViewChild('baseETH') baseETH;
   @ViewChild('baseUSDT') baseUSDT;
   private checked = ['BTC', 'ETH','USDT' ];
+
   onChangeBase(){
     let checked:string[] = [];
     if(this.baseBTC.checked)checked.push('BTC');

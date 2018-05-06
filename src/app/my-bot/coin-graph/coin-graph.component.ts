@@ -76,9 +76,7 @@ export class CoinGraphComponent implements OnInit {
     console.log(history[0])
     const anl = GRAPHS.mcAggregatedToGraphs(history);
     // console.log(anl);
-    const graphs = []
-
-
+    const graphs = [];
     graphs.push({
       ys: anl.price_btc,
       color: '#885a6a',
@@ -92,12 +90,6 @@ export class CoinGraphComponent implements OnInit {
           color: '#252288',
           label: 'prev10_20'
         });*/
-
-    graphs.push({
-      ys: anl.trigger,
-      color: '#0e8857',
-      label: '%  1h'
-    });
     /*
         graphs.push({
           ys: coinHistory.price_usd,

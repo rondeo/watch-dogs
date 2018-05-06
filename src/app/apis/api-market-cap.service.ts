@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/concat";
 import * as _ from 'lodash';
 import "rxjs/add/operator/share";
-
+import {Subject} from "rxjs/Subject";
 
 
 interface MCdata {
@@ -15,15 +15,14 @@ interface MCdata {
   usd: number;
   btc: number;
   rank: number;
-  rP:number;
+  rP: number;
   vol: number;
   h1: number;
   t: number;
-  volP:number;
+  volP: number;
   data: number[];
-  prev:number[];
+  prev: number[];
 }
-
 
 
 export interface VOMCAgregated {
@@ -46,7 +45,7 @@ export interface VOMCAgregated {
   ago2h: number;
   prev30: number;
   ago3h: number;
-  date:string;
+  date: string;
 }
 
 
@@ -56,19 +55,26 @@ export class ApiMarketCapService {
   static mapServerValues(data: { [id: string]: MCdata }): { [symbol: string]: VOMarketCap } {
     let MC: { [symbol: string]: VOMarketCap } = {};
 
+    const percent_change_1h = data['BTC'].h1;
+    const percent_change_24h = data['BTC'].data[0];
+    const percent_change_7d = data['BTC'].data[1];
+
     for (let str in data) {
       const item: MCdata = data[str];
-      if(item.data) {
+      if (item.data) {
         MC[str] = {
           id: item.id,
           symbol: str,
-          name:item.n,
+          name: item.n,
           rank: item.rank,
           price_usd: item.usd,
           price_btc: item.btc,
           percent_change_1h: item.h1,
           percent_change_24h: +item.data[0],
           percent_change_7d: +item.data[1],
+          tobtc_change_1h: +(item.h1 - percent_change_1h).toFixed(2),
+          tobtc_change_24h: +(+item.data[0] - percent_change_24h).toFixed(2),
+          tobtc_change_7d: +(+item.data[1] - percent_change_7d).toFixed(2),
           volume_usd_24h: item.vol,
           //volumePrev:item.volP,
           market_cap_usd: item.data[2],
@@ -83,10 +89,10 @@ export class ApiMarketCapService {
   }
 
 
-  static mapAgrigated(item:MCdata, symbol: string):VOMCAgregated{
+  static mapAgrigated(item: MCdata, symbol: string): VOMCAgregated {
     return {
-      date:'',
-      symbol:symbol,
+      date: '',
+      symbol: symbol,
       id: item.id,
       price_btc: item.btc,
       price_usd: item.usd,
@@ -107,6 +113,7 @@ export class ApiMarketCapService {
       ago3h: item.prev[6]
     }
   }
+
   static MC: { [symbol: string]: VOMarketCap };
 
   constructor(private http: HttpClient) {
@@ -117,23 +124,32 @@ export class ApiMarketCapService {
     return this.downloadTicker().toPromise().then(res => ApiMarketCapService.MC[symbol])
   }
 
-  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
+  downloadTicker(refresh = false): Observable<{ [symbol: string]: VOMarketCap }> {
+    if(!refresh &&  ApiMarketCapService.MC) return Observable.of(ApiMarketCapService.MC);
     let url = '/api/marketcap/ticker';
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).share().map((res: { [id: string]: MCdata }) => {
       let MC = ApiMarketCapService.mapServerValues(res);
-       ApiMarketCapService.MC = MC;
+      ApiMarketCapService.MC = MC;
       return MC;
     });
+  }
+
+  private agrigatedSub: Subject<{ [symbol: string]: VOMCAgregated }> = new Subject();
+  agregated$():Observable<{ [symbol: string]: VOMCAgregated }>{
+    return this.agrigatedSub.asObservable();
   }
 
   downloadAgrigated(): Observable<{ [symbol: string]: VOMCAgregated }> {
     let url = '/api/marketcap/agrigated';
     console.log('%c ' + url, 'color:pink');
-    return this.http.get(url).share().map((res: { [id: string]: MCdata }) => {
-      console.log(res);
+    return this.http.get(url)
+      .share()
+      .map((res: { [id: string]: MCdata }) => {
+    //  console.log(res);
       const out = {}
-      for(let str in res) out[str] = ApiMarketCapService.mapAgrigated(res[str], str)
+      for (let str in res) out[str] = ApiMarketCapService.mapAgrigated(res[str], str);
+      this.agrigatedSub.next(out);
       return out;
     });
   }

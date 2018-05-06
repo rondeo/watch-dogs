@@ -20,10 +20,11 @@ import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
 import {Component, OnInit} from '@angular/core';
 import {ApisModule} from "../apis/apis.module";
 import { CoinGraphComponent } from './coin-graph/coin-graph.component';
-import { BotSellCoinComponent } from './bot-sell-coin/bot-sell-coin.component';
+import { BotSellCoinComponent } from './bot-sell-coins/bot-sell-coin.component';
 import {BotSellCoinService} from "./services/bot-sell-coin.service";
 import {UsdtBtcService} from "./services/usdt-btc.service";
 import {UiModule} from "../ui/ui.module";
+import { SellCoinComponent } from './sell-coin/sell-coin.component';
 
 @Component({
   template: `
@@ -82,7 +83,8 @@ const routes: Routes = [
     CoinDayComponent,
     Outlet,
     CoinGraphComponent,
-    BotSellCoinComponent
+    BotSellCoinComponent,
+    SellCoinComponent
 
   ],
   providers: [

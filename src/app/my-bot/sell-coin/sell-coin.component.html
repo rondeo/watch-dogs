@@ -1,0 +1,17 @@
+<div>
+    <section>
+        {{watchdog.base}}&nbsp;${{watchdog.baseUS}}
+        &nbsp;&nbsp;
+        <a routerLink="../coin-graph/{{watchdog.coin}}" class="btn">{{watchdog.coin}}</a>
+        &nbsp;
+        ${{watchdog.coinUS}}
+        &nbsp; &nbsp;
+        <span>%</span>
+        &nbsp;
+        <app-mc-percent *ngIf="watchdog.mcCoin" [marketcap]="watchdog.mcCoin"></app-mc-percent>
+    </section>
+
+    <section>
+        <app-line-chart [graphs]="myGraps"></app-line-chart>
+    </section>
+</div>

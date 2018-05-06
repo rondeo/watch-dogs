@@ -371,19 +371,22 @@ export class VOMarketCap {
   percent_change_24h: number;
   percent_change_7d: number;
 
+  volume_usd_24h?: number;
 
-
-  btcUS?: number
   tobtc_change_1h?: number;
   tobtc_change_24h?: number;
   tobtc_change_7d?: number;
 
+  btcUS?: number
+
+
+ /*
 
   network?: string;
-  age?: number;
+  age?: number;*/
 
 
-  volume_usd_24h?: number;
+
 
   market_cap_usd?: number;
   available_supply?: number;
@@ -392,11 +395,11 @@ export class VOMarketCap {
   last_updated?: number;
 
 
-  last_updated_date?: string;
+ // last_updated_date?: string;
   selected?: boolean;
 
-  rankUP?: number;
-  percent_1h_UP?: number;
+ // rankUP?: number;
+ // percent_1h_UP?: number;
 }
 
 export class VOMarketCapExt extends VOMarketCap {
