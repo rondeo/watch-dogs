@@ -114,12 +114,14 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     let trigger = false;
     const pricebtcs = [];
     const priceusds = [];
+    const volumes = [];
     const triggers = [10];
 
     history.forEach(function (item) {
       labels.push(' ');
       pricebtcs.push(item.price_btc);
       priceusds.push(item.price_usd);
+      volumes.push(item.volume);
       const integ = GRAPHS.integralData(item);
       if(trigger){
         trigger = false;
@@ -137,10 +139,12 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     })
 
 
-
-
-
     const graphs = [
+      {
+        ys: volumes,
+        color:'#2abc50',
+        label: 'Vol'
+      },
       {
         ys: pricebtcs,
         color:'#551c1c',

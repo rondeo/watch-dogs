@@ -8,12 +8,13 @@ import {of} from "rxjs/observable/of";
 import {concatMap, delay} from "rxjs/operators";
 import {timer} from "rxjs/observable/timer";
 import {ApiPublicAbstract} from "./api-public-abstract";
+import {StorageService} from "../../services/app-storage.service";
 
 export class ApiPublicBitfinex extends ApiPublicAbstract{
   exchange = 'bitfinex';
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(http: HttpClient, storage:StorageService) {
+    super(http, storage);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {

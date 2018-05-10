@@ -17,6 +17,8 @@ import { GlKnownExchangesComponent } from './gl-known-exchanges/gl-known-exchang
 import { CoinsExchangesComponent } from './coins-exchanges/coins-exchanges.component';
 import {FormsModule} from '@angular/forms';
 import { MarketCapMainComponent } from './market-cap-main/market-cap-main.component';
+import { CoinDayComponent } from './coin-day/coin-day.component';
+import {UiModule} from "../ui/ui.module";
 
 
 const routes: Routes = [
@@ -30,7 +32,8 @@ const routes: Routes = [
       {path: 'coin-exchanges/:coinId', component: CoinsExchangesComponent},
 
       {path: 'coins-list', component: CoinsListComponent},
-      {path: 'exchanges-list', component: ExchangesListComponent}
+      {path: 'exchanges-list', component: ExchangesListComponent},
+      {path: 'coin-day/:coin', component: CoinDayComponent}
     ]
   }
 ];
@@ -41,6 +44,7 @@ const routes: Routes = [
     CommonModule,
     MaterialAppModule,
     SharedModule,
+    UiModule,
     FormsModule,
     RouterModule.forChild(routes)
   ],
@@ -53,7 +57,8 @@ const routes: Routes = [
     GlAllExchangesComponent,
     GlKnownExchangesComponent,
     CoinsExchangesComponent,
-    MarketCapMainComponent
+    MarketCapMainComponent,
+    CoinDayComponent
   ]
 })
 export class MarketCapModule {}

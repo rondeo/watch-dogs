@@ -58,6 +58,7 @@ export class MongoService {
   }
 
   downloadCoinHistory(to: string, from: string, coin: string, limit: number): Promise<VOMCAgregated[]> {
+    console.log(to, from);
     const find = {
       timestamp: {$gt: moment(from).valueOf(), $lt: moment(to).valueOf()}
     }
@@ -66,9 +67,10 @@ export class MongoService {
     fields.date = 1;
 
     return this.geteData('last', find, fields, limit).then((res: any) => {
+      console.log(res);
       return res.payload.map(function (itemObj) {
         const item = itemObj[coin];
-        return ApiMarketCapService.mapAgrigated(item, coin);
+        return item?ApiMarketCapService.mapAgrigated(item, coin):null;
       });
     })
   }

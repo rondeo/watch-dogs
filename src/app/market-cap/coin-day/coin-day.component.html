@@ -1,0 +1,29 @@
+<div class="coin-graph">
+    <h3>
+        {{coin}}
+    </h3>
+    <p>
+        <span>rank {{rankFirst}} - {{rankLast}}</span> &nbsp; &nbsp;
+        <app-mc-percent *ngIf="mcCoin" [marketcap]="mcCoin"></app-mc-percent>
+    </p>
+
+
+    <div>
+        <div class="inline-block">
+            <div>{{from}}</div>
+            <div>{{to}}</div>
+        </div>
+        &nbsp;
+        <div class="inline-block">
+            <button mat-raised-button (click)="onMinus12h()">-12h</button>
+            <button mat-raised-button (click)="onPlus12h()">+12h</button>
+            <button mat-raised-button (click)="onMinus1D()">-1D</button>
+            <button mat-raised-button (click)="onPlus1D()">+1D</button>
+            <button mat-raised-button (click)="onNowClick()">now</button>
+            <span class="dred">{{skips}}</span>
+        </div>
+
+    </div>
+
+    <app-line-chart [graphs]="myGraps"></app-line-chart>
+</div>

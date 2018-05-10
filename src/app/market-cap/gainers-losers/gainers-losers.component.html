@@ -1,42 +1,68 @@
 <div>
     <p>
-       <span>by Rank</span>
-        <mat-radio-group  (change)="onTopChange($event)">
-            <mat-radio-button [checked]="true" value="all">All</mat-radio-button>
-             <mat-radio-button value="top100">Top 100</mat-radio-button>
-            <mat-radio-button value="top200">Top 200</mat-radio-button>
-            <mat-radio-button value="after100">> 100</mat-radio-button>
-            <mat-radio-button value="after200">> 200</mat-radio-button>
+        <mat-form-field class="w5">
+            <mat-select [(ngModel)] = "top" (change)="onTopChange($event)" placeholder="by Rank">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="top100">Top 100</mat-option>
+                <mat-option value="top200">Top 200</mat-option>
+                <mat-option value="after100"> > 100</mat-option>
+                    <mat-option value="after200">< 200</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w6">
+            <mat-select [(ngModel)] = "exchange"  (change)="onExcgangeChange($event)" placeholder="Exchange">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="bittrex">Bittrex</mat-option>
+                <mat-option value="poloniex">Poloniex</mat-option>
+                <mat-option value="binance">Binance</mat-option>
+                <mat-option value="hitbtc">HitBtc</mat-option>
+                <mat-option value="cryptopia">Cryptopia</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-        </mat-radio-group>
+
     </p>
 
     <section>
-            <table>
-                <tbody>
-                <tr>
-                    <th>Graph</th>
-                    <th>Symbol</th>
-                    <th  class="btn" (click)="onClickHeader('tobtc_change_1h')">1h%</th>
-                    <th  class="btn" (click)="onClickHeader('tobtc_change_24h')" >24h%</th>
-                    <th  class="btn" (click)="onClickHeader('tobtc_change_7d')">7d%</th>
-                    <th>Rank</th>
-                    <th>$US</th>
-                    <th>ID</th>
-                </tr>
 
-                <tr *ngFor="let item of sorted">
-                    <td><a class="fa fa-line-chart" target="_blank" href="https://coinmarketcap.com/currencies/{{item.id}}/"></a></td>
-                    <td><span class="btn small" (click)="onSymbolClick(item)">{{item.symbol}}</span></td>
-                    <td class="w50" [ngClass]="item.tobtc_change_1h>0?'dgreen':'dred'" >{{item.tobtc_change_1h}}</td>
-                    <td class="w50" [ngClass]="item.tobtc_change_24h>0?'dgreen':'dred'" >{{item.tobtc_change_24h}}</td>
-                    <td class="w50" [ngClass]="item.tobtc_change_7d>0?'dgreen':'dred'" >{{item.tobtc_change_7d}}</td>
-                    <td><small>{{item.rank}}</small></td>
-                   <td class="small">{{item.price_usd}}</td>
-                    <td class="small w80 ell" >{{item.id}}</td>
-                </tr>
-                </tbody>
-            </table>
+        <table>
+            <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3" class="text-center">
+                    <small>% to btc</small>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Graph</th>
+                <th>Symbol</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_1h')">1h%</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_24h')">24h%</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_7d')">7d%</th>
+                <th>Rank</th>
+                <th>$US</th>
+                <th>ID</th>
+            </tr>
+
+            <tr *ngFor="let item of sorted">
+                <td><a class="fa fa-line-chart" target="_blank"
+                       href="https://coinmarketcap.com/currencies/{{item.id}}/"></a></td>
+                <td><span class="btn small" (click)="onSymbolClick(item)">{{item.symbol}}</span></td>
+                <td class="w50" [ngClass]="item.tobtc_change_1h>0?'dgreen':'dred'">{{item.tobtc_change_1h}}</td>
+                <td class="w50 btn" [ngClass]="item.tobtc_change_24h>0?'dgreen':'dred'"  routerLink="../coin-day/{{item.symbol}}">{{item.tobtc_change_24h}}</td>
+                <td class="w50" [ngClass]="item.tobtc_change_7d>0?'dgreen':'dred'">{{item.tobtc_change_7d}}</td>
+                <td>
+                    <small>{{item.rank}}</small>
+                </td>
+                <td class="small">{{item.price_usd}}</td>
+                <td class="small w80 ell">{{item.id}}</td>
+            </tr>
+            </tbody>
+        </table>
         <!-- <app-sortable-table [consAvailable]="gainersAr" (selectedSymbol)="onSymbolSelected($event)"></app-sortable-table>-->
     </section>
 </div>

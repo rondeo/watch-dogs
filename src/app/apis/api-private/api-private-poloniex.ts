@@ -209,7 +209,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
     return this.getCredentials().switchMap(cred=>{
       if(!cred) throw new Error('login reqired');
 
-
       post.nonce = Math.ceil(Date.now() / 1000);
 
       let load = Object.keys(post).map(function (item) {

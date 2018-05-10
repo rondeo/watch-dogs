@@ -3,6 +3,8 @@ import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/empty';
+import {StorageService} from "../../services/app-storage.service";
+import {Subject} from "rxjs/Subject";
 
 export interface MarketDay {
   Ask: number[];
@@ -24,7 +26,10 @@ export abstract class ApiPublicAbstract {
   allCoins: { [coin: string]: { [base: string]: number } };
 
 
-  constructor(protected http: HttpClient) {
+  constructor(
+    protected http: HttpClient,
+    protected store:StorageService
+  ) {
 
   }
 
@@ -32,15 +37,32 @@ export abstract class ApiPublicAbstract {
     if (this.allCoins) return Observable.of(this.allCoins);
     else {
       if (fromCache) {
-        const str = localStorage.getItem(this.exchange + '-coins');
-        if (str) {
-          this.allCoins = JSON.parse(str);
-          return Observable.of(this.allCoins);
-        }
+
+        const sub = new Subject<any>();
+
+        this.store.select(this.exchange + '-coins').then(str =>{
+          if(!str){
+            this.downloadTicker().map((r) =>{
+             // console.log(this.exchange , r);
+             // console.log(this.allCoins);
+              this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
+              // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
+              sub.next(this.allCoins)
+            }).toPromise()
+          }else{
+           // console.log(this.exchange);
+            this.allCoins = JSON.parse(str);
+            setTimeout(() =>sub.next(this.allCoins), 50);
+          }
+        })
+
+      return sub.asObservable();
       }
+
       return this.downloadTicker().map((r) =>{
-        console.log(this.exchange , r);
-        localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
+        console.log(this.exchange , this.allCoins);
+        this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
+       // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
         return this.allCoins
       } )
     }

@@ -4,12 +4,13 @@ import {ApiCryptopia} from "../../my-exchange/services/apis/api-cryptopia";
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
 import {ApiPublicAbstract} from "./api-public-abstract";
+import {StorageService} from "../../services/app-storage.service";
 
 export class ApiPublicCryptopia extends ApiPublicAbstract {
   exchange = 'cryptopia';
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(http: HttpClient, storage:StorageService) {
+    super(http, storage);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {

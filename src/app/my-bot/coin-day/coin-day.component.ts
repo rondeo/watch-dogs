@@ -162,23 +162,6 @@ export class CoinDayComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.myGraps = {
-      xs: ['one', 'two'],
-      graphs: [
-        {
-          ys: [0, 100, 200, 60, 300],
-          color: '#00FF00',
-          label: 'Volume'
-        },
-        {
-          ys: [100, 200, 0, 600, 100, 250],
-          color: '#FF0000',
-          label: 'Price'
-        }
-      ]
-    }
-
     this.route.params.subscribe(paramas => {
       let coin = paramas.coin;
       console.log(coin);

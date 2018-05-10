@@ -12,7 +12,7 @@ import {UtilsBooks} from "../../com/utils-books";
 import {Subject} from "rxjs/Subject";
 import {WatchDog} from "../../my-bot/services/watch-dog";
 
-export class ApiPrivateBittrex extends ApiPrivateAbstaract{
+export class ApiPrivateBinance extends ApiPrivateAbstaract{
 
   balances:VOBalance[];
   exchange ='bittrex'
@@ -56,6 +56,8 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract{
           })
 
          }else throw new Error(order.message)
+
+
 
        })
 
@@ -186,11 +188,30 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract{
   }
 
   hash_hmac(text, password) {
-    let dg: any = cryptojs.HmacSHA512(text, password);
+   // let dg: any = cryptojs.HmacSHA512(text, password);
+    let dg: any = cryptojs.HmacSHA256(text, password);
     return dg.toString(cryptojs.enc.Hex);
   }
 
 
+
+
+  signedRequest = function(url, data = {}, callback, method = 'GET') {
+   /* if ( !options.APIKEY ) throw Error('apiRequest: Invalid API Key');
+    if ( !options.APISECRET ) throw Error('signedRequest: Invalid API Secret');
+    data.timestamp = new Date().getTime() + info.timeOffset;
+    if ( typeof data.recvWindow === 'undefined' ) data.recvWindow = options.recvWindow;*/
+    let query = Object.keys(data).reduce(function(a,k){a.push(k+'='+encodeURIComponent(data[k]));return a},[]).join('&');
+   // let signature = crypto.createHmac('sha256', options.APISECRET).update(query).digest('hex'); // set the HMAC hash header
+
+  /*  let opt = reqObj(
+      url+'?'+query+'&signature='+signature,
+      data,
+      method,
+      options.APIKEY
+    );
+    proxyRequest(opt, callback);*/
+  }
 
 
 }

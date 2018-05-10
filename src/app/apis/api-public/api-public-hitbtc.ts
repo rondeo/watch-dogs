@@ -2,13 +2,14 @@ import {VOBooks, VOMarket, VOOrder, VOTrade} from "../../models/app-models";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {ApiPublicAbstract} from "./api-public-abstract";
+import {StorageService} from "../../services/app-storage.service";
 
 export class ApiPublicHitbtc extends ApiPublicAbstract{
   exchange = 'hitbtc';
   private marketsAr: VOMarket[];
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(http: HttpClient, storage:StorageService) {
+    super(http, storage);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {

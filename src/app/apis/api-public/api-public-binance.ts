@@ -2,14 +2,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
 import {ApiPublicAbstract} from "./api-public-abstract";
+import {StorageService} from "../../services/app-storage.service";
 
 
 export class ApiPublicBinance extends ApiPublicAbstract {
   exchange = 'binance';
 
-  constructor(http: HttpClient) {
-    super(http)
-
+  constructor(http: HttpClient, storage:StorageService) {
+    super(http, storage);
   }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {

@@ -44,7 +44,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
 
       if(this.subMarkets) this.subMarkets.unsubscribe();
       this.subMarkets = connector.getAllMarkets().subscribe(res=>{
-        console.log(res);
+       //  console.log(res);
         this.marketsArAll = res;
         this.render();
       })

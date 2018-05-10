@@ -10,6 +10,7 @@ import {ApiPublicBitfinex} from "./api-public/api-public-bitfinex";
 import {ApiPublicAbstract} from "./api-public/api-public-abstract";
 import {Observable} from "rxjs/Observable";
 import {forkJoin} from "rxjs/observable/forkJoin";
+import {StorageService} from "../services/app-storage.service";
 
 
 @Injectable()
@@ -17,7 +18,10 @@ export class ApisPublicService {
 
   private exchanges: { [index: string]: ApiPublicAbstract } = {};
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {
   }
 
   private availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc', 'cryptopia'];
@@ -123,17 +127,17 @@ export class ApisPublicService {
   private cerateExchange(exchange: string): ApiPublicAbstract {
     switch (exchange) {
       case 'cryptopia':
-        return new ApiPublicCryptopia(this.http);
+        return new ApiPublicCryptopia(this.http, this.storage);
       case 'poloniex':
-        return new ApiPublicPoloniex(this.http);
+        return new ApiPublicPoloniex(this.http, this.storage);
       case 'hitbtc':
-        return new ApiPublicHitbtc(this.http);
+        return new ApiPublicHitbtc(this.http, this.storage);
       case 'binance':
-        return new ApiPublicBinance(this.http);
+        return new ApiPublicBinance(this.http, this.storage);
       case 'bittrex':
-        return new ApiPublicBittrex(this.http);
+        return new ApiPublicBittrex(this.http, this.storage);
       case 'bitfinex':
-        return new ApiPublicBitfinex(this.http);
+        return new ApiPublicBitfinex(this.http, this.storage);
 
 
     }

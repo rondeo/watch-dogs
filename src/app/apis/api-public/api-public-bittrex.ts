@@ -3,14 +3,14 @@ import {VOBooks, VOMarket, VOTrade} from "../../models/app-models";
 import {Observable} from "rxjs/Observable";
 import {SOMarketBittrex} from "../../models/sos";
 import {ApiPublicAbstract} from "./api-public-abstract";
+import {StorageService} from "../../services/app-storage.service";
 
 export class ApiPublicBittrex extends ApiPublicAbstract{
 
   exchange = 'bittrex';
 
-  constructor(http: HttpClient) {
-
-    super(http);
+  constructor(http: HttpClient, storage:StorageService) {
+    super(http, storage);
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {

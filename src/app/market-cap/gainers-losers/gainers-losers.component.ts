@@ -4,6 +4,8 @@ import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {ApisPublicService} from "../../apis/apis-public.service";
+import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
 
 @Component({
   selector: 'app-gainers-losers',
@@ -12,62 +14,99 @@ import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 })
 export class GainersLosersComponent implements OnInit {
 
+  pageId = 'marketcap-ganers-losers'
   asc_desc = 'desc';
-  top:string = 'top300';
-
+  top: string = 'top300';
+  exchange: string;
   allCoins: VOMarketCap[];
 
   sorted: VOMarketCap[];
 
-
   sortBy: string = 'percent_change_24h';
+
+  exchangeCoins: string[] = [];
 
   constructor(
     private router: Router,
-    private marketCap: MarketCapService,
+    private apiPublic: ApisPublicService,
     private apiMarketCap: ApiMarketCapService
   ) {
   }
 
-
   onSymbolClick(mc: VOMarketCap) {
-
-    // let symbols:string[] = _.map(this.consAvailable,'symbol');
-
     this.router.navigateByUrl('/market-cap/coin-exchanges/' + mc.id);
   }
 
   private missingImages: string[] = [];
   private misingImagesTimeout;
 
+
+  saveState() {
+    const state = {
+      sortBy: this.sortBy,
+      asc_desc: this.asc_desc,
+      exchange: this.exchange,
+      top: this.top
+    }
+    localStorage.setItem(this.pageId, JSON.stringify(state));
+  }
+
   ngOnInit() {
+    const lastState = localStorage.getItem(this.pageId);
+    if (lastState) {
+      const state = JSON.parse(lastState);
+
+      this.sortBy = state.sortBy || this.sortBy;
+      this.asc_desc = state.asc_desc || this.asc_desc;
+      this.top = state.top || this.top;
+      this.exchange = state.exchange;
+    }
 
     this.downlaodTicker();
-
-    /*this.marketCap.coinsAr$.subscribe(res => {
-      this.allCoins = res;
-
-      this.sortData();
-    });
-    this.marketCap.refresh();*/
   }
 
   onSymbolSelected(symbol: string) {
     console.log(symbol);
   }
 
+  async onExcgangeChange(evt) {
+    // this.exchange = evt.value;
+    this.loadExchange();
+    this.saveState();
 
-  onTopChange(evt){
-    this.top = evt.value;
+  }
+
+  async loadExchange() {
+    if (!this.exchange) return;
+    const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
+    if (!api) {
+      this.exchangeCoins = [];
+      this.sortData();
+      return
+    }
+
+    api.getAllCoins().subscribe(coins => {
+      // console.log(coins);
+      this.exchangeCoins = Object.keys(coins);
+      this.sortData();
+
+    })   //console.log(coins);
+
+  }
+
+
+  onTopChange(evt) {
     this.sortData();
+    this.saveState();
   }
 
   async downlaodTicker() {
     const ticker = await this.apiMarketCap.downloadTicker().toPromise();
 
-    console.log(ticker);
+    //  console.log(ticker);
     this.allCoins = Object.values(ticker);
-    this.sortData();
+    if (this.exchange) this.loadExchange();
+    else this.sortData();
   }
 
   onFilterClick() {
@@ -76,54 +115,50 @@ export class GainersLosersComponent implements OnInit {
   }
 
   sortData() {
-    if (!this.allCoins) return;
 
-    var allCoins:VOMarketCap[] = this.allCoins;
+    if (!this.allCoins) return;
+    // console.log('sort');
+
+    var allCoins: VOMarketCap[] = this.allCoins;
+
     switch (this.top) {
       case 'top100':
-        allCoins = allCoins.filter(o=>o.rank < 100);
+        allCoins = allCoins.filter(o => o.rank < 100);
         break;
       case 'top200':
-        allCoins = allCoins.filter(o=>o.rank < 200);
+        allCoins = allCoins.filter(o => o.rank < 200);
         break;
       case 'after100':
-        allCoins = allCoins.filter(o=>o.rank > 100);
+        allCoins = allCoins.filter(o => o.rank > 100);
         break;
       case 'after200':
-        allCoins = allCoins.filter(o=>o.rank > 200);
+        allCoins = allCoins.filter(o => o.rank > 200);
         break;
+    }
 
+    const exchangeCoins = this.exchangeCoins || [];
+    if (exchangeCoins.length) {
+      allCoins = allCoins.filter(function (item) {
+        return exchangeCoins.indexOf(item.symbol) !== -1
+      });
     }
 
     //let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
-
     let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
 
     // console.log(sorted);
-    this.sorted = _.take(sorted, 100);
+    this.sorted = _.take(sorted, 50);
   }
-
-
-  onTableclick(event) {
-
-    // console.log(event.srcElement);
-    var target = event.target || event.srcElement || event.currentTarget;
-    var idAttr = target.attributes.data;
-
-    if (idAttr && idAttr.nodeValue) console.log(idAttr.nodeValue);
-
-    // var value = idAttr.id;
-  }
-
 
   onClickHeader(criteria: string): void {
-   // console.log(criteria);
+    // console.log(criteria);
     if (this.sortBy === criteria) {
       this.asc_desc = (this.asc_desc === 'asc') ? 'desc' : 'asc';
     }
 
     this.sortBy = criteria;
     this.sortData();
+    this.saveState();
   }
 
 }
