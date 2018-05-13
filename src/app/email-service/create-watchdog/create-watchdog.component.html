@@ -18,14 +18,14 @@
     </table>
     <br/>
     <mat-input-container>
-      <small> <input [(ngModel)]="watchDog.uid"  matInput placeholder="ID"  disabled name="uid"></small>
+      <!--<small> <input [(ngModel)]="watchDog.uid"  matInput placeholder="ID"  disabled name="uid"></small>-->
     </mat-input-container>
     <mat-input-container>
-        <input [(ngModel)]="watchDog.dogName"  matInput placeholder="Dog Name" name="label">
+       <!-- <input [(ngModel)]="watchDog.dogName"  matInput placeholder="Dog Name" name="label">-->
     </mat-input-container>
-    <mat-input-container>
+  <!--  <mat-input-container>
         <input [(ngModel)]="watchDog.description"  matInput placeholder="Description" name="description">
-    </mat-input-container>
+    </mat-input-container>-->
 
 
     <mat-select placeholder="New Watchdog" (change)="onCoinSelectChanged($event)">
@@ -56,7 +56,7 @@
 
             <tbody>
 
-            <tr *ngFor="let dog of watchDogs">
+          <!--  <tr *ngFor="let dog of watchDogs">
                 <td><small class="btn" (click)="onDogClick(dog)">{{dog.uid}}</small></td>
                 <td><b><small>{{dog.dogName}}</small></b></td>
                 <td><small>{{dog.description}}</small></td>
@@ -69,7 +69,7 @@
                 <td>{{dog.marketCap.rank}}</td>
                 <td><div class="w5 ell">{{dog.marketCap.name}}</div></td>
                 <td><div (click)="onDeleteClick(dog)"  class="fa fa-close"></div></td>
-            </tr>
+            </tr>-->
 
             </tbody>
         </table>

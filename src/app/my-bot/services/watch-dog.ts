@@ -1,4 +1,5 @@
 import {VOMarketCap, VOWatchdog} from "../../models/app-models";
+import {VOMCAgregated} from "../../apis/api-market-cap.service";
 
 export class WatchDog extends VOWatchdog {
   uuid: string;
@@ -7,8 +8,8 @@ export class WatchDog extends VOWatchdog {
   baseUS: number;
   coinUS: number;
   isToSell;
-  mcCoin: VOMarketCap;
-  mcBase: VOMarketCap;
+  mcCoin: VOMCAgregated;
+  mcBase: VOMCAgregated;
 
 
   booksDelta:number;
@@ -18,7 +19,7 @@ export class WatchDog extends VOWatchdog {
     Object.assign(this, wd);
   }
 
-  addUS(MC: { [symbol: string]: VOMarketCap }) {
+  addUS(MC: { [symbol: string]: VOMCAgregated }) {
     this.mcBase = MC[this.base];
     this.mcCoin = MC[this.coin];
 

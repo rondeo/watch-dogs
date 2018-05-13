@@ -13,7 +13,7 @@
         {{marketInit.coin}}
         <span class="large"><sup>$</sup>{{balanceCoinUS}}</span>
         &nbsp;
-        <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshBalancesClick()"></a>
+      <!--  <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshBalancesClick()"></a>-->
 
         <hr/>
 
@@ -61,7 +61,7 @@
 
     <section>
 
-        <a class="btn" (click)="onOpenMarketClick()">{{marketInit.market}}</a>
+       <!-- <a class="btn" (click)="onOpenMarketClick()">{{marketInit.market}}</a>-->
 
         &nbsp; &nbsp;
         <strong class="large">{{analytics.tolerance.toFixed(2)}}</strong>%
@@ -70,7 +70,7 @@
         &nbsp;&nbsp;
         <strong class="large">{{(analytics.speed*60).toPrecision(2)}}/min</strong>
         &nbsp;&nbsp;&nbsp;
-        <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
+      <!--  <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>-->
         <!-- <div class="inline-block">
           &lt;!&ndash;   <app-refresh-button
                      [durationMin]="durationInMin"
@@ -106,7 +106,7 @@
 
     <br/>
     <section>
-        <small>Bought:</small> {{(analytics.sumBuy/1000).toFixed(3).replace('.',',')}}
+      <!--  <small>Bought:</small> {{(analytics.sumBuy/1000).toFixed(3).replace('.',',')}}
         <small> Sold: </small> {{(analytics.sumSell/1000).toFixed(3).replace('.',',')}}
         <small>Dust:</small>
         <sub class="green">b: {{analytics.dustCountBuy}}</sub>
@@ -124,7 +124,7 @@
                 </tbody>
             </table>
         </div>
-
+-->
 
     </section>
 

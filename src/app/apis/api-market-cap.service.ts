@@ -10,18 +10,22 @@ import {Subject} from "rxjs/Subject";
 
 
 interface MCdata {
-  n: string;
   id: string;
   usd: number;
   btc: number;
   rank: number;
   rP: number;
   vol: number;
+  vol_1h: number;
+  vol_3h: number;
+  vol_6h: number;
+  h05: number;
   h1: number;
   t: number;
-  volP: number;
+  n: string;
   data: number[];
-  prev: number[];
+  price_btcs: number[];
+  prev?
 }
 
 
@@ -30,24 +34,67 @@ export interface VOMCAgregated {
   id: string;
   price_btc: number;
   price_usd: number;
+  tobtc_last: number;
+
+  tobtc_change_05h: number;
+  tobtc_change_1h: number;
+  tobtc_change_2h: number;
+  tobtc_change_3h: number;
+
   percent_change_1h: number;
   percent_change_24h: number;
   percent_change_7d: number;
+
   rankPrev: number;
   rank: number;
   timestamp: number;
   volume: number;
-  volumePrev: number;
+  vol_1h: number;
+  vol_3h: number;
+  vol_6h: number;
   prev: number;
-  prev5: number;
-  prev10: number
-  prev20: number;
+  last5: number;
+  last10: number
+  last20: number;
   ago2h: number;
-  prev30: number;
+  last30: number;
   ago3h: number;
   date: string;
+  total_supply?: number;
 }
 
+export const VOMCAGREGATED: VOMCAgregated = {
+  symbol: '',
+  id: '',
+  price_btc: 0,
+  price_usd: 0,
+  tobtc_last: 0,
+
+  tobtc_change_05h: 0,
+  tobtc_change_1h: 0,
+  tobtc_change_2h: 0,
+  tobtc_change_3h: 0,
+
+  percent_change_1h: 0,
+  percent_change_24h: 0,
+  percent_change_7d: 0,
+
+  rankPrev: 0,
+  rank: 0,
+  timestamp: 0,
+  volume: 0,
+  vol_1h: 0,
+  vol_3h: 0,
+  vol_6h: 0,
+  prev: 0,
+  last5: 0,
+  last10: 0,
+  last20: 0,
+  ago2h: 0,
+  last30: 0,
+  ago3h: 0,
+  date: ''
+}
 
 @Injectable()
 export class ApiMarketCapService {
@@ -90,12 +137,31 @@ export class ApiMarketCapService {
 
 
   static mapAgrigated(item: MCdata, symbol: string): VOMCAgregated {
+    const price_btcs = item.price_btcs || item.prev
+    const price_btc = item.btc,
+      prev = price_btcs[0],
+      last5 = price_btcs[1],
+      last10 = price_btcs[2],
+      last20 = price_btcs[3],
+      ago2h = price_btcs[4],
+      last30 = price_btcs[5],
+      ago3h = price_btcs[6]
+
+
     return {
       date: '',
       symbol: symbol,
       id: item.id,
-      price_btc: item.btc,
       price_usd: item.usd,
+      price_btc,
+      tobtc_last: +(100 * (price_btc - prev) / prev).toFixed(2),
+      tobtc_change_05h: +(100 * (last5 - last10) / last10).toFixed(2),
+      tobtc_change_1h: +(100 * (last10 - last20) / last20).toFixed(2),
+      tobtc_change_2h: +(100 * (last10 - last30) / last30).toFixed(2),
+      tobtc_change_3h: +(100 * (last10 - ago3h) / ago3h).toFixed(2),
+
+      total_supply:item.data[4],
+
       percent_change_1h: item.h1,
       percent_change_24h: item.data[0],
       percent_change_7d: item.data[1],
@@ -103,14 +169,16 @@ export class ApiMarketCapService {
       rankPrev: item.rP,
       timestamp: item.t * 1000,
       volume: item.vol,
-      volumePrev: item.volP,
-      prev: item.prev[0],
-      prev5: item.prev[1],
-      prev10: item.prev[2],
-      prev20: item.prev[3],
-      ago2h: item.prev[4],
-      prev30: item.prev[5],
-      ago3h: item.prev[6]
+      vol_1h: item.vol_1h,
+      vol_3h: item.vol_3h,
+      vol_6h: item.vol_6h,
+      prev,
+      last5,
+      last10,
+      last20,
+      ago2h,
+      last30,
+      ago3h
     }
   }
 
@@ -125,7 +193,7 @@ export class ApiMarketCapService {
   }
 
   downloadTicker(refresh = false): Observable<{ [symbol: string]: VOMarketCap }> {
-    if(!refresh &&  ApiMarketCapService.MC) return Observable.of(ApiMarketCapService.MC);
+    if (!refresh && ApiMarketCapService.MC) return Observable.of(ApiMarketCapService.MC);
     let url = '/api/marketcap/ticker';
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).share().map((res: { [id: string]: MCdata }) => {
@@ -136,7 +204,8 @@ export class ApiMarketCapService {
   }
 
   private agrigatedSub: Subject<{ [symbol: string]: VOMCAgregated }> = new Subject();
-  agregated$():Observable<{ [symbol: string]: VOMCAgregated }>{
+
+  agregated$(): Observable<{ [symbol: string]: VOMCAgregated }> {
     return this.agrigatedSub.asObservable();
   }
 
@@ -146,12 +215,12 @@ export class ApiMarketCapService {
     return this.http.get(url)
       .share()
       .map((res: { [id: string]: MCdata }) => {
-    //  console.log(res);
-      const out = {}
-      for (let str in res) out[str] = ApiMarketCapService.mapAgrigated(res[str], str);
-      this.agrigatedSub.next(out);
-      return out;
-    });
+        //  console.log(res);
+        const out = {}
+        for (let str in res) out[str] = ApiMarketCapService.mapAgrigated(res[str], str);
+        this.agrigatedSub.next(out);
+        return out;
+      });
   }
 
 

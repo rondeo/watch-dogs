@@ -33,15 +33,15 @@ export class UtilsBot {
 
      const current = coinMC.symbol === 'BTC'?coinMC.price_usd:coinMC.price_btc;
      const cur_prev = +(100 * (current - coinMC.prev) / coinMC.prev).toFixed(4);
-     const cur_prev5 = +(100 * (current - coinMC.prev5) / coinMC.prev5).toFixed(4);
+     const cur_prev5 = +(100 * (current - coinMC.last5) / coinMC.last5).toFixed(4);
 
 
-     const prev5_10 = +(100 * (coinMC.prev5 - coinMC.prev10) / coinMC.prev10).toFixed(4);
+     const prev5_10 = +(100 * (coinMC.last5 - coinMC.last10) / coinMC.last10).toFixed(4);
 
-     const prev10_20 = +(100 * (coinMC.prev10 - coinMC.prev20) / coinMC.prev20).toFixed(4);
-     const prev20_30 = +(100 * (coinMC.prev20 - coinMC.prev30) / coinMC.prev30).toFixed(4);
-     const h1_ago2h = +(100 * (coinMC.prev10 - coinMC.ago2h) / coinMC.ago2h).toFixed(4);
-     const h1_pago3h = +(100 * (coinMC.prev10 - coinMC.ago3h) / coinMC.ago3h).toFixed(4);
+     const prev10_20 = +(100 * (coinMC.last10 - coinMC.last20) / coinMC.last20).toFixed(4);
+     const prev20_30 = +(100 * (coinMC.last20 - coinMC.last30) / coinMC.last30).toFixed(4);
+     const h1_ago2h = +(100 * (coinMC.last10 - coinMC.ago2h) / coinMC.ago2h).toFixed(4);
+     const h1_pago3h = +(100 * (coinMC.last10 - coinMC.ago3h) / coinMC.ago3h).toFixed(4);
      return{
        current,
        cur_prev,

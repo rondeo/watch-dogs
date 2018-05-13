@@ -150,7 +150,7 @@ export class GainersLosersComponent implements OnInit {
       });
     }
 
-    //let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
+    // let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
     let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
 
     // console.log(sorted);

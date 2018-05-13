@@ -57,6 +57,8 @@ export class CoinDayComponent implements OnInit {
 
     const l = history.length;
 
+    console.log(history);
+
     history = history.filter(function (item) {
       return !!item;
     })
@@ -81,6 +83,8 @@ export class CoinDayComponent implements OnInit {
     const pricebtcs = [];
     const priceusds = [];
     const volumes = [];
+    const total_supply = [];
+    const rank = [];
     const triggers = [10];
 
     history.forEach(function (item) {
@@ -91,6 +95,8 @@ export class CoinDayComponent implements OnInit {
         pricebtcs.push(item.price_btc);
         priceusds.push(item.price_usd);
         volumes.push(item.volume);
+        total_supply.push(item.total_supply);
+        rank.push(item.rank);
         const integ = GRAPHS.integralData(item);
         if (trigger) {
           trigger = false;
@@ -117,22 +123,22 @@ export class CoinDayComponent implements OnInit {
     const graphs = [
       {
         ys: volumes,
-        color: '#2abc50',
+        color: '#05ff35',
         label: 'Vol'
       },
       {
         ys: pricebtcs,
-        color: '#551c1c',
+        color: '#ff7f56',
         label: 'BTC'
       },
       {
         ys: priceusds,
-        color: '#545511',
+        color: '#88a5ff',
         label: 'US'
       },
       {
-        ys: triggers,
-        color: '#095531',
+        ys: rank,
+        color: '#c4bbc0',
         label: 'T'
       }
     ]

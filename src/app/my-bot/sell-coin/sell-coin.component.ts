@@ -63,7 +63,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
 
 
   async addUSValues() {
-    const MC = await  this.marketcap.downloadTicker().toPromise();
+    const MC = await  this.marketcap.downloadAgrigated().toPromise();
     this.watchdog.addUS(MC);
 
   }
@@ -75,19 +75,8 @@ export class SellCoinComponent implements OnInit, OnDestroy {
       const coin = this.watchdog.coin;
       const data = newValues[coin];
       console.log(data);
+      this.watchdog.mcCoin = data;
 
-      this.watchdog.mcCoin = {
-        id: data.id,
-        name: '',
-        symbol: data.symbol,
-        rank: data.rank,
-        price_usd: data.price_usd,
-        price_btc: data.price_btc,
-        percent_change_1h: data.percent_change_1h,
-        percent_change_24h: data.percent_change_24h,
-        percent_change_7d: data.percent_change_7d,
-        volume_usd_24h: data.volume
-      }
 
       const integ = GRAPHS.integralData(data);
 

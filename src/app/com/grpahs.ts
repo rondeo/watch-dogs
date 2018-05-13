@@ -7,12 +7,15 @@ export class GRAPHS {
   static integralData(item:VOMCAgregated){
     const cur = item.symbol === 'BTC' ? item.price_usd : item.price_btc
     const cur_prev = +(100 * (cur - item.prev) / item.prev).toFixed(4);
-    const cur_prev5 = +(100 * (cur - item.prev5) / item.prev5).toFixed(4);
-    const prev5_10 = +(100 * (item.prev5 - item.prev10) / item.prev10).toFixed(4);
-    const prev10_20 = +(100 * (item.prev10 - item.prev20) / item.prev20).toFixed(4);
-    const prev20_30 = +(100 * (item.prev20 - item.prev30) / item.prev30).toFixed(4);
-    const h1_ago2h = +(100 * (item.prev10 - item.ago2h) / item.ago2h).toFixed(4);
-    const h1_pago3h = +(100 * (item.prev10 - item.ago3h) / item.ago3h).toFixed(4);
+    const cur_prev5 = +(100 * (cur - item.last5) / item.last5).toFixed(4);
+    const prev5_10 = +(100 * (item.last5 - item.last10) / item.last10).toFixed(4);
+    const prev10_20 = +(100 * (item.last10 - item.last20) / item.last20).toFixed(4);
+    const prev20_30 = +(100 * (item.last20 - item.last30) / item.last30).toFixed(4);
+    const h1_ago2h = +(100 * (item.last10 - item.ago2h) / item.ago2h).toFixed(4);
+    const h1_pago3h = +(100 * (item.last10 - item.ago3h) / item.ago3h).toFixed(4);
+    const vol1_6 = item.vol_6h? +(100 * (item.vol_1h - item.vol_6h) / item.vol_6h).toFixed(4):0;
+    const rankD = +(100 * (item.rankPrev - item.rank) / item.rank).toFixed(4);
+
     return {
       cur,
       cur_prev,
@@ -21,7 +24,9 @@ export class GRAPHS {
       prev10_20,
       prev20_30,
       h1_ago2h,
-      h1_pago3h
+      h1_pago3h,
+      vol1_6,
+      rankD
     }
   }
 

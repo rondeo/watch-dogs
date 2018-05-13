@@ -35,7 +35,7 @@ import { SellCoinComponent } from './sell-coin/sell-coin.component';
       </div>
   `
 })
-class Outlet implements OnInit {
+export class Outlet implements OnInit {
 
   constructor() {
   }
