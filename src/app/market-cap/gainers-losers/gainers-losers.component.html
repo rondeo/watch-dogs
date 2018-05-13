@@ -1,16 +1,16 @@
 <div>
     <p>
         <mat-form-field class="w5">
-            <mat-select [(ngModel)] = "top" (change)="onTopChange($event)" placeholder="by Rank">
+            <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
                 <mat-option value="all">All</mat-option>
                 <mat-option value="top100">Top 100</mat-option>
                 <mat-option value="top200">Top 200</mat-option>
-                <mat-option value="after100"> > 100</mat-option>
-                    <mat-option value="after200">< 200</mat-option>
+                <mat-option value="after100"> >> 100</mat-option>
+                <mat-option value="after200"> >> 200</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="w6">
-            <mat-select [(ngModel)] = "exchange"  (change)="onExcgangeChange($event)" placeholder="Exchange">
+            <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
                 <mat-option value="all">All</mat-option>
                 <mat-option value="bittrex">Bittrex</mat-option>
                 <mat-option value="poloniex">Poloniex</mat-option>
@@ -19,8 +19,7 @@
                 <mat-option value="cryptopia">Cryptopia</mat-option>
             </mat-select>
         </mat-form-field>
-
-
+        <span class="fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></span>
     </p>
 
     <section>
@@ -30,36 +29,93 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td colspan="3" class="text-center">
+                <td colspan="4" class="text-center">
                     <small>% to btc</small>
                 </td>
-                <td></td>
+                <td class="btn" (click)="onUpClick()">UP</td>
+                <td colspan="3" class="text-center">
+                    <small>CMC</small>
+                </td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
                 <th>Graph</th>
                 <th>Symbol</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_05h')">0.5h%</th>
                 <th class="btn" (click)="onClickHeader('tobtc_change_1h')">1h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_24h')">24h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_7d')">7d%</th>
-                <th>Rank</th>
-                <th>$US</th>
-                <th>ID</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_2h')">2h%</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_3h')">3h%</th>
+                <th class="btn" (click)="onClickHeader('rank')">Rank</th>
+                <th class="btn" (click)="onClickHeader('percent_change_1h')">1h%</th>
+                <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>
+                <th class="btn" (click)="onClickHeader('percent_change_7d')">7d%</th>
+                <th class="btn" (click)="onClickHeader('price_usd')">$US</th>
+                <th class="btn" (click)="onClickHeader('id')">ID</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>BTC</td>
+                <td>{{btcMC.tobtc_change_05h}}</td>
+                <td>{{btcMC.tobtc_change_1h}}</td>
+
+                <td>{{btcMC.tobtc_change_2h}}</td>
+                <td>{{btcMC.tobtc_change_3h}}</td>
+                <td></td>
+
+                <td>{{btcMC.percent_change_1h}}</td>
+                <td>{{btcMC.percent_change_24h}}</td>
+                <td>{{btcMC.percent_change_7d}}</td>
+                <td>{{btcMC.price_usd}}</td>
+                <td>{{btcMC.id}}</td>
+
             </tr>
 
             <tr *ngFor="let item of sorted">
-                <td><a class="fa fa-line-chart" target="_blank"
-                       href="https://coinmarketcap.com/currencies/{{item.id}}/"></a></td>
-                <td><span class="btn small" (click)="onSymbolClick(item)">{{item.symbol}}</span></td>
-                <td class="w50" [ngClass]="item.tobtc_change_1h>0?'dgreen':'dred'">{{item.tobtc_change_1h}}</td>
-                <td class="w50 btn" [ngClass]="item.tobtc_change_24h>0?'dgreen':'dred'"  routerLink="../coin-day/{{item.symbol}}">{{item.tobtc_change_24h}}</td>
-                <td class="w50" [ngClass]="item.tobtc_change_7d>0?'dgreen':'dred'">{{item.tobtc_change_7d}}</td>
                 <td>
-                    <small>{{item.rank}}</small>
+                    <a class="fa fa-line-chart" target="_blank"
+                       href="https://coinmarketcap.com/currencies/{{item.id}}/"></a>
                 </td>
-                <td class="small">{{item.price_usd}}</td>
-                <td class="small w80 ell">{{item.id}}</td>
+                <td>
+                    <a class="btn small" routerLink="../coin-day/{{item.symbol}}">
+                        {{item.symbol}}</a>
+                </td>
+                <td class="w50" [ngClass]="item.tobtc_change_05h>0?'dgreen':'dred'">
+                    {{item.tobtc_change_05h}}
+                </td>
+                <td class="w50" [ngClass]="item.tobtc_change_1h>0?'dgreen':'dred'">
+                    {{item.tobtc_change_1h}}
+                </td>
+                <td class="w50" [ngClass]="item.tobtc_change_2h>0?'dgreen':'dred'">
+                    {{item.tobtc_change_2h}}
+                </td>
+                <td class="w50" [ngClass]="item.tobtc_change_3h>0?'dgreen':'dred'">
+                    {{item.tobtc_change_3h}}
+                </td>
+                <td>
+                    <small>
+                    <sub>{{item.rank}}</sub>
+                    <sup>{{(item.rankPrev - item.rank)}}</sup>
+                    </small>
+                </td>
+
+                <td class="w50" [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">
+                    {{item.percent_change_1h}}
+                </td>
+                <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">
+                    {{item.percent_change_24h}}
+                </td>
+                <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">
+                    {{item.percent_change_7d}}
+                </td>
+
+
+                <td class="small">
+                    {{item.price_usd}}
+                </td>
+                <td class="small w80 ell">
+                    {{item.id}}
+                </td>
             </tr>
             </tbody>
         </table>

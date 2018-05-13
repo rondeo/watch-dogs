@@ -3,7 +3,7 @@ import {MarketCapService} from '../market-cap.service';
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
-import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService, VOMCAGREGATED, VOMCAgregated} from "../../apis/api-market-cap.service";
 import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
 
@@ -18,11 +18,14 @@ export class GainersLosersComponent implements OnInit {
   asc_desc = 'desc';
   top: string = 'top300';
   exchange: string;
-  allCoins: VOMarketCap[];
+  allCoins: VOMCAgregated[];
 
-  sorted: VOMarketCap[];
+  sorted: VOMCAgregated[];
 
   sortBy: string = 'percent_change_24h';
+
+
+  btcMC:VOMCAgregated = VOMCAGREGATED;
 
   exchangeCoins: string[] = [];
 
@@ -94,6 +97,9 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
+  onRefreshClick(){
+    this.downlaodTicker();
+  }
 
   onTopChange(evt) {
     this.sortData();
@@ -101,9 +107,10 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async downlaodTicker() {
-    const ticker = await this.apiMarketCap.downloadTicker().toPromise();
+    const ticker = await this.apiMarketCap.downloadAgrigated().toPromise();
 
-    //  console.log(ticker);
+    this.btcMC = ticker['BTC']
+     //console.log(ticker);
     this.allCoins = Object.values(ticker);
     if (this.exchange) this.loadExchange();
     else this.sortData();
@@ -119,7 +126,7 @@ export class GainersLosersComponent implements OnInit {
     if (!this.allCoins) return;
     // console.log('sort');
 
-    var allCoins: VOMarketCap[] = this.allCoins;
+    var allCoins: VOMCAgregated[] = this.allCoins;
 
     switch (this.top) {
       case 'top100':
@@ -161,4 +168,16 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
+  onUpClick() {
+    if (!this.allCoins) return;
+    var allCoins: VOMCAgregated[] = this.allCoins;
+    let sorted = allCoins.sort(function (a, b) {
+      const rankUpA = a.rankPrev - a.rank;
+      const rankUpB = b.rankPrev - b.rank;
+      if(rankUpA > rankUpB) return -1;
+      else return 1
+    })
+    this.sorted = _.take(sorted, 50);
+
+  }
 }
