@@ -1,5 +1,5 @@
 <div class="coin-graph">
-    <h3>
+    <h3><small>Coin Day </small>
         {{coin}}
     </h3>
     <p>
@@ -19,7 +19,8 @@
             <button mat-raised-button (click)="onPlus12h()">+12h</button>
             <button mat-raised-button (click)="onMinus1D()">-1D</button>
             <button mat-raised-button (click)="onPlus1D()">+1D</button>
-            <button mat-raised-button (click)="onNowClick()">now</button>
+            <button mat-raised-button (click)="onNowClick()">Last</button>
+            <button mat-raised-button (click)="onAllClick()">All</button>
             <span class="dred">{{skips}}</span>
         </div>
 

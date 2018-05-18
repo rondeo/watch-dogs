@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="">
+    <list default="true" id="97b05c78-fae3-4170-a8f5-4621dc9e8764" name="Default" comment="publish">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy.conf.json" beforeDir="false" afterPath="$PROJECT_DIR$/proxy.conf.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/grpahs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/grpahs.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/utils-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/sell-coin/sell-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-bot/sell-coin/sell-coin.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-bot/services/watch-dog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-bot/services/watch-dog.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -28,26 +22,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.67245007">
+    <splitter split-orientation="horizontal" split-proportion="0.54314214">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="mongo.service.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/mongo.service.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="690">
-                  <caret line="72" column="47" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
-                  <folding>
-                    <element signature="e#0#41#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="api-market-cap.service.ts" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="202">
-                  <caret line="162" column="32" selection-start-line="162" selection-start-column="32" selection-end-line="162" selection-end-column="32" />
+                <state relative-caret-position="272">
+                  <caret line="293" column="52" selection-start-line="293" selection-start-column="52" selection-end-line="293" selection-end-column="52" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -55,23 +37,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="gainers-losers.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts">
+          <file leaf-file-name="proxy.conf.json" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/proxy.conf.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="453">
-                  <caret line="137" column="22" selection-start-line="137" selection-start-column="22" selection-end-line="137" selection-end-column="22" />
-                  <folding>
-                    <element signature="e#0#48#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="45">
+                  <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="coin-day.component.ts" pinned="false" current-in-tab="false">
+          <file leaf-file-name="coin-day.component.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="344">
-                  <caret line="121" selection-start-line="121" selection-end-line="121" />
+                <state relative-caret-position="503">
+                  <caret line="72" column="28" lean-forward="true" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="28" />
                   <folding>
                     <element signature="e#0#48#0" expanded="true" />
                   </folding>
@@ -79,11 +58,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+          <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+                <state relative-caret-position="180">
+                  <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="15" selection-end-column="34" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="coin-day.component.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="330">
+                  <caret line="22" column="57" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="57" />
                 </state>
               </provider>
             </entry>
@@ -155,7 +143,7 @@
           <file leaf-file-name="grpahs.ts" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/com/grpahs.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="285">
+                <state relative-caret-position="48">
                   <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
                 </state>
               </provider>
@@ -208,7 +196,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>filterAndIndex</find>
       <find>tableHeaders</find>
       <find>downloadBooks</find>
       <find>compareBooks</find>
@@ -238,6 +225,7 @@
       <find>downloadAgrigated</find>
       <find>from</find>
       <find>fa-refre</find>
+      <find>drawData</find>
     </findStrings>
     <replaceStrings>
       <replace>MatD</replace>
@@ -261,7 +249,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/email-service/run-watchdogs/script-analytics.ts" />
         <option value="$PROJECT_DIR$/src/app/email-service/watchdog-edit/watchdog-edit.component.ts" />
         <option value="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.ts" />
         <option value="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" />
@@ -297,7 +284,6 @@
         <option value="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.css" />
         <option value="$PROJECT_DIR$/src/app/apis/mongo.service.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/services/watch-dog.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/sell-coin/sell-coin.component.ts" />
@@ -305,13 +291,15 @@
         <option value="$PROJECT_DIR$/src/app/com/utils-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html" />
         <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts" />
         <option value="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" />
         <option value="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.html" />
         <option value="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.html" />
         <option value="$PROJECT_DIR$/src/app/my-bot/bot-run/bot-run.component.html" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/proxy.conf.json" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html" />
+        <option value="$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts" />
       </list>
     </option>
   </component>
@@ -362,21 +350,6 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="email-service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="email-service" type="462c0819:PsiDirectoryNode" />
-              <item name="create-watchdog" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="market-cap" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -384,7 +357,8 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-bot" type="462c0819:PsiDirectoryNode" />
+              <item name="market-cap" type="462c0819:PsiDirectoryNode" />
+              <item name="coin-day" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -752,14 +726,7 @@
       <workItem from="1524698048374" duration="106857000" />
       <workItem from="1525476193390" duration="31589000" />
       <workItem from="1525613351215" duration="46832000" />
-      <workItem from="1525909610724" duration="26657000" />
-    </task>
-    <task id="LOCAL-00019" summary="aoi base">
-      <created>1516240998419</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1516240998419</updated>
+      <workItem from="1525909610724" duration="40028000" />
     </task>
     <task id="LOCAL-00020" summary="markets">
       <created>1516243606846</created>
@@ -1097,26 +1064,32 @@
       <option name="project" value="LOCAL" />
       <updated>1526182836411</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="publish">
+      <created>1526208316831</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1526208316831</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2441833000" />
+    <option name="totallyTimeSpent" value="2455204000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="2514" height="1456" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info id="DB Browser" order="2" weight="0.18589482" />
       <window_info anchor="bottom" id="DB Execution Console" order="7" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.3295207" side_tool="true" weight="0.30309498" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5985839" visible="true" weight="0.34362933" />
-      <window_info active="true" id="npm" order="4" sideWeight="0.16352941" side_tool="true" visible="true" weight="0.23182553" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5985839" visible="true" weight="0.33281854" />
+      <window_info id="npm" order="4" sideWeight="0.27430555" side_tool="true" visible="true" weight="0.15670437" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.6704793" weight="0.21776062" />
       <window_info anchor="bottom" id="TypeScript" order="10" weight="0.32895753" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8364706" visible="true" weight="0.23182553" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7256944" visible="true" weight="0.15670437" />
       <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.25637066" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1195,7 +1168,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="build transaction" />
     <MESSAGE value="sel coin service" />
     <MESSAGE value="refactoring" />
     <MESSAGE value="BOT" />
@@ -1220,7 +1192,8 @@
     <MESSAGE value="sell coin" />
     <MESSAGE value="coin day" />
     <MESSAGE value="sorting" />
-    <option name="LAST_COMMIT_MESSAGE" value="sorting" />
+    <MESSAGE value="publish" />
+    <option name="LAST_COMMIT_MESSAGE" value="publish" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1228,9 +1201,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/com/mappers-history.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/com/mappers.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1476,13 +1446,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
@@ -1522,7 +1485,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/com/grpahs.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
+        <state relative-caret-position="48">
           <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
         </state>
       </provider>
@@ -1560,26 +1523,6 @@
           <caret line="72" column="47" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="162" column="32" selection-start-line="162" selection-start-column="32" selection-end-line="162" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="121" selection-start-line="121" selection-end-line="121" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1627,8 +1570,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+        <state relative-caret-position="180">
+          <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="15" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/proxy.conf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="293" column="52" selection-start-line="293" selection-start-column="52" selection-end-line="293" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="57" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/market-cap/coin-day/coin-day.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="503">
+          <caret line="72" column="28" lean-forward="true" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -6,7 +6,7 @@ import * as moment from "moment";
 import * as _ from 'lodash'
 import {MongoService} from "../../apis/mongo.service";
 import {Moment} from "moment";
-import {VOMCAgregated} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService, VOCoinData, VOMCAgregated} from "../../apis/api-market-cap.service";
 
 @Component({
   selector: 'app-coin-day',
@@ -15,7 +15,7 @@ import {VOMCAgregated} from "../../apis/api-market-cap.service";
 })
 export class CoinDayComponent implements OnInit {
 
-  mcCoin:VOMCAgregated;
+  mcCoin: VOMCAgregated;
   coin: string;
   myGraps: VOGraphs;
 
@@ -31,7 +31,8 @@ export class CoinDayComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mongo: MongoService
+    private mongo: MongoService,
+    private marketCap: ApiMarketCapService
   ) {
   }
 
@@ -41,23 +42,35 @@ export class CoinDayComponent implements OnInit {
       let coin = paramas.coin;
       console.log(coin);
       this.coin = coin;
-      this.drawData();
+      this.filterDay();
 
     });
   }
 
-  async drawData() {
-    const coin = this.coin;
-    let history = await this.mongo.downloadCoinHistory(
-      this.momentTo.format(),
-      moment(this.momentTo.format()).subtract(1, 'd').format(),
-      coin,
-      300
-    );
+
+  async filterDay() {
+  this.fullHistory = await this.getCoinHistory();
+    const to = this.momentTo.valueOf();
+    const from = moment(to).subtract(1, 'd').valueOf();
+    let history =  this.fullHistory.filter(function (item) {
+      return item.timestamp < to && item.timestamp > from;
+    });
+    this.drawData(history);
+
+  }
+
+  async getCoinHistory() {
+    if (this.fullHistory) return Promise.resolve(this.fullHistory);
+    else return this.marketCap.getCoinWeek(this.coin).toPromise();
+  }
+
+  fullHistory: VOCoinData[];
+
+  drawData(history: VOCoinData[]) {
 
     const l = history.length;
 
-    console.log(history);
+   //  console.log(history);
 
     history = history.filter(function (item) {
       return !!item;
@@ -88,7 +101,6 @@ export class CoinDayComponent implements OnInit {
     const triggers = [10];
 
     history.forEach(function (item) {
-
       labels.push(' ');
       if (item) {
 
@@ -97,26 +109,27 @@ export class CoinDayComponent implements OnInit {
         volumes.push(item.volume);
         total_supply.push(item.total_supply);
         rank.push(item.rank);
-        const integ = GRAPHS.integralData(item);
-        if (trigger) {
-          trigger = false;
-          triggers.push(0);
-        } else {
-          trigger =
-            integ.cur_prev < 0 &&
-            integ.prev5_10 < 0 &&
-            integ.prev10_20 < 0 &&
-            integ.prev5_10 < 0;
-          triggers.push(trigger ? 2 : 1);
 
-        }
-      } else {
-        //pricebtcs.push(item.price_btc);
-        //// priceusds.push(item.price_usd);
-        //  volumes.push(item.volume);
+        /* const integ = GRAPHS.integralData(item);
+         if (trigger) {
+           trigger = false;
+           triggers.push(0);
+         } else {
+           trigger =
+             integ.cur_prev < 0 &&
+             integ.prev5_10 < 0 &&
+             integ.prev10_20 < 0 &&
+             integ.prev5_10 < 0;
+           triggers.push(trigger ? 2 : 1);
+
+         }
+       } else {
+         //pricebtcs.push(item.price_btc);
+         //// priceusds.push(item.price_usd);
+         //  volumes.push(item.volume);
+       }*/
+
       }
-
-
     })
 
 
@@ -139,7 +152,7 @@ export class CoinDayComponent implements OnInit {
       {
         ys: rank,
         color: '#c4bbc0',
-        label: 'T'
+        label: 'Rank'
       }
     ]
 
@@ -150,35 +163,39 @@ export class CoinDayComponent implements OnInit {
 
   }
 
+  onAllClick() {
+    this.drawData(this.fullHistory);
+
+  }
 
   onMinus12h() {
     this.momentTo.subtract(12, 'hours');
-    this.drawData();
+    this.filterDay();
 
     //this.getCoinHistory(to);
   }
 
   onPlus12h() {
     this.momentTo.add(12, 'hours');
-    this.drawData();
+    this.filterDay();
   }
 
 
   onMinus1D() {
     this.momentTo.subtract(1, 'd');
-    this.drawData();
+    this.filterDay();
 
     //this.getCoinHistory(to);
   }
 
   onPlus1D() {
     this.momentTo.add(1, 'd');
-    this.drawData();
+    this.filterDay();
     //  this.getCoinHistory(to);
   }
 
   onNowClick() {
     this.momentTo = moment();
-    this.drawData();
+    this.filterDay();
   }
 }

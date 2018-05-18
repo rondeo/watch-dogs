@@ -8,6 +8,14 @@ import * as _ from 'lodash';
 import "rxjs/add/operator/share";
 import {Subject} from "rxjs/Subject";
 
+export interface VOCoinData{
+  timestamp: number;
+  price_btc: number;
+  price_usd: number;
+  volume: number;
+  rank: number
+  total_supply: number;
+}
 
 interface MCdata {
   id: string;
@@ -282,6 +290,25 @@ export class ApiMarketCapService {
     });
   }
 
+
+  getCoinWeek(coin: string): Observable<VOCoinData[]> {
+    const url = 'api/marketcap/coin-history/' + coin;
+    return this.http.get(url).map((res:any)=>{
+     // console.log(res)
+
+
+      return res.data.map(function (item) {
+        return {
+          timestamp: item.t,
+          price_btc: item.d[0],
+          price_usd: item.d[1],
+          volume: item.d[2],
+          rank: item.d[3],
+          total_supply: item.d[4]
+        }
+      });
+    });
+  }
 
   getCoinDay(coin: string, from: string, to: string) {
     const url = '/api/front-desk/market-cap-coin-day?coin=' + coin + '&from=' + from + '&to=' + to;

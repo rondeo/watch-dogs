@@ -8,7 +8,7 @@
     "start": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload false",
     "live-reload": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload true",
     "verify": "ng eject --target=production",
-    "prod": "ng build --prod -sm",
+    "prod": "ng build --prod",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
