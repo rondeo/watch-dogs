@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {VOOrder} from "../models/app-models";
 import {Observable} from "rxjs/Observable";
-import {SOBuySell} from "../bittrex/bittrex-private.service";
 import {Subject} from "rxjs/Subject";
 
 
@@ -20,7 +19,6 @@ export class OrdersManagerService {
 
   private statusSub:Subject<VOOrder> = new Subject();
   private errorsSub:Subject<string> = new Subject();
-
   constructor() {
 
   }

@@ -81,7 +81,7 @@ export class SSCoinsAvailableComponent implements OnInit {
       this.merge()
     })
 */
-    this.marketCap.refresh();
+   //  this.marketCap.refresh();
   }
 
   calculateRequest(){

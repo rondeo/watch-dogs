@@ -1,4 +1,4 @@
-import {VOMCAgregated} from "../apis/api-market-cap.service";
+import {VOMCAgregated} from '../apis/models';
 
 
 export class GRAPHS {

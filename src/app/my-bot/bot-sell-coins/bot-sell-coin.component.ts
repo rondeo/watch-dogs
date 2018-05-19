@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ApiMarketCapService, VOMCAgregated} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ActivatedRoute} from "@angular/router";
 import {VOMarketCap, VOMarketCapExt, VOWatchdog} from "../../models/app-models";
 import {BotSellCoinService} from "../services/bot-sell-coin.service";
@@ -60,6 +60,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
     ;
     this.startCheckMC();
   }
+
 
 
   async checkBalance(wds: VOWatchdog[]) {

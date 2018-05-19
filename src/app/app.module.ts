@@ -48,7 +48,7 @@ import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-tab
 import {StorageService} from './services/app-storage.service';
 
 
-import {BittrexModule} from './bittrex/bittrex.module';
+
 
 import {CompareService} from './services/compare.service';
 import {SlackService} from "./services/slack.service";
@@ -81,7 +81,6 @@ declare const Buffer: any;
     EmailServiceModule,
     LoginModule,
     ShapeShiftModule,
-    BittrexModule,
     MyExchangeModule,
     MyBotModule,
     TraderModule,

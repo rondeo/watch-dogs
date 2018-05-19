@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {MarketCapService, VOExchangeCoin} from '../market-cap.service';
+import {MarketCapService} from '../market-cap.service';
 import {VOSymbolMarkets} from '../gl-all-exchanges/gl-all-exchanges.component';
 import {Utils} from '../../shared/utils';
 import {ActivatedRoute} from '@angular/router';
@@ -14,10 +14,10 @@ export class CoinsExchangesComponent implements OnInit, OnChanges {
 
   @Input() consAr:string[];
 
-  symbolExchanges:VOExchangeCoin[];
+ // symbolExchanges:VOExchangeCoin[];
 
   coinId:string;
-  exchanges:VOExchangeCoin[];
+//  exchanges:VOExchangeCoin[];
 
   constructor(
     private route:ActivatedRoute,
@@ -33,7 +33,7 @@ export class CoinsExchangesComponent implements OnInit, OnChanges {
 
     //console.log(coinId);
 
-    this.marketcap.getCoinsExchanges().subscribe((res:VOExchangeCoin[])=>{
+   /* this.marketcap.getCoinsExchanges().subscribe((res:VOExchangeCoin[])=>{
       this.exchanges = res;
       let ar = res.filter(function (item) {
         return item.coinId  === coinId
@@ -41,7 +41,7 @@ export class CoinsExchangesComponent implements OnInit, OnChanges {
 
       this.symbolExchanges = _.orderBy(ar, 'exchange');
      // this.pricessData();
-    })
+    })*/
   }
 
 

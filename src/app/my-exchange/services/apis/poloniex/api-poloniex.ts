@@ -1,22 +1,21 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../../services/auth-http.service';
-import {APIBooksService} from "../../../../services/books-service";
-import {VOBalance, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../../../models/app-models";
-import {StorageService} from "../../../../services/app-storage.service";
+import {APIBooksService} from '../../../../services/books-service';
+import {VOBalance, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from '../../../../models/app-models';
+import {StorageService} from '../../../../services/app-storage.service';
 
-import {ApiLogin} from "../../../../shared/api-login";
-import {IExchangeConnector} from "../../connector-api.service";
+import {ApiLogin} from '../../../../shared/api-login';
+import {IExchangeConnector} from '../../connector-api.service';
 
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
-import {SelectedSaved} from "../../../../com/selected-saved";
-import {ApiBase} from "../api-base";
-import {MarketCapService} from "../../../../market-cap/market-cap.service";
-import {Mappers} from "../../../../com/mappers";
-import {SOMarketPoloniex} from "../../../../models/sos";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Subject} from "rxjs/Subject";
-
+import {SelectedSaved} from '../../../../com/selected-saved';
+import {ApiBase} from '../api-base';
+import {MarketCapService} from '../../../../market-cap/market-cap.service';
+import {Mappers} from '../../../../apis/mappers';
+import {SOMarketPoloniex} from '../../../../models/sos';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Subject} from 'rxjs/Subject';
 
 
 export class ApiPoloniex extends ApiBase {
@@ -28,7 +27,7 @@ export class ApiPoloniex extends ApiBase {
 
   }
 
-  getMarketURL(base:string, coin:string){
+  getMarketURL(base: string, coin: string) {
     return 'https://poloniex.com/exchange#{{base}}_{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
   }
 
@@ -42,11 +41,11 @@ export class ApiPoloniex extends ApiBase {
       if (res)
         return {
           uuid: orderId,
-          isOpen: (res.success !==1),
+          isOpen: (res.success !== 1),
           coin: null,
           base: null,
           rate: 0,
-          amountCoin:0
+          amountCoin: 0
         }
       else return null;
     })
@@ -85,13 +84,12 @@ export class ApiPoloniex extends ApiBase {
         coin: null,
         base: null,
         rate: 0,
-        amountCoin:0
+        amountCoin: 0
       }
 
 
     })
   }
-
 
 
   downloadOrders(base: string, coin: string): Observable<VOOrder[]> {
@@ -103,27 +101,27 @@ export class ApiPoloniex extends ApiBase {
     });
   }
 
-  getOpenOrders(base: string, coin: string): Observable<VOOrder[]>{
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
     return this.call({
       command: 'returnOpenOrders',
       currencyPair: base + '_' + coin
-    }).map(res=>{
+    }).map(res => {
 
       console.warn(res);
       return res.map(function (o) {
-        return{
-          uuid:o.orderNumber,
-          action:o.type.toUpperCase(),
-          isOpen:true,
-          rate:+o.rate,
-          coin:coin,
-          base:base,
-          exchange:'poloniex',
-          amountCoin:o.amount,
-          amountBase:o.amount * o.rate,
-          date:o.date,
-          timestamp:new Date(o.date).getTime(),
-          fee:0
+        return {
+          uuid: o.orderNumber,
+          action: o.type.toUpperCase(),
+          isOpen: true,
+          rate: +o.rate,
+          coin: coin,
+          base: base,
+          exchange: 'poloniex',
+          amountCoin: o.amount,
+          amountBase: o.amount * o.rate,
+          date: o.date,
+          timestamp: new Date(o.date).getTime(),
+          fee: 0
 
         }
       })
@@ -138,199 +136,200 @@ export class ApiPoloniex extends ApiBase {
   }*/
 
   downloadMarketHistory$;
-  downloadMarketHistory(base:string, coin:string):Observable<VOOrder[]>{
 
-      if (this.downloadMarketHistory$) return this.downloadMarketHistory$;
+  downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
 
-      let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-      url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
-      // console.log(url)
-     this.downloadMarketHistory$ = this.http.get(url).map((res:any)=>{
-       // console.log(res);
+    if (this.downloadMarketHistory$) return this.downloadMarketHistory$;
 
-       this.downloadMarketHistory$ = null;
-        return res.map(function(item) {
-          let time = (new Date(item.date.split(' ').join('T')+'Z'));
+    let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
+    url = url.replace('{{base}}', base).replace('{{coin}}', coin);
+    // console.log(url)
+    this.downloadMarketHistory$ = this.http.get(url).map((res: any) => {
+      // console.log(res);
 
-          return {
-            action:item.type.toUpperCase(),
-            isOpen:false,
-            uuid: item.tradeID,
-            exchange: 'poloniex',
-            rate:+item.rate,
-            amountCoin:+item.amount,
-            amountBase:+item.total,
-            base: base,
-            coin: coin,
-            date:item.date,
-            minutes:time.getMinutes(),
-            timestamp:time.getTime(),
-            local:time.toLocaleTimeString()
-          };
-        });
+      this.downloadMarketHistory$ = null;
+      return res.map(function (item) {
+        let time = (new Date(item.date.split(' ').join('T') + 'Z'));
 
-      }, err=>{
-       this.downloadMarketHistory$ = null;
-     })
-  return this.downloadMarketHistory$
+        return {
+          action: item.type.toUpperCase(),
+          isOpen: false,
+          uuid: item.tradeID,
+          exchange: 'poloniex',
+          rate: +item.rate,
+          amountCoin: +item.amount,
+          amountBase: +item.total,
+          base: base,
+          coin: coin,
+          date: item.date,
+          minutes: time.getMinutes(),
+          timestamp: time.getTime(),
+          local: time.toLocaleTimeString()
+        };
+      });
+
+    }, err => {
+      this.downloadMarketHistory$ = null;
+    })
+    return this.downloadMarketHistory$
 
   }
 
 
-
-  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'_'+coin;
+  buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+    let market = base + '_' + coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
-    return this.call( {
-      command:'buy',
-      currencyPair:market,
-      rate:rate,
-      amount:quantity
-    }).map(res=>{
+    return this.call({
+      command: 'buy',
+      currencyPair: market,
+      rate: rate,
+      amount: quantity
+    }).map(res => {
 
 
-      console.log(' buyLimit market ' + market , res);
+      console.log(' buyLimit market ' + market, res);
 
       return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        amountCoin:quantity, //TODO get real property
-        base:base,
-        coin:coin,
-        type:res.type
+        uuid: res.orderNumber,
+        isOpen: !!res.orderNumber,
+        rate: res.rate,
+        amountCoin: quantity, //TODO get real property
+        base: base,
+        coin: coin,
+        type: res.type
       };
     });
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
 
-  sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'_'+coin;
+  sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+    let market = base + '_' + coin;
     console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
-    return this.call( {
-        command:'sell',
-        currencyPair:market,
-        rate:rate,
-        amount:quantity
+    return this.call({
+      command: 'sell',
+      currencyPair: market,
+      rate: rate,
+      amount: quantity
 
-    }).map(res=>{
-      console.log(' sellLimit market '+market , res);
+    }).map(res => {
+      console.log(' sellLimit market ' + market, res);
       return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        amountCoin:quantity, //TODO get real property
-        base:base,
-        coin:coin,
-        type:res.type
+        uuid: res.orderNumber,
+        isOpen: !!res.orderNumber,
+        rate: res.rate,
+        amountCoin: quantity, //TODO get real property
+        base: base,
+        coin: coin,
+        type: res.type
       };
 
     });
   }
 
 
-/*
-  isBooksDownloading:boolean
-  downloadBooks(base:string, coin:string):Observable<VOBooks>{
+  /*
+    isBooksDownloading:boolean
+    downloadBooks(base:string, coin:string):Observable<VOBooks>{
 
-    if(this.isBooksDownloading) return;
-    this.isBooksDownloading = true;
-    let url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair='+base+'_'+coin+'&depth=100'
+      if(this.isBooksDownloading) return;
+      this.isBooksDownloading = true;
+      let url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair='+base+'_'+coin+'&depth=100'
 
-    //let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
-    console.log(url)
-    this.http.get(url).map((res:any)=>{
-      this.isBooksDownloading = false;
-      console.log(res);
-      let buy = res.bids.map(function (item) {
-        return{
-          Quantity:+item[1],
-          Rate:+item[0]
+      //let url = '/api/poloniex/orderBook/'+base+'_'+coin+'/100';
+      console.log(url)
+      this.http.get(url).map((res:any)=>{
+        this.isBooksDownloading = false;
+        console.log(res);
+        let buy = res.bids.map(function (item) {
+          return{
+            Quantity:+item[1],
+            Rate:+item[0]
+          }
+        })
+
+        let sell = res.asks.map(function (item) {
+          return{
+            Quantity:+item[1],
+            Rate:+item[0]
         }
+        });
+
+        return {
+          market:base+'_'+coin,
+          exchange:this.exchange,
+          buy:buy,
+          sell:sell
+        }
+
+      }).toPromise().then(res=>{
+
+        this.dispatchBook(res)
+      }).catch(err=>{
+        this.isBooksDownloading = false;
       })
-
-      let sell = res.asks.map(function (item) {
-        return{
-          Quantity:+item[1],
-          Rate:+item[0]
-      }
-      });
-
-      return {
-        market:base+'_'+coin,
-        exchange:this.exchange,
-        buy:buy,
-        sell:sell
-      }
-
-    }).toPromise().then(res=>{
-
-      this.dispatchBook(res)
-    }).catch(err=>{
-      this.isBooksDownloading = false;
-    })
-    return this.books$();
-  }
-*/
+      return this.books$();
+    }
+  */
 //TODO
   urlBalances = 'api/2/trading/balance';
 
 
-  isLoadingBalances:boolean;
- /* refreshBalances():void {
+  isLoadingBalances: boolean;
 
-    if(!this.isLogedInSub.getValue()){
-      console.warn(' not logged in');
-      return;
-    }
-    if(this.isLoadingBalances) return;
-    this.isLoadingBalances = true;
+  /* refreshBalances():void {
 
-    //console.log('%c refreshBalances  ','color:pink');
+     if(!this.isLogedInSub.getValue()){
+       console.warn(' not logged in');
+       return;
+     }
+     if(this.isLoadingBalances) return;
+     this.isLoadingBalances = true;
 
-    this.call( {command:'returnBalances'}).map(res => {
-      //console.log(res);
+     //console.log('%c refreshBalances  ','color:pink');
+
+     this.call( {command:'returnBalances'}).map(res => {
+       //console.log(res);
 
 
-      if(!res){
-        console.warn('refreshBalances null')
-        return null;
-      }
-      if(res.error){
-        res.api='returnBalances';
-        this.onError(res);
+       if(!res){
+         console.warn('refreshBalances null')
+         return null;
+       }
+       if(res.error){
+         res.api='returnBalances';
+         this.onError(res);
 
-        return null;
-      }
+         return null;
+       }
 
-      let out =[];
+       let out =[];
 
-      for(let str in res) {
-        let bal = new VOBalance();
-        bal.balance = +res[str];
-        bal.symbol = str;
-        out.push(bal)
-      }
+       for(let str in res) {
+         let bal = new VOBalance();
+         bal.balance = +res[str];
+         bal.symbol = str;
+         out.push(bal)
+       }
 
-      return out;
-    }).toPromise().then(res=>{
-      this.isLoadingBalances = false;
-      this.dispatchBalances(res);
+       return out;
+     }).toPromise().then(res=>{
+       this.isLoadingBalances = false;
+       this.dispatchBalances(res);
 
-    }).catch(err=>{
-      this.isLoadingBalances = false;
-      err.api='poloniex returnBalances';
-      this.onError(err);
+     }).catch(err=>{
+       this.isLoadingBalances = false;
+       err.api='poloniex returnBalances';
+       this.onError(err);
 
-    });
-  }*/
+     });
+   }*/
 
-  downloadBalances():Observable<VOBalance[]>{
+  downloadBalances(): Observable<VOBalance[]> {
 
-    return this.call( {command:'returnBalances'}).map(res => {
+    return this.call({command: 'returnBalances'}).map(res => {
       //console.log(res);
 
 
@@ -363,17 +362,18 @@ export class ApiPoloniex extends ApiBase {
 
 
   urlMarketHistory = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
-  mapMarketHistory(res):VOOrder[]{
-    return res.map(function(item) {
+
+  mapMarketHistory(res): VOOrder[] {
+    return res.map(function (item) {
       return {
-        action:item.type.toUpperCase(),
-        isOpen:false,
+        action: item.type.toUpperCase(),
+        isOpen: false,
         uuid: item.tradeID,
         exchange: 'poloniex',
-        rate:+item.rate,
-        amountBase:+item.total,
-        date:item.date,
-        timestamp:(new Date(item.date.split(' ').join('T')+'Z')).getTime()
+        rate: +item.rate,
+        amountBase: +item.total,
+        date: item.date,
+        timestamp: (new Date(item.date.split(' ').join('T') + 'Z')).getTime()
       };
     });
   }
@@ -383,24 +383,24 @@ export class ApiPoloniex extends ApiBase {
   urlMarkets = 'https://poloniex.com/public?command=returnTicker';
 
 
-  mapBooks(res:any):{buy:VOOrder[], sell:VOOrder[]}{
+  mapBooks(res: any): { buy: VOOrder[], sell: VOOrder[] } {
     let buy = res.bids.map(function (item) {
-      return{
-        amountCoin:+item[1],
-        rate:+item[0]
+      return {
+        amountCoin: +item[1],
+        rate: +item[0]
       }
     })
 
     let sell = res.asks.map(function (item) {
-      return{
-        amountCoin:+item[1],
-        rate:+item[0]
+      return {
+        amountCoin: +item[1],
+        rate: +item[0]
       }
     });
 
     return {
-      buy:buy,
-      sell:sell
+      buy: buy,
+      sell: sell
     }
 
   }
@@ -438,13 +438,13 @@ export class ApiPoloniex extends ApiBase {
 
 
   mapMarkets(
-    result:{[index:string]:SOMarketPoloniex},
-    marketsAr:VOMarket[],
-    indexed:{[pair:string]:VOMarket},
-    bases:string[],
-    selected:string[]
+    result: { [index: string]: SOMarketPoloniex },
+    marketsAr: VOMarket[],
+    indexed: { [pair: string]: VOMarket },
+    bases: string[],
+    selected: string[]
     //marketCap:{[symbol:string]:VOMarketCap}
-  ):number{
+  ): number {
 
     let i = 0;
     for (let str in result) {
@@ -459,22 +459,22 @@ export class ApiPoloniex extends ApiBase {
       if (bases.indexOf(market.base) === -1) bases.push(market.base);
       market.coin = ar[1];
       market.pair = str;
-      market.selected = selected.indexOf(str) !==-1;
+      market.selected = selected.indexOf(str) !== -1;
       market.id = str;
       market.exchange = 'poloniex';
 
-     // market.Volume = +data.quoteVolume;
+      // market.Volume = +data.quoteVolume;
       market.Last = +data.last;
       market.High = +data.highestBid;
       market.Low = +data.lowestAsk;
       market.Ask = +data.lowestAsk;
       market.Bid = +data.highestBid;
       market.BaseVolume = +data.baseVolume;
-      market.disabled = data.isFrozen !=='0';
+      market.disabled = data.isFrozen !== '0';
 
       market.PrevDay = (+data.high24hr + +data.low24hr) / 2;
 
-     // let mcBase = marketCap[market.base];
+      // let mcBase = marketCap[market.base];
       //let basePrice = mcBase ? mcBase.price_usd : 1;
 
       //Mappers.mapDisplayValues(market, basePrice, 4, marketCap[market.coin]);
@@ -482,9 +482,9 @@ export class ApiPoloniex extends ApiBase {
       //let mc = marketCap[market.coin];
       //if (!mc) {
       //  //console.log('no mc for ' + market.coin);
-       // market.usMC = '';
+      // market.usMC = '';
 
-     // } else market.usMC = mc.price_usd.toFixed(2);
+      // } else market.usMC = mc.price_usd.toFixed(2);
 
       indexed[market.pair] = market;
       marketsAr.push(market);
@@ -493,14 +493,15 @@ export class ApiPoloniex extends ApiBase {
   }
 
 
-  callInprogress:boolean;
-  private call( post: any): Observable<any> {
+  callInprogress: boolean;
 
-    return this.getCredentials().switchMap(cred=> {
-    //  console.log(cred);
+  private call(post: any): Observable<any> {
 
-      this.isLogedInSub.next(cred.password?true: false)
-      if(!cred.password) throw new Error(' poloniex no password');
+    return this.getCredentials().switchMap(cred => {
+      //  console.log(cred);
+
+      this.isLogedInSub.next(cred.password ? true : false)
+      if (!cred.password) throw new Error(' poloniex no password');
 
       /*if (!this.apiKey) {
         console.error(' no key')
@@ -548,8 +549,6 @@ export class ApiPoloniex extends ApiBase {
 
 
   }
-
-
 
 
 }

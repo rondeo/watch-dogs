@@ -14,26 +14,13 @@ import {Parsers} from '../apis/parsers';
 @Injectable()
 export class MarketCapService {
 
-  // private coinsAr: VOMarketCap[];
 
-  private history: { [id: string]: VOMarketCap }[];
-  // coinsAr$: Observable<VOMarketCap[]>;
-  // private coinsArSub: BehaviorSubject<VOMarketCap[]> = new BehaviorSubject(null);
   private coins: { [symbol: string]: VOMarketCap };
-
-  // private coins$: Observable<{ [symbol: string]: VOMarketCap }>;
-
-  // private coinsSub: Subject<{[symbol:string]:VOMarketCap}> = new Subject();
-
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
   delay = 6.1 * 60;
   counter: number;
-
   coinsById: { [id: string]: VOMarketCap };
-  countDown: number;
-  countDownSub: Subject<number>
-  countDown$: Observable<number>;
   historyCounterSub: Subject<number>;
   historyCounter$: Observable<number>;
   private isRunning: boolean;
@@ -45,89 +32,13 @@ export class MarketCapService {
 
     this.timestamp = Date.now();
     this.counter = 0;
-
-    this.countDownSub = new Subject();
-    this.countDown$ = this.countDownSub.asObservable();
-    this.historyCounterSub = new Subject();
-    this.historyCounter$ = this.historyCounterSub.asObservable();
-
-   // this.coinsAr$ = this.coinsArSub.asObservable();
-
     this.coinsSubB = new BehaviorSubject(this.coins);
-    // this.coins$ = this.coinsSubB.asObservable();
-    this.history = [];
-    //this.coinsSub = new Subject();
-
-
-    this.countDown = this.delay;
-    this.isRunning = true;
-    // setInterval(() => this.doCountDown(), 1000);
-    this.start();
   }
-
-
-  /* getLast10(coins: string[]): Observable<any> {
-     return this.http.get('api/marketcap/coinsLast10/' + coins.toString()).map((res: any[]) => {
-       //console.log(res);
-       return res.map(function (item) {
-         return ApiMarketCapService.mapServerValues(item);
-       })
-     })
-   }*/
-
-  /* doCountDown() {
-     this.countDown--;
-     this.countDownSub.next(this.countDown);
-     if (this.countDown < 2) {
-
-       if (this.isRunning) this.refresh();
-
-
-     }
-   }*/
-
-  isLoaded: boolean;
-
-
   getCoinsObs() {
     if (this.coins) return Observable.of(this.coins);
     return this.api.downloadTicker().do(res => this.coins = res);
   }
-
-  getCoinsPromise(): Promise<{ [symbol: string]: VOMarketCap }> {
-    if (!this.isLoaded) this.refresh();
-    this.isLoaded = true;
-
-    return new Promise<{ [symbol: string]: VOMarketCap }>((resolve, reject) => {
-      if (this.coins) resolve(this.coins);
-      else {
-        this.coinsSubB.subscribe(res => {
-          if (res) resolve(this.coins)
-        });
-        this.refresh();
-      }
-    })
-
-    // if(!this.coinsSubB)return this.coinsSub.asObservable();
-    //return this.coinsSubB.asObservable();
-  }
-
   private interval;
-
-
-  start(): void {
-    if (this.isRunning) return;
-    this.isRunning = true;
-    this.countDown = this.delay;
-    this.refresh();
-  }
-
-  stop() {
-    if (!this.isRunning) return;
-    this.isRunning = false;
-    clearInterval(this.interval);
-  }
-
   getCoinBySymbol(symbol: string): VOMarketCap {
     return this.coins[symbol];
   }
@@ -160,12 +71,7 @@ export class MarketCapService {
     this.coinsSubB.next(this.coins);
   }
 
-  getHistory(): { [id: string]: VOMarketCap }[] {
-    return this.history;
-  }
-
-
-  setData(MC: { [symbol: string]: VOMarketCap }): void {
+ /* setData(MC: { [symbol: string]: VOMarketCap }): void {
     // console.warn('setData ');
 
     console.log('%c MarketCap new data  ', 'color:pink');
@@ -175,12 +81,12 @@ export class MarketCapService {
    //  this.coinsAr = Object.values(MC);
     let btc = MC['BTC'];
 
-  /*  this.coinsAr.forEach(function (item) {
+  /!*  this.coinsAr.forEach(function (item) {
       item.tobtc_change_1h = +(item.percent_change_1h - this.btc.percent_change_1h).toFixed(2);
       item.tobtc_change_24h = +(item.percent_change_24h - this.btc.percent_change_24h).toFixed(2);
       item.tobtc_change_7d = +(item.percent_change_7d - this.btc.percent_change_7d).toFixed(2);
       item.btcUS = this.btc.price_usd;
-    }, {btc: btc});*/
+    }, {btc: btc});*!/
 
     this.coinsSubB.next(this.coins);
     // console.log(ar);
@@ -198,9 +104,9 @@ export class MarketCapService {
 
     // console.log(' marketcap total: ' + this.marketsAr.length);
     this.counter++;
-  }
+  }*/
 
-  getCoinsExchanges(): Observable<VOExchangeCoin[]> {
+  /*getCoinsExchanges(): Observable<VOExchangeCoin[]> {
     let url = '/api/marketcap/all-exchanges';
     return this.http.get(url).map(function (res: any) {
       // let out:VOExchangeCoin[] = [];
@@ -230,9 +136,9 @@ export class MarketCapService {
       return items;
     })
 
-  }
+  }*/
 
-  isLoading: boolean;
+ // isLoading: boolean;
 
 
   /*
@@ -253,7 +159,7 @@ export class MarketCapService {
            +item.last_updated*/
 
 
-  static mapMCValue(item) {
+ /* static mapMCValue(item) {
     return {
       id: item[0],
       name: item[1],
@@ -271,9 +177,9 @@ export class MarketCapService {
       max_supply: item[13],
       last_updated: item[14]
     }
-  }
+  }*/
 
-
+/*
   downloadTicker() {
     let url = '/api/marketcap/ticker';
     console.log(url);
@@ -282,9 +188,9 @@ export class MarketCapService {
       this.coins = MC;
       return MC;
     });
-  }
+  }*/
 
-  refresh() {
+ /* refresh() {
     if (this.isLoading) return;
     this.isLoading = true;
     //console.log('%c MarketCap load data ', 'color:pink');;
@@ -298,7 +204,7 @@ export class MarketCapService {
       this.isLoading = false;
       return res
     }).toPromise();//subscribe(data=> this.setData(data));
-  }
+  }*/
 
   /*getCoinBySymbol(symbol:string):VOMarketCap{
     return this.coins[symbol];
@@ -319,31 +225,4 @@ export class MarketCapService {
    }*/
 
 
-}
-
-
-export interface VOCoin {
-  symbol: string;
-  name: string;
-  base: string;
-}
-
-/*
-export interface VOGainers{
-  name:string;
-  symbol:string;
-  status:string
-  cap:string;
-  price:string;
-  percent:string;
-}
-*/
-
-
-export interface VOExchangeCoin {
-  coinId: string;
-  exchange: string;
-  pair: string;
-  pairUrl: string;
-  urlMC: string;
 }

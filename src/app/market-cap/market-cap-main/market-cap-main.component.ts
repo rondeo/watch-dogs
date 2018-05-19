@@ -19,7 +19,7 @@ export class MarketCapMainComponent implements OnInit {
   }
 
   onRefreshClick(){
-    this.service.refresh();
+   //  this.service.refresh();
   }
 
 }

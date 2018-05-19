@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MarketCapService, VOExchangeCoin} from '../market-cap.service';
+import {MarketCapService} from '../market-cap.service';
 
 @Component({
   selector: 'app-coins-list',
@@ -9,18 +9,18 @@ import {MarketCapService, VOExchangeCoin} from '../market-cap.service';
 export class CoinsListComponent implements OnInit {
 
 
-  listEchangeCoin:VOExchangeCoin[];
+  // listEchangeCoin:VOExchangeCoin[];
   constructor(
-    private service:MarketCapService
+   // private service:MarketCapService
   ) { }
 
   ngOnInit() {
-    this.service.getCoinsExchanges().subscribe(res=>{
+   /* this.service.getCoinsExchanges().subscribe(res=>{
       if(!res) return;
 
       this.listEchangeCoin = res;
 
-    })
+    })*/
   }
 
 }

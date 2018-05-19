@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {VOMarketCap} from '../../models/app-models';
-import {MarketCapService, VOExchangeCoin} from '../market-cap.service';
+import {MarketCapService} from '../market-cap.service';
 import * as _ from 'lodash';
 import {Utils} from '../../shared/utils';
 
@@ -66,7 +66,7 @@ export class GlAllExchangesComponent implements OnInit {
         */
 
 
-    this.service.refresh();
+  //  this.service.refresh();
   }
 
 

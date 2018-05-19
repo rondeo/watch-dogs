@@ -155,10 +155,10 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigateByUrl('/email-service/edit-script/' + dog.uuid);
   }
 
-  loadData() {
+ /* loadData() {
     this.marketCap.refresh();
   }
-
+*/
   onDogClick(dog: WatchDog) {
     this.router.navigateByUrl('/email-service/edit-watchdogs/' + dog.uuid);
   }
@@ -176,13 +176,13 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isRunning = true;
     this.progress = 20;
     this.seconds = 0;
-    this.loadData();
+   // this.loadData();
     this.interval = setInterval(() => {
       this.seconds++
       this.progress = 5 + (this.seconds / this.refreshSeconds) * 100;
       if (this.seconds > this.refreshSeconds) {
         this.seconds = 0;
-        this.loadData();
+        // this.loadData();
       }
     }, 1000);
   }

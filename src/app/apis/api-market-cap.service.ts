@@ -56,11 +56,9 @@ export class ApiMarketCapService {
         selected.forEach(function (item) {
           data[item].selected = true;
         });
-        console.log(data);
         this.coinsAr = Object.values(data);
         sub.next(this.coinsAr);
-
-      })
+      });
       return sub.asObservable()
     })
 

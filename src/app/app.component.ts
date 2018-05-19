@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
   }
 
   onRefreshClick(){
-    this.marketCap.refresh();
+   //  this.marketCap.refresh();
 
   }
   onLogin(){

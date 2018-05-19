@@ -7,7 +7,6 @@ import {MaterialAppModule} from '../material/material-app.module';
 import {RouterModule} from '@angular/router';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { ConfirmResetPasswordComponent } from './confirm-reset-password/confirm-reset-password.component';
-import {BittrexLoginComponent} from '../bittrex/bittrex-login/bittrex-login.component';
 
 
 
@@ -25,6 +24,6 @@ import {BittrexLoginComponent} from '../bittrex/bittrex-login/bittrex-login.comp
     ConfirmResetPasswordComponent,
 
   ],
-  entryComponents: [ BittrexLoginComponent]
+  entryComponents: []
 })
 export class LoginModule { }

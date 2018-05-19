@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-
-import {BittrexLoginComponent} from "../../bittrex/bittrex-login/bittrex-login.component";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
 import {ConnectorApiService} from "../services/connector-api.service";
@@ -120,21 +118,6 @@ export class MyMainComponent implements OnInit {
 
 
     let credentials = {apiKey:'', password:'', save:false, submit:false};
-
-    let dialogRef = this.dialog.open(BittrexLoginComponent,{
-      data:credentials
-    });
-
-    let sub =  dialogRef.afterClosed().subscribe(result => {
-      if(!result) return;
-      sub.unsubscribe();
-      console.log(result);
-      if(result.apiKey.length && result.password.length && result.submit) {
-        this.apiService.login(result.apiKey, result.password, result.save);
-        if(!result.save) this.apiService.removeSavedLogin();
-      }
-
-    });
 
   }
 

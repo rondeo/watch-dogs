@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MarketCapService, VOExchangeCoin} from '../market-cap.service';
+import {MarketCapService} from '../market-cap.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -9,19 +9,19 @@ import * as _ from 'lodash';
 })
 export class ExchangesListComponent implements OnInit {
 
-  exchangesCoin:VOExchangeCoin[];
+ //  exchangesCoin:VOExchangeCoin[];
 
   constructor(
     private service:MarketCapService
   ) { }
 
   ngOnInit() {
-    this.service.getCoinsExchanges().subscribe(res=>{
+   /* this.service.getCoinsExchanges().subscribe(res=>{
       if(!res) return;
       //console.log(res);
       this.exchangesCoin = res;
 
-    })
+    })*/
   }
 
 }
