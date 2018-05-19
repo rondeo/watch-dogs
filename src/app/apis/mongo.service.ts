@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import * as moment from "moment";
 import {VOMarketCap, VOMarketCapExt} from "../models/app-models";
-import {ApiMarketCapService, VOMCAgregated} from "./api-market-cap.service";
+import {ApiMarketCapService} from "./api-market-cap.service";
+import {Parsers} from './parsers';
+import {VOMCAgregated} from './models';
 
 
 @Injectable()
@@ -70,7 +72,7 @@ export class MongoService {
       console.log(res);
       return res.payload.map(function (itemObj) {
         const item = itemObj[coin];
-        return item?ApiMarketCapService.mapAgrigated(item, coin):null;
+        return item?Parsers.mapAgrigated(item, coin):null;
       });
     })
   }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiMarketCapService, VOMCAgregated} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ActivatedRoute} from "@angular/router";
 import {VOGraphs} from "../../shared/line-chart/line-chart.component";
 import * as moment from "moment";
@@ -13,6 +13,7 @@ import {MongoService} from "../../apis/mongo.service";
 import {UtilsBot} from "../../com/utils-bot";
 import {GRAPHS} from "../../com/grpahs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {VOMCAgregated} from '../../apis/models';
 
 @Component({
   selector: 'app-coin-graph',

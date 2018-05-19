@@ -229,7 +229,7 @@ export class BotRunComponent implements OnInit {
     //this.market = this.base+'_' + this.coin;
     this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0, rate:0};
     console.warn('onMarketChange');
-    this.currentAPI.getPriceForBase(ar[0]).then(priceBaseUS=>{
+  /*  this.currentAPI.getPriceForBase(ar[0]).then(priceBaseUS=>{
 
       //console.warn(res);
       if(!priceBaseUS) return;
@@ -254,12 +254,12 @@ export class BotRunComponent implements OnInit {
         this.setBalances();
 
         let publicApi:any = this.currentAPI
-       /* publicApi.downloadMarketHistoryForPeriod(base, coin, 180, 5).subscribe(res=>{
+       /!* publicApi.downloadMarketHistoryForPeriod(base, coin, 180, 5).subscribe(res=>{
           console.warn(res);
-        })*/
+        })*!/
 
 
-       /* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(history=>{
+       /!* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(history=>{
 
           console.log(this.marketInit.exchange + '  ' + UtilsOrder.calculateLength(history)  + ' min');
 
@@ -270,7 +270,7 @@ export class BotRunComponent implements OnInit {
          // this.runBot(analytics);
 
         })
-*/
+*!/
       })
 
 
@@ -278,7 +278,7 @@ export class BotRunComponent implements OnInit {
 
       console.error('cant get price for base ' +ar[0], err)
 
-    });
+    });*/
 
   }
 

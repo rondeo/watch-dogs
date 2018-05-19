@@ -3,7 +3,8 @@ import {VOMarketCap, VOWatchdog} from "../../models/app-models";
 import {StorageService} from "../../services/app-storage.service";
 import * as _ from 'lodash';
 import {ApisPrivateService} from "../../apis/apis-private.service";
-import {VOMCAgregated} from "../../apis/api-market-cap.service";
+import {VOMCAgregated} from '../../apis/models';
+
 
 
 @Injectable()

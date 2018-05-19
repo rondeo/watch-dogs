@@ -3,9 +3,10 @@ import {MarketCapService} from '../market-cap.service';
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
-import {ApiMarketCapService, VOMCAGREGATED, VOMCAgregated} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
+import {VOMCAGREGATED, VOMCAgregated} from '../../apis/models';
 
 @Component({
   selector: 'app-gainers-losers',

@@ -9,40 +9,39 @@ import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 import {ApiMarketCapService} from "../apis/api-market-cap.service";
-
+import {Parsers} from '../apis/parsers';
 
 @Injectable()
 export class MarketCapService {
 
-  private coinsAr: VOMarketCap[];
+  // private coinsAr: VOMarketCap[];
 
   private history: { [id: string]: VOMarketCap }[];
+  // coinsAr$: Observable<VOMarketCap[]>;
+  // private coinsArSub: BehaviorSubject<VOMarketCap[]> = new BehaviorSubject(null);
+  private coins: { [symbol: string]: VOMarketCap };
 
-
-  coinsAr$: Observable<VOMarketCap[]>;
-  private coinsArSub: BehaviorSubject<VOMarketCap[]> = new BehaviorSubject(null);
-  coins: { [symbol: string]: VOMarketCap };
-
-  private coins$: Observable<{ [symbol: string]: VOMarketCap }>;
+  // private coins$: Observable<{ [symbol: string]: VOMarketCap }>;
 
   // private coinsSub: Subject<{[symbol:string]:VOMarketCap}> = new Subject();
+
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
   delay = 6.1 * 60;
   counter: number;
-  coinsById: { [id: string]: VOMarketCap };
 
+  coinsById: { [id: string]: VOMarketCap };
   countDown: number;
   countDownSub: Subject<number>
   countDown$: Observable<number>;
-
   historyCounterSub: Subject<number>;
   historyCounter$: Observable<number>;
-
-  isRunning: boolean;
+  private isRunning: boolean;
 
   constructor(public http: HttpClient,
-              private storage: StorageService) {
+              private storage: StorageService,
+              private api:ApiMarketCapService
+              ) {
 
     this.timestamp = Date.now();
     this.counter = 0;
@@ -52,47 +51,47 @@ export class MarketCapService {
     this.historyCounterSub = new Subject();
     this.historyCounter$ = this.historyCounterSub.asObservable();
 
-    this.coinsAr$ = this.coinsArSub.asObservable();
+   // this.coinsAr$ = this.coinsArSub.asObservable();
 
     this.coinsSubB = new BehaviorSubject(this.coins);
-    this.coins$ = this.coinsSubB.asObservable();
+    // this.coins$ = this.coinsSubB.asObservable();
     this.history = [];
     //this.coinsSub = new Subject();
 
 
     this.countDown = this.delay;
     this.isRunning = true;
-   // setInterval(() => this.doCountDown(), 1000);
+    // setInterval(() => this.doCountDown(), 1000);
     this.start();
   }
 
 
-  getLast10(coins:string[]):Observable<any>{
-    return this.http.get('api/marketcap/coinsLast10/' + coins.toString()).map((res:any[])=>{
-      //console.log(res);
-      return res.map(function (item) {
-        return ApiMarketCapService.mapServerValues(item);
-      })
-    })
-  }
+  /* getLast10(coins: string[]): Observable<any> {
+     return this.http.get('api/marketcap/coinsLast10/' + coins.toString()).map((res: any[]) => {
+       //console.log(res);
+       return res.map(function (item) {
+         return ApiMarketCapService.mapServerValues(item);
+       })
+     })
+   }*/
 
-  doCountDown() {
-    this.countDown--;
-    this.countDownSub.next(this.countDown);
-    if (this.countDown < 2) {
+  /* doCountDown() {
+     this.countDown--;
+     this.countDownSub.next(this.countDown);
+     if (this.countDown < 2) {
 
-      if (this.isRunning) this.refresh();
+       if (this.isRunning) this.refresh();
 
 
-    }
-  }
+     }
+   }*/
 
   isLoaded: boolean;
 
 
   getCoinsObs() {
-    if(this.coins) return Observable.of(this.coins);
-    return this.downloadTicker();
+    if (this.coins) return Observable.of(this.coins);
+    return this.api.downloadTicker().do(res => this.coins = res);
   }
 
   getCoinsPromise(): Promise<{ [symbol: string]: VOMarketCap }> {
@@ -141,18 +140,20 @@ export class MarketCapService {
   }
 
   getAllCoinsById(): { [id: string]: VOMarketCap } {
-    //console.log('getAllCoinsById');
+
     return this.coinsById;
   }
 
+/*
   getAllCoinsArr(): VOMarketCap[] {
     return this.coinsAr
   }
+*/
 
-  getSelected(): VOMarketCap[] {
+ /* getSelected(): VOMarketCap[] {
 
-    return this.storage.filterSelected(this.coinsAr);
-  }
+    return this.storage.filterSelected(Object.values(this.coins));
+  }*/
 
 
   dispatchCouns() {
@@ -164,30 +165,31 @@ export class MarketCapService {
   }
 
 
-  setData(MC:{[symbol:string]:VOMarketCap}): void {
+  setData(MC: { [symbol: string]: VOMarketCap }): void {
     // console.warn('setData ');
 
     console.log('%c MarketCap new data  ', 'color:pink');
 
     this.coins = MC
     this.coins['USDT'].price_usd = 1;
-    this.coinsAr = Object.values(MC);
+   //  this.coinsAr = Object.values(MC);
     let btc = MC['BTC'];
 
-    this.coinsAr.forEach(function (item) {
+  /*  this.coinsAr.forEach(function (item) {
       item.tobtc_change_1h = +(item.percent_change_1h - this.btc.percent_change_1h).toFixed(2);
       item.tobtc_change_24h = +(item.percent_change_24h - this.btc.percent_change_24h).toFixed(2);
       item.tobtc_change_7d = +(item.percent_change_7d - this.btc.percent_change_7d).toFixed(2);
       item.btcUS = this.btc.price_usd;
-    },{btc:btc});
+    }, {btc: btc});*/
 
     this.coinsSubB.next(this.coins);
     // console.log(ar);
 
-   // this.coinsById = _.keyBy(ar, 'id');
+    // this.coinsById = _.keyBy(ar, 'id');
 
     //setTimeout(() => this.coinsSubB.next(this.coins), 100);
-    setTimeout(() => this.coinsArSub.next(this.coinsAr), 50);
+
+    // setTimeout(() => this.coinsArSub.next(this.coinsAr), 50);
 
     // if(this.history.length > 300) this.history.shift();
     // this.history.push(this.coins);
@@ -251,7 +253,7 @@ export class MarketCapService {
            +item.last_updated*/
 
 
-  static mapMCValue(item){
+  static mapMCValue(item) {
     return {
       id: item[0],
       name: item[1],
@@ -272,16 +274,16 @@ export class MarketCapService {
   }
 
 
-
-  downloadTicker(){
+  downloadTicker() {
     let url = '/api/marketcap/ticker';
     console.log(url);
-     return this.http.get(url).map((res: any) => {
-       let MC =ApiMarketCapService.mapServerValues(res)
-       this.coins = MC;
-       return MC;
-     });
+    return this.http.get(url).map((res: any) => {
+      let MC = Parsers.mapServerValues(res);
+      this.coins = MC;
+      return MC;
+    });
   }
+
   refresh() {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -290,7 +292,7 @@ export class MarketCapService {
     console.log('%c ' + url, 'color:pink');
     return this.http.get(url).map((res: any) => {
 
-     let MC =  ApiMarketCapService.mapServerValues( res)
+      let MC = Parsers.mapServerValues(res)
       this.setData(MC);
       this.countDown = this.delay;
       this.isLoading = false;

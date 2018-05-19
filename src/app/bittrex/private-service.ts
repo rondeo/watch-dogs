@@ -38,7 +38,7 @@ export class PrivateService {
   constructor(
     private config:any,
   private http: HttpClient,
-  public marketCap: MarketCapService,
+ // public marketCap: MarketCapService,
   //public publicService: BittrexService,
   private slack:SlackService,
   public storage: StorageService,
@@ -56,11 +56,11 @@ export class PrivateService {
 
 
 
-    this.marketCap.getCoinsObs().subscribe(MC => {
+   /* this.marketCap.getCoinsObs().subscribe(MC => {
       this.MC = MC;
       console.log(this.id + ' MC ready');
       this.mapBalancesToMC();
-    });
+    });*/
 
   }
 

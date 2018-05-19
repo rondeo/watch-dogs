@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
@@ -9,9 +9,9 @@ import {ChartsModule} from "ng2-charts";
 import {TraderOutletComponent} from "./trader-outlet/trader-outlet.component";
 import {TraderMainComponent} from "./trader-main/trader-main.component";
 import {SoketConnectorService} from "../sockets/soket-connector.service";
-import { TraderSocketComponent } from './trader-socket/trader-socket.component';
+import {TraderSocketComponent} from './trader-socket/trader-socket.component';
 import {ApisModule} from "../apis/apis.module";
-import { TraderRecorderComponent } from './trader-recorder/trader-recorder.component';
+import {TraderRecorderComponent} from './trader-recorder/trader-recorder.component';
 
 const routes: Routes = [
   {
@@ -41,6 +41,7 @@ const routes: Routes = [
     TraderSocketComponent,
     TraderRecorderComponent
   ],
-  providers:[SoketConnectorService]
+  providers: [SoketConnectorService]
 })
-export class TraderModule { }
+export class TraderModule {
+}

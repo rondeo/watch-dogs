@@ -16,8 +16,6 @@ import {SelectedCoinsComponent} from "../../market-cap/selected-coins/selected-c
 export class EmailSelectedCoinsComponent implements OnInit {
 
   selectedCoins:VOMarketCap[] = [];
-
-
   constructor(
    private marketCapService:MarketCapService,
    private storage:StorageService
@@ -25,7 +23,7 @@ export class EmailSelectedCoinsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.marketCapService.coinsAr$.subscribe(res=>{
+    /*this.marketCapService.coinsAr$.subscribe(res=>{
       // console.log(res);
       if(!res){
         console.log(' no reports refreshing MC')
@@ -35,7 +33,7 @@ export class EmailSelectedCoinsComponent implements OnInit {
       this.selectedCoins = SelectedCoinsComponent.filterSelected(res, this.storage.getSelectedMC());
 
 
-    });
+    });*/
   }
 
   setCoins(ar:VOMarketCap[]){

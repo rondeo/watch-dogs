@@ -15,8 +15,7 @@ import {WatchDog} from "../../my-bot/services/watch-dog";
 export class ApiPrivateBinance extends ApiPrivateAbstaract{
 
   balances:VOBalance[];
-  exchange ='bittrex'
-  apiPublic:ApiPublicBittrex;
+  exchange ='binance'
 
   constructor(
     private http:HttpClient,

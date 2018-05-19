@@ -191,7 +191,7 @@ export class EmailServiceService {
 
   deleteDog(dog: WatchDog) {
     this.watchDogs = _.filter(this.watchDogs,function (item) {
-      return item.uid !==dog.uuid;
+      return item.uuid !==dog.uuid;
     });
     this.saveData();
     this.watchDogsSub.next(this.watchDogs);

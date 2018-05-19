@@ -259,7 +259,8 @@ export class MyBuySellComponent implements OnInit {
       //this.market = this.base+'_' + this.coin;
       this.marketInit = {base:'', coin:'', exchange:'', market:'', priceBaseUS:0, rate:0};
       console.warn('onMarketChange');
-      this.currentAPI.getPriceForBase(ar[0]).then(res=>{
+
+     /* this.currentAPI.getPriceForBase(ar[0]).then(res=>{
 
         console.warn(res);
         if(!res) return;
@@ -291,7 +292,7 @@ export class MyBuySellComponent implements OnInit {
 
         console.error('cant get price for base ' +ar[0], err)
 
-      });
+      });*/
 
   }
 

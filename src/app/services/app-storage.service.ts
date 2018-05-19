@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class StorageService {
 
-  selected: string[];
+  // selected: string[];
 
   readonly WATCH_DOGS = 'WATCH_DOGS';
   //email:string;
@@ -47,34 +47,24 @@ export class StorageService {
     return JSON.parse(item);
   }
 
-  filterSelected(coins: VOMarketCap[]): VOMarketCap[] {
-    let selected = this.getSelectedMC();
-    return coins.filter(function (item) {
-      return selected.indexOf(item.symbol) !== -1;
-    })
-  }
+  /* filterSelected(coins: VOMarketCap[]): VOMarketCap[] {
+     let selected = this.getSelectedMC();
+     return coins.filter(function (item) {
+       return selected.indexOf(item.symbol) !== -1;
+     })
+   }*/
 
-  mapSelected(coins: any) {
-    let selected = this.getSelectedMC();
-    coins.forEach(function (item) {
-      item.selected = selected.indexOf(item.symbol) !== -1;
-    })
-  }
+  /* mapSelected(coins: any) {
+     let selected = this.getSelectedMC();
+     coins.forEach(function (item) {
+       item.selected = selected.indexOf(item.symbol) !== -1;
+     })
+   }*/
 
 
   getSelectedMC() {
-    if (!this.selected) {
-      this.selected = [];
-      let str = localStorage.getItem('market-cap-selected');
-      try {
-        if (str) this.selected = JSON.parse(str);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    return this.selected;
-
+    if (this.selectedMC) return Promise.resolve(this.selectedMC);
+    else return this.select('market-cap-selected').then(res => this.selectedMC = res || []);
   }
 
   getEmail(): string {
@@ -110,38 +100,40 @@ export class StorageService {
     ;
   }
 
-  addMCSelected(symbol: string) {
-    let ar = this.getSelectedMC();
+  selectedMC: string[];
+
+  async addMCSelected(symbol: string) {
+    let ar = this.selectedMC;
     if (ar.indexOf(symbol) == -1) ar.push(symbol);
-    this.saveSelected();
+    this.saveSelectedMC();
   }
 
-  deleteMCSelected(symbol: string) {
-    let ar = this.getSelectedMC();
+  async deleteSelectedMC(symbol: string) {
+    let ar = this.selectedMC;
     for (let i = ar.length - 1; i >= 0; i--) if (ar[i] === symbol) ar.splice(i, 1);
-    this.saveSelected();
+    return this.saveSelectedMC();
   }
 
 
   //////////////////////////////////////////////////////////
 
-/*
-  processes: any[];
+  /*
+    processes: any[];
 
-  async saveProcess(process: any) {
-    const processes: any[] = await this.getProcesses();
-    const exists = processes.find(function (item) {
-      return item.id === process.id;
-    });
-    if (!exists) processes.push(process);
+    async saveProcess(process: any) {
+      const processes: any[] = await this.getProcesses();
+      const exists = processes.find(function (item) {
+        return item.id === process.id;
+      });
+      if (!exists) processes.push(process);
 
-    return this.upsert('PROCESSES', this.processes);
-  }
+      return this.upsert('PROCESSES', this.processes);
+    }
 
-  async getProcesses() {
-    if (this.processes) return Promise.resolve(this.processes)
-    else return this.select('PROCESSES').then(res => this.processes = res);
-  }*/
+    async getProcesses() {
+      if (this.processes) return Promise.resolve(this.processes)
+      else return this.select('PROCESSES').then(res => this.processes = res);
+    }*/
 
 
   /*async setSoldCoin(sellCoin: VOSellCoin) {
@@ -161,21 +153,22 @@ export class StorageService {
   }*/
 
 
-
   private watchDogs: VOWatchdog[];
-  async upsertWatchDog(wd: VOWatchdog){
+
+  async upsertWatchDog(wd: VOWatchdog) {
     const exists = await this.getWatchDogByID(wd.id);
-    if(!exists) this.watchDogs.push(wd);
+    if (!exists) this.watchDogs.push(wd);
     return this.saveWatchDogs();
   }
-  async getWatchDogByID(id:string){
+
+  async getWatchDogByID(id: string) {
     const wd = await this.getWatchDogs();
-    return _.find(wd, {id:id});
+    return _.find(wd, {id: id});
   }
 
-  async getWatchDogs():Promise<VOWatchdog[]> {
+  async getWatchDogs(): Promise<VOWatchdog[]> {
     if (this.watchDogs) return Promise.resolve(this.watchDogs);
-    else return this.select(this.WATCH_DOGS).then(res =>{
+    else return this.select(this.WATCH_DOGS).then(res => {
       this.watchDogs = res || [];
       return this.watchDogs;
     })
@@ -197,8 +190,9 @@ export class StorageService {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  saveSelected() {
-    localStorage.setItem('market-cap-selected', JSON.stringify(this.selected));
+  async saveSelectedMC() {
+    return this.upsert('market-cap-selected', this.selectedMC);
+    // localStorage.setItem('market-cap-selected', JSON.stringify(this.selected));
   }
 
   getItem(s: string, secure = false) {

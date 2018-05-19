@@ -34,7 +34,7 @@ export class SelectedCoinsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.marketCapService.coinsAr$.subscribe(res=>{
+   /* this.marketCapService.coinsAr$.subscribe(res=>{
      // console.log(res);
       if(!res){
         console.log(' no reports refreshing MC')
@@ -44,7 +44,7 @@ export class SelectedCoinsComponent implements OnInit {
         this.selectedCoins = SelectedCoinsComponent.filterSelected(res, this.storage.getSelectedMC());
       this.calculateAvarage();
 
-    });
+    });*/
 
   }
 

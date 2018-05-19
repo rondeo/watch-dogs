@@ -20,14 +20,14 @@ export class BotListComponent implements OnInit, OnDestroy {
   seconds:number =  0;
   counter:number = 0;
   myBots:MyBot[];
-  marketCap:MarketCapService
+ // marketCap:MarketCapService
   constructor(
     private route:ActivatedRoute,
     private router:Router,
     private privateService:BittrexPrivateService,
     private snackBar:MatSnackBar
   ) {
-    this.marketCap = this.privateService.marketCap;
+   // this.marketCap = this.privateService.marketCap;
   }
 
 
@@ -71,9 +71,9 @@ export class BotListComponent implements OnInit, OnDestroy {
     });
 
     if(start){
-      this.sub2 = this.marketCap.countDown$.subscribe(res=>this.seconds = res)
-      this.sub3 = this.marketCap.getCoinsObs().subscribe(()=>this.counter++);
-      this.marketCap.dispatchCouns();
+     // this.sub2 = this.marketCap.countDown$.subscribe(res=>this.seconds = res)
+     // this.sub3 = this.marketCap.getCoinsObs().subscribe(()=>this.counter++);
+     //  this.marketCap.dispatchCouns();
     }else {
       if(this.sub2) this.sub2.unsubscribe();
       if(this.sub3) this.sub3.unsubscribe();

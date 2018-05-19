@@ -15,7 +15,7 @@ export class BuySellCoins {
 
       console.log('%c BUY ' + _.map(buyCoins, 'coin'), 'color:red');
 
-      buyCoins.forEach(function (item) {
+      buyCoins.forEach(function (item: any) {
         item.status = ACTIONS.BUYING;
         item.newData = 7;
       });
@@ -27,9 +27,6 @@ export class BuySellCoins {
       });
 
     }
-
-
-
 
     let buyingCoins = _.filter(myMarkets, {'action': ACTIONS.BUYING});
 
@@ -67,7 +64,7 @@ export class BuySellCoins {
 
       setTimeout(() => {
         console.log('%c SOLD ' + _.map(sellCoins, 'coin'), 'color:red');
-        sellCoins.forEach(function (item) {
+        sellCoins.forEach(function (item: any) {
           item.newData = 5;
           item.status = ACTIONS.SOLD;
         });

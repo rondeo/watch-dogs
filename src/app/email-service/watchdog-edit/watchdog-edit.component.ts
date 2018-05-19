@@ -44,7 +44,7 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   async initAsync() {
-    this.selectedCoins = this.storage.getSelectedMC();
+    this.selectedCoins = await this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
     let wd = await this.storage.getWatchDogByID(id);
 

@@ -6,7 +6,10 @@ import * as moment from "moment";
 import * as _ from 'lodash'
 import {MongoService} from "../../apis/mongo.service";
 import {Moment} from "moment";
-import {ApiMarketCapService, VOCoinData, VOMCAgregated} from "../../apis/api-market-cap.service";
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {ApiCryptoCompareService} from "../../apis/api-crypto-compare.service";
+import {P} from "@angular/core/src/render3";
+import {VOCoinData} from '../../apis/models';
 
 @Component({
   selector: 'app-coin-day',
@@ -15,12 +18,12 @@ import {ApiMarketCapService, VOCoinData, VOMCAgregated} from "../../apis/api-mar
 })
 export class CoinDayComponent implements OnInit {
 
-  mcCoin: VOMCAgregated;
+  mcCoin: VOCoinData;
   coin: string;
   myGraps: VOGraphs;
 
   rankFirst: number;
-  rankLast: number
+  rankLast: number;
 
   skips: number;
 
@@ -32,7 +35,8 @@ export class CoinDayComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mongo: MongoService,
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private cryptoCompare: ApiCryptoCompareService
   ) {
   }
 
@@ -42,24 +46,32 @@ export class CoinDayComponent implements OnInit {
       let coin = paramas.coin;
       console.log(coin);
       this.coin = coin;
+
+      this.cryptoCompare.getSocialStats(coin).subscribe(res => {
+        console.log(res);
+      })
+
+
       this.filterDay();
 
     });
+
+
   }
 
 
   async filterDay() {
-  this.fullHistory = await this.getCoinHistory();
+    this.fullHistory = await this.getCoinHistory();
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
-    let history =  this.fullHistory.filter(function (item) {
+    let history = this.fullHistory.filter(function (item) {
       return item.timestamp < to && item.timestamp > from;
     });
     this.drawData(history);
 
   }
 
-  async getCoinHistory() {
+  async getCoinHistory(): Promise<VOCoinData[]> {
     if (this.fullHistory) return Promise.resolve(this.fullHistory);
     else return this.marketCap.getCoinWeek(this.coin).toPromise();
   }
@@ -70,7 +82,7 @@ export class CoinDayComponent implements OnInit {
 
     const l = history.length;
 
-   //  console.log(history);
+    //  console.log(history);
 
     history = history.filter(function (item) {
       return !!item;
@@ -79,8 +91,8 @@ export class CoinDayComponent implements OnInit {
     this.skips = l - history.length;
 
 
-    const first: VOMCAgregated = _.first(history);
-    const last: VOMCAgregated = _.last(history);
+    const first: VOCoinData = _.first(history);
+    const last: VOCoinData = _.last(history);
 
     this.mcCoin = last;
 

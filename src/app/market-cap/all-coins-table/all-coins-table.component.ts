@@ -7,6 +7,8 @@ import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 import {filterSelected} from '../../shared/utils';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMC} from '../../apis/models';
 
 @Component({
   selector: 'app-all-coins-table',
@@ -16,11 +18,7 @@ import {filterSelected} from '../../shared/utils';
 
 
 export class AllCoinsTableComponent implements OnInit {
-
-  //@Input() selectedSymbols:string[];
-  //@Output() onSelectedSymbolsChange  = new EventEmitter<string[]>();
-
-  allCoinsData:VOMarketCap[];
+  allCoinsData:VOMC[];
   average1h:number;
   average24h:number;
   average7d:number;
@@ -31,30 +29,15 @@ export class AllCoinsTableComponent implements OnInit {
   asc_desc='asc';
 
   constructor(
-    private allCoinsService:MarketCapService,
+    private marketCap:ApiMarketCapService,
     private storage:StorageService
   ) { }
 
- // ngOnChanges(changes: any) {
-   // console.log(changes);
-
-    //this.modelCoins  = changes.allCoins.currentValue;// _.reject(changes.allCoins,'selected')
-
-    //this.doSomething(changes.categoryId.currentValue);
-
-  //}
-
   ngOnInit() {
-    this.allCoinsService.coinsAr$.subscribe(res=>{
-      if(res){
+    this.marketCap.getCoinsArWithSelected().subscribe(res =>{
+      this.allCoinsData = res;
 
-        this.storage.mapSelected(res);
-        this.allCoinsData = res;
-        this.calculateAvarage();
-      }//filterSelected(res, this.storage.getSelectedMC());
-    });
-
-    this.allCoinsService.refresh();
+    })
   }
 
   calculateAvarage(){
@@ -72,7 +55,7 @@ export class AllCoinsTableComponent implements OnInit {
    // console.log(event.target.checked, coin);
     let symbol = coin.symbol;
     if(event.target.checked) this.storage.addMCSelected(symbol);
-    else this.storage.deleteMCSelected(symbol);
+    else this.storage.deleteSelectedMC(symbol);
   }
 
   onClickHeader(creteria:string):void{

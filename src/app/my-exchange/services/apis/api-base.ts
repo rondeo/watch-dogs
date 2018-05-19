@@ -218,16 +218,17 @@ return null;
     //if(!this.isLogedInSub.getValue()){
    //   console.warn(' not logged in');
 //    }
-
+/*
     if(this.isLoadingBalances) return;
    this.isLoadingBalances = true;
    this.downloadBalances().subscribe(res=>{
      if(!res) throw new Error(' no balances');
      this.isLoadingBalances = false;
+
      this.mapBalancesToMC(res).then(res=>this.dispatchBalances(res)).catch(console.error);
     }, err=>{
      this.isLoadingBalances = false;
-   })
+   })*/
   }
 
   balances$(){
@@ -236,7 +237,7 @@ return null;
     return this.balancesSub.asObservable();
   }
 
-  mapBalancesToMC(balances:VOBalance[]){
+ /* mapBalancesToMC(balances:VOBalance[]){
     return new Promise<VOBalance[]>( (resolve, reject)=> {
 
       this.marketCap.getCoinsObs().subscribe(MC=>{
@@ -258,7 +259,7 @@ return null;
     })
 
 
-  }
+  }*/
 
   dispatchBalances(balances:VOBalance[]):void{
     if(!balances) balances = this.balancesSub.getValue();
@@ -392,9 +393,9 @@ return null;
   protected marketsObjSub:BehaviorSubject<{[pair:string]:VOMarket}> = new BehaviorSubject<{[pair:string]:VOMarket}>(null);
   protected marketsArSub:BehaviorSubject<VOMarket[]> = new BehaviorSubject<VOMarket[]>(null);
   isMarketsLoaded:boolean = false;
-
   bases:string[];
   protected dispatchMarketsData( marketsAr, indexed, bases){
+
     let sub = this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
@@ -498,7 +499,7 @@ return null;
     console.error(err)
   }
 
-  getPriceForBase(base: string):Promise<number> {
+  /*getPriceForBase(base: string):Promise<number> {
     return new Promise( (resolve, reject) => {
       this.marketCap.getCoinsObs().subscribe(MC=>{
         if(!MC) return;
@@ -507,7 +508,7 @@ return null;
         mc?resolve(mc.price_usd):reject(0);
       })
     })
-  }
+  }*/
 
   private credentials: { apiKey: string, password: string };
 

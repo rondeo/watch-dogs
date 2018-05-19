@@ -16,9 +16,6 @@ export class MarketCapMainComponent implements OnInit {
 
   ngOnInit() {
 
-    //this.service.timestamp$.subscribe(res=>{
-     // this.time = moment(res).format('ddd DD, h:mm a')
-    //})
   }
 
   onRefreshClick(){

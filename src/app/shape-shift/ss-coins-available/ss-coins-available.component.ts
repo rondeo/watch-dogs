@@ -62,6 +62,8 @@ export class SSCoinsAvailableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+
     this.shapeShiftService.coinsAvailable$.subscribe(res=>{
     //  console.log(res);
       this.coinsAvailable = res;
@@ -69,7 +71,7 @@ export class SSCoinsAvailableComponent implements OnInit {
       this.merge();
     })
 
-    this.marketCap.coinsAr$.subscribe(res =>{
+    /*this.marketCap.coinsAr$.subscribe(res =>{
       if(!res) return
 
 
@@ -78,7 +80,7 @@ export class SSCoinsAvailableComponent implements OnInit {
 
       this.merge()
     })
-
+*/
     this.marketCap.refresh();
   }
 

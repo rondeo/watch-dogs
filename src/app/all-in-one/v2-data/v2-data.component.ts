@@ -134,7 +134,7 @@ export class V2DataComponent implements OnInit {
 
     console.log(indexed);
     const basePrice = baseBTC.price_usd;
-    mcAr.forEach(function (item) {
+   /* mcAr.forEach(function (item) {
       const coin = item.symbol;
       // if(poloniex[coin]){
       const price = item.price_usd;
@@ -152,7 +152,7 @@ export class V2DataComponent implements OnInit {
       }
       // }
 
-    });
+    });*/
 
     return out;
   }

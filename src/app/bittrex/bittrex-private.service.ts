@@ -481,8 +481,9 @@ TimeStamp
       let uri = 'https://bittrex.com/api/v1.1/account/getbalance';
       return this.call(uri, {currency: symbol}).switchMap( res => {
         console.log(res);
+        return res
 
-        return this.marketCap.getCoinsObs().map(MC=>{
+      /*  return this.marketCap.getCoinsObs().map(MC=>{
           if(!MC) return null;
 
           if (!res) return null;
@@ -507,7 +508,7 @@ TimeStamp
 
 
         });
-
+*/
 
 
 
@@ -728,10 +729,12 @@ TimeStamp
   updateBot(bot: MyBot) {
     this.saveBots();
   }
+/*
 
   getBotsByMarket(pair: string): MyBot[] {
     return _.find(this.getBots(), {market: pair});
   }
+*/
 
   saveBot(autoTransfer: MyBot) {
     let exists = this.getBots().find(function (item) {
