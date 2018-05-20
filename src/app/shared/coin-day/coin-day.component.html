@@ -1,6 +1,7 @@
 <div class="coin-graph">
     <h3><small>Coin Day </small>
         {{coin}}
+        <sub>({{exchange}})</sub>
     </h3>
     <p>
         <span>rank {{rankFirst}} - {{rankLast}}</span> &nbsp; &nbsp;
@@ -23,8 +24,6 @@
             <button mat-raised-button (click)="onAllClick()">All</button>
             <span class="dred">{{skips}}</span>
         </div>
-
     </div>
-
     <app-line-chart [graphs]="myGraps"></app-line-chart>
 </div>

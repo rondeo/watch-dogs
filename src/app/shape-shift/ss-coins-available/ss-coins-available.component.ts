@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ShapeShiftService} from '../shape-shift.service';
-import {MarketCapService} from '../../market-cap/market-cap.service';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';

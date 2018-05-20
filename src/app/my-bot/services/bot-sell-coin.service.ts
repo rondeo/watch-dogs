@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 import {HttpClient} from "@angular/common/http";
 import {VOBalance, VOMarket, VOMarketCap, VOWatchdog} from "../../models/app-models";
 import {ApisPublicService} from "../../apis/apis-public.service";

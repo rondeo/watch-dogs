@@ -3,7 +3,7 @@ import {VOMarketCap, VOWatchdog} from "../../models/app-models";
 import {WatchDogService} from "../watch-dog.service";
 import {AuthHttpService} from "../../services/auth-http.service";
 import {Router} from "@angular/router";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 import {StorageService} from "../../services/app-storage.service";
 import * as moment from "moment";
 import * as _ from 'lodash';

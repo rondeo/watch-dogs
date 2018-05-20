@@ -2,10 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
 import {EmailServiceService} from '../email-service.service';
-import {DialogSimpleComponent} from '../../shared/dialog-simple/dialog-simple.component';
+import {DialogSimpleComponent} from '../../material/dialog-simple/dialog-simple.component';
 import {MatDialog} from '@angular/material';
 import {VOMarketCap} from '../../models/app-models';
-import {MarketCapService} from '../../market-cap/market-cap.service';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WatchDog} from "../../my-bot/services/watch-dog";
 

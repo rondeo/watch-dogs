@@ -8,7 +8,7 @@ import {LoginFormComponent} from './shared/login-form/login-form.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {StorageService} from './services/app-storage.service';
-import {MarketCapService} from "./market-cap/market-cap.service";
+import {MarketCapService} from "./market-cap/services/market-cap.service";
 
 @Component({
   selector: 'app-root',

@@ -2,7 +2,7 @@ import {StorageService} from "../../../services/app-storage.service";
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../../models/app-models";
-import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {MarketCapService} from "../../../market-cap/services/market-cap.service";
 import {Mappers} from "../../../apis/mappers";
 import * as _ from 'lodash';
 

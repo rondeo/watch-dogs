@@ -1,0 +1,40 @@
+<div>
+    <strong>{{exchange}}</strong> {{market}}
+    &nbsp; &nbsp;
+    <strong class="large">{{analytics.tolerance.toFixed(2)}}</strong>%
+    &nbsp;&nbsp;&nbsp;
+    <strong class="large">{{(analytics.duration/60).toFixed(0)}} min</strong>
+    &nbsp;&nbsp;
+    <strong class="large">{{(analytics.speed*60).toPrecision(2)}}/min</strong>
+    &nbsp;&nbsp;&nbsp;
+    <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
+
+    <br/>
+
+    <app-bubble-chart [bubbles]="analytics.bubbles"></app-bubble-chart>
+
+    <br/>
+    <section>
+        <small>Bought:</small> {{(analytics.sumBuy/1000).toFixed(3).replace('.',',')}}
+        <small> Sold: </small> {{(analytics.sumSell/1000).toFixed(3).replace('.',',')}}
+        <small>Dust:</small>
+        <sub class="green">b: {{analytics.dustCountBuy}}</sub>
+        <sup class="red">s: {{analytics.dustCountSell}}</sup>
+
+        <div>
+            <span class="fa fa-ship"></span>
+            <table>
+                <tbody>
+                <tr *ngFor="let fish of analytics.fishes">
+                    <td>{{fish.action}} </td>
+                    <td>{{fish.amountBaseUS}} </td>
+                    <td>{{fish.priceBaseUS}} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </section>
+
+</div>

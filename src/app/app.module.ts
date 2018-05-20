@@ -37,7 +37,7 @@ import {EmailServiceModule} from './email-service/email-service.module';
 import {AuthHttpService} from './services/auth-http.service';
 import {LoginModule} from './login/login.module';
 import {ShapeShiftModule} from './shape-shift/shape-shift.module';
-import {MarketCapService} from './market-cap/market-cap.service';
+import {MarketCapService} from './market-cap/services/market-cap.service';
 
 
 import {MarketCapModule} from './market-cap/market-cap.module';

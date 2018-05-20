@@ -5,16 +5,14 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 import {Http} from '@angular/http';
 import * as _ from 'lodash';
-import {VOMarketCap} from '../models/app-models';
-import {StorageService} from '../services/app-storage.service';
+import {VOMarketCap} from '../../models/app-models';
+import {StorageService} from '../../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
-import {ApiMarketCapService} from "../apis/api-market-cap.service";
-import {Parsers} from '../apis/parsers';
+import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {Parsers} from '../../apis/parsers';
 
 @Injectable()
 export class MarketCapService {
-
-
   private coins: { [symbol: string]: VOMarketCap };
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
@@ -41,6 +39,16 @@ export class MarketCapService {
   private interval;
   getCoinBySymbol(symbol: string): VOMarketCap {
     return this.coins[symbol];
+  }
+
+  private currentExchange: string;
+  setCurentExchange(exchange : string){
+    this.currentExchange = exchange;
+    localStorage.setItem('current-exchange', exchange);
+  }
+  getCurrentExchange():string{
+    if(!this.currentExchange) this.currentExchange = localStorage.getItem('current-exchange');
+    return this.currentExchange
   }
 
   /*  getCoinsData():Observable<{[symbol:string]:VOMarketCap}>{

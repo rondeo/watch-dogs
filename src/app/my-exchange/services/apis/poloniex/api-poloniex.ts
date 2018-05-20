@@ -11,7 +11,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {SelectedSaved} from '../../../../com/selected-saved';
 import {ApiBase} from '../api-base';
-import {MarketCapService} from '../../../../market-cap/market-cap.service';
+import {MarketCapService} from '../../../../market-cap/services/market-cap.service';
 import {Mappers} from '../../../../apis/mappers';
 import {SOMarketPoloniex} from '../../../../models/sos';
 import {HttpClient, HttpHeaders} from '@angular/common/http';

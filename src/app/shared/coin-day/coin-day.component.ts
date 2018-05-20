@@ -1,15 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {VOGraphs} from "../../shared/line-chart/line-chart.component";
-import {GRAPHS} from "../../com/grpahs";
-import * as moment from "moment";
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {VOGraphs} from '../line-chart/line-chart.component';
+import {GRAPHS} from '../../com/grpahs';
+import * as moment from 'moment';
 import * as _ from 'lodash'
-import {MongoService} from "../../apis/mongo.service";
-import {Moment} from "moment";
-import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {ApiCryptoCompareService} from "../../apis/api-crypto-compare.service";
-import {P} from "@angular/core/src/render3";
+import {MongoService} from '../../apis/mongo.service';
+import {Moment} from 'moment';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {P} from '@angular/core/src/render3';
 import {VOCoinData} from '../../apis/models';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 @Component({
   selector: 'app-coin-day',
@@ -18,8 +19,9 @@ import {VOCoinData} from '../../apis/models';
 })
 export class CoinDayComponent implements OnInit {
 
+  @Input()  coin: string;
   mcCoin: VOCoinData;
-  coin: string;
+
   myGraps: VOGraphs;
 
   rankFirst: number;
@@ -31,18 +33,18 @@ export class CoinDayComponent implements OnInit {
   to: string = '';
 
   momentTo: Moment;
+  exchange: string;
 
   constructor(
-    private route: ActivatedRoute,
-    private mongo: MongoService,
-    private marketCap: ApiMarketCapService,
+  //  private route: ActivatedRoute,
+    private apiMarketCap: ApiMarketCapService,
     private cryptoCompare: ApiCryptoCompareService
   ) {
   }
 
   ngOnInit() {
     this.momentTo = moment();//.subtract(12,'h');
-    this.route.params.subscribe(paramas => {
+    /*this.route.params.subscribe(paramas => {
       let coin = paramas.coin;
       console.log(coin);
       this.coin = coin;
@@ -54,8 +56,9 @@ export class CoinDayComponent implements OnInit {
 
       this.filterDay();
 
-    });
+    });*/
 
+    this.filterDay();
 
   }
 
@@ -73,7 +76,7 @@ export class CoinDayComponent implements OnInit {
 
   async getCoinHistory(): Promise<VOCoinData[]> {
     if (this.fullHistory) return Promise.resolve(this.fullHistory);
-    else return this.marketCap.getCoinWeek(this.coin).toPromise();
+    else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
   }
 
   fullHistory: VOCoinData[];

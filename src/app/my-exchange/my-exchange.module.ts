@@ -32,6 +32,7 @@ import {MyTradingService} from "./my-exchange-bot/bot/my-trading.service";
 import {MarketCollectorService} from "./my-exchange-bot/bot/market-collector.service";
 import {BuyCoinService} from "./my-exchange-bot/bot/buy-coin.service";
 import {FollowCoinService} from "./my-exchange-bot/bot/follow-coin.service";
+import {UiModule} from '../ui/ui.module';
 
 
 const routes: Routes = [
@@ -73,6 +74,7 @@ const routes: Routes = [
     MaterialAppModule,
     ChartsModule,
     SharedModule,
+    UiModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

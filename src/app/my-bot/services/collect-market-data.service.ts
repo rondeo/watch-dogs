@@ -5,7 +5,7 @@ import {CollectMarketData} from "./collect-market-data";
 
 import {Subject} from "rxjs/Subject";
 import {IMarketDataCollect, IMarketRecommended} from "../../services/utils-order";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 
 @Injectable()
 export class CollectMarketDataService {

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConnectorApiService} from "../services/connector-api.service";
 import {VOBalance, VOTransfer} from "../../models/app-models";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 import {Router} from "@angular/router";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {ApiBase} from "../services/apis/api-base";

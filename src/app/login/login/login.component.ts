@@ -4,7 +4,7 @@ import {FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthHttpService} from '../../services/auth-http.service';
 import {element} from 'protractor';
-import {DialogSimpleComponent} from '../../shared/dialog-simple/dialog-simple.component';
+import {DialogSimpleComponent} from '../../material/dialog-simple/dialog-simple.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {StorageService} from "../../services/app-storage.service";
 

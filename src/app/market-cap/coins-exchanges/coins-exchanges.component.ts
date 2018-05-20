@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {MarketCapService} from '../market-cap.service';
+import {MarketCapService} from '../services/market-cap.service';
 import {VOSymbolMarkets} from '../gl-all-exchanges/gl-all-exchanges.component';
 import {Utils} from '../../shared/utils';
 import {ActivatedRoute} from '@angular/router';

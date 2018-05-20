@@ -12,13 +12,17 @@ import {SoketConnectorService} from "../sockets/soket-connector.service";
 import {TraderSocketComponent} from './trader-socket/trader-socket.component';
 import {ApisModule} from "../apis/apis.module";
 import {TraderRecorderComponent} from './trader-recorder/trader-recorder.component';
+import { AnalyseCoinComponent } from './analyse-coin/analyse-coin.component';
+import {UiModule} from '../ui/ui.module';
+
 
 const routes: Routes = [
   {
     path: 'trader', component: TraderOutletComponent,
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
-      {path: 'market/:market', component: TraderMainComponent}
+      {path: 'market/:market', component: TraderMainComponent},
+      {path: 'analyze/:coin/:exchange', component: AnalyseCoinComponent}
     ]
   }
 ];
@@ -33,13 +37,15 @@ const routes: Routes = [
     ChartsModule,
     SharedModule,
     ApisModule,
+    UiModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
     TraderOutletComponent,
     TraderMainComponent,
     TraderSocketComponent,
-    TraderRecorderComponent
+    TraderRecorderComponent,
+    AnalyseCoinComponent
   ],
   providers: [SoketConnectorService]
 })

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {MarketCapService} from '../market-cap/market-cap.service';
+import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {HttpClient} from '@angular/common/http';
 import {VOMarketCap, VOMarketCapExt} from '../models/app-models';
 import {Observable} from 'rxjs/Observable';

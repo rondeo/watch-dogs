@@ -77,7 +77,7 @@
                        href="https://coinmarketcap.com/currencies/{{item.id}}/"></a>
                 </td>
                 <td>
-                    <a class="btn small" routerLink="../coin-day/{{item.symbol}}">
+                    <a class="btn small" routerLink="/trader/analyze/{{item.symbol}}/{{exchange}}">
                         {{item.symbol}}</a>
                 </td>
                 <td class="w50" [ngClass]="item.tobtc_change_05h>0?'dgreen':'dred'">

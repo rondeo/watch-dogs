@@ -6,7 +6,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
 import {runDogScript} from './script-analytics';
 import {VOMarketCap} from '../../models/app-models';
-import {MarketCapService} from '../../market-cap/market-cap.service';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {Router} from '@angular/router';
 import {WatchDog} from '../../my-bot/services/watch-dog';
 

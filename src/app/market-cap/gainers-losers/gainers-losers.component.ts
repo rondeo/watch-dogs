@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MarketCapService} from '../market-cap.service';
+import {MarketCapService} from '../services/market-cap.service';
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
@@ -33,7 +33,8 @@ export class GainersLosersComponent implements OnInit {
   constructor(
     private router: Router,
     private apiPublic: ApisPublicService,
-    private apiMarketCap: ApiMarketCapService
+    private apiMarketCap: ApiMarketCapService,
+    private service: MarketCapService
   ) {
   }
 
@@ -59,7 +60,6 @@ export class GainersLosersComponent implements OnInit {
     const lastState = localStorage.getItem(this.pageId);
     if (lastState) {
       const state = JSON.parse(lastState);
-
       this.sortBy = state.sortBy || this.sortBy;
       this.asc_desc = state.asc_desc || this.asc_desc;
       this.top = state.top || this.top;
@@ -74,6 +74,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async onExcgangeChange(evt) {
+    this.service.setCurentExchange(this.exchange);
     // this.exchange = evt.value;
     this.loadExchange();
     this.saveState();

@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {VOGraphs} from "../../shared/line-chart/line-chart.component";
 
 @Component({
-  selector: 'app-coin-day',
+  selector: 'app-bot-coin-day',
   templateUrl: './coin-day.component.html',
   styleUrls: ['./coin-day.component.css']
 })

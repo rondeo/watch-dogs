@@ -8,7 +8,7 @@ import {AuthHttpService, VOUser} from '../services/auth-http.service';
 
 import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
-import {MarketCapService} from '../market-cap/market-cap.service';
+import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {ApiMarketCapService} from "../apis/api-market-cap.service";
 import {WatchDog} from "../my-bot/services/watch-dog";
 

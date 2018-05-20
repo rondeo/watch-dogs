@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
-import {MarketCapService} from '../../market-cap/market-cap.service';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 import {SelectedCoinsComponent} from "../../market-cap/selected-coins/selected-coins.component";
 

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {VOMarketCap} from '../../models/app-models';
-import {MarketCapService} from '../market-cap.service';
+import {MarketCapService} from '../services/market-cap.service';
 import * as _ from 'lodash';
 import {Utils} from '../../shared/utils';
 

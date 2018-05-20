@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 //import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
 import {VOMarketCap} from "../../models/app-models";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 
 import {MarketCollectorService} from "../../my-exchange/my-exchange-bot/bot/market-collector.service";
 import {IMarketDataCollect, IMarketRecommended} from "../../services/utils-order";

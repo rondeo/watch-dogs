@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
-import {MarketCapService} from "../../market-cap/market-cap.service";
+import {MarketCapService} from "../../market-cap/services/market-cap.service";
 
 import {IApiPublic} from "../../my-exchange/services/apis/api-base";
 import {IMarketRecommended, UtilsOrder} from "../../services/utils-order";

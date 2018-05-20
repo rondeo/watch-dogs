@@ -12,7 +12,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {applyMixins} from "../../../shared/utils";
 import {SelectedSaved} from "../../../com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
-import {MarketCapService} from "../../../market-cap/market-cap.service";
+import {MarketCapService} from "../../../market-cap/services/market-cap.service";
 import {Mappers} from "../../../apis/mappers";
 import {SOMarketBittrex, SOMarketPoloniex} from "../../../models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -20,6 +20,8 @@ import {Subject} from "rxjs/Subject";
 
 import * as cryptojs from 'crypto-js';
 import {HttpDelay} from "../../../apis/http-delay";
+
+
 
 
 export class ApiHitbtc extends ApiBase  {
