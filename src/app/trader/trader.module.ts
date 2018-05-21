@@ -12,8 +12,9 @@ import {SoketConnectorService} from "../sockets/soket-connector.service";
 import {TraderSocketComponent} from './trader-socket/trader-socket.component';
 import {ApisModule} from "../apis/apis.module";
 import {TraderRecorderComponent} from './trader-recorder/trader-recorder.component';
-import { AnalyseCoinComponent } from './analyse-coin/analyse-coin.component';
+import { AnalyzeCoinComponent } from './analyze-coin/analyze-coin.component';
 import {UiModule} from '../ui/ui.module';
+import {WidgetsModule} from '../widgets/widgets.module';
 
 
 const routes: Routes = [
@@ -22,7 +23,7 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
       {path: 'market/:market', component: TraderMainComponent},
-      {path: 'analyze/:coin/:exchange', component: AnalyseCoinComponent}
+      {path: 'analyze/:coin/:exchange', component: AnalyzeCoinComponent}
     ]
   }
 ];
@@ -38,6 +39,7 @@ const routes: Routes = [
     SharedModule,
     ApisModule,
     UiModule,
+    WidgetsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -45,7 +47,7 @@ const routes: Routes = [
     TraderMainComponent,
     TraderSocketComponent,
     TraderRecorderComponent,
-    AnalyseCoinComponent
+    AnalyzeCoinComponent
   ],
   providers: [SoketConnectorService]
 })

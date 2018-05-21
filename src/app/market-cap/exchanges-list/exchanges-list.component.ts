@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 })
 export class ExchangesListComponent implements OnInit {
 
- //  exchangesCoin:VOExchangeCoin[];
+  exchangesCoin:any[];
 
   constructor(
     private service:MarketCapService

@@ -13,6 +13,7 @@ import {StorageService} from "../../services/app-storage.service";
 export class ApiPublicBitfinex extends ApiPublicAbstract{
   exchange = 'bitfinex';
 
+  private allMarkets: string[]
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
@@ -38,7 +39,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 
 
 
-  getAllCoins(fromCache = true):Observable<{ [coin: string]: { [base: string]: number } }> {
+ /* getAllCoins(fromCache = true):Observable<{ [coin: string]: { [base: string]: number } }> {
     if (this.allCoins) return Observable.of(this.allCoins);
     else {
       if (fromCache) {
@@ -51,7 +52,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
       return this.getSymbols().map(() => this.allCoins)
     }
   }
-
+*/
 
  private  getItems(ids: string[]): Observable<any> {
    const url = '/api/proxy/api.bitfinex.com/v1/pubticker/';
@@ -65,64 +66,23 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
-    const sub: Subject<{ [market: string]: VOMarket }> = new Subject();
-    this.getSymbols().subscribe(symbols => {
-      console.warn(symbols);
-      const sub = this.getItems(symbols).subscribe(res =>{
-        console.log(res);
-      })
-      /*of(symbols).pipe(
-        concatMap(
+   return this.downlaodMarketsAvailable().map(markets =>{
+     const coins = {};
+     markets.forEach(function (item) {
+       let base = item.slice(-3).toUpperCase();
+       if (base === 'USD') base = 'USDT';
+       const coin = item.slice(0,-3).toUpperCase();
+       if(!coins[coin]) coins[coin] = {};
+       coins[coin][base] = -1;
+     });
+     this.allCoins = coins;
+     return coins;
+   })
 
-        )
-      )*/
 
-
-
-    })
-    return sub.asObservable();
-    /*let url = '/api/bittrex/summaries';
-
-    console.log(url);
-
-    return this.http.get(url).map( (result: any) => {
-      let ar:SOMarketBittrex[] = result.result;
-      let bases =[];;
-
-      const allCoins = {};
-      const marketsAr = [];
-      const indexed = {};
-      ar.forEach(function (item:SOMarketBittrex) {
-
-        let ar:string[] = item.MarketName.split('-');
-        let market:VOMarket = new VOMarket();
-        market.base = ar[0];
-        if (bases.indexOf(market.base) === -1) bases.push(market.base);
-        market.coin = ar[1];
-        market.id = item.MarketName;
-        market.exchange = 'bittrex';
-        market.Last = +item.Last;
-        market.High = +item.High;
-        market.Low = +item.Low;
-        market.Ask = +item.Ask;
-        market.Bid = +item.Bid;
-        market.BaseVolume = +item.BaseVolume;
-        market.PrevDay = item.PrevDay;
-        market.OpenBuyOrders = item.OpenBuyOrders;
-        market.OpenSellOrders = item.OpenSellOrders;
-        indexed[market.base + '_' +  market.coin] = market;
-        marketsAr.push(market);
-
-        if(!allCoins[market.coin])allCoins[market.coin] = {};
-          allCoins[market.coin][market.base] = +item.Last;
-      })
-      this.allCoins = allCoins;
-      // console.log(marketsAr);
-      return indexed;*/
-    //});
   }
 
-  private getTicker(market: string) {
+  private getTickerForMarket(market: string) {
     const url = '/api/proxy/api.bitfinex.com/v1/pubticker/' + market;
     return this.http.get(url).map(res => {
       console.log(res);
@@ -130,21 +90,29 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     })
   }
 
-  private getSymbols(): Observable<any> {
+  private downlaodMarketsAvailable():Observable<string[]>{
+    let url = '/api/proxy/api.bitfinex.com/v1/symbols';
+    console.log(url);
+    return <any>this.http.get(url)
+  }
+  /*private getSymbols(): Observable<any> {
     let url = '/api/proxy/api.bitfinex.com/v1/symbols';
     console.log(url);
     return this.http.get(url).map((res:string[]) =>{
+      console.log(res);
       const coins = {};
       res.forEach(function (item) {
-        const base = item.slice(-3).toUpperCase();
+        let base = item.slice(-3).toUpperCase();
+        if (base === 'USD') base = 'USDT';
         const coin = item.slice(0,-3).toUpperCase();
         if(!coins[coin]) coins[coin] = {};
         coins[coin][base] = -1;
       });
 
       this.allCoins = coins;
+      return coins;
     });
-  }
+  }*/
 
   downloadMarketHistory(base: string, coin: string) {
     let url = 'https://api.bitfinex.com/v2/trades/t{{coin}}{{base}}/hist'

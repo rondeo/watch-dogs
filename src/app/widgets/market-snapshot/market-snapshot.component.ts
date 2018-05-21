@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {VOOrder} from '../../models/app-models';
 import {UtilsOrder} from '../../services/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
@@ -47,11 +47,16 @@ export class MarketSnapshotComponent implements OnInit {
 
   @Input() exchange: string;
   @Input() market: string;
+
   analytics: VOMarketSnapshot;
   priceBaseUS: number;
-  baseMC: VOMCAgregated;
-  coinMC: VOMCAgregated;
-  allCoins: { [symbol: string]: VOMCAgregated }
+  coinPriceUS: number;
+  private baseMC: VOMCAgregated;
+  private coinMC: VOMCAgregated;
+  private allCoins: { [symbol: string]: VOMCAgregated };
+
+
+  exchanges: string[];
 
 
   isRefreshingHistory:boolean;
@@ -60,36 +65,47 @@ export class MarketSnapshotComponent implements OnInit {
     private apiMarketCap: ApiMarketCapService,
     private apisPublic: ApisPublicService
   ) {
-    this.analytics = VO_MARKET_SNAPSHOT;
+
+
+  }
+
+  ngOnChanges(evt: SimpleChanges){
+    this.ngOnInit();
   }
 
   ngOnInit() {
+    this.analytics = VO_MARKET_SNAPSHOT;
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
     let base = ar[0];
     let coin = ar[1];
+
+
     this.apiMarketCap.getData().subscribe(allCoins => {
       this.allCoins = allCoins;
       this.baseMC = allCoins[base];
       this.priceBaseUS = this.baseMC.price_usd;
       this.coinMC = allCoins[coin];
+      this.coinPriceUS = this.coinMC.price_usd;
       this.downloadHistory();
     })
 
   }
 
 
+
  async downloadHistory() {
+    this.isRefreshingHistory = true;
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if(!api) throw new Error(' no api for ' + this.exchange);
     const history: VOOrder[] = await api.downloadMarketHistory(this.baseMC.symbol, this.coinMC.symbol).toPromise();
    // console.log(history);
-   if (!history) return;
+   if (!history) throw new Error('No history base: '+ this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
    this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
+   this.isRefreshingHistory = false
 
   }
-
 
   onRefreshHistory(){
     this.downloadHistory();

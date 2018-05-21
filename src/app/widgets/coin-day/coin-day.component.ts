@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {VOGraphs} from '../line-chart/line-chart.component';
+import {VOGraphs} from '../../shared/line-chart/line-chart.component';
 import {GRAPHS} from '../../com/grpahs';
 import * as moment from 'moment';
 import * as _ from 'lodash'

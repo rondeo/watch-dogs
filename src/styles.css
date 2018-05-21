@@ -49,6 +49,8 @@ div.scrollmenu a {
 }
 
 
+
+
 .line{
     margin-top: 5px;
 }
@@ -96,10 +98,12 @@ sup, sub{
     }
 }
 */
+/*
 
 nav>a{
     margin: 5px;
 }
+*/
 
 
 
@@ -209,9 +213,9 @@ table td {
     border:none;
 }
 
-h2, h3, h4, h5{
+/*h2, h3, h4, h5{
   display: inline-block;
-}
+}*/
 .content{
 
 }

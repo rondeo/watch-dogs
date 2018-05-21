@@ -1,0 +1,15 @@
+<div>
+    <span class="mat-headline">{{coin}} {{exchange}} {{market}}</span>
+    <app-coin-day [coin]="coin"></app-coin-day>
+    <input #amount type="number" (keyup.enter)="onAmountlick(amount.value)"  value="1000"/>
+
+    <table>
+        <tr *ngFor="let item of allMarkets">
+            <td>{{item.exchange}}</td>
+            <td><span class="btn" (click)="onMarketClick(item)">{{item.market}}</span></td>
+            <td><app-books-for-amount [market]="item.market" [exchange]="item.exchange" [amountUS]="amountUS"></app-books-for-amount></td>
+        </tr>
+    </table>
+    <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
+    <!--<app-market-books [exchange]="exchange" [market]="market"></app-market-books>-->
+</div>

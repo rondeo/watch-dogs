@@ -14,7 +14,7 @@ export class CoinsExchangesComponent implements OnInit, OnChanges {
 
   @Input() consAr:string[];
 
- // symbolExchanges:VOExchangeCoin[];
+  symbolExchanges:any[];
 
   coinId:string;
 //  exchanges:VOExchangeCoin[];

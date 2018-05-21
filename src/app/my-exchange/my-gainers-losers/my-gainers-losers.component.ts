@@ -3,7 +3,7 @@ import {VOMarketCap} from "../../models/app-models";
 import {Router} from "@angular/router";
 import * as _ from 'lodash';
 import {MatDialog, MatSnackBar} from "@angular/material";
-import {MarketViewComponent} from "../../shared/market-view/market-view.component";
+
 import {ConnectorApiService} from "../services/connector-api.service";
 import {GainersService} from "../my-exchange-bot/bot/gainers.service";
 

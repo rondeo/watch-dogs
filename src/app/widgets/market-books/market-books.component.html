@@ -1,0 +1,22 @@
+<div>
+<span class="mat-title">Books {{exchange}} {{market}}</span>
+    &nbsp;&nbsp;&nbsp;
+    <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshClick()"></a>
+
+    <p class="mat-body-2">by MC ${{priceCoinUS}}</p>
+
+    <table>
+        <tr>
+            <td>For</td>
+            <td>to Sell</td>
+            <td>%</td>
+            <td>to Buy</td>
+        </tr>
+        <tr *ngFor="let books of bookDisplays">
+            <td><small>$</small>{{books.us}}</td>
+            <td>{{books.sell}}</td>
+            <td>{{books.diff}}</td>
+            <td>{{books.buy}}</td>
+        </tr>
+    </table>
+</div>

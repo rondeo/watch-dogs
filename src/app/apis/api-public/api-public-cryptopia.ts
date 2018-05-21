@@ -51,7 +51,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
     console.log(url);
     return this.http.get(url).map((res: any) => {
       res = res.Data;
-      console.log('MarketHistory ' + res.length);
+      console.log(' MarketHistory ' + res.length);
       return res.map(function (item) {
         let time = new Date(item.Timestamp * 1000);
         return {

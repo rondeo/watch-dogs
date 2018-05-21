@@ -1,11 +1,17 @@
 <div>
-    <strong>{{exchange}}</strong> {{market}}
+    <p>
+        <span>Trades</span>
+        <span>{{exchange}}</span>
+        <span>{{market}}</span>
+    <span class="mat-body-2">by MC ${{coinPriceUS}}</span>
+    </p>
+
     &nbsp; &nbsp;
-    <strong class="large">{{analytics.tolerance.toFixed(2)}}</strong>%
+    <span class="mat-subheading-2">{{analytics.tolerance.toFixed(2)}}</span>%
     &nbsp;&nbsp;&nbsp;
-    <strong class="large">{{(analytics.duration/60).toFixed(0)}} min</strong>
+    <span class="mat-subheading-2">{{(analytics.duration/60).toFixed(0)}} min</span>
     &nbsp;&nbsp;
-    <strong class="large">{{(analytics.speed*60).toPrecision(2)}}/min</strong>
+    <span class="mat-subheading-2">{{(analytics.speed*60).toPrecision(2)}}/min</span>
     &nbsp;&nbsp;&nbsp;
     <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
 

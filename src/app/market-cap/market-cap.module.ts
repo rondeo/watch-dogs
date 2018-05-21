@@ -10,7 +10,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {GainersLosersComponent} from './gainers-losers/gainers-losers.component';
 import {ExchangesListComponent} from './exchanges-list/exchanges-list.component';
-import {CoinsListComponent} from './coins-list/coins-list.component';
 import {GlAllExchangesComponent} from './gl-all-exchanges/gl-all-exchanges.component';
 import {GlKnownExchangesComponent} from './gl-known-exchanges/gl-known-exchanges.component';
 
@@ -30,10 +29,7 @@ const routes: Routes = [
       {path: 'selected', component: SelectedCoinsComponent},
       {path: 'gainers-losers', component: GainersLosersComponent},
       {path: 'coin-exchanges/:coinId', component: CoinsExchangesComponent},
-
-      {path: 'coins-list', component: CoinsListComponent},
-      {path: 'exchanges-list', component: ExchangesListComponent},
-     // {path: 'coin-day/:coin', component: CoinDayComponent}
+      {path: 'exchanges-list', component: ExchangesListComponent}
     ]
   }
 ];
@@ -53,7 +49,6 @@ const routes: Routes = [
     AllCoinsTableComponent,
     GainersLosersComponent,
     ExchangesListComponent,
-    CoinsListComponent,
     GlAllExchangesComponent,
     GlKnownExchangesComponent,
     CoinsExchangesComponent,
