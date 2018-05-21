@@ -3,5 +3,5 @@
     <small>{{booksDisplay.diff}}</small>
     <span>{{booksDisplay.buy}}</span>
     &nbsp;&nbsp;&nbsp;
-    <span class="fa fa-refresh fa-2x dgreen btn right" (click)="onRefreshClick()"></span>
+    <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></a>
 </div>

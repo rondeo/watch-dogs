@@ -1,15 +1,33 @@
 <div>
     <span class="mat-headline">{{coin}} {{exchange}} {{market}}</span>
-    <app-coin-day [coin]="coin"></app-coin-day>
-    <input #amount type="number" (keyup.enter)="onAmountlick(amount.value)"  value="1000"/>
 
-    <table>
-        <tr *ngFor="let item of allMarkets">
-            <td>{{item.exchange}}</td>
-            <td><span class="btn" (click)="onMarketClick(item)">{{item.market}}</span></td>
-            <td><app-books-for-amount [market]="item.market" [exchange]="item.exchange" [amountUS]="amountUS"></app-books-for-amount></td>
-        </tr>
-    </table>
-    <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
-    <!--<app-market-books [exchange]="exchange" [market]="market"></app-market-books>-->
+    <section>
+        <app-coin-day [coin]="coin"></app-coin-day>
+    </section>
+
+    <p class="mat-title">
+        <span>{{exchange}} {{market}}</span>
+        <button mat-raised-button color="primary">GO</button>
+    </p>
+
+    <section class="mat-typography">
+        <span class="mat-title">Books</span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="mat-subheading-2"> <small>$</small> <input class="w5" #amount type="number" min="10" max="1000000" step="10000" (keyup.enter)="onAmountlick(amount.value)" value="1000"/></span>
+        <table>
+            <tr *ngFor="let item of allMarkets">
+                <td>{{item.exchange}}</td>
+                <td><span class="btn" (click)="onMarketClick(item)">{{item.market}}</span></td>
+                <td>
+                    <app-books-for-amount [market]="item.market" [exchange]="item.exchange"
+                                          [amountUS]="amountUS"></app-books-for-amount>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <br/>
+   <section>
+       <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
+   </section>
 </div>

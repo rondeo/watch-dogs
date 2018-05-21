@@ -37,7 +37,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     if(evt.exchange && evt.market){
 
     } else if(evt.amountUS){
-      console.log(this.amountUS);
+     // console.log(this.amountUS);
       this.calculate();
     }
 

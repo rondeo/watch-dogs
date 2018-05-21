@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
@@ -9,6 +9,8 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
   styleUrls: ['./analyze-coin.component.css']
 })
 export class AnalyzeCoinComponent implements OnInit {
+
+  @ViewChild('amount') amoubtView:ElementRef;
 
   coin: string;
   exchange: string;
@@ -49,7 +51,13 @@ export class AnalyzeCoinComponent implements OnInit {
   }
 
   onAmountlick(evt){
-    this.amountUS = Number(evt);
+    let  am  = Number(evt);
+
+    if(am < 10){
+      am = 10;
+      this.amoubtView.nativeElement.value = am
+    }
+    this.amountUS = am;
   }
 
 }
