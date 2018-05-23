@@ -202,11 +202,11 @@ export class StorageService {
         if (user) this.setSalt(user.u, user.p)
         else alert('Please login in Application');
       }
-
       s = CryptoJS.HmacSHA1(s, this.salt).toString();
       // console.log(s);
 
       let str = localStorage.getItem(s)
+
       if (str) return CryptoJS.AES.decrypt(str, this.salt).toString(CryptoJS.enc.Utf8);
       else return null
     } else s = CryptoJS.HmacSHA1(s, this.simplePass).toString();

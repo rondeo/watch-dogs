@@ -37,6 +37,7 @@ export class Parsers {
 
     return {
       date: '',
+      name:item.id,
       symbol: symbol,
       id: item.id,
       price_usd: item.usd,

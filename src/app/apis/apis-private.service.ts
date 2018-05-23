@@ -4,6 +4,7 @@ import {StorageService} from "../services/app-storage.service";
 import {ApiPrivateAbstaract} from "./api-private/api-private-abstaract";
 import {ApiPrivateBittrex} from "./api-private/api-private-bittrex";
 import {ApiPrivatePoloniex} from "./api-private/api-private-poloniex";
+import {ApiPrivateHitbtc} from './api-private/api-private-hitbtc';
 
 
 @Injectable()
@@ -30,6 +31,10 @@ export class ApisPrivateService {
         return new ApiPrivateBittrex(this.http, this.storage);
       case 'poloniex':
         return new ApiPrivatePoloniex(this.http, this.storage);
+      case 'hitbtc':
+        return new ApiPrivateHitbtc(this.http, this.storage);
+      case 'cryptopia':
+        return null // new ApiPrivateCryptopia(this.http, this.storage);
 
     }
     return undefined;

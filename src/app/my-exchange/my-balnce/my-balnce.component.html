@@ -1,9 +1,10 @@
 <div>
+    <div class="mat-subheading-1">My {{exchange}} <span class="mat-title"> ${{total}}</span></div>
     <section>
         <mat-checkbox (change)="onShowAll($event)">Show All</mat-checkbox>
-        <h5>Total ${{total}}</h5>
+
         &nbsp; &nbsp;
-        <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x" (click)="refreshBalance()"></span>
+        <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="refreshBalances()"></span>
         <table class="small">
             <tbody>
             <tr>
@@ -25,7 +26,7 @@
                     <td><span [ngClass]="balance.percent_change_1h>0?'green':'red'">{{balance.percent_change_1h}}</span></td>
                     <td><span [ngClass]="balance.percent_change_24h>0?'green':'red'">{{balance.percent_change_24h}}</span></td>
                     <td><span [ngClass]="balance.percent_change_7d>0?'green':'red'">{{balance.percent_change_7d}}</span></td>
-                    <td><small class="btn" (click)="onShowCartClick(balance)" ><small class="grey">$</small>{{balance.priceUS}}</small></td>
+                    <td><small class="btn" (click)="onShowChartClick(balance)" ><small class="grey">$</small>{{balance.priceUS}}</small></td>
 
                 </tr>
             </ng-container>

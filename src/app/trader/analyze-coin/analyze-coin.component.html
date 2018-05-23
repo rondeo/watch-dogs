@@ -7,13 +7,14 @@
 
     <p class="mat-title">
         <span>{{exchange}} {{market}}</span>
-        <button mat-raised-button color="primary">GO</button>
+        <a routerLink="/trader/buy-sell/{{exchange}}/{{market}}" mat-raised-button color="primary">GO</a>
     </p>
 
     <section class="mat-typography">
         <span class="mat-title">Books</span>
         &nbsp;&nbsp;&nbsp;
         <span class="mat-subheading-2"> <small>$</small> <input class="w5" #amount type="number" min="10" max="1000000" step="10000" (keyup.enter)="onAmountlick(amount.value)" value="1000"/></span>
+        <div class="mat-body-2">By CMC {{coinPriceMC}}</div>
         <table>
             <tr *ngFor="let item of allMarkets">
                 <td>{{item.exchange}}</td>

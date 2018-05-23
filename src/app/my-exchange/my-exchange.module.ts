@@ -37,14 +37,14 @@ import {UiModule} from '../ui/ui.module';
 
 const routes: Routes = [
   {
-    path: 'my-exchange/:exchange', component: MyMainComponent,
+    path: 'my-exchange', component: MyMainComponent,
     children: [
-      {path: '', redirectTo: 'markets', pathMatch: 'full'},
-      {path: 'balance', component: MyBalnceComponent},
-      {path: 'markets', component: MyMarketsComponent},
+      {path: '', redirectTo: 'balances/bittrex', pathMatch: 'full'},
+      {path: 'balances/:exchange', component: MyBalnceComponent},
+      {path: 'markets/:exchange', component: MyMarketsComponent},
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
-      {path: 'buy-sell/:market', component: MyBuySellComponent},
+      {path: 'buy-sell/:exchage/:market', component: MyBuySellComponent},
       {path: 'bot', component: MyExchangeBotComponent}
 
      /* {path: 'data', component: BittrexDataComponent},

@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
+import {VOMCAgregated} from '../../../apis/models';
 
 
 
@@ -295,8 +296,8 @@ return null;
     return this.http.get(url).map(this.mapBooks)
   }
 
-  private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
-  getCurrencies():Observable<{[symbol:string]:VOMarketCap}> {
+  private coinsSub:BehaviorSubject<{[symbol:string]:VOMCAgregated}> = new BehaviorSubject<{[p: string]: VOMCAgregated}>(null);
+  getCurrencies():Observable<{[symbol:string]:VOMCAgregated}> {
     if(!this.coinsSub.getValue())this.getAllMarkets();
     return this.coinsSub.asObservable();
   }
@@ -399,7 +400,7 @@ return null;
     let sub = this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
-      let localCoins:{[symbol:string]:VOMarketCap} = {};
+      let localCoins:{[symbol:string]:VOMCAgregated} = {};
       marketsAr.forEach(function (item:VOMarket) {
         let mcBase = MC[item.base] || {
           price_usd:0,

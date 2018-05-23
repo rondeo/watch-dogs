@@ -13,12 +13,18 @@
         </div>
         &nbsp;
         <div class="inline-block">
-            <button mat-raised-button (click)="onMinus12h()">-12h</button>
-            <button mat-raised-button (click)="onPlus12h()">+12h</button>
-            <button mat-raised-button (click)="onMinus1D()">-1D</button>
-            <button mat-raised-button (click)="onPlus1D()">+1D</button>
-            <button mat-raised-button (click)="onNowClick()">Last</button>
-            <button mat-raised-button (click)="onAllClick()">All</button>
+            <a class="btn" (click)="onMinus12h()">-12h</a>
+            &nbsp;&nbsp;
+            <a class="btn" (click)="onPlus12h()">+12h</a>
+            &nbsp;&nbsp;
+            <a class="btn" (click)="onMinus1D()">-1D</a>
+            &nbsp;&nbsp;
+            <a class="btn" (click)="onPlus1D()">+1D</a>
+            &nbsp;&nbsp;
+            <a class="btn" (click)="onNowClick()">Last</a>
+            &nbsp;&nbsp;
+            <a class="btn" (click)="onAllClick()">All</a>
+            &nbsp;&nbsp;
             <span class="dred">{{skips}}</span>
         </div>
     </div>

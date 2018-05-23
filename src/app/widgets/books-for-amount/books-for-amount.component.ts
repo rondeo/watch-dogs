@@ -75,7 +75,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     booksDisplay1.buy = (ratesBuy * basePrice).toPrecision(4);
     booksDisplay1.sell = (ratesSell * basePrice).toPrecision(4);
     if(+booksDisplay1.buy && +booksDisplay1.sell){
-      booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell)/+booksDisplay1.sell).toFixed(3);
+      booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell)/+booksDisplay1.sell).toFixed(2);
     } else booksDisplay1.diff = '0';
 
 

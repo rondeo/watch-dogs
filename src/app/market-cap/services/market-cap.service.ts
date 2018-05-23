@@ -10,10 +10,11 @@ import {StorageService} from '../../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {Parsers} from '../../apis/parsers';
+import {VOMCAgregated} from '../../apis/models';
 
 @Injectable()
 export class MarketCapService {
-  private coins: { [symbol: string]: VOMarketCap };
+  private coins: { [symbol: string]: VOMCAgregated };
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
   delay = 6.1 * 60;
@@ -30,16 +31,16 @@ export class MarketCapService {
 
     this.timestamp = Date.now();
     this.counter = 0;
-    this.coinsSubB = new BehaviorSubject(this.coins);
+    // this.coinsSubB = new BehaviorSubject(this.coins);
   }
-  getCoinsObs() {
+  getCoinsObs():Observable<{ [symbol: string]: VOMCAgregated }> {
     if (this.coins) return Observable.of(this.coins);
-    return this.api.downloadTicker().do(res => this.coins = res);
+    return this.api.downloadAgrigated().map(res => this.coins = res);
   }
   private interval;
-  getCoinBySymbol(symbol: string): VOMarketCap {
+ /* getCoinBySymbol(symbol: string): VOMarketCap {
     return this.coins[symbol];
-  }
+  }*/
 
   private currentExchange: string;
   setCurentExchange(exchange : string){
@@ -54,14 +55,14 @@ export class MarketCapService {
   /*  getCoinsData():Observable<{[symbol:string]:VOMarketCap}>{
 
     }*/
-  getAllCoinsData(): { [symbol: string]: VOMarketCap } {
+ /* getAllCoinsData(): { [symbol: string]: VOMarketCap } {
     return this.coins
-  }
+  }*/
 
-  getAllCoinsById(): { [id: string]: VOMarketCap } {
+ /* getAllCoinsById(): { [id: string]: VOMarketCap } {
 
     return this.coinsById;
-  }
+  }*/
 
 /*
   getAllCoinsArr(): VOMarketCap[] {
@@ -75,9 +76,9 @@ export class MarketCapService {
   }*/
 
 
-  dispatchCouns() {
+ /* dispatchCouns() {
     this.coinsSubB.next(this.coins);
-  }
+  }*/
 
  /* setData(MC: { [symbol: string]: VOMarketCap }): void {
     // console.warn('setData ');

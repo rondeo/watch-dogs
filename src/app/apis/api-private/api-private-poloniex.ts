@@ -11,6 +11,8 @@ import {Subject} from "rxjs/Subject";
 
 export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
   apiPublic: ApiPublicPoloniex
+  exchange = 'poloniex';
+
   constructor(
     private http:HttpClient,
     storage:StorageService
@@ -205,11 +207,10 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
   }
 
   private call(post: any): Observable<any> {
-
     return this.getCredentials().switchMap(cred=>{
       if(!cred) throw new Error('login reqired');
 
-      post.nonce = Math.ceil(Date.now() / 1000);
+      post.nonce = Date.now();
 
       let load = Object.keys(post).map(function (item) {
         return item + '=' + this.post[item];

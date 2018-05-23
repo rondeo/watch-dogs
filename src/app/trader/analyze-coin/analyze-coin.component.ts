@@ -16,6 +16,7 @@ export class AnalyzeCoinComponent implements OnInit {
   exchange: string;
   market: string;
   amountUS = 1000;
+  coinPriceMC: number;
   allMarkets: { exchange: string, market: string }[];
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +37,7 @@ export class AnalyzeCoinComponent implements OnInit {
       this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
         //  console.warn(res);
         this.marketCap.getCoinsObs().subscribe(MC => {
+          this.coinPriceMC = MC[coin].price_usd;
           this.allMarkets = res;
 
         })

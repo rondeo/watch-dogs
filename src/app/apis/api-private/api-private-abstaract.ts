@@ -9,7 +9,7 @@ import {WatchDog} from "../../my-bot/services/watch-dog";
 
 export abstract class ApiPrivateAbstaract {
 
-  exchange: string;
+  abstract exchange: string;
   apiPublic:any;
   /* credetialsSub:BehaviorSubject<{apiKey:string, password: string}> = new BehaviorSubject(null);
    credentials$(){

@@ -68,18 +68,32 @@ export class ApiMarketCapService {
     return this.data ? Observable.of(this.data) : this.downloadAgrigated().map(res => this.data = res);
   }
 
+  private agrigated;
+  private agrigatedData
   downloadAgrigated(): Observable<{ [symbol: string]: VOMCAgregated }> {
     let url = '/api/marketcap/agrigated';
-    console.log('%c ' + url, 'color:pink');
-    return this.http.get(url)
+   // console.log('%c ' + url, 'color:red');
+    if(this.agrigatedData) return Observable.of(this.agrigatedData);
+    if(this.agrigated) return this.agrigated;
+    console.log('%c LOADING ' + url, 'color:red');
+    this.agrigated =  this.http.get(url)
       .share()
       .map((res: { [id: string]: MCdata }) => {
-        //  console.log(res);
+        this.agrigated = null;
+        if(this.agrigatedData) return this.agrigatedData;
+
+        console.log('%c DONE ' + url, 'color:red');
         const out = {}
         for (let str in res) out[str] = Parsers.mapAgrigated(res[str], str);
+
         this.agrigatedSub.next(out);
+        this.agrigatedData = out;
+        setTimeout(()=>{
+          this.agrigatedData = null;
+        }, 3*60*1000);
         return out;
       });
+    return this.agrigated;
   }
 
 

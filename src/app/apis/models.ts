@@ -1,3 +1,5 @@
+import {VOMarketCap} from '../models/app-models';
+
 export interface VOCoinData{
   timestamp: number;
   price_btc: number;
@@ -27,7 +29,7 @@ export interface MCdata {
 }
 
 
-export interface VOMCAgregated {
+export interface VOMCAgregated extends VOMarketCap{
   symbol: string;
   id: string;
   price_btc: number;
@@ -64,6 +66,7 @@ export interface VOMCAgregated {
 export const VOMCAGREGATED: VOMCAgregated = {
   symbol: '',
   id: '',
+  name:'',
   price_btc: 0,
   price_usd: 0,
   tobtc_last: 0,
@@ -97,3 +100,5 @@ export const VOMCAGREGATED: VOMCAgregated = {
 export interface VOMC extends VOMCAgregated{
   selected: boolean;
 }
+
+export type VOMCObj = {[symbol:string]: VOMCAgregated}

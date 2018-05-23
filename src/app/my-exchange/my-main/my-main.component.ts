@@ -10,8 +10,6 @@ import {ConnectorApiService} from "../services/connector-api.service";
   styleUrls: ['./my-main.component.css']
 })
 export class MyMainComponent implements OnInit {
-
-
   exchange:string;
   isLogedIn:boolean;
   constructor(

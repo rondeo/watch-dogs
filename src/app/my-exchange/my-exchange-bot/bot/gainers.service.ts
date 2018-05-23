@@ -40,12 +40,12 @@ export class GainersService {
        // console.log(res);
 
         let btc = res['BTC'];
-        this.btcMC = btc;
+        this.btcMC = <VOMarketCap>btc;
         this.ethMC = res['ETH'];
 
         let coins = Object.values(res);
 
-        coins = this.subtractBTC(coins, btc);
+        coins = <any>this.subtractBTC(coins, btc);
 
        // console.log(coins);
 

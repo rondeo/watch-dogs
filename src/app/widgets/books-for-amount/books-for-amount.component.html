@@ -1,6 +1,6 @@
 <div class="mat-body-2">
     <span>{{booksDisplay.sell}}</span>
-    <small>{{booksDisplay.diff}}</small>
+    <small class="dred"><small>%</small>{{booksDisplay.diff}}</small>
     <span>{{booksDisplay.buy}}</span>
     &nbsp;&nbsp;&nbsp;
     <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></a>

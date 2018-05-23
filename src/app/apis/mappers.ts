@@ -5,6 +5,7 @@ import {
   SOMarketCryptopia, SOMarketNovaExchange, SOMarketCoinExchange, SOCurrencyCoinexchange, SOMarketExmo, SOMarketBitz,
   SOMarketCoinnone, SOMarketBitsane, SOMarketBithumb, SOMarketEtherdelta
 } from '../models/sos';
+import {VOMCAgregated} from './models';
 
 
 interface BitfinexMarket{
@@ -715,7 +716,7 @@ export class Mappers{
     });
     return marketsAr.length;
   }
-  static mapDisplayValues1(item:VOMarket, basePrice:number, base_1h:number, base_24h:number, base_7d:number, marketCap:VOMarketCap){
+  static mapDisplayValues1(item:VOMarket, basePrice:number, base_1h:number, base_24h:number, base_7d:number, marketCap:VOMCAgregated){
     let base = basePrice;
   //  item.dVolume = (item.Volume/1e6).toFixed(3)+'M';
     item.dBaseVolume = item.BaseVolume.toFixed(2);
