@@ -8,163 +8,116 @@ import {LoginFormComponent} from './shared/login-form/login-form.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {StorageService} from './services/app-storage.service';
-import {MarketCapService} from "./market-cap/services/market-cap.service";
+import {MarketCapService} from './market-cap/services/market-cap.service';
+import {ExchangeLogin, UserLoginService} from './services/user-login.service';
+import {LoginExchangeComponent} from './shared/login-exchange/login-exchange.component';
 
 @Component({
   selector: 'app-root',
-  templateUrl:'app.component.html'
+  templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
   title = 'app works!';
-  menu:any;
-  isLogedIn:boolean;
-  nickname:string;
-  countDown:number;
-  historyCounter:number;
+  menu: any;
+  isLogedIn: boolean;
+  nickname: string;
+  countDown: number;
+  historyCounter: number;
 
 
-  isMenu:boolean
+  isMenu: boolean
 
   constructor(
-    private auth:AuthHttpService,
-    private storage:StorageService,
-    private router:Router,
-    private dialog:MatDialog,
-    private marketCap:MarketCapService,
-    private snackBar:MatSnackBar
-  ){
-
-   /* console.log = function () {
-      
-    }
-*/
-   // this.isLogedIn$ = storage.
-
-   /* router.events.subscribe((val) => {
-
-      console.log(val);
-     // console.log(val instanceof NavigationEnd)
-    });
-*/
+    private auth: AuthHttpService,
+    private storage: StorageService,
+    private router: Router,
+    private dialog: MatDialog,
+    private userLogin: UserLoginService,
+    //  private marketCap:MarketCapService,
+    private snackBar: MatSnackBar
+  ) {
   }
 
-  onRefreshClick(){
-   //  this.marketCap.refresh();
+  onRefreshClick() {
+
 
   }
-  onLogin(){
-   let ref =  this.dialog.open(LoginFormComponent,{
-      width:'300px',
-      height:'300px'
+
+  onExchangeLogin(loginType: ExchangeLogin) {
+    let ref = this.dialog.open(LoginExchangeComponent, {
+      width: '100vw',
+      height: '300px'
+    })
+    ref.afterClosed().subscribe(data => {
+      if (data && data.apiKey && data.password) {
+        this.userLogin.setExchangeCredetials(loginType.exchange, JSON.stringify(data));
+      }
     })
 
-    ref.afterClosed().subscribe(data=>{
+  }
 
-      if(data && data.email && data.password){
+  onApplicationLogin(loginType: ExchangeLogin) {
+    let ref = this.dialog.open(LoginFormComponent, {
+      width: '300px',
+      height: '300px'
+    })
 
+    ref.afterClosed().subscribe(data => {
+
+      if (data && data.email && data.password) {
         let salt = this.storage.hashPassword1(data.password);
         let password = this.storage.hashPassword1(salt);
 
-        this.auth.login(data.email, password).toPromise().then((res:any)=>{
+        /*this.auth.login(data.email, password).toPromise().then((res:any)=>{
           console.log(res);
           this.auth.setUser(res.user);
 
-        });
-        this.storage.setSalt(data.email, salt);
+        });*/
+        this.userLogin.setSalt(data.email, salt, loginType);
 
-        if(data.save) this.storage.storeUserSimple(data.email, salt);
+        if (data.save) this.storage.storeUserSimple(data.email, salt);
       }
 
 
     })
   }
 
-  onLogout(){
-    if(confirm('You want to logout from Application')){
-      this.auth.logout().toPromise().then((res:any)=>{
+  onLogout() {
+    if (confirm('You want to logout from Application')) {
+      this.auth.logout().toPromise().then((res: any) => {
         console.log(res);
-        if(res.success) this.auth.setUser(null);
-        else this.snackBar.open( res.message,'x', {extraClasses:['alert-red']});
-      }).catch(err=>{
-        this.snackBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+        if (res.success) this.auth.setUser(null);
+        else this.snackBar.open(res.message, 'x', {extraClasses: ['alert-red']});
+      }).catch(err => {
+        this.snackBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
       });
     }
 
   }
 
-  onClearStorage(){
-    if(confirm('You want to delete all data from storage?')){
+  onClearStorage() {
+    if (confirm('You want to delete all data from storage?')) {
       localStorage.clear();
     }
   }
 
-
-  bgColor ='';
+  bgColor = '';
   imageClass = '';
 
-  ngOnInit():void{
-    this.auth.isOnline$().subscribe(res=>{
-      this.imageClass =  res?'':'glow-red';
-      this.bgColor = res?'':'bg-red';
-    });
-
-
-   /* this.storage.onSalt().subscribe(salt=>{
+  ngOnInit(): void {
+    this.userLogin.exchangeLogin$().subscribe(exchangeLogin => {
+      console.log(exchangeLogin);
+      if (exchangeLogin.status === 'application-login-ewquired') this.onApplicationLogin(exchangeLogin);
+      else if (exchangeLogin.status === 'no-credetials') this.onExchangeLogin(exchangeLogin);
 
     })
-
-    this.marketCap.countDown$.subscribe(r=>this.countDown = r);
-
-    this.marketCap.historyCounter$.subscribe(r=>this.historyCounter = r);
-
-
-    let user =  this.storage.restoreUserSimple();
-
-   // console.log(user);
-    if(user && user.u && user.p){
-      this.storage.setSalt( user.u, user.p);
-
-      let password2 = this.storage.hashPassword1(user.p);
-      this.auth.login(user.u,password2).toPromise().then((res:any)=>{
-        // console.log(' autologin ', res);
-        if(res.success){
-          this.snackBar.open(res.message, 'x', {duration:2000, extraClasses:['alert-green']});
-          this.auth.setUser(res.user)
-        } else this.snackBar.open( res.message,'x', {extraClasses:['alert-red']});
-
-
-      }).catch(err=>{
-        this.snackBar.open( 'Connection error','x', {extraClasses:['alert-red']});
-
-      });
-
-
-    }
-
-
-
-
-    this.auth.getUser$().subscribe(user=> {
-      this.nickname = user?user.nickname:'';
-      this.isLogedIn = !!user
-    });*/
-
-
- /*   this.http.authError.subscribe((err:any)=>{
-      console.warn(err);
-      this.router.navigateByUrl('/login');
+    this.auth.isOnline$().subscribe(res => {
+      this.imageClass = res ? '' : 'glow-red';
+      this.bgColor = res ? '' : 'bg-red';
     });
-*/
-    /*this.menu = this.http.get('http://localhost:8090/api/menu/1').map(res=>{
-
-      console.log(res.json().menu);
-      return res.json().menu;
-    })*/
-
-
   }
 
-  onDogClick(){
+  onDogClick() {
     this.isMenu = !this.isMenu;
   }
 }

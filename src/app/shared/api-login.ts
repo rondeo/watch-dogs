@@ -33,13 +33,13 @@ export class ApiLogin {
 
   autoLogin(): void {
     //if (!this.storage.isLoggedIn()) return ;
-    let str = this.storage.getItem(this.exchange +'-credentials', true);
+   /* let str = this.storage.getItem(this.exchange +'-credentials', true);
     //console.warn('autoLogin ', str);
     if (str) {
       let credentials: { apiKey: string, password: string } = JSON.parse(str);
       // console.log(credentials);
       if (credentials && credentials.apiKey && credentials.password) this.login(credentials.apiKey, credentials.password, false);
-    }
+    }*/
   }
 
   isLogedIn$():Observable<boolean>{

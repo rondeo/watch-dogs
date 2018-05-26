@@ -8,7 +8,7 @@ export class SelectedSaved {
   marketsSelected:string[];
 
   getMarketsSelected():string[]{
-    if(!this.marketsSelected) this.marketsSelected = JSON.parse(this.storage.getItem(this.exchange+'-markets-selected') || '[]');
+    // if(!this.marketsSelected) this.marketsSelected = JSON.parse(this.storage.getItem(this.exchange+'-markets-selected') || '[]');
     return this.marketsSelected;
 
   }

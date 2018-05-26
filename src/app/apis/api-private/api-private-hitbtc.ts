@@ -1,12 +1,14 @@
-import {Subject} from "rxjs/Subject";
-import {Observable} from "rxjs/Observable";
-import {VOBalance, VOOrder} from "../../models/app-models";
-import {ApiPrivateAbstaract} from "./api-private-abstaract";
-import {StorageService} from "../../services/app-storage.service";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {ApiPublicPoloniex} from "../api-public/api-public-poloniex";
-import {ApiPublicHitbtc} from "../api-public/api-public-hitbtc";
-import {UtilsBooks} from "../../com/utils-books";
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
+import {VOBalance, VOOrder} from '../../models/app-models';
+import {ApiPrivateAbstaract} from './api-private-abstaract';
+import {StorageService} from '../../services/app-storage.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
+import {ApiPublicHitbtc} from '../api-public/api-public-hitbtc';
+import {UtilsBooks} from '../../com/utils-books';
+import {PrivateCalls} from '../../my-exchange/services/apis/api-base';
+import {UserLoginService} from '../../services/user-login.service';
 
 export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   apiPublic: ApiPublicHitbtc
@@ -14,15 +16,57 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   constructor(
     private http: HttpClient,
-    storage: StorageService
+    userLogin: UserLoginService
   ) {
-    super(storage)
+    super(userLogin);
   }
 
 
-  getOrder(orderId): Observable<VOOrder> {
-    return null
+  getOrder(orderId, base:string, coin:string): Observable<VOOrder> {
+    const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}',base).replace('{{coin}}', coin);
+    console.log(url);
+    return this.call(url, null)
+      .map((res:any[])=>{
+        console.log(res);
 
+        return res.map(function (item) {
+          return{
+            isOpen:true,
+            id:item.id,
+            uuid:item.clientOrderId,
+            action:item.side.toUpperCase(),
+            rate:+item.price,
+            amountCoin:+item.quantity,
+            amountBase:+item.price * +item.quantity,
+            date:item.createdAt,
+            timestamp:new Date(item.createdAt).getTime(),
+            status:item.status
+          }
+        }).find(function (item) {
+          return item.uuid === orderId;
+        }) || {
+          uuid:orderId,
+          isOpen: false
+        };
+      });
+  }
+
+  cancelOrder(uuid: string): Observable<VOOrder> {
+    const url = 'api/hitbtc-delete/' + uuid;
+    return this.call(url, null)
+      .map((res: any) => {
+        console.log(res);
+        let result: any = res;
+        return {
+          uuid: res.clientOrderId,
+          isOpen: !(res.status === 'canceled'),
+          action: res.side.toUpperCase(),
+          rate: +res.price,
+          amountCoin: +res.quantity,
+          date: res.createdAt,
+          timestamp: new Date(res.createdAt).getTime()
+        }
+      });
   }
 
   balancesSub: Subject<VOBalance[]>
@@ -125,7 +169,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     return this.getCredentials().switchMap(cred => {
       if (!cred) throw new Error('login reqired');
 
-      let headers: HttpHeaders = new HttpHeaders().set("Authorization", "Basic " + btoa(cred.apiKey + ":" + cred.password));
+      let headers: HttpHeaders = new HttpHeaders().set('Authorization', 'Basic ' + btoa(cred.apiKey + ':' + cred.password));
 
       if (post) {
         return this.http.post(url, post, {headers})

@@ -1,70 +1,92 @@
-import {ApiPrivateAbstaract} from "./api-private-abstaract";
-import {StorageService} from "../../services/app-storage.service";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {VOBalance, VOOrder} from "../../models/app-models";
-import {UtilsBooks} from "../../com/utils-books";
-import {ApiPublicPoloniex} from "../api-public/api-public-poloniex";
+import {ApiPrivateAbstaract} from './api-private-abstaract';
+import {StorageService} from '../../services/app-storage.service';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import {VOBalance, VOOrder} from '../../models/app-models';
+import {UtilsBooks} from '../../com/utils-books';
+import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
 
 import * as cryptojs from 'crypto-js';
-import {Subject} from "rxjs/Subject";
+import {Subject} from 'rxjs/Subject';
+import {UserLoginService} from '../../services/user-login.service';
 
-export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
+export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   apiPublic: ApiPublicPoloniex
   exchange = 'poloniex';
 
   constructor(
-    private http:HttpClient,
-    storage:StorageService
-  ){
-    super(storage)
+    private http: HttpClient,
+    userLogin: UserLoginService
+  ) {
+    super(userLogin);
   }
 
 
- /* sellCoin(sellCoin:VOSellCoin):Observable<VOSellCoin>{
-    if(!sellCoin.coinPrice) throw new Error(' need coin price')
-    return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
-      // console.log(balance);
-      if(balance.balance * sellCoin.coinPrice < 10) {
-        sellCoin.balance = 0;
-      }else sellCoin.balance = balance.balance;
 
-      if(!sellCoin.balance) {
-        sellCoin.balance = 0;
-        return Observable.of(sellCoin);
-      }
+  /* sellCoin(sellCoin:VOSellCoin):Observable<VOSellCoin>{
+     if(!sellCoin.coinPrice) throw new Error(' need coin price')
+     return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
+       // console.log(balance);
+       if(balance.balance * sellCoin.coinPrice < 10) {
+         sellCoin.balance = 0;
+       }else sellCoin.balance = balance.balance;
 
-      return this.apiPublic.downloadBooks(sellCoin.base, sellCoin.coin).switchMap(books => {
-        // console.log(books);
+       if(!sellCoin.balance) {
+         sellCoin.balance = 0;
+         return Observable.of(sellCoin);
+       }
 
-        let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balance);
-        const myCoinprice = sellCoin.basePrice * rate;
-        sellCoin.priceDiff = +(100*(myCoinprice - sellCoin.coinPrice)/sellCoin.coinPrice).toPrecision(2);
-        rate = +(rate - (rate* 0.01)).toFixed(8);
-        return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balance, rate).switchMap(order =>{
-          console.log(order);
-          if(order.uuid){
-            sellCoin.uuid = order.uuid;
-            return this.getOrder(order.uuid).switchMap(order =>{
+       return this.apiPublic.downloadBooks(sellCoin.base, sellCoin.coin).switchMap(books => {
+         // console.log(books);
 
-              return Observable.of(sellCoin)
-            })
+         let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balance);
+         const myCoinprice = sellCoin.basePrice * rate;
+         sellCoin.priceDiff = +(100*(myCoinprice - sellCoin.coinPrice)/sellCoin.coinPrice).toPrecision(2);
+         rate = +(rate - (rate* 0.01)).toFixed(8);
+         return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balance, rate).switchMap(order =>{
+           console.log(order);
+           if(order.uuid){
+             sellCoin.uuid = order.uuid;
+             return this.getOrder(order.uuid).switchMap(order =>{
 
-          }else throw new Error(order.message)
+               return Observable.of(sellCoin)
+             })
 
-
-
-        })
+           }else throw new Error(order.message)
 
 
-      })
+
+         })
 
 
+       })
+
+
+     })
+
+   }*/
+
+  cancelOrder(orderId): Observable<VOOrder> {
+    return this.call({
+      command: 'cancelOrder',
+      orderNumber: orderId
+    }).map(res => {
+      console.log(res);
+      if (res)
+        return {
+          uuid: orderId,
+          isOpen: (res.success !== 1),
+          coin: null,
+          base: null,
+          rate: 0,
+          amountCoin: 0
+        }
+      else return null;
     })
+  }
 
-  }*/
 
-  getOrder(orderId):Observable<VOOrder>{
+  getOrder(orderId, base:string, coin:string): Observable<VOOrder> {
     return this.call({
       command: 'returnOrderTrades',
       orderNumber: orderId
@@ -96,7 +118,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
         coin: null,
         base: null,
         rate: 0,
-        amountCoin:0
+        amountCoin: 0
       }
 
 
@@ -106,26 +128,26 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
 
   balancesSub: Subject<VOBalance[]>
 
-  downloadBalance(symbol:string):Observable<VOBalance>{
-    if(this.isLoadingBalances) return this.balancesSub.asObservable()
-      .map(balabces=>{
-      return balabces.find(function (bal) {
+  downloadBalance(symbol: string): Observable<VOBalance> {
+    if (this.isLoadingBalances) return this.balancesSub.asObservable()
+      .map(balabces => {
+        return balabces.find(function (bal) {
+          return bal.symbol === symbol;
+        })
+      })
+    return this.downloadBalances().map(res => {
+      return res.find(function (bal) {
         return bal.symbol === symbol;
       })
     })
-   return this.downloadBalances().map(res => {
-     return res.find(function (bal) {
-       return bal.symbol === symbol;
-     })
-   })
   }
 
-  isLoadingBalances:boolean;
+  isLoadingBalances: boolean;
 
-  downloadBalances():Observable<VOBalance[]> {
+  downloadBalances(): Observable<VOBalance[]> {
     this.balancesSub = new Subject();
     this.isLoadingBalances = true;
-    return this.call( {command:'returnBalances'}).map(res => {
+    return this.call({command: 'returnBalances'}).map(res => {
       //console.log(res);
 
 
@@ -152,63 +174,63 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
     });
   }
 
-  buyLimit(base: string, coin:string,  quantity: number, rate: number): Observable<VOOrder> {
-    let market = base+'_'+coin;
+  buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+    let market = base + '_' + coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
-    return this.call( {
-      command:'buy',
-      currencyPair:market,
-      rate:rate,
-      amount:quantity
-    }).map(res=>{
+    return this.call({
+      command: 'buy',
+      currencyPair: market,
+      rate: rate,
+      amount: quantity
+    }).map(res => {
 
 
-      console.log(' buyLimit market ' + market , res);
+      console.log(' buyLimit market ' + market, res);
 
       return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        amountCoin:quantity, //TODO get real property
-        base:base,
-        coin:coin,
-        type:res.type
+        uuid: res.orderNumber,
+        isOpen: !!res.orderNumber,
+        rate: res.rate,
+        amountCoin: quantity, //TODO get real property
+        base: base,
+        coin: coin,
+        type: res.type
       };
     });
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
 
-  sellLimit(base: string, coin:string, quantity: number, rate: number): Observable<VOOrder> {
+  sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
 
-    let market = base+'_'+coin;
+    let market = base + '_' + coin;
     console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
-    return this.call( {
-      command:'sell',
-      currencyPair:market,
-      rate:rate,
-      amount:quantity
+    return this.call({
+      command: 'sell',
+      currencyPair: market,
+      rate: rate,
+      amount: quantity
 
-    }).map(res=>{
-      console.log(' sellLimit market '+market , res);
+    }).map(res => {
+      console.log(' sellLimit market ' + market, res);
       return {
-        uuid:res.orderNumber,
-        isOpen:!!res.orderNumber,
-        rate:res.rate,
-        amountCoin:quantity, //TODO get real property
-        base:base,
-        coin:coin,
-        type:res.type
+        uuid: res.orderNumber,
+        isOpen: !!res.orderNumber,
+        rate: res.rate,
+        amountCoin: quantity, //TODO get real property
+        base: base,
+        coin: coin,
+        type: res.type
       };
 
     });
   }
 
   private call(post: any): Observable<any> {
-    return this.getCredentials().switchMap(cred=>{
-      if(!cred) throw new Error('login reqired');
+    return this.getCredentials().switchMap(cred => {
+      if (!cred) throw new Error('login reqired');
 
       post.nonce = Date.now();
 
@@ -218,9 +240,10 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
 
 
       let signed = this.hash_hmac(load, cred.password);
-      let url = '/api/poloniex/private';;
+      let url = '/api/poloniex/private';
+      ;
       console.log(url);
-      return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData:load}).map(res=>{
+      return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).map(res => {
 
         return res
       })
@@ -233,7 +256,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract{
     let dg: any = cryptojs.HmacSHA512(text, password);
     return dg.toString(cryptojs.enc.Hex);
   }
-
 
 
 }

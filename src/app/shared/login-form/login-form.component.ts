@@ -10,30 +10,29 @@ export class LoginFormComponent implements OnInit {
 
   showPass = false;
 
-  login = {email:'', password:'', save:true};
+  login = {email: '', password: '', save: true};
 
   @ViewChild('savepass') savepass;
 
   constructor(
-    private dialogRef: MatDialogRef<{apiKey:string, password:string, save:boolean}>
-  ) { }
+    private dialogRef: MatDialogRef<{ apiKey: string, password: string, save: boolean }>
+  ) {
+  }
 
   ngOnInit() {
   }
 
-  checkPassword(){
+  checkPassword() {
 
   }
 
-  onShowPasswordChanged(evt, on){
+  onShowPasswordChanged(evt, on) {
     this.showPass = on.checked;
   }
 
-  onSubmit(){
+  onSubmit() {
     this.login.save = !this.savepass.checked;
-
     this.dialogRef.close(this.login);
-
   }
 
 }

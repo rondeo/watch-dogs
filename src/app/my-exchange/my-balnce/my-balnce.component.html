@@ -22,11 +22,11 @@
                         <small class="btn" (click)="onSymbolClick(balance)">{{balance.symbol}}</small>
                     </td>
 
-                    <td><span  class="btn" (click)="onTransferClick(balance)"><small class="grey">$</small>{{balance.balanceUS}}</span></td>
+                    <td><span  class="btn" (click)="onBalanceClick(balance)"><small class="grey">$</small>{{balance.balanceUS}}</span></td>
                     <td><span [ngClass]="balance.percent_change_1h>0?'green':'red'">{{balance.percent_change_1h}}</span></td>
                     <td><span [ngClass]="balance.percent_change_24h>0?'green':'red'">{{balance.percent_change_24h}}</span></td>
                     <td><span [ngClass]="balance.percent_change_7d>0?'green':'red'">{{balance.percent_change_7d}}</span></td>
-                    <td><small class="btn" (click)="onShowChartClick(balance)" ><small class="grey">$</small>{{balance.priceUS}}</small></td>
+                    <td><small class="btn" (click)="onPriceClick(balance)" ><small class="grey">$</small>{{balance.priceUS}}</small></td>
 
                 </tr>
             </ng-container>

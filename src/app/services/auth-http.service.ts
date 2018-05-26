@@ -6,7 +6,6 @@ import {Subject} from 'rxjs/Subject';
 import {
   Http,
   Response,
-  Headers,
   RequestOptions,
   CookieXSRFStrategy,
   XSRFStrategy,
@@ -53,8 +52,8 @@ export class AuthHttpService {
     //setTimeout(() => this.autoLogin(), 2000);
   }
 
-  autoLogin(){
-    let user =  this.storage.restoreUserSimple();
+  async autoLogin(){
+    let user =  await this.storage.restoreUserSimple();
     console.warn(user);
     let password2 = this.storage.hashPassword1(user.p);
     return this.login(user.u, password2).map((result: any) =>{
@@ -144,13 +143,13 @@ export class AuthHttpService {
       let str = this.storage.getItem('authentication');
 
       if (str) {
-              try {
-              this.user = JSON.parse(atob(str));
+            //  try {
+            //  this.user = JSON.parse(atob(str));
               // /   new VOUser(JSON.parse(atob(str)));
-            } catch (e) {
-              console.error(e);
+           // } catch (e) {
+           //   console.error(e);
               //this.removeAuthentication();
-            }
+           // }
 
       }
     }

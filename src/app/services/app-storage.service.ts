@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import * as localforage from 'localforage';
 import * as _ from 'lodash';
+import {ExchangeLogin} from './user-login.service';
 
 
 @Injectable()
@@ -32,19 +33,19 @@ export class StorageService {
   /*isLoggedIn():boolean{
     return  this.isLogedInSub.getValue();
   }*/
-  storeUserSimple(email: string, password: string) {
+  async storeUserSimple(email: string, password: string):Promise<void> {
     let user = CryptoJS.HmacSHA1('user', this.simplePass).toString();
     let data = JSON.stringify({u: email, p: password});
     data = CryptoJS.AES.encrypt(data, this.simplePass).toString();
-    localStorage.setItem(user, data);
+    return Promise.resolve(localStorage.setItem(user, data));
   }
 
-  restoreUserSimple(): { u: string, p: string } {
+  async restoreUserSimple(): Promise< { u: string, p: string }> {
     let user = CryptoJS.HmacSHA1('user', this.simplePass).toString();
     let item = localStorage.getItem(user);
     if (!item) return null;
     item = CryptoJS.AES.decrypt(item, this.simplePass).toString(CryptoJS.enc.Utf8);
-    return JSON.parse(item);
+    return Promise.resolve(JSON.parse(item));
   }
 
   /* filterSelected(coins: VOMarketCap[]): VOMarketCap[] {
@@ -195,35 +196,40 @@ export class StorageService {
     // localStorage.setItem('market-cap-selected', JSON.stringify(this.selected));
   }
 
-  getItem(s: string, secure = false) {
+  async getItem(s: string, secure = false): Promise<string> {
     if (secure) {
       if (!this.salt) {
-        let user = this.restoreUserSimple();
+        let user =  await this.restoreUserSimple();
         if (user) this.setSalt(user.u, user.p)
-        else alert('Please login in Application');
+        else {
+          console.error('application-login');
+         // alert('Please login in Application');
+
+          return Promise.reject('application-login');
+        }
       }
       s = CryptoJS.HmacSHA1(s, this.salt).toString();
       // console.log(s);
 
       let str = localStorage.getItem(s)
 
-      if (str) return CryptoJS.AES.decrypt(str, this.salt).toString(CryptoJS.enc.Utf8);
-      else return null
+      if (str) return Promise.resolve(CryptoJS.AES.decrypt(str, this.salt).toString(CryptoJS.enc.Utf8));
+      else return  Promise.resolve(null)
     } else s = CryptoJS.HmacSHA1(s, this.simplePass).toString();
-    return localStorage.getItem(s);
+    return Promise.resolve(localStorage.getItem(s));
   }
 
-  setItem(s: string, data: string, secure = false) {
+  async setItem(s: string, data: string, secure = false) {
     //  console.log('save', data);
     if (secure) {
       if (!this.salt) {
         alert('Please login in Application');
-        return;
+        return Promise.reject('application-login');
       }
       data = CryptoJS.AES.encrypt(data, this.salt).toString();
       s = CryptoJS.HmacSHA1(s, this.salt).toString();
     } else s = CryptoJS.HmacSHA1(s, this.simplePass).toString();
-    return localStorage.setItem(s, data);
+    return Promise.resolve(localStorage.setItem(s, data));
   }
 
   removeItem(s: string, secure = false) {

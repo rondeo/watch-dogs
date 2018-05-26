@@ -33,6 +33,9 @@ import {MarketCollectorService} from "./my-exchange-bot/bot/market-collector.ser
 import {BuyCoinService} from "./my-exchange-bot/bot/buy-coin.service";
 import {FollowCoinService} from "./my-exchange-bot/bot/follow-coin.service";
 import {UiModule} from '../ui/ui.module';
+import {MyExchangeService} from './services/my-exchange.service';
+import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
+import {WidgetsModule} from '../widgets/widgets.module';
 
 
 const routes: Routes = [
@@ -45,6 +48,8 @@ const routes: Routes = [
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:exchage/:market', component: MyBuySellComponent},
+      {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent},
+
       {path: 'bot', component: MyExchangeBotComponent}
 
      /* {path: 'data', component: BittrexDataComponent},
@@ -75,6 +80,7 @@ const routes: Routes = [
     ChartsModule,
     SharedModule,
     UiModule,
+    WidgetsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -92,7 +98,8 @@ const routes: Routes = [
     RefreshButtonComponent,
     MyOrdersHistoryComponent,
     AllMainCoinsComponent,
-    MyExchangeBotComponent
+    MyExchangeBotComponent,
+    BuySellCoinComponent
   ],
   providers:[
     ConnectorApiService,
@@ -100,7 +107,8 @@ const routes: Routes = [
     MyTradingService,
     MarketCollectorService,
     BuyCoinService,
-    FollowCoinService
+    FollowCoinService,
+    MyExchangeService
   ]
 
 })

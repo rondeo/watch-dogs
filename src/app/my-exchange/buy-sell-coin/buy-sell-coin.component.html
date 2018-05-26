@@ -1,0 +1,80 @@
+<div>
+    <span class="mat-subheading-1">{{exchange}}</span>
+    <mat-form-field class="w8">
+        <mat-select [(ngModel)]="currentMarket" placeholder="Select Market" (ngModelChange)="onMarketChanged($event)">
+            <mat-option *ngFor="let market of marketsAvailable" [value]="market">
+                {{market.base}}-{{market.coin}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <app-amount-coin [amount]="amountUS" (amountChanged)="onAmountChanged($event)"></app-amount-coin>
+    <mat-card>
+        <mat-card-content>
+            {{currentMarket.base}}
+            <span class="large"><sup>$</sup>{{balanceBaseUS}}</span>
+            &nbsp;
+            {{currentMarket.coin}}
+            <span class="large"><sup>$</sup>{{balanceCoinUS}}</span>
+            &nbsp;
+            <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
+               (click)="onRefreshBalancesClick()"></a>
+
+        </mat-card-content>
+
+        <mat-card-title>
+            <div>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <mat-form-field class="w4">
+                    <input matInput placeholder="Price" [(ngModel)]="userPriceUS"
+                           (ngModelChange)="onUserPriceChanged($event)">
+                </mat-form-field>
+            </div>
+        </mat-card-title>
+        <mat-card-content>
+            &nbsp; &nbsp;
+            <button mat-fab
+                    [ngClass]="isBuyDisabled?'':'green-color'"
+                    [disabled]="isBuyDisabled"
+                    (click)="onBuyClick()"
+            >Buy
+            </button>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+
+            <button mat-fab class="btn-sell" color="accent"
+                    [disabled]="isSellDisabled"
+                    (click)="onSellClick()"
+            >Sell
+            </button>
+        </mat-card-content>
+    </mat-card>
+    <section *ngIf="orderId">
+        <span>{{orderId}}</span>
+        <span class="btn fa fa-close dred" (click)="onCancelOrderClick()"></span>
+    </section>
+
+    <section *ngIf="lastOrder">
+        <p>
+            <small>{{lastOrder.action}} {{lastOrder.coin}} : $</small>
+            {{lastOrder.amountCoinUS}}
+            <small>Price: $</small>
+            {{lastOrder.priceUS}}
+            <small> Fee: $</small>
+            {{lastOrder.feeUS}}
+            {{lastOrder.isOpen?'Open':'Closed'}}
+            <span *ngIf="lastOrder.isOpen" class="btn fa fa-close dred" (click)="onCancelOrderClick()"></span>
+        </p>
+
+    </section>
+
+    <mat-card>
+        <app-market-books
+                [exchange]="exchange"
+                [market]="market"
+                (price)="onPriceClick($event)"
+        ></app-market-books>
+    </mat-card>
+    <mat-card>
+        <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
+    </mat-card>
+
+</div>

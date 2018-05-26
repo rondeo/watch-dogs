@@ -60,6 +60,7 @@ import {DatabaseService} from "./services/database.service";
 import {TraderModule} from "./trader/trader.module";
 import {AllInOneModule} from "./all-in-one/all-in-one.module";
 import {UiModule} from "./ui/ui.module";
+import {UserLoginService} from './services/user-login.service';
 
 
 //import {WebsocketService} from "./shared/websocket-service";
@@ -105,7 +106,8 @@ declare const Buffer: any;
     MarketCapService,
 
     StorageService,
-    CompareService
+    CompareService,
+    UserLoginService
     // WebsocketService
 
     // provideAuth({

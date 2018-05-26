@@ -6,10 +6,14 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
 import {UtilsBooks} from "../../com/utils-books";
 import {WatchDog} from "../../my-bot/services/watch-dog";
+import {UserLoginService} from '../../services/user-login.service';
 
 export abstract class ApiPrivateAbstaract {
 
   abstract exchange: string;
+
+
+
   apiPublic:any;
   /* credetialsSub:BehaviorSubject<{apiKey:string, password: string}> = new BehaviorSubject(null);
    credentials$(){
@@ -19,7 +23,7 @@ export abstract class ApiPrivateAbstaract {
 
    */
   private credentials: { apiKey: string, password: string };
-  constructor(private storage: StorageService) {
+  constructor(private userLogin: UserLoginService) {
 
   }
 
@@ -47,7 +51,7 @@ export abstract class ApiPrivateAbstaract {
           console.log(order);
           if(order.uuid){
             sellCoin.uuid = order.uuid;
-            return this.getOrder(order.uuid).switchMap(order =>{
+            return this.getOrder(order.uuid, sellCoin.base, sellCoin.coin).switchMap(order =>{
 
               return Observable.of(sellCoin)
             })
@@ -66,11 +70,12 @@ export abstract class ApiPrivateAbstaract {
 
   }
 
-  abstract  getOrder(orderId):Observable<VOOrder>;
+  abstract cancelOrder(orderId):Observable<VOOrder>;
+  abstract getOrder(orderId, base:string, coin:string):Observable<VOOrder>;
   abstract downloadBalance(symbol: string): Observable<VOBalance>;
   abstract downloadBalances(): Observable<VOBalance[]>;
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
-  abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
+  abstract buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
 
 
   protected getCredentials(): Observable<{ apiKey: string, password: string }> {
@@ -78,14 +83,18 @@ export abstract class ApiPrivateAbstaract {
     let credentials = null;
     const sub = new Subject<{ apiKey: string, password: string }>();
 
-    let str = this.storage.getItem(this.exchange + '-credentials', true);
-    if (str) {
-      let credentials: { apiKey: string, password: string } = JSON.parse(str);
-      if (credentials && credentials.apiKey && credentials.password) {
-        this.credentials = credentials;
+    this.userLogin.getExchangeCredentials(this.exchange).then(str=>{
+      console.warn(str);
+      if (str) {
+        let cred: { apiKey: string, password: string } = JSON.parse(str);
+        if (cred && cred.apiKey && cred.password) {
+          this.credentials = cred;
+        }
       }
-    }
+      console.log(this.credentials);
+      sub.next(this.credentials);
+    });
 
-    return Observable.of(this.credentials);
+    return sub
   }
 }

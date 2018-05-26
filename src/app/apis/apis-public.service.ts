@@ -26,7 +26,7 @@ export class ApisPublicService {
   ) {
   }
 
-  availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc', 'cryptopia'];
+  availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
 
   private myExchanges = ['poloniex'];
 

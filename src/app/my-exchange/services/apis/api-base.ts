@@ -432,7 +432,7 @@ return null;
   marketsSelected: string[];
 
   getMarketsSelected(): string[] {
-    if (!this.marketsSelected) this.marketsSelected = JSON.parse(this.storage.getItem(this.exchange + '-markets-selected') || '[]');
+   // if (!this.marketsSelected) this.marketsSelected = JSON.parse(this.storage.getItem(this.exchange + '-markets-selected') || '[]');
     return this.marketsSelected;
 
   }
@@ -468,9 +468,9 @@ return null;
     let str = this.storage.getItem(this.exchange + '-credentials', true);
     //console.warn('autoLogin ', str);
     if (str) {
-      let credentials: { apiKey: string, password: string } = JSON.parse(str);
+     // let credentials: { apiKey: string, password: string } = JSON.parse(str);
       // console.log(credentials);
-      if (credentials && credentials.apiKey && credentials.password) this.login(credentials.apiKey, credentials.password, false);
+     // if (credentials && credentials.apiKey && credentials.password) this.login(credentials.apiKey, credentials.password, false);
     }
   }
 
@@ -516,7 +516,7 @@ return null;
   protected getCredentials(): Observable<{ apiKey: string, password: string }> {
     if (!!this.credentials) return Observable.of(this.credentials);
     let credentials = null;
-    const sub = new Subject<{ apiKey: string, password: string }>();
+   /* const sub = new Subject<{ apiKey: string, password: string }>();
 
     let str = this.storage.getItem(this.exchange + '-credentials', true);
     if (str) {
@@ -524,7 +524,7 @@ return null;
       if (credentials && credentials.apiKey && credentials.password) {
         this.credentials = credentials;
       }
-    }
+    }*/
 
     return new BehaviorSubject(this.credentials).asObservable()
   }

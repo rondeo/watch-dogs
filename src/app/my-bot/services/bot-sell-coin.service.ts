@@ -37,7 +37,7 @@ export class BotSellCoinService {
 
   trackCoin(coin: WatchDog) {
 
-    this.apisPrivate.getExchangeApi(coin.exchange).getOrder(coin.uuid).subscribe(res => {
+    this.apisPrivate.getExchangeApi(coin.exchange).getOrder(coin.uuid, coin.base, coin.coin).subscribe(res => {
       console.warn(res);
     })
 

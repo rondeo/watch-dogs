@@ -1,5 +1,5 @@
 <div>
-<span class="mat-title">Books {{exchange}} {{market}}</span>
+    <span class="mat-title">Books {{exchange}} {{market}}</span>
     &nbsp;&nbsp;&nbsp;
     <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshClick()"></a>
 
@@ -7,16 +7,19 @@
 
     <table>
         <tr>
-            <td>For</td>
-            <td>to Sell</td>
-            <td>%</td>
-            <td>to Buy</td>
+            <td>Inst</td>
+            <td><span class="btn" (click)="onToSellClick()">to Sell</span></td>
+            <td>% 4</td>
+            <td><span class="btn" (click)="onToBuyClick()">to Buy</span></td>
         </tr>
         <tr *ngFor="let books of bookDisplays">
-            <td><small>$</small>{{books.us}}</td>
-            <td>{{books.sell}}</td>
+            <td>
+                <small>$</small>
+                {{books.us}}
+            </td>
+            <td><span class="btn" (click)="onBookClick(books.sell)">{{books.sell}}</span></td>
             <td>{{books.diff}}</td>
-            <td>{{books.buy}}</td>
+            <td><span class="btn" (click)="onBookClick(books.buy)" >{{books.buy}}</span></td>
         </tr>
     </table>
 </div>

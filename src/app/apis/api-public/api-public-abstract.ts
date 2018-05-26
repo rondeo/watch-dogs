@@ -25,7 +25,7 @@ export interface MarketDay {
 export abstract class ApiPublicAbstract {
   exchange: string;
   allCoins: { [coin: string]: { [base: string]: number } };
-
+  markets: { [market: string]: VOMarket }
 
   constructor(
     protected http: HttpClient,
@@ -34,7 +34,7 @@ export abstract class ApiPublicAbstract {
 
   }
 
-  private updateTicker(){
+  private updateTicker() {
     return this.downloadTicker().map((r) => {
 
       this.tickerTimestamp = Date.now();
@@ -46,13 +46,13 @@ export abstract class ApiPublicAbstract {
     })
   }
 
-  tickerTimestamp:number;
+  tickerTimestamp: number;
 
   getAllCoins(fromCache = true): Observable<{ [coin: string]: { [base: string]: number } }> {
-    if(!fromCache){
-      if(!this.tickerTimestamp) this.tickerTimestamp = +localStorage.getItem('tickerTimestamp ' + this.exchange);
-      if((Date.now() - this.tickerTimestamp) > (15 * 60 * 1000)){
-        console.log('%c ' + this.exchange + ' updating ticker '+ Math.round((Date.now() - this.tickerTimestamp)/60000) + ' min','color:blue');
+    if (!fromCache) {
+      if (!this.tickerTimestamp) this.tickerTimestamp = +localStorage.getItem('tickerTimestamp ' + this.exchange);
+      if ((Date.now() - this.tickerTimestamp) > (15 * 60 * 1000)) {
+        console.log('%c ' + this.exchange + ' updating ticker ' + Math.round((Date.now() - this.tickerTimestamp) / 60000) + ' min', 'color:blue');
         return this.updateTicker();
       }
     }
@@ -60,38 +60,39 @@ export abstract class ApiPublicAbstract {
     if (this.allCoins) return Observable.of(this.allCoins);
     else {
       //if (fromCache) {
-        const prom = new Promise<any>((resolve, reject) => {
-          this.store.select(this.exchange + '-coins').then(str => {
-            if (!str) {
-              this.updateTicker().subscribe(resolve, reject);
-             /* this.downloadTicker().map((r) => {
+      const prom = new Promise<any>((resolve, reject) => {
+        this.store.select(this.exchange + '-coins').then(str => {
+          if (!str) {
+            this.updateTicker().subscribe(resolve, reject);
+            /* this.downloadTicker().map((r) => {
 
-                // console.log(this.exchange , r);
-                // console.log(this.allCoins);
-                this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
-                // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
-              }).toPromise()*/
-            } else {
-              // console.log(this.exchange);
-              this.allCoins = JSON.parse(str);
-              resolve(this.allCoins);
-            }
-          })
-        });
-        return Observable.fromPromise(prom);
+               // console.log(this.exchange , r);
+               // console.log(this.allCoins);
+               this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
+               // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
+             }).toPromise()*/
+          } else {
+            // console.log(this.exchange);
+            this.allCoins = JSON.parse(str);
+            resolve(this.allCoins);
+          }
+        })
+      });
+      return Observable.fromPromise(prom);
       //}
-/*
-      return this.downloadTicker().map((r) => {
-        console.log(this.exchange, this.allCoins);
-        this.tickerTimestamp = Date.now();
-        localStorage.setItem('tickerTimestamp ' + this.exchange, String(this.tickerTimestamp));
-          this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
-        // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
-        return this.allCoins
-      })*/
+      /*
+            return this.downloadTicker().map((r) => {
+              console.log(this.exchange, this.allCoins);
+              this.tickerTimestamp = Date.now();
+              localStorage.setItem('tickerTimestamp ' + this.exchange, String(this.tickerTimestamp));
+                this.store.upsert(this.exchange + '-coins', JSON.stringify(this.allCoins));
+              // localStorage.setItem(this.exchange + '-coins', JSON.stringify(this.allCoins));
+              return this.allCoins
+            })*/
     }
   }
 
+/*
   getMarketDay(base: string, coin: string, from: string, to: string): Observable<MarketDay> {
 
     return this.getAllCoins().switchMap(allCoins => {
@@ -103,6 +104,24 @@ export abstract class ApiPublicAbstract {
         return Observable.empty();
       }
     })
+
+  }*/
+
+  marketsTimestamp: number = 0;
+  getMarketsAvailable(): Promise<{ [market: string]: VOMarket }> {
+    if (this.markets && this.marketsTimestamp > (Date.now() - (1000 * 60 * 15))) return Promise.resolve(this.markets);
+    this.marketsTimestamp = Number(localStorage.getItem('marketsTimestamp-' + this.exchange));
+    if (this.marketsTimestamp > (Date.now() - (1000 * 60 * 5))) {
+      return this.store.select('markets-' + this.exchange)
+        .then(res => this.markets = res);
+    }
+   return this.downloadTicker().toPromise().then(res=>{
+     this.markets = res;
+     this.marketsTimestamp = Date.now();
+     localStorage.setItem('marketsTimestamp-' + this.exchange, ''+this.marketsTimestamp);
+     this.store.upsert('markets-' + this.exchange, this.markets);
+     return res;
+   })
 
   }
 

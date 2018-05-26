@@ -79,9 +79,9 @@ export class ApiHitbtc extends ApiBase  {
   privateCall(method:PrivateCalls, data:any):Observable<any>{
     if(!this.apiKey){
 
-      const cred = JSON.parse(this.storage.getItem(this.exchange + '-credentials', true));
-      this.apiKey = cred.apiKey;
-      this.password = cred.password;
+     // const cred = JSON.parse(this.storage.getItem(this.exchange + '-credentials', true));
+     // this.apiKey = cred.apiKey;
+     // this.password = cred.password;
 
     }
 

@@ -4,7 +4,6 @@ import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {ApiBase} from "../services/apis/api-base";
-import {APIBuySellService} from "../../services/buy-sell.service";
 import {Observable} from "rxjs/Observable";
 import {BooksService} from "../../services/books-service";
 import {MatSnackBar} from "@angular/material";

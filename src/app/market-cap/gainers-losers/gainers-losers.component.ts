@@ -145,12 +145,8 @@ export class GainersLosersComponent implements OnInit {
         break;
     }
 
-    const exchangeCoins = this.exchangeCoins || [];
-    if (exchangeCoins.length) {
-      allCoins = allCoins.filter(function (item) {
-        return exchangeCoins.indexOf(item.symbol) !== -1
-      });
-    }
+
+    allCoins = this.filterExhangeCoins(allCoins);
 
     // let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
     let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
@@ -178,8 +174,20 @@ export class GainersLosersComponent implements OnInit {
       const rankUpB = b.rankPrev - b.rank;
       if(rankUpA > rankUpB) return -1;
       else return 1
-    })
+    });
+
+    sorted = this.filterExhangeCoins(sorted);
     this.sorted = _.take(sorted, 50);
 
+  }
+
+  filterExhangeCoins(allCoins:VOMCAgregated[]): VOMCAgregated[]{
+    const exchangeCoins = this.exchangeCoins || [];
+    if (exchangeCoins.length) {
+      return allCoins.filter(function (item) {
+        return exchangeCoins.indexOf(item.symbol) !== -1
+      });
+    }
+    return allCoins;
   }
 }

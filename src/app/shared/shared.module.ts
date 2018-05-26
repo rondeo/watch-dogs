@@ -13,6 +13,7 @@ import { TradesHistoryComponent } from './trades-history/trades-history.componen
 import { LineChartComponent } from './line-chart/line-chart.component';
 
 import {UiModule} from '../ui/ui.module';
+import { LoginExchangeComponent } from './login-exchange/login-exchange.component';
 
 
 @NgModule({
@@ -34,8 +35,14 @@ import {UiModule} from '../ui/ui.module';
     LogoutFormComponent,
     LoginFormComponent,
     TradesHistoryComponent,
-    LineChartComponent
+    LineChartComponent,
+    LoginExchangeComponent
   ],
-  entryComponents: [DialogSimpleComponent, LoginFormComponent, LogoutFormComponent]
+  entryComponents: [
+    DialogSimpleComponent,
+    LoginFormComponent,
+    LogoutFormComponent,
+    LoginExchangeComponent
+  ]
 })
 export class SharedModule { }

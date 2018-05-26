@@ -10,6 +10,7 @@ import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {E} from '@angular/core/src/render3';
 import {VOMC, VOMCObj} from '../../apis/models';
+import {MyExchangeService} from '../services/my-exchange.service';
 
 @Component({
   selector: 'app-my-balnce',
@@ -39,7 +40,8 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private marketCap: MarketCapService
+    private marketCap: MarketCapService,
+    private myService: MyExchangeService
   ) {
   }
 
@@ -145,8 +147,9 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
 
    isBalancesLoading = false
 
-  onTransferClick(balance){
-
+  async onBalanceClick(balance: VOBalance){
+    const symbol = balance.symbol;
+    this.router.navigateByUrl('/my-exchange/buy-sell-coin/'+ this.exchange + '/'+ symbol)
     console.log(balance)
 
   }
@@ -177,9 +180,10 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
 
   onSymbolClick(balance){
 
+
   }
 
-  onShowChartClick(balance){
+  onPriceClick(balance){
 
   }
 

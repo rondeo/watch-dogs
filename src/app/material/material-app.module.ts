@@ -64,8 +64,6 @@ import {
     MatProgressSpinnerModule,
     MatChipsModule,
     MatSliderModule
-
-
   ]
 })
 

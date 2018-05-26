@@ -93,12 +93,12 @@ export class EmailServiceService {
       let ar = [];
 
       if(str){
-        try {
+       /* try {
           ar = JSON.parse(str);
 
         }catch (e){
           console.error(e);
-        }
+        }*/
 
 
       }

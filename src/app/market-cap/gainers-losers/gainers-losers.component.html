@@ -94,7 +94,7 @@
                 </td>
                 <td>
                     <small>
-                    <sub>{{item.rank}}</sub>
+                    <sub [ngClass]="(item.rankPrev - item.rank) >0?'dgreen':'dred'">{{item.rank}}</sub>
                     <sup>{{(item.rankPrev - item.rank)}}</sup>
                     </small>
                 </td>
