@@ -229,8 +229,21 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   }
 
   private call(post: any): Observable<any> {
-    return this.getCredentials().switchMap(cred => {
-      if (!cred) throw new Error('login reqired');
+    const cred = this.getCredentials();
+    if (!cred) {
+      const sub = new Subject();
+      this.userLogin$().subscribe(login => {
+        console.log(login);
+        if (login) {
+          this.call(post).subscribe(res => {
+            sub.next(res);
+            sub.complete();
+          });
+        }
+      })
+
+      return sub.asObservable();
+    }
 
       post.nonce = Date.now();
 
@@ -248,7 +261,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         return res
       })
 
-    });
+
 
   }
 

@@ -4,10 +4,17 @@ import {StorageService} from './app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import {reject} from 'q';
 
+export enum LoginStatus{
+  APPLICATION_LOGIN_REQIRED,
+  APPLICATION_LOGGED_IN,
+  EXCHANGE_LOGIN_REQIRED,
+  EXCHANGE_LOGGED_IN
+}
+
 
 export class ExchangeLogin {
   exchange: string;
-  status: string;
+  status: LoginStatus;
 }
 
 @Injectable()
@@ -36,7 +43,7 @@ export class UserLoginService {
       console.warn(e);
       this.exchangeLoginSub.next({
         exchange: exchange,
-        status: 'application-login-ewquired'
+        status: LoginStatus.APPLICATION_LOGGED_IN
       })
     }
 
@@ -47,20 +54,27 @@ export class UserLoginService {
         this.promiseReject = reject;
         this.exchangeLoginSub.next({
           exchange: exchange,
-          status: 'no-credetials'
+          status: LoginStatus.EXCHANGE_LOGIN_REQIRED
         })
       })
     }
   }
 
-  onLoginError(exchange: string, reason: string) {
-
+  onLoginError(exchange: string, reason: LoginStatus) {
+    this.exchangeLoginSub.next({
+      exchange: exchange,
+      status: reason
+    })
   }
 
   async setExchangeCredetials(exchange: string, credentials: string) {
     await this.storage.setItem(exchange + '-credentials', credentials, true)
     if (exchange === this.exchange) this.promiseResolve(credentials);
     this.exchange = null;
+    this.exchangeLoginSub.next({
+      exchange:exchange,
+      status: LoginStatus.EXCHANGE_LOGGED_IN
+    })
     return true
 
   }
@@ -74,7 +88,7 @@ export class UserLoginService {
         if(credentials) resolve(true);
         else this.exchangeLoginSub.next({
           exchange: exchange,
-          status: 'no-credetials'
+          status: LoginStatus.EXCHANGE_LOGIN_REQIRED
         })
       } else resolve(true);
 

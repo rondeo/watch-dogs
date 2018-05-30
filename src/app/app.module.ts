@@ -61,6 +61,9 @@ import {TraderModule} from "./trader/trader.module";
 import {AllInOneModule} from "./all-in-one/all-in-one.module";
 import {UiModule} from "./ui/ui.module";
 import {UserLoginService} from './services/user-login.service';
+import {ShowExternalPageService} from './services/show-external-page.service';
+
+
 
 
 //import {WebsocketService} from "./shared/websocket-service";
@@ -107,7 +110,8 @@ declare const Buffer: any;
 
     StorageService,
     CompareService,
-    UserLoginService
+    UserLoginService,
+    ShowExternalPageService
     // WebsocketService
 
     // provideAuth({

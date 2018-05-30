@@ -1,5 +1,5 @@
 <div>
-    <span class="mat-headline">{{coin}} {{exchange}} {{market}}</span>
+    <span class="mat-headline">{{coin}} {{exchange}} <span class="btn" (click)="onExchangeMarketClick()">{{market}}</span></span>
 
     <section>
         <app-coin-day [coin]="coin"></app-coin-day>

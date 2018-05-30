@@ -3,7 +3,7 @@ import {ConnectorApiService} from '../services/connector-api.service';
 import {VOBalance, VOTransfer} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSelectChange, MatSnackBar} from '@angular/material';
 import {ApiBase} from '../services/apis/api-base';
 import * as _ from 'lodash';
 import {ApisPrivateService} from '../../apis/apis-private.service';
@@ -11,14 +11,17 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {E} from '@angular/core/src/render3';
 import {VOMC, VOMCObj} from '../../apis/models';
 import {MyExchangeService} from '../services/my-exchange.service';
+import {ShowExternalPageService} from '../../services/show-external-page.service';
 
 @Component({
   selector: 'app-my-balnce',
-  templateUrl: './my-balnce.component.html',
-  styleUrls: ['./my-balnce.component.css']
+  templateUrl: './my-exchange-balnces.component.html',
+  styleUrls: ['./my-exchange-balnces.component.css']
 })
-export class MyBalnceComponent implements OnInit, OnDestroy {
+export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
+
+  exchangesPrivate: string[];
 
   balancesAr: VOBalance[];
   balancesAll: VOBalance[];
@@ -28,20 +31,20 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
   exchange: string;
 
   isPendingOrders: boolean;
-  MC:VOMCObj;
+  MC: VOMCObj;
 
   currentConnector: ApiBase;
 
   constructor(
-    //  private apiService:ConnectorApiService,
-    private apisPrivate: ApisPrivateService,
+    private privateService: MyExchangeService,
     private apisPublic: ApisPublicService,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private marketCap: MarketCapService,
-    private myService: MyExchangeService
+    private myService: MyExchangeService,
+    private externalPage: ShowExternalPageService
   ) {
   }
 
@@ -55,7 +58,13 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
   private sub2;
 
   ngOnInit() {
+    this.exchangesPrivate = this.privateService.getMyPivateExchanges()
     this.route.params.subscribe(params => {
+
+      if(this.exchange !== params.exchange) {
+        this.balancesAll = [];
+        this.balancesAr = [];
+      }
       this.exchange = params.exchange;
       this.dowloadAllBalances();
     })
@@ -86,16 +95,18 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
 
   }
 
+
+
   async dowloadAllBalances() {
-    this.isBalancesLoading = true
-    const api = this.apisPrivate.getExchangeApi(this.exchange);
-    if(!api) throw new Error(' no api for ' + this.exchange);
+    this.isBalancesLoading = true;
     this.MC = await this.marketCap.getCoinsObs().toPromise();
-    this.balancesAll  = await  api.downloadBalances().toPromise();
+    console.log(this.exchange);
+    this.balancesAll = await  this.privateService.getBalancesAll(this.exchange);
     const MC = this.MC;
+    console.log(this.balancesAll);
     this.balancesAll.forEach(function (item) {
       const coinMC = MC[item.symbol];
-      if(coinMC){
+      if (coinMC) {
         item.id = coinMC.id;
         item.balanceUS = +(item.balance * coinMC.price_usd).toFixed(2);
         item.priceUS = coinMC.price_usd;
@@ -145,11 +156,11 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
   }
 
 
-   isBalancesLoading = false
+  isBalancesLoading = false
 
-  async onBalanceClick(balance: VOBalance){
+  async onBalanceClick(balance: VOBalance) {
     const symbol = balance.symbol;
-    this.router.navigateByUrl('/my-exchange/buy-sell-coin/'+ this.exchange + '/'+ symbol)
+    this.router.navigateByUrl('/my-exchange/buy-sell-coin/' + this.exchange + '/' + symbol)
     console.log(balance)
 
   }
@@ -163,7 +174,6 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
 
   onSortClick(criteria: string): void {
     console.log(criteria);
-
     if (this.sortBy === criteria) {
       this.asc_desc = (this.asc_desc === 'asc') ? 'desc' : 'asc';
     }
@@ -178,13 +188,18 @@ export class MyBalnceComponent implements OnInit, OnDestroy {
 
   }
 
-  onSymbolClick(balance){
-
-
+  onSymbolClick(balance) {
+    this.router.navigateByUrl('/trader/analyze/' + balance.symbol + '/' + this.exchange);
   }
 
-  onPriceClick(balance){
+  onPriceClick(balance: VOBalance) {
 
+    this.externalPage.showCoinOnMarketCap(balance.symbol);
+  }
+
+  onEchangeChanged(evt: MatSelectChange){
+    //console.log(exch);
+    this.router.navigate(['../'+evt.value], {relativeTo: this.route})
   }
 
 }

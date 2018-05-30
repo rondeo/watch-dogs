@@ -22,30 +22,30 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   }
 
 
-  getOrder(orderId, base:string, coin:string): Observable<VOOrder> {
-    const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}',base).replace('{{coin}}', coin);
+  getOrder(orderId, base: string, coin: string): Observable<VOOrder> {
+    const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.call(url, null)
-      .map((res:any[])=>{
+      .map((res: any[]) => {
         console.log(res);
 
         return res.map(function (item) {
-          return{
-            isOpen:true,
-            id:item.id,
-            uuid:item.clientOrderId,
-            action:item.side.toUpperCase(),
-            rate:+item.price,
-            amountCoin:+item.quantity,
-            amountBase:+item.price * +item.quantity,
-            date:item.createdAt,
-            timestamp:new Date(item.createdAt).getTime(),
-            status:item.status
+          return {
+            isOpen: true,
+            id: item.id,
+            uuid: item.clientOrderId,
+            action: item.side.toUpperCase(),
+            rate: +item.price,
+            amountCoin: +item.quantity,
+            amountBase: +item.price * +item.quantity,
+            date: item.createdAt,
+            timestamp: new Date(item.createdAt).getTime(),
+            status: item.status
           }
         }).find(function (item) {
           return item.uuid === orderId;
         }) || {
-          uuid:orderId,
+          uuid: orderId,
           isOpen: false
         };
       });
@@ -164,20 +164,32 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       });
   }
 
-  private call(url: string, post: any): Observable<any> {
+  private call(URL: string, post: any): Observable<any> {
 
-    return this.getCredentials().switchMap(cred => {
-      if (!cred) throw new Error('login reqired');
+    const cred = this.getCredentials();
+    console.log(cred);
+    if (!cred) {
+      const sub = new Subject();
+      this.userLogin$().subscribe(login => {
+        console.log(login);
+        if (login) {
+          this.call(URL, post).subscribe(res => {
+            sub.next(res);
+            sub.complete();
+          });
+        }
+      })
 
-      let headers: HttpHeaders = new HttpHeaders().set('Authorization', 'Basic ' + btoa(cred.apiKey + ':' + cred.password));
+      return sub.asObservable();
+    }
+    let headers: HttpHeaders = new HttpHeaders().set('Authorization', 'Basic ' + btoa(cred.apiKey + ':' + cred.password));
 
-      if (post) {
-        return this.http.post(url, post, {headers})
-      } else {
-        return this.http.get(url)
-      }
+    if (post) {
+      return this.http.post(URL, post, {headers});
+    } else {
+      return this.http.get(URL, {headers});
+    }
 
-    });
 
   }
 }

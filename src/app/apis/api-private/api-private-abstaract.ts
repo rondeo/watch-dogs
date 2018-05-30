@@ -1,20 +1,20 @@
-import {VOBalance, VOOrder} from "../../models/app-models";
-import {Observable} from "rxjs/Observable";
-import {StorageService} from "../../services/app-storage.service";
-import {reject} from "q";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Subject} from "rxjs/Subject";
-import {UtilsBooks} from "../../com/utils-books";
-import {WatchDog} from "../../my-bot/services/watch-dog";
-import {UserLoginService} from '../../services/user-login.service';
+import {VOBalance, VOOrder} from '../../models/app-models';
+import {Observable} from 'rxjs/Observable';
+import {StorageService} from '../../services/app-storage.service';
+import {reject} from 'q';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Subject} from 'rxjs/Subject';
+import {UtilsBooks} from '../../com/utils-books';
+import {WatchDog} from '../../my-bot/services/watch-dog';
+import {LoginStatus, UserLoginService} from '../../services/user-login.service';
 
 export abstract class ApiPrivateAbstaract {
 
   abstract exchange: string;
 
 
+  apiPublic: any;
 
-  apiPublic:any;
   /* credetialsSub:BehaviorSubject<{apiKey:string, password: string}> = new BehaviorSubject(null);
    credentials$(){
 
@@ -22,20 +22,28 @@ export abstract class ApiPrivateAbstaract {
    }
 
    */
+
+
+  loginSub:Subject<boolean> = new Subject()
+  userLogin$() {
+    return  this.loginSub.asObservable();  // TOD dipatch  call after user login this.userLogin.exchangeLogin$();
+  }
+
   private credentials: { apiKey: string, password: string };
+
   constructor(private userLogin: UserLoginService) {
 
   }
 
-  sellCoin(sellCoin:WatchDog):Observable<WatchDog>{
-    if(!sellCoin.coinUS) throw new Error(' need coin price')
-    return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
+  sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
+    if (!sellCoin.coinUS) throw new Error(' need coin price')
+    return this.downloadBalance(sellCoin.coin).switchMap(balance => {
       // console.log(balance);
-      if(balance.balance * sellCoin.coinUS < 10) {
+      if (balance.balance * sellCoin.coinUS < 10) {
         sellCoin.balanceCoin = 0;
-      }else sellCoin.balanceCoin = balance.balance;
+      } else sellCoin.balanceCoin = balance.balance;
 
-      if(!sellCoin.balanceCoin) {
+      if (!sellCoin.balanceCoin) {
         sellCoin.balanceCoin = 0;
         return Observable.of(sellCoin);
       }
@@ -45,19 +53,18 @@ export abstract class ApiPrivateAbstaract {
 
         let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balanceCoin);
         const myCoinprice = sellCoin.baseUS * rate;
-        sellCoin.booksDelta = +(100*(myCoinprice - sellCoin.coinUS)/sellCoin.coinUS).toPrecision(2);
-        rate = +(rate - (rate* 0.01)).toFixed(8);
-        return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order =>{
+        sellCoin.booksDelta = +(100 * (myCoinprice - sellCoin.coinUS) / sellCoin.coinUS).toPrecision(2);
+        rate = +(rate - (rate * 0.01)).toFixed(8);
+        return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order => {
           console.log(order);
-          if(order.uuid){
+          if (order.uuid) {
             sellCoin.uuid = order.uuid;
-            return this.getOrder(order.uuid, sellCoin.base, sellCoin.coin).switchMap(order =>{
+            return this.getOrder(order.uuid, sellCoin.base, sellCoin.coin).switchMap(order => {
 
               return Observable.of(sellCoin)
             })
 
-          }else throw new Error(order.message)
-
+          } else throw new Error(order.message)
 
 
         })
@@ -70,31 +77,32 @@ export abstract class ApiPrivateAbstaract {
 
   }
 
-  abstract cancelOrder(orderId):Observable<VOOrder>;
-  abstract getOrder(orderId, base:string, coin:string):Observable<VOOrder>;
+  abstract cancelOrder(orderId, base?: string, coin?: string): Observable<VOOrder>;
+
+  abstract getOrder(orderId, base: string, coin: string): Observable<VOOrder>;
+
   abstract downloadBalance(symbol: string): Observable<VOBalance>;
+
   abstract downloadBalances(): Observable<VOBalance[]>;
+
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
+
   abstract buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
 
 
-  protected getCredentials(): Observable<{ apiKey: string, password: string }> {
-    if (!!this.credentials) return Observable.of(this.credentials);
-    let credentials = null;
-    const sub = new Subject<{ apiKey: string, password: string }>();
-
-    this.userLogin.getExchangeCredentials(this.exchange).then(str=>{
-      console.warn(str);
+  protected getCredentials(): { apiKey: string, password: string } {
+    if (!!this.credentials) return this.credentials;
+    this.userLogin.getExchangeCredentials(this.exchange).then(str => {
       if (str) {
         let cred: { apiKey: string, password: string } = JSON.parse(str);
         if (cred && cred.apiKey && cred.password) {
           this.credentials = cred;
-        }
-      }
-      console.log(this.credentials);
-      sub.next(this.credentials);
+          this.loginSub.next(true);
+
+        } else this.userLogin.onLoginError(this.exchange, LoginStatus.EXCHANGE_LOGIN_REQIRED);
+      } else this.userLogin.onLoginError(this.exchange, LoginStatus.EXCHANGE_LOGIN_REQIRED);
     });
 
-    return sub
+    return null
   }
 }

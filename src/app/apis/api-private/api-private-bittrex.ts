@@ -176,23 +176,34 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     });
   }
 
-  private call(uri: string, post: any): Observable<any> {
+  private call(URL: string, post: any): Observable<any> {
 
-    return this.getCredentials().switchMap(cred => {
-      if (!cred) throw new Error('login reqired');
-      post.apikey = cred.apiKey;
-      post.nonce = Math.ceil(Date.now() / 1000);
-      let load = Object.keys(post).map(function (item) {
-        return item + '=' + this.post[item];
-      }, {post: post}).join('&');
+    const cred = this.getCredentials();
+    if (!cred) {
+      const sub = new Subject();
+      this.userLogin$().subscribe(login => {
+        console.log(login);
+        if (login) {
+          this.call(URL, post).subscribe(res => {
+            sub.next(res);
+            sub.complete();
+          });
+        }
+      })
 
-      uri += '?' + load;
-      console.log(uri);
-      let signed = this.hash_hmac(uri, cred.password);
-      let url = '/api/bittrex/private';
-      return this.http.post(url, {uri: uri, signed: signed});
-    });
+      return sub.asObservable();
+    }
+    post.apikey = cred.apiKey;
+    post.nonce = Math.ceil(Date.now() / 1000);
+    let load = Object.keys(post).map(function (item) {
+      return item + '=' + this.post[item];
+    }, {post: post}).join('&');
 
+    URL += '?' + load;
+    console.log(URL);
+    let signed = this.hash_hmac(URL, cred.password);
+    let url = '/api/bittrex/private';
+    return this.http.post(url, {uri: URL, signed: signed});
   }
 
   hash_hmac(text, password) {

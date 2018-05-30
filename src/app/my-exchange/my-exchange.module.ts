@@ -10,12 +10,10 @@ import {RouterModule, Routes} from "@angular/router";
 
 
 import { MyMainComponent } from './my-main/my-main.component';
-import { MyBalnceComponent } from './my-balnce/my-balnce.component';
 import { MyMarketsComponent } from './my-markets/my-markets.component';
 import {ConnectorApiService} from "./services/connector-api.service";
 import { MyGainersLosersComponent } from './my-gainers-losers/my-gainers-losers.component';
 import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
-
 import {MarketSelectComponent} from "./market-select/market-select.component";
 import { MyBooksComponent } from './my-books/my-books.component';
 import { MarketHistoryLineComponent } from './market-history-line/market-history-line.component';
@@ -36,6 +34,7 @@ import {UiModule} from '../ui/ui.module';
 import {MyExchangeService} from './services/my-exchange.service';
 import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
 import {WidgetsModule} from '../widgets/widgets.module';
+import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.component';
 
 
 const routes: Routes = [
@@ -43,7 +42,7 @@ const routes: Routes = [
     path: 'my-exchange', component: MyMainComponent,
     children: [
       {path: '', redirectTo: 'balances/bittrex', pathMatch: 'full'},
-      {path: 'balances/:exchange', component: MyBalnceComponent},
+      {path: 'balances/:exchange', component: MyExchangeBalncesComponent},
       {path: 'markets/:exchange', component: MyMarketsComponent},
       {path: 'gainers-losers', component:  MyGainersLosersComponent},
      // {path: 'orders-history', component:  MyOrdersHistoryComponent},
@@ -85,7 +84,7 @@ const routes: Routes = [
   ],
   declarations: [
     MyMainComponent,
-    MyBalnceComponent,
+    MyExchangeBalncesComponent,
     MyMarketsComponent,
     MyGainersLosersComponent,
     MyBuySellComponent,

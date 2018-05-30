@@ -25,6 +25,11 @@ export class MyExchangeService {
   ) {
   }
 
+  getMyPivateExchanges(): string[] {
+    let my: string[] = JSON.parse(localStorage.getItem('my-exchanges'));
+    if (!my) my = this.apisPrivate.getAllAvailable();
+    return my
+  }
 
   async getBooks(exchange: string, base: string, coin: string) {
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(exchange);
@@ -46,25 +51,28 @@ export class MyExchangeService {
   async getMarketsForCoin(exchange: string, coin: string): Promise<VOMarket[]> {
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(exchange);
     const marketsAvailable = await api.getMarketsAvailable();
+
     if (!marketsAvailable) throw new Error(' const marketsAvailable = await api.getMarketsAvailable() ');
+    if(coin ==='USDT') return _.filter(Object.values(marketsAvailable), {base: coin});
     return _.filter(Object.values(marketsAvailable), {coin: coin});
 
   }
 
-  async getBalances(exchange, symbols: string[], isRefresh = false): Promise<VOBalance[]> {
-    if (!isRefresh && this.balancesAllExchanges[exchange]) return Promise.resolve(MyExchangeService.filterBalances(symbols, this.balancesAllExchanges[exchange]));
+  async getBalancesAll(exchange: string, isRefresh = false): Promise<VOBalance[]> {
+    if (!isRefresh && this.balancesAllExchanges[exchange]) return Promise.resolve(this.balancesAllExchanges[exchange]);
     const api = this.apisPrivate.getExchangeApi(exchange);
     if (!api) throw new Error(' no api for ' + exchange);
     return new Promise<VOBalance[]>((resolve, reject) => {
       api.downloadBalances().subscribe(balances => {
         this.balancesAllExchanges[exchange] = balances
-        resolve(MyExchangeService.filterBalances(symbols, this.balancesAllExchanges[exchange]))
+        resolve(balances)
       }, reject);
     })
-    // const balances =   await  api.downloadBalances().toPromise();
-    // console.log(' balances ' ,balances);
-    //
-    //return
+
+  }
+
+  async getBalances(exchange, symbols: string[], isRefresh = false): Promise<VOBalance[]> {
+    return this.getBalancesAll(exchange, isRefresh).then(balances => MyExchangeService.filterBalances(symbols, balances));
   }
 
 }

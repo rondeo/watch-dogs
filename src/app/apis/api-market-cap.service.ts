@@ -86,6 +86,7 @@ export class ApiMarketCapService {
         const out = {}
         for (let str in res) out[str] = Parsers.mapAgrigated(res[str], str);
 
+        out['USDT'].price_usd = 1;
         this.agrigatedSub.next(out);
         this.agrigatedData = out;
         setTimeout(()=>{

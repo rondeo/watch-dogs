@@ -9,7 +9,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {StorageService} from './services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
-import {ExchangeLogin, UserLoginService} from './services/user-login.service';
+import {ExchangeLogin, LoginStatus, UserLoginService} from './services/user-login.service';
 import {LoginExchangeComponent} from './shared/login-exchange/login-exchange.component';
 
 @Component({
@@ -106,9 +106,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.userLogin.exchangeLogin$().subscribe(exchangeLogin => {
-      console.log(exchangeLogin);
-      if (exchangeLogin.status === 'application-login-ewquired') this.onApplicationLogin(exchangeLogin);
-      else if (exchangeLogin.status === 'no-credetials') this.onExchangeLogin(exchangeLogin);
+     //  console.log(exchangeLogin);
+      if (exchangeLogin.status === LoginStatus.APPLICATION_LOGIN_REQIRED) this.onApplicationLogin(exchangeLogin);
+      else if (exchangeLogin.status === LoginStatus.EXCHANGE_LOGIN_REQIRED) this.onExchangeLogin(exchangeLogin);
 
     })
     this.auth.isOnline$().subscribe(res => {

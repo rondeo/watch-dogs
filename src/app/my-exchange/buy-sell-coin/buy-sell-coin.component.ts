@@ -162,7 +162,8 @@ export class BuySellCoinComponent implements OnInit {
     const action = 'BUY';
 
     const priceBaseUS = this.MC[this.base].price_usd;
-    const rate = +(this.userPriceUS / priceBaseUS).toFixed(8);
+
+    const rate = +(this.userPriceUS / priceBaseUS).toPrecision(5);
 
     let amountCoin = +(this.amountUS / priceBaseUS / rate).toFixed(8);
 
@@ -184,7 +185,7 @@ export class BuySellCoinComponent implements OnInit {
   onSellClick() {
     const action = 'SELL';
     const priceBaseUS = this.MC[this.base].price_usd;
-    const rate = +(this.userPriceUS / priceBaseUS).toFixed(8);
+    const rate = +(this.userPriceUS / priceBaseUS).toPrecision(5)
 
     let amountCoin = +(this.amountUS / priceBaseUS / rate).toFixed(8);
 

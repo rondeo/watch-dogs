@@ -1,4 +1,14 @@
 <div>
+
+    <mat-form-field class="w8" >
+        <mat-select [ngModel] = "exchange"  placeholder="Select Exchange" (change)="onEchangeChanged($event)">
+            <mat-option *ngFor="let exch of exchangesPrivate" [value]="exch">
+                {{exch}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
     <div class="mat-subheading-1">My {{exchange}} <span class="mat-title"> ${{total}}</span></div>
     <section>
         <mat-checkbox (change)="onShowAll($event)">Show All</mat-checkbox>

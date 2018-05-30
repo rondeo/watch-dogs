@@ -2,6 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
+import {ShowExternalPageService} from '../../services/show-external-page.service';
+
 
 @Component({
   selector: 'app-analyze-coin',
@@ -21,7 +23,8 @@ export class AnalyzeCoinComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
-    private marketCap: MarketCapService
+    private marketCap: MarketCapService,
+    private showExtranPage: ShowExternalPageService
   ) {
   }
 
@@ -60,6 +63,12 @@ export class AnalyzeCoinComponent implements OnInit {
       this.amoubtView.nativeElement.value = am
     }
     this.amountUS = am;
+  }
+
+
+  onExchangeMarketClick(){
+    const ar = this.market.split('_')
+    this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
   }
 
 }
