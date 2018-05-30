@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "start": "ng serve --port 4202 --proxy-config proxy.conf.json --live-reload false",
+    "start": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload false",
     "live-reload": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload true",
     "verify": "ng eject --target=production",
     "prod": "ng build --prod",
