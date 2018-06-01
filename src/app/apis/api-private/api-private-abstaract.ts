@@ -5,8 +5,8 @@ import {reject} from 'q';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 import {UtilsBooks} from '../../com/utils-books';
-import {WatchDog} from '../../my-bot/services/watch-dog';
 import {LoginStatus, UserLoginService} from '../../services/user-login.service';
+import {WatchDog} from '../../models/watch-dog';
 
 export abstract class ApiPrivateAbstaract {
 

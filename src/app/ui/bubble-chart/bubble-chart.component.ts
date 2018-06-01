@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 
 import * as _ from 'lodash';
-import {VOBubble} from "../../services/utils-order";
+import {VOBubble} from "../../com/utils-order";
 
 @Component({
   selector: 'app-bubble-chart',

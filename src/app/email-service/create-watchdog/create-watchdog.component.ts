@@ -7,7 +7,8 @@ import {MatDialog} from '@angular/material';
 import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {WatchDog} from "../../my-bot/services/watch-dog";
+import {WatchDog} from '../../models/watch-dog';
+
 
 
 @Component({

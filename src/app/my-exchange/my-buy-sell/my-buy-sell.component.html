@@ -1,5 +1,5 @@
 <div>
-    <app-market-select></app-market-select>
+    <!--<app-market-select></app-market-select>
     {{marketInit.base}}
     <span class="large"><sup>$</sup>{{balanceBaseUS}}</span>
     &nbsp;
@@ -71,20 +71,20 @@
                         [newOrder]="newOrder"
                         (fillOrder)="onFillOrder($event)"
                 ></my-orders-history>
-               <!-- <app-trading-history
+               &lt;!&ndash; <app-trading-history
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
                         (completeOrder)="onOrderComplete($event)"
-                ></app-trading-history>-->
+                ></app-trading-history>&ndash;&gt;
             </div>
         </div>
 
     </section>
     <hr/>
-    <!--<section>
+    &lt;!&ndash;<section>
         <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'BTC'" [priceBaseUS]="1"></app-trades-history>
         <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'LTC'" [priceBaseUS]="1"></app-trades-history>
-    </section>-->
+    </section>&ndash;&gt;
 
 
 
@@ -100,13 +100,13 @@
         <strong class="large">{{(analytics.speed*60).toPrecision(2)}}/min</strong>
         &nbsp;&nbsp;&nbsp;
         <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
-       <!-- <div class="inline-block">
+       &lt;!&ndash; <div class="inline-block">
          &lt;!&ndash;   <app-refresh-button
                     [durationMin]="durationInMin"
                     (onRefresh)="onRfreshHistory($event)"
 
             ></app-refresh-button>&ndash;&gt;
-        </div>-->
+        </div>&ndash;&gt;
     </section>
 
     <br/>
@@ -136,7 +136,7 @@
 
 
     </section>
-
+-->
 
 
 </div>

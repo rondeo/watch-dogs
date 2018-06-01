@@ -7,6 +7,7 @@ import {MarketCapService} from "../../market-cap/services/market-cap.service";
 import {StorageService} from "../../services/app-storage.service";
 import * as moment from "moment";
 import * as _ from 'lodash';
+import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-buy-sell.service';
 
 @Component({
   selector: 'app-watchdogs-list',
@@ -22,17 +23,18 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     private auth:AuthHttpService,
     private markrtCap:MarketCapService,
     private router:Router,
-    private storage:StorageService
+    private wdService: AppBuySellService
   ) { }
 
 
   ngOnInit() {
-    this.initAsync();
+    this.wdService.watchdogsData$().subscribe(wds =>{
+      if(!wds) return;
+      this.watchDogs = wds
+    })
   }
 
-  async initAsync(){
-    this.watchDogs = await this.storage.getWatchDogs();
-  }
+
 
 
   ngOnDestroy(){
@@ -53,18 +55,10 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   }
 
-
   async onDeleteClick(dog:VOWatchdog){
     console.log(dog);
     if(!confirm('You want to delete Watchdog '+ dog.name +'?')) return;
-    let allDogs = await this.storage.getWatchDogs();
-
-    allDogs = allDogs.filter(function (item) {
-      return item.id && item.id !== dog.id;
-    })
-
-   await this.storage.saveWatchDogs(allDogs);
-   this.watchDogs = await this.storage.getWatchDogs();
+    this.wdService.deleteWatchDog(dog);
   }
 
   onNameClick(dog:VOWatchdog){

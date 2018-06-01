@@ -17,6 +17,7 @@ import {SharedModule} from '../shared/shared.module';
 import { WatchdogsListComponent } from './watchdogs-list/watchdogs-list.component';
 import { WatchdogEditComponent } from './watchdog-edit/watchdog-edit.component';
 import { AddScriptComponent } from './add-script/add-script.component';
+import {AppServicesModule} from '../app-services/app-services.module';
 
 
 
@@ -42,6 +43,7 @@ const routes: Routes = [
     RouterModule,
     MaterialAppModule,
     SharedModule,
+    AppServicesModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

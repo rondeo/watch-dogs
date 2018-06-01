@@ -10,8 +10,9 @@ import {ApiPublicBittrex} from '../api-public/api-public-bittrex';
 
 import {UtilsBooks} from '../../com/utils-books';
 import {Subject} from 'rxjs/Subject';
-import {WatchDog} from '../../my-bot/services/watch-dog';
+
 import {UserLoginService} from '../../services/user-login.service';
+import {WatchDog} from '../../models/watch-dog';
 
 export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
@@ -57,11 +58,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
           } else throw new Error(order.message)
 
         })
-
-
       })
-
-
     })
 
   }

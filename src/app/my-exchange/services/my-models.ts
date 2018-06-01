@@ -1,4 +1,4 @@
-import {VOBubble} from "../../services/utils-order";
+import {VOBubble} from "../../com/utils-order";
 import {VOMarketCap, VOOrder} from "../../models/app-models";
 
 /*

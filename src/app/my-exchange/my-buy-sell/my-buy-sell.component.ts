@@ -5,11 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {ConnectorApiService} from "../services/connector-api.service";
 import {ApiBase} from "../services/apis/api-base";
 import {Observable} from "rxjs/Observable";
-import {BooksService} from "../../services/books-service";
 import {MatSnackBar} from "@angular/material";
-import {MarketHistoryData} from "../market-history-line/market-history-line.component";
-import {MyBooksComponent} from "../my-books/my-books.component";
-import {UtilsOrder} from "../../services/utils-order";
+import {UtilsOrder} from "../../com/utils-order";
 import {placeOrder} from "./place-order";
 
 @Component({
@@ -21,9 +18,9 @@ import {placeOrder} from "./place-order";
 export class MyBuySellComponent implements OnInit {
 
 
-  @ViewChild(MyBooksComponent)
+ /* @ViewChild(MyBooksComponent)
     private booksComponent:MyBooksComponent;
-
+*/
 
 
   analytics: {
@@ -135,20 +132,20 @@ export class MyBuySellComponent implements OnInit {
 
   onBuyClick(){
     let action = 'BUY';
-    let rate = this.booksComponent.rateToBuyUS/this.marketInit.priceBaseUS
+    /*let rate = this.booksComponent.rateToBuyUS/this.marketInit.priceBaseUS
     let amountBase:number = +this.amountUS/this.marketInit.priceBaseUS;
     if(amountBase > this.balanceBase) amountBase = this.balanceBase - (this.balanceBase* 0.0025);
     let amountCoin =  amountBase/rate;
-    this.processAction(action, amountCoin, rate);
+    this.processAction(action, amountCoin, rate);*/
   }
 
   onSellClick(){
     let action = 'SELL';
-    let rate = this.booksComponent.rateToSellUS/this.marketInit.priceBaseUS;
+    /*let rate = this.booksComponent.rateToSellUS/this.marketInit.priceBaseUS;
     let amountCoin =  +this.amountUS/this.marketInit.priceBaseUS/rate;
     if(amountCoin > this.balanceCoin) amountCoin  = this.balanceCoin - (this.balanceCoin * 0.0025);
 
-    this.processAction(action, amountCoin, rate);
+    this.processAction(action, amountCoin, rate);*/
   }
 
   newOrder:VOOrder;

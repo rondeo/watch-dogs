@@ -1,6 +1,5 @@
 import {Observable} from 'rxjs/Observable';
 import {AuthHttpService} from '../../../../services/auth-http.service';
-import {APIBooksService} from "../../../../services/books-service";
 import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook} from "../../../../models/app-models";
 import {StorageService} from "../../../../services/app-storage.service";
 

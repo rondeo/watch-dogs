@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {VOOrder} from '../../models/app-models';
-import {UtilsOrder} from '../../services/utils-order';
+import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCAgregated} from '../../apis/models';
 import {ApisPublicService} from '../../apis/apis-public.service';

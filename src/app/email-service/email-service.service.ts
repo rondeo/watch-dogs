@@ -10,7 +10,8 @@ import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {ApiMarketCapService} from "../apis/api-market-cap.service";
-import {WatchDog} from "../my-bot/services/watch-dog";
+import {WatchDog} from '../models/watch-dog';
+
 
 
 

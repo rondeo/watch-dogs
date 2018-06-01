@@ -6,7 +6,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {runDogScript} from '../run-watchdogs/script-analytics';
 import {VOMarketCap, VOWatchdog} from '../../models/app-models';
-import {WatchDog} from "../../my-bot/services/watch-dog";
+import {WatchDog} from '../../models/watch-dog';
 
 
 @Component({

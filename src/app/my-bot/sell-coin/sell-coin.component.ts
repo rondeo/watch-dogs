@@ -1,18 +1,17 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {WatchDog} from "../services/watch-dog";
+
 import {forkJoin} from "rxjs/observable/forkJoin";
-import {BotSellCoinService} from "../services/bot-sell-coin.service";
 import {MongoService} from "../../apis/mongo.service";
 import {ApisPrivateService} from "../../apis/apis-private.service";
 import {ActivatedRoute} from "@angular/router";
 import {StorageService} from "../../services/app-storage.service";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {UsdtBtcService} from "../services/usdt-btc.service";
 import {VOGraphs} from "../../shared/line-chart/line-chart.component";
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {GRAPHS} from "../../com/grpahs";
 import {VOMarketCap} from "../../models/app-models";
+import {WatchDog} from '../../models/watch-dog';
 
 @Component({
   selector: 'app-sell-coin',

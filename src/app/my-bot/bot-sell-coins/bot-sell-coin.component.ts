@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ActivatedRoute} from "@angular/router";
 import {VOMarketCap, VOMarketCapExt, VOWatchdog} from "../../models/app-models";
-import {BotSellCoinService} from "../services/bot-sell-coin.service";
 import {RunScript} from "../../com/run-script";
 import {StorageService} from "../../services/app-storage.service";
 import * as moment from 'moment';
@@ -13,11 +12,11 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/mergeMap';
 
 import {forkJoin} from "rxjs/observable/forkJoin";
-import {UsdtBtcService} from "../services/usdt-btc.service";
-import {WatchDog} from "../services/watch-dog";
+
 import {MongoService} from "../../apis/mongo.service";
 import {GRAPHS} from "../../com/grpahs";
 import {VOGraphs} from "../../shared/line-chart/line-chart.component";
+import {WatchDog} from '../../models/watch-dog';
 
 
 @Component({
@@ -34,11 +33,11 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
   constructor(
     private marketcap: ApiMarketCapService,
-    private sellService: BotSellCoinService,
+    // private sellService: BotSellCoinService,
     private apisPrivate: ApisPrivateService,
     private route: ActivatedRoute,
     private storage: StorageService,
-    private usdtBtc: UsdtBtcService,
+    // private usdtBtc: UsdtBtcService,
     private mongo: MongoService
   ) {
   }
@@ -50,12 +49,12 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.sellService.soldCoin$().subscribe(sellCoin => {
+   /* this.sellService.soldCoin$().subscribe(sellCoin => {
       //this.storage
       console.log(' SOLD coin ', sellCoin);
 
       //this.storage.setSoldCoin(sellCoin);
-    })
+    })*/
     this.initAsync();
     ;
     this.startCheckMC();

@@ -8,8 +8,7 @@ import {runDogScript} from './script-analytics';
 import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {Router} from '@angular/router';
-import {WatchDog} from '../../my-bot/services/watch-dog';
-
+import {WatchDog} from '../../models/watch-dog';
 
 @Component({
   selector: 'app-run-watchdogs',
@@ -17,7 +16,6 @@ import {WatchDog} from '../../my-bot/services/watch-dog';
   styleUrls: ['./run-watchdogs.component.css']
 })
 export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
-
 
   counter: number = 0;
   watchDogs: WatchDog[] = [];

@@ -31,7 +31,6 @@ import {ExchangeSsComponent} from './exchange-ss/exchange-ss.component';
 import {ExchangeSsService} from './exchange-ss/exchange-ss.service';
 
 import {ApiServerService} from './api-server.service';
-import {Login2Component} from './login2/login2.component';
 import {SendAlertService} from './exchange-ss/send-alert.service';
 import {EmailServiceModule} from './email-service/email-service.module';
 import {AuthHttpService} from './services/auth-http.service';
@@ -47,10 +46,6 @@ import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-tab
 
 import {StorageService} from './services/app-storage.service';
 
-
-
-
-import {CompareService} from './services/compare.service';
 import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
 import {WebsocketService} from "./shared/websocket-service";
@@ -62,6 +57,7 @@ import {AllInOneModule} from "./all-in-one/all-in-one.module";
 import {UiModule} from "./ui/ui.module";
 import {UserLoginService} from './services/user-login.service';
 import {ShowExternalPageService} from './services/show-external-page.service';
+import {AppServicesModule} from './app-services/app-services.module';
 
 
 
@@ -90,13 +86,13 @@ declare const Buffer: any;
     TraderModule,
     AllInOneModule,
     UiModule,
+    AppServicesModule,
     // AuthModule,
     RouterModule.forRoot(rootRouterConfig, {useHash: true})
   ],
   declarations: [
     AppComponent,
-    ExchangeSsComponent,
-    Login2Component
+    ExchangeSsComponent
   ],
   providers: [
     DatabaseService,
@@ -107,9 +103,7 @@ declare const Buffer: any;
 
     SendAlertService,
     MarketCapService,
-
     StorageService,
-    CompareService,
     UserLoginService,
     ShowExternalPageService
     // WebsocketService

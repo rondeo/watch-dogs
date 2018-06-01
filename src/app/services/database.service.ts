@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {IMarketRecommended} from "./utils-order";
+import {IMarketRecommended} from "../com/utils-order";
 
 @Injectable()
 export class DatabaseService {
