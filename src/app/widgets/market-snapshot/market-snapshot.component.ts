@@ -59,7 +59,7 @@ export class MarketSnapshotComponent implements OnInit {
   exchanges: string[];
 
 
-  isRefreshingHistory:boolean;
+  isRefreshingHistory: boolean;
 
   constructor(
     private apiMarketCap: ApiMarketCapService,
@@ -69,7 +69,7 @@ export class MarketSnapshotComponent implements OnInit {
 
   }
 
-  ngOnChanges(evt: SimpleChanges){
+  ngOnChanges(evt: SimpleChanges) {
     this.ngOnInit();
   }
 
@@ -85,29 +85,30 @@ export class MarketSnapshotComponent implements OnInit {
     this.apiMarketCap.getData().subscribe(allCoins => {
       this.allCoins = allCoins;
       this.baseMC = allCoins[base];
-      this.priceBaseUS = this.baseMC.price_usd;
+      this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
       this.coinMC = allCoins[coin];
-      this.coinPriceUS = this.coinMC.price_usd;
+      this.coinPriceUS = this.coinMC ? this.coinMC.price_usd : -1;
       this.downloadHistory();
     })
 
   }
 
 
-
- async downloadHistory() {
+  async downloadHistory() {
     this.isRefreshingHistory = true;
+    if (!this.exchange) return;
+    if (!this.baseMC || !this.coinMC) return;
     const api = this.apisPublic.getExchangeApi(this.exchange);
-    if(!api) throw new Error(' no api for ' + this.exchange);
+    if (!api) throw new Error(' no api for ' + this.exchange);
     const history: VOOrder[] = await api.downloadMarketHistory(this.baseMC.symbol, this.coinMC.symbol).toPromise();
-   // console.log(history);
-   if (!history) throw new Error('No history base: '+ this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
-   this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
-   this.isRefreshingHistory = false
+    // console.log(history);
+    if (!history) throw new Error('No history base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
+    this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
+    this.isRefreshingHistory = false
 
   }
 
-  onRefreshHistory(){
+  onRefreshHistory() {
     this.downloadHistory();
   }
 

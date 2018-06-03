@@ -1,34 +1,44 @@
 <div>
-    <span class="mat-headline">{{coin}} {{exchange}} <span class="btn" (click)="onExchangeMarketClick()">{{market}}</span></span>
+    <span class="mat-headline">{{coin}} </span>
 
     <section>
         <app-coin-day [coin]="coin"></app-coin-day>
     </section>
 
-    <p class="mat-title">
-        <span>{{exchange}} {{market}}</span>
-        <a routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}" mat-raised-button color="primary">GO</a>
+    <p>
+        <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
+        <button
+                routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+                mat-raised-button color="primary"
+                [disabled]="isDisabled()"
+        >GO {{exchange}} {{market}}</button>
     </p>
+    <br/>
+    <section>
+
+    </section>
 
     <section class="mat-typography">
         <span class="mat-title">Books</span>
         &nbsp;&nbsp;&nbsp;
-        <span class="mat-subheading-2"> <small>$</small> <input class="w5" #amount type="number" min="10" max="1000000" step="10000" (keyup.enter)="onAmountlick(amount.value)" value="1000"/></span>
+        <span class="mat-subheading-2"> <small>$</small> <input class="w5" #amount type="number" min="10" max="1000000"
+                                                                step="10000" (keyup.enter)="onAmountlick(amount.value)"
+                                                                value="1000"/></span>
         <div class="mat-body-2">By CMC {{coinPriceMC}}</div>
         <table>
             <tr *ngFor="let item of allMarkets">
                 <td>{{item.exchange}}</td>
-                <td><span class="btn" (click)="onMarketClick(item)">{{item.market}}</span></td>
+                <td><span class="btn" (click)="onBooksClick(item)">{{item.market}}</span></td>
                 <td>
-                    <app-books-for-amount [market]="item.market" [exchange]="item.exchange"
-                                          [amountUS]="amountUS"></app-books-for-amount>
+                    <app-books-for-amount
+                            [market]="item.market"
+                            [exchange]="item.exchange"
+                            [amountUS]="amountUS"
+                    ></app-books-for-amount>
                 </td>
             </tr>
         </table>
     </section>
 
-    <br/>
-   <section>
-       <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
-   </section>
+
 </div>

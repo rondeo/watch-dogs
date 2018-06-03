@@ -30,21 +30,8 @@ export class SortableTableComponent implements OnInit {
     this.consAvailable = _.orderBy(this.consAvailable, this.sortCriteria, this.asc_desc);
   }
 
-
-  onSymbolClick(coin:VOMarketCap){
-    //console.log(coin);
-    this.router.navigateByUrl('/market-cap/coin-exchanges/' + coin.id);
-  }
-
-  onTableclick(event){
-
-  // console.log(event.srcElement);
-    var target = event.target || event.srcElement || event.currentTarget;
-    var idAttr = target.attributes.data;
-
-  //  console.log(idAttr.nodeValue);
-    if(idAttr && idAttr.nodeValue) this.selectedSymbol.emit(String(idAttr.nodeValue));
-   // var value = idAttr.id;
+  onSymbolClick(event){
+    this.selectedSymbol.emit(event);
   }
 
 

@@ -1,6 +1,6 @@
 <div>
 
-        <table (click)="onTableclick($event)">
+        <table>
             <tbody>
             <tr class="small">
                 <th>Graph</th>
@@ -14,7 +14,7 @@
 
             <tr *ngFor="let item of consAvailable">
                 <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn fa fa-line-chart"></a></td>
-                <td  title="{{item.name}}" class="btn" (click)="onSymbolClick(item)">{{item.symbol}}</td>
+                <td><a  title="{{item.name}}" class="btn" (click)="onSymbolClick(item.symbol)">{{item.symbol}}</a></td>
                 <td>
                     <span [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">{{item.percent_change_1h}}</span>
                 </td>

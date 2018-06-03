@@ -1,6 +1,6 @@
 <div>
     <h4><small>Total:</small> {{selectedCoins.length}}</h4>
     <div>
-        <app-sortable-table [consAvailable]="selectedCoins"></app-sortable-table>
+        <app-sortable-table [consAvailable]="selectedCoins" (selectedSymbol)="onSymbolSelected($event)" ></app-sortable-table>
     </div>
 </div>

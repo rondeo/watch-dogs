@@ -24,7 +24,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
       {path: 'market/:market', component: TraderMainComponent},
-      {path: 'analyze/:coin/:exchange', component: AnalyzeCoinComponent},
+      {path: 'analyze-coin/:coin', component: AnalyzeCoinComponent},
+      {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
       {path: 'buy-sell/:exchange/:market', component: BuySellCoinComponent}
     ]
   }

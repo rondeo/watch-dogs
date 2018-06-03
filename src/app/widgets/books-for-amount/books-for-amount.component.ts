@@ -16,7 +16,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   @Input() market: string;
   @Input() amountUS: number;
 
-  booksDisplay:BooksDisplay = new BooksDisplay();
+  booksDisplay: BooksDisplay = new BooksDisplay();
 
   priceCoinUS: number;
 
@@ -33,15 +33,16 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnChanges(evt: any){
-    if(evt.exchange && evt.market){
+  ngOnChanges(evt: any) {
+    if (evt.exchange && evt.market) {
 
-    } else if(evt.amountUS){
-     // console.log(this.amountUS);
+    } else if (evt.amountUS) {
+      // console.log(this.amountUS);
       this.calculate();
     }
 
   }
+
   ngOnInit() {
 
     let pair = this.market;
@@ -52,17 +53,16 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     this.apiMarketCap.getData().subscribe(allCoins => {
       this.allCoins = allCoins;
       this.baseMC = allCoins[base];
-      this.priceBaseUS = this.baseMC.price_usd;
+      this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
       this.coinMC = allCoins[coin];
-      this.priceCoinUS = this.coinMC.price_usd;
+      this.priceCoinUS = this.coinMC ? this.coinMC.price_usd : -1;
       this.downloadBooks();
     })
 
   }
 
 
-
-  private calculate(){
+  private calculate() {
 
     const coinPrice = this.coinMC.price_usd;
     const basePrice = this.baseMC.price_usd;
@@ -74,8 +74,8 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
 
     booksDisplay1.buy = (ratesBuy * basePrice).toPrecision(4);
     booksDisplay1.sell = (ratesSell * basePrice).toPrecision(4);
-    if(+booksDisplay1.buy && +booksDisplay1.sell){
-      booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell)/+booksDisplay1.sell).toFixed(2);
+    if (+booksDisplay1.buy && +booksDisplay1.sell) {
+      booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell) / +booksDisplay1.sell).toFixed(2);
     } else booksDisplay1.diff = '0';
 
 
@@ -83,7 +83,9 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   }
 
   private books;
+
   async downloadBooks() {
+    if(!this.baseMC || !this.coinMC) return;
     this.isRefreshing = true;
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
@@ -97,7 +99,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
 
   }
 
-  onRefreshClick(){
+  onRefreshClick() {
     this.downloadBooks();
   }
 

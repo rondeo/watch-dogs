@@ -17,7 +17,7 @@ import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-bu
 })
 export class WatchdogEditComponent implements OnInit {
 
-  watchDog: VOWatchdog;
+  watchDog: VOWatchdog = new VOWatchdog();
 
   reports: string;
   bases: string[] = ['BTC', 'USDT', 'ETH'];
@@ -40,8 +40,8 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.watchDog = new VOWatchdog();
-    this.watchDog.action = 'SELL';
+
+
     this.initAsync();
   }
 
@@ -56,6 +56,7 @@ export class WatchdogEditComponent implements OnInit {
       wd.sellScript = [];
       wd.buyScript = []
       wd.id = id;
+      wd.action = 'SELL';
     }
     this.watchDog = wd;
   }

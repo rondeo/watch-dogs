@@ -8,7 +8,10 @@ import {Observable} from 'rxjs/Observable';
 import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 
 export class AppSellCoin {
-  sellCoins: VOWatchdog[]
+  private sellCoins: VOWatchdog[];
+
+  private sellCoinsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null)
+
   constructor(
     private storage: StorageService,
     private apiPrivate: ApisPrivateService,
@@ -16,17 +19,23 @@ export class AppSellCoin {
     private watchDogsSub: BehaviorSubjectMy<VOWatchdog[]>
   ) {
 
-   /* this.sellCoins$().subscribe(res => {
-      this.sellCoins = res;
-    });*/
+    watchDogsSub.asObservable().subscribe(wds => {
+      this.sellCoins = _.filter(wds, {action: 'SELL'});
+      this.sellCoinsSub.next(this.sellCoins);
+    });
   }
 
   sellCoins$() {
-    return this.watchDogsSub.asObservable().map(wds => _.filter(wds, {action: 'SELL'}));
+    return this.sellCoinsSub.asObservable();
+
   }
 
   sellCoinsNumber():Observable<number>{
     return this.sellCoins$().map(wds => wds.length);
   }
 
+  run() {
+
+    console.log(this.sellCoins);
+  }
 }

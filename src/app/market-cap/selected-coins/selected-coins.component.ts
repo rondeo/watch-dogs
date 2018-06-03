@@ -5,6 +5,7 @@ import {MarketCapService} from '../services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 import {VOMC} from '../../apis/models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-selected-coins',
@@ -16,7 +17,8 @@ export class SelectedCoinsComponent implements OnInit {
   private allCoinsData: VOMC[];
   constructor(
     private marketCap: ApiMarketCapService,
-    private storage: StorageService
+    private storage: StorageService,
+    private router: Router
   ) {
   }
 
@@ -25,6 +27,12 @@ export class SelectedCoinsComponent implements OnInit {
       this.allCoinsData = res;
       this.selectedCoins = _.filter(res, {selected: true});
     })
+
+  }
+
+  onSymbolSelected(evt) {
+    console.log(evt);
+    this.router.navigateByUrl('/trader/analyze-coin/' + evt);
 
   }
 

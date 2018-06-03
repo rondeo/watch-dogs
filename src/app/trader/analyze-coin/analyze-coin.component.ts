@@ -12,7 +12,7 @@ import {ShowExternalPageService} from '../../services/show-external-page.service
 })
 export class AnalyzeCoinComponent implements OnInit {
 
-  @ViewChild('amount') amoubtView:ElementRef;
+  @ViewChild('amount') amoubtView: ElementRef;
 
   coin: string;
   exchange: string;
@@ -20,6 +20,7 @@ export class AnalyzeCoinComponent implements OnInit {
   amountUS = 1000;
   coinPriceMC: number;
   allMarkets: { exchange: string, market: string }[];
+
   constructor(
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
@@ -31,7 +32,7 @@ export class AnalyzeCoinComponent implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-     // console.log(params)
+      // console.log(params)
       let coin = params.coin;
       this.coin = coin;
       this.exchange = params.exchange;
@@ -49,16 +50,20 @@ export class AnalyzeCoinComponent implements OnInit {
     });
   }
 
-  onMarketClick(item){
+  isDisabled() {
+    return !this.exchange || !this.market;
+  }
+
+  onBooksClick(item) {
     console.log(item);
     this.market = item.market;
     this.exchange = item.exchange;
   }
 
-  onAmountlick(evt){
-    let  am  = Number(evt);
+  onAmountlick(evt) {
+    let am = Number(evt);
 
-    if(am < 10){
+    if (am < 10) {
       am = 10;
       this.amoubtView.nativeElement.value = am
     }
@@ -66,9 +71,9 @@ export class AnalyzeCoinComponent implements OnInit {
   }
 
 
-  onExchangeMarketClick(){
-    const ar = this.market.split('_')
-    this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
+  onExchangeMarketClick() {
+    //  const ar = this.market.split('_')
+    // this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
   }
 
 }

@@ -68,7 +68,6 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   onNewClick() {
-
     this.router.navigateByUrl('/email-service/watchdog-edit/' + moment().toISOString());
 
   }

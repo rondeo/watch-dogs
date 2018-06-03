@@ -20,6 +20,7 @@ export class BuySellSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.sellWds$ = this.buySellCoin.sellCoins$();
-    this.buyWds$ =  this.buySellCoin.buyCoins$();
+    this.buyWds$ = this.buySellCoin.buyCoins$();
+  }
 
 }
