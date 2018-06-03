@@ -76,4 +76,11 @@ export class AnalyzeCoinComponent implements OnInit {
     // this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
   }
 
+  onLineChartClick(){
+    if(this.exchange && this.market) {
+      const ar = this.market.split('_')
+      this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
+    }
+  }
+
 }

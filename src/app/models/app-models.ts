@@ -4,7 +4,7 @@
 
 
 import {Observable} from 'rxjs/Observable';
-
+import {VOMCAgregated} from '../apis/models';
 
 
 export interface VOBooksStats {
@@ -377,29 +377,15 @@ export class VOMarketCap {
   tobtc_change_24h?: number;
   tobtc_change_7d?: number;
 
-  btcUS?: number
-
-
- /*
-
-  network?: string;
-  age?: number;*/
-
-
-
-
+  btcUS?: number;
   market_cap_usd?: number;
   available_supply?: number;
   total_supply?: number;
   max_supply?: number;
   last_updated?: number;
-
-
- // last_updated_date?: string;
   selected?: boolean;
 
- // rankUP?: number;
- // percent_1h_UP?: number;
+
 }
 
 export class VOMarketCapExt extends VOMarketCap {
@@ -620,8 +606,6 @@ export class WalletModel {
 */
 
 
-
-
 export class VOWatchdog {
   id: string;
   exchange: string;
@@ -643,9 +627,19 @@ export class VOWatchdog {
   percent_change_1hLess: boolean;
   percent_change_1h: number;
 
-  mc?: VOMarketCap;
+  mc?: VOMCAgregated;
   isOpen?: boolean
+
+  constructor(obj: any) {
+    for (let str in obj) this[str] = obj[str]
+  }
 }
+
+export const VOWATCHDOG = new VOWatchdog({
+  results: [],
+  sellScript: [],
+  buyScript: []
+})
 
 
 /*

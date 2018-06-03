@@ -1,4 +1,4 @@
-import {VOMarketCap, VOWatchdog} from "./app-models";
+import {VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
 import {VOMCAgregated} from '../apis/models';
 
 
@@ -16,7 +16,7 @@ export class WatchDog extends VOWatchdog {
   booksDelta:number;
 
   constructor(public wd: VOWatchdog) {
-    super();
+    super(wd);
     Object.assign(this, wd);
   }
 

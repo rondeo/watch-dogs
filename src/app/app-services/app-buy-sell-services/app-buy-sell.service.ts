@@ -25,7 +25,7 @@ export class AppBuySellService {
     private apiPrivate: ApisPrivateService,
     private apiPublic: ApisPublicService
   ) {
-    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd))
+    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new VOWatchdog(o))))
     this.sellCoinsCtr = new AppSellCoin(this.storage, this.apiPrivate, this.apiPublic, this.watchDogsDataSub);
     this.init();
   }
@@ -121,7 +121,7 @@ export class AppBuySellService {
 
   async saveWatchDog(watchDog: VOWatchdog) {
     const wds = this.watchDogsDataSub.getValue() || [];
-    if (!this.getWatchDogById(watchDog.id)) {
+    if (!await this.getWatchDogById(watchDog.id)) {
       wds.push(watchDog);
     }
     await this.storage.saveWatchDogs(wds)

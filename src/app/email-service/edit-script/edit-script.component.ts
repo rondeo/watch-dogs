@@ -5,7 +5,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 
 import {ActivatedRoute} from '@angular/router';
 import {runDogScript} from '../run-watchdogs/script-analytics';
-import {VOMarketCap, VOWatchdog} from '../../models/app-models';
+import {VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../models/app-models';
 import {WatchDog} from '../../models/watch-dog';
 
 
@@ -50,7 +50,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     private route:ActivatedRoute
   ) {
 
-    this.currentDog = new WatchDog(new VOWatchdog());
+    this.currentDog = new WatchDog(VOWATCHDOG);
    // this.currentDog.marketCap = new VOMarketCap();
   }
 
@@ -248,7 +248,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
       let script = (dog && dog.sellScript)?dog.sellScript.toString():'';
       this.setCurrentScript(script);
       this.currentDog = dog;
-    }else this.currentDog = new WatchDog(new VOWatchdog());
+    }else this.currentDog = new WatchDog(new VOWatchdog({}));
     console.log(' set dog ', dog);
   }
 

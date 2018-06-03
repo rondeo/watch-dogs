@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {VOMarketCap, VOWatchdog} from "../../models/app-models";
+import {VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../models/app-models';
 import {ActivatedRoute} from "@angular/router";
 import {WatchDogService} from "../watch-dog.service";
 import {StorageService} from "../../services/app-storage.service";
@@ -17,7 +17,7 @@ import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-bu
 })
 export class WatchdogEditComponent implements OnInit {
 
-  watchDog: VOWatchdog = new VOWatchdog();
+  watchDog: VOWatchdog = VOWATCHDOG;
 
   reports: string;
   bases: string[] = ['BTC', 'USDT', 'ETH'];
@@ -34,9 +34,10 @@ export class WatchdogEditComponent implements OnInit {
     private snackBar: MatSnackBar,
     private buySellCoin: AppBuySellService
   ) {
-    this.watchDog = new VOWatchdog();
-    this.watchDog.sellScript = [];
-    this.watchDog.buyScript = [];
+    this.watchDog = new VOWatchdog({
+      sellScript :[],
+      buyScript:[]
+    });
   }
 
   ngOnInit() {
@@ -52,9 +53,7 @@ export class WatchdogEditComponent implements OnInit {
     let wd = await this.buySellCoin.getWatchDogById(id)
 
     if(!wd) {
-      wd = new VOWatchdog();
-      wd.sellScript = [];
-      wd.buyScript = []
+      wd = VOWATCHDOG;
       wd.id = id;
       wd.action = 'SELL';
     }
