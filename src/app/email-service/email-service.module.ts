@@ -27,7 +27,8 @@ const routes: Routes = [
     children:[
       { path: '', redirectTo:'watchdogs', pathMatch:'full'},
       { path: 'selected-coins', component: EmailSelectedCoinsComponent},
-      { path: 'watchdogs', component:WatchdogsListComponent},
+      { path: 'watchdogs', redirectTo:'watchdogs/SELL', pathMatch:'full'},
+      { path: 'watchdogs/:action', component:WatchdogsListComponent},
       { path: 'watchdog-edit/:uid', component: WatchdogEditComponent},
       { path: 'edit-script/:uid', component: EditScriptComponent},
       { path: 'run-watchdogs', component: RunWatchdogsComponent}

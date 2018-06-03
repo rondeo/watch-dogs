@@ -9,10 +9,13 @@ import {MaterialAppModule} from '../material/material-app.module';
 import { BooksForAmountComponent } from './books-for-amount/books-for-amount.component';
 import { AmountCoinComponent } from './amount-coin/amount-coin.component';
 import {FormsModule} from '@angular/forms';
+import { BuySellSummaryComponent } from './buy-sell-summary/buy-sell-summary.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     MaterialAppModule,
     UiModule,
@@ -23,14 +26,16 @@ import {FormsModule} from '@angular/forms';
     MarketSnapshotComponent,
     MarketBooksComponent,
     BooksForAmountComponent,
-    AmountCoinComponent
+    AmountCoinComponent,
+    BuySellSummaryComponent
   ],
   declarations:[
     CoinDayComponent,
     MarketSnapshotComponent,
     MarketBooksComponent,
     BooksForAmountComponent,
-    AmountCoinComponent
+    AmountCoinComponent,
+    BuySellSummaryComponent
   ]
 })
 export class WidgetsModule { }

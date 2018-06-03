@@ -8,6 +8,7 @@ import {MatSnackBar} from "@angular/material";
 import * as moment from "moment";
 import * as _ from 'lodash';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-buy-sell.service';
 
 @Component({
   selector: 'app-watchdog-edit',
@@ -20,7 +21,7 @@ export class WatchdogEditComponent implements OnInit {
 
   reports: string;
   bases: string[] = ['BTC', 'USDT', 'ETH'];
-  exchanges: string[] = ['bittrex', 'poloniex'];
+  exchanges: string[] = ['binance','bittrex', 'poloniex'];
   selectedCoins: string[];
   MC: { [symbol: string]: VOMarketCap };
   coinMC: VOMarketCap = new VOMarketCap();
@@ -30,7 +31,8 @@ export class WatchdogEditComponent implements OnInit {
     private watchdogService: WatchDogService,
     private storage: StorageService,
     private marketCap: ApiMarketCapService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private buySellCoin: AppBuySellService
   ) {
     this.watchDog = new VOWatchdog();
     this.watchDog.sellScript = [];
@@ -39,28 +41,23 @@ export class WatchdogEditComponent implements OnInit {
 
   ngOnInit() {
     this.watchDog = new VOWatchdog();
-
+    this.watchDog.action = 'SELL';
     this.initAsync();
   }
 
   async initAsync() {
     this.selectedCoins = await this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
-    let wd = await this.storage.getWatchDogByID(id);
 
-    if (wd){
-      if(!wd.sellScript)wd.sellScript = [];
-      if(!wd.sellScript)wd.buyScript = [];
-      this.watchDog = wd;
-      this.displayMC();
-    }
-    else {
+    let wd = await this.buySellCoin.getWatchDogById(id)
+
+    if(!wd) {
       wd = new VOWatchdog();
       wd.sellScript = [];
       wd.buyScript = []
       wd.id = id;
-      this.watchDog = wd;
     }
+    this.watchDog = wd;
   }
 
   async displayMC() {
@@ -111,7 +108,7 @@ export class WatchdogEditComponent implements OnInit {
 
   async saveWatchDog() {
     try {
-      await this.storage.upsertWatchDog(this.watchDog);
+      await this.buySellCoin.saveWatchDog(this.watchDog);
       this.snackBar.open(this.watchDog.name + ' Saved ', 'x', {duration: 2000})
     } catch (e) {
       this.snackBar.open(e.toString(), 'x', {duration: 2000, extraClasses: 'alert-red'})

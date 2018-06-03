@@ -1,5 +1,11 @@
 <div>
-  <h3><span class="btn" (click)="onNewClick()">New</span></h3>
+    <p>
+        <span class="mat-subheading-1">{{action}}</span>
+        <a class="mat-subheading-2" class="btn" (click)="onNewClick()">New</a>
+        <a class="btn" (click)="startStopBots()">{{isBotsRunning?'Stop':'Start'}}</a>
+
+    </p>
+
     <section>
         <table>
             <tbody>

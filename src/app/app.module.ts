@@ -58,6 +58,7 @@ import {UiModule} from "./ui/ui.module";
 import {UserLoginService} from './services/user-login.service';
 import {ShowExternalPageService} from './services/show-external-page.service';
 import {AppServicesModule} from './app-services/app-services.module';
+import {WidgetsModule} from './widgets/widgets.module';
 
 
 
@@ -87,6 +88,7 @@ declare const Buffer: any;
     AllInOneModule,
     UiModule,
     AppServicesModule,
+    WidgetsModule,
     // AuthModule,
     RouterModule.forRoot(rootRouterConfig, {useHash: true})
   ],

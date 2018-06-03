@@ -627,6 +627,7 @@ export class VOWatchdog {
   exchange: string;
   base: string;
   coin: string;
+  action: string;
   name: string;
   active: boolean;
   status: string;

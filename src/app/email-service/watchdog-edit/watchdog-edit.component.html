@@ -4,7 +4,7 @@
     <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>
 
     <section>
-        <div>
+        <p>
             <mat-form-field class="w6">
                 <mat-select placeholder="Exchange" [(ngModel)]="watchDog.exchange">
                     <mat-option *ngFor="let exchange of exchanges" [value]="exchange">{{exchange}}</mat-option>
@@ -24,32 +24,28 @@
             </mat-form-field>
 
             <mat-input-container class="w6">
-                    <input class="w5" matInput placeholder="Amount" type="number" [(ngModel)]="watchDog.amount"/>
+                <input class="w5" matInput placeholder="Amount" type="number" [(ngModel)]="watchDog.amount"/>
             </mat-input-container>
 
+        </p>
 
-<!--
-            <mat-radio-group  [(ngModel)]="watchDog.status">
+        <p>
+            <mat-input-container>
+                <input matInput placeholder="Name" type="text" [(ngModel)]="watchDog.name"/>
+            </mat-input-container>
+            <mat-radio-group [(ngModel)]="watchDog.action">
                 <mat-radio-button value="SELL">SELL</mat-radio-button>
                 <mat-radio-button value="BUY">BUY</mat-radio-button>
-                <mat-radio-button value="SOLD">SOLD</mat-radio-button>
-            </mat-radio-group>-->
+            </mat-radio-group>
+        </p>
 
-        </div>
-
-
-
-
-
-
-        <mat-input-container>
-            <input matInput placeholder="Name" type="text" [(ngModel)]="watchDog.name"/>
-        </mat-input-container>
-        <mat-checkbox [(ngModel)]="watchDog.active">Active</mat-checkbox>
-        <button mat-raised-button color="accent" (click)="saveWatchdog()">Save</button>
+        <p>
+            <mat-checkbox [(ngModel)]="watchDog.active">Active</mat-checkbox>
+            <button mat-raised-button color="accent" (click)="saveWatchdog()">Save</button>
+        </p>
 
     </section>
-
+    <br/>
     <section>
         <table>
             <tbody>

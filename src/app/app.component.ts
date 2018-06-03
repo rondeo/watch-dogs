@@ -11,6 +11,7 @@ import {StorageService} from './services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
 import {ExchangeLogin, LoginStatus, UserLoginService} from './services/user-login.service';
 import {LoginExchangeComponent} from './shared/login-exchange/login-exchange.component';
+import {AppBuySellService} from './app-services/app-buy-sell-services/app-buy-sell.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
   countDown: number;
   historyCounter: number;
 
+  sellCoinsCount: number;
 
   isMenu: boolean
 
@@ -33,10 +35,11 @@ export class AppComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private userLogin: UserLoginService,
-    //  private marketCap:MarketCapService,
+    private buySellCoin: AppBuySellService,
     private snackBar: MatSnackBar
   ) {
   }
+
 
   onRefreshClick() {
 
@@ -105,8 +108,9 @@ export class AppComponent implements OnInit {
   imageClass = '';
 
   ngOnInit(): void {
+
     this.userLogin.exchangeLogin$().subscribe(exchangeLogin => {
-     //  console.log(exchangeLogin);
+      //  console.log(exchangeLogin);
       if (exchangeLogin.status === LoginStatus.APPLICATION_LOGIN_REQIRED) this.onApplicationLogin(exchangeLogin);
       else if (exchangeLogin.status === LoginStatus.EXCHANGE_LOGIN_REQIRED) this.onExchangeLogin(exchangeLogin);
 
