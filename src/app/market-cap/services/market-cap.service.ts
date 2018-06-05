@@ -33,10 +33,10 @@ export class MarketCapService {
     this.counter = 0;
     // this.coinsSubB = new BehaviorSubject(this.coins);
   }
-  getCoinsObs():Observable<{ [symbol: string]: VOMCAgregated }> {
-    if (this.coins) return Observable.of(this.coins);
+  // getCoinsObs():Observable<{ [symbol: string]: VOMCAgregated }> {
+ /*   if (this.coins) return Observable.of(this.coins);
     return this.api.downloadAgrigated().map(res => this.coins = res);
-  }
+  }*/
   private interval;
  /* getCoinBySymbol(symbol: string): VOMarketCap {
     return this.coins[symbol];

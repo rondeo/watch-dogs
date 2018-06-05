@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 
@@ -6,14 +6,15 @@ import {MarketCapService} from '../market-cap/services/market-cap.service';
 export class ShowExternalPageService {
 
   constructor(
-    private marketCap: MarketCapService
-  ) { }
+    private marketCap: ApiMarketCapService
+  ) {
+  }
 
-  showMarket(exchange: string, base: string, coin: string){
+  showMarket(exchange: string, base: string, coin: string) {
     let url
-    switch(exchange){
+    switch (exchange) {
       case 'bittrex':
-       url = 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+        url = 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
         break;
       case 'binance':
         url = 'https://www.binance.com/trade.html?symbol={{coin}}_{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
@@ -34,18 +35,15 @@ export class ShowExternalPageService {
 
     }
 
-    if(url)window.open(url, '_blank');
+    if (url) window.open(url, '_blank');
     else console.warn(exchange);
   }
 
 
-  showCoinOnMarketCap(coin:string){
-    this.marketCap.getCoinsObs().subscribe(MC =>{
-      const mc = MC[coin];
-      window.open('https://coinmarketcap.com/currencies/' + mc.id, '_blank');
-    })
-
-
+  async showCoinOnMarketCap(coin: string) {
+    const MC = await this.marketCap.getData();
+    const mc = MC[coin];
+    window.open('https://coinmarketcap.com/currencies/' + mc.id, '_blank');
   }
 
 }

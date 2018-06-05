@@ -47,9 +47,10 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   initSellBots() {
     this.wdService.isSellRunning$().subscribe(isRunning => {
+
       this.isBotsRunning = isRunning;
     });
-    this.wdService.sellCoins$().subscribe(wds => {
+    this.wdService.subSellCoins$().subscribe(wds => {
       this.watchDogs = wds;
     })
   }

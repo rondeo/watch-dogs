@@ -116,7 +116,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
    // await this.addUSValues(watchDogs);
 
     const sellCoins = watchDogs.filter(function (item) {
-      return item.sellScript.toString().length && item.balanceCoin > 0 && item.coin !== 'BTC';
+      return item.sellScripts.toString().length && item.balanceCoin > 0 && item.coin !== 'BTC';
     });
 
     console.log(sellCoins);
@@ -133,7 +133,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
   }
 
   async downloadAgrigated() {
-    const MC = await  this.marketcap.downloadAgrigated().toPromise();
+   //  const MC = await  this.marketcap.downloadAgrigated().toPromise();
 
 
   }

@@ -617,18 +617,16 @@ export class VOWatchdog {
   status: string;
   isEmail: boolean;
   results?: string[];
-  sellScript: string[];
-  buyScript: string[];
+  sellScripts: string[];
+  buyScripts: string[];
   balanceCoin: number;
   balanceBase: number;
-
   amount: number;
-
   percent_change_1hLess: boolean;
   percent_change_1h: number;
 
   mc?: VOMCAgregated;
-  isOpen?: boolean
+  isOpen?: boolean;
 
   constructor(obj: any) {
     for (let str in obj) this[str] = obj[str]

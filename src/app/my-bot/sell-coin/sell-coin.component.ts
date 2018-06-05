@@ -61,12 +61,12 @@ export class SellCoinComponent implements OnInit, OnDestroy {
   }
 
 
-  async addUSValues() {
+ /* async addUSValues() {
     const MC = await  this.marketcap.downloadAgrigated().toPromise();
     this.watchdog.addUS(MC);
 
   }
-
+*/
   sub1
   ngOnInit() {
 
@@ -159,7 +159,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
 
   async initAsync() {
     await  this.getBalance();
-    await this.addUSValues();
+    //await this.addUSValues();
 
   }
 

@@ -15,6 +15,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class SelectedCoinsComponent implements OnInit {
   selectedCoins: VOMC[] = [];
   private allCoinsData: VOMC[];
+
   constructor(
     private marketCap: ApiMarketCapService,
     private storage: StorageService,
@@ -23,11 +24,12 @@ export class SelectedCoinsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.marketCap.getCoinsArWithSelected().subscribe(res => {
-      this.allCoinsData = res;
-      this.selectedCoins = _.filter(res, {selected: true});
-    })
+    this.initAsync();
+  }
 
+  async initAsync() {
+    this.allCoinsData = await this.marketCap.getCoinsArWithSelected();
+    this.selectedCoins = _.filter(this.allCoinsData, {selected: true});
   }
 
   onSymbolSelected(evt) {

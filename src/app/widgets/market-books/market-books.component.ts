@@ -9,7 +9,7 @@ export class BooksDisplay {
   sell: string = '';
   buy: string = '';
   diff: string = '';
-  us:string = ''
+  us: string = ''
 }
 
 @Component({
@@ -24,7 +24,7 @@ export class MarketBooksComponent implements OnInit, OnChanges {
 
   @Output() price: EventEmitter<number> = new EventEmitter();
 
-  bookDisplays:BooksDisplay[] = [];
+  bookDisplays: BooksDisplay[] = [];
   priceCoinUS: number;
 
   isRefreshing: boolean = false;
@@ -40,27 +40,30 @@ export class MarketBooksComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.ngOnInit();
   }
 
   ngOnInit() {
+    this.initAsync();
+  }
+
+  async initAsync() {
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
     let base = ar[0];
     let coin = ar[1];
-    this.apiMarketCap.getData().subscribe(allCoins => {
-      this.allCoins = allCoins;
-      this.baseMC = allCoins[base];
-      this.priceBaseUS = this.baseMC.price_usd;
-      this.coinMC = allCoins[coin];
-      this.priceCoinUS = this.coinMC.price_usd;
-      this.downloadBooks();
-    })
+    this.allCoins = await this.apiMarketCap.getData();
+    this.baseMC = this.allCoins[base];
+    this.priceBaseUS = this.baseMC.price_usd;
+    this.coinMC = this.allCoins[coin];
+    this.priceCoinUS = this.coinMC.price_usd;
+    this.downloadBooks();
+
   }
 
- // private basePrice;
+  // private basePrice;
   async downloadBooks() {
     const ar = this.market.split('_');
     const base = ar[0];
@@ -69,7 +72,7 @@ export class MarketBooksComponent implements OnInit, OnChanges {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
     const books = await api.downloadBooks(base, coin).toPromise();
-   //  console.log(books);
+    //  console.log(books);
 
     const coinPrice = this.coinMC.price_usd;
     const basePrice = this.baseMC.price_usd;
@@ -92,50 +95,50 @@ export class MarketBooksComponent implements OnInit, OnChanges {
     booksDisplay1.buy = (ratesBuy.rate1 * basePrice).toPrecision(4);
     booksDisplay1.sell = (ratesSell.rate1 * basePrice).toPrecision(4);
     booksDisplay1.us = '500';
-    booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell)/+booksDisplay1.sell).toFixed(2);
+    booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell) / +booksDisplay1.sell).toFixed(2);
 
     booksDisplay2.buy = (ratesBuy.rate2 * basePrice).toPrecision(4);
     booksDisplay2.sell = (ratesSell.rate2 * basePrice).toPrecision(4);
     booksDisplay2.us = '1200';
-    booksDisplay2.diff = (100 * (+booksDisplay2.buy - +booksDisplay2.sell)/+booksDisplay2.sell).toFixed(2);
+    booksDisplay2.diff = (100 * (+booksDisplay2.buy - +booksDisplay2.sell) / +booksDisplay2.sell).toFixed(2);
 
     booksDisplay3.buy = (ratesBuy.rate3 * basePrice).toPrecision(4);
     booksDisplay3.sell = (ratesSell.rate3 * basePrice).toPrecision(4);
     booksDisplay3.us = '5000';
-    booksDisplay3.diff = (100 * (+booksDisplay3.buy - +booksDisplay3.sell)/+booksDisplay1.sell).toFixed(2);
+    booksDisplay3.diff = (100 * (+booksDisplay3.buy - +booksDisplay3.sell) / +booksDisplay1.sell).toFixed(2);
 
-   /* booksDisplay4.buy =  (+booksDisplay1.buy + (+booksDisplay1.buy * 0.02)).toFixed(3);
-    booksDisplay4.sell =  (+booksDisplay1.sell - (+booksDisplay1.sell * 0.02)).toFixed(3);
-    booksDisplay4.us = 'Inst';
-    booksDisplay4.diff = (100 * (+booksDisplay4.buy - +booksDisplay4.sell)/+booksDisplay4.sell).toFixed(2);
-*/
+    /* booksDisplay4.buy =  (+booksDisplay1.buy + (+booksDisplay1.buy * 0.02)).toFixed(3);
+     booksDisplay4.sell =  (+booksDisplay1.sell - (+booksDisplay1.sell * 0.02)).toFixed(3);
+     booksDisplay4.us = 'Inst';
+     booksDisplay4.diff = (100 * (+booksDisplay4.buy - +booksDisplay4.sell)/+booksDisplay4.sell).toFixed(2);
+ */
     this.bookDisplays = [booksDisplay1, booksDisplay2, booksDisplay3];
 
     this.isRefreshing = false;
-   //  console.log(ratesBuy, ratesSell);
+    //  console.log(ratesBuy, ratesSell);
 
   }
 
-  onRefreshClick(){
+  onRefreshClick() {
     this.downloadBooks();
   }
 
-  onBookClick(price:number){
+  onBookClick(price: number) {
     this.price.emit(+price);
   }
 
-  onToSellClick(){
+  onToSellClick() {
     const first = _.first(this.bookDisplays);
-    if(first) {
+    if (first) {
       const toSell = +(+first.sell - (+first.sell * 0.02)).toFixed(3);
       this.price.emit(toSell);
     }
 
   }
 
-  onToBuyClick(){
+  onToBuyClick() {
     const first = _.first(this.bookDisplays);
-    if(first) {
+    if (first) {
       const toSell = +(+first.buy + (+first.buy * 0.02)).toFixed(3);
       this.price.emit(toSell);
     }

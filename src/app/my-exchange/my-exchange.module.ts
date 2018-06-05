@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
+import {Component, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {MaterialAppModule} from "../material/material-app.module";
 import {RouterModule, Routes} from "@angular/router";
-import { MyMainComponent } from './my-main/my-main.component';
 import { MyMarketsComponent } from './my-markets/my-markets.component';
 import {ConnectorApiService} from "./services/connector-api.service";
 
@@ -21,6 +20,16 @@ import {MyExchangeService} from './services/my-exchange.service';
 import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
 import {WidgetsModule} from '../widgets/widgets.module';
 import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.component';
+
+
+@Component({
+  selector: 'app-my-main',
+  template: `<router-outlet></router-outlet>`
+})
+export class MyMainComponent{
+
+}
+
 
 
 const routes: Routes = [

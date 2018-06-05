@@ -109,7 +109,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async downlaodTicker() {
-    const ticker = await this.apiMarketCap.downloadAgrigated().toPromise();
+    const ticker = await this.apiMarketCap.getData();
 
     this.btcMC = ticker['BTC']
      //console.log(ticker);

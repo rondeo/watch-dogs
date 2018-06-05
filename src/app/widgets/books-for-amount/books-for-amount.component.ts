@@ -44,21 +44,21 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.initAsync();
+  }
 
+  async initAsync() {
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
     let base = ar[0];
     let coin = ar[1];
-    this.apiMarketCap.getData().subscribe(allCoins => {
-      this.allCoins = allCoins;
-      this.baseMC = allCoins[base];
-      this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
-      this.coinMC = allCoins[coin];
-      this.priceCoinUS = this.coinMC ? this.coinMC.price_usd : -1;
-      this.downloadBooks();
-    })
-
+    this.allCoins = await this.apiMarketCap.getData();
+    this.baseMC = this.allCoins[base];
+    this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
+    this.coinMC = this.allCoins[coin];
+    this.priceCoinUS = this.coinMC ? this.coinMC.price_usd : -1;
+    this.downloadBooks();
   }
 
 
@@ -85,7 +85,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   private books;
 
   async downloadBooks() {
-    if(!this.baseMC || !this.coinMC) return;
+    if (!this.baseMC || !this.coinMC) return;
     this.isRefreshing = true;
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);

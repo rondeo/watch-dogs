@@ -397,7 +397,7 @@ return null;
   bases:string[];
   protected dispatchMarketsData( marketsAr, indexed, bases){
 
-    let sub = this.marketCap.getCoinsObs().subscribe(MC=>{
+  /*  let sub = this.marketCap.getCoinsObs().subscribe(MC=>{
       if(!MC) return;
 
       let localCoins:{[symbol:string]:VOMCAgregated} = {};
@@ -422,7 +422,7 @@ return null;
      // console.log(marketsAr);
       this.marketsArSub.next(marketsAr);
     })
-
+*/
 
 
   }

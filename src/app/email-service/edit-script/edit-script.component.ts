@@ -245,7 +245,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setCurrentDog(dog:WatchDog){
     if(dog){
-      let script = (dog && dog.sellScript)?dog.sellScript.toString():'';
+      let script = (dog && dog.sellScripts)?dog.sellScripts.toString():'';
       this.setCurrentScript(script);
       this.currentDog = dog;
     }else this.currentDog = new WatchDog(new VOWatchdog({}));

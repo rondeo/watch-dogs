@@ -48,7 +48,7 @@ export class AddScriptComponent implements OnInit {
     const script = 'if(percent_change_1h  ' + (this.percent_change_1hLess ? '<' : '>') + ' ' + this.percent_change_1h + ')  { SELL(percent_change_1h) }';
 
     this.scripAr.push(script);
-    //console.log(this.watchDog.sellScript);
+    //console.log(this.watchDog.sellScripts);
     //this.initScripts();
   }
 

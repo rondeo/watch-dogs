@@ -1,5 +1,5 @@
 <div>
-    <span class="mat-subheading-1">{{exchange}}</span>
+    <a routerLink="/my-exchange/balances/{{exchange}}" class="btn mat-subheading-1">{{exchange}}</a>
     <mat-form-field class="w8">
         <mat-select [(ngModel)]="currentMarket" placeholder="Select Market" (ngModelChange)="onMarketChanged($event)">
             <mat-option *ngFor="let market of marketsAvailable" [value]="market">

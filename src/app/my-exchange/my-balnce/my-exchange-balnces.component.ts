@@ -12,6 +12,7 @@ import {E} from '@angular/core/src/render3';
 import {VOMC, VOMCObj} from '../../apis/models';
 import {MyExchangeService} from '../services/my-exchange.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 @Component({
   selector: 'app-my-balnce',
@@ -42,7 +43,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private marketCap: MarketCapService,
+    private marketCap: ApiMarketCapService,
     private myService: MyExchangeService,
     private externalPage: ShowExternalPageService
   ) {
@@ -99,11 +100,11 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   async dowloadAllBalances() {
     this.isBalancesLoading = true;
-    this.MC = await this.marketCap.getCoinsObs().toPromise();
-    console.log(this.exchange);
+    this.MC = await this.marketCap.getData();
+   // console.log(this.exchange);
     this.balancesAll = await  this.privateService.getBalancesAll(this.exchange);
     const MC = this.MC;
-    console.log(this.balancesAll);
+   // console.log(this.balancesAll);
     this.balancesAll.forEach(function (item) {
       const coinMC = MC[item.symbol];
       if (coinMC) {
@@ -161,7 +162,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   async onBalanceClick(balance: VOBalance) {
     const symbol = balance.symbol;
     this.router.navigateByUrl('/my-exchange/buy-sell-coin/' + this.exchange + '/' + symbol)
-    console.log(balance)
+   //  console.log(balance)
 
   }
 
@@ -173,7 +174,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   asc_desc = 'desc';
 
   onSortClick(criteria: string): void {
-    console.log(criteria);
+   // console.log(criteria);
     if (this.sortBy === criteria) {
       this.asc_desc = (this.asc_desc === 'asc') ? 'desc' : 'asc';
     }
@@ -187,9 +188,8 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     this.balancesAr = _.orderBy(this.balancesAr, this.sortBy, this.asc_desc);
 
   }
-
   onSymbolClick(balance) {
-    this.router.navigateByUrl('/trader/analyze/' + balance.symbol + '/' + this.exchange);
+    this.router.navigateByUrl('/trader/analyze-coin/' + balance.symbol + '/' + this.exchange);
   }
 
   onPriceClick(balance: VOBalance) {

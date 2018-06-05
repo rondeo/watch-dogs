@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class AnalyzeCoinComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
-    private marketCap: MarketCapService,
+    private marketCap: ApiMarketCapService,
     private showExtranPage: ShowExternalPageService
   ) {
   }
@@ -40,7 +41,7 @@ export class AnalyzeCoinComponent implements OnInit {
 
       this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
         //  console.warn(res);
-        this.marketCap.getCoinsObs().subscribe(MC => {
+        this.marketCap.getData().then(MC => {
           this.coinPriceMC = MC[coin].price_usd;
           this.allMarkets = res;
 

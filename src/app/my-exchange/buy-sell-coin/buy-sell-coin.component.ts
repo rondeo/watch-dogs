@@ -10,6 +10,7 @@ import {MatSnackBar} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 @Component({
   selector: 'app-buy-sell-coin',
@@ -21,7 +22,7 @@ export class BuySellCoinComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private myService: MyExchangeService,
-    private marketCap: MarketCapService,
+    private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar,
     private apisPrivate: ApisPrivateService
   ) {
@@ -118,7 +119,7 @@ export class BuySellCoinComponent implements OnInit {
 
 
   async getMarkets(marketSymbol?: string) {
-    if (!this.MC) this.MC = await this.marketCap.getCoinsObs().toPromise();
+    if (!this.MC) this.MC = await this.marketCap.getData();
     const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
     if (markets.length === 0) {
       console.log(await this.myService.getAllMarkets(this.exchange));

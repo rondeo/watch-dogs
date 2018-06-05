@@ -1,8 +1,10 @@
 <div>
     <p>
-        <span class="mat-subheading-1">{{action}}</span>
-        <a class="mat-subheading-2" class="btn" (click)="onNewClick()">New</a>
-        <a class="btn" (click)="startStopBots()">{{isBotsRunning?'Stop':'Start'}}</a>
+        <span class="mat-title">{{action}}</span>
+        &nbsp;&nbsp;&nbsp;
+        <a class="fa-2x fa fa-plus-circle btn dgreen"  (click)="onNewClick()"></a>
+        &nbsp;&nbsp;&nbsp;
+        <a class="dred btn fa-2x fa fa-{{isBotsRunning?'stop-circle':'play-circle'}}" (click)="startStopBots()"></a>
 
     </p>
 

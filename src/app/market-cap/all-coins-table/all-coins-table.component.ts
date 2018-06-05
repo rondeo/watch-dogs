@@ -22,22 +22,19 @@ export class AllCoinsTableComponent implements OnInit {
   average1h:number;
   average24h:number;
   average7d:number;
-
-
   creteria:string;
-
   asc_desc='asc';
-
   constructor(
     private marketCap:ApiMarketCapService,
     private storage:StorageService
   ) { }
 
   ngOnInit() {
-    this.marketCap.getCoinsArWithSelected().subscribe(res =>{
-      this.allCoinsData = res;
+    this.iniiAsync();
+  }
 
-    })
+  async iniiAsync(){
+    this.allCoinsData = await this.marketCap.getCoinsArWithSelected();
   }
 
   calculateAvarage(){
@@ -59,12 +56,12 @@ export class AllCoinsTableComponent implements OnInit {
   }
 
   onClickHeader(creteria:string):void{
-    console.log(creteria);
+    // console.log(creteria);
     if(this.creteria === creteria){
       if(this.asc_desc === 'asc') this.asc_desc ='desc';
       else  this.asc_desc='asc';
     }else this.asc_desc = 'asc';
-    console.log(this.asc_desc);
+   //  console.log(this.asc_desc);
 
     this.allCoinsData = _.orderBy(this.allCoinsData, creteria, this.asc_desc);
     this.creteria = creteria;

@@ -9,6 +9,9 @@ import {DatabaseService} from '../../services/database.service';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import * as _ from 'lodash';
+import {GRAPHS} from '../../com/grpahs';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMCObj} from '../../apis/models';
 
 @Injectable()
 export class AppBuySellService {
@@ -19,76 +22,73 @@ export class AppBuySellService {
   private _isBuyRunning: BehaviorSubject<boolean>;
   private sellInterval;
   private buyInterval;
+  private MC:VOMCObj;
 
   constructor(
     private storage: StorageService,
     private apiPrivate: ApisPrivateService,
-    private apiPublic: ApisPublicService
+    private apiPublic: ApisPublicService,
+    private marketCap: ApiMarketCapService
   ) {
-    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new VOWatchdog(o))))
-    this.sellCoinsCtr = new AppSellCoin(this.storage, this.apiPrivate, this.apiPublic, this.watchDogsDataSub);
+    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new VOWatchdog(o))));
+    this.sellCoinsCtr = new AppSellCoin(storage, apiPrivate, apiPublic, this.watchDogsDataSub, marketCap);
     this.init();
   }
 
   init() {
-    this.isSellRunning$().subscribe(isRunning => {
-      console.log('BOTS running ' + isRunning);
-      if (isRunning) {
-        if (!this.sellInterval) {
-          this.sellInterval = setInterval(() => this.runSellBots(), 60 * 1000);
-          const sub = this.sellCoinsCtr.sellCoins$().subscribe(wds => {
-            this.runSellBots();
-            setTimeout(() =>sub.unsubscribe(), 100);
-          });
-        } else this.runSellBots();
-      } else {
-        clearInterval(this.sellInterval);
-        this.sellInterval = 0;
-      }
-    });
+    this.marketCap.agregated$().subscribe(newValues => {
+      this.MC = newValues;
+      this.sellCoinsCtr.run();
+
+    //  const coin = this.watchdog.coin;
+     // const data = newValues[coin];
+      //console.log(data);
+
+
+
+     /* const integ = GRAPHS.integralData(data);
+
+      // console.log(integ);
+      const trigger =
+        integ.cur_prev < 0 &&
+        integ.prev5_10 < 0 &&
+        integ.prev10_20 < 0 &&
+        integ.prev5_10 < 0;
+      console.log('%c ' + coin + '  ' + trigger, 'color:red');     */
+    })
+
+
   }
 
   isSellRunning$(): Observable<boolean> {
-    if (!this._isSellRunning) {
-      const isRunning = !!JSON.parse(localStorage.getItem('isSellRunning'));
-      this._isSellRunning = new BehaviorSubject<boolean>(isRunning);
-    }
-    return this._isSellRunning.asObservable();
+   return this.sellCoinsCtr.isRunning$();
   }
 
   isBuyRunning$(): Observable<boolean> {
-    if (!this._isBuyRunning) {
-      const isRunning = !!JSON.parse(localStorage.getItem('isBuyRunning'));
-      this._isBuyRunning = new BehaviorSubject<boolean>(isRunning);
-    }
-    return this._isBuyRunning.asObservable();
+   return null
   }
 
   startSellBots() {
-    localStorage.setItem('isSellRunning', 'true');
-    this._isSellRunning.next(true);
+    this.sellCoinsCtr.start();
   }
 
   stopSellBots() {
-    localStorage.setItem('isSellRunning', 'false');
-    this._isSellRunning.next(false);
+    this.sellCoinsCtr.stop();
   }
 
   runSellBots() {
-    console.log('running bots');
-    this.sellCoinsCtr.run();
-
+   this.sellCoinsCtr.run();
   }
 
-  sellCoins$(): Observable<VOWatchdog[]> {
+  subSellCoins$(): Observable<VOWatchdog[]> {
     return this.sellCoinsCtr.sellCoins$()
   }
 
-  buyCoins$(): Observable<VOWatchdog[]> {
-    return this.watchdogsData$().map(wds => _.filter(wds, {action: 'BUY'}))
+  subBuyCoins$(): Observable<VOWatchdog[]> {
+    return this.subWatchdogsData$().map(wds => _.filter(wds, {action: 'BUY'}))
   }
 
-  watchdogsData$() {
+  subWatchdogsData$() {
     return this.watchDogsDataSub.asObservable();
   }
 
@@ -110,7 +110,7 @@ export class AppBuySellService {
 
   async getWatchDogById(id: string): Promise<VOWatchdog> {
     return new Promise<VOWatchdog>((resolve, reject) => {
-      this.watchdogsData$().subscribe(wds => {
+      this.subWatchdogsData$().subscribe(wds => {
         //  console.warn(wds);
         resolve(_.find(wds, {id: id}));
       }, reject)

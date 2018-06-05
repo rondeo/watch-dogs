@@ -67,7 +67,7 @@ export class EmailServiceService {
   saveData(){
 
     let data = this.watchDogs.map(function (item) {
-      let script = item.sellScript.toString();
+      let script = item.sellScripts.toString();
       if(script && script.length < 50) script = '';
 
     return {

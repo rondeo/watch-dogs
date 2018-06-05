@@ -95,9 +95,9 @@ export class WatchdogEditComponent implements OnInit {
       return
     }
     if (!this.watchDog.name) this.watchDog.name = this.watchDog.exchange + ' ' + this.watchDog.base + ' ' + this.watchDog.coin + ' ' + this.watchDog.amount;
-    const sellScript = this.watchDog.sellScript?this.watchDog.sellScript.toString():null;
-    const buyScript = this.watchDog.buyScript?this.watchDog.buyScript.toString():null;
-    // console.log(!sellScript, !buyScript);
+    const sellScript = this.watchDog.sellScripts?this.watchDog.sellScripts.toString():null;
+    const buyScript = this.watchDog.buyScripts?this.watchDog.buyScripts.toString():null;
+    // console.log(!sellScripts, !buyScripts);
     if(this.watchDog.active && !sellScript && !buyScript){
       this.snackBar.open('Set Script', 'x', {extraClasses:'alert-red'});
       return

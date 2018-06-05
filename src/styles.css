@@ -339,6 +339,10 @@ table td {
   cursor: pointer;
   text-decoration: underline;
 }
+.btn.fa{
+    text-decoration: none;
+    text-shadow: 2px 2px #bebab9;
+}
 
 .not-available{
   text-decoration: line-through;

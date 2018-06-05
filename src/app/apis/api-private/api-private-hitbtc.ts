@@ -167,11 +167,11 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   private call(URL: string, post: any): Observable<any> {
 
     const cred = this.getCredentials();
-    console.log(cred);
+   //  console.log(cred);
     if (!cred) {
       const sub = new Subject();
       this.userLogin$().subscribe(login => {
-        console.log(login);
+       //  console.log(login);
         if (login) {
           this.call(URL, post).subscribe(res => {
             sub.next(res);

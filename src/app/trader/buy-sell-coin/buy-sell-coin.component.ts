@@ -38,7 +38,7 @@ export class BuySellCoinComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    /*this.route.params.subscribe(params => {
       console.log(params);
       this.exchange = params.exchange;
       this.market = params.market;
@@ -52,7 +52,7 @@ export class BuySellCoinComponent implements OnInit {
         this.downloadBalances();
 
       })
-    });
+    });*/
   }
 
   async downloadBalances(){

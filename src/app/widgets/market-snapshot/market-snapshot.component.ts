@@ -75,22 +75,21 @@ export class MarketSnapshotComponent implements OnInit {
 
   ngOnInit() {
     this.analytics = VO_MARKET_SNAPSHOT;
+    this.initAsync();
+  }
+
+  async initAsync() {
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
     let base = ar[0];
     let coin = ar[1];
-
-
-    this.apiMarketCap.getData().subscribe(allCoins => {
-      this.allCoins = allCoins;
-      this.baseMC = allCoins[base];
-      this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
-      this.coinMC = allCoins[coin];
-      this.coinPriceUS = this.coinMC ? this.coinMC.price_usd : -1;
-      this.downloadHistory();
-    })
-
+    this.allCoins = await this.apiMarketCap.getData();
+    this.baseMC = this.allCoins[base];
+    this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
+    this.coinMC = this.allCoins[coin];
+    this.coinPriceUS = this.coinMC ? this.coinMC.price_usd : -1;
+    this.downloadHistory();
   }
 
 
