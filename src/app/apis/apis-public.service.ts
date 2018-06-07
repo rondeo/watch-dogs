@@ -13,11 +13,17 @@ import {forkJoin} from 'rxjs/observable/forkJoin';
 import {StorageService} from '../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
+import {VOCandle} from './models';
 
 
 @Injectable()
 export class ApisPublicService {
 
+  static candelsToAvarage(res: VOCandle[]){
+    return res.map(function (item: VOCandle) {
+      return +((item.High + item.Low)/2).toPrecision(7);
+    });
+  }
   private exchanges: { [index: string]: ApiPublicAbstract } = {};
 
   constructor(
@@ -30,6 +36,25 @@ export class ApisPublicService {
 
   private myExchanges = ['poloniex'];
 
+
+  async getPriceFromExchangesByCandlesticks(excnanges: string[], base: string, coin: string, from: number, to: number): Promise<number[][]> {
+   return Promise.all( excnanges.map((exchange) => {
+      const api = this.getExchangeApi(exchange);
+      return api.getCandlesticks(base, coin, from, to).then(ApisPublicService.candelsToAvarage);
+    }));
+
+
+/*
+    return api.getCandlesticks(base, coin, from, to).map((res: VOCandle[]) => {
+
+      return res.map(function (item: VOCandle) {
+        return +((item.High + item.Low)/2).toPrecision(7);
+
+
+      });
+    });*/
+
+  }
 
   downloadTickers(exchanges: string[]) {
     const subs = [];
@@ -90,22 +115,22 @@ export class ApisPublicService {
     });
   }
 
-  getAvailableMarketsForCoin(coin: string): Observable<{ exchange: string, market:string }[]> {
+  getAvailableMarketsForCoin(coin: string): Observable<{ exchange: string, market: string }[]> {
     return forkJoin(this.availableExhanges.map((item) => {
       return this.getExchangeApi(item).getAllCoins(true).map(res => {
-        if(res[coin]){
+        if (res[coin]) {
           return {
-            exhcnge:item,
-            markets:res[coin]
+            exhcnge: item,
+            markets: res[coin]
           }
-        }else return null
+        } else return null
 
       });
-    })).map(res=>{
+    })).map(res => {
 
       const allMarkets = [];
       res.forEach(function (item) {
-        if(item){
+        if (item) {
           for (let str in item.markets) {
             allMarkets.push({
               exchange: item.exhcnge,
@@ -116,7 +141,6 @@ export class ApisPublicService {
       })
       return allMarkets
     })
-
   }
 
   getExchangeApi(exchange: string): ApiPublicAbstract {

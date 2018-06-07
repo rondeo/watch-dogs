@@ -42,7 +42,6 @@ export class WatchdogEditComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.initAsync();
   }
 
@@ -50,13 +49,15 @@ export class WatchdogEditComponent implements OnInit {
     this.selectedCoins = await this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
 
-    let wd = await this.buySellCoin.getWatchDogById(id)
+    let wd = await this.buySellCoin.getWatchDogById(id);
 
     if(!wd) {
       wd = VOWATCHDOG;
       wd.id = id;
       wd.action = 'SELL';
     }
+    if(!wd.sellScripts) wd.sellScripts = [];
+    if(!wd.buyScripts) wd.buyScripts = [];
     this.watchDog = wd;
   }
 

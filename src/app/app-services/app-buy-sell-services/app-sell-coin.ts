@@ -13,7 +13,6 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 export class AppSellCoin {
   private sellCoins: VOWatchdog[];
   private sellCoinsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
-
   private _isSellRunning: BehaviorSubject<boolean>;
   private interval;
   constructor(

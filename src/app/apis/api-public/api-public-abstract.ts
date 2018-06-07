@@ -6,6 +6,8 @@ import 'rxjs/add/observable/empty';
 import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/fromPromise';
+import {VOCandle} from '../models';
+import {UTILS} from '../../com/utils';
 
 export interface MarketDay {
   Ask: number[];
@@ -108,7 +110,7 @@ export abstract class ApiPublicAbstract {
   }*/
 
   marketsTimestamp: number = 0;
-  getMarketsAvailable(): Promise<{ [market: string]: VOMarket }> {
+  async getMarketsAvailable(): Promise<{ [market: string]: VOMarket }> {
     if (this.markets && this.marketsTimestamp > (Date.now() - (1000 * 60 * 15))) return Promise.resolve(this.markets);
     this.marketsTimestamp = Number(localStorage.getItem('marketsTimestamp-' + this.exchange));
     if (this.marketsTimestamp > (Date.now() - (1000 * 60 * 5))) {
@@ -123,6 +125,10 @@ export abstract class ApiPublicAbstract {
      return res;
    })
 
+  }
+
+  async getCandlesticks(base: string, coin: string, from:number, to:number): Promise<VOCandle[]>{
+    return Promise.resolve([]);
   }
 
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;

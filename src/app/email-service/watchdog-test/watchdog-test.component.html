@@ -1,0 +1,17 @@
+<div>
+    <span class="mat-title">{{watchDog.action}}</span> <sup>{{watchDog.id}}</sup>
+    <div>{{watchDog.name}} &nbsp; &nbsp; &nbsp;  <a class="fa fa-bolt fa-2x dred btn" (click)="onRunClick()"></a></div>
+
+
+    <mat-list>
+        <mat-list-item *ngFor="let scriptText of scripts">
+            <span contenteditable="true">{{scriptText}}</span>
+        </mat-list-item>
+    </mat-list>
+
+
+    <section>
+        <app-coin-day [coin]="watchDog.coin"></app-coin-day>
+    </section>
+
+</div>

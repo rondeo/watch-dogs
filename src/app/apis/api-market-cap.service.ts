@@ -29,9 +29,14 @@ export class ApiMarketCapService {
   ) {
   }
 
-  async getCoin(symbol: string): Promise<VOMarketCap> {
-    if (ApiMarketCapService.MC) return Promise.resolve(ApiMarketCapService.MC[symbol]);
-    return this.downloadTicker().toPromise().then(res => ApiMarketCapService.MC[symbol])
+  async getCoin(symbol: string): Promise<VOMCAgregated> {
+    if(this.data) return Promise.resolve(this.data[symbol]);
+    return new Promise<VOMCAgregated>((resolve, reject) =>{
+      this.agregated$().subscribe(res =>{
+        resolve(this.data[symbol]);
+      }, reject);
+    })
+
   }
 
   downloadTicker(refresh = false): Observable<{ [symbol: string]: VOMarketCap }> {
@@ -163,9 +168,10 @@ export class ApiMarketCapService {
 
 
   getCoinWeek(coin: string): Observable<VOCoinData[]> {
+    if(!coin) throw new Error(' no coin');
     const url = 'api/marketcap/coin-history/' + coin;
     return this.http.get(url).map((res: any) => {
-      // console.log(res)
+       console.log(res);
 
 
       return res.data.map(function (item) {

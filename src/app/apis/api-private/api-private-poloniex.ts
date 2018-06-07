@@ -9,6 +9,7 @@ import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
 import * as cryptojs from 'crypto-js';
 import {Subject} from 'rxjs/Subject';
 import {UserLoginService} from '../../services/user-login.service';
+import {UTILS} from '../../com/utils';
 
 export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   apiPublic: ApiPublicPoloniex
@@ -246,12 +247,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     }
 
       post.nonce = Date.now();
-
-      let load = Object.keys(post).map(function (item) {
-        return item + '=' + this.post[item];
-      }, {post: post}).join('&');
-
-
+      let load = UTILS.toURLparams(post);
       let signed = this.hash_hmac(load, cred.password);
       let url = '/api/poloniex/private';
       ;

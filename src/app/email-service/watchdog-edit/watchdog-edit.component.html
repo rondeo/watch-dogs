@@ -1,7 +1,14 @@
 <div>
-    <h4>Watchdog <sup *ngIf="watchDog">{{watchDog.id}}</sup></h4>
-    <a class="fa fa-line-chart btn" routerLink="/my-bot/coin-graph/{{watchDog.coin}}"></a>
-    <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>
+    <div class="mat-subheading-2">
+        <span>Watchdog</span>
+        <sup *ngIf="watchDog">{{watchDog.id}}</sup>
+        &nbsp;  &nbsp;  &nbsp;
+        <a class="fa fa-bolt fa-2x dgreen btn" routerLink="/email-service/watchdog-test/{{watchDog.id}}"></a>
+    </div>
+
+
+   <!-- <a class="fa fa-line-chart btn" routerLink="/my-bot/coin-graph/{{watchDog.coin}}"></a>
+    <mat-checkbox [(ngModel)]="watchDog.isEmail">Email</mat-checkbox>-->
 
     <section>
         <p>

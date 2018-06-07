@@ -19,6 +19,10 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
     console.log(url);
     return this.http.get(url).map((res: any) => {
 
+      if(!res.bid){
+        console.log(res);
+        throw new Error(this.exchange + ' wromg data ');
+      }
       let buy: VOTrade[] = res.bid.map(function (item) {
         return {
           amountCoin: +item.size,

@@ -102,3 +102,14 @@ export interface VOMC extends VOMCAgregated{
 }
 
 export type VOMCObj = {[symbol:string]: VOMCAgregated}
+
+export interface VOCandle{
+  from: number;
+  to: number;
+  Open: number;
+  Close: number;
+  High: number;
+  Low: number;
+  Trades?: number;
+  Volume?: number;
+}

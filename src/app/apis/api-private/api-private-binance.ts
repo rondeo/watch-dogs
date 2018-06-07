@@ -69,6 +69,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
 
+
   cancelOrder(orderId: string, base?: string, coin?: string) {
     let url = '/api/proxy/api.binance.com/api/v3/order';
     //console.log(url);

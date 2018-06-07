@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {VOGraphs} from '../../shared/line-chart/line-chart.component';
 import {GRAPHS} from '../../com/grpahs';
@@ -11,18 +11,22 @@ import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {P} from '@angular/core/src/render3';
 import {VOCoinData} from '../../apis/models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
+import {ApisPublicService} from '../../apis/apis-public.service';
+import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 
 @Component({
   selector: 'app-coin-day',
   templateUrl: './coin-day.component.html',
   styleUrls: ['./coin-day.component.css']
 })
-export class CoinDayComponent implements OnInit {
+export class CoinDayComponent implements OnInit, OnChanges {
 
-  @Input()  coin: string;
+  @Input() coin: string;
   mcCoin: VOCoinData;
 
   myGraps: VOGraphs;
+  myGraps2: VOLineGraph[];
+
 
   rankFirst: number;
   rankLast: number;
@@ -36,14 +40,26 @@ export class CoinDayComponent implements OnInit {
   exchange: string;
 
   constructor(
-  //  private route: ActivatedRoute,
+    //  private route: ActivatedRoute,
     private apiMarketCap: ApiMarketCapService,
-    private cryptoCompare: ApiCryptoCompareService
+    private cryptoCompare: ApiCryptoCompareService,
+    private apiPublic: ApisPublicService
   ) {
   }
 
+  ngOnChanges(data: { [val: string]: SimpleChange }) {
+    if (data.coin) {
+      console.warn(data);
+      this.filterDay();
+    }
+  }
+
   ngOnInit() {
+
+
     this.momentTo = moment();//.subtract(12,'h');
+
+
     /*this.route.params.subscribe(paramas => {
       let coin = paramas.coin;
       console.log(coin);
@@ -58,15 +74,30 @@ export class CoinDayComponent implements OnInit {
 
     });*/
 
-    this.filterDay();
+    // this.filterDay();
 
   }
 
 
   async filterDay() {
+    if (!this.coin) return;
+    console.warn(this.coin);
     this.fullHistory = await this.getCoinHistory();
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
+
+
+    const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance','bittrex'], 'BTC', this.coin, from, to);
+    console.log(prices);
+
+    const line: VOLineGraph = {
+      ys: prices[0],
+      color: '#ff7f56',
+      label: 'price BTC'
+    }
+
+    this.myGraps2 = [line];
+
     let history = this.fullHistory.filter(function (item) {
       return item.timestamp < to && item.timestamp > from;
     });
@@ -104,9 +135,7 @@ export class CoinDayComponent implements OnInit {
 
     this.rankFirst = first.rank
     this.rankLast = last.rank;
-
-
-    const labels = []
+    const labels = [];
     let trigger = false;
     const pricebtcs = [];
     const priceusds = [];
@@ -175,6 +204,7 @@ export class CoinDayComponent implements OnInit {
       xs: labels,
       graphs: graphs
     }
+
 
   }
 

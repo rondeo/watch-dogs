@@ -3,6 +3,9 @@ import {Observable} from "rxjs/Observable";
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
+import  * as moment from 'moment';
+import {UTILS} from '../../com/utils';
+import {VOCandle} from '../models';
 
 
 export class ApiPublicBinance extends ApiPublicAbstract {
@@ -11,6 +14,38 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
+
+
+  async getCandlesticks(base: string, coin: string, from:number, to:number): Promise<VOCandle[]>{
+   const markets = await this.getMarketsAvailable();
+   if(!markets[base+'_'+coin]) return Promise.resolve([]);
+    const params = {
+      symbol:coin+base,
+      interval:'5m',
+      startTime: from,
+      endTime: to
+    };
+
+    const url = '/api/proxy/api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    return this.http.get(url).map((res: any[]) => {
+      return res.map(function (item) {
+        return {
+          from:+item[0],
+          to:+item[6],
+          Open:+item[1],
+          High: +item[2],
+          Low: +item[3],
+          Close: +item[4],
+          Trades: +item[8],
+          Volume: +item[5]
+        }
+      })
+
+
+    }).toPromise()
+
+  }
+
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
