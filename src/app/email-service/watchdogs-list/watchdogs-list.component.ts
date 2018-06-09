@@ -8,6 +8,7 @@ import {StorageService} from '../../services/app-storage.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+import {WatchDog} from '../../models/watch-dog';
 
 
 @Component({
@@ -18,7 +19,7 @@ import {AppBotsService} from '../../app-services/app-bots-services/app-bots.serv
 export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   action: string
-  watchDogs: VOWatchdog[];
+  watchDogs: WatchDog[];
   MC: { [symbol: string]: VOMarketCap };
 
   isBotsRunning: boolean;
@@ -35,7 +36,6 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
 
   dryRunDogs(){
-
     this.botsService.dryRun(this.action);
   }
   ngOnInit() {
@@ -52,11 +52,13 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   initSellBots() {
     this.botsService.isSellRunning$().subscribe(isRunning => {
-
       this.isBotsRunning = isRunning;
     });
+
     this.botsService.subSellCoins$().subscribe(wds => {
-      this.watchDogs = wds;
+      this.watchDogs = wds.map(function (item) {
+        return new WatchDog(item);
+      });
     })
   }
 
@@ -66,11 +68,11 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   mapMC() {
-    if (this.MC && this.watchDogs) {
+   /* if (this.MC && this.watchDogs) {
       this.watchDogs.forEach(function (item) {
-        item.mc = this.MC[item.coin];
+        //item.mc = this.MC[item.coin];
       }, {MC: this.MC})
-    }
+    }*/
   }
 
   onNewClick() {
@@ -78,13 +80,13 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   }
 
-  async onDeleteClick(dog: VOWatchdog) {
+  async onDeleteClick(dog: WatchDog) {
     console.log(dog);
     if (!confirm('You want to delete Watchdog ' + dog.name + '?')) return;
     this.botsService.deleteWatchDog(dog);
   }
 
-  onNameClick(dog: VOWatchdog) {
+  onNameClick(dog: WatchDog) {
     this.router.navigateByUrl('/email-service/watchdog-edit/' + dog.id)
   }
 

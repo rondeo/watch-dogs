@@ -175,7 +175,7 @@ export class StorageService {
     })
   }
 
-  async saveWatchDogs(watchDogs = null) {
+  async saveWatchDogs(watchDogs:VOWatchdog[] = null) {
     if (watchDogs) this.watchDogs = watchDogs;
     if (this.watchDogs) return this.upsert(this.WATCH_DOGS, this.watchDogs);
     else throw new Error('no watchdogs to save');

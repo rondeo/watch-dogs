@@ -2,7 +2,6 @@ import {VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
 import {VOMCAgregated} from './api-models';
 
 
-
 export class WatchDog extends VOWatchdog {
   uuid: string;
   timestamp: number;
@@ -12,13 +11,10 @@ export class WatchDog extends VOWatchdog {
   isToSell;
   mcCoin: VOMCAgregated;
   mcBase: VOMCAgregated;
-
-
-  booksDelta:number;
+  booksDelta: number;
 
   constructor(public wd: VOWatchdog) {
     super(wd);
-    Object.assign(this, wd);
   }
 
   addUS(MC: { [symbol: string]: VOMCAgregated }) {
@@ -26,12 +22,32 @@ export class WatchDog extends VOWatchdog {
     this.mcCoin = MC[this.coin];
 
     this.baseUS = +(this.mcBase.price_usd * this.balanceBase).toFixed(2);
-    this.coinUS = +(this.mcCoin.price_usd * this.balanceCoin ). toFixed(2);
+    this.coinUS = +(this.mcCoin.price_usd * this.balanceCoin).toFixed(2);
+
+  }
+
+  toJSON(): VOWatchdog {
+    return {
+      id: this.id,
+      exchange: this.exchange,
+      base: this.base,
+      coin: this.coin,
+      action: this.action,
+      name: this.name,
+      isActive: this.isActive,
+      status: this.status,
+      isEmail: this.isEmail,
+      results : this.results,
+      sellScripts: this.sellScripts,
+      buyScripts: this.buyScripts,
+      balanceCoin: this.balanceCoin,
+      balanceBase: this.balanceBase,
+      amount: this.amount
+    }
 
   }
 
   copy() {
-    return Object.assign({date: this.date}, this.wd)
 
   }
 

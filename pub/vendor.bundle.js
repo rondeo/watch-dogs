@@ -7208,24 +7208,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': true },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': false }
+     *   { 'user': 'barney',  'isActive': true },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': false }
      * ];
      *
-     * _.dropRightWhile(users, function(o) { return !o.active; });
+     * _.dropRightWhile(users, function(o) { return !o.isActive; });
      * // => objects for ['barney']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.dropRightWhile(users, { 'user': 'pebbles', 'active': false });
+     * _.dropRightWhile(users, { 'user': 'pebbles', 'isActive': false });
      * // => objects for ['barney', 'fred']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.dropRightWhile(users, ['active', false]);
+     * _.dropRightWhile(users, ['isActive', false]);
      * // => objects for ['barney']
      *
      * // The `_.property` iteratee shorthand.
-     * _.dropRightWhile(users, 'active');
+     * _.dropRightWhile(users, 'isActive');
      * // => objects for ['barney', 'fred', 'pebbles']
      */
     function dropRightWhile(array, predicate) {
@@ -7249,24 +7249,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': false },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': true }
+     *   { 'user': 'barney',  'isActive': false },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': true }
      * ];
      *
-     * _.dropWhile(users, function(o) { return !o.active; });
+     * _.dropWhile(users, function(o) { return !o.isActive; });
      * // => objects for ['pebbles']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.dropWhile(users, { 'user': 'barney', 'active': false });
+     * _.dropWhile(users, { 'user': 'barney', 'isActive': false });
      * // => objects for ['fred', 'pebbles']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.dropWhile(users, ['active', false]);
+     * _.dropWhile(users, ['isActive', false]);
      * // => objects for ['pebbles']
      *
      * // The `_.property` iteratee shorthand.
-     * _.dropWhile(users, 'active');
+     * _.dropWhile(users, 'isActive');
      * // => objects for ['barney', 'fred', 'pebbles']
      */
     function dropWhile(array, predicate) {
@@ -7331,24 +7331,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': false },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': true }
+     *   { 'user': 'barney',  'isActive': false },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': true }
      * ];
      *
      * _.findIndex(users, function(o) { return o.user == 'barney'; });
      * // => 0
      *
      * // The `_.matches` iteratee shorthand.
-     * _.findIndex(users, { 'user': 'fred', 'active': false });
+     * _.findIndex(users, { 'user': 'fred', 'isActive': false });
      * // => 1
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.findIndex(users, ['active', false]);
+     * _.findIndex(users, ['isActive', false]);
      * // => 0
      *
      * // The `_.property` iteratee shorthand.
-     * _.findIndex(users, 'active');
+     * _.findIndex(users, 'isActive');
      * // => 2
      */
     function findIndex(array, predicate, fromIndex) {
@@ -7378,24 +7378,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': true },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': false }
+     *   { 'user': 'barney',  'isActive': true },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': false }
      * ];
      *
      * _.findLastIndex(users, function(o) { return o.user == 'pebbles'; });
      * // => 2
      *
      * // The `_.matches` iteratee shorthand.
-     * _.findLastIndex(users, { 'user': 'barney', 'active': true });
+     * _.findLastIndex(users, { 'user': 'barney', 'isActive': true });
      * // => 0
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.findLastIndex(users, ['active', false]);
+     * _.findLastIndex(users, ['isActive', false]);
      * // => 2
      *
      * // The `_.property` iteratee shorthand.
-     * _.findLastIndex(users, 'active');
+     * _.findLastIndex(users, 'isActive');
      * // => 0
      */
     function findLastIndex(array, predicate, fromIndex) {
@@ -8329,24 +8329,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': true },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': false }
+     *   { 'user': 'barney',  'isActive': true },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': false }
      * ];
      *
-     * _.takeRightWhile(users, function(o) { return !o.active; });
+     * _.takeRightWhile(users, function(o) { return !o.isActive; });
      * // => objects for ['fred', 'pebbles']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.takeRightWhile(users, { 'user': 'pebbles', 'active': false });
+     * _.takeRightWhile(users, { 'user': 'pebbles', 'isActive': false });
      * // => objects for ['pebbles']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.takeRightWhile(users, ['active', false]);
+     * _.takeRightWhile(users, ['isActive', false]);
      * // => objects for ['fred', 'pebbles']
      *
      * // The `_.property` iteratee shorthand.
-     * _.takeRightWhile(users, 'active');
+     * _.takeRightWhile(users, 'isActive');
      * // => []
      */
     function takeRightWhile(array, predicate) {
@@ -8370,24 +8370,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'active': false },
-     *   { 'user': 'fred',    'active': false },
-     *   { 'user': 'pebbles', 'active': true }
+     *   { 'user': 'barney',  'isActive': false },
+     *   { 'user': 'fred',    'isActive': false },
+     *   { 'user': 'pebbles', 'isActive': true }
      * ];
      *
-     * _.takeWhile(users, function(o) { return !o.active; });
+     * _.takeWhile(users, function(o) { return !o.isActive; });
      * // => objects for ['barney', 'fred']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.takeWhile(users, { 'user': 'barney', 'active': false });
+     * _.takeWhile(users, { 'user': 'barney', 'isActive': false });
      * // => objects for ['barney']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.takeWhile(users, ['active', false]);
+     * _.takeWhile(users, ['isActive', false]);
      * // => objects for ['barney', 'fred']
      *
      * // The `_.property` iteratee shorthand.
-     * _.takeWhile(users, 'active');
+     * _.takeWhile(users, 'isActive');
      * // => []
      */
     function takeWhile(array, predicate) {
@@ -9212,20 +9212,20 @@ function toComment(sourceMap) {
      * // => false
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': false },
-     *   { 'user': 'fred',   'age': 40, 'active': false }
+     *   { 'user': 'barney', 'age': 36, 'isActive': false },
+     *   { 'user': 'fred',   'age': 40, 'isActive': false }
      * ];
      *
      * // The `_.matches` iteratee shorthand.
-     * _.every(users, { 'user': 'barney', 'active': false });
+     * _.every(users, { 'user': 'barney', 'isActive': false });
      * // => false
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.every(users, ['active', false]);
+     * _.every(users, ['isActive', false]);
      * // => true
      *
      * // The `_.property` iteratee shorthand.
-     * _.every(users, 'active');
+     * _.every(users, 'isActive');
      * // => false
      */
     function every(collection, predicate, guard) {
@@ -9254,23 +9254,23 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': true },
-     *   { 'user': 'fred',   'age': 40, 'active': false }
+     *   { 'user': 'barney', 'age': 36, 'isActive': true },
+     *   { 'user': 'fred',   'age': 40, 'isActive': false }
      * ];
      *
-     * _.filter(users, function(o) { return !o.active; });
+     * _.filter(users, function(o) { return !o.isActive; });
      * // => objects for ['fred']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.filter(users, { 'age': 36, 'active': true });
+     * _.filter(users, { 'age': 36, 'isActive': true });
      * // => objects for ['barney']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.filter(users, ['active', false]);
+     * _.filter(users, ['isActive', false]);
      * // => objects for ['fred']
      *
      * // The `_.property` iteratee shorthand.
-     * _.filter(users, 'active');
+     * _.filter(users, 'isActive');
      * // => objects for ['barney']
      */
     function filter(collection, predicate) {
@@ -9294,24 +9294,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'age': 36, 'active': true },
-     *   { 'user': 'fred',    'age': 40, 'active': false },
-     *   { 'user': 'pebbles', 'age': 1,  'active': true }
+     *   { 'user': 'barney',  'age': 36, 'isActive': true },
+     *   { 'user': 'fred',    'age': 40, 'isActive': false },
+     *   { 'user': 'pebbles', 'age': 1,  'isActive': true }
      * ];
      *
      * _.find(users, function(o) { return o.age < 40; });
      * // => object for 'barney'
      *
      * // The `_.matches` iteratee shorthand.
-     * _.find(users, { 'age': 1, 'active': true });
+     * _.find(users, { 'age': 1, 'isActive': true });
      * // => object for 'pebbles'
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.find(users, ['active', false]);
+     * _.find(users, ['isActive', false]);
      * // => object for 'fred'
      *
      * // The `_.property` iteratee shorthand.
-     * _.find(users, 'active');
+     * _.find(users, 'isActive');
      * // => object for 'barney'
      */
     var find = createFind(findIndex);
@@ -9718,24 +9718,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney',  'age': 36, 'active': false },
-     *   { 'user': 'fred',    'age': 40, 'active': true },
-     *   { 'user': 'pebbles', 'age': 1,  'active': false }
+     *   { 'user': 'barney',  'age': 36, 'isActive': false },
+     *   { 'user': 'fred',    'age': 40, 'isActive': true },
+     *   { 'user': 'pebbles', 'age': 1,  'isActive': false }
      * ];
      *
-     * _.partition(users, function(o) { return o.active; });
+     * _.partition(users, function(o) { return o.isActive; });
      * // => objects for [['fred'], ['barney', 'pebbles']]
      *
      * // The `_.matches` iteratee shorthand.
-     * _.partition(users, { 'age': 1, 'active': false });
+     * _.partition(users, { 'age': 1, 'isActive': false });
      * // => objects for [['pebbles'], ['barney', 'fred']]
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.partition(users, ['active', false]);
+     * _.partition(users, ['isActive', false]);
      * // => objects for [['barney', 'pebbles'], ['fred']]
      *
      * // The `_.property` iteratee shorthand.
-     * _.partition(users, 'active');
+     * _.partition(users, 'isActive');
      * // => objects for [['fred'], ['barney', 'pebbles']]
      */
     var partition = createAggregator(function(result, value, key) {
@@ -9830,23 +9830,23 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': false },
-     *   { 'user': 'fred',   'age': 40, 'active': true }
+     *   { 'user': 'barney', 'age': 36, 'isActive': false },
+     *   { 'user': 'fred',   'age': 40, 'isActive': true }
      * ];
      *
-     * _.reject(users, function(o) { return !o.active; });
+     * _.reject(users, function(o) { return !o.isActive; });
      * // => objects for ['fred']
      *
      * // The `_.matches` iteratee shorthand.
-     * _.reject(users, { 'age': 40, 'active': true });
+     * _.reject(users, { 'age': 40, 'isActive': true });
      * // => objects for ['barney']
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.reject(users, ['active', false]);
+     * _.reject(users, ['isActive', false]);
      * // => objects for ['fred']
      *
      * // The `_.property` iteratee shorthand.
-     * _.reject(users, 'active');
+     * _.reject(users, 'isActive');
      * // => objects for ['barney']
      */
     function reject(collection, predicate) {
@@ -9978,20 +9978,20 @@ function toComment(sourceMap) {
      * // => true
      *
      * var users = [
-     *   { 'user': 'barney', 'active': true },
-     *   { 'user': 'fred',   'active': false }
+     *   { 'user': 'barney', 'isActive': true },
+     *   { 'user': 'fred',   'isActive': false }
      * ];
      *
      * // The `_.matches` iteratee shorthand.
-     * _.some(users, { 'user': 'barney', 'active': false });
+     * _.some(users, { 'user': 'barney', 'isActive': false });
      * // => false
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.some(users, ['active', false]);
+     * _.some(users, ['isActive', false]);
      * // => true
      *
      * // The `_.property` iteratee shorthand.
-     * _.some(users, 'active');
+     * _.some(users, 'isActive');
      * // => true
      */
     function some(collection, predicate, guard) {
@@ -12929,24 +12929,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = {
-     *   'barney':  { 'age': 36, 'active': true },
-     *   'fred':    { 'age': 40, 'active': false },
-     *   'pebbles': { 'age': 1,  'active': true }
+     *   'barney':  { 'age': 36, 'isActive': true },
+     *   'fred':    { 'age': 40, 'isActive': false },
+     *   'pebbles': { 'age': 1,  'isActive': true }
      * };
      *
      * _.findKey(users, function(o) { return o.age < 40; });
      * // => 'barney' (iteration order is not guaranteed)
      *
      * // The `_.matches` iteratee shorthand.
-     * _.findKey(users, { 'age': 1, 'active': true });
+     * _.findKey(users, { 'age': 1, 'isActive': true });
      * // => 'pebbles'
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.findKey(users, ['active', false]);
+     * _.findKey(users, ['isActive', false]);
      * // => 'fred'
      *
      * // The `_.property` iteratee shorthand.
-     * _.findKey(users, 'active');
+     * _.findKey(users, 'isActive');
      * // => 'barney'
      */
     function findKey(object, predicate) {
@@ -12968,24 +12968,24 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = {
-     *   'barney':  { 'age': 36, 'active': true },
-     *   'fred':    { 'age': 40, 'active': false },
-     *   'pebbles': { 'age': 1,  'active': true }
+     *   'barney':  { 'age': 36, 'isActive': true },
+     *   'fred':    { 'age': 40, 'isActive': false },
+     *   'pebbles': { 'age': 1,  'isActive': true }
      * };
      *
      * _.findLastKey(users, function(o) { return o.age < 40; });
      * // => returns 'pebbles' assuming `_.findKey` returns 'barney'
      *
      * // The `_.matches` iteratee shorthand.
-     * _.findLastKey(users, { 'age': 36, 'active': true });
+     * _.findLastKey(users, { 'age': 36, 'isActive': true });
      * // => 'barney'
      *
      * // The `_.matchesProperty` iteratee shorthand.
-     * _.findLastKey(users, ['active', false]);
+     * _.findLastKey(users, ['isActive', false]);
      * // => 'fred'
      *
      * // The `_.property` iteratee shorthand.
-     * _.findLastKey(users, 'active');
+     * _.findLastKey(users, 'isActive');
      * // => 'pebbles'
      */
     function findLastKey(object, predicate) {
@@ -15563,13 +15563,13 @@ function toComment(sourceMap) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': true },
-     *   { 'user': 'fred',   'age': 40, 'active': false }
+     *   { 'user': 'barney', 'age': 36, 'isActive': true },
+     *   { 'user': 'fred',   'age': 40, 'isActive': false }
      * ];
      *
      * // The `_.matches` iteratee shorthand.
-     * _.filter(users, _.iteratee({ 'user': 'barney', 'active': true }));
-     * // => [{ 'user': 'barney', 'age': 36, 'active': true }]
+     * _.filter(users, _.iteratee({ 'user': 'barney', 'isActive': true }));
+     * // => [{ 'user': 'barney', 'age': 36, 'isActive': true }]
      *
      * // The `_.matchesProperty` iteratee shorthand.
      * _.filter(users, _.iteratee(['user', 'fred']));
@@ -24076,7 +24076,7 @@ function style(tokens) {
  * Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
- * `state` declares an animation state within the given trigger. When a state is active within a
+ * `state` declares an animation state within the given trigger. When a state is isActive within a
  * component then its associated styles will persist on the element that the trigger is attached to
  * (even when the animation ends).
  *
@@ -24254,7 +24254,7 @@ function keyframes(steps) {
  *
  * ```
  * // start off by hiding the element, but make sure that it animates properly to whatever state
- * // is currently active for "myAnimationTrigger"
+ * // is currently isActive for "myAnimationTrigger"
  * transition("void => *", [
  *   style({ opacity: 0 }),
  *   animate(500)
@@ -28226,7 +28226,7 @@ function formatNumber(pipe, locale, value, style, digits, currency, currencyAsSy
  * \@howToUse `number_expression | number[:digitInfo]`
  *
  * Formats a number as text. Group sizing and separator and other locale-specific
- * configurations are based on the active locale.
+ * configurations are based on the isActive locale.
  *
  * where `expression` is a number:
  *  - `digitInfo` is a `string` which has a following format: <br>
@@ -71071,7 +71071,7 @@ function style$1(tokens) {
  * Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
- * `state` declares an animation state within the given trigger. When a state is active within a
+ * `state` declares an animation state within the given trigger. When a state is isActive within a
  * component then its associated styles will persist on the element that the trigger is attached to
  * (even when the animation ends).
  *
@@ -71249,7 +71249,7 @@ function keyframes$1(steps) {
  *
  * ```
  * // start off by hiding the element, but make sure that it animates properly to whatever state
- * // is currently active for "myAnimationTrigger"
+ * // is currently isActive for "myAnimationTrigger"
  * transition("void => *", [
  *   style({ opacity: 0 }),
  *   animate(500)
@@ -72740,7 +72740,7 @@ RadioControlRegistry.ctorParameters = function () { return []; };
  * \@howToUse
  *
  * If you have imported the {\@link FormsModule} or the {\@link ReactiveFormsModule}, this
- * value accessor will be active on any radio control that has a form directive. You do
+ * value accessor will be isActive on any radio control that has a form directive. You do
  * **not** need to add a special selector to activate it.
  *
  * ### How to use radio buttons with form directives
@@ -72981,7 +72981,7 @@ function _extractId(valueString) {
  * \@howToUse
  *
  * If you have imported the {\@link FormsModule} or the {\@link ReactiveFormsModule}, this
- * value accessor will be active on any select control that has a form directive. You do
+ * value accessor will be isActive on any select control that has a form directive. You do
  * **not** need to add a special selector to activate it.
  *
  * ### How to use select controls with form directives
@@ -74224,7 +74224,7 @@ var AbstractControl = (function () {
         configurable: true
     });
     /**
-     * Sets the synchronous validators that are active on this control.  Calling
+     * Sets the synchronous validators that are isActive on this control.  Calling
      * this will overwrite any existing sync validators.
      * @param {?} newValidator
      * @return {?}
@@ -74233,7 +74233,7 @@ var AbstractControl = (function () {
         this.validator = coerceToValidator(newValidator);
     };
     /**
-     * Sets the async validators that are active on this control. Calling this
+     * Sets the async validators that are isActive on this control. Calling this
      * will overwrite any existing async validators.
      * @param {?} newValidator
      * @return {?}
@@ -75597,7 +75597,7 @@ var resolvedPromise = Promise.resolve(null);
  *
  * \@howToUse
  *
- * As soon as you import the `FormsModule`, this directive becomes active by default on
+ * As soon as you import the `FormsModule`, this directive becomes isActive by default on
  * all `<form>` tags.  You don't need to add a special selector.
  *
  * You can export the directive into a local template variable using `ngForm` as the key
@@ -77236,7 +77236,7 @@ RequiredValidator.propDecorators = {
  * ### Example
  *
  * ```
- * <input type="checkbox" name="active" ngModel required>
+ * <input type="checkbox" name="isActive" ngModel required>
  * ```
  *
  * \@experimental
@@ -81034,7 +81034,7 @@ var RippleRenderer = /*@__PURE__*/(function () {
          */
         this._triggerEvents = new Map();
         /**
-         * Set of currently active ripple references.
+         * Set of currently isActive ripple references.
          */
         this._activeRipples = new Set();
         /**
@@ -81099,7 +81099,7 @@ var RippleRenderer = /*@__PURE__*/(function () {
         // Exposed reference to the ripple that will be returned.
         var /** @type {?} */ rippleRef = new RippleRef(this, ripple, config);
         rippleRef.state = RippleState.FADING_IN;
-        // Add the ripple reference to the list of all active ripples.
+        // Add the ripple reference to the list of all isActive ripples.
         this._activeRipples.add(rippleRef);
         // Wait for the ripple element to be completely faded in.
         // Once it's faded in, the ripple can be hidden immediately if the mouse is released.
@@ -81117,7 +81117,7 @@ var RippleRenderer = /*@__PURE__*/(function () {
      * @return {?}
      */
     RippleRenderer.prototype.fadeOutRipple = function (rippleRef) {
-        // For ripples that are not active anymore, don't re-un the fade-out animation.
+        // For ripples that are not isActive anymore, don't re-un the fade-out animation.
         if (!this._activeRipples.delete(rippleRef)) {
             return;
         }
@@ -81132,7 +81132,7 @@ var RippleRenderer = /*@__PURE__*/(function () {
         }, RIPPLE_FADE_OUT_DURATION);
     };
     /**
-     * Fades out all currently active ripples.
+     * Fades out all currently isActive ripples.
      * @return {?}
      */
     RippleRenderer.prototype.fadeOutAll = function () {
@@ -82379,8 +82379,8 @@ var MdOption = /*@__PURE__*/(function () {
     });
     Object.defineProperty(MdOption.prototype, "active", {
         /**
-         * Whether or not the option is currently active and ready to be selected.
-         * An active option displays styles as if it is focused, but the
+         * Whether or not the option is currently isActive and ready to be selected.
+         * An isActive option displays styles as if it is focused, but the
          * focus is actually retained somewhere else. This comes in handy
          * for components like autocomplete where focus must remain on the input.
          * @return {?}
@@ -82429,8 +82429,8 @@ var MdOption = /*@__PURE__*/(function () {
     };
     /**
      * This method sets display styles on the option to make it appear
-     * active. This is used by the ActiveDescendantKeyManager so key
-     * events will display the proper options as active on arrow key events.
+     * isActive. This is used by the ActiveDescendantKeyManager so key
+     * events will display the proper options as isActive on arrow key events.
      * @return {?}
      */
     MdOption.prototype.setActiveStyles = function () {
@@ -82438,8 +82438,8 @@ var MdOption = /*@__PURE__*/(function () {
     };
     /**
      * This method removes display styles on the option that made it appear
-     * active. This is used by the ActiveDescendantKeyManager so key
-     * events will display the proper options as active on arrow key events.
+     * isActive. This is used by the ActiveDescendantKeyManager so key
+     * events will display the proper options as isActive on arrow key events.
      * @return {?}
      */
     MdOption.prototype.setInactiveStyles = function () {
@@ -84823,7 +84823,7 @@ var FocusTrap = /*@__PURE__*/(function () {
     }
     Object.defineProperty(FocusTrap.prototype, "enabled", {
         /**
-         * Whether the focus trap is active.
+         * Whether the focus trap is isActive.
          * @return {?}
          */
         get: function () { return this._enabled; },
@@ -85079,7 +85079,7 @@ var FocusTrapDeprecatedDirective = /*@__PURE__*/(function () {
     }
     Object.defineProperty(FocusTrapDeprecatedDirective.prototype, "disabled", {
         /**
-         * Whether the focus trap is active.
+         * Whether the focus trap is isActive.
          * @return {?}
          */
         get: function () { return !this.focusTrap.enabled; },
@@ -85137,7 +85137,7 @@ var FocusTrapDirective = /*@__PURE__*/(function () {
     }
     Object.defineProperty(FocusTrapDirective.prototype, "enabled", {
         /**
-         * Whether the focus trap is active.
+         * Whether the focus trap is isActive.
          * @return {?}
          */
         get: function () { return this.focusTrap.enabled; },
@@ -87435,7 +87435,7 @@ MdButton.decorators = [
                     '[disabled]': 'disabled || null',
                 },
                 template: "<span class=\"mat-button-wrapper\"><ng-content></ng-content></span><div md-ripple class=\"mat-button-ripple\" [class.mat-button-ripple-round]=\"_isRoundButton || _isIconButton\" [mdRippleDisabled]=\"_isRippleDisabled()\" [mdRippleCentered]=\"_isIconButton\" [mdRippleTrigger]=\"_getHostElement()\"></div><div class=\"mat-button-focus-overlay\"></div>",
-                styles: [".mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled].mat-button,[disabled].mat-fab,[disabled].mat-icon-button,[disabled].mat-mini-fab,[disabled].mat-raised-button{cursor:default}.cdk-keyboard-focused.mat-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-icon-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-mini-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-raised-button .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-fab::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-mini-fab::-moz-focus-inner,.mat-raised-button::-moz-focus-inner{border:0}.mat-fab,.mat-mini-fab,.mat-raised-button{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-fab:not([disabled]):active,.mat-mini-fab:not([disabled]):active,.mat-raised-button:not([disabled]):active{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled].mat-fab,[disabled].mat-mini-fab,[disabled].mat-raised-button{box-shadow:none}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay{opacity:1}.mat-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab:not([disabled]):active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-icon,.mat-fab i{padding:16px 0;line-height:24px}.mat-mini-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab:not([disabled]):active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-icon,.mat-mini-fab i{padding:8px 0;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button,.mat-icon-button,.mat-raised-button{color:currentColor}.mat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*{vertical-align:middle}.mat-button-focus-overlay,.mat-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:active){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:active){.mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}"],
+                styles: [".mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled].mat-button,[disabled].mat-fab,[disabled].mat-icon-button,[disabled].mat-mini-fab,[disabled].mat-raised-button{cursor:default}.cdk-keyboard-focused.mat-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-icon-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-mini-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-raised-button .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-fab::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-mini-fab::-moz-focus-inner,.mat-raised-button::-moz-focus-inner{border:0}.mat-fab,.mat-mini-fab,.mat-raised-button{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-fab:not([disabled]):isActive,.mat-mini-fab:not([disabled]):isActive,.mat-raised-button:not([disabled]):isActive{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled].mat-fab,[disabled].mat-mini-fab,[disabled].mat-raised-button{box-shadow:none}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay{opacity:1}.mat-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab:not([disabled]):isActive{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-icon,.mat-fab i{padding:16px 0;line-height:24px}.mat-mini-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab:not([disabled]):isActive{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-icon,.mat-mini-fab i{padding:8px 0;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button,.mat-icon-button,.mat-raised-button{color:currentColor}.mat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*{vertical-align:middle}.mat-button-focus-overlay,.mat-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:isActive){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:isActive){.mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}"],
                 inputs: ['disabled', 'color'],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 changeDetection: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_15" /* ChangeDetectionStrategy */].OnPush,
@@ -87510,7 +87510,7 @@ MdAnchor.decorators = [
                 },
                 inputs: ['disabled', 'color'],
                 template: "<span class=\"mat-button-wrapper\"><ng-content></ng-content></span><div md-ripple class=\"mat-button-ripple\" [class.mat-button-ripple-round]=\"_isRoundButton || _isIconButton\" [mdRippleDisabled]=\"_isRippleDisabled()\" [mdRippleCentered]=\"_isIconButton\" [mdRippleTrigger]=\"_getHostElement()\"></div><div class=\"mat-button-focus-overlay\"></div>",
-                styles: [".mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled].mat-button,[disabled].mat-fab,[disabled].mat-icon-button,[disabled].mat-mini-fab,[disabled].mat-raised-button{cursor:default}.cdk-keyboard-focused.mat-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-icon-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-mini-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-raised-button .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-fab::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-mini-fab::-moz-focus-inner,.mat-raised-button::-moz-focus-inner{border:0}.mat-fab,.mat-mini-fab,.mat-raised-button{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-fab:not([disabled]):active,.mat-mini-fab:not([disabled]):active,.mat-raised-button:not([disabled]):active{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled].mat-fab,[disabled].mat-mini-fab,[disabled].mat-raised-button{box-shadow:none}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay{opacity:1}.mat-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab:not([disabled]):active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-icon,.mat-fab i{padding:16px 0;line-height:24px}.mat-mini-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab:not([disabled]):active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-icon,.mat-mini-fab i{padding:8px 0;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button,.mat-icon-button,.mat-raised-button{color:currentColor}.mat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*{vertical-align:middle}.mat-button-focus-overlay,.mat-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:active){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:active){.mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}"],
+                styles: [".mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled].mat-button,[disabled].mat-fab,[disabled].mat-icon-button,[disabled].mat-mini-fab,[disabled].mat-raised-button{cursor:default}.cdk-keyboard-focused.mat-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-icon-button .mat-button-focus-overlay,.cdk-keyboard-focused.mat-mini-fab .mat-button-focus-overlay,.cdk-keyboard-focused.mat-raised-button .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-fab::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-mini-fab::-moz-focus-inner,.mat-raised-button::-moz-focus-inner{border:0}.mat-fab,.mat-mini-fab,.mat-raised-button{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-fab:not([disabled]):isActive,.mat-mini-fab:not([disabled]):isActive,.mat-raised-button:not([disabled]):isActive{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled].mat-fab,[disabled].mat-mini-fab,[disabled].mat-raised-button{box-shadow:none}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay{opacity:1}.mat-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab:not([disabled]):isActive{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-icon,.mat-fab i{padding:16px 0;line-height:24px}.mat-mini-fab{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab:not([disabled]):isActive{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-icon,.mat-mini-fab i{padding:8px 0;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button,.mat-icon-button,.mat-raised-button{color:currentColor}.mat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*{vertical-align:middle}.mat-button-focus-overlay,.mat-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:isActive){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:isActive){.mat-button,.mat-fab,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None
             },] },
 ];
@@ -88782,7 +88782,7 @@ MdRadioModule.decorators = [
 MdRadioModule.ctorParameters = function () { return []; };
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
- * of items, it will set the active item correctly when arrow events occur.
+ * of items, it will set the isActive item correctly when arrow events occur.
  */
 var ListKeyManager = /*@__PURE__*/(function () {
     /**
@@ -88795,7 +88795,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
         this._wrap = false;
     }
     /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * Turns on wrapping mode, which ensures that the isActive item will wrap to
      * the other end of list when there are no more items in the given direction.
      *
      * @return {?} The ListKeyManager that the method was called on.
@@ -88805,9 +88805,9 @@ var ListKeyManager = /*@__PURE__*/(function () {
         return this;
     };
     /**
-     * Sets the active item to the item at the index specified.
+     * Sets the isActive item to the item at the index specified.
      *
-     * @param {?} index The index of the item to be set as active.
+     * @param {?} index The index of the item to be set as isActive.
      * @return {?}
      */
     ListKeyManager.prototype.setActiveItem = function (index) {
@@ -88815,8 +88815,8 @@ var ListKeyManager = /*@__PURE__*/(function () {
         this._activeItem = this._items.toArray()[index];
     };
     /**
-     * Sets the active item depending on the key event passed in.
-     * @param {?} event Keyboard event to be used for determining which element should be active.
+     * Sets the isActive item depending on the key event passed in.
+     * @param {?} event Keyboard event to be used for determining which element should be isActive.
      * @return {?}
      */
     ListKeyManager.prototype.onKeydown = function (event) {
@@ -88838,7 +88838,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
     };
     Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
         /**
-         * Returns the index of the currently active item.
+         * Returns the index of the currently isActive item.
          * @return {?}
          */
         get: function () {
@@ -88849,7 +88849,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
     });
     Object.defineProperty(ListKeyManager.prototype, "activeItem", {
         /**
-         * Returns the currently active item.
+         * Returns the currently isActive item.
          * @return {?}
          */
         get: function () {
@@ -88859,28 +88859,28 @@ var ListKeyManager = /*@__PURE__*/(function () {
         configurable: true
     });
     /**
-     * Sets the active item to the first enabled item in the list.
+     * Sets the isActive item to the first enabled item in the list.
      * @return {?}
      */
     ListKeyManager.prototype.setFirstItemActive = function () {
         this._setActiveItemByIndex(0, 1);
     };
     /**
-     * Sets the active item to the last enabled item in the list.
+     * Sets the isActive item to the last enabled item in the list.
      * @return {?}
      */
     ListKeyManager.prototype.setLastItemActive = function () {
         this._setActiveItemByIndex(this._items.length - 1, -1);
     };
     /**
-     * Sets the active item to the next enabled item in the list.
+     * Sets the isActive item to the next enabled item in the list.
      * @return {?}
      */
     ListKeyManager.prototype.setNextItemActive = function () {
         this._activeItemIndex === null ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
     };
     /**
-     * Sets the active item to a previous enabled item in the list.
+     * Sets the isActive item to a previous enabled item in the list.
      * @return {?}
      */
     ListKeyManager.prototype.setPreviousItemActive = function () {
@@ -88908,8 +88908,8 @@ var ListKeyManager = /*@__PURE__*/(function () {
         configurable: true
     });
     /**
-     * This method sets the active item, given a list of items and the delta between the
-     * currently active item and the new active item. It will calculate differently
+     * This method sets the isActive item, given a list of items and the delta between the
+     * currently isActive item and the new isActive item. It will calculate differently
      * depending on whether wrap mode is turned on.
      * @param {?} delta
      * @param {?=} items
@@ -88921,7 +88921,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
             : this._setActiveInDefaultMode(delta, items);
     };
     /**
-     * Sets the active item properly given "wrap" mode. In other words, it will continue to move
+     * Sets the isActive item properly given "wrap" mode. In other words, it will continue to move
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      * @param {?} delta
@@ -88929,7 +88929,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
      * @return {?}
      */
     ListKeyManager.prototype._setActiveInWrapMode = function (delta, items) {
-        // when active item would leave menu, wrap to beginning or end
+        // when isActive item would leave menu, wrap to beginning or end
         this._activeItemIndex =
             (this._activeItemIndex + delta + items.length) % items.length;
         // skip all disabled menu items recursively until an enabled one is reached
@@ -88941,7 +88941,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Sets the active item properly given the default mode. In other words, it will
+     * Sets the isActive item properly given the default mode. In other words, it will
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      * @param {?} delta
@@ -88952,7 +88952,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
         this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
     };
     /**
-     * Sets the active item to the first enabled item starting at the index specified. If the
+     * Sets the isActive item to the first enabled item starting at the index specified. If the
      * item is disabled, it will move in the fallbackDelta direction until it either
      * finds an enabled item or encounters the end of the list.
      * @param {?} index
@@ -88984,8 +88984,8 @@ var FocusKeyManager = /*@__PURE__*/(function (_super) {
         return _super.call(this, items) || this;
     }
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
+     * This method sets the isActive item to the item at the specified index.
+     * It also adds focuses the newly isActive item.
      * @param {?} index
      * @return {?}
      */
@@ -90147,7 +90147,7 @@ var MdSelect = /*@__PURE__*/(function (_super) {
 MdSelect.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-select, mat-select',
                 template: "<div class=\"mat-select-trigger\" cdk-overlay-origin (click)=\"toggle()\" #origin=\"cdkOverlayOrigin\" #trigger><span class=\"mat-select-placeholder\" [class.mat-floating-placeholder]=\"_selectionModel.hasValue()\" [@transformPlaceholder]=\"_getPlaceholderAnimationState()\" [style.opacity]=\"_getPlaceholderOpacity()\" [style.width.px]=\"_selectedValueWidth\">{{ placeholder }} </span><span class=\"mat-select-value\" *ngIf=\"_selectionModel.hasValue()\"><span class=\"mat-select-value-text\">{{ triggerValue }}</span> </span><span class=\"mat-select-arrow\"></span> <span class=\"mat-select-underline\"></span></div><ng-template cdk-connected-overlay hasBackdrop backdropClass=\"cdk-overlay-transparent-backdrop\" [origin]=\"origin\" [open]=\"panelOpen\" [positions]=\"_positions\" [minWidth]=\"_triggerWidth\" [offsetY]=\"_offsetY\" (backdropClick)=\"close()\" (attach)=\"_onAttached()\" (detach)=\"close()\"><div class=\"mat-select-panel {{ 'mat-' + color }}\" [ngClass]=\"panelClass\" [@transformPanel]=\"multiple ? 'showing-multiple' : 'showing'\" (@transformPanel.done)=\"_onPanelDone()\" (keydown)=\"_handlePanelKeydown($event)\" [style.transformOrigin]=\"_transformOrigin\" [class.mat-select-panel-done-animating]=\"_panelDoneAnimating\"><div class=\"mat-select-content\" [@fadeInContent]=\"'showing'\" (@fadeInContent.done)=\"_onFadeInDone()\"><ng-content></ng-content></div></div></ng-template>",
-                styles: [".mat-select{display:inline-block;outline:0}.mat-select-trigger{display:flex;align-items:center;height:30px;min-width:112px;cursor:pointer;position:relative;box-sizing:border-box}[aria-disabled=true] .mat-select-trigger{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default}.mat-select-underline{position:absolute;bottom:0;left:0;right:0;height:1px}[aria-disabled=true] .mat-select-underline{background-image:linear-gradient(to right,rgba(0,0,0,.26) 0,rgba(0,0,0,.26) 33%,transparent 0);background-size:4px 1px;background-repeat:repeat-x;background-color:transparent;background-position:0 bottom}.mat-select-placeholder{position:relative;padding:0 2px;transform-origin:left top;flex-grow:1}.mat-select-placeholder.mat-floating-placeholder{top:-22px;left:-2px;text-align:left;transform:scale(.75)}[dir=rtl] .mat-select-placeholder{transform-origin:right top}[dir=rtl] .mat-select-placeholder.mat-floating-placeholder{left:2px;text-align:right}[aria-required=true] .mat-select-placeholder::after{content:'*'}.mat-select-value{position:absolute;max-width:calc(100% - 18px);flex-grow:1;top:0;left:0;bottom:0;display:flex;align-items:center}[dir=rtl] .mat-select-value{left:auto;right:0}.mat-select-value-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:30px}.mat-select-arrow{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid;margin:0 4px}.mat-select-panel{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);min-width:112px;max-width:280px;overflow:auto;-webkit-overflow-scrolling:touch;padding-top:0;padding-bottom:0;max-height:256px;min-width:100%}@media screen and (-ms-high-contrast:active){.mat-select-panel{outline:solid 1px}}"],
+                styles: [".mat-select{display:inline-block;outline:0}.mat-select-trigger{display:flex;align-items:center;height:30px;min-width:112px;cursor:pointer;position:relative;box-sizing:border-box}[aria-disabled=true] .mat-select-trigger{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default}.mat-select-underline{position:absolute;bottom:0;left:0;right:0;height:1px}[aria-disabled=true] .mat-select-underline{background-image:linear-gradient(to right,rgba(0,0,0,.26) 0,rgba(0,0,0,.26) 33%,transparent 0);background-size:4px 1px;background-repeat:repeat-x;background-color:transparent;background-position:0 bottom}.mat-select-placeholder{position:relative;padding:0 2px;transform-origin:left top;flex-grow:1}.mat-select-placeholder.mat-floating-placeholder{top:-22px;left:-2px;text-align:left;transform:scale(.75)}[dir=rtl] .mat-select-placeholder{transform-origin:right top}[dir=rtl] .mat-select-placeholder.mat-floating-placeholder{left:2px;text-align:right}[aria-required=true] .mat-select-placeholder::after{content:'*'}.mat-select-value{position:absolute;max-width:calc(100% - 18px);flex-grow:1;top:0;left:0;bottom:0;display:flex;align-items:center}[dir=rtl] .mat-select-value{left:auto;right:0}.mat-select-value-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:30px}.mat-select-arrow{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid;margin:0 4px}.mat-select-panel{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);min-width:112px;max-width:280px;overflow:auto;-webkit-overflow-scrolling:touch;padding-top:0;padding-bottom:0;max-height:256px;min-width:100%}@media screen and (-ms-high-contrast:isActive){.mat-select-panel{outline:solid 1px}}"],
                 inputs: ['color', 'disabled'],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 host: {
@@ -90539,7 +90539,7 @@ MdSlideToggle.decorators = [
                     '[class.mat-slide-toggle-label-before]': 'labelPosition == "before"',
                 },
                 template: "<label class=\"mat-slide-toggle-label\" #label><div class=\"mat-slide-toggle-bar\"><input #input class=\"mat-slide-toggle-input cdk-visually-hidden\" type=\"checkbox\" [id]=\"inputId\" [required]=\"required\" [tabIndex]=\"tabIndex\" [checked]=\"checked\" [disabled]=\"disabled\" [attr.name]=\"name\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledby\" (change)=\"_onChangeEvent($event)\" (click)=\"_onInputClick($event)\"><div class=\"mat-slide-toggle-thumb-container\" (slidestart)=\"_onDragStart()\" (slide)=\"_onDrag($event)\" (slideend)=\"_onDragEnd()\"><div class=\"mat-slide-toggle-thumb\"></div><div class=\"mat-slide-toggle-ripple\" md-ripple [mdRippleTrigger]=\"label\" [mdRippleCentered]=\"true\" [mdRippleDisabled]=\"disableRipple || disabled\"></div></div></div><span class=\"mat-slide-toggle-content\"><ng-content></ng-content></span></label>",
-                styles: [".mat-slide-toggle{display:inline-block;height:24px;line-height:24px;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0}.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container{transform:translate3d(16px,0,0)}.mat-slide-toggle.mat-disabled .mat-slide-toggle-label,.mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container{cursor:default}.mat-slide-toggle-label{display:flex;flex:1;flex-direction:row;align-items:center;cursor:pointer}.mat-slide-toggle-label-before .mat-slide-toggle-label{order:1}.mat-slide-toggle-label-before .mat-slide-toggle-bar{order:2}.mat-slide-toggle-bar,[dir=rtl] .mat-slide-toggle-label-before .mat-slide-toggle-bar{margin-right:8px;margin-left:0}.mat-slide-toggle-label-before .mat-slide-toggle-bar,[dir=rtl] .mat-slide-toggle-bar{margin-left:8px;margin-right:0}.mat-slide-toggle-thumb-container{position:absolute;z-index:1;width:20px;height:20px;top:-3px;left:0;transform:translate3d(0,0,0);transition:all 80ms linear;transition-property:transform;cursor:-webkit-grab;cursor:grab}.mat-slide-toggle-thumb-container.mat-dragging,.mat-slide-toggle-thumb-container:active{cursor:-webkit-grabbing;cursor:grabbing;transition-duration:0s}.mat-slide-toggle-thumb{height:20px;width:20px;border-radius:50%;box-shadow:0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)}@media screen and (-ms-high-contrast:active){.mat-slide-toggle-thumb{background:#fff;border:solid 1px #000}}.mat-slide-toggle-bar{position:relative;width:36px;height:14px;border-radius:8px}@media screen and (-ms-high-contrast:active){.mat-slide-toggle-bar{background:#fff}}.mat-slide-toggle-input{bottom:0;left:10px}.mat-slide-toggle-bar,.mat-slide-toggle-thumb{transition:all 80ms linear;transition-property:background-color;transition-delay:50ms}.mat-slide-toggle-ripple{position:absolute;top:-13px;left:-13px;height:46px;width:46px;border-radius:50%;z-index:1;pointer-events:none}"],
+                styles: [".mat-slide-toggle{display:inline-block;height:24px;line-height:24px;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0}.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container{transform:translate3d(16px,0,0)}.mat-slide-toggle.mat-disabled .mat-slide-toggle-label,.mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container{cursor:default}.mat-slide-toggle-label{display:flex;flex:1;flex-direction:row;align-items:center;cursor:pointer}.mat-slide-toggle-label-before .mat-slide-toggle-label{order:1}.mat-slide-toggle-label-before .mat-slide-toggle-bar{order:2}.mat-slide-toggle-bar,[dir=rtl] .mat-slide-toggle-label-before .mat-slide-toggle-bar{margin-right:8px;margin-left:0}.mat-slide-toggle-label-before .mat-slide-toggle-bar,[dir=rtl] .mat-slide-toggle-bar{margin-left:8px;margin-right:0}.mat-slide-toggle-thumb-container{position:absolute;z-index:1;width:20px;height:20px;top:-3px;left:0;transform:translate3d(0,0,0);transition:all 80ms linear;transition-property:transform;cursor:-webkit-grab;cursor:grab}.mat-slide-toggle-thumb-container.mat-dragging,.mat-slide-toggle-thumb-container:isActive{cursor:-webkit-grabbing;cursor:grabbing;transition-duration:0s}.mat-slide-toggle-thumb{height:20px;width:20px;border-radius:50%;box-shadow:0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)}@media screen and (-ms-high-contrast:isActive){.mat-slide-toggle-thumb{background:#fff;border:solid 1px #000}}.mat-slide-toggle-bar{position:relative;width:36px;height:14px;border-radius:8px}@media screen and (-ms-high-contrast:isActive){.mat-slide-toggle-bar{background:#fff}}.mat-slide-toggle-input{bottom:0;left:10px}.mat-slide-toggle-bar,.mat-slide-toggle-thumb{transition:all 80ms linear;transition-property:background-color;transition-delay:50ms}.mat-slide-toggle-ripple{position:absolute;top:-13px;left:-13px;height:46px;width:46px;border-radius:50%;z-index:1;pointer-events:none}"],
                 providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
                 inputs: ['disabled', 'color'],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
@@ -90675,11 +90675,11 @@ var MIN_AUTO_TICK_SEPARATION = 30;
  */
 var DISABLED_THUMB_GAP = 7;
 /**
- * The thumb gap size for a non-active slider at its minimum value.
+ * The thumb gap size for a non-isActive slider at its minimum value.
  */
 var MIN_VALUE_NONACTIVE_THUMB_GAP = 7;
 /**
- * The thumb gap size for an active slider at its minimum value.
+ * The thumb gap size for an isActive slider at its minimum value.
  */
 var MIN_VALUE_ACTIVE_THUMB_GAP = 10;
 /**
@@ -90750,7 +90750,7 @@ var MdSlider = /*@__PURE__*/(function (_super) {
          */
         _this._isSliding = false;
         /**
-         * Whether or not the slider is active (clicked or sliding).
+         * Whether or not the slider is isActive (clicked or sliding).
          * Used to shrink and grow the thumb as according to the Material Design spec.
          */
         _this._isActive = false;
@@ -91473,7 +91473,7 @@ MdSlider.decorators = [
                     '[class.mat-slider-hide-last-tick]': 'disabled || _isMinValue && _thumbGap && _invertAxis',
                 },
                 template: "<div class=\"mat-slider-wrapper\"><div class=\"mat-slider-track-wrapper\"><div class=\"mat-slider-track-background\" [ngStyle]=\"_trackBackgroundStyles\"></div><div class=\"mat-slider-track-fill\" [ngStyle]=\"_trackFillStyles\"></div></div><div class=\"mat-slider-ticks-container\" [ngStyle]=\"_ticksContainerStyles\"><div class=\"mat-slider-ticks\" [ngStyle]=\"_ticksStyles\"></div></div><div class=\"mat-slider-thumb-container\" [ngStyle]=\"_thumbContainerStyles\"><div class=\"mat-slider-focus-ring\"></div><div class=\"mat-slider-thumb\"></div><div class=\"mat-slider-thumb-label\"><span class=\"mat-slider-thumb-label-text\">{{displayValue}}</span></div></div></div>",
-                styles: [".mat-slider{display:inline-block;position:relative;box-sizing:border-box;padding:8px;outline:0;vertical-align:middle}.mat-slider-wrapper{position:absolute}.mat-slider-track-wrapper{position:absolute;top:0;left:0;overflow:hidden}.mat-slider-track-fill{position:absolute;transform-origin:0 0;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-track-background{position:absolute;transform-origin:100% 100%;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-ticks-container{position:absolute;left:0;top:0;overflow:hidden}.mat-slider-ticks{background-repeat:repeat;background-clip:content-box;box-sizing:border-box;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-container{position:absolute;z-index:1;transition:transform .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-focus-ring{position:absolute;width:30px;height:30px;border-radius:50%;transform:scale(0);opacity:0;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1),opacity .4s cubic-bezier(.25,.8,.25,1)}.cdk-keyboard-focused .mat-slider-focus-ring{transform:scale(1);opacity:1}.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb-label{cursor:-webkit-grab;cursor:grab}.mat-slider-sliding:not(.mat-slider-disabled) .mat-slider-thumb,.mat-slider-sliding:not(.mat-slider-disabled) .mat-slider-thumb-label,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb-label:active,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb:active{cursor:-webkit-grabbing;cursor:grabbing}.mat-slider-thumb{position:absolute;right:-10px;bottom:-10px;box-sizing:border-box;width:20px;height:20px;border:3px solid transparent;border-radius:50%;transform:scale(.7);transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1),border-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-label{display:none;align-items:center;justify-content:center;position:absolute;width:28px;height:28px;border-radius:50%;transition:transform .4s cubic-bezier(.25,.8,.25,1),border-radius .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-label-text{z-index:1;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-sliding .mat-slider-thumb-container,.mat-slider-sliding .mat-slider-track-background,.mat-slider-sliding .mat-slider-track-fill{transition-duration:0s}.mat-slider-has-ticks .mat-slider-wrapper::after{content:'';position:absolute;border-width:0;border-style:solid;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-has-ticks.cdk-focused:not(.mat-slider-hide-last-tick) .mat-slider-wrapper::after,.mat-slider-has-ticks:hover:not(.mat-slider-hide-last-tick) .mat-slider-wrapper::after{opacity:1}.mat-slider-has-ticks.cdk-focused:not(.mat-slider-disabled) .mat-slider-ticks,.mat-slider-has-ticks:hover:not(.mat-slider-disabled) .mat-slider-ticks{opacity:1}.mat-slider-thumb-label-showing .mat-slider-focus-ring{transform:scale(0);opacity:0}.mat-slider-thumb-label-showing .mat-slider-thumb-label{display:flex}.mat-slider-axis-inverted .mat-slider-track-fill{transform-origin:100% 100%}.mat-slider-axis-inverted .mat-slider-track-background{transform-origin:0 0}.cdk-focused.mat-slider-thumb-label-showing .mat-slider-thumb{transform:scale(0)}.cdk-focused .mat-slider-thumb-label{border-radius:50% 50% 0}.cdk-focused .mat-slider-thumb-label-text{opacity:1}.cdk-mouse-focused .mat-slider-thumb,.cdk-program-focused .mat-slider-thumb,.cdk-touch-focused .mat-slider-thumb{border-width:2px;transform:scale(1)}.mat-slider-disabled .mat-slider-focus-ring{transform:scale(0);opacity:0}.mat-slider-disabled .mat-slider-thumb{border-width:4px;transform:scale(.5)}.mat-slider-disabled .mat-slider-thumb-label{display:none}.mat-slider-horizontal{height:48px;min-width:128px}.mat-slider-horizontal .mat-slider-wrapper{height:2px;top:23px;left:8px;right:8px}.mat-slider-horizontal .mat-slider-wrapper::after{height:2px;border-left-width:2px;right:0;top:0}.mat-slider-horizontal .mat-slider-track-wrapper{height:2px;width:100%}.mat-slider-horizontal .mat-slider-track-fill{height:2px;width:100%;transform:scaleX(0)}.mat-slider-horizontal .mat-slider-track-background{height:2px;width:100%;transform:scaleX(1)}.mat-slider-horizontal .mat-slider-ticks-container{height:2px;width:100%}.mat-slider-horizontal .mat-slider-ticks{height:2px;width:100%}.mat-slider-horizontal .mat-slider-thumb-container{width:100%;height:0;top:50%}.mat-slider-horizontal .mat-slider-focus-ring{top:-15px;right:-15px}.mat-slider-horizontal .mat-slider-thumb-label{right:-14px;top:-40px;transform:translateY(26px) scale(.01) rotate(45deg)}.mat-slider-horizontal .mat-slider-thumb-label-text{transform:rotate(-45deg)}.mat-slider-horizontal.cdk-focused .mat-slider-thumb-label{transform:rotate(45deg)}.mat-slider-vertical{width:48px;min-height:128px}.mat-slider-vertical .mat-slider-wrapper{width:2px;top:8px;bottom:8px;left:23px}.mat-slider-vertical .mat-slider-wrapper::after{width:2px;border-top-width:2px;bottom:0;left:0}.mat-slider-vertical .mat-slider-track-wrapper{height:100%;width:2px}.mat-slider-vertical .mat-slider-track-fill{height:100%;width:2px;transform:scaleY(0)}.mat-slider-vertical .mat-slider-track-background{height:100%;width:2px;transform:scaleY(1)}.mat-slider-vertical .mat-slider-ticks-container{width:2px;height:100%}.mat-slider-vertical .mat-slider-focus-ring{bottom:-15px;left:-15px}.mat-slider-vertical .mat-slider-ticks{width:2px;height:100%}.mat-slider-vertical .mat-slider-thumb-container{height:100%;width:0;left:50%}.mat-slider-vertical .mat-slider-thumb-label{bottom:-14px;left:-40px;transform:translateX(26px) scale(.01) rotate(-45deg)}.mat-slider-vertical .mat-slider-thumb-label-text{transform:rotate(45deg)}.mat-slider-vertical.cdk-focused .mat-slider-thumb-label{transform:rotate(-45deg)}[dir=rtl] .mat-slider-wrapper::after{left:0;right:auto}[dir=rtl] .mat-slider-horizontal .mat-slider-track-fill{transform-origin:100% 100%}[dir=rtl] .mat-slider-horizontal .mat-slider-track-background{transform-origin:0 0}[dir=rtl] .mat-slider-horizontal.mat-slider-axis-inverted .mat-slider-track-fill{transform-origin:0 0}[dir=rtl] .mat-slider-horizontal.mat-slider-axis-inverted .mat-slider-track-background{transform-origin:100% 100%}"],
+                styles: [".mat-slider{display:inline-block;position:relative;box-sizing:border-box;padding:8px;outline:0;vertical-align:middle}.mat-slider-wrapper{position:absolute}.mat-slider-track-wrapper{position:absolute;top:0;left:0;overflow:hidden}.mat-slider-track-fill{position:absolute;transform-origin:0 0;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-track-background{position:absolute;transform-origin:100% 100%;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-ticks-container{position:absolute;left:0;top:0;overflow:hidden}.mat-slider-ticks{background-repeat:repeat;background-clip:content-box;box-sizing:border-box;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-container{position:absolute;z-index:1;transition:transform .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-focus-ring{position:absolute;width:30px;height:30px;border-radius:50%;transform:scale(0);opacity:0;transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1),opacity .4s cubic-bezier(.25,.8,.25,1)}.cdk-keyboard-focused .mat-slider-focus-ring{transform:scale(1);opacity:1}.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb-label{cursor:-webkit-grab;cursor:grab}.mat-slider-sliding:not(.mat-slider-disabled) .mat-slider-thumb,.mat-slider-sliding:not(.mat-slider-disabled) .mat-slider-thumb-label,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb-label:isActive,.mat-slider:not(.mat-slider-disabled) .mat-slider-thumb:isActive{cursor:-webkit-grabbing;cursor:grabbing}.mat-slider-thumb{position:absolute;right:-10px;bottom:-10px;box-sizing:border-box;width:20px;height:20px;border:3px solid transparent;border-radius:50%;transform:scale(.7);transition:transform .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1),border-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-label{display:none;align-items:center;justify-content:center;position:absolute;width:28px;height:28px;border-radius:50%;transition:transform .4s cubic-bezier(.25,.8,.25,1),border-radius .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-thumb-label-text{z-index:1;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-sliding .mat-slider-thumb-container,.mat-slider-sliding .mat-slider-track-background,.mat-slider-sliding .mat-slider-track-fill{transition-duration:0s}.mat-slider-has-ticks .mat-slider-wrapper::after{content:'';position:absolute;border-width:0;border-style:solid;opacity:0;transition:opacity .4s cubic-bezier(.25,.8,.25,1)}.mat-slider-has-ticks.cdk-focused:not(.mat-slider-hide-last-tick) .mat-slider-wrapper::after,.mat-slider-has-ticks:hover:not(.mat-slider-hide-last-tick) .mat-slider-wrapper::after{opacity:1}.mat-slider-has-ticks.cdk-focused:not(.mat-slider-disabled) .mat-slider-ticks,.mat-slider-has-ticks:hover:not(.mat-slider-disabled) .mat-slider-ticks{opacity:1}.mat-slider-thumb-label-showing .mat-slider-focus-ring{transform:scale(0);opacity:0}.mat-slider-thumb-label-showing .mat-slider-thumb-label{display:flex}.mat-slider-axis-inverted .mat-slider-track-fill{transform-origin:100% 100%}.mat-slider-axis-inverted .mat-slider-track-background{transform-origin:0 0}.cdk-focused.mat-slider-thumb-label-showing .mat-slider-thumb{transform:scale(0)}.cdk-focused .mat-slider-thumb-label{border-radius:50% 50% 0}.cdk-focused .mat-slider-thumb-label-text{opacity:1}.cdk-mouse-focused .mat-slider-thumb,.cdk-program-focused .mat-slider-thumb,.cdk-touch-focused .mat-slider-thumb{border-width:2px;transform:scale(1)}.mat-slider-disabled .mat-slider-focus-ring{transform:scale(0);opacity:0}.mat-slider-disabled .mat-slider-thumb{border-width:4px;transform:scale(.5)}.mat-slider-disabled .mat-slider-thumb-label{display:none}.mat-slider-horizontal{height:48px;min-width:128px}.mat-slider-horizontal .mat-slider-wrapper{height:2px;top:23px;left:8px;right:8px}.mat-slider-horizontal .mat-slider-wrapper::after{height:2px;border-left-width:2px;right:0;top:0}.mat-slider-horizontal .mat-slider-track-wrapper{height:2px;width:100%}.mat-slider-horizontal .mat-slider-track-fill{height:2px;width:100%;transform:scaleX(0)}.mat-slider-horizontal .mat-slider-track-background{height:2px;width:100%;transform:scaleX(1)}.mat-slider-horizontal .mat-slider-ticks-container{height:2px;width:100%}.mat-slider-horizontal .mat-slider-ticks{height:2px;width:100%}.mat-slider-horizontal .mat-slider-thumb-container{width:100%;height:0;top:50%}.mat-slider-horizontal .mat-slider-focus-ring{top:-15px;right:-15px}.mat-slider-horizontal .mat-slider-thumb-label{right:-14px;top:-40px;transform:translateY(26px) scale(.01) rotate(45deg)}.mat-slider-horizontal .mat-slider-thumb-label-text{transform:rotate(-45deg)}.mat-slider-horizontal.cdk-focused .mat-slider-thumb-label{transform:rotate(45deg)}.mat-slider-vertical{width:48px;min-height:128px}.mat-slider-vertical .mat-slider-wrapper{width:2px;top:8px;bottom:8px;left:23px}.mat-slider-vertical .mat-slider-wrapper::after{width:2px;border-top-width:2px;bottom:0;left:0}.mat-slider-vertical .mat-slider-track-wrapper{height:100%;width:2px}.mat-slider-vertical .mat-slider-track-fill{height:100%;width:2px;transform:scaleY(0)}.mat-slider-vertical .mat-slider-track-background{height:100%;width:2px;transform:scaleY(1)}.mat-slider-vertical .mat-slider-ticks-container{width:2px;height:100%}.mat-slider-vertical .mat-slider-focus-ring{bottom:-15px;left:-15px}.mat-slider-vertical .mat-slider-ticks{width:2px;height:100%}.mat-slider-vertical .mat-slider-thumb-container{height:100%;width:0;left:50%}.mat-slider-vertical .mat-slider-thumb-label{bottom:-14px;left:-40px;transform:translateX(26px) scale(.01) rotate(-45deg)}.mat-slider-vertical .mat-slider-thumb-label-text{transform:rotate(45deg)}.mat-slider-vertical.cdk-focused .mat-slider-thumb-label{transform:rotate(-45deg)}[dir=rtl] .mat-slider-wrapper::after{left:0;right:auto}[dir=rtl] .mat-slider-horizontal .mat-slider-track-fill{transform-origin:100% 100%}[dir=rtl] .mat-slider-horizontal .mat-slider-track-background{transform-origin:0 0}[dir=rtl] .mat-slider-horizontal.mat-slider-axis-inverted .mat-slider-track-fill{transform-origin:0 0}[dir=rtl] .mat-slider-horizontal.mat-slider-axis-inverted .mat-slider-track-background{transform-origin:100% 100%}"],
                 inputs: ['disabled'],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
             },] },
@@ -92216,7 +92216,7 @@ MdSidenavContainer.decorators = [
                 // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
                 // changes its state.
                 template: "<div class=\"mat-sidenav-backdrop\" (click)=\"_onBackdropClicked()\" [class.mat-sidenav-shown]=\"_isShowingBackdrop()\"></div><ng-content select=\"md-sidenav, mat-sidenav\"></ng-content><div class=\"mat-sidenav-content\" [ngStyle]=\"_getStyles()\" cdk-scrollable><ng-content></ng-content></div>",
-                styles: [".mat-sidenav-container{position:relative;transform:translate3d(0,0,0);box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.mat-sidenav-container[fullscreen]{position:absolute;top:0;left:0;right:0;bottom:0}.mat-sidenav-container[fullscreen].mat-sidenav-opened{overflow:hidden}.mat-sidenav-backdrop{position:absolute;top:0;left:0;right:0;bottom:0;display:block;z-index:2;visibility:hidden}.mat-sidenav-backdrop.mat-sidenav-shown{visibility:visible}@media screen and (-ms-high-contrast:active){.mat-sidenav-backdrop{opacity:.5}}.mat-sidenav-content{position:relative;transform:translate3d(0,0,0);display:block;height:100%;overflow:auto}.mat-sidenav{position:relative;transform:translate3d(0,0,0);display:block;position:absolute;top:0;bottom:0;z-index:3;min-width:5vw;outline:0;box-sizing:border-box;height:100%;overflow-y:auto;transform:translate3d(-100%,0,0)}.mat-sidenav.mat-sidenav-closed{visibility:hidden}.mat-sidenav.mat-sidenav-opened,.mat-sidenav.mat-sidenav-opening{transform:translate3d(0,0,0)}.mat-sidenav.mat-sidenav-side{z-index:1}.mat-sidenav.mat-sidenav-end{right:0;transform:translate3d(100%,0,0)}.mat-sidenav.mat-sidenav-end.mat-sidenav-closed{visibility:hidden}.mat-sidenav.mat-sidenav-end.mat-sidenav-opened,.mat-sidenav.mat-sidenav-end.mat-sidenav-opening{transform:translate3d(0,0,0)}[dir=rtl] .mat-sidenav{transform:translate3d(100%,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-closed{visibility:hidden}[dir=rtl] .mat-sidenav.mat-sidenav-opened,[dir=rtl] .mat-sidenav.mat-sidenav-opening{transform:translate3d(0,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-end{left:0;right:auto;transform:translate3d(-100%,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-closed{visibility:hidden}[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-opened,[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-opening{transform:translate3d(0,0,0)}.mat-sidenav.mat-sidenav-opened:not(.mat-sidenav-side),.mat-sidenav.mat-sidenav-opening:not(.mat-sidenav-side){box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12)} .mat-sidenav-transition .mat-sidenav{transition:transform .4s cubic-bezier(.25,.8,.25,1)}.mat-sidenav-transition .mat-sidenav-content{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:transform,margin-left,margin-right}.mat-sidenav-transition .mat-sidenav-backdrop.mat-sidenav-shown{transition:background-color .4s cubic-bezier(.25,.8,.25,1)}"],
+                styles: [".mat-sidenav-container{position:relative;transform:translate3d(0,0,0);box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.mat-sidenav-container[fullscreen]{position:absolute;top:0;left:0;right:0;bottom:0}.mat-sidenav-container[fullscreen].mat-sidenav-opened{overflow:hidden}.mat-sidenav-backdrop{position:absolute;top:0;left:0;right:0;bottom:0;display:block;z-index:2;visibility:hidden}.mat-sidenav-backdrop.mat-sidenav-shown{visibility:visible}@media screen and (-ms-high-contrast:isActive){.mat-sidenav-backdrop{opacity:.5}}.mat-sidenav-content{position:relative;transform:translate3d(0,0,0);display:block;height:100%;overflow:auto}.mat-sidenav{position:relative;transform:translate3d(0,0,0);display:block;position:absolute;top:0;bottom:0;z-index:3;min-width:5vw;outline:0;box-sizing:border-box;height:100%;overflow-y:auto;transform:translate3d(-100%,0,0)}.mat-sidenav.mat-sidenav-closed{visibility:hidden}.mat-sidenav.mat-sidenav-opened,.mat-sidenav.mat-sidenav-opening{transform:translate3d(0,0,0)}.mat-sidenav.mat-sidenav-side{z-index:1}.mat-sidenav.mat-sidenav-end{right:0;transform:translate3d(100%,0,0)}.mat-sidenav.mat-sidenav-end.mat-sidenav-closed{visibility:hidden}.mat-sidenav.mat-sidenav-end.mat-sidenav-opened,.mat-sidenav.mat-sidenav-end.mat-sidenav-opening{transform:translate3d(0,0,0)}[dir=rtl] .mat-sidenav{transform:translate3d(100%,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-closed{visibility:hidden}[dir=rtl] .mat-sidenav.mat-sidenav-opened,[dir=rtl] .mat-sidenav.mat-sidenav-opening{transform:translate3d(0,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-end{left:0;right:auto;transform:translate3d(-100%,0,0)}[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-closed{visibility:hidden}[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-opened,[dir=rtl] .mat-sidenav.mat-sidenav-end.mat-sidenav-opening{transform:translate3d(0,0,0)}.mat-sidenav.mat-sidenav-opened:not(.mat-sidenav-side),.mat-sidenav.mat-sidenav-opening:not(.mat-sidenav-side){box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12)} .mat-sidenav-transition .mat-sidenav{transition:transform .4s cubic-bezier(.25,.8,.25,1)}.mat-sidenav-transition .mat-sidenav-content{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:transform,margin-left,margin-right}.mat-sidenav-transition .mat-sidenav-backdrop.mat-sidenav-shown{transition:background-color .4s cubic-bezier(.25,.8,.25,1)}"],
                 host: {
                     'class': 'mat-sidenav-container',
                     '[class.mat-sidenav-transition]': '_enableTransitions',
@@ -93608,7 +93608,7 @@ var MdCard = /*@__PURE__*/(function () {
 MdCard.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-card, mat-card',
                 template: "<ng-content></ng-content>",
-                styles: [".mat-card{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);display:block;position:relative;padding:24px;border-radius:2px}.mat-card:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}@media screen and (-ms-high-contrast:active){.mat-card{outline:solid 1px}}.mat-card-flat{box-shadow:none}.mat-card-actions,.mat-card-content,.mat-card-subtitle,.mat-card-title{display:block;margin-bottom:16px}.mat-card-actions{margin-left:-16px;margin-right:-16px;padding:8px 0}.mat-card-actions[align=end]{display:flex;justify-content:flex-end}.mat-card-image{width:calc(100% + 48px);margin:0 -24px 16px -24px}.mat-card-xl-image{width:240px;height:240px;margin:-8px}.mat-card-footer{position:absolute;width:100%;min-height:5px;bottom:0;left:0}.mat-card-actions .mat-button,.mat-card-actions .mat-raised-button{margin:0 4px}.mat-card-header{display:flex;flex-direction:row}.mat-card-header-text{margin:0 8px}.mat-card-avatar{height:40px;width:40px;border-radius:50%;flex-shrink:0}.mat-card-lg-image,.mat-card-md-image,.mat-card-sm-image{margin:-8px 0}.mat-card-title-group{display:flex;justify-content:space-between;margin:0 -8px}.mat-card-sm-image{width:80px;height:80px}.mat-card-md-image{width:112px;height:112px}.mat-card-lg-image{width:152px;height:152px}@media (max-width:600px){.mat-card{padding:24px 16px}.mat-card-actions{margin-left:-8px;margin-right:-8px}.mat-card-image{width:calc(100% + 32px);margin:16px -16px}.mat-card-title-group{margin:0}.mat-card-xl-image{margin-left:0;margin-right:0}.mat-card-header{margin:-8px 0 0 0}}.mat-card-content>:first-child,.mat-card>:first-child{margin-top:0}.mat-card-content>:last-child,.mat-card>:last-child{margin-bottom:0}.mat-card-image:first-child{margin-top:-24px}.mat-card>.mat-card-actions:last-child{margin-bottom:-16px;padding-bottom:0}.mat-card-actions .mat-button:first-child,.mat-card-actions .mat-raised-button:first-child{margin-left:0;margin-right:0}.mat-card-subtitle:not(:first-child),.mat-card-title:not(:first-child){margin-top:-4px}.mat-card-header .mat-card-subtitle:not(:first-child){margin-top:-8px}.mat-card>.mat-card-xl-image:first-child{margin-top:-8px}.mat-card>.mat-card-xl-image:last-child{margin-bottom:-8px}"],
+                styles: [".mat-card{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);display:block;position:relative;padding:24px;border-radius:2px}.mat-card:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}@media screen and (-ms-high-contrast:isActive){.mat-card{outline:solid 1px}}.mat-card-flat{box-shadow:none}.mat-card-actions,.mat-card-content,.mat-card-subtitle,.mat-card-title{display:block;margin-bottom:16px}.mat-card-actions{margin-left:-16px;margin-right:-16px;padding:8px 0}.mat-card-actions[align=end]{display:flex;justify-content:flex-end}.mat-card-image{width:calc(100% + 48px);margin:0 -24px 16px -24px}.mat-card-xl-image{width:240px;height:240px;margin:-8px}.mat-card-footer{position:absolute;width:100%;min-height:5px;bottom:0;left:0}.mat-card-actions .mat-button,.mat-card-actions .mat-raised-button{margin:0 4px}.mat-card-header{display:flex;flex-direction:row}.mat-card-header-text{margin:0 8px}.mat-card-avatar{height:40px;width:40px;border-radius:50%;flex-shrink:0}.mat-card-lg-image,.mat-card-md-image,.mat-card-sm-image{margin:-8px 0}.mat-card-title-group{display:flex;justify-content:space-between;margin:0 -8px}.mat-card-sm-image{width:80px;height:80px}.mat-card-md-image{width:112px;height:112px}.mat-card-lg-image{width:152px;height:152px}@media (max-width:600px){.mat-card{padding:24px 16px}.mat-card-actions{margin-left:-8px;margin-right:-8px}.mat-card-image{width:calc(100% + 32px);margin:16px -16px}.mat-card-title-group{margin:0}.mat-card-xl-image{margin-left:0;margin-right:0}.mat-card-header{margin:-8px 0 0 0}}.mat-card-content>:first-child,.mat-card>:first-child{margin-top:0}.mat-card-content>:last-child,.mat-card>:last-child{margin-bottom:0}.mat-card-image:first-child{margin-top:-24px}.mat-card>.mat-card-actions:last-child{margin-bottom:-16px;padding-bottom:0}.mat-card-actions .mat-button:first-child,.mat-card-actions .mat-raised-button:first-child{margin-left:0;margin-right:0}.mat-card-subtitle:not(:first-child),.mat-card-title:not(:first-child){margin-top:-4px}.mat-card-header .mat-card-subtitle:not(:first-child){margin-top:-8px}.mat-card>.mat-card-xl-image:first-child{margin-top:-8px}.mat-card>.mat-card-xl-image:last-child{margin-bottom:-8px}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 changeDetection: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_15" /* ChangeDetectionStrategy */].OnPush,
                 host: { 'class': 'mat-card' }
@@ -96560,7 +96560,7 @@ var MdSnackBarContainer = /*@__PURE__*/(function (_super) {
 MdSnackBarContainer.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'snack-bar-container',
                 template: "<ng-template cdkPortalHost></ng-template>",
-                styles: [":host{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);background:#323232;border-radius:2px;box-sizing:content-box;display:block;max-width:568px;min-width:288px;padding:14px 24px;transform:translateY(100%)}@media screen and (-ms-high-contrast:active){:host{border:solid 1px}}"],
+                styles: [":host{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);background:#323232;border-radius:2px;box-sizing:content-box;display:block;max-width:568px;min-width:288px;padding:14px 24px;transform:translateY(100%)}@media screen and (-ms-high-contrast:isActive){:host{border:solid 1px}}"],
                 host: {
                     'role': 'alert',
                     '[@state]': 'animationState',
@@ -96978,7 +96978,7 @@ var MdTabGroup = /*@__PURE__*/(function () {
          */
         this._tabBodyWrapperHeight = null;
         /**
-         * Whether the tab group should grow to the size of the active tab
+         * Whether the tab group should grow to the size of the isActive tab
          */
         this._dynamicHeight = false;
         this._disableRipple = false;
@@ -97044,7 +97044,7 @@ var MdTabGroup = /*@__PURE__*/(function () {
          */
         get: function () { return this._selectedIndex; },
         /**
-         * The index of the active tab.
+         * The index of the isActive tab.
          * @param {?} value
          * @return {?}
          */
@@ -97165,8 +97165,8 @@ var MdTabGroup = /*@__PURE__*/(function () {
 }());
 MdTabGroup.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-tab-group, mat-tab-group',
-                template: "<md-tab-header #tabHeader [selectedIndex]=\"selectedIndex\" [disableRipple]=\"disableRipple\" (indexFocused)=\"_focusChanged($event)\" (selectFocusedIndex)=\"selectedIndex = $event\"><div class=\"mat-tab-label\" role=\"tab\" md-tab-label-wrapper md-ripple *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabLabelId(i)\" [tabIndex]=\"selectedIndex == i ? 0 : -1\" [attr.aria-controls]=\"_getTabContentId(i)\" [attr.aria-selected]=\"selectedIndex == i\" [class.mat-tab-label-active]=\"selectedIndex == i\" [disabled]=\"tab.disabled\" [mdRippleDisabled]=\"disableRipple\" (click)=\"tabHeader.focusIndex = selectedIndex = i\"><ng-template [ngIf]=\"tab.templateLabel\"><ng-template [cdkPortalHost]=\"tab.templateLabel\"></ng-template></ng-template><ng-template [ngIf]=\"!tab.templateLabel\">{{tab.textLabel}}</ng-template></div></md-tab-header><div class=\"mat-tab-body-wrapper\" #tabBodyWrapper><md-tab-body role=\"tabpanel\" *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabContentId(i)\" [attr.aria-labelledby]=\"_getTabLabelId(i)\" [class.mat-tab-body-active]=\"selectedIndex == i\" [content]=\"tab.content\" [position]=\"tab.position\" [origin]=\"tab.origin\" (onCentered)=\"_removeTabBodyWrapperHeight()\" (onCentering)=\"_setTabBodyWrapperHeight($event)\"></md-tab-body></div>",
-                styles: [":host{display:flex;flex-direction:column}:host.mat-tab-group-inverted-header{flex-direction:column-reverse}.mat-tab-label{line-height:48px;height:48px;padding:0 12px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;position:relative}.mat-tab-label:focus{outline:0;opacity:1}@media (max-width:600px){.mat-tab-label{min-width:72px}}:host[mat-stretch-tabs] .mat-tab-label,:host[md-stretch-tabs] .mat-tab-label{flex-basis:0;flex-grow:1}.mat-tab-body-wrapper{position:relative;overflow:hidden;display:flex;transition:height .5s cubic-bezier(.35,0,.25,1)}.mat-tab-body{position:absolute;top:0;left:0;right:0;bottom:0;display:block;overflow:hidden}.mat-tab-body.mat-tab-body-active{position:relative;overflow-x:hidden;overflow-y:auto;z-index:1;flex-grow:1}:host.mat-tab-group-dynamic-height .mat-tab-body.mat-tab-body-active{overflow-y:hidden}.mat-tab-disabled{cursor:default;pointer-events:none}"],
+                template: "<md-tab-header #tabHeader [selectedIndex]=\"selectedIndex\" [disableRipple]=\"disableRipple\" (indexFocused)=\"_focusChanged($event)\" (selectFocusedIndex)=\"selectedIndex = $event\"><div class=\"mat-tab-label\" role=\"tab\" md-tab-label-wrapper md-ripple *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabLabelId(i)\" [tabIndex]=\"selectedIndex == i ? 0 : -1\" [attr.aria-controls]=\"_getTabContentId(i)\" [attr.aria-selected]=\"selectedIndex == i\" [class.mat-tab-label-isActive]=\"selectedIndex == i\" [disabled]=\"tab.disabled\" [mdRippleDisabled]=\"disableRipple\" (click)=\"tabHeader.focusIndex = selectedIndex = i\"><ng-template [ngIf]=\"tab.templateLabel\"><ng-template [cdkPortalHost]=\"tab.templateLabel\"></ng-template></ng-template><ng-template [ngIf]=\"!tab.templateLabel\">{{tab.textLabel}}</ng-template></div></md-tab-header><div class=\"mat-tab-body-wrapper\" #tabBodyWrapper><md-tab-body role=\"tabpanel\" *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabContentId(i)\" [attr.aria-labelledby]=\"_getTabLabelId(i)\" [class.mat-tab-body-isActive]=\"selectedIndex == i\" [content]=\"tab.content\" [position]=\"tab.position\" [origin]=\"tab.origin\" (onCentered)=\"_removeTabBodyWrapperHeight()\" (onCentering)=\"_setTabBodyWrapperHeight($event)\"></md-tab-body></div>",
+                styles: [":host{display:flex;flex-direction:column}:host.mat-tab-group-inverted-header{flex-direction:column-reverse}.mat-tab-label{line-height:48px;height:48px;padding:0 12px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;position:relative}.mat-tab-label:focus{outline:0;opacity:1}@media (max-width:600px){.mat-tab-label{min-width:72px}}:host[mat-stretch-tabs] .mat-tab-label,:host[md-stretch-tabs] .mat-tab-label{flex-basis:0;flex-grow:1}.mat-tab-body-wrapper{position:relative;overflow:hidden;display:flex;transition:height .5s cubic-bezier(.35,0,.25,1)}.mat-tab-body{position:absolute;top:0;left:0;right:0;bottom:0;display:block;overflow:hidden}.mat-tab-body.mat-tab-body-isActive{position:relative;overflow-x:hidden;overflow-y:auto;z-index:1;flex-grow:1}:host.mat-tab-group-dynamic-height .mat-tab-body.mat-tab-body-isActive{overflow-y:hidden}.mat-tab-disabled{cursor:default;pointer-events:none}"],
                 host: {
                     'class': 'mat-tab-group',
                     '[class.mat-tab-group-dynamic-height]': 'dynamicHeight',
@@ -97249,7 +97249,7 @@ MdTabLabelWrapper.ctorParameters = function () { return [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["M" /* ElementRef */], },
 ]; };
 /**
- * The ink-bar is used to display and animate the line underneath the current active tab label.
+ * The ink-bar is used to display and animate the line underneath the current isActive tab label.
  * \@docs-private
  */
 var MdInkBar = /*@__PURE__*/(function () {
@@ -97345,7 +97345,7 @@ var MdTabNav = /*@__PURE__*/(function () {
         this._onDestroy = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
     }
     /**
-     * Notifies the component that the active link has been changed.
+     * Notifies the component that the isActive link has been changed.
      * @param {?} element
      * @return {?}
      */
@@ -97369,7 +97369,7 @@ var MdTabNav = /*@__PURE__*/(function () {
         });
     };
     /**
-     * Checks if the active link has been changed and, if so, will update the ink bar.
+     * Checks if the isActive link has been changed and, if so, will update the ink bar.
      * @return {?}
      */
     MdTabNav.prototype.ngAfterContentChecked = function () {
@@ -97385,7 +97385,7 @@ var MdTabNav = /*@__PURE__*/(function () {
         this._onDestroy.next();
     };
     /**
-     * Aligns the ink bar to the active link.
+     * Aligns the ink bar to the isActive link.
      * @return {?}
      */
     MdTabNav.prototype._alignInkBar = function () {
@@ -97428,7 +97428,7 @@ var MdTabLink = /*@__PURE__*/(function () {
     }
     Object.defineProperty(MdTabLink.prototype, "active", {
         /**
-         * Whether the link is active.
+         * Whether the link is isActive.
          * @return {?}
          */
         get: function () { return this._isActive; },
@@ -97509,7 +97509,7 @@ var MdTabBody = /*@__PURE__*/(function () {
         this._dir = _dir;
         this._elementRef = _elementRef;
         /**
-         * Event emitted when the tab begins to animate towards the center as the active tab.
+         * Event emitted when the tab begins to animate towards the center as the isActive tab.
          */
         this.onCentering = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["F" /* EventEmitter */]();
         /**
@@ -97726,7 +97726,7 @@ var MdTabHeader = /*@__PURE__*/(function () {
     }
     Object.defineProperty(MdTabHeader.prototype, "selectedIndex", {
         /**
-         * The index of the active tab.
+         * The index of the isActive tab.
          * @return {?}
          */
         get: function () { return this._selectedIndex; },
@@ -98837,7 +98837,7 @@ var TooltipComponent = /*@__PURE__*/(function () {
 TooltipComponent.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-tooltip-component, mat-tooltip-component',
                 template: "<div class=\"mat-tooltip\" [ngClass]=\"tooltipClass\" [style.transform-origin]=\"_transformOrigin\" [@state]=\"_visibility\" (@state.done)=\"_afterVisibilityAnimation($event)\">{{message}}</div>",
-                styles: [":host{pointer-events:none}.mat-tooltip{color:#fff;border-radius:2px;margin:14px;max-width:250px;padding-left:8px;padding-right:8px}@media screen and (-ms-high-contrast:active){.mat-tooltip{outline:solid 1px}}"],
+                styles: [":host{pointer-events:none}.mat-tooltip{color:#fff;border-radius:2px;margin:14px;max-width:250px;padding-left:8px;padding-right:8px}@media screen and (-ms-high-contrast:isActive){.mat-tooltip{outline:solid 1px}}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 animations: [
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14__angular_animations__["a" /* trigger */])('state', [
@@ -99183,7 +99183,7 @@ MdMenu.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-menu, mat-menu',
                 host: { 'role': 'menu' },
                 template: "<ng-template><div class=\"mat-menu-panel\" [ngClass]=\"_classList\" (keydown)=\"_handleKeydown($event)\" (click)=\"_emitCloseEvent()\" [@transformMenu]=\"'showing'\"><div class=\"mat-menu-content\" [@fadeInItems]=\"'showing'\"><ng-content></ng-content></div></div></ng-template>",
-                styles: [".mat-menu-panel{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);min-width:112px;max-width:280px;overflow:auto;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 48px)}.mat-menu-panel.mat-menu-after.mat-menu-below{transform-origin:left top}.mat-menu-panel.mat-menu-after.mat-menu-above{transform-origin:left bottom}.mat-menu-panel.mat-menu-before.mat-menu-below{transform-origin:right top}.mat-menu-panel.mat-menu-before.mat-menu-above{transform-origin:right bottom}[dir=rtl] .mat-menu-panel.mat-menu-after.mat-menu-below{transform-origin:right top}[dir=rtl] .mat-menu-panel.mat-menu-after.mat-menu-above{transform-origin:right bottom}[dir=rtl] .mat-menu-panel.mat-menu-before.mat-menu-below{transform-origin:left top}[dir=rtl] .mat-menu-panel.mat-menu-before.mat-menu-above{transform-origin:left bottom}@media screen and (-ms-high-contrast:active){.mat-menu-panel{outline:solid 1px}}.mat-menu-content{padding-top:8px;padding-bottom:8px}.mat-menu-item{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:48px;height:48px;padding:0 16px;text-align:left;text-decoration:none;position:relative}.mat-menu-item[disabled]{cursor:default}[dir=rtl] .mat-menu-item{text-align:right}.mat-menu-item .mat-icon{margin-right:16px}[dir=rtl] .mat-menu-item .mat-icon{margin-left:16px;margin-right:0}button.mat-menu-item{width:100%}.mat-menu-ripple{position:absolute;top:0;left:0;bottom:0;right:0}"],
+                styles: [".mat-menu-panel{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);min-width:112px;max-width:280px;overflow:auto;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 48px)}.mat-menu-panel.mat-menu-after.mat-menu-below{transform-origin:left top}.mat-menu-panel.mat-menu-after.mat-menu-above{transform-origin:left bottom}.mat-menu-panel.mat-menu-before.mat-menu-below{transform-origin:right top}.mat-menu-panel.mat-menu-before.mat-menu-above{transform-origin:right bottom}[dir=rtl] .mat-menu-panel.mat-menu-after.mat-menu-below{transform-origin:right top}[dir=rtl] .mat-menu-panel.mat-menu-after.mat-menu-above{transform-origin:right bottom}[dir=rtl] .mat-menu-panel.mat-menu-before.mat-menu-below{transform-origin:left top}[dir=rtl] .mat-menu-panel.mat-menu-before.mat-menu-above{transform-origin:left bottom}@media screen and (-ms-high-contrast:isActive){.mat-menu-panel{outline:solid 1px}}.mat-menu-content{padding-top:8px;padding-bottom:8px}.mat-menu-item{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:48px;height:48px;padding:0 16px;text-align:left;text-decoration:none;position:relative}.mat-menu-item[disabled]{cursor:default}[dir=rtl] .mat-menu-item{text-align:right}.mat-menu-item .mat-icon{margin-right:16px}[dir=rtl] .mat-menu-item .mat-icon{margin-left:16px;margin-right:0}button.mat-menu-item{width:100%}.mat-menu-ripple{position:absolute;top:0;left:0;bottom:0;right:0}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 animations: [
                     transformMenu,
@@ -99838,7 +99838,7 @@ var MdDialogContainer = /*@__PURE__*/(function (_super) {
 MdDialogContainer.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'md-dialog-container, mat-dialog-container',
                 template: "<ng-template cdkPortalHost></ng-template>",
-                styles: [".mat-dialog-container{box-shadow:0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);display:block;padding:24px;border-radius:2px;box-sizing:border-box;overflow:auto;max-width:80vw;width:100%;height:100%}@media screen and (-ms-high-contrast:active){.mat-dialog-container{outline:solid 1px}}.mat-dialog-content{display:block;margin:0 -24px;padding:0 24px;max-height:65vh;overflow:auto;-webkit-overflow-scrolling:touch}.mat-dialog-title{margin:0 0 20px;display:block}.mat-dialog-actions{padding:12px 0;display:flex;flex-wrap:wrap}.mat-dialog-actions:last-child{margin-bottom:-24px}.mat-dialog-actions[align=end]{justify-content:flex-end}.mat-dialog-actions[align=center]{justify-content:center}"],
+                styles: [".mat-dialog-container{box-shadow:0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);display:block;padding:24px;border-radius:2px;box-sizing:border-box;overflow:auto;max-width:80vw;width:100%;height:100%}@media screen and (-ms-high-contrast:isActive){.mat-dialog-container{outline:solid 1px}}.mat-dialog-content{display:block;margin:0 -24px;padding:0 24px;max-height:65vh;overflow:auto;-webkit-overflow-scrolling:touch}.mat-dialog-title{margin:0 0 20px;display:block}.mat-dialog-actions{padding:12px 0;display:flex;flex-wrap:wrap}.mat-dialog-actions:last-child{margin-bottom:-24px}.mat-dialog-actions[align=end]{justify-content:flex-end}.mat-dialog-actions[align=center]{justify-content:center}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 animations: [
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14__angular_animations__["a" /* trigger */])('slideDialog', [
@@ -100256,9 +100256,9 @@ var ActiveDescendantKeyManager = /*@__PURE__*/(function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
+     * This method sets the isActive item to the item at the specified index.
+     * It also adds isActive styles to the newly isActive item and removes isActive
+     * styles from the previously isActive item.
      * @param {?} index
      * @return {?}
      */
@@ -100308,7 +100308,7 @@ var MdAutocomplete = /*@__PURE__*/(function () {
     };
     /**
      * Sets the panel scrollTop. This allows us to manually scroll to display
-     * options below the fold, as they are not actually being focused when active.
+     * options below the fold, as they are not actually being focused when isActive.
      * @param {?} scrollTop
      * @return {?}
      */
@@ -100527,7 +100527,7 @@ var MdAutocompleteTrigger = /*@__PURE__*/(function () {
     });
     Object.defineProperty(MdAutocompleteTrigger.prototype, "activeOption", {
         /**
-         * The currently active option, coerced to MdOption type.
+         * The currently isActive option, coerced to MdOption type.
          * @return {?}
          */
         get: function () {
@@ -100656,10 +100656,10 @@ var MdAutocompleteTrigger = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Given that we are not actually focusing active options, we must manually adjust scroll
+     * Given that we are not actually focusing isActive options, we must manually adjust scroll
      * to reveal options below the fold. First, we find the offset of the option from the top
      * of the panel. The new scrollTop will be that offset - the panel height + the option
-     * height, so the active option will be just visible at the bottom of the panel.
+     * height, so the isActive option will be just visible at the bottom of the panel.
      * @return {?}
      */
     MdAutocompleteTrigger.prototype._scrollToOption = function () {
@@ -100777,14 +100777,14 @@ var MdAutocompleteTrigger = /*@__PURE__*/(function () {
         return this._element.nativeElement.getBoundingClientRect().width;
     };
     /**
-     * Reset active item to null so arrow events will activate the correct options.
+     * Reset isActive item to null so arrow events will activate the correct options.
      * @return {?}
      */
     MdAutocompleteTrigger.prototype._resetActiveItem = function () {
         this.autocomplete._keyManager.setActiveItem(null);
     };
     /**
-     * Resets the active item and re-calculates alignment of the panel in case its size
+     * Resets the isActive item and re-calculates alignment of the panel in case its size
      * has changed due to fewer or greater number of options.
      * @return {?}
      */
@@ -100882,7 +100882,7 @@ var MdCalendarBody = /*@__PURE__*/(function () {
          */
         this.allowDisabledSelection = false;
         /**
-         * The cell number of the active cell in the table.
+         * The cell number of the isActive cell in the table.
          */
         this.activeCell = 0;
         /**
@@ -100929,7 +100929,7 @@ var MdCalendarBody = /*@__PURE__*/(function () {
 }());
 MdCalendarBody.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: '[md-calendar-body]',
-                template: "<tr *ngIf=\"_firstRowOffset < labelMinRequiredCells\" aria-hidden=\"true\"><td class=\"mat-calendar-body-label\" [attr.colspan]=\"numCols\">{{label}}</td></tr><tr *ngFor=\"let row of rows; let rowIndex = index\" role=\"row\"><td *ngIf=\"rowIndex === 0 && _firstRowOffset\" aria-hidden=\"true\" class=\"mat-calendar-body-label\" [attr.colspan]=\"_firstRowOffset\">{{_firstRowOffset >= labelMinRequiredCells ? label : ''}}</td><td *ngFor=\"let item of row; let colIndex = index\" role=\"gridcell\" class=\"mat-calendar-body-cell\" [tabindex]=\"_isActiveCell(rowIndex, colIndex) ? 0 : -1\" [class.mat-calendar-body-disabled]=\"!item.enabled\" [class.mat-calendar-body-active]=\"_isActiveCell(rowIndex, colIndex)\" [attr.aria-label]=\"item.ariaLabel\" [attr.aria-disabled]=\"!item.enabled || null\" (click)=\"_cellClicked(item)\"><div class=\"mat-calendar-body-cell-content\" [class.mat-calendar-body-selected]=\"selectedValue === item.value\" [class.mat-calendar-body-today]=\"todayValue === item.value\">{{item.displayValue}}</div></td></tr>",
+                template: "<tr *ngIf=\"_firstRowOffset < labelMinRequiredCells\" aria-hidden=\"true\"><td class=\"mat-calendar-body-label\" [attr.colspan]=\"numCols\">{{label}}</td></tr><tr *ngFor=\"let row of rows; let rowIndex = index\" role=\"row\"><td *ngIf=\"rowIndex === 0 && _firstRowOffset\" aria-hidden=\"true\" class=\"mat-calendar-body-label\" [attr.colspan]=\"_firstRowOffset\">{{_firstRowOffset >= labelMinRequiredCells ? label : ''}}</td><td *ngFor=\"let item of row; let colIndex = index\" role=\"gridcell\" class=\"mat-calendar-body-cell\" [tabindex]=\"_isActiveCell(rowIndex, colIndex) ? 0 : -1\" [class.mat-calendar-body-disabled]=\"!item.enabled\" [class.mat-calendar-body-isActive]=\"_isActiveCell(rowIndex, colIndex)\" [attr.aria-label]=\"item.ariaLabel\" [attr.aria-disabled]=\"!item.enabled || null\" (click)=\"_cellClicked(item)\"><div class=\"mat-calendar-body-cell-content\" [class.mat-calendar-body-selected]=\"selectedValue === item.value\" [class.mat-calendar-body-today]=\"todayValue === item.value\">{{item.displayValue}}</div></td></tr>",
                 styles: [".mat-calendar-body{min-width:224px}.mat-calendar-body-label{padding:7.14286% 0 7.14286% 7.14286%;height:0;line-height:0;transform:translateX(-6px);text-align:left}.mat-calendar-body-cell{position:relative;width:14.28571%;height:0;line-height:0;padding:7.14286% 0;text-align:center;outline:0;cursor:pointer}.mat-calendar-body-disabled{cursor:default}.mat-calendar-body-cell-content{position:absolute;top:5%;left:5%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:90%;height:90%;border-width:1px;border-style:solid;border-radius:50%}[dir=rtl] .mat-calendar-body-label{padding:0 7.14286% 0 0;transform:translateX(6px);text-align:right}"],
                 host: {
                     'class': 'mat-calendar-body',
@@ -101370,7 +101370,7 @@ var MdCalendar = /*@__PURE__*/(function () {
     }
     Object.defineProperty(MdCalendar.prototype, "_activeDate", {
         /**
-         * The current active date. This determines which time period is shown and which date is
+         * The current isActive date. This determines which time period is shown and which date is
          * highlighted when using keyboard navigation.
          * @return {?}
          */
@@ -101517,13 +101517,13 @@ var MdCalendar = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Focuses the active cell after the microtask queue is empty.
+     * Focuses the isActive cell after the microtask queue is empty.
      * @return {?}
      */
     MdCalendar.prototype._focusActiveCell = function () {
         var _this = this;
         this._ngZone.runOutsideAngular(function () { return _this._ngZone.onStable.first().subscribe(function () {
-            var /** @type {?} */ activeEl = _this._elementRef.nativeElement.querySelector('.mat-calendar-body-active');
+            var /** @type {?} */ activeEl = _this._elementRef.nativeElement.querySelector('.mat-calendar-body-isActive');
             activeEl.focus();
         }); });
     };
@@ -101583,7 +101583,7 @@ var MdCalendar = /*@__PURE__*/(function () {
                 }
                 return;
             default:
-                // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+                // Don't prevent default or focus isActive cell on keys that we don't explicitly handle.
                 return;
         }
         this._focusActiveCell();
@@ -101627,7 +101627,7 @@ var MdCalendar = /*@__PURE__*/(function () {
                 this._monthSelected(this._activeDate);
                 break;
             default:
-                // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+                // Don't prevent default or focus isActive cell on keys that we don't explicitly handle.
                 return;
         }
         this._focusActiveCell();
@@ -106733,7 +106733,7 @@ var HTML_ATTRS = tagSet('abbr,accesskey,align,alt,autoplay,axis,bgcolor,border,c
 // NB: This currently conciously doesn't support SVG. SVG sanitization has had several security
 // issues in the past, so it seems safer to leave it out if possible. If support for binding SVG via
 // innerHTML is required, SVG attributes should be added here.
-// NB: Sanitization does not allow <form> elements or other active elements (<button> etc). Those
+// NB: Sanitization does not allow <form> elements or other isActive elements (<button> etc). Those
 // can be sanitized, but they increase security surface area without a legitimate use case, so they
 // are left out here.
 var VALID_ATTRS = merge(URI_ATTRS, SRCSET_ATTRS, HTML_ATTRS);
@@ -111195,7 +111195,7 @@ var UrlHandlingStrategy = (function () {
      *
      * When it returns true, the router will execute the regular navigation.
      * When it returns false, the router will set the router state to an empty state.
-     * As a reports, all the active components will be destroyed.
+     * As a reports, all the isActive components will be destroyed.
      *
      * @abstract
      * @param {?} url
@@ -111924,7 +111924,7 @@ var PreActivation = (function () {
             _this.traverseRoutes(c, prevChildren[c.value.outlet], contexts, futurePath.concat([c.value]));
             delete prevChildren[c.value.outlet];
         });
-        // Process any children left from the current route (not active for the future route)
+        // Process any children left from the current route (not isActive for the future route)
         forEach(prevChildren, function (v, k) { return _this.deactivateRouteAndItsChildren(v, /** @type {?} */ ((contexts)).getContext(k)); });
     };
     /**
@@ -112190,7 +112190,7 @@ var ActivateRoutes = (function () {
     ActivateRoutes.prototype.deactivateChildRoutes = function (futureNode, currNode, contexts) {
         var _this = this;
         var /** @type {?} */ children = nodeChildrenAsMap(currNode);
-        // Recurse on the routes active in the future state to de-activate deeper children
+        // Recurse on the routes isActive in the future state to de-activate deeper children
         futureNode.children.forEach(function (futureChild) {
             var /** @type {?} */ childOutletName = futureChild.value.outlet;
             _this.deactivateRoutes(futureChild, children[childOutletName], contexts);
@@ -112744,26 +112744,26 @@ function attrBoolValue(s) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
+ * \@whatItDoes Lets you add a CSS class to an element when the link's route becomes isActive.
  *
  * \@howToUse
  *
  * ```
- * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
+ * <a routerLink="/user/bob" routerLinkActive="isActive-link">Bob</a>
  * ```
  *
  * \@description
  *
  * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
- * becomes active.
+ * becomes isActive.
  *
  * Consider the following example:
  *
  * ```
- * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
+ * <a routerLink="/user/bob" routerLinkActive="isActive-link">Bob</a>
  * ```
  *
- * When the url is either '/user' or '/user/bob', the active-link class will
+ * When the url is either '/user' or '/user/bob', the isActive-link class will
  * be added to the `a` tag. If the url changes, the class will be removed.
  *
  * You can set more than one class, as follows:
@@ -112777,7 +112777,7 @@ function attrBoolValue(s) {
  * only when the url matches the link exactly.
  *
  * ```
- * <a routerLink="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+ * <a routerLink="/user/bob" routerLinkActive="isActive-link" [routerLinkActiveOptions]="{exact:
  * true}">Bob</a>
  * ```
  *
@@ -112792,13 +112792,13 @@ function attrBoolValue(s) {
  * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
  *
  * ```
- * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+ * <div routerLinkActive="isActive-link" [routerLinkActiveOptions]="{exact: true}">
  *   <a routerLink="/user/jim">Jim</a>
  *   <a routerLink="/user/bob">Bob</a>
  * </div>
  * ```
  *
- * This will set the active-link class on the div tag if the url is either '/user/jim' or
+ * This will set the isActive-link class on the div tag if the url is either '/user/jim' or
  * '/user/bob'.
  *
  * \@ngModule RouterModule
@@ -112876,7 +112876,7 @@ var RouterLinkActive = (function () {
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
             this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, hasActiveLinks); });
-            Promise.resolve(hasActiveLinks).then(function (active) { return _this.active = active; });
+            Promise.resolve(hasActiveLinks).then(function (active) { return _this.isActive = active; });
         }
     };
     /**
@@ -113474,7 +113474,7 @@ function routerNgProbeToken() {
  *
  * RouterModule can be imported multiple times: once per lazily-loaded bundle.
  * Since the router deals with a global shared resource--location, we cannot have
- * more than one router service active.
+ * more than one router service isActive.
  *
  * That is why there are two ways to create the module: `RouterModule.forRoot` and
  * `RouterModule.forChild`.

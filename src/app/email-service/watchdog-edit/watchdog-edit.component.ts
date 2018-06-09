@@ -9,6 +9,7 @@ import * as moment from "moment";
 import * as _ from 'lodash';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+import {WatchDog} from '../../models/watch-dog';
 
 
 @Component({
@@ -18,7 +19,7 @@ import {AppBotsService} from '../../app-services/app-bots-services/app-bots.serv
 })
 export class WatchdogEditComponent implements OnInit {
 
-  watchDog: VOWatchdog = VOWATCHDOG;
+  watchDog: WatchDog = new WatchDog(VOWATCHDOG);
 
   reports: string;
   bases: string[] = ['BTC', 'USDT', 'ETH'];
@@ -35,10 +36,6 @@ export class WatchdogEditComponent implements OnInit {
     private snackBar: MatSnackBar,
     private botsService: AppBotsService
   ) {
-    this.watchDog = new VOWatchdog({
-      sellScript :[],
-      buyScript:[]
-    });
   }
 
   ngOnInit() {
@@ -53,7 +50,7 @@ export class WatchdogEditComponent implements OnInit {
     let wd = await this.botsService.getWatchDogById(id);
 
     if(!wd) {
-      wd = VOWATCHDOG;
+      wd = new WatchDog(VOWATCHDOG);
       wd.id = id;
       wd.action = 'SELL';
     }
@@ -100,7 +97,7 @@ export class WatchdogEditComponent implements OnInit {
     const sellScript = this.watchDog.sellScripts?this.watchDog.sellScripts.toString():null;
     const buyScript = this.watchDog.buyScripts?this.watchDog.buyScripts.toString():null;
     // console.log(!sellScripts, !buyScripts);
-    if(this.watchDog.active && !sellScript && !buyScript){
+    if(this.watchDog.isActive && !sellScript && !buyScript){
       this.snackBar.open('Set Script', 'x', {extraClasses:'alert-red'});
       return
     }

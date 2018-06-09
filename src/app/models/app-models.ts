@@ -484,7 +484,7 @@ export interface VOExchange {
 export interface CoinConfig {
   symbol: string;
   network: any;
-  active: string;
+  isActive: string;
   icon: string;
   contractAddress: string;
   generator: string;
@@ -614,7 +614,7 @@ export class VOWatchdog {
   coin: string;
   action: string;
   name: string;
-  active: boolean;
+  isActive: boolean;
   status: string;
   isEmail: boolean;
   results?: string[];
@@ -623,14 +623,9 @@ export class VOWatchdog {
   balanceCoin: number;
   balanceBase: number;
   amount: number;
-  percent_change_1hLess: boolean;
-  percent_change_1h: number;
-
-  mc?: VOMCAgregated;
   isOpen?: boolean;
-
   constructor(obj: any) {
-    for (let str in obj) this[str] = obj[str]
+    Object.assign(this, obj);
   }
 }
 

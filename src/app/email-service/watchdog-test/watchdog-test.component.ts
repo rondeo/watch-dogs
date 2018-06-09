@@ -14,6 +14,7 @@ import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../com/moving-average';
 import {VOCoinData, VOMCAgregated} from '../../models/api-models';
+import {WatchDog} from '../../models/watch-dog';
 
 
 
@@ -25,7 +26,7 @@ import {VOCoinData, VOMCAgregated} from '../../models/api-models';
 export class WatchdogTestComponent implements OnInit {
 
   private uid: string;
-  watchDog: VOWatchdog = new VOWatchdog({});
+  watchDog: WatchDog = new WatchDog(new VOWatchdog({}));
   MC: VOMCAgregated;
   scripts: string[];
 

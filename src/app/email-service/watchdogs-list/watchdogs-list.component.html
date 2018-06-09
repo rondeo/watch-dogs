@@ -21,7 +21,7 @@
             <ng-container *ngFor="let dog of watchDogs">
                 <tr>
                     <td><span class="btn" (click)="onNameClick(dog)">{{dog.name}}</span></td>
-                    <td><span>{{dog.active}}</span></td>
+                    <td><span>{{dog.isActive}}</span></td>
                     <td><span class="btn fa fa-trash dred" (click)="onDeleteClick(dog)"></span></td>
                 </tr>
             </ng-container>

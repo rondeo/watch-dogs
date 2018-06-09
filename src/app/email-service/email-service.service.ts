@@ -126,7 +126,7 @@ export class EmailServiceService {
     ar.forEach(function (item) {
 
       item.scriptIcon = item.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
-      item.statusIcon = item.status !=='active'?'fa fa-play':'fa fa-pause';
+      item.statusIcon = item.status !=='isActive'?'fa fa-play':'fa fa-pause';
       item.marketCap = data[item.coinId];
 
       if(!item.marketCap) console.error('cant find ' + item.coinId);
@@ -155,7 +155,7 @@ export class EmailServiceService {
 
  addDog(dog:WatchDog){
   /* dog.scriptIcon = dog.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
-   dog.statusIcon = dog.status !=='active'?'fa fa-play':'fa fa-pause';
+   dog.statusIcon = dog.status !=='isActive'?'fa fa-play':'fa fa-pause';
    dog.marketCap = this.marketCapData[dog.coinId];
    if(!dog.marketCap){
      console.error(' cant find  '+dog.coinId);

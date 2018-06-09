@@ -10,9 +10,10 @@ import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import {RunScript} from '../../com/run-script';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {MovingAverage} from '../../com/moving-average';
+import {WatchDog} from '../../models/watch-dog';
 
 export class AppSellCoin {
-  private sellCoins: VOWatchdog[];
+  private sellCoins: WatchDog[];
   private sellCoinsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
   private _isSellRunning: BehaviorSubject<boolean>;
   private interval;
@@ -20,7 +21,7 @@ export class AppSellCoin {
     private storage: StorageService,
     private apiPrivate: ApisPrivateService,
     private apiPublic: ApisPublicService,
-    private watchDogsSub: BehaviorSubjectMy<VOWatchdog[]>,
+    private watchDogsSub: BehaviorSubjectMy<WatchDog[]>,
     private marketCap: ApiMarketCapService
   ) {
 
@@ -33,7 +34,7 @@ export class AppSellCoin {
   init(){
     if(this._isSellRunning.getValue()) this.start();
     this.watchDogsSub.asObservable().subscribe(wds => {
-      this.sellCoins = _.filter(wds, {action: 'SELL'});
+      this.sellCoins = _.filter(wds, {action: 'SELL'})
       this.sellCoinsSub.next(this.sellCoins);
     });
   }

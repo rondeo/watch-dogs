@@ -12,12 +12,13 @@ import * as _ from 'lodash';
 import {GRAPHS} from '../../com/grpahs';
 import {VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {WatchDog} from '../../models/watch-dog';
 
 
 @Injectable()
 export class AppBotsService {
 
-  private watchDogsDataSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
+  private watchDogsDataSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy(null);
   private sellCoinsCtr: AppSellCoin;
   private _isSellRunning: BehaviorSubject<boolean>;
   private _isBuyRunning: BehaviorSubject<boolean>;
@@ -31,7 +32,7 @@ export class AppBotsService {
     private apiPublic: ApisPublicService,
     private marketCap: ApiMarketCapService
   ) {
-    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new VOWatchdog(o))));
+    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new WatchDog(o))));
     this.sellCoinsCtr = new AppSellCoin(storage, apiPrivate, apiPublic, this.watchDogsDataSub, marketCap);
     this.init();
   }
@@ -40,25 +41,7 @@ export class AppBotsService {
     this.marketCap.agregated$().subscribe(newValues => {
       this.MC = newValues;
       this.sellCoinsCtr.run();
-
-    //  const coin = this.watchdog.coin;
-     // const data = newValues[coin];
-      //console.log(data);
-
-
-
-     /* const integ = GRAPHS.integralData(data);
-
-      // console.log(integ);
-      const trigger =
-        integ.cur_prev < 0 &&
-        integ.prev5_10 < 0 &&
-        integ.prev10_20 < 0 &&
-        integ.prev5_10 < 0;
-      console.log('%c ' + coin + '  ' + trigger, 'color:red');     */
     })
-
-
   }
 
   dryRun(action: string){
@@ -99,7 +82,7 @@ export class AppBotsService {
     return this.watchDogsDataSub.asObservable();
   }
 
-  save(wds?: VOWatchdog[]) {
+  save(wds: VOWatchdog[]) {
     this.storage.saveWatchDogs(wds);
   }
 
@@ -115,23 +98,24 @@ export class AppBotsService {
 
   }
 
-  async getWatchDogById(id: string): Promise<VOWatchdog> {
-    return new Promise<VOWatchdog>((resolve, reject) => {
+  async getWatchDogById(id: string): Promise<WatchDog> {
+    return new Promise<WatchDog>((resolve, reject) => {
       this.subWatchdogsData$().subscribe(wds => {
         //  console.warn(wds);
         resolve(_.find(wds, {id: id}));
       }, reject)
-
     })
 
   }
 
-  async saveWatchDog(watchDog: VOWatchdog) {
+  async saveWatchDog(watchDog: WatchDog) {
     const wds = this.watchDogsDataSub.getValue() || [];
     if (!await this.getWatchDogById(watchDog.id)) {
       wds.push(watchDog);
     }
-    await this.storage.saveWatchDogs(wds)
+    await this.storage.saveWatchDogs(wds.map(function (item: WatchDog) {
+      return item.toJSON();
+    }))
     this.watchDogsDataSub.next(wds);
   }
 }

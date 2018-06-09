@@ -105,7 +105,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
   async initAsync() {
     let wd: VOWatchdog[] = await this.storage.getWatchDogs();
-    wd = _.filter(wd, {active: true});
+    wd = _.filter(wd, {isActive: true});
 
     await this.checkBalance(wd);
 
