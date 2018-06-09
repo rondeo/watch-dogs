@@ -5,9 +5,7 @@ import {AllCoinsTableComponent} from './all-coins-table/all-coins-table.componen
 import {SelectedCoinsComponent} from './selected-coins/selected-coins.component';
 import {MatButton, MatCard} from '@angular/material';
 import {MaterialAppModule} from '../material/material-app.module';
-
 import {RouterModule, Routes} from '@angular/router';
-import {SharedModule} from '../shared/shared.module';
 import {GainersLosersComponent} from './gainers-losers/gainers-losers.component';
 import {ExchangesListComponent} from './exchanges-list/exchanges-list.component';
 import {GlAllExchangesComponent} from './gl-all-exchanges/gl-all-exchanges.component';
@@ -39,7 +37,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     MaterialAppModule,
-    SharedModule,
     UiModule,
     FormsModule,
     RouterModule.forChild(routes)

@@ -100,8 +100,8 @@ export class MarketSnapshotComponent implements OnInit {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
     const history: VOOrder[] = await api.downloadMarketHistory(this.baseMC.symbol, this.coinMC.symbol).toPromise();
-    // console.log(history);
-    if (!history) throw new Error('No history base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
+    // console.log(coindatas);
+    if (!history) throw new Error('No coindatas base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
     this.isRefreshingHistory = false
 

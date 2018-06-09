@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {VOGraphs} from '../../shared/line-chart/line-chart.component';
+import {VOGraphs} from '../../ui/line-chart/line-chart.component';
 import {GRAPHS} from '../../com/grpahs';
 import * as moment from 'moment';
 import * as _ from 'lodash'
@@ -21,12 +21,15 @@ import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 })
 export class CoinDayComponent implements OnInit, OnChanges {
 
+
+  @Output() coindatas: EventEmitter<VOCoinData[]> = new EventEmitter<VOCoinData[]>();
   @Input() coin: string;
   mcCoin: VOCoinData;
 
   myGraps: VOGraphs;
   myGraps2: VOLineGraph[];
 
+  isExchanges:boolean;
 
   rankFirst: number;
   rankLast: number;
@@ -38,6 +41,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   momentTo: Moment;
   exchange: string;
+  market:string;
 
   constructor(
     //  private route: ActivatedRoute,
@@ -78,31 +82,36 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   }
 
+/*  async showExchanges(){
+   // console.log(this.isExchanges);
+    if(!this.isExchanges) return;
+    const to = this.momentTo.valueOf();
+    const from = moment(to).subtract(1, 'd').valueOf();
+    this.market = 'BTC_' + this.coin;
+    const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance','bittrex'], 'BTC', this.coin, from, to);
+   // console.log(prices);
+
+    const line: VOLineGraph = {
+      ys: prices[0],
+      color: '#ff7f56',
+      label: 'binance'
+    }
+    this.myGraps2 = [line];
+  }*/
 
   async filterDay() {
     if (!this.coin) return;
-    console.warn(this.coin);
+   // console.warn(this.coin);
     this.fullHistory = await this.getCoinHistory();
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
 
 
-    const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance','bittrex'], 'BTC', this.coin, from, to);
-    console.log(prices);
-
-    const line: VOLineGraph = {
-      ys: prices[0],
-      color: '#ff7f56',
-      label: 'price BTC'
-    }
-
-    this.myGraps2 = [line];
-
     let history = this.fullHistory.filter(function (item) {
       return item.timestamp < to && item.timestamp > from;
     });
     this.drawData(history);
-
+    //this.showExchanges();
   }
 
   async getCoinHistory(): Promise<VOCoinData[]> {
@@ -116,12 +125,13 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
     const l = history.length;
 
-    //  console.log(history);
+    //  console.log(coindatas);
 
     history = history.filter(function (item) {
       return !!item;
     })
 
+   // console.log('histpory', history);
     this.skips = l - history.length;
 
 
@@ -153,6 +163,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
         volumes.push(item.volume);
         total_supply.push(item.total_supply);
         rank.push(item.rank);
+
+       //  const integ = GRAPHS.integralData(item);
 
         /* const integ = GRAPHS.integralData(item);
          if (trigger) {
@@ -205,6 +217,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
       graphs: graphs
     }
 
+    this.coindatas.emit(history);
 
   }
 

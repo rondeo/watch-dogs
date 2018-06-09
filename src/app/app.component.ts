@@ -4,14 +4,14 @@ import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {AuthHttpService, VOUser} from './services/auth-http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {LoginFormComponent} from './shared/login-form/login-form.component';
+import {LoginFormComponent} from './material/login-form/login-form.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {StorageService} from './services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
 import {ExchangeLogin, LoginStatus, UserLoginService} from './services/user-login.service';
-import {LoginExchangeComponent} from './shared/login-exchange/login-exchange.component';
-import {AppBuySellService} from './app-services/app-buy-sell-services/app-buy-sell.service';
+import {LoginExchangeComponent} from './material/login-exchange/login-exchange.component';
+import {AppBotsService} from './app-services/app-bots-services/app-bots.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private userLogin: UserLoginService,
-    private buySellCoin: AppBuySellService,
+    private botsService: AppBotsService,
     private snackBar: MatSnackBar
   ) {
   }

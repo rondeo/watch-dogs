@@ -192,7 +192,7 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
   /*  if(changes.market){
 
       this.marketSummary = null;
-      this.history = null;
+      this.coindatas = null;
       this.downloadHistory();
     console.log(this.market);
     }

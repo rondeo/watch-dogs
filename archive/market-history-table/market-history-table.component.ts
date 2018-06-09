@@ -153,7 +153,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
     /*  if(changes.market){
 
         this.marketSummary = null;
-        this.history = null;
+        this.coindatas = null;
         this.downloadHistory();
       console.log(this.market);
       }

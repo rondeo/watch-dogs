@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiMarketCapService} from "../../src/app/apis/api-market-cap.service";
 import {ActivatedRoute} from "@angular/router";
-import {VOGraphs} from "../../src/app/shared/line-chart/line-chart.component";
+import {VOGraphs} from "../../src/app/ui/line-chart/line-chart.component";
 import * as moment from "moment";
 import * as _ from 'lodash';
 import {VOMarketCap} from "../../src/app/models/app-models";

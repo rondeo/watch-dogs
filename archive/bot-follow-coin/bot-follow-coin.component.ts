@@ -191,9 +191,9 @@ export class BotFollowCoinComponent implements OnInit {
     /*//
     //console.log(mc);
 
-    const history = await this.marketCap.downloadHistoryFromLatHours(10).toPromise();
-    // console.log(history);
-    const gainersVolume = NewGainers.getrGanersVolume(Object.values(history));
+    const coindatas = await this.marketCap.downloadHistoryFromLatHours(10).toPromise();
+    // console.log(coindatas);
+    const gainersVolume = NewGainers.getrGanersVolume(Object.values(coindatas));
 
     const gainersVolumeSorted1 = _.orderBy(gainersVolume, 'volumeSpeed', 'desc');
     console.log(gainersVolumeSorted1);

@@ -14,7 +14,6 @@ import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
 import {TradingHistoryComponent} from "./trading-history/trading-history.component";
 import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
 import { AllMainCoinsComponent } from './all-main-coins/all-main-coins.component';
-import {SharedModule} from "../shared/shared.module";
 import {UiModule} from '../ui/ui.module';
 import {MyExchangeService} from './services/my-exchange.service';
 import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
@@ -40,7 +39,7 @@ const routes: Routes = [
       {path: 'balances/:exchange', component: MyExchangeBalncesComponent},
       {path: 'markets/:exchange', component: MyMarketsComponent},
 
-     // {path: 'orders-history', component:  MyOrdersHistoryComponent},
+     // {path: 'orders-coindatas', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:exchage/:market', component: MyBuySellComponent},
       {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent}
 
@@ -56,8 +55,6 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     MaterialAppModule,
-
-    SharedModule,
     UiModule,
     WidgetsModule,
     RouterModule.forChild(routes)

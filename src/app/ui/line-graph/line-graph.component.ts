@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {LineChartComponent, VOGraph} from '../../shared/line-chart/line-chart.component';
+import {LineChartComponent, VOGraph} from '../line-chart/line-chart.component';
 import * as _ from 'lodash';
 
 
@@ -26,17 +26,17 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
   @Input() linegraphs: VOLineGraph[];
   @Input() textsxs: string[];
 
+  @Input() width: number = 600;
+  @Input() height: number = 400;
 
-  width: number = 600;
-  height: number = 400;
 
 
-  private ratio: number = 600 / 400;
+  private ratio: number;
 
   private widthG: number;
   private heightG: number;
-  private vertical = 12;
-  private horizont = 10;
+  @Input() vertical = 12;
+  @Input() horizont = 10;
   private padding = 10;
   private paddingTop = 30;
   private paddingBottom = 20;
@@ -97,6 +97,7 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
 
 
   private drwaHorizonts() {
+    if(!this.horizont) return;
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
@@ -117,6 +118,7 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
   }
 
   private drwaVerticals() {
+    if(!this.vertical) return;
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
@@ -139,19 +141,22 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
 
 
   drawTextsY() {
+
     let ctx = this.ctx;
      let x0 = this.x0 + 50;
      let y0 = this.y0;
      this.linegraphs.forEach(function (graph, i) {
-       ctx.fillStyle = graph.color;
-       ctx.font = "12px Arial";
-       let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
-       let min = graph.min;
-       let max = graph.max;
+       if(!!graph.label) {
+         ctx.fillStyle = graph.color;
+         ctx.font = "12px Arial";
+         let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
+         let min = graph.min;
+         let max = graph.max;
 
-       ctx.fillText(graph.label + ' ' + percent + '%', x0 + i * 90, 12, 80);
-       ctx.fillText(min.toPrecision(4), 2, y0 - (i * 20), 40);
-       ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
+         ctx.fillText(graph.label + ' ' + percent + '%', x0 + i * 90, 12, 80);
+         ctx.fillText(min.toPrecision(4), 2, y0 - (i * 20), 40);
+         ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
+       }
      });
   }
 
@@ -188,6 +193,7 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.ratio  = +(this.width / this.height).toPrecision(8);
     window.addEventListener('resize', event => {
       clearTimeout(this.resiseTimeout);
       this.resiseTimeout = setTimeout(() => this.onResise(), 500);

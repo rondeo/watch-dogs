@@ -142,7 +142,7 @@ export class BotBuyCoinService {
     publicAPI.downloadTrades(base, coin).toPromise().then(reports=>{
 
       reports.reverse();
-      let history = UtilsOrder.analizeOrdersHistory2(reports, priceBaseUS);
+      let coindatas = UtilsOrder.analizeOrdersHistory2(reports, priceBaseUS);
 
       market.tradesStats =  {
         exchange:'',
@@ -151,23 +151,23 @@ export class BotBuyCoinService {
         avgRate:0,
         avgRateUS:0,
         priceBaseUS:priceBaseUS,
-        rateLast:history.rateLast,
-        rateLastUS:history.priceLastUS,
-        priceToMC: Math.round(10000 * (history.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
-        //bubbles: history.bubbles,
-        duratinMin: history.duration / 60,
-        speedPerMin: (history.speed * 60),
-        speed:history.speed,
+        rateLast:coindatas.rateLast,
+        rateLastUS:coindatas.priceLastUS,
+        priceToMC: Math.round(10000 * (coindatas.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
+        //bubbles: coindatas.bubbles,
+        duratinMin: coindatas.duration / 60,
+        speedPerMin: (coindatas.speed * 60),
+        speed:coindatas.speed,
         amountBuy:0,
         amountSell:0,
-        amountBuyUS: history.sumBuyUS,
-        amountSellUS: history.sumSellUS,
-        perHourBuy: history.sumBuyUS / (history.duration / 60 / 60),
-        perHourSell: history.sumSellUS / (history.duration / 60 / 60),
-        coin: history.coin,
-        base: history.base,
-        volUS:history.sumBuyUS +  history.sumSellUS,
-        totalUS: history.sumBuyUS - history.sumSellUS
+        amountBuyUS: coindatas.sumBuyUS,
+        amountSellUS: coindatas.sumSellUS,
+        perHourBuy: coindatas.sumBuyUS / (coindatas.duration / 60 / 60),
+        perHourSell: coindatas.sumSellUS / (coindatas.duration / 60 / 60),
+        coin: coindatas.coin,
+        base: coindatas.base,
+        volUS:coindatas.sumBuyUS +  coindatas.sumSellUS,
+        totalUS: coindatas.sumBuyUS - coindatas.sumSellUS
 
       };
 

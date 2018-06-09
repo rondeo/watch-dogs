@@ -7,7 +7,8 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-buy-sell.service';
+import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+
 
 @Component({
   selector: 'app-watchdogs-list',
@@ -28,11 +29,15 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     private markrtCap: MarketCapService,
     private router: Router,
     private route: ActivatedRoute,
-    private wdService: AppBuySellService
+    private botsService: AppBotsService
   ) {
   }
 
 
+  dryRunDogs(){
+
+    this.botsService.dryRun(this.action);
+  }
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params.action) {
@@ -46,11 +51,11 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   initSellBots() {
-    this.wdService.isSellRunning$().subscribe(isRunning => {
+    this.botsService.isSellRunning$().subscribe(isRunning => {
 
       this.isBotsRunning = isRunning;
     });
-    this.wdService.subSellCoins$().subscribe(wds => {
+    this.botsService.subSellCoins$().subscribe(wds => {
       this.watchDogs = wds;
     })
   }
@@ -76,7 +81,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   async onDeleteClick(dog: VOWatchdog) {
     console.log(dog);
     if (!confirm('You want to delete Watchdog ' + dog.name + '?')) return;
-    this.wdService.deleteWatchDog(dog);
+    this.botsService.deleteWatchDog(dog);
   }
 
   onNameClick(dog: VOWatchdog) {
@@ -85,9 +90,9 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   startStopBots() {
     if (!this.isBotsRunning) {
-      if (this.action === 'SELL') this.wdService.startSellBots();
+      if (this.action === 'SELL') this.botsService.startSellBots();
     } else {
-      if (this.action === 'SELL') this.wdService.stopSellBots();
+      if (this.action === 'SELL') this.botsService.stopSellBots();
     }
 
   }

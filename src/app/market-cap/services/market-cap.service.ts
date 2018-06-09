@@ -106,9 +106,9 @@ export class MarketCapService {
 
     // setTimeout(() => this.coinsArSub.next(this.coinsAr), 50);
 
-    // if(this.history.length > 300) this.history.shift();
-    // this.history.push(this.coins);
-    //this.historyCounterSub.next(this.history.length);
+    // if(this.coindatas.length > 300) this.coindatas.shift();
+    // this.coindatas.push(this.coins);
+    //this.historyCounterSub.next(this.coindatas.length);
     // this.timestamp = Date.now();
 
     // console.log(' marketcap total: ' + this.marketsAr.length);

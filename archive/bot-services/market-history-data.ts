@@ -124,7 +124,7 @@ export class MarketHistoryData{
     this.downloadHistory((err, diff)=>{
       let delay = 20000;
       if(!err){
-         // console.log(this.id + ' history duration '+ (diff/1000/60) + ' min');
+         // console.log(this.id + ' coindatas duration '+ (diff/1000/60) + ' min');
           delay = Math.round(diff/2);
           if(delay < 20000) {
             //console.log(this.id + ' delay ' + delay);
@@ -145,14 +145,14 @@ export class MarketHistoryData{
   private downloadHistory(callBack:(err, res)=>void){
 
     let sub1 =  this.currentAPI.downloadMarketHistory(this.base, this.coin).subscribe(history=>{
-     // console.log(history);
+     // console.log(coindatas);
       if(!history) return;
 
       history.reverse();
       let diff = history[history.length-1].timestamp - history[0].timestamp;
 
       let oldHistory = this.getHistory();
-      ///console.log(' old history ', oldHistory);
+      ///console.log(' old coindatas ', oldHistory);
 
       if(oldHistory.length){
 
@@ -162,15 +162,15 @@ export class MarketHistoryData{
           return item.timestamp > this.t;
         },{t:last});
 
-        //console.log(' adding  new  history '+ newHistory.length);
+        //console.log(' adding  new  coindatas '+ newHistory.length);
 
         history = oldHistory.concat(newHistory);
 
-       /// console.log(' after cocat  ' + history.length);
+       /// console.log(' after cocat  ' + coindatas.length);
         history = this.removeOldOrders(history, this.historyLength);
       }
 
-      //console.log(this.id + ' history length ' + UtilsOrder.calculateLength(history) + ' min');
+      //console.log(this.id + ' coindatas length ' + UtilsOrder.calculateLength(coindatas) + ' min');
 
       this.history = history;
       this.historySub.next(history);
@@ -180,7 +180,7 @@ export class MarketHistoryData{
 
 
 
-      this.analytics = UtilsOrder.analizeOrdersHistory2(history, this.priceBaseUS);
+      this.analytics = UtilsOrder.analizeOrdersHistory2(coindatas, this.priceBaseUS);
 
       //console.log(this.analytics);
 

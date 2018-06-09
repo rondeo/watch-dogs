@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import {ActivatedRoute} from "@angular/router";
 import * as moment from "moment";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {VOGraphs} from "../../src/app/shared/line-chart/line-chart.component";
+import {VOGraphs} from "../../src/app/ui/line-chart/line-chart.component";
 
 @Component({
   selector: 'app-bot-coin-day',

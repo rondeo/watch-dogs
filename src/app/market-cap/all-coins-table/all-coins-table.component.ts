@@ -6,7 +6,7 @@ import {VOMarketCap} from '../../models/app-models';
 
 import {MarketCapService} from '../services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
-import {filterSelected} from '../../shared/utils';
+
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMC} from '../../apis/models';
 

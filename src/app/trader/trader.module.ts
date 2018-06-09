@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterModule, Routes} from "@angular/router";
@@ -39,7 +38,6 @@ const routes: Routes = [
     FormsModule,
     MaterialAppModule,
     ChartsModule,
-    SharedModule,
     ApisModule,
     UiModule,
     WidgetsModule,

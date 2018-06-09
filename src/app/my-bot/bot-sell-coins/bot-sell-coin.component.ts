@@ -15,7 +15,7 @@ import {forkJoin} from "rxjs/observable/forkJoin";
 
 import {MongoService} from "../../apis/mongo.service";
 import {GRAPHS} from "../../com/grpahs";
-import {VOGraphs} from "../../shared/line-chart/line-chart.component";
+import {VOGraphs} from "../../ui/line-chart/line-chart.component";
 import {WatchDog} from '../../models/watch-dog';
 
 

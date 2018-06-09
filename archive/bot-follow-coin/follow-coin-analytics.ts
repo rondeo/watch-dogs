@@ -47,7 +47,7 @@ export class FollowCoinAnalytics {
          // console.log('%c changing BUY ' + gainer.coin + report, 'color:red');
          // gainer.reports.push(new Date().toLocaleTimeString() + report);
 
-       // }else if (gainer.history && gainer.history.length > 2) {
+       // }else if (gainer.coindatas && gainer.coindatas.length > 2) {
 
          // console.log('%c changing TO_BUY' + gainer.coin, 'color:brown');
 

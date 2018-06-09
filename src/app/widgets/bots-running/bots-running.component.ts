@@ -1,30 +1,31 @@
 import {Component, OnInit} from '@angular/core';
-import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-buy-sell.service';
+
 import {VOWatchdog} from '../../models/app-models';
 import {Observable} from 'rxjs/Observable';
 import {MatSnackBar} from '@angular/material';
+import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 
 @Component({
-  selector: 'app-buy-sell-summary',
-  templateUrl: './buy-sell-summary.component.html',
-  styleUrls: ['./buy-sell-summary.component.css']
+  selector: 'app-bots-running',
+  templateUrl: './bots-running.component.html',
+  styleUrls: ['./bots-running.component.css']
 })
-export class BuySellSummaryComponent implements OnInit {
+export class BotsRunningComponent implements OnInit {
 
   sellWds$: Observable<VOWatchdog[]>;
   buyWds$: Observable<VOWatchdog[]>;
 
   constructor(
-    private buySellCoin: AppBuySellService,
+    private botsService: AppBotsService,
     private snackBar:MatSnackBar
   ) {
   }
 
   ngOnInit() {
-    this.sellWds$ = this.buySellCoin.subSellCoins$();
-    this.buyWds$ = this.buySellCoin.subBuyCoins$();
+    this.sellWds$ = this.botsService.subSellCoins$();
+    this.buyWds$ = this.botsService.subBuyCoins$();
 
-    this.buySellCoin.isSellRunning$().subscribe(isRunning =>{
+    this.botsService.isSellRunning$().subscribe(isRunning =>{
       clearTimeout(this.timeout);
       this.timeout = setTimeout(()=>this.showSbackBar(isRunning), 1300);
 

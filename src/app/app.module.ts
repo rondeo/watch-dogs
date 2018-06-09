@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+
 import {Router, RouterModule} from '@angular/router';
 import {rootRouterConfig} from './app.routes';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
@@ -22,11 +22,8 @@ import "rxjs/add/operator/concat";
 
 //import {AuthHttp, AuthModule, provideAuth, AuthConfig} from './libs/angular2-jwt';
 
-
 import {MaterialAppModule} from './material/material-app.module';
-
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SharedModule} from './shared/shared.module';
 import {ExchangeSsComponent} from './exchange-ss/exchange-ss.component';
 import {ExchangeSsService} from './exchange-ss/exchange-ss.service';
 
@@ -74,9 +71,7 @@ declare const Buffer: any;
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
     MarketCapModule,
-    SharedModule,
     MaterialAppModule,
     BrowserModule,
     EmailServiceModule,

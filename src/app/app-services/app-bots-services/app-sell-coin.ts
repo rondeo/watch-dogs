@@ -9,6 +9,7 @@ import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import {VOMCAgregated, VOMCObj} from '../../apis/models';
 import {RunScript} from '../../com/run-script';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {MovingAverage} from '../../com/moving-average';
 
 export class AppSellCoin {
   private sellCoins: VOWatchdog[];
@@ -78,5 +79,21 @@ export class AppSellCoin {
 
     })
     console.log(this.sellCoins);
+  }
+
+  async dryRun() {
+   const MC = await this.marketCap.getAgregated().toPromise();
+   //console.log(MC);
+    console.log('dry run bots ' + this.sellCoins.length);
+    this.sellCoins.forEach(function (wd: VOWatchdog) {
+      const aggr = MC[wd.coin];
+      if(!aggr) console.error(wd, MC);
+      else {
+        const ma = MovingAverage.map(aggr);
+        console.log(ma);
+        const trigger = MovingAverage.isMovingDown(ma);
+        console.log(trigger);
+      }
+    });
   }
 }

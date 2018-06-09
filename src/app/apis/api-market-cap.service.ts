@@ -52,7 +52,6 @@ export class ApiMarketCapService {
 
 
   agregated$(): Observable<{ [symbol: string]: VOMCAgregated }> {
-    if(!this.agrigatedSub.getValue()) this.downloadAgrigated();
     return this.agrigatedSub.asObservable();
   }
 
@@ -88,25 +87,32 @@ export class ApiMarketCapService {
   private agrigatedTimestamp: number = 0;
   private isLoading: boolean;
 
-  private downloadAgrigated(): Subscription {
+  private refreshAgrigated(): Subscription {
     if(this.isLoading) return;
     this.isLoading = true;
     let url = '/api/marketcap/agrigated';
     console.log('%c LOADING ' + url, 'color:red');
-   return this.http.get(url)
-      .subscribe((res: { [id: string]: MCdata }) => {
-        const out = {}
-        for (let str in res) out[str] = Parsers.mapAgrigated(res[str], str);
-        out['USDT'].price_usd = 1;
-        this.agrigatedTimestamp = out['BTC'].timestamp;
+   return this.getAgregated()
+      .subscribe((res) => {
+        this.agrigatedTimestamp = res['BTC'].timestamp;
         console.log('%c MC ' + moment(this.agrigatedTimestamp).toLocaleString(), 'color:red');
-        this.data = out;
-
-        this.agrigatedSub.next(out);
+        this.data = res;
+        this.agrigatedSub.next(res);
         this.isLoading = false;
       });
   }
 
+  getAgregated(): Observable<{[symbol: string]:VOMCAgregated}>{
+    let url = '/api/marketcap/agrigated';
+    console.log('%c LOADING agrigated' + url, 'color:pink');
+    return this.http.get(url)
+      .map((res: { [id: string]: MCdata }) => {
+        const out = {}
+        for (let str in res) out[str] = Parsers.mapAgrigated(res[str], str);
+        out['USDT'].price_usd = 1;
+        return out;
+      });
+  }
 
   downloadOneRecord(after: string, before: string,): Observable<{ createdAt: string; data: { [symbol: string]: VOMarketCap } }> {
     const q = before ? 'before=' + before : 'after=' + after;
@@ -197,7 +203,7 @@ export class ApiMarketCapService {
   startAutoRefresh() {
     if (this.refreshInterval) return
     this.refreshInterval = setInterval(() => {
-      this.downloadAgrigated();
+      this.refreshAgrigated();
     }, 6 * 60 * 1000)
   }
 

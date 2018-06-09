@@ -246,7 +246,7 @@ export class TradesData{
       console.log(this.id +'  next trades download in '+ (delay/ 1000/60).toPrecision(4) + ' min');
 /*
       let oldTrades =this.getHistory();
-      ///console.log(' old history ', oldHistory);
+      ///console.log(' old coindatas ', oldHistory);
 
       if(oldTrades.length){
 
@@ -256,11 +256,11 @@ export class TradesData{
           return item.timestamp > this.t;
         },{t:last});
 
-        //console.log(' adding  new  history '+ newHistory.length);
+        //console.log(' adding  new  coindatas '+ newHistory.length);
 
         trades = oldTrades.concat(newTrades);
 
-        /// console.log(' after cocat  ' + history.length);
+        /// console.log(' after cocat  ' + coindatas.length);
         trades = TradesData.removeOldOrders(trades, this.tradesLength);
       }
 
@@ -268,7 +268,7 @@ export class TradesData{
 
 
       console.log(this.id +' length '+Math.round(length/1000/60)+ ' min  next trades download in '+ (delay/ 1000/60).toPrecision(4) + ' min');
-      //console.log(this.id + ' history length ' + UtilsOrder.calculateLength(history) + ' min');
+      //console.log(this.id + ' coindatas length ' + UtilsOrder.calculateLength(coindatas) + ' min');
 
 
 

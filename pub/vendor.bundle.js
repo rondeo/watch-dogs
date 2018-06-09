@@ -25335,7 +25335,7 @@ var Location = (function () {
     };
     /**
      * Changes the browsers URL to the normalized version of the given URL, and pushes a
-     * new item onto the platform's history.
+     * new item onto the platform's coindatas.
      * @param {?} path
      * @param {?=} query
      * @return {?}
@@ -25346,7 +25346,7 @@ var Location = (function () {
     };
     /**
      * Changes the browsers URL to the normalized version of the given URL, and replaces
-     * the top item on the platform's history stack.
+     * the top item on the platform's coindatas stack.
      * @param {?} path
      * @param {?=} query
      * @return {?}
@@ -25356,12 +25356,12 @@ var Location = (function () {
         this._platformStrategy.replaceState(null, '', path, query);
     };
     /**
-     * Navigates forward in the platform's history.
+     * Navigates forward in the platform's coindatas.
      * @return {?}
      */
     Location.prototype.forward = function () { this._platformStrategy.forward(); };
     /**
-     * Navigates back in the platform's history.
+     * Navigates back in the platform's coindatas.
      * @return {?}
      */
     Location.prototype.back = function () { this._platformStrategy.back(); };
@@ -99900,7 +99900,7 @@ var MdDialog = /*@__PURE__*/(function () {
          * Gets an observable that is notified when all open dialog have finished closing.
          */
         this.afterAllClosed = this._afterAllClosed.asObservable();
-        // Close all of the dialogs when the user goes forwards/backwards in history or when the
+        // Close all of the dialogs when the user goes forwards/backwards in coindatas or when the
         // location hash changes. Note that this usually doesn't include clicking on links (unless
         // the user is using the `HashLocationStrategy`).
         if (!_parentDialog && _location) {
@@ -113531,7 +113531,7 @@ var RouterModule = (function () {
      *
      * Options:
      * * `enableTracing` makes the router log all its internal events to the console.
-     * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+     * * `useHash` enables the location strategy that uses the URL fragment instead of the coindatas
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.

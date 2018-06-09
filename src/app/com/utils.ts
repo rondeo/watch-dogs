@@ -4,4 +4,18 @@ export class UTILS {
       return item + '=' + this.obj[item];
     }, {obj: obj}).join('&');
   }
+
+}
+
+export function applyMixins(derivedCtor: any, baseCtors: any[]) {
+  console.log(derivedCtor)
+  baseCtors.forEach(baseCtor => {
+    console.log(baseCtors)
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      console.log(name);
+      if (name !== 'constructor') {
+        derivedCtor.prototype[name] = baseCtor.prototype[name];
+      }
+    });
+  });
 }

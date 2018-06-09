@@ -9,13 +9,14 @@ import {MaterialAppModule} from '../material/material-app.module';
 import {FormsModule} from '@angular/forms';
 import {EmailServiceService} from './email-service.service';
 import { EditScriptComponent } from './edit-script/edit-script.component';
-import {SharedModule} from '../shared/shared.module';
+
 import { WatchdogsListComponent } from './watchdogs-list/watchdogs-list.component';
 import { WatchdogEditComponent } from './watchdog-edit/watchdog-edit.component';
 import { AddScriptComponent } from './add-script/add-script.component';
 import {AppServicesModule} from '../app-services/app-services.module';
 import { WatchdogTestComponent } from './watchdog-test/watchdog-test.component';
 import {WidgetsModule} from '../widgets/widgets.module';
+import {UiModule} from '../ui/ui.module';
 
 
 
@@ -41,9 +42,9 @@ const routes: Routes = [
     FormsModule,
     RouterModule,
     MaterialAppModule,
-    SharedModule,
     AppServicesModule,
     WidgetsModule,
+    UiModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

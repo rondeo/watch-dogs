@@ -30,5 +30,12 @@
     </div>
     <br/>
     <app-line-chart [graphs]="myGraps"></app-line-chart>
-    <app-line-graph [linegraphs]="myGraps2"></app-line-graph>
+<!--
+    <mat-checkbox
+            [(ngModel)]="isExchanges"
+            (ngModelChange)="showExchanges()">Exchanges
+        <span class="mat-body-2">{{market}}</span>
+    </mat-checkbox>
+
+    <app-line-graph *ngIf="isExchanges" [linegraphs]="myGraps2"></app-line-graph>-->
 </div>

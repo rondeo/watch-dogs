@@ -232,7 +232,7 @@ export class MyBuySellComponent implements OnInit {
     if(!this.marketInit) return;
     let cur = this.marketInit;
    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
-     //console.log(history);
+     //console.log(coindatas);
      if(!history) return;
      this.analytics = UtilsOrder.analizeOrdersHistory(history, this.marketInit.priceBaseUS);
       sub1.unsubscribe()

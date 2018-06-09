@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { DialogSimpleComponent } from '../material/dialog-simple/dialog-simple.component';
 import {MaterialAppModule} from '../material/material-app.module';
 import { SortableTableComponent } from '../ui/sortable-table/sortable-table.component';
-import { CrossTableComponent } from './cross-table/cross-table.component';
-import { LogoutFormComponent } from './logout-form/logout-form.component';
-import {LoginFormComponent} from './login-form/login-form.component';
+import { CrossTableComponent } from '../ui/cross-table/cross-table.component';
+import {LoginFormComponent} from '../material/login-form/login-form.component';
 import {FormsModule} from '@angular/forms';
 
-import { TradesHistoryComponent } from './trades-history/trades-history.component';
+import { TradesHistoryComponent } from '../widgets/trades-history/trades-history.component';
 
-import { LineChartComponent } from './line-chart/line-chart.component';
+import { LineChartComponent } from '../ui/line-chart/line-chart.component';
 
 import {UiModule} from '../ui/ui.module';
-import { LoginExchangeComponent } from './login-exchange/login-exchange.component';
+import { LoginExchangeComponent } from '../material/login-exchange/login-exchange.component';
 
 
 @NgModule({
@@ -32,7 +31,6 @@ import { LoginExchangeComponent } from './login-exchange/login-exchange.componen
     DialogSimpleComponent,
     SortableTableComponent,
     CrossTableComponent,
-    LogoutFormComponent,
     LoginFormComponent,
     TradesHistoryComponent,
     LineChartComponent,
@@ -41,8 +39,7 @@ import { LoginExchangeComponent } from './login-exchange/login-exchange.componen
   entryComponents: [
     DialogSimpleComponent,
     LoginFormComponent,
-    LogoutFormComponent,
     LoginExchangeComponent
   ]
 })
-export class SharedModule { }
+export class SharedModuleOld { }

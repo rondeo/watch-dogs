@@ -8,7 +8,8 @@ import {MatSnackBar} from "@angular/material";
 import * as moment from "moment";
 import * as _ from 'lodash';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {AppBuySellService} from '../../app-services/app-buy-sell-services/app-buy-sell.service';
+import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+
 
 @Component({
   selector: 'app-watchdog-edit',
@@ -32,7 +33,7 @@ export class WatchdogEditComponent implements OnInit {
     private storage: StorageService,
     private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar,
-    private buySellCoin: AppBuySellService
+    private botsService: AppBotsService
   ) {
     this.watchDog = new VOWatchdog({
       sellScript :[],
@@ -49,7 +50,7 @@ export class WatchdogEditComponent implements OnInit {
     this.selectedCoins = await this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
 
-    let wd = await this.buySellCoin.getWatchDogById(id);
+    let wd = await this.botsService.getWatchDogById(id);
 
     if(!wd) {
       wd = VOWATCHDOG;
@@ -109,7 +110,7 @@ export class WatchdogEditComponent implements OnInit {
 
   async saveWatchDog() {
     try {
-      await this.buySellCoin.saveWatchDog(this.watchDog);
+      await this.botsService.saveWatchDog(this.watchDog);
       this.snackBar.open(this.watchDog.name + ' Saved ', 'x', {duration: 2000})
     } catch (e) {
       this.snackBar.open(e.toString(), 'x', {duration: 2000, extraClasses: 'alert-red'})

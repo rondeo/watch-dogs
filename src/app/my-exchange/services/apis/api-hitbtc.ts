@@ -5,10 +5,7 @@ import {StorageService} from "../../../services/app-storage.service";
 
 import {ApiLogin} from "../../../shared/api-login";
 import {IExchangeConnector} from "../connector-api.service";
-
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-
-import {applyMixins} from "../../../shared/utils";
 import {SelectedSaved} from "../../../com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
 import {MarketCapService} from "../../../market-cap/services/market-cap.service";
@@ -109,7 +106,7 @@ export class ApiHitbtc extends ApiBase  {
             }));
 
       case PrivateCalls.ORDERS_HISTORY:
-        url = 'api/hitbtc/history/trades?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
+        url = 'api/hitbtc/coindatas/trades?symbol={{coin}}{{base}}'.replace('{{base}}',data.base).replace('{{coin}}', data.coin);
         console.log(url);
         return this.http.get(url, {headers})
           .map(res=>{

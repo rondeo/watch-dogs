@@ -14,7 +14,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../apis/models';
 
 @Injectable()
-export class AppBuySellService {
+export class AppBotsService {
 
   private watchDogsDataSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
   private sellCoinsCtr: AppSellCoin;
@@ -58,6 +58,12 @@ export class AppBuySellService {
     })
 
 
+  }
+
+  dryRun(action: string){
+    if(action === 'SELL'){
+      this.sellCoinsCtr.dryRun()
+    }
   }
 
   isSellRunning$(): Observable<boolean> {

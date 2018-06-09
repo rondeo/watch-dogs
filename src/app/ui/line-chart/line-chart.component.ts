@@ -31,7 +31,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
   private ctx: CanvasRenderingContext2D;
-  @Input() graphs: VOGraphs;
+  @Input() graphs: VOGraphs
 
 
   lines: VOLine[];

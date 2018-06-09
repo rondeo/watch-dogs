@@ -7,7 +7,7 @@ import {ApiLogin} from "../../../shared/api-login";
 import {IExchangeConnector} from "../connector-api.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
-import {applyMixins} from "../../../shared/utils";
+
 import {SelectedSaved} from "../../../com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
 import {MarketCapService} from "../../../market-cap/services/market-cap.service";

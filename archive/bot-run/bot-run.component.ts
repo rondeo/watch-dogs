@@ -82,10 +82,10 @@ export class BotRunComponent implements OnInit {
   downloadHistory(callBack:(err, res)=>void){
     if(!this.marketInit) return;
     let cur = this.marketInit;
-    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(history=>{
-      //console.log(history);
-      if(!history) return;
-      this.analytics = UtilsOrder.analizeOrdersHistory(history, this.marketInit.priceBaseUS);
+    let sub1 =  this.currentAPI.downloadMarketHistory(cur.base, cur.coin).subscribe(coindatas=>{
+      //console.log(coindatas);
+      if(!coindatas) return;
+      this.analytics = UtilsOrder.analizeOrdersHistory(coindatas, this.marketInit.priceBaseUS);
       sub1.unsubscribe()
       callBack(null, this.analytics.bubbles);
     },err=>{
@@ -259,11 +259,11 @@ export class BotRunComponent implements OnInit {
         })*!/
 
 
-       /!* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(history=>{
+       /!* this.botService.subscribeForHistory(this.marketInit, this.currentAPI).subscribe(coindatas=>{
 
-          console.log(this.marketInit.exchange + '  ' + UtilsOrder.calculateLength(history)  + ' min');
+          console.log(this.marketInit.exchange + '  ' + UtilsOrder.calculateLength(coindatas)  + ' min');
 
-          if(history.length)this.analytics = UtilsOrder.analizeOrdersHistory2(history, this.marketInit.priceBaseUS);
+          if(coindatas.length)this.analytics = UtilsOrder.analizeOrdersHistory2(coindatas, this.marketInit.priceBaseUS);
 
          // console.log(analytics)
          // this.analytics = analytics

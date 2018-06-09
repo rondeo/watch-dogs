@@ -66,24 +66,24 @@
                 </app-my-books>
             </div>
             <div class="myFlexCol">
-                <my-orders-history
+                <my-orders-coindatas
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
                         (fillOrder)="onFillOrder($event)"
-                ></my-orders-history>
-               &lt;!&ndash; <app-trading-history
+                ></my-orders-coindatas>
+               &lt;!&ndash; <app-trading-coindatas
                         [marketInit]="marketInit"
                         [newOrder]="newOrder"
                         (completeOrder)="onOrderComplete($event)"
-                ></app-trading-history>&ndash;&gt;
+                ></app-trading-coindatas>&ndash;&gt;
             </div>
         </div>
 
     </section>
     <hr/>
     &lt;!&ndash;<section>
-        <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'BTC'" [priceBaseUS]="1"></app-trades-history>
-        <app-trades-history [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'LTC'" [priceBaseUS]="1"></app-trades-history>
+        <app-trades-coindatas [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'BTC'" [priceBaseUS]="1"></app-trades-coindatas>
+        <app-trades-coindatas [exchange]="'bitfinex'" [base]="'USDT'" [coin]="'LTC'" [priceBaseUS]="1"></app-trades-coindatas>
     </section>&ndash;&gt;
 
 

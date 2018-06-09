@@ -6,7 +6,7 @@ import {ApisPrivateService} from "../../apis/apis-private.service";
 import {ActivatedRoute} from "@angular/router";
 import {StorageService} from "../../services/app-storage.service";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {VOGraphs} from "../../shared/line-chart/line-chart.component";
+import {VOGraphs} from "../../ui/line-chart/line-chart.component";
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {GRAPHS} from "../../com/grpahs";
@@ -96,7 +96,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
   async drawData() {
     const coin = this.watchdog.coin;
     const history = await this.mongo.downloadCoinHistory(moment().format(), moment().subtract(1, 'd').format(), coin, 300);
-///console.log(history);
+///console.log(coindatas);
 
     const labels = []
     let trigger = false;

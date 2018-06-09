@@ -67,7 +67,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
     this.refreshOpenOrders((err, res)=> {
       console.log('refreshOpenOrders ', res)
       if (res.length === 0) {
-        console.warn('no open orders  looking in history ' )
+        console.warn('no open orders  looking in coindatas ' )
         this.refreshOrdersHistory(()=>{
           if(this.newOrder) setTimeout(()=> this.downloadNewOrder(), 6000);
 

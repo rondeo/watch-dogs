@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {AppBuySellService} from './app-buy-sell-services/app-buy-sell.service';
+import {AppBotsService} from './app-bots-services/app-bots.service';
+
 
 @NgModule({
   imports: [
@@ -8,7 +9,7 @@ import {AppBuySellService} from './app-buy-sell-services/app-buy-sell.service';
   ],
   declarations: [],
   providers:[
-    AppBuySellService
+    AppBotsService
   ]
 })
 export class AppServicesModule { }

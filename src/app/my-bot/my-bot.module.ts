@@ -4,7 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
-import {SharedModule} from "../shared/shared.module";
+
 import {ChartsModule} from "ng2-charts";
 import {MatDatepickerModule} from "@angular/material";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
@@ -54,7 +54,6 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     MaterialAppModule,
-    SharedModule,
     MatDatepickerModule,
     MatMomentDateModule,
     ReactiveFormsModule,

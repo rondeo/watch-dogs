@@ -111,7 +111,7 @@ export class SendAlertService {
 
         report = {
           symbol: newMarket.symbol,
-          history: wallet.analitics.price_usd_historyDisplay
+          coindatas: wallet.analitics.price_usd_historyDisplay
 
         }
       }

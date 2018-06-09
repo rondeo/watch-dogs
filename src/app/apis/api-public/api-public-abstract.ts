@@ -99,7 +99,7 @@ export abstract class ApiPublicAbstract {
 
     return this.getAllCoins().switchMap(allCoins => {
       if (!!allCoins[coin]) return this.http
-        .get('/api/front-desk/' + this.exchange + '-history?base=' + base
+        .get('/api/front-desk/' + this.exchange + '-coindatas?base=' + base
           + '&coin=' + coin + '&from=' + from + '&to=' + to).map(this.mapCoinDay);
       else {
         // console.log(' no coin ' + coin , allCoins);

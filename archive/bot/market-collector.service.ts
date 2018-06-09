@@ -130,7 +130,7 @@ export class MarketCollectorService {
               rateLast:history.rateLast10,
               rateLastUS:history.priceLast10US,
               priceToMC: Math.round(10000 * (history.priceLast10US - coinMC.price_usd) / coinMC.price_usd) / 100,
-              //bubbles: history.bubbles,
+              //bubbles: coindatas.bubbles,
               duratinMin: history.duration / 60,
               speedPerMin: (history.speed * 60),
               amountBuyUS: history.sumBuyUS,
@@ -159,7 +159,7 @@ export class MarketCollectorService {
       api.downloadMarketHistory(base, coin).subscribe(res=>{
         res.reverse();
         //console.log(res);
-        let history = UtilsOrder.analizeOrdersHistory2(res, priceBaseUS);
+        let coindatas = UtilsOrder.analizeOrdersHistory2(res, priceBaseUS);
         setTimeout(()=>{
 
           api.downloadBooks(base, coin).subscribe(books=>{
@@ -182,21 +182,21 @@ export class MarketCollectorService {
             let summary:IMarketSummary = {
               exchange:api.exchange,
               MC:mc,
-              bubbles:history.bubbles,
-              duratinMin:history.duration/60,
-              speedPerMin:(history.speed * 60),
-              sumBuyUS:history.sumBuyUS,
-              sumSellUS:history.sumSellUS,
-              perHourBuy:history.sumBuyUS/ (history.duration/60/60),
-              perHourSell:history.sumSellUS/ (history.duration/60/60),
-              coin:history.coin,
-              base:history.base,
+              bubbles:coindatas.bubbles,
+              duratinMin:coindatas.duration/60,
+              speedPerMin:(coindatas.speed * 60),
+              sumBuyUS:coindatas.sumBuyUS,
+              sumSellUS:coindatas.sumSellUS,
+              perHourBuy:coindatas.sumBuyUS/ (coindatas.duration/60/60),
+              perHourSell:coindatas.sumSellUS/ (coindatas.duration/60/60),
+              coin:coindatas.coin,
+              base:coindatas.base,
               booksDiff:percentDiff,
               rateToBuy:rateSell,
               rateToSell:rateBuy,
               priceToSellUS:rateToSellUS,
               priceToBuyUS:rateToBuyUS,
-              totalUS:history.sumBuyUS - history.sumSellUS,
+              totalUS:coindatas.sumBuyUS - coindatas.sumSellUS,
               priceToMC:priceToMC,
               priceBaseUS:priceBaseUS
 

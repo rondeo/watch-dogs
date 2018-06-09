@@ -44,7 +44,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any){
-   // console.log('trading-history-component', changes);
+   // console.log('trading-coindatas-component', changes);
     if(changes.marketInit && changes.marketInit.currentValue){
       this.loadSavedData();
       if(this.newOrder){
@@ -62,7 +62,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     }
 
    /* if(changes.priceBaseUS && changes.priceBaseUS.currentValue){
-      console.log('trading-history-component  '+ changes.priceBaseUS.currentValue);
+      console.log('trading-coindatas-component  '+ changes.priceBaseUS.currentValue);
 
     }*/
 /*
