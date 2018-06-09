@@ -5,7 +5,8 @@ import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
 import  * as moment from 'moment';
 import {UTILS} from '../../com/utils';
-import {VOCandle} from '../../shared/models';
+import {VOCandle} from '../../models/api-models';
+
 
 
 export class ApiPublicBinance extends ApiPublicAbstract {

@@ -2,8 +2,8 @@ import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {VOOrder} from '../../models/app-models';
 import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMCAgregated} from '../../shared/models';
 import {ApisPublicService} from '../../apis/apis-public.service';
+import {VOMCAgregated} from '../../models/api-models';
 
 export interface VOMarketSnapshot {
   buy: VOOrder[],

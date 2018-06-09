@@ -4,7 +4,8 @@ import * as moment from "moment";
 import {VOMarketCap, VOMarketCapExt} from "../models/app-models";
 import {ApiMarketCapService} from "./api-market-cap.service";
 import {Parsers} from './parsers';
-import {VOMCAgregated} from '../shared/models';
+import {VOMCAgregated} from '../models/api-models';
+
 
 
 @Injectable()

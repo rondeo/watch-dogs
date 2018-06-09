@@ -1,6 +1,5 @@
-
-import {MCdata, VOMCAgregated} from '../shared/models';
 import {VOMarketCap} from '../models/app-models';
+import {MCdata, VOMCAgregated} from '../models/api-models';
 
 export class Parsers {
   static mapMCValue(item) {

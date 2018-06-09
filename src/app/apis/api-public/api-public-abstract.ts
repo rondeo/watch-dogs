@@ -6,8 +6,8 @@ import 'rxjs/add/observable/empty';
 import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/fromPromise';
-import {VOCandle} from '../../shared/models';
 import {UTILS} from '../../com/utils';
+import {VOCandle} from '../../models/api-models';
 
 export interface MarketDay {
   Ask: number[];

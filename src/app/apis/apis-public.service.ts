@@ -13,7 +13,8 @@ import {forkJoin} from 'rxjs/observable/forkJoin';
 import {StorageService} from '../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
-import {VOCandle} from '../shared/models';
+import {VOCandle} from '../models/api-models';
+
 
 
 @Injectable()

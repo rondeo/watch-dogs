@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
 import {BooksDisplay} from '../market-books/market-books.component';
 import {UtilsBooks} from '../../com/utils-books';
-import {VOMCAgregated} from '../../shared/models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
+import {VOMCAgregated} from '../../models/api-models';
 
 @Component({
   selector: 'app-books-for-amount',

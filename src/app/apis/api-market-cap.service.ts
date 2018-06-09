@@ -9,11 +9,11 @@ import 'rxjs/add/operator/share';
 import {Subject} from 'rxjs/Subject';
 import {StorageService} from '../services/app-storage.service';
 import {Parsers} from './parsers';
-import {MCdata, VOCoinData, VOMC, VOMCAgregated, VOMCObj} from '../shared/models';
 import * as moment from 'moment';
 import {clearInterval} from 'timers';
 import {BehaviorSubjectMy} from '../com/behavior-subject-my';
 import {Subscription} from 'rxjs/Subscription';
+import {MCdata, VOCoinData, VOMC, VOMCAgregated, VOMCObj} from '../models/api-models';
 
 
 @Injectable()
