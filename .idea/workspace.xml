@@ -2,44 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/bot-services/usdt-btc.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/bot-services/usdt-btc.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/coin-graph/coin-graph.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/coin-graph/coin-graph.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/apis-public.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/apis-public.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/mappers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/mappers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/api-models.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/mongo.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/mongo.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/parsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/parsers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-sell-coin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-sell-coin.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/grpahs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/grpahs.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/com/moving-average.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/moving-average.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/run-script.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/run-script.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/utils-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/selected-coins/selected-coins.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/selected-coins/selected-coins.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/material-app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/material/material-app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/models/app-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/app-models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/models/watch-dog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/watch-dog.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/trader/buy-sell-coin/buy-sell-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/buy-sell-coin/buy-sell-coin.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/ui.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/ui.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-books/market-books.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/market-books/market-books.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/market-snapshot/market-snapshot.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/market-snapshot/market-snapshot.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -56,65 +31,32 @@
     <splitter split-orientation="horizontal" split-proportion="0.5600928">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="app-bots.service.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts">
+          <file leaf-file-name="api-market-cap.service.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+                <state relative-caret-position="165">
+                  <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="watchdog-test.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.ts">
+          <file leaf-file-name="market-cap.service.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" selection-start-line="8" selection-end-line="8" />
+                <state relative-caret-position="-630">
+                  <caret line="16" column="44" lean-forward="true" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
+                  <folding>
+                    <element signature="e#0#41#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="gainers-losers.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts">
+          <file leaf-file-name="parsers.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/parsers.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" column="43" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="selected-coins.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/market-cap/selected-coins/selected-coins.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="75">
-                  <caret line="5" selection-start-line="5" selection-end-line="5" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="all-coins-table.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="buy-sell-coin.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/buy-sell-coin/buy-sell-coin.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="45">
-                  <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="utils-bot.ts" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/app/com/utils-bot.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="795">
-                  <caret line="53" column="16" lean-forward="true" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+                <state relative-caret-position="-135">
+                  <caret line="22" column="3" lean-forward="true" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="3" />
                   <folding>
                     <element signature="e#0#49#0" expanded="true" />
                   </folding>
@@ -122,20 +64,44 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="buy-sell-coin.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts">
+          <file leaf-file-name="utils-bot.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/com/utils-bot.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="75">
-                  <caret line="5" selection-start-line="5" selection-end-line="5" />
+                <state relative-caret-position="-300">
+                  <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+                  <folding>
+                    <element signature="e#0#49#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="my-exchange-balnces.component.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts">
+          <file leaf-file-name="api-public-abstract.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="15">
-                  <caret line="35" column="9" lean-forward="true" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+                <state relative-caret-position="120">
+                  <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="api-base.ts" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="510">
+                  <caret line="299" column="56" lean-forward="true" selection-start-line="299" selection-start-column="56" selection-end-line="299" selection-end-column="56" />
+                  <folding>
+                    <element signature="e#0#69#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="mappers.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/mappers.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="296">
+                  <caret line="718" column="124" lean-forward="true" selection-start-line="718" selection-start-column="124" selection-end-line="718" selection-end-column="124" />
                   <folding>
                     <element signature="e#0#59#0" expanded="true" />
                   </folding>
@@ -143,11 +109,32 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="app-sell-coin.ts" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/app-sell-coin.ts">
+          <file leaf-file-name="mongo.service.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/mongo.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="63">
-                  <caret line="8" selection-start-line="8" selection-end-line="8" />
+                <state relative-caret-position="690">
+                  <caret line="62" column="91" selection-start-line="62" selection-start-column="91" selection-end-line="62" selection-end-column="91" />
+                  <folding>
+                    <element signature="e#0#41#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="api-public-binance.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="105">
+                  <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="apis-public.service.ts" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/apis-public.service.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="225">
+                  <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
                 </state>
               </provider>
             </entry>
@@ -282,22 +269,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.css" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-bot-services/app-buy-sell.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-bot-services/app-bots.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-services.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/email-service/watchdog-edit/watchdog-edit.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/buy-sell-summary/buy-sell-summary.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/buy-sell-summary/bots-rubbing.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/app.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/buy-sell-summary/bots-running.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/bots-running/bots-running.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.html" />
         <option value="$PROJECT_DIR$/src/app/email-service/watchdogs-list/watchdogs-list.component.html" />
         <option value="$PROJECT_DIR$/src/app/email-service/watchdogs-list/watchdogs-list.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
         <option value="$PROJECT_DIR$/src/app/com/moving-avarage.ts" />
-        <option value="$PROJECT_DIR$/src/app/com/moving-average.ts" />
         <option value="$PROJECT_DIR$/src/app/com/MATH.ts" />
         <option value="$PROJECT_DIR$/src/app/shared/shared.module.ts" />
         <option value="$PROJECT_DIR$/src/app/com/utils.ts" />
@@ -333,6 +307,19 @@
         <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts" />
         <option value="$PROJECT_DIR$/src/app/com/utils-bot.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/apis-public.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/com/moving-average.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/market-snapshot/market-snapshot.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/mappers.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/mongo.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/parsers.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts" />
       </list>
     </option>
   </component>
@@ -394,6 +381,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="apis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -524,7 +518,7 @@
       <workItem from="1528328738119" duration="8292000" />
       <workItem from="1528413124657" duration="4979000" />
       <workItem from="1528498600363" duration="6876000" />
-      <workItem from="1528552558019" duration="17952000" />
+      <workItem from="1528552558019" duration="18251000" />
     </task>
     <task id="LOCAL-00001" summary="marketsap refactoring">
       <created>1526734493898</created>
@@ -624,11 +618,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528575480964</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="refactoring">
+      <created>1528577477378</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1528577477378</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="292655000" />
+    <option name="totallyTimeSpent" value="292954000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="2514" height="1456" extended-state="6" />
@@ -716,7 +717,8 @@
     <MESSAGE value="start stop watchdogs" />
     <MESSAGE value="price BTC by candels" />
     <MESSAGE value="remove shared module" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove shared module" />
+    <MESSAGE value="refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -749,96 +751,6 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/models/app-models.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="120" column="17" selection-start-line="50" selection-end-line="120" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/cross-table/cross-table.component.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="33" selection-start-line="1" selection-start-column="33" selection-end-line="1" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/material/login-exchange/login-exchange.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/logout-form/logout-form.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="22" lean-forward="true" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/logout-form/logout-form.component.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/material/login-form/login-form.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/math.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="36" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/shared/utils.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" selection-start-line="30" selection-end-line="41" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/utils.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/market-cap/coins-exchanges/coins-exchanges.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/market-cap/gl-all-exchanges/gl-all-exchanges.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="30" lean-forward="true" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1156,12 +1068,126 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#102#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/com/moving-average.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#1#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/market-snapshot/market-snapshot.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#70#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/apis-public.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/com/utils-bot.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="53" column="16" lean-forward="true" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+        <state relative-caret-position="-300">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/mappers.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="718" column="124" lean-forward="true" selection-start-line="718" selection-start-column="124" selection-end-line="718" selection-end-column="124" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/mongo.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="62" column="91" selection-start-line="62" selection-start-column="91" selection-end-line="62" selection-end-column="91" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-630">
+          <caret line="16" column="44" lean-forward="true" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/parsers.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-135">
+          <caret line="22" column="3" lean-forward="true" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/apis/api-base.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="299" column="56" lean-forward="true" selection-start-line="299" selection-start-column="56" selection-end-line="299" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#69#0" expanded="true" />
           </folding>
         </state>
       </provider>

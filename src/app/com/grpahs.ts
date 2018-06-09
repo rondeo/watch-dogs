@@ -1,4 +1,4 @@
-import {VOMCAgregated} from '../shared/models';
+import {VOMCAgregated} from '../models/api-models';
 
 
 export class GRAPHS {
