@@ -6,7 +6,8 @@ import {Router} from '@angular/router';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
-import {VOMCAGREGATED, VOMCAgregated} from '../../apis/models';
+import {VOMCAGREGATED, VOMCAgregated} from '../../models/api-models';
+
 
 @Component({
   selector: 'app-gainers-losers',

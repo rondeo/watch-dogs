@@ -6,13 +6,14 @@ import {WatchDogService} from '../watch-dog.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ActivatedRoute} from '@angular/router';
 import {VOWatchdog} from '../../models/app-models';
-import {VOCoinData, VOMCAgregated} from '../../apis/models';
+
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../com/moving-average';
+import {VOCoinData, VOMCAgregated} from '../../models/api-models';
 
 
 

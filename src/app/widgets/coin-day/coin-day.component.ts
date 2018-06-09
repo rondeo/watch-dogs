@@ -9,7 +9,7 @@ import {Moment} from 'moment';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {P} from '@angular/core/src/render3';
-import {VOCoinData} from '../../apis/models';
+import {VOCoinData} from '../../shared/models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';

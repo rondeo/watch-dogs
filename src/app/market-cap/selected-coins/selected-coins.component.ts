@@ -3,9 +3,10 @@ import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
-import {VOMC} from '../../apis/models';
+
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {VOMC} from '../../models/api-models';
 
 @Component({
   selector: 'app-selected-coins',

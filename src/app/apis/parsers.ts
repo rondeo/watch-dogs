@@ -1,5 +1,5 @@
 
-import {MCdata, VOMCAgregated} from './models';
+import {MCdata, VOMCAgregated} from '../shared/models';
 import {VOMarketCap} from '../models/app-models';
 
 export class Parsers {

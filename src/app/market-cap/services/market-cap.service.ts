@@ -10,7 +10,7 @@ import {StorageService} from '../../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {Parsers} from '../../apis/parsers';
-import {VOMCAgregated} from '../../apis/models';
+import {VOMCAgregated} from '../../shared/models';
 
 @Injectable()
 export class MarketCapService {

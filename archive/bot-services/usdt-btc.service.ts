@@ -3,7 +3,7 @@ import {VOMarketCap, VOWatchdog} from "../../src/app/models/app-models";
 import {StorageService} from "../../src/app/services/app-storage.service";
 import * as _ from 'lodash';
 import {ApisPrivateService} from "../../src/app/apis/apis-private.service";
-import {VOMCAgregated} from '../../src/app/apis/models';
+import {VOMCAgregated} from '../../src/app/shared/models';
 
 
 

@@ -4,7 +4,7 @@
 
 
 import {Observable} from 'rxjs/Observable';
-import {VOMCAgregated} from '../apis/models';
+import {VOMCAgregated} from '../shared/models';
 
 
 export interface VOBooksStats {

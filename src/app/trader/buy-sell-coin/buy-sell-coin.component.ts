@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {VOBalance} from '../../models/app-models';
-import {VOMCAgregated} from '../../apis/models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApisPrivateService} from '../../apis/apis-private.service';
+import {VOMCAgregated} from '../../models/api-models';
 
 @Component({
   selector: 'app-buy-sell-coin',

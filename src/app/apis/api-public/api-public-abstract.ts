@@ -6,7 +6,7 @@ import 'rxjs/add/observable/empty';
 import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/fromPromise';
-import {VOCandle} from '../models';
+import {VOCandle} from '../../shared/models';
 import {UTILS} from '../../com/utils';
 
 export interface MarketDay {

@@ -10,8 +10,9 @@ import {Observable} from 'rxjs/Observable';
 import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import * as _ from 'lodash';
 import {GRAPHS} from '../../com/grpahs';
+import {VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMCObj} from '../../apis/models';
+
 
 @Injectable()
 export class AppBotsService {

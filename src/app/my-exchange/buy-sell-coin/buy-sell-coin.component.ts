@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {MyExchangeService} from '../services/my-exchange.service';
 import {VOBalance, VOMarket, VOOrder} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
-import {VOMCObj} from '../../apis/models';
+
 import * as _ from 'lodash';
 import {ApiBase} from '../services/apis/api-base';
 import {MatSnackBar} from '@angular/material';
@@ -11,6 +11,7 @@ import {Observable} from 'rxjs/Observable';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMCObj} from '../../models/api-models';
 
 @Component({
   selector: 'app-buy-sell-coin',

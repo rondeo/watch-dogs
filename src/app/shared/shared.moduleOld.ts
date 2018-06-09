@@ -14,7 +14,7 @@ import { LineChartComponent } from '../ui/line-chart/line-chart.component';
 import {UiModule} from '../ui/ui.module';
 import { LoginExchangeComponent } from '../material/login-exchange/login-exchange.component';
 
-
+/*
 @NgModule({
   exports:[
     SortableTableComponent,
@@ -41,5 +41,5 @@ import { LoginExchangeComponent } from '../material/login-exchange/login-exchang
     LoginFormComponent,
     LoginExchangeComponent
   ]
-})
+})*/
 export class SharedModuleOld { }

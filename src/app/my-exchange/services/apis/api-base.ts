@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
-import {VOMCAgregated} from '../../../apis/models';
+import {VOMCAgregated} from '../../../shared/models';
 
 
 

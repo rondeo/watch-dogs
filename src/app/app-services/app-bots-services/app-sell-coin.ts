@@ -6,7 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
-import {VOMCAgregated, VOMCObj} from '../../apis/models';
+
 import {RunScript} from '../../com/run-script';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {MovingAverage} from '../../com/moving-average';

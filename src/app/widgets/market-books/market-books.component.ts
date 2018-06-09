@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, Output, OnChanges, OnInit} from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
-import {VOMCAgregated} from '../../apis/models';
+
 import {UtilsBooks} from '../../com/utils-books';
 import * as _ from 'lodash';
+import {VOMCAgregated} from '../../models/api-models';
 
 export class BooksDisplay {
   sell: string = '';

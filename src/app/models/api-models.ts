@@ -1,4 +1,4 @@
-import {VOMarketCap} from '../models/app-models';
+import {VOMarketCap} from './app-models';
 
 export interface VOCoinData{
   timestamp: number;

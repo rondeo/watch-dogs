@@ -1,23 +1,35 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {McPercentComponent} from './mc-percent/mc-percent.component';
 import {BubbleChartComponent} from './bubble-chart/bubble-chart.component';
 import { LineGraphComponent } from './line-graph/line-graph.component';
+import {SortableTableComponent} from './sortable-table/sortable-table.component';
+import {LineChartComponent} from './line-chart/line-chart.component';
+import {CrossTableComponent} from './cross-table/cross-table.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   exports: [
     McPercentComponent,
     BubbleChartComponent,
-    LineGraphComponent
+    LineGraphComponent,
+    SortableTableComponent,
+    LineChartComponent,
+    CrossTableComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   declarations: [
     McPercentComponent,
     BubbleChartComponent,
-    LineGraphComponent
-  ]
+    LineGraphComponent,
+    SortableTableComponent,
+    LineChartComponent,
+    CrossTableComponent
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class UiModule {
 }

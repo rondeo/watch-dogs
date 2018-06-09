@@ -13,7 +13,7 @@ import {MongoService} from "../../src/app/apis/mongo.service";
 import {UtilsBot} from "../../src/app/com/utils-bot";
 import {GRAPHS} from "../../src/app/com/grpahs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {VOMCAgregated} from '../../src/app/apis/models';
+import {VOMCAgregated} from '../../src/app/shared/models';
 
 @Component({
   selector: 'app-coin-graph',

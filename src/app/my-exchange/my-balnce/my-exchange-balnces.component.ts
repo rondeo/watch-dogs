@@ -9,10 +9,11 @@ import * as _ from 'lodash';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {E} from '@angular/core/src/render3';
-import {VOMC, VOMCObj} from '../../apis/models';
+
 import {MyExchangeService} from '../services/my-exchange.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMCObj} from '../../models/api-models';
 
 @Component({
   selector: 'app-my-balnce',

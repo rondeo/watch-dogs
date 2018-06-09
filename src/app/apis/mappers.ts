@@ -5,7 +5,7 @@ import {
   SOMarketCryptopia, SOMarketNovaExchange, SOMarketCoinExchange, SOCurrencyCoinexchange, SOMarketExmo, SOMarketBitz,
   SOMarketCoinnone, SOMarketBitsane, SOMarketBithumb, SOMarketEtherdelta
 } from '../models/sos';
-import {VOMCAgregated} from './models';
+import {VOMCAgregated} from '../shared/models';
 
 
 interface BitfinexMarket{

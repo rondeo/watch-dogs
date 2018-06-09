@@ -6,12 +6,14 @@ import {ShapeShiftService} from './shape-shift.service';
 
 import {FormsModule} from '@angular/forms';
 import {MaterialAppModule} from '../material/material-app.module';
+import {UiModule} from '../ui/ui.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    MaterialAppModule
+    MaterialAppModule,
+    UiModule
   ],
   declarations: [SSCoinsAvailableComponent, SsMainComponent],
   providers:[ShapeShiftService]

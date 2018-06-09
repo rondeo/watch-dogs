@@ -1,7 +1,8 @@
 import {VOMarketCap} from "../models/app-models";
 
 import * as _ from 'lodash';
-import {VOMCAgregated} from '../apis/models';
+import {VOMCAgregated} from '../models/api-models';
+
 
 
 export interface Result1 {

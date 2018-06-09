@@ -1,5 +1,6 @@
 import {VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
-import {VOMCAgregated} from '../apis/models';
+import {VOMCAgregated} from './api-models';
+
 
 
 export class WatchDog extends VOWatchdog {

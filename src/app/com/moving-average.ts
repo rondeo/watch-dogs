@@ -1,4 +1,4 @@
-import {VOCoinData, VOMCAgregated} from '../apis/models';
+import {VOCoinData, VOMCAgregated} from '../shared/models';
 import * as _ from 'lodash';
 
 export interface VOMovingAvg {

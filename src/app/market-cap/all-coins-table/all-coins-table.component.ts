@@ -8,7 +8,8 @@ import {MarketCapService} from '../services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMC} from '../../apis/models';
+import {VOMC} from '../../models/api-models';
+
 
 @Component({
   selector: 'app-all-coins-table',

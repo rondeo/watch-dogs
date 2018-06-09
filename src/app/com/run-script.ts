@@ -1,5 +1,6 @@
 import {VOMarketCap} from "../models/app-models";
-import {VOMCAgregated} from '../apis/models';
+import {VOMCAgregated} from '../models/api-models';
+
 
 export class RunScript {
   static runScriptSell (newValue:VOMCAgregated, script:string){
