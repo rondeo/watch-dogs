@@ -61,7 +61,7 @@ export class ApiMarketCapService {
     if (this.coinsAr) return Promise.resolve(this.coinsAr);
      return new Promise<VOMC[]>(async (resolve, reject) => {
        const selected = await this.storage.getSelectedMC();
-       const sub = this.agregated$().subscribe(data => {
+       const sub = this.getAgregated().subscribe(data => {
          selected.forEach(function (item) {
            data[item].selected = true;
          });
@@ -77,8 +77,8 @@ export class ApiMarketCapService {
   getData(): Promise<VOMCObj> {
     if(this.data) return Promise.resolve(this.data);
     return new Promise<VOMCObj>(async (resolve, reject) => {
-      const sub = this.agregated$().subscribe(resolve, reject);
-      setTimeout(()=>sub.unsubscribe(), 30000);
+      const sub = this.getAgregated().subscribe(resolve, reject);
+      setTimeout(()=>sub.unsubscribe(), 300);
     });
   }
 
@@ -93,6 +93,7 @@ export class ApiMarketCapService {
     let url = '/api/marketcap/agrigated';
     console.log('%c LOADING ' + url, 'color:red');
    return this.getAgregated()
+     .share()
       .subscribe((res) => {
         this.agrigatedTimestamp = res['BTC'].timestamp;
         console.log('%c MC ' + moment(this.agrigatedTimestamp).toLocaleString(), 'color:red');

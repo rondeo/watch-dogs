@@ -24,6 +24,11 @@
                     <td><span>{{dog.isActive}}</span></td>
                     <td><span class="btn fa fa-trash dred" (click)="onDeleteClick(dog)"></span></td>
                 </tr>
+                <tr>
+                    <td colspan="3">
+                        {{dog.message}}
+                    </td>
+                </tr>
             </ng-container>
             </tbody>
         </table>

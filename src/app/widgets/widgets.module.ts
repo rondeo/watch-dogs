@@ -11,6 +11,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {BotsRunningComponent} from './bots-running/bots-running.component';
 import {TradesHistoryComponent} from './trades-history/trades-history.component';
+import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {TradesHistoryComponent} from './trades-history/trades-history.component'
     BooksForAmountComponent,
     AmountCoinComponent,
     BotsRunningComponent,
-    TradesHistoryComponent
+    TradesHistoryComponent,
+    CoinCandlesComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -37,7 +39,8 @@ import {TradesHistoryComponent} from './trades-history/trades-history.component'
     BooksForAmountComponent,
     AmountCoinComponent,
     BotsRunningComponent,
-    TradesHistoryComponent
+    TradesHistoryComponent,
+    CoinCandlesComponent
   ]
 })
 export class WidgetsModule { }

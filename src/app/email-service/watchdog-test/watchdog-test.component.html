@@ -1,6 +1,14 @@
 <div>
     <span class="mat-title">{{watchDog.action}}</span> <sup>{{watchDog.id}}</sup>
-    <div>{{watchDog.name}} &nbsp; &nbsp; &nbsp;  </div>
+    <div>
+        {{watchDog.name}} &nbsp; &nbsp; &nbsp;
+        <a class="fa fa fa-line-chart fa-2x btn dred" (click)="onLineChartClick()" ></a>
+        &nbsp; &nbsp; &nbsp;
+        <mat-checkbox
+                [(ngModel)]="isExchanges"
+                (ngModelChange)="showExchanges()">Candles
+        </mat-checkbox>
+    </div>
 
 
     <mat-list>
@@ -10,13 +18,20 @@
     </mat-list>
 
 
-
     <section class="overlap">
         <app-coin-day [coin]="watchDog.coin" (coindatas)="onCoinDataChange($event)"></app-coin-day>
         <div class="triggers">
-            <app-line-graph *ngIf="triggers" [linegraphs]="triggers" [horizont]="0" [vertical]="0" [height]="150"></app-line-graph>
+            <div>
+                <app-line-graph *ngIf="triggers" [linegraphs]="triggers" [horizont]="0" [vertical]="0" [height]="150"></app-line-graph>
+            </div>
+
         </div>
 
     </section>
+
+    <div *ngIf="isExchanges">
+       <span class="mat-body">Exchanges</span>
+        <app-coin-candles  [market]="market" [numberTo]="numberTo" ></app-coin-candles>
+    </div>
 
 </div>

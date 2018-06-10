@@ -15,6 +15,7 @@ import {AppBotsService} from '../../app-services/app-bots-services/app-bots.serv
 import {MovingAverage} from '../../com/moving-average';
 import {VOCoinData, VOMCAgregated} from '../../models/api-models';
 import {WatchDog} from '../../models/watch-dog';
+import {ShowExternalPageService} from '../../services/show-external-page.service';
 
 
 
@@ -29,6 +30,10 @@ export class WatchdogTestComponent implements OnInit {
   watchDog: WatchDog = new WatchDog(new VOWatchdog({}));
   MC: VOMCAgregated;
   scripts: string[];
+  exchange:string;
+  market:string;
+  isExchanges: boolean;
+  numberTo = moment().valueOf();
 
   triggers: VOLineGraph[];
 
@@ -55,17 +60,15 @@ export class WatchdogTestComponent implements OnInit {
     this.watchDog = await this.botsService.getWatchDogById(this.uid);
     if (!this.watchDog) throw new Error(' no WD for ' + this.uid);
     this.scripts = this.watchDog.sellScripts;
-    console.log(this.watchDog);
+    this.exchange = this.watchDog.exchange;
+    this.market = this.watchDog.base + '_' + this.watchDog.coin;
+
+    // console.log(this.watchDog);
     //  this.scriptText = this.scripts.join('<br>');
 
 
   }
 
-  async onRunClick() {
-    if (!this.MC) this.MC = await this.marketCap.getCoin(this.watchDog.coin);
-    console.log(this.MC)
-   //  console.log('run');
-  }
 
   onCoinDataChange(coindatas: VOCoinData[]) {
     const length = coindatas.length;
@@ -78,7 +81,7 @@ export class WatchdogTestComponent implements OnInit {
     let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
 
    //  while(triggers.length < length) triggers.unshift(1);
-    console.log(triggers);
+   // console.log(triggers);
     const values = _.map(triggers, 'trigger');
     this.triggers = [{
       ys:values,
@@ -86,6 +89,19 @@ export class WatchdogTestComponent implements OnInit {
       label:null
     }];
   }
+
+
+  onLineChartClick(){
+    if(this.exchange && this.market) {
+      const ar = this.market.split('_')
+      ShowExternalPageService.showMarket(this.exchange, ar[0], ar[1]);
+    }
+  }
+
+  showExchanges(){
+
+  }
+
 
 
 }

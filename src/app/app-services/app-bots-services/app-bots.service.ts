@@ -71,7 +71,7 @@ export class AppBotsService {
   }
 
   subSellCoins$(): Observable<VOWatchdog[]> {
-    return this.sellCoinsCtr.sellCoins$()
+    return this.sellCoinsCtr.watchDogs$()
   }
 
   subBuyCoins$(): Observable<VOWatchdog[]> {

@@ -10,7 +10,7 @@ export class ShowExternalPageService {
   ) {
   }
 
-  showMarket(exchange: string, base: string, coin: string) {
+  static showMarket(exchange: string, base: string, coin: string) {
     let url
     switch (exchange) {
       case 'bittrex':
