@@ -4451,7 +4451,7 @@ function toComment(sourceMap) {
     /**
      * The base implementation of `wrapperValue` which returns the reports of
      * performing a sequence of actions on the unwrapped `value`, where each
-     * successive status is supplied the return value of the previous.
+     * successive isActive is supplied the return value of the previous.
      *
      * @private
      * @param {*} value The unwrapped value.
@@ -22264,7 +22264,7 @@ function reduce(accumulator, seed) {
     var hasSeed = false;
     // providing a seed of `undefined` *should* be valid and trigger
     // hasSeed! so don't use `seed !== undefined` checks!
-    // For this reason, we have to check it here at the original call site
+    // For this message, we have to check it here at the original call site
     // otherwise inside Operator/Subscriber we won't know if `undefined`
     // means they didn't provide anything or if they literally provided `undefined`
     if (arguments.length >= 2) {
@@ -22741,7 +22741,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Subscription_1 = __webpack_require__("../../../../rxjs/Subscription.js");
 /**
- * A unit of work to be executed in a {@link Scheduler}. An status is typically
+ * A unit of work to be executed in a {@link Scheduler}. An isActive is typically
  * created from within a Scheduler and an RxJS user does not need to concern
  * themselves about creating and manipulating an Action.
  *
@@ -22760,7 +22760,7 @@ var Action = (function (_super) {
         _super.call(this);
     }
     /**
-     * Schedules this status on its parent Scheduler for execution. May be passed
+     * Schedules this isActive on its parent Scheduler for execution. May be passed
      * some context object, `state`. May happen at some point in the future,
      * according to the `delay` parameter, if specified.
      * @param {T} [state] Some contextual data that the `work` function uses when
@@ -22812,7 +22812,7 @@ var AsyncAction = (function (_super) {
         }
         // Always replace the current state with the new state.
         this.state = state;
-        // Set the pending flag indicating that this status has been scheduled, or
+        // Set the pending flag indicating that this isActive has been scheduled, or
         // has recursively rescheduled itself.
         this.pending = true;
         var id = this.id;
@@ -22833,8 +22833,8 @@ var AsyncAction = (function (_super) {
         // interval period, regardless of load.
         //
         // Therefore, we use `setInterval` to schedule single and repeat actions.
-        // If the status reschedules itself with the same delay, the interval is not
-        // canceled. If the status doesn't reschedule, or reschedules with a
+        // If the isActive reschedules itself with the same delay, the interval is not
+        // canceled. If the isActive doesn't reschedule, or reschedules with a
         // different delay, the interval will be canceled after scheduled callback
         // execution.
         //
@@ -22842,7 +22842,7 @@ var AsyncAction = (function (_super) {
             this.id = this.recycleAsyncId(scheduler, id, delay);
         }
         this.delay = delay;
-        // If this status has already an async Id, don't request a new one.
+        // If this isActive has already an async Id, don't request a new one.
         this.id = this.id || this.requestAsyncId(scheduler, this.id, delay);
         return this;
     };
@@ -22852,21 +22852,21 @@ var AsyncAction = (function (_super) {
     };
     AsyncAction.prototype.recycleAsyncId = function (scheduler, id, delay) {
         if (delay === void 0) { delay = 0; }
-        // If this status is rescheduled with the same delay time, don't clear the interval id.
+        // If this isActive is rescheduled with the same delay time, don't clear the interval id.
         if (delay !== null && this.delay === delay && this.pending === false) {
             return id;
         }
-        // Otherwise, if the status's delay time is different from the current delay,
-        // or the status has been rescheduled before it's executed, clear the interval id
+        // Otherwise, if the isActive's delay time is different from the current delay,
+        // or the isActive has been rescheduled before it's executed, clear the interval id
         return root_1.root.clearInterval(id) && undefined || undefined;
     };
     /**
-     * Immediately executes this status and the `work` it contains.
+     * Immediately executes this isActive and the `work` it contains.
      * @return {any}
      */
     AsyncAction.prototype.execute = function (state, delay) {
         if (this.closed) {
-            return new Error('executing a cancelled status');
+            return new Error('executing a cancelled isActive');
         }
         this.pending = false;
         var error = this._execute(state, delay);
@@ -22874,14 +22874,14 @@ var AsyncAction = (function (_super) {
             return error;
         }
         else if (this.pending === false && this.id != null) {
-            // Dequeue if the status didn't reschedule itself. Don't call
-            // unsubscribe(), because the status could reschedule later.
+            // Dequeue if the isActive didn't reschedule itself. Don't call
+            // unsubscribe(), because the isActive could reschedule later.
             // For example:
             // ```
             // scheduler.schedule(function doWork(counter) {
             //   /* ... I'm a busy worker bee ... */
             //   var originalAction = this;
-            //   /* wait 100ms before rescheduling the status */
+            //   /* wait 100ms before rescheduling the isActive */
             //   setTimeout(function () {
             //     originalAction.schedule(counter + 1);
             //   }, 100);
@@ -23182,7 +23182,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * An error thrown when an status is invalid because the object has been
+ * An error thrown when an isActive is invalid because the object has been
  * unsubscribed.
  *
  * @see {@link Subject}
@@ -34169,7 +34169,7 @@ var _ParseAST = (function () {
         var /** @type {?} */ result = this.parseExpression();
         if (this.optionalOperator('|')) {
             if (this.parseAction) {
-                this.error('Cannot have a pipe in an status expression');
+                this.error('Cannot have a pipe in an isActive expression');
             }
             do {
                 var /** @type {?} */ name = ((this.expectIdentifierOrKeyword()));
@@ -49254,7 +49254,7 @@ registerContext(__WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* SecurityConte
 // NB: no SCRIPT contexts here, they are never allowed due to the parser stripping them.
 registerContext(__WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* SecurityContext */].URL, [
     '*|formAction', 'area|href', 'area|ping', 'audio|src', 'a|href',
-    'a|ping', 'blockquote|cite', 'body|background', 'del|cite', 'form|status',
+    'a|ping', 'blockquote|cite', 'body|background', 'del|cite', 'form|isActive',
     'img|src', 'img|srcset', 'input|src', 'ins|cite', 'q|cite',
     'source|src', 'source|srcset', 'track|src', 'video|poster', 'video|src',
 ]);
@@ -49369,7 +49369,7 @@ var SCHEMA = [
     'embed^[HTMLElement]|align,height,name,src,type,width',
     'fieldset^[HTMLElement]|!disabled,name',
     'font^[HTMLElement]|color,face,size',
-    'form^[HTMLElement]|acceptCharset,status,autocomplete,encoding,enctype,method,name,!noValidate,target',
+    'form^[HTMLElement]|acceptCharset,isActive,autocomplete,encoding,enctype,method,name,!noValidate,target',
     'frame^[HTMLElement]|frameBorder,longDesc,marginHeight,marginWidth,name,!noResize,scrolling,src',
     'frameset^[HTMLElement]|cols,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,rows',
     'hr^[HTMLElement]|align,color,!noShade,size,width',
@@ -50395,7 +50395,7 @@ var ConvertActionBindingResult = (function () {
 }());
 /**
  * Converts the given expression AST into an executable output AST, assuming the expression is
- * used in an status binding (e.g. an event handler).
+ * used in an isActive binding (e.g. an event handler).
  * @param {?} localResolver
  * @param {?} implicitReceiver
  * @param {?} action
@@ -60440,7 +60440,7 @@ function noopScope(arg0, arg1) {
  *     }
  *
  * Note, adding try-finally block around the work to ensure that `wtfLeave` gets called can
- * negatively impact the performance of your application. For this reason we recommend that
+ * negatively impact the performance of your application. For this message we recommend that
  * you don't add them to ensure that `wtfLeave` gets called. In production `wtfLeave` is a noop and
  * so try-finally block has no value. When debugging perf issues, skipping `wtfLeave`, do to
  * exception, will produce incorrect trace, but presence of exception signifies logic error which
@@ -60771,7 +60771,7 @@ var NgZone = (function () {
         /**
          * Notifies when there is no more microtasks enqueue in the current VM Turn.
          * This is a hint for Angular to do change detection, which may enqueue more microtasks.
-         * For this reason this event can fire multiple times per VM Turn.
+         * For this message this event can fire multiple times per VM Turn.
          * @return {?}
          */
         get: function () { return this._onMicrotaskEmpty; },
@@ -73904,7 +73904,7 @@ var ngControlStatusHost = {
 };
 /**
  * Directive automatically applied to Angular form controls that sets CSS classes
- * based on control status (valid/invalid/dirty/etc).
+ * based on control isActive (valid/invalid/dirty/etc).
  *
  * \@stable
  */
@@ -73929,7 +73929,7 @@ NgControlStatus.ctorParameters = function () { return [
 ]; };
 /**
  * Directive automatically applied to Angular form groups that sets CSS classes
- * based on control status (valid/invalid/dirty/etc).
+ * based on control isActive (valid/invalid/dirty/etc).
  *
  * \@stable
  */
@@ -74024,7 +74024,7 @@ function coerceToAsyncValidator(asyncValidator) {
  * {\@link FormArray}.
  *
  * It provides some of the shared behavior that all controls and groups of controls have, like
- * running validators, calculating status, and resetting state. It also defines the properties
+ * running validators, calculating isActive, and resetting state. It also defines the properties
  * that are shared between all sub-classes, like `value`, `valid`, and `dirty`. It shouldn't be
  * instantiated directly.
  *
@@ -74070,7 +74070,7 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "status", {
         /**
-         * The validation status of the control. There are four possible
+         * The validation isActive of the control. There are four possible
          * validation statuses:
          *
          * * **VALID**:  control has passed all validation checks
@@ -74088,9 +74088,9 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "valid", {
         /**
-         * A control is `valid` when its `status === VALID`.
+         * A control is `valid` when its `isActive === VALID`.
          *
-         * In order to have this status, the control must have passed all its
+         * In order to have this isActive, the control must have passed all its
          * validation checks.
          * @return {?}
          */
@@ -74100,9 +74100,9 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "invalid", {
         /**
-         * A control is `invalid` when its `status === INVALID`.
+         * A control is `invalid` when its `isActive === INVALID`.
          *
-         * In order to have this status, the control must have failed
+         * In order to have this isActive, the control must have failed
          * at least one of its validation checks.
          * @return {?}
          */
@@ -74112,9 +74112,9 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "pending", {
         /**
-         * A control is `pending` when its `status === PENDING`.
+         * A control is `pending` when its `isActive === PENDING`.
          *
-         * In order to have this status, the control must be in the
+         * In order to have this isActive, the control must be in the
          * middle of conducting a validation check.
          * @return {?}
          */
@@ -74124,7 +74124,7 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "disabled", {
         /**
-         * A control is `disabled` when its `status === DISABLED`.
+         * A control is `disabled` when its `isActive === DISABLED`.
          *
          * Disabled controls are exempt from validation checks and
          * are not included in the aggregate value of their ancestor
@@ -74137,9 +74137,9 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "enabled", {
         /**
-         * A control is `enabled` as long as its `status !== DISABLED`.
+         * A control is `enabled` as long as its `isActive !== DISABLED`.
          *
-         * In other words, it has a status of `VALID`, `INVALID`, or
+         * In other words, it has a isActive of `VALID`, `INVALID`, or
          * `PENDING`.
          * @return {?}
          */
@@ -74215,7 +74215,7 @@ var AbstractControl = (function () {
     });
     Object.defineProperty(AbstractControl.prototype, "statusChanges", {
         /**
-         * Emits an event every time the validation status of the control
+         * Emits an event every time the validation isActive of the control
          * is re-calculated.
          * @return {?}
          */
@@ -74270,7 +74270,7 @@ var AbstractControl = (function () {
      * Marks the control as `untouched`.
      *
      * If the control has any children, it will also mark all children as `untouched`
-     * to maintain the model, and re-calculate the `touched` status of all parent
+     * to maintain the model, and re-calculate the `touched` isActive of all parent
      * controls.
      * @param {?=} opts
      * @return {?}
@@ -74302,7 +74302,7 @@ var AbstractControl = (function () {
      * Marks the control as `pristine`.
      *
      * If the control has any children, it will also mark all children as `pristine`
-     * to maintain the model, and re-calculate the `pristine` status of all parent
+     * to maintain the model, and re-calculate the `pristine` isActive of all parent
      * controls.
      * @param {?=} opts
      * @return {?}
@@ -74329,7 +74329,7 @@ var AbstractControl = (function () {
     };
     /**
      * Disables the control. This means the control will be exempt from validation checks and
-     * excluded from the aggregate value of any parent. Its status is `DISABLED`.
+     * excluded from the aggregate value of any parent. Its isActive is `DISABLED`.
      *
      * If the control has children, all children will be disabled to maintain the model.
      * @param {?=} opts
@@ -74350,7 +74350,7 @@ var AbstractControl = (function () {
     };
     /**
      * Enables the control. This means the control will be included in validation checks and
-     * the aggregate value of its parent. Its status is re-calculated based on its value and
+     * the aggregate value of its parent. Its isActive is re-calculated based on its value and
      * its validators.
      *
      * If the control has children, all children will be enabled.
@@ -74406,7 +74406,7 @@ var AbstractControl = (function () {
      */
     AbstractControl.prototype.reset = function (value, options) { };
     /**
-     * Re-calculates the value and validation status of the control.
+     * Re-calculates the value and validation isActive of the control.
      *
      * By default, it will also update the value and validity of its ancestors.
      * @param {?=} opts
@@ -74684,7 +74684,7 @@ var AbstractControl = (function () {
     return AbstractControl;
 }());
 /**
- * \@whatItDoes Tracks the value and validation status of an individual form control.
+ * \@whatItDoes Tracks the value and validation isActive of an individual form control.
  *
  * It is one of the three fundamental building blocks of Angular forms, along with
  * {\@link FormGroup} and {\@link FormArray}.
@@ -74707,7 +74707,7 @@ var AbstractControl = (function () {
  * ```ts
  * const ctrl = new FormControl({value: 'n/a', disabled: true});
  * console.log(ctrl.value);     // 'n/a'
- * console.log(ctrl.status);   // 'DISABLED'
+ * console.log(ctrl.isActive);   // 'DISABLED'
  * ```
  *
  * To include a sync validator (or an array of sync validators) with the control,
@@ -74717,7 +74717,7 @@ var AbstractControl = (function () {
  * ```ts
  * const ctrl = new FormControl('', Validators.required);
  * console.log(ctrl.value);     // ''
- * console.log(ctrl.status);   // 'INVALID'
+ * console.log(ctrl.isActive);   // 'INVALID'
  * ```
  *
  * See its superclass, {\@link AbstractControl}, for more properties and methods.
@@ -74813,7 +74813,7 @@ var FormControl = (function (_super) {
      * this.control.reset({value: 'Nancy', disabled: true});
      *
      * console.log(this.control.value);  // 'Nancy'
-     * console.log(this.control.status);  // 'DISABLED'
+     * console.log(this.control.isActive);  // 'DISABLED'
      * ```
      * @param {?=} formState
      * @param {?=} options
@@ -74893,7 +74893,7 @@ var FormControl = (function (_super) {
  * instances.
  *
  * A `FormGroup` aggregates the values of each child {\@link FormControl} into one object,
- * with each control name as the key.  It calculates its status by reducing the statuses
+ * with each control name as the key.  It calculates its isActive by reducing the statuses
  * of its children. For example, if one of the controls in a group is invalid, the entire
  * group becomes invalid.
  *
@@ -74914,7 +74914,7 @@ var FormControl = (function (_super) {
  * });
  *
  * console.log(form.value);   // {first: 'Nancy', last; 'Drew'}
- * console.log(form.status);  // 'VALID'
+ * console.log(form.isActive);  // 'VALID'
  * ```
  *
  * You can also include group-level validators as the second arg, or group-level async
@@ -75100,7 +75100,7 @@ var FormGroup = (function (_super) {
      * You can also reset to a specific form state by passing in a map of states
      * that matches the structure of your form, with control names as keys. The state
      * can be a standalone value or a form state object with both a value and a disabled
-     * status.
+     * isActive.
      *
      * ### Example
      *
@@ -75119,7 +75119,7 @@ var FormGroup = (function (_super) {
      * });
      *
      * console.log(this.form.value);  // {first: 'name', last: 'last name'}
-     * console.log(this.form.get('first').status);  // 'DISABLED'
+     * console.log(this.form.get('first').isActive);  // 'DISABLED'
      * ```
      * @param {?=} value
      * @param {?=} options
@@ -75138,7 +75138,7 @@ var FormGroup = (function (_super) {
     /**
      * The aggregate value of the {\@link FormGroup}, including any disabled controls.
      *
-     * If you'd like to include all values regardless of disabled status, use this method.
+     * If you'd like to include all values regardless of disabled isActive, use this method.
      * Otherwise, the `value` property is the best way to get the value of the group.
      * @return {?}
      */
@@ -75255,7 +75255,7 @@ var FormGroup = (function (_super) {
  * {\@link FormGroup} or {\@link FormArray} instances.
  *
  * A `FormArray` aggregates the values of each child {\@link FormControl} into an array.
- * It calculates its status by reducing the statuses of its children. For example, if one of
+ * It calculates its isActive by reducing the statuses of its children. For example, if one of
  * the controls in a `FormArray` is invalid, the entire array becomes invalid.
  *
  * `FormArray` is one of the three fundamental building blocks used to define forms in Angular,
@@ -75275,7 +75275,7 @@ var FormGroup = (function (_super) {
  * ]);
  *
  * console.log(arr.value);   // ['Nancy', 'Drew']
- * console.log(arr.status);  // 'VALID'
+ * console.log(arr.isActive);  // 'VALID'
  * ```
  *
  * You can also include array-level validators as the second arg, or array-level async
@@ -75452,7 +75452,7 @@ var FormArray = (function (_super) {
      *
      * You can also reset to a specific form state by passing in an array of states
      * that matches the structure of the control. The state can be a standalone value
-     * or a form state object with both a value and a disabled status.
+     * or a form state object with both a value and a disabled isActive.
      *
      * ### Example
      *
@@ -75471,7 +75471,7 @@ var FormArray = (function (_super) {
      * ]);
      *
      * console.log(this.arr.value);  // ['name', 'last name']
-     * console.log(this.arr.get(0).status);  // 'DISABLED'
+     * console.log(this.arr.get(0).isActive);  // 'DISABLED'
      * ```
      * @param {?=} value
      * @param {?=} options
@@ -75490,7 +75490,7 @@ var FormArray = (function (_super) {
     /**
      * The aggregate value of the array, including any disabled controls.
      *
-     * If you'd like to include all values regardless of disabled status, use this method.
+     * If you'd like to include all values regardless of disabled isActive, use this method.
      * Otherwise, the `value` property is the best way to get the value of the array.
      * @return {?}
      */
@@ -75593,7 +75593,7 @@ var formDirectiveProvider = {
 var resolvedPromise = Promise.resolve(null);
 /**
  * \@whatItDoes Creates a top-level {\@link FormGroup} instance and binds it to a form
- * to track aggregate form value and validation status.
+ * to track aggregate form value and validation isActive.
  *
  * \@howToUse
  *
@@ -75603,7 +75603,7 @@ var resolvedPromise = Promise.resolve(null);
  * You can export the directive into a local template variable using `ngForm` as the key
  * (ex: `#myForm="ngForm"`). This is optional, but useful.  Many properties from the underlying
  * {\@link FormGroup} instance are duplicated on the directive itself, so a reference to it
- * will give you access to the aggregate value and validity status of the form, as well as
+ * will give you access to the aggregate value and validity isActive of the form, as well as
  * user interaction properties like `dirty` and `touched`.
  *
  * To register child controls with the form, you'll want to use {\@link NgModel} with a
@@ -75964,7 +75964,7 @@ var resolvedPromise$1 = Promise.resolve(null);
  * to a form control element.
  *
  * The {\@link FormControl} instance will track the value, user interaction, and
- * validation status of the control and keep the view synced with the model. If used
+ * validation isActive of the control and keep the view synced with the model. If used
  * within a parent form, the directive will also register itself with the form as a child
  * control.
  *
@@ -76304,7 +76304,7 @@ var formControlBinding$1 = {
  *
  * **Listen to value**: If you want to listen to changes in the value of the control, you can
  * subscribe to the {\@link AbstractControl#valueChanges} event.  You can also listen to
- * {\@link AbstractControl#statusChanges} to be notified when the validation status is
+ * {\@link AbstractControl#statusChanges} to be notified when the validation isActive is
  * re-calculated.
  *
  * ### Example
@@ -76453,7 +76453,7 @@ var formDirectiveProvider$1 = {
  *
  * **Listen to value**: If you want to listen to changes in the value of the form, you can subscribe
  * to the {\@link FormGroup}'s {\@link AbstractControl#valueChanges} event.  You can also listen to
- * its {\@link AbstractControl#statusChanges} event to be notified when the validation status is
+ * its {\@link AbstractControl#statusChanges} event to be notified when the validation isActive is
  * re-calculated.
  *
  * Furthermore, you can listen to the directive's `ngSubmit` event to be notified when the user has
@@ -76741,7 +76741,7 @@ var formGroupNameProvider = {
  *
  * **Listen to value**: If you want to listen to changes in the value of the group, you can
  * subscribe to the {\@link AbstractControl#valueChanges} event.  You can also listen to
- * {\@link AbstractControl#statusChanges} to be notified when the validation status is
+ * {\@link AbstractControl#statusChanges} to be notified when the validation isActive is
  * re-calculated.
  *
  * ### Example
@@ -76828,7 +76828,7 @@ var formArrayNameProvider = {
  * **Listen to value**: If you want to listen to changes in the value of the array, you can
  * subscribe to the {\@link FormArray}'s {\@link AbstractControl#valueChanges} event.  You can also
  * listen to its {\@link AbstractControl#statusChanges} event to be notified when the validation
- * status is re-calculated.
+ * isActive is re-calculated.
  *
  * **Add new controls**: You can add new controls to the {\@link FormArray} dynamically by
  * calling its {\@link FormArray#push} method.
@@ -76991,7 +76991,7 @@ var controlNameBinding = {
  *
  * **Listen to value**: If you want to listen to changes in the value of the control, you can
  * subscribe to the {\@link AbstractControl#valueChanges} event.  You can also listen to
- * {\@link AbstractControl#statusChanges} to be notified when the validation status is
+ * {\@link AbstractControl#statusChanges} to be notified when the validation isActive is
  * re-calculated.
  *
  * ### Example
@@ -77577,7 +77577,7 @@ var FormBuilder = (function () {
      * `asyncValidator`.
      *
      * `formState` can either be a standalone value for the form control or an object
-     * that contains both a value and a disabled status.
+     * that contains both a value and a disabled isActive.
      *
      * @param {?} formState
      * @param {?=} validator
@@ -78252,7 +78252,7 @@ var ResponseOptions = (function () {
  * Subclass of {\@link ResponseOptions}, with default values.
  *
  * Default values:
- *  * status: 200
+ *  * isActive: 200
  *  * headers: empty {\@link Headers} object
  *
  * This class could be extended and bound to the {\@link ResponseOptions} class
@@ -78782,7 +78782,7 @@ var Response = (function (_super) {
      * @return {?}
      */
     Response.prototype.toString = function () {
-        return "Response with status: " + this.status + " " + this.statusText + " for URL: " + this.url;
+        return "Response with isActive: " + this.status + " " + this.statusText + " for URL: " + this.url;
     };
     return Response;
 }(Body));
@@ -79076,7 +79076,7 @@ var XHRConnection = (function () {
                         body = body.replace(XSSI_PREFIX, '');
                     }
                 }
-                // fix status code when it is 0 (0 status is undocumented).
+                // fix isActive code when it is 0 (0 isActive is undocumented).
                 // Occurs when accessing file resources or on Android 4.1 stock browser
                 // while retrieving files from application cache.
                 if (status === 0) {
@@ -83285,7 +83285,7 @@ var OverlayRef = /*@__PURE__*/(function () {
         // in order to handle stacked overlays properly.
         this._pane.parentElement.insertBefore(this._backdropElement, this._pane);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
-        // status desired when such a click occurs (usually closing the overlay).
+        // isActive desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
         // Add class to fade-in the backdrop after one frame.
         requestAnimationFrame(function () {
@@ -88620,7 +88620,7 @@ var MdRadioButton = /*@__PURE__*/(function (_super) {
      */
     MdRadioButton.prototype._markForCheck = function () {
         // When group value changes, the button will not be notified. Use `markForCheck` to explicit
-        // update radio button's status
+        // update radio button's isActive
         this._changeDetector.markForCheck();
     };
     /**
@@ -88828,7 +88828,7 @@ var ListKeyManager = /*@__PURE__*/(function () {
                 this.setPreviousItemActive();
                 break;
             case TAB:
-                // Note that we shouldn't prevent the default status on tab.
+                // Note that we shouldn't prevent the default isActive on tab.
                 this._tabOut.next(null);
                 return;
             default:
@@ -94512,7 +94512,7 @@ var MdIconRegistry = /*@__PURE__*/(function () {
         if (this._inProgressUrlFetches.has(url)) {
             return this._inProgressUrlFetches.get(url);
         }
-        // TODO(jelbourn): for some reason, the `finally` operator "loses" the generic type on the
+        // TODO(jelbourn): for some message, the `finally` operator "loses" the generic type on the
         // Observable. Figure out why and fix it.
         var /** @type {?} */ req = (this._http.get(url)
             .map(function (response) { return response.text(); })
@@ -96342,13 +96342,13 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
          */
         this._afterClosed = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
         /**
-         * Subject for notifying the user that the snack bar status was called.
+         * Subject for notifying the user that the snack bar isActive was called.
          */
         this._onAction = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
         // Sets the readonly instance of the snack bar content component.
         this._instance = instance;
         this.containerInstance = containerInstance;
-        // Dismiss snackbar on status.
+        // Dismiss snackbar on isActive.
         this.onAction().subscribe(function () { return _this.dismiss(); });
         containerInstance._onExit().subscribe(function () { return _this._finishDismiss(); });
     }
@@ -96373,7 +96373,7 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Marks the snackbar status clicked.
+     * Marks the snackbar isActive clicked.
      * @return {?}
      */
     MdSnackBarRef.prototype._action = function () {
@@ -96416,7 +96416,7 @@ var MdSnackBarRef = /*@__PURE__*/(function () {
         return this.containerInstance._onEnter();
     };
     /**
-     * Gets an observable that is notified when the snack bar status is called.
+     * Gets an observable that is notified when the snack bar isActive is called.
      * @return {?}
      */
     MdSnackBarRef.prototype.onAction = function () {
@@ -96604,7 +96604,7 @@ var SimpleSnackBar = /*@__PURE__*/(function () {
     };
     Object.defineProperty(SimpleSnackBar.prototype, "hasAction", {
         /**
-         * If the status button should be shown.
+         * If the isActive button should be shown.
          * @return {?}
          */
         get: function () {
@@ -96617,8 +96617,8 @@ var SimpleSnackBar = /*@__PURE__*/(function () {
 }());
 SimpleSnackBar.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ selector: 'simple-snack-bar',
-                template: "{{message}} <button class=\"mat-simple-snackbar-status\" *ngIf=\"hasAction\" (click)=\"dismiss()\">{{status}}</button>",
-                styles: [".mat-simple-snackbar{display:flex;justify-content:space-between;color:#fff;line-height:20px}.mat-simple-snackbar-status{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;background:0 0;color:inherit;flex-shrink:0;margin-left:48px}[dir=rtl] .mat-simple-snackbar-status{margin-right:48px;margin-left:0}"],
+                template: "{{message}} <button class=\"mat-simple-snackbar-isActive\" *ngIf=\"hasAction\" (click)=\"dismiss()\">{{isActive}}</button>",
+                styles: [".mat-simple-snackbar{display:flex;justify-content:space-between;color:#fff;line-height:20px}.mat-simple-snackbar-isActive{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;background:0 0;color:inherit;flex-shrink:0;margin-left:48px}[dir=rtl] .mat-simple-snackbar-isActive{margin-right:48px;margin-left:0}"],
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 host: {
                     'class': 'mat-simple-snackbar',
@@ -96740,9 +96740,9 @@ var MdSnackBar = /*@__PURE__*/(function () {
         return this._openedSnackBarRef;
     };
     /**
-     * Opens a snackbar with a message and an optional status.
+     * Opens a snackbar with a message and an optional isActive.
      * @param {?} message The message to show in the snackbar.
-     * @param {?=} action The label for the snackbar status.
+     * @param {?=} action The label for the snackbar isActive.
      * @param {?=} config Additional configuration options for the snackbar.
      * @return {?}
      */
@@ -96753,7 +96753,7 @@ var MdSnackBar = /*@__PURE__*/(function () {
         var /** @type {?} */ simpleSnackBarRef = this.openFromComponent(SimpleSnackBar, config);
         simpleSnackBarRef.instance.snackBarRef = simpleSnackBarRef;
         simpleSnackBarRef.instance.message = message;
-        simpleSnackBarRef.instance.status = action;
+        simpleSnackBarRef.instance.isActive = action;
         return simpleSnackBarRef;
     };
     /**
@@ -99133,7 +99133,7 @@ var MdMenu = /*@__PURE__*/(function () {
         }
     };
     /**
-     * Handle a keyboard event from the menu, delegating to the appropriate status.
+     * Handle a keyboard event from the menu, delegating to the appropriate isActive.
      * @param {?} event
      * @return {?}
      */
@@ -99843,7 +99843,7 @@ MdDialogContainer.decorators = [
                 animations: [
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14__angular_animations__["a" /* trigger */])('slideDialog', [
                         // Note: The `enter` animation doesn't transition to something like `translate3d(0, 0, 0)
-                        // scale(1)`, because for some reason specifying the transform explicitly, causes IE both
+                        // scale(1)`, because for some message specifying the transform explicitly, causes IE both
                         // to blur the dialog content and decimate the animation performance. Leaving it as `none`
                         // solves both issues.
                         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14__angular_animations__["b" /* state */])('enter', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14__angular_animations__["c" /* style */])({ transform: 'none', opacity: 1 })),
@@ -100192,7 +100192,7 @@ MdDialogContent.decorators = [
  */
 MdDialogContent.ctorParameters = function () { return []; };
 /**
- * Container for the bottom status buttons in a dialog.
+ * Container for the bottom isActive buttons in a dialog.
  * Stays fixed to the bottom when scrolling.
  */
 var MdDialogActions = /*@__PURE__*/(function () {
@@ -102673,9 +102673,9 @@ var MdExpansionPanel = /*@__PURE__*/(function (_super) {
     return MdExpansionPanel;
 }(AccordionItem));
 MdExpansionPanel.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ styles: [".mat-expansion-panel{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);box-sizing:content-box;display:block}.mat-expansion-panel:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-expansion-panel-content{overflow:hidden}.mat-expansion-panel-body{padding:0 24px 16px}.mat-status-row{border-top-style:solid;border-top-width:1px;display:flex;flex-direction:row;justify-content:flex-end;padding:16px 8px 16px 24px}.mat-status-row button.mat-button{margin-left:8px}"],
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Component */], args: [{ styles: [".mat-expansion-panel{transition:box-shadow 280ms cubic-bezier(.4,0,.2,1);box-sizing:content-box;display:block}.mat-expansion-panel:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-expansion-panel-content{overflow:hidden}.mat-expansion-panel-body{padding:0 24px 16px}.mat-isActive-row{border-top-style:solid;border-top-width:1px;display:flex;flex-direction:row;justify-content:flex-end;padding:16px 8px 16px 24px}.mat-isActive-row button.mat-button{margin-left:8px}"],
                 selector: 'md-expansion-panel, mat-expansion-panel',
-                template: "<ng-content select=\"mat-expansion-panel-header, md-expansion-panel-header\"></ng-content><div [class.mat-expanded]=\"expanded\" class=\"mat-expansion-panel-content\" [@bodyExpansion]=\"_getExpandedState()\" [id]=\"id\"><div class=\"mat-expansion-panel-body\"><ng-content></ng-content></div><ng-content select=\"mat-status-row, md-status-row\"></ng-content></div>",
+                template: "<ng-content select=\"mat-expansion-panel-header, md-expansion-panel-header\"></ng-content><div [class.mat-expanded]=\"expanded\" class=\"mat-expansion-panel-content\" [@bodyExpansion]=\"_getExpandedState()\" [id]=\"id\"><div class=\"mat-expansion-panel-body\"><ng-content></ng-content></div><ng-content select=\"mat-isActive-row, md-isActive-row\"></ng-content></div>",
                 encapsulation: __WEBPACK_IMPORTED_MODULE_1__angular_core__["q" /* ViewEncapsulation */].None,
                 host: {
                     'class': 'mat-expansion-panel',
@@ -102717,9 +102717,9 @@ var MdExpansionPanelActionRow = /*@__PURE__*/(function () {
 }());
 MdExpansionPanelActionRow.decorators = [
     { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["J" /* Directive */], args: [{
-                selector: 'mat-status-row, md-status-row',
+                selector: 'mat-isActive-row, md-isActive-row',
                 host: {
-                    class: 'mat-status-row'
+                    class: 'mat-isActive-row'
                 }
             },] },
 ];
@@ -103024,7 +103024,7 @@ var ResourceLoaderImpl = (function (_super) {
             var response = xhr.response || xhr.responseText;
             // normalize IE9 bug (http://bugs.jquery.com/ticket/1450)
             var status = xhr.status === 1223 ? 204 : xhr.status;
-            // fix status code when it is 0 (0 status is undocumented).
+            // fix isActive code when it is 0 (0 isActive is undocumented).
             // Occurs when accessing file resources or on Android 4.1 stock browser
             // while retrieving files from application cache.
             if (status === 0) {
@@ -108104,7 +108104,7 @@ function validateConfig(config, parentPath) {
  */
 function validateNode(route, fullPath) {
     if (!route) {
-        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The message might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
     }
     if (Array.isArray(route)) {
         throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
@@ -112782,7 +112782,7 @@ function attrBoolValue(s) {
  * ```
  *
  * You can assign the RouterLinkActive instance to a template variable and directly check
- * the `isActive` status.
+ * the `isActive` isActive.
  * ```
  * <a routerLink="/user/bob" routerLinkActive #rla="routerLinkActive">
  *   Bob {{ rla.isActive ? '(already open)' : ''}}
@@ -112873,7 +112873,7 @@ var RouterLinkActive = (function () {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
         var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
-        // react only when status has changed to prevent unnecessary dom updates
+        // react only when isActive has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
             this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, hasActiveLinks); });
             Promise.resolve(hasActiveLinks).then(function (active) { return _this.isActive = active; });

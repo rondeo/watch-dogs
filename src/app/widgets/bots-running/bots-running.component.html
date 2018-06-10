@@ -1,4 +1,4 @@
 <span>
-    <a class="btn" routerLink="/email-service/watchdogs/sell" *ngIf="sellWds$ | async">Sell {{(sellWds$ | async).length}}</a>
-    <span *ngIf="buyWds$ | async">Buy {{(buyWds$ | async).length}}</span>
+    <a class="btn" routerLink="/email-service/watchdogs-list/SELL" *ngIf="sellWds">Sell {{sellWds.length}}</a>
+    <span *ngIf="buyWds">Buy {{buyWds.length}}</span>
 </span>

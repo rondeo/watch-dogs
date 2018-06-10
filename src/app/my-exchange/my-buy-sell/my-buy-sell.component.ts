@@ -96,7 +96,7 @@ export class MyBuySellComponent implements OnInit {
       uuid:'uuuuu',
       amountBase:0.01,
       amountCoin:300,
-      status:'B',
+      isActive:'B',
       rate:0.0002,
       base:'',
       coin:'',
@@ -136,7 +136,7 @@ export class MyBuySellComponent implements OnInit {
     let amountBase:number = +this.amountUS/this.marketInit.priceBaseUS;
     if(amountBase > this.balanceBase) amountBase = this.balanceBase - (this.balanceBase* 0.0025);
     let amountCoin =  amountBase/rate;
-    this.processAction(action, amountCoin, rate);*/
+    this.processAction(orderType, amountCoin, rate);*/
   }
 
   onSellClick(){
@@ -145,7 +145,7 @@ export class MyBuySellComponent implements OnInit {
     let amountCoin =  +this.amountUS/this.marketInit.priceBaseUS/rate;
     if(amountCoin > this.balanceCoin) amountCoin  = this.balanceCoin - (this.balanceCoin * 0.0025);
 
-    this.processAction(action, amountCoin, rate);*/
+    this.processAction(orderType, amountCoin, rate);*/
   }
 
   newOrder:VOOrder;

@@ -80,7 +80,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEditDog(dog: WatchDog) {
 
-    this.router.navigateByUrl('/email-service/dog-edit/' + dog.uuid);
+    this.router.navigateByUrl('/email-service/dog-edit/' + dog.id);
 
   }
 
@@ -98,7 +98,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.counter++;
 
     let ar: WatchDog[] = this.watchDogs.filter(function (item) {
-      return item.status === 'active';
+      return item.isActive;
     });
     let results: string[] = [];
 
@@ -150,7 +150,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   onScriptClick(dog: WatchDog) {
-    this.router.navigateByUrl('/email-service/edit-script/' + dog.uuid);
+    this.router.navigateByUrl('/email-service/edit-script/' + dog.id);
   }
 
  /* loadData() {
@@ -158,7 +158,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 */
   onDogClick(dog: WatchDog) {
-    this.router.navigateByUrl('/email-service/edit-watchdogs/' + dog.uuid);
+    this.router.navigateByUrl('/email-service/edit-watchdogs/' + dog.id);
   }
 
   stopTimer() {

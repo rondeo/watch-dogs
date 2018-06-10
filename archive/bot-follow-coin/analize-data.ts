@@ -37,7 +37,7 @@ export class AnalizeData {
 
     let sellCoinsChanges: IMarketRecommended[] = FollowCoinAnalytics.analizeToSell(toSell);
 
-    //let sellCoins = _.filter(myMarkets, {'status': ACTIONS.SELL});
+    //let sellCoins = _.filter(myMarkets, {'isActive': ACTIONS.SELL});
 
     //console.log('SELL: ' + sellCoins.length);
 
@@ -56,7 +56,7 @@ export class AnalizeData {
         let report = item.date + ' transfer TO_SELL ';
         console.log(report);
         item.reports.push(report);
-        item.status = ACTIONS.TO_SELL;
+        item.isActive = ACTIONS.TO_SELL;
       });
 
       //this.saveInDB(boughtCoins);

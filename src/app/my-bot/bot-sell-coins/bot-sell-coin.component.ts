@@ -62,7 +62,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
 
 
-  async checkBalance(wds: VOWatchdog[]) {
+  async checkBalance(wds: WatchDog[]) {
     const all = [];
 
     wds.forEach((item, i) => {
@@ -104,7 +104,9 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
   }*/
 
   async initAsync() {
-    let wd: VOWatchdog[] = await this.storage.getWatchDogs();
+    let wd: WatchDog[] = (await this.storage.getWatchDogs()).map(function (item) {
+      return new WatchDog(item);
+    })
     wd = _.filter(wd, {isActive: true});
 
     await this.checkBalance(wd);

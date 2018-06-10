@@ -68,7 +68,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
       if(!dogs) return;
       console.log(dogs);
 
-      if(this.currentDog.uuid) this.setCurrentDogByUid(this.currentDog.uuid);
+      if(this.currentDog.id) this.setCurrentDogByUid(this.currentDog.id);
 
 
 
@@ -79,7 +79,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub1 = this.route.params.subscribe(params => {
       let uid = params['uid'];
       uid = uid.toUpperCase();
-      this.currentDog.uuid = uid;
+      this.currentDog.id = uid;
       if(this.emailService.getWatchDogs()) this.setCurrentDogByUid(uid);
 
 
@@ -97,7 +97,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     let dog = this.emailService.getWatchDogs().find(function (item) {
-      return item.uuid === uid;
+      return item.id === uid;
     });
 
     if(dog) this.setCurrentDog(dog);
@@ -145,7 +145,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if(results.length){
       let message = results.join('<br/>');
-      let subject = this.currentDog.uuid + ' '+ this.currentDog.name +' '+this.currentDog.name ||'';
+      let subject = this.currentDog.id + ' '+ this.currentDog.name +' '+this.currentDog.name ||'';
       this.emailService.sendNotification(subject, message).subscribe(res=>{
         console.log(res);
 
@@ -265,12 +265,12 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.currentDog) {
       let text = this.getCurrentScript();
       if(text && text.length > 50){
-        this.currentDog.status = 'full';
+       // this.currentDog.isActive = 'full';
        // this.currentDog.scriptIcon = 'fa fa-battery-full';
       }
       else {
         //this.currentDog.scriptIcon ='fa fa-battery-empty';
-        //this.currentDog.status = 'empty';
+        //this.currentDog.isActive = 'empty';
         //this.currentDog.statusIcon = 'fa fa-play';
       }
      // this.currentDog.scriptText = text;

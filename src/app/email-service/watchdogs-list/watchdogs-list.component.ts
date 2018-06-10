@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {VOMarketCap, VOWatchdog} from '../../models/app-models';
+import {OrderType, VOMarketCap, VOWatchdog} from '../../models/app-models';
 import {WatchDogService} from '../watch-dog.service';
 import {AuthHttpService} from '../../services/auth-http.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,7 +18,7 @@ import {WatchDog} from '../../models/watch-dog';
 })
 export class WatchdogsListComponent implements OnInit, OnDestroy {
 
-  action: string
+  orderType: string
   watchDogs: WatchDog[];
   MC: { [symbol: string]: VOMarketCap };
 
@@ -36,13 +36,13 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
 
   dryRunDogs(){
-    this.botsService.dryRun(this.action);
+    this.botsService.dryRun(this.orderType);
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params.action) {
-        this.action = params.action.toUpperCase();
-        if (this.action === 'SELL') {
+      if (params.orderType) {
+        this.orderType = params.orderType.toUpperCase();
+        if (this.orderType === 'SELL') {
           this.initSellBots();
         }
       }
@@ -55,10 +55,10 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
       this.isBotsRunning = isRunning;
     });
 
-    this.botsService.subSellCoins$().subscribe(wds => {
-      this.watchDogs = wds.map(function (item) {
-        return new WatchDog(item);
-      });
+    this.botsService.allWatchDogs$().subscribe(wds => {
+      this.watchDogs = wds.filter(function (item) {
+        return item.orderType === OrderType.SELL;
+      })
     })
   }
 
@@ -92,9 +92,9 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   startStopBots() {
     if (!this.isBotsRunning) {
-      if (this.action === 'SELL') this.botsService.startSellBots();
+      if (this.orderType === 'SELL') this.botsService.startSellBots();
     } else {
-      if (this.action === 'SELL') this.botsService.stopSellBots();
+      if (this.orderType === 'SELL') this.botsService.stopSellBots();
     }
 
   }

@@ -51,8 +51,9 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
     const url = '/api/proxy/api.binance.com/api/v1/ticker/24hr';
+    console.log(url);
     return this.http.get(url).map((res: any[]) => {
-       console.log(res);
+
       const indexed = {};
       const allCoins = {}
       res.forEach(function (item) {

@@ -605,34 +605,33 @@ export class WalletModel {
 
 }
 */
-
+export enum OrderType{
+  SELL='SELL',
+  BUY='BUY'
+}
 
 export class VOWatchdog {
   id: string;
   exchange: string;
   base: string;
   coin: string;
-  action: string;
+  orderType: OrderType;
   name: string;
   isActive: boolean;
-  status: string;
   isEmail: boolean;
-  results?: string[];
-  sellScripts: string[];
-  buyScripts: string[];
-  balanceCoin: number;
-  balanceBase: number;
+  results: string[] =[];
+  sellScripts: string[] = [];
+  buyScripts: string[] = [];
   amount: number;
-  isOpen?: boolean;
+  orderID: string;
   constructor(obj: any) {
     Object.assign(this, obj);
+    if(obj.action)this.orderType = obj.action
   }
 }
 
 export const VOWATCHDOG = new VOWatchdog({
-  results: [],
-  sellScript: [],
-  buyScript: []
+
 })
 
 
@@ -642,7 +641,7 @@ export class WatchDog {
   uid: string;
   coinId: string;
   dogName: string;
-  status: string;
+  isActive: string;
   marketCap: VOMarketCap;
 
   description?: string;

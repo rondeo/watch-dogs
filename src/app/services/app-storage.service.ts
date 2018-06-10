@@ -147,7 +147,7 @@ export class StorageService {
 
     if (sold) {
       sold.results = sellCoin.results;
-      sold.status = "SOLD";
+      sold.isActive = "SOLD";
       await this.saveWatchDogs(sellCoins);
     }
     return sold

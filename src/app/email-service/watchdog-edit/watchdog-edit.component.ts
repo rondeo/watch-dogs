@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../models/app-models';
+import {OrderType, VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../models/app-models';
 import {ActivatedRoute} from "@angular/router";
 import {WatchDogService} from "../watch-dog.service";
 import {StorageService} from "../../services/app-storage.service";
@@ -52,7 +52,7 @@ export class WatchdogEditComponent implements OnInit {
     if(!wd) {
       wd = new WatchDog(VOWATCHDOG);
       wd.id = id;
-      wd.action = 'SELL';
+      wd.orderType = OrderType.SELL;
     }
     if(!wd.sellScripts) wd.sellScripts = [];
     if(!wd.buyScripts) wd.buyScripts = [];

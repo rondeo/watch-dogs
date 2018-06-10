@@ -72,7 +72,7 @@ export interface VOOrder{
   uuid:string;
   isOpen:boolean;
   message?:string;
-  status?:string;
+  isActive?:string;
   act?:string
   date?:string;
   timestamp?:number;

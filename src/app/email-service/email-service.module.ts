@@ -24,9 +24,9 @@ const routes: Routes = [
   {
     path: 'email-service', component: EmailMainComponent,
     children:[
-      { path: '', redirectTo:'watchdogs', pathMatch:'full'},
-      { path: 'watchdogs', redirectTo:'watchdogs/SELL', pathMatch:'full'},
-      { path: 'watchdogs/:action', component:WatchdogsListComponent},
+      { path: '', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
+      { path: 'watchdogs', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
+      { path: 'watchdogs-list/:orderType', component:WatchdogsListComponent},
       { path: 'watchdog-edit/:uid', component: WatchdogEditComponent},
       { path: 'watchdog-test/:uid', component: WatchdogTestComponent},
       { path: 'edit-script/:uid', component: EditScriptComponent},

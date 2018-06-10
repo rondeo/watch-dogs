@@ -16,7 +16,7 @@ export class BuySellCoins {
       console.log('%c BUY ' + _.map(buyCoins, 'coin'), 'color:red');
 
       buyCoins.forEach(function (item: any) {
-        item.status = ACTIONS.BUYING;
+        item.isActive = ACTIONS.BUYING;
         item.newData = 7;
       });
 
@@ -39,7 +39,7 @@ export class BuySellCoins {
         console.log('%c BOUGHT now TO_SELL ' + _.map(buyCoins, 'coin'), 'color:red');
         buyingCoins.forEach(function (item:IMarketRecommended) {
           //item.newData = 6;
-          item.status = ACTIONS.TO_SELL;
+          item.isActive = ACTIONS.TO_SELL;
         });
 
       }, 10000);
@@ -66,7 +66,7 @@ export class BuySellCoins {
         console.log('%c SOLD ' + _.map(sellCoins, 'coin'), 'color:red');
         sellCoins.forEach(function (item: any) {
           item.newData = 5;
-          item.status = ACTIONS.SOLD;
+          item.isActive = ACTIONS.SOLD;
         });
       }, 20000);
 

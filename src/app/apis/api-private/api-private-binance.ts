@@ -34,7 +34,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
-    if (!sellCoin.coinUS) throw new Error(' need coin price')
+    /*if (!sellCoin.coinUS) throw new Error(' need coin price')
     return this.downloadBalance(sellCoin.coin).switchMap(balance => {
       // console.log(balance);
       if (balance.balance * sellCoin.coinUS < 10) {
@@ -56,7 +56,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order => {
           console.log(order);
           if (order.uuid) {
-            sellCoin.uuid = order.uuid;
+            sellCoin.id = order.uuid;
             return this.getOrder(order.uuid, sellCoin.base, sellCoin.coin).switchMap(order => {
 
               return Observable.of(sellCoin)
@@ -65,7 +65,8 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           } else throw new Error(order.message);
         })
       })
-    })
+    })*/
+    return null
   }
 
 

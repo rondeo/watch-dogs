@@ -1,7 +1,7 @@
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
-import {VOWatchdog} from '../../models/app-models';
+import {OrderType, VOWatchdog} from '../../models/app-models';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
@@ -14,10 +14,11 @@ import {WatchDog} from '../../models/watch-dog';
 import * as moment from 'moment';
 
 export class AppSellCoin {
-  private watchDogs: WatchDog[];
-  private watchDogsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
+ // private watchDogs: WatchDog[];
+  ///private watchDogsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
   private _isSellRunning: BehaviorSubject<boolean>;
   private interval;
+
   constructor(
     private storage: StorageService,
     private apiPrivate: ApisPrivateService,
@@ -29,17 +30,24 @@ export class AppSellCoin {
     const isRunning = !!JSON.parse(localStorage.getItem('isSellRunning'));
     this._isSellRunning = new BehaviorSubject<boolean>(isRunning);
 
-   setTimeout(()=>this.init(), 1);
+    setTimeout(() => this.init(), 1);
   }
 
-  init(){
-    if(this._isSellRunning.getValue()) this.start();
+  sellCoins(watchDog: WatchDog[]) {
+
+  }
+
+  init() {
+    if (this._isSellRunning.getValue()) this.start();
     this.allWatchDogsSub.asObservable().subscribe(wds => {
-      this.watchDogs = _.filter(wds, {action: 'SELL'})
+
+    /*  this.watchDogs = wds.filter(function (item) {
+        return item.orderType === OrderType.SELL;
+      });
       this.watchDogs.forEach(function (item) {
-        item.message = 'INIT';
-      })
-      this.watchDogsSub.next(this.watchDogs);
+
+      });
+      this.watchDogsSub.next(this.watchDogs);*/
     });
   }
 
@@ -47,63 +55,62 @@ export class AppSellCoin {
     return this._isSellRunning.asObservable();
   }
 
-  start(){
-    if(!this.interval){
+  start() {
+    if (!this.interval) {
       localStorage.setItem('isSellRunning', 'true');
       this.interval = setInterval(() => this.run(), 60 * 1000);
       this._isSellRunning.next(true);
     }
   }
 
-  stop(){
+  stop() {
     clearInterval(this.interval);
     this.interval = 0;
     this._isSellRunning.next(false);
     localStorage.setItem('isSellRunning', 'false');
   }
 
-  watchDogs$() {
+  /*watchDogs$() {
     return this.watchDogsSub.asObservable();
-  }
+  }*/
 
-  sellCoinsNumber():Observable<number>{
+/*  sellCoinsNumber(): Observable<number> {
     return this.watchDogs$().map(wds => wds.length);
-  }
-  async run() {
-    if(!this.watchDogs) return;
-    if(!this._isSellRunning.getValue()) return;
-    console.log('running bots ' + this.watchDogs.length);
-    const MC = await this.marketCap.getData();
-    this.watchDogs.forEach(function (wd: WatchDog) {
-     /* const sellScripts = wd.sellScripts || [];
-      const mc: VOMCAgregated = MC[wd.coin];
-      const results = sellScripts.map(function (script) {
-        return RunScript.runScriptSell( mc, script)
-      });
-      console.log(results);*/
+  }*/
 
+  getAllSellBots(): WatchDog[]{
+    const allWD = this.allWatchDogsSub.getValue();
+    if (!allWD) return[];
+    return WatchDog.isTest? allWD.filter(function (wd: WatchDog) {
+      return wd.orderType === OrderType.SELL;
+    }) :  allWD.filter(function (wd: WatchDog) {
+      return wd.isActive && wd.orderType === OrderType.SELL;
     })
-    console.log(this.watchDogs);
   }
 
-  async dryRun() {
+  async run() {
+    const sellDogs = this.getAllSellBots();
+    if (!sellDogs.length) return;
+    console.log('running bots ' + sellDogs.length);
+    const MC = await this.marketCap.getData();
 
-   const MC = await this.marketCap.getAgregated().toPromise();
-   //console.log(MC);
-    console.log('dry run bots ' + this.watchDogs.length);
-    this.watchDogs.forEach(function (wd: WatchDog) {
+    sellDogs.forEach(function (wd: WatchDog) {
       const aggr = MC[wd.coin];
-      if(!aggr) console.error(wd, MC);
+      if (!aggr) console.error(wd, MC);
       else {
         const ma = MovingAverage.map(aggr);
         const isTrigger = MovingAverage.isMovingDown(ma);
-        console.log(isTrigger, ma);
-        const msg = isTrigger?'selling coin':'avarage price not going down';
-       // wd.message = 'avarage price onot going down';
-        wd.dryRunResults('SELL',false, msg, moment().format());
+        const msg = isTrigger ?  wd.sellCoin('selling coin') : wd.setMessage('avarage price not going down');
+
       }
     });
-    this.watchDogsSub.next(this.watchDogs);
-
+    console.log(sellDogs);
   }
+
+  async dryRun() {
+    WatchDog.isTest = true;
+    await this.run();
+    WatchDog.isTest = false;
+  }
+
 }

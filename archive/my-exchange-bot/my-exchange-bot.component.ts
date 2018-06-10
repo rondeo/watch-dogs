@@ -151,10 +151,10 @@ export class MyExchangeBotComponent implements OnInit {
   }
 
 
-/*  testRun(marketSummary:IOrdersStats, order:VOOrder, reason:string){
+/*  testRun(marketSummary:IOrdersStats, order:VOOrder, message:string){
     console.log(' runing test ', order);
 
-    this.botsService.followCoin(this.currentAPI, marketSummary.coinMC, order, this.baseMC.price_usd, marketSummary, reason);
+    this.botsService.followCoin(this.currentAPI, marketSummary.coinMC, order, this.baseMC.price_usd, marketSummary, message);
 
 
   }*/
@@ -174,7 +174,7 @@ export class MyExchangeBotComponent implements OnInit {
 
         order.marketStats = marketSummary;
 
-        this.botsService.followCoin(this.currentAPI, marketSummary.coinMC, order, this.baseMC.price_usd, marketSummary, reason);
+        this.botsService.followCoin(this.currentAPI, marketSummary.coinMC, order, this.baseMC.price_usd, marketSummary, message);
 
       }).catch(err=>console.error);*/
   }

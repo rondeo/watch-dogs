@@ -529,8 +529,8 @@ export class UtilsOrder{
       }
 
       /* timestamps.push(item.timestamp);
-       if(item.status === 'buy') buys.push(item);
-       else if(item.status === 'sell') sells.push(item);
+       if(item.isActive === 'buy') buys.push(item);
+       else if(item.isActive === 'sell') sells.push(item);
        else console.warn(item);*/
     });
 
@@ -618,8 +618,8 @@ export class UtilsOrder{
       }
 
       /* timestamps.push(item.timestamp);
-       if(item.status === 'buy') buys.push(item);
-       else if(item.status === 'sell') sells.push(item);
+       if(item.isActive === 'buy') buys.push(item);
+       else if(item.isActive === 'sell') sells.push(item);
        else console.warn(item);*/
     });
 

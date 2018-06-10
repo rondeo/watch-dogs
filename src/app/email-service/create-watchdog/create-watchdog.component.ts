@@ -77,7 +77,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
     uid = uid.toUpperCase();
 
     let dog  = this.watchDogs.find(function (item) {
-      return item.uuid === uid;
+      return item.id === uid;
     });
     if(dog) this.watchDog = dog;
 
@@ -97,7 +97,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
     let ref = this.dialog.open(DialogSimpleComponent, {data:{
       title:'Alert',
-      message:'You want to delete watch dog '+ dog.uuid + ' '+ dog.coin+'?',
+      message:'You want to delete watch dog '+ dog.id + ' '+ dog.coin+'?',
       buttons:['Yes','No']
     }})
 
@@ -118,7 +118,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
   saveDogClick(){
 
-    let exists = this.emailService.getDogByUid(this.watchDog.uuid);
+    let exists = this.emailService.getDogByUid(this.watchDog.id);
     if(!exists){
 
       this.emailService.addDog(this.watchDog)
@@ -145,12 +145,12 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
 
   onDogClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.uuid);
+    this.router.navigateByUrl('/email-service/edit-watchdogs/'+dog.id);
    // this.watchDog = dog;
   }
 
   onScriptClick(dog:WatchDog){
-    this.router.navigateByUrl('/email-service/edit-script/'+dog.uuid);
+    this.router.navigateByUrl('/email-service/edit-script/'+dog.id);
   }
 
   onCoinSelectChanged(evt){

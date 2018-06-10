@@ -72,13 +72,11 @@ export class ApiMarketCapService {
      });
   }
 
-
-
   getData(): Promise<VOMCObj> {
     if(this.data) return Promise.resolve(this.data);
     return new Promise<VOMCObj>(async (resolve, reject) => {
       const sub = this.getAgregated().subscribe(resolve, reject);
-      setTimeout(()=>sub.unsubscribe(), 300);
+      setTimeout(()=>sub.unsubscribe(), 30000);
     });
   }
 

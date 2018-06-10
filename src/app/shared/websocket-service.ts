@@ -224,7 +224,7 @@ export default function connect(
       if (event.wasClean)
         observer.complete()
       else
-        observer.error(new Error(event.reason))
+        observer.error(new Error(event.message))
     }
 
     return () => {

@@ -203,7 +203,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
         totalFee += item.fee;
         if(item.action === 'BUY') totalBuy += item.amountCoinUS;
         else if(item.action ==='SELL') totalSell+= item.amountCoinUS;
-        else console.error(' no status ', item);
+        else console.error(' no isActive ', item);
       }
 
     });

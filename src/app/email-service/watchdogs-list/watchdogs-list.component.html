@@ -1,6 +1,6 @@
 <div>
     <p>
-        <span class="mat-title">{{action}}</span>
+        <span class="mat-title">{{orderType}}</span>
         &nbsp;&nbsp;&nbsp;
         <a class="fa-2x fa fa-plus-circle btn dgreen"  (click)="onNewClick()"></a>
         &nbsp;&nbsp;&nbsp;
@@ -10,24 +10,25 @@
 
     </p>
 
-    <section>
+    <section class="mat-body">
         <table>
             <tbody>
             <tr class="small">
                 <th>Name</th>
                 <th>Active</th>
+                <th>Status</th>
+                <th>Date</th>
                 <th>Delete</th>
+                <th>Message</th>
             </tr>
             <ng-container *ngFor="let dog of watchDogs">
                 <tr>
                     <td><span class="btn" (click)="onNameClick(dog)">{{dog.name}}</span></td>
-                    <td><span>{{dog.isActive}}</span></td>
+                    <td><span class="fa {{dog.isActive?'fa-play dgreen':'fa-stop dred'}}"></span></td>
+                    <td><small>{{dog.status}}</small></td>
+                    <td><small>{{dog.date}}</small></td>
                     <td><span class="btn fa fa-trash dred" (click)="onDeleteClick(dog)"></span></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        {{dog.message}}
-                    </td>
+                    <td><span>{{dog.message}}</span></td>
                 </tr>
             </ng-container>
             </tbody>

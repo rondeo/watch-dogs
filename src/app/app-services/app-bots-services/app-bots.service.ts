@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
-import {VOWatchdog} from '../../models/app-models';
+import {OrderType, VOWatchdog} from '../../models/app-models';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AppSellCoin} from './app-sell-coin';
 import {ApisPrivateService} from '../../apis/apis-private.service';
@@ -18,7 +18,7 @@ import {WatchDog} from '../../models/watch-dog';
 @Injectable()
 export class AppBotsService {
 
-  private watchDogsDataSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy(null);
+  private allWatchDogsSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy(null);
   private sellCoinsCtr: AppSellCoin;
   private _isSellRunning: BehaviorSubject<boolean>;
   private _isBuyRunning: BehaviorSubject<boolean>;
@@ -32,8 +32,8 @@ export class AppBotsService {
     private apiPublic: ApisPublicService,
     private marketCap: ApiMarketCapService
   ) {
-    this.storage.getWatchDogs().then(wd => this.watchDogsDataSub.next(wd.map(o=>new WatchDog(o))));
-    this.sellCoinsCtr = new AppSellCoin(storage, apiPrivate, apiPublic, this.watchDogsDataSub, marketCap);
+    this.storage.getWatchDogs().then(wd => this.allWatchDogsSub.next(wd.map(o=>new WatchDog(o))));
+    this.sellCoinsCtr = new AppSellCoin(storage, apiPrivate, apiPublic, this.allWatchDogsSub, marketCap);
     this.init();
   }
 
@@ -46,7 +46,11 @@ export class AppBotsService {
 
   dryRun(action: string){
     if(action === 'SELL'){
-      this.sellCoinsCtr.dryRun()
+      this.sellCoinsCtr.dryRun().then(res =>{
+        const wds = this.allWatchDogsSub.getValue();
+        console.log(wds)
+        this.allWatchDogsSub.next(wds);
+      })
     }
   }
 
@@ -70,16 +74,8 @@ export class AppBotsService {
    this.sellCoinsCtr.run();
   }
 
-  subSellCoins$(): Observable<VOWatchdog[]> {
-    return this.sellCoinsCtr.watchDogs$()
-  }
-
-  subBuyCoins$(): Observable<VOWatchdog[]> {
-    return this.subWatchdogsData$().map(wds => _.filter(wds, {action: 'BUY'}))
-  }
-
-  subWatchdogsData$() {
-    return this.watchDogsDataSub.asObservable();
+  allWatchDogs$(): Observable<WatchDog[]> {
+    return this.allWatchDogsSub.asObservable();
   }
 
   save(wds: VOWatchdog[]) {
@@ -88,19 +84,19 @@ export class AppBotsService {
 
   deleteWatchDog(wd: VOWatchdog) {
 
-    let allDogs = this.watchDogsDataSub.getValue();
+    let allDogs = this.allWatchDogsSub.getValue();
 
     allDogs = allDogs.filter(function (item) {
       return item.id && item.id !== wd.id;
     });
 
-    this.storage.saveWatchDogs(allDogs).then(res => this.watchDogsDataSub.next(allDogs));
+    this.storage.saveWatchDogs(allDogs).then(res => this.allWatchDogsSub.next(allDogs));
 
   }
 
   async getWatchDogById(id: string): Promise<WatchDog> {
     return new Promise<WatchDog>((resolve, reject) => {
-      this.subWatchdogsData$().subscribe(wds => {
+      this.allWatchDogs$().subscribe(wds => {
         //  console.warn(wds);
         resolve(_.find(wds, {id: id}));
       }, reject)
@@ -109,13 +105,13 @@ export class AppBotsService {
   }
 
   async saveWatchDog(watchDog: WatchDog) {
-    const wds = this.watchDogsDataSub.getValue() || [];
+    const wds = this.allWatchDogsSub.getValue() || [];
     if (!await this.getWatchDogById(watchDog.id)) {
       wds.push(watchDog);
     }
     await this.storage.saveWatchDogs(wds.map(function (item: WatchDog) {
       return item.toJSON();
     }))
-    this.watchDogsDataSub.next(wds);
+    this.allWatchDogsSub.next(wds);
   }
 }

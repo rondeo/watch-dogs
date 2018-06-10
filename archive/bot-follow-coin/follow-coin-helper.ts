@@ -130,17 +130,17 @@ export class FollowCoinHelper {
   static transferBoughtToSell(myMarkets: IMarketRecommended[]) {
 
     let boughtCoins = myMarkets.filter(function (item) {
-      return item.status === ACTIONS.BOUGHT;
+      return item.isActive === ACTIONS.BOUGHT;
     });
     if (boughtCoins.length === 0) return;
     let toSell = myMarkets.filter(function (item) {
-      return item.status === ACTIONS.TO_SELL;
+      return item.isActive === ACTIONS.TO_SELL;
     });
     let toSellExists: string[] = _.map(boughtCoins, 'coin');
 
     boughtCoins.forEach(function (item) {
       if (toSellExists.indexOf(item.coin) === -1) {
-        item.status = ACTIONS.TO_SELL;
+        item.isActive = ACTIONS.TO_SELL;
         myMarkets.unshift(item);
       }
     })
@@ -202,27 +202,27 @@ export class FollowCoinHelper {
   /*static tosellCoins: IMarketRecommended[] = [
     {
       exchange: 'poloniex',
-      action: ACTIONS.TO_SELL,
+      orderType: ACTIONS.TO_SELL,
       base: 'USDT',
       coin: 'BTC',
-      reason: '',
-      status:'',
+      message: '',
+      isActive:'',
       reports: null
     },
     {
       exchange: 'poloniex',
-      action: ACTIONS.TO_SELL,
+      orderType: ACTIONS.TO_SELL,
       base: 'USDT',
       coin: 'LTC',
-      reason: '',
+      message: '',
       reports: null
     },
     {
       exchange: 'poloniex',
-      action: ACTIONS.TO_SELL,
+      orderType: ACTIONS.TO_SELL,
       base: 'USDT',
       coin: 'ETH',
-      reason: '',
+      message: '',
       reports: null
     }
   ];*/
