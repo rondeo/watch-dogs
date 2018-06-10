@@ -99,4 +99,8 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   }
 
+  isActiveClick(dog: WatchDog){
+    dog.isActive = !dog.isActive;
+    this.botsService.save();
+  }
 }

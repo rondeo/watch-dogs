@@ -14,8 +14,6 @@ import {WatchDog} from '../../models/watch-dog';
 import * as moment from 'moment';
 
 export class AppSellCoin {
- // private watchDogs: WatchDog[];
-  ///private watchDogsSub: BehaviorSubjectMy<VOWatchdog[]> = new BehaviorSubjectMy(null);
   private _isSellRunning: BehaviorSubject<boolean>;
   private interval;
 
@@ -29,7 +27,6 @@ export class AppSellCoin {
 
     const isRunning = !!JSON.parse(localStorage.getItem('isSellRunning'));
     this._isSellRunning = new BehaviorSubject<boolean>(isRunning);
-
     setTimeout(() => this.init(), 1);
   }
 
@@ -38,16 +35,9 @@ export class AppSellCoin {
   }
 
   init() {
-    if (this._isSellRunning.getValue()) this.start();
+    // if (this._isSellRunning.getValue()) this.start();
     this.allWatchDogsSub.asObservable().subscribe(wds => {
 
-    /*  this.watchDogs = wds.filter(function (item) {
-        return item.orderType === OrderType.SELL;
-      });
-      this.watchDogs.forEach(function (item) {
-
-      });
-      this.watchDogsSub.next(this.watchDogs);*/
     });
   }
 
@@ -55,13 +45,13 @@ export class AppSellCoin {
     return this._isSellRunning.asObservable();
   }
 
-  start() {
+ /* start() {
     if (!this.interval) {
       localStorage.setItem('isSellRunning', 'true');
       this.interval = setInterval(() => this.run(), 60 * 1000);
       this._isSellRunning.next(true);
     }
-  }
+  }*/
 
   stop() {
     clearInterval(this.interval);
@@ -88,7 +78,7 @@ export class AppSellCoin {
     })
   }
 
-  async run() {
+ /* async run() {
     const sellDogs = this.getAllSellBots();
     if (!sellDogs.length) return;
     console.log('running bots ' + sellDogs.length);
@@ -105,12 +95,14 @@ export class AppSellCoin {
       }
     });
     console.log(sellDogs);
-  }
+  }*/
+/*
 
   async dryRun() {
     WatchDog.isTest = true;
     await this.run();
     WatchDog.isTest = false;
   }
+*/
 
 }

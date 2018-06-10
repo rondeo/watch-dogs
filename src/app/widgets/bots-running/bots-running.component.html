@@ -1,4 +1,9 @@
 <span>
-    <a class="btn" routerLink="/email-service/watchdogs-list/SELL" *ngIf="sellWds">Sell {{sellWds.length}}</a>
-    <span *ngIf="buyWds">Buy {{buyWds.length}}</span>
+    <span>
+        <a class="btn" routerLink="/email-service/watchdogs-list/SELL">Sell: </a>
+        {{totalSell}} Active: {{activeSell}}
+    </span>
+    <span>
+        Buy {{totalBuy}}  Active: {{activeBuy}}
+    </span>
 </span>

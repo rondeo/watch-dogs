@@ -626,7 +626,7 @@ export class VOWatchdog {
   orderID: string;
   constructor(obj: any) {
     Object.assign(this, obj);
-    if(obj.action)this.orderType = obj.action
+  //  if(obj.action)this.orderType = obj.action
   }
 }
 

@@ -14,8 +14,11 @@ import 'rxjs/add/operator/filter';
 })
 export class BotsRunningComponent implements OnInit {
 
-  sellWds:WatchDog[];
-  buyWds: WatchDog[];
+  activeSell: number;
+  activeBuy: number;
+
+  totalSell:number;
+  totalBuy: number;
 
   constructor(
     private botsService: AppBotsService,
@@ -24,19 +27,14 @@ export class BotsRunningComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.botsService.allWatchDogs$().map(function (wds: WatchDog[]) {
-      return wds.filter(function (item) {
-        return  item.orderType === OrderType.SELL;
-      })
-    }).subscribe(wds => {
-      this.sellWds = wds
-    });
+    this.botsService.allWatchDogs$().subscribe(wds => {
+      this.activeSell = this.botsService.getActiveSellBots().length;
+      this.totalSell = this.botsService.getAllSellBots().length;
 
-   this.botsService.allWatchDogs$().map(function (wds: WatchDog[]) {
-      return wds.filter(function (item) {
-        return  item.orderType === OrderType.BUY;
-      })
-    }).subscribe(wds => this.buyWds = wds);
+      this.totalBuy = this.botsService.getAllBuyBots().length;
+      this.activeBuy = this.botsService.getActiveBuyBots().length;
+
+    });
 
     this.botsService.isSellRunning$().subscribe(isRunning => {
       clearTimeout(this.timeout);
