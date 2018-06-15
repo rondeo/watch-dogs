@@ -20,6 +20,10 @@ export class BotsRunningComponent implements OnInit {
   totalSell:number;
   totalBuy: number;
 
+  secondsLeft: number;
+
+  isSellRunning:boolean
+
   constructor(
     private botsService: AppBotsService,
     private snackBar: MatSnackBar
@@ -36,7 +40,12 @@ export class BotsRunningComponent implements OnInit {
 
     });
 
+    this.botsService.secondsLeft$().subscribe(seconds =>{
+      this.secondsLeft = seconds;
+    })
+
     this.botsService.isSellRunning$().subscribe(isRunning => {
+      this.isSellRunning = isRunning;
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => this.showSbackBar(isRunning), 1300);
 

@@ -18,7 +18,7 @@ import {WatchDog} from '../../models/watch-dog';
 })
 export class WatchdogsListComponent implements OnInit, OnDestroy {
 
-  orderType: string
+  orderType: string;
   watchDogs: WatchDog[];
   MC: { [symbol: string]: VOMarketCap };
 

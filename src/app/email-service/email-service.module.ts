@@ -27,6 +27,7 @@ const routes: Routes = [
       { path: '', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
       { path: 'watchdogs', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
       { path: 'watchdogs-list/:orderType', component:WatchdogsListComponent},
+      { path: 'create-bot/:exchange/:base/:coin', component: CreateWatchdogComponent},
       { path: 'watchdog-edit/:uid', component: WatchdogEditComponent},
       { path: 'watchdog-test/:uid', component: WatchdogTestComponent},
       { path: 'edit-script/:uid', component: EditScriptComponent},

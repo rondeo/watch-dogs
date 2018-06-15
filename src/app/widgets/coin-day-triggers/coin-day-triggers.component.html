@@ -1,0 +1,12 @@
+<div>
+    <section>
+        <app-coin-day [coin]="coin" (coindatas)="onCoinDataChange($event)"></app-coin-day>
+        <div class="triggers">
+            <div>
+                <app-line-graph *ngIf="triggers" [linegraphs]="triggers" [horizont]="0" [vertical]="0" [height]="150"></app-line-graph>
+            </div>
+
+        </div>
+
+    </section>
+</div>

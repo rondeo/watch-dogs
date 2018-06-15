@@ -7,7 +7,16 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
+    <button mat-button
+            routerLink="/email-service/create-bot/{{exchange}}/{{base}}/{{coin}}"
+            [queryParams]="{balance:balanceCoinUS}"
+            [disabled]="!exchange || !base || !coin" >
+        <span>
+            WD
+        </span>
+    </button>
     <app-amount-coin [amount]="amountUS" (amountChanged)="onAmountChanged($event)"></app-amount-coin>
+
     <mat-card>
         <mat-card-content>
             {{currentMarket.base}}

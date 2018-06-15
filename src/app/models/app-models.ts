@@ -5,6 +5,7 @@
 
 import {Observable} from 'rxjs/Observable';
 import {VOMCAgregated} from './api-models';
+import {WatchDogStatus} from './watch-dog';
 
 
 
@@ -566,6 +567,9 @@ export class VOBalance {
   percent_change_7d?: number;
   id?: string;
   isDetails?: boolean;
+  constructor(obj?: VOBalance){
+    if(obj)Object.assign(this,obj);
+  }
 }
 
 /*
@@ -618,12 +622,13 @@ export class VOWatchdog {
   orderType: OrderType;
   name: string;
   isActive: boolean;
-  isEmail: boolean;
+  // isEmail: boolean;
   results: string[] =[];
   sellScripts: string[] = [];
   buyScripts: string[] = [];
   amount: number;
   orderID: string;
+  _status: WatchDogStatus;
   constructor(obj: any) {
     Object.assign(this, obj);
   //  if(obj.action)this.orderType = obj.action

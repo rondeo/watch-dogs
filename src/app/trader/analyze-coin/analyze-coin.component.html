@@ -1,4 +1,23 @@
 <div>
+    <p>
+        <span class="mat-body-2">{{exchange}} {{market}}</span>
+        <button mat-raised-button color="primary"
+                (click)="onLineChartClick()"
+                [disabled]="!exchange"
+        ><span class="fa fa-line-chart fa-2x"></span></button>
+        <button
+                routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+                mat-raised-button color="accent"
+                [disabled]="isDisabled()"
+        ><span class="fa fa-exchange fa-2x"></span></button>
+        <button
+                routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+                mat-raised-button color="accent"
+                [disabled]="isDisabled()"
+        ><span class="fa fa-exchange fa-2x"></span></button>
+    </p>
+
+
     <span class="mat-headline">{{coin}} </span>
 
     <section>
@@ -8,18 +27,7 @@
     <p>
         <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
     </p>
-<p>
-    <span class="mat-body-2">{{exchange}} {{market}}</span>
-    <button  mat-raised-button color="primary"
-             (click)="onLineChartClick()"
-             [disabled]="!exchange"
-    ><span class="fa fa-line-chart fa-2x"></span></button>
-    <button
-            routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
-            mat-raised-button color="accent"
-            [disabled]="isDisabled()"
-    ><span class="fa fa-exchange fa-2x"></span></button>
-</p>
+
 
 
     <br/>

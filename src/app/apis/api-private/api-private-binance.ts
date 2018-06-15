@@ -88,13 +88,13 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       this.isLoadingBalances = false;
       console.log(res);
       return res.balances.map(function (item) {
-        return {
+        return new VOBalance({
           symbol: item.asset,
           address: '',
-          balance: item.free,
-          available: item.free,
-          pending: item.locked
-        }
+          balance: +item.free,
+          available: +item.free,
+          pending: +item.locked
+        })
       })
 
     })

@@ -33,7 +33,6 @@ export class WatchDog extends VOWatchdog {
   coinUS: number;
   coinMC: VOMCAgregated;
   baseMC: VOMCAgregated;
-  private _status:WatchDogStatus;
   message: string;
   history: string[];
   balanceBase: number;
@@ -50,7 +49,6 @@ export class WatchDog extends VOWatchdog {
   }
   constructor(public wd: VOWatchdog) {
     super(wd);
-    this._status = WatchDogStatus.WAITING;
     this.message = 'initialized';
   }
 
@@ -93,11 +91,11 @@ export class WatchDog extends VOWatchdog {
       orderType: this.orderType,
       name: this.name,
       isActive: this.isActive,
-      isEmail: this.isEmail,
       results: this.results,
       sellScripts: this.sellScripts,
       buyScripts: this.buyScripts,
-      amount: this.amount
+      amount: this.amount,
+      _status: this._status
     }
 
   }

@@ -1,9 +1,12 @@
 <span>
     <span>
-        <a class="btn" routerLink="/email-service/watchdogs-list/SELL">Sell: </a>
-        {{totalSell}} Active: {{activeSell}}
+        <a class="btn {{isSellRunning?'green':'red'}}" routerLink="/email-service/watchdogs-list/SELL">Sell: </a>
+        {{totalSell}} a: {{activeSell}}
     </span>
+    &nbsp; &nbsp; &nbsp;
+    <span class="mat-body-2">{{secondsLeft}}<small>s</small></span>
+    &nbsp; &nbsp; &nbsp;
     <span>
-        Buy {{totalBuy}}  Active: {{activeBuy}}
+        Buy {{totalBuy}} a: {{activeBuy}}
     </span>
 </span>

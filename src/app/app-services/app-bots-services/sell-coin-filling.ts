@@ -7,14 +7,18 @@ import {Subject} from 'rxjs/Subject';
 import {reject} from 'q';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMovingAvg} from '../../com/moving-average';
+
 
 export class SellCoinFilling {
 
   id:string;
   private apiPrivate: ApiPrivateAbstaract;
   private apiPublic: ApiPublicAbstract;
+
   constructor(
-    private watchDog: WatchDog,
+    public watchDog: WatchDog,
     apiPrivates: ApisPrivateService,
     apiPublics: ApisPublicService
   ) {
@@ -23,8 +27,9 @@ export class SellCoinFilling {
     this.id = watchDog.id;
   }
 
-  sell(): Promise<WatchDogStatus> {
-    return new Promise((resolve, reject) => {
+  async sell(): Promise<WatchDogStatus> {
+    return new Promise<WatchDogStatus>((resolve, reject) => {
+
       if (!this.watchDog.coinMC || !this.watchDog.baseMC) {
         reject('MC value required')
         return;

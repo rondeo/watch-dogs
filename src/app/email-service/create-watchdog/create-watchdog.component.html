@@ -1,79 +1,16 @@
-<div class="content">
-<hr/>
-    <table>
-        <tbody>
-        <tr>
-            <td>Market Cap $US</td>
-            <td><small>%</small>1h</td>
-            <td><small>%</small>24h</td>
-            <td><small>%</small>7d</td>
-        </tr>
-        <tr  *ngIf="coinMarket">
-            <td>{{coinMarket.price_usd}}</td>
-            <td>{{coinMarket.percent_change_1h}}</td>
-            <td>{{coinMarket.percent_change_24h}}</td>
-            <td>{{coinMarket.percent_change_7d}}</td>
-        </tr>
-        </tbody>
-    </table>
-    <br/>
-    <mat-input-container>
-      <!--<small> <input [(ngModel)]="watchDog.uid"  matInput placeholder="ID"  disabled name="uid"></small>-->
-    </mat-input-container>
-    <mat-input-container>
-       <!-- <input [(ngModel)]="watchDog.dogName"  matInput placeholder="Dog Name" name="label">-->
-    </mat-input-container>
-  <!--  <mat-input-container>
-        <input [(ngModel)]="watchDog.description"  matInput placeholder="Description" name="description">
-    </mat-input-container>-->
+<div>
+    {{exchange}}
+    {{base}}
+    {{coin}}
+    ${{amount}}
 
+    <mat-radio-group [(ngModel)]="orderType">
+        <mat-radio-button value="SELL">SELL</mat-radio-button>
+        <mat-radio-button value="BUY">BUY</mat-radio-button>
+    </mat-radio-group>
 
-    <mat-select placeholder="New Watchdog" (change)="onCoinSelectChanged($event)">
-        <mat-option *ngFor="let coin of coinsSelected" [value]="coin.id">
-             {{coin.symbol}} <span class="small">({{coin.name}})</span>
-        </mat-option>
-    </mat-select>
+    <mat-checkbox [(ngModel)]="isActive">Active</mat-checkbox>
+    <button mat-raised-button color="accent" (click)="onCreateClick()">Create</button>
 
-    <button mat-raised-button color="accent" (click)="saveDogClick()">Save</button>
-    <hr/>
-    <div>
-        <h4> Watch Dogs </h4> <small>Total {{watchDogs.length}}</small>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Script</th>
-                <th>Symbol</th>
-                <th>1h%</th>
-                <th>24h%</th>
-                <th>7days%</th>
-                <th>$US</th>
-                <th>Rank</th>
-                <th>Coin Name</th>
-                <td><small>Delete</small></td>
-            </tr>
-
-            <tbody>
-
-          <!--  <tr *ngFor="let dog of watchDogs">
-                <td><small class="btn" (click)="onDogClick(dog)">{{dog.uid}}</small></td>
-                <td><b><small>{{dog.dogName}}</small></b></td>
-                <td><small>{{dog.description}}</small></td>
-                <td><div class="btn {{dog.scriptIcon}}" (click)="onScriptClick(dog)"></div></td>
-                <td><b><small>{{dog.marketCap.symbol}}</small></b></td>
-                <td>{{dog.marketCap.percent_change_1h}}</td>
-                <td>{{dog.marketCap.percent_change_24h}}</td>
-                <td>{{dog.marketCap.percent_change_7d}}</td>
-                <td>{{dog.marketCap.price_usd}}</td>
-                <td>{{dog.marketCap.rank}}</td>
-                <td><div class="w5 ell">{{dog.marketCap.name}}</div></td>
-                <td><div (click)="onDeleteClick(dog)"  class="fa fa-close"></div></td>
-            </tr>-->
-
-            </tbody>
-        </table>
-
-    </div>
-
+    <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
 </div>

@@ -12,6 +12,7 @@ import {RouterModule} from '@angular/router';
 import {BotsRunningComponent} from './bots-running/bots-running.component';
 import {TradesHistoryComponent} from './trades-history/trades-history.component';
 import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
+import { CoinDayTriggersComponent } from './coin-day-triggers/coin-day-triggers.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
     AmountCoinComponent,
     BotsRunningComponent,
     TradesHistoryComponent,
-    CoinCandlesComponent
+    CoinCandlesComponent,
+    CoinDayTriggersComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -40,7 +42,8 @@ import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
     AmountCoinComponent,
     BotsRunningComponent,
     TradesHistoryComponent,
-    CoinCandlesComponent
+    CoinCandlesComponent,
+    CoinDayTriggersComponent
   ]
 })
 export class WidgetsModule { }
