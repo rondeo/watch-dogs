@@ -26,9 +26,9 @@ export class MyExchangeService {
   }
 
   getMyPivateExchanges(): string[] {
-    let my: string[] = JSON.parse(localStorage.getItem('my-exchanges'));
-    if (!my) my = this.apisPrivate.getAllAvailable();
-    return my
+   // let my: string[] = JSON.parse(localStorage.getItem('my-exchanges'));
+   // if (!my) my = this.apisPrivate.getAllAvailable();
+    return this.apisPrivate.getAllAvailable();
   }
 
   async getBooks(exchange: string, base: string, coin: string) {

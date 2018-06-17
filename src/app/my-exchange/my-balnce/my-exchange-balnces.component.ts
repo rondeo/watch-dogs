@@ -100,6 +100,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
 
   async dowloadAllBalances() {
+    if(!this.exchange) return;
     this.isBalancesLoading = true;
     this.MC = await this.marketCap.getData();
    // console.log(this.exchange);
@@ -200,7 +201,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   onEchangeChanged(evt: MatSelectChange){
     //console.log(exch);
-    this.router.navigate(['../'+evt.value], {relativeTo: this.route})
+    this.router.navigateByUrl('/my-exchange/balances/' + evt.value);
   }
 
 }

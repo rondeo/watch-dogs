@@ -22,7 +22,6 @@ export const rootRouterConfig: Routes = [
   { path: '', redirectTo: 'market-cap/all-coins', pathMatch: 'full' },
   { path: 'exchange-ss', component:ExchangeSsComponent },
   { path: 'coins-exchanges/:list', component: CoinsExchangesComponent},
-
   { path: 'shape-shift-market-cap', component: SSCoinsAvailableComponent},
   { path: 'login/:topic', component: LoginComponent },
   { path: 'login-confirm/:session', component:ConfirmComponent },
