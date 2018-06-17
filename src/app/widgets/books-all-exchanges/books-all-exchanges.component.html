@@ -1,0 +1,23 @@
+<section class="mat-typography">
+    <span class="mat-title">Books</span>    &nbsp;&nbsp;&nbsp;
+    <span class="mat-subheading-2"> <small>$</small>
+        <input class="w5" #amount type="number" min="10" max="1000000"
+               step="10000" (keyup.enter)="onAmountEnter(amount.value)"
+               value="1000"/>
+    </span>
+
+    <div class="mat-body-2">By CMC {{coinPriceMC}}</div>
+    <table>
+        <tr *ngFor="let item of allMarkets" class="{{item.selected?'selected':''}}">
+            <td>{{item.exchange}}</td>
+            <td><span class="btn" (click)="onBooksClick(item)">{{item.market}}</span></td>
+            <td>
+                <app-books-for-amount
+                        [market]="item.market"
+                        [exchange]="item.exchange"
+                        [amountUS]="amountUS"
+                ></app-books-for-amount>
+            </td>
+        </tr>
+    </table>
+</section>
