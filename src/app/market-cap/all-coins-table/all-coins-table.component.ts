@@ -9,6 +9,7 @@ import {StorageService} from '../../services/app-storage.service';
 
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMC} from '../../models/api-models';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class AllCoinsTableComponent implements OnInit {
   asc_desc='asc';
   constructor(
     private marketCap:ApiMarketCapService,
-    private storage:StorageService
+    private storage:StorageService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -54,6 +56,11 @@ export class AllCoinsTableComponent implements OnInit {
     let symbol = coin.symbol;
     if(event.target.checked) this.storage.addMCSelected(symbol);
     else this.storage.deleteSelectedMC(symbol);
+  }
+
+
+  onSymbolClick(symbol: string) {
+    this.router.navigateByUrl('/trader/analyze-coin/' + symbol);
   }
 
   onClickHeader(creteria:string):void{

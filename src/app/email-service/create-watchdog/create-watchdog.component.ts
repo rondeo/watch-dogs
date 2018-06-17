@@ -40,7 +40,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
   //private sub3;
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const amount = params.balance || 100;
+      const amount = params.amount || 100;
       this.amount =  Math.ceil(amount);
     })
     this.route.params.subscribe(params =>{

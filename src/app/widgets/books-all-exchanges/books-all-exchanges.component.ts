@@ -10,15 +10,18 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 })
 export class BooksAllExchangesComponent implements OnInit {
 
-  @ViewChild('amount') amoubtView: ElementRef;
+ // @ViewChild('amount') amoubtView: ElementRef;
 
   @Input() coin: string;
   @Output() marketExchange: EventEmitter<{ exchange: string, market: string }> = new EventEmitter();
+  @Output() amount: EventEmitter<number> = new EventEmitter();
 
   selected: { exchange: string, market: string, selected: boolean };
   allMarkets: { exchange: string, market: string, selected: boolean }[];
   amountUS = 1000;
   coinPriceMC: number;
+
+  amountInput:number;
 
   exchange: string;
   market: string;
@@ -46,21 +49,16 @@ export class BooksAllExchangesComponent implements OnInit {
     })
   }
 
-
   onAmountEnter(evt) {
-    let am = Number(evt);
+    this.amountUS = this.amountInput;
+    this.amount.emit(this.amountUS);
 
-    if (am < 10) {
-      am = 10;
-      this.amoubtView.nativeElement.value = am
-    }
-    this.amountUS = am;
   }
 
 
   onBooksClick(item) {
     if (item == this.selected) return;
-    console.log(item);
+   //  console.log(item);
     if (this.selected) this.selected.selected = false;
     item.selected = true;
     this.selected = item;

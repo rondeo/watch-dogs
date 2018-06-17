@@ -9,7 +9,7 @@
     </mat-form-field>
     <button mat-button
             routerLink="/email-service/create-bot/{{exchange}}/{{base}}/{{coin}}"
-            [queryParams]="{balance:balanceCoinUS}"
+            [queryParams]="{amount:balanceCoinUS}"
             [disabled]="!exchange || !base || !coin" >
         <span>
             WD

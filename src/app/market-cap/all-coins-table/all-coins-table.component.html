@@ -24,7 +24,7 @@
                 <td><input type="checkbox" (change)="onCoinSelected($event, item)" [checked]="item.selected"
                            name="selected"/></td>
                 <td class="w120 ell">{{item.id}}</td>
-                <td><a class="btn" routerLink="/trader/analyze-coin/{{item.symbol}}">{{item.symbol}}</a></td>
+                <td><a class="btn" (click)="onSymbolClick(item.symbol)">{{item.symbol}}</a></td>
                 <td><span [ngClass]="item.percent_change_1h>0?'green':'red'">{{item.percent_change_1h}}</span></td>
                 <td><span [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">{{item.percent_change_24h}}</span></td>
                 <td><span [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">{{item.percent_change_7d}}</span></td>

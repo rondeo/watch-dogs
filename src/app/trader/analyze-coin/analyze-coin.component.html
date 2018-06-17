@@ -11,10 +11,11 @@
                 [disabled]="isDisabled()"
         ><span class="fa fa-exchange fa-2x"></span></button>
         <button
-                routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+                routerLink="/email-service/create-bot/{{exchange}}/{{market.split('_').join('/')}}"
+                [queryParams]="{ amount: amountUS }"
                 mat-raised-button color="accent"
                 [disabled]="isDisabled()"
-        ><span class="fa fa-exchange fa-2x"></span></button>
+        ><span>WD</span></button>
     </p>
 
 
@@ -25,7 +26,11 @@
     </section>
 
     <p>
-        <app-books-all-exchanges [coin]="coin"></app-books-all-exchanges>
+        <app-books-all-exchanges
+                [coin]="coin"
+                (marketExchange)="onMarketExchangeChange($event)"
+                (amount)="onAmountChanged($event)"
+        ></app-books-all-exchanges>
     </p>
 
     <p>
@@ -33,28 +38,5 @@
     </p>
 
     <br/>
-
-    <!--<section class="mat-typography">
-        <span class="mat-title">Books</span>
-        &nbsp;&nbsp;&nbsp;
-        <span class="mat-subheading-2"> <small>$</small> <input class="w5" #amount type="number" min="10" max="1000000"
-                                                                step="10000" (keyup.enter)="onAmountlick(amount.value)"
-                                                                value="1000"/></span>
-        <div class="mat-body-2">By CMC {{coinPriceMC}}</div>
-        <table>
-            <tr *ngFor="let item of allMarkets">
-                <td>{{item.exchange}}</td>
-                <td><span class="btn" (click)="onBooksClick(item)">{{item.market}}</span></td>
-                <td>
-                    <app-books-for-amount
-                            [market]="item.market"
-                            [exchange]="item.exchange"
-                            [amountUS]="amountUS"
-                    ></app-books-for-amount>
-                </td>
-            </tr>
-        </table>
-    </section>
--->
 
 </div>
