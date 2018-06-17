@@ -353,8 +353,8 @@ export class UtilsOrder{
       let priceUS = this.b * item.rate;
       let amountUS =  item.amountCoin  * item.rate * this.b;
 
-      item.priceBaseUS = +priceUS.toPrecision(4);
-      item.amountBaseUS = Math.round(amountUS);
+      item.priceUS = +priceUS.toPrecision(4);
+      item.amountUS = Math.round(amountUS);
 
       if(priceUS < this.out.min )this.out.min = priceUS;
       if(priceUS > this.out.max )this.out.max = priceUS;
@@ -417,8 +417,8 @@ export class UtilsOrder{
 
 
 
-      item.priceBaseUS = +priceUS.toPrecision(4);
-      item.amountBaseUS = Math.round(amountUS);
+      item.priceUS = +priceUS.toPrecision(4);
+      item.amountUS = Math.round(amountUS);
 
 
 

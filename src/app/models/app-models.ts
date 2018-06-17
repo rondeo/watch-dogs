@@ -161,10 +161,9 @@ export interface VOOrder {
   timestamp?: number;
   rate?: number;
   exchange?: string;
-  priceBaseUS?: number;
-  amountBaseUS?: number;
-  amountCoinUS?: number;
   priceUS?: number;
+  amountUS?: number;
+  // amountCoinUS?: number; priceUS?: number;
   amountCoin?: number;
   amountBase?: number;
   fee?: number;

@@ -67,8 +67,8 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
     let amount = 0;
 
      ar.forEach(function (item) {
-      amount += item.amountBaseUS;
-      sum += item.amountBaseUS * item.priceBaseUS;
+      amount += item.amountUS;
+      sum += item.amountUS * item.priceUS;
     })
 
     this.accumSum = 0;
@@ -83,9 +83,9 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
   parseData(data:VOOrder){
     if(this.priceBaseUS){
-      data.amountBaseUS = data.amountCoin * data.rate * this.priceBaseUS;
-      data.priceBaseUS = data.rate * this.priceBaseUS;
-      this.accumSum += Math.round(data.action==='BUY'? data.amountBaseUS:-data.amountBaseUS);
+      data.amountUS = data.amountCoin * data.rate * this.priceBaseUS;
+      data.priceUS = data.rate * this.priceBaseUS;
+      this.accumSum += Math.round(data.action==='BUY'? data.amountUS:-data.amountUS);
       this.accummulate.push(data);
     }
 

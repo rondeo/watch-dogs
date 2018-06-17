@@ -29,12 +29,16 @@
 
         <div>
             <span class="fa fa-ship"></span>
+            <mat-form-field class="w4">
+                <input matInput placeholder="Over" [(ngModel)]="amountFishUS"
+                       (ngModelChange)="onAmountFishChanged($event)">
+            </mat-form-field>
             <table>
                 <tbody>
-                <tr *ngFor="let fish of analytics.fishes">
+                <tr *ngFor="let fish of fishes">
                     <td>{{fish.action}} </td>
-                    <td>{{fish.amountBaseUS}} </td>
-                    <td>{{fish.priceBaseUS}} </td>
+                    <td>{{fish.amountUS}} </td>
+                    <td>{{fish.priceUS}} </td>
                 </tr>
                 </tbody>
             </table>

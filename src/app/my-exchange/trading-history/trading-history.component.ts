@@ -82,7 +82,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
     let uuid = order.uuid;
 
-    if(!confirm('Cancel order '+ order.action + ' ' + order.amountBaseUS +' '+ order.priceUS +'?')) return;
+    if(!confirm('Cancel order '+ order.action + ' ' + order.amountUS +' '+ order.priceUS +'?')) return;
 
     api.cancelOrder(uuid).toPromise().then(res=>{
       console.log(res);
@@ -191,8 +191,8 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       uuid:order.uuid,
       amountBase:order.amountBase,
       amountCoin:order.amountCoin,
-      amountCoinUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
-      amountBaseUS: Math.round(order.amountBase * priceBaseUS),
+       amountUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
+     //  amountUS: Math.round(order.amountBase * priceBaseUS),
       priceUS:+(order.rate * priceBaseUS).toPrecision(4) ,
       rate:order.rate,
       action:order.action,

@@ -111,7 +111,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
 
       this.openOrders = res.map(function (item) {
-        item.amountCoinUS = Math.round(item.amountCoin * item.rate * this.pB);
+        item.amountUS = Math.round(item.amountCoin * item.rate * this.pB);
         item.priceUS = +(item.rate * this.pB).toPrecision(3);
         item.act = item.action.substr(0,1)
         return item
@@ -162,7 +162,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
       //console.warn(res);
       this.ordersHistory = res.map(function (item) {
-        item.amountCoinUS = Math.round(item.amountCoin * item.rate * this.pB);
+        item.amountUS = Math.round(item.amountCoin * item.rate * this.pB);
         item.priceUS = +(item.rate * this.pB).toPrecision(3);
         item.act = item.action.substr(0,1)
         return item
@@ -201,8 +201,8 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
       if(!item.isOpen){
 
         totalFee += item.fee;
-        if(item.action === 'BUY') totalBuy += item.amountCoinUS;
-        else if(item.action ==='SELL') totalSell+= item.amountCoinUS;
+        if(item.action === 'BUY') totalBuy += item.amountUS;
+        else if(item.action ==='SELL') totalSell+= item.amountUS;
         else console.error(' no isActive ', item);
       }
 
@@ -225,7 +225,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
 
     let uuid = order.uuid;
 
-    if(!confirm('Cancel order '+ order.action + ' ' + order.amountCoinUS +' '+ order.priceUS +'?')) return;
+    if(!confirm('Cancel order '+ order.action + ' ' + order.amountUS +' '+ order.priceUS +'?')) return;
 
     api.cancelOrder(uuid).toPromise().then(res=>{
       console.log('order canceled ', res);

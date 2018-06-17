@@ -61,6 +61,7 @@ export interface VOMCAgregated extends VOMarketCap{
   ago3h: number;
   date: string;
   total_supply?: number;
+  rankChange24h?: number;
 }
 
 export const VOMCAGREGATED: VOMCAgregated = {

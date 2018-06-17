@@ -86,4 +86,9 @@
         <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
     </mat-card>
 
+    <mat-checkbox [(ngModel)]="isCoinDay"> Coin Day</mat-checkbox>
+    <p *ngIf="isCoinDay">
+        <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
+    </p>
+
 </div>

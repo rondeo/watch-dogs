@@ -29,6 +29,7 @@ export class BuySellCoinComponent implements OnInit {
   ) {
   }
 
+  isCoinDay = false;
   exchange: string;
   market: string;
   coin: string;
@@ -314,7 +315,7 @@ export class BuySellCoinComponent implements OnInit {
     const baseMC = this.MC[order.base];
     order.feeUS = +(order.fee *  baseMC.price_usd).toFixed(2)
     order.priceUS = +(order.rate * baseMC.price_usd).toPrecision(4);
-    order.amountCoinUS = +(order.amountCoin * coinMC.price_usd).toFixed(0);
+    order.amountUS = +(order.amountCoin * coinMC.price_usd).toFixed(0);
     this.lastOrder = order;
   }
 }

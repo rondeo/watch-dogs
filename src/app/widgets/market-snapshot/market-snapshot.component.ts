@@ -55,9 +55,12 @@ export class MarketSnapshotComponent implements OnInit {
   private coinMC: VOMCAgregated;
   private allCoins: { [symbol: string]: VOMCAgregated };
 
+  private marketHistory: VOOrder[];
+  fishes: VOOrder[];
+  amountFishUS: number = 10000;
+
 
   exchanges: string[];
-
 
   isRefreshingHistory: boolean;
 
@@ -100,15 +103,36 @@ export class MarketSnapshotComponent implements OnInit {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
     const history: VOOrder[] = await api.downloadMarketHistory(this.baseMC.symbol, this.coinMC.symbol).toPromise();
+    this.marketHistory = history;
+
     // console.log(coindatas);
     if (!history) throw new Error('No coindatas base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
     this.isRefreshingHistory = false
+    this.calculeteFishes();
 
   }
 
+
   onRefreshHistory() {
     this.downloadHistory();
+  }
+
+  calculeteFishes() {
+    if (!this.amountFishUS) return;
+    const history = this.marketHistory;
+    const basePrice = this.baseMC.price_usd;
+    const priceCoin = this.coinMC.price_usd
+    // console.log(history, basePrice);
+    const amount = this.amountFishUS / priceCoin;
+    this.fishes = history.filter(function (item) {
+      return item.amountCoin > amount;
+    })
+  }
+
+  onAmountFishChanged(evt) {
+
+    this.calculeteFishes();
   }
 
 }

@@ -109,9 +109,9 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async downlaodTicker() {
-    const ticker = await this.apiMarketCap.getData();
+    const ticker = await this.apiMarketCap.getDataWithRankChange();
     this.btcMC = ticker['BTC']
-     //console.log(ticker);
+     console.log(ticker);
     this.allCoins = Object.values(ticker);
     if (this.exchange) this.loadExchange();
     else this.sortData();

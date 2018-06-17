@@ -39,28 +39,28 @@ export class MarketHistory{
           out.push({
             amountBuy:'',
             rateBuy:'',
-            amountSell:order1.amountBaseUS+'',
-            rateSell:order1.priceBaseUS+''
+            amountSell:order1.amountUS+'',
+            rateSell:order1.priceUS+''
 
           })
           out.push({
             amountBuy:'',
             rateBuy:'',
-            amountSell:order2.amountBaseUS+'',
-            rateSell:order2.priceBaseUS+''
+            amountSell:order2.amountUS+'',
+            rateSell:order2.priceUS+''
 
           })
         } else  if(order1.action ==='BUY') {
           out.push({
-            amountBuy:order1.amountBaseUS+'',
-            rateBuy:order1.priceBaseUS+'',
+            amountBuy:order1.amountUS+'',
+            rateBuy:order1.priceUS+'',
             amountSell:'',
             rateSell:''
 
           })
           out.push({
-            amountBuy:order2.amountBaseUS+'',
-            rateBuy:order2.priceBaseUS+'',
+            amountBuy:order2.amountUS+'',
+            rateBuy:order2.priceUS+'',
             amountSell:'',
             rateSell:''
 
@@ -70,19 +70,19 @@ export class MarketHistory{
       else{
         if(order1.action ==='SELL'){
           out.push({
-            amountBuy:order2.amountBaseUS+'',
-            rateBuy:order2.priceBaseUS+'',
-            amountSell:order1.amountBaseUS+'',
-            rateSell:order1.priceBaseUS+''
+            amountBuy:order2.amountUS+'',
+            rateBuy:order2.priceUS+'',
+            amountSell:order1.amountUS+'',
+            rateSell:order1.priceUS+''
 
           })
 
         }else{
           out.push({
-            amountBuy:order1.amountBaseUS+'',
-            rateBuy:order1.priceBaseUS+'',
-            amountSell:order2.amountBaseUS+'',
-            rateSell:order2.priceBaseUS+''
+            amountBuy:order1.amountUS+'',
+            rateBuy:order1.priceUS+'',
+            amountSell:order2.amountUS+'',
+            rateSell:order2.priceUS+''
 
           })
 

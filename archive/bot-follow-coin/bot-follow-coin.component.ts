@@ -86,7 +86,7 @@ export class BotFollowCoinComponent implements OnInit {
     })
   }
 
-  async getWeekForCoins(gainersVolumeSorted, moment) {
+/*  async getWeekForCoins(gainersVolumeSorted, moment) {
     const out = {};
 
     const step = 15;
@@ -123,7 +123,7 @@ export class BotFollowCoinComponent implements OnInit {
     const data12 = await this.marketCap.downloadOneRecord(moment.add(step, stepOf).format(), null).toPromise();
     this.analigeGaners(gainersVolumeSorted, data12);
     return out;
-  }
+  }*/
 
   private filterMyCoins(res: any): any {
     const out = {};
@@ -179,9 +179,9 @@ export class BotFollowCoinComponent implements OnInit {
 
     const gainersSorted = _.takeRight(gainers, 20);
 
-    const done = await this.getWeekForCoins(gainersSorted, weekago);
+   // const done = await this.getWeekForCoins(gainersSorted, weekago);
 
-    console.log(done);
+   // console.log(done);
   }
 
   async downloadHistory() {

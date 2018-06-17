@@ -72,6 +72,21 @@ export class ApiMarketCapService {
      });
   }
 
+  async getDataWithRankChange(): Promise<VOMCObj>{
+    if(this.data && this.data['BTC'].rankChange24h) return Promise.resolve(this.data);
+    const result  = await this.downloadOneRecord(moment().subtract(1, 'd').toISOString()).toPromise();
+    console.log('day ago '+result.createdAt);
+    const oldMC = result.data;
+    const newMC = await this.getData();
+    Object.values(newMC).forEach(function (item) {
+      if(!!oldMC[item.symbol]) {
+        const rankOld: number =  oldMC[item.symbol].rank;
+        item.rankChange24h = +(100 * (rankOld - item.rank)/rankOld).toFixed(2);
+      }
+    });
+    return newMC;
+  }
+
   getData(): Promise<VOMCObj> {
     if(this.data) return Promise.resolve(this.data);
     return new Promise<VOMCObj>(async (resolve, reject) => {
@@ -113,7 +128,7 @@ export class ApiMarketCapService {
       });
   }
 
-  downloadOneRecord(after: string, before: string,): Observable<{ createdAt: string; data: { [symbol: string]: VOMarketCap } }> {
+  downloadOneRecord(before: string, after?: string,): Observable<{ createdAt: string; data: { [symbol: string]: VOMarketCap } }> {
     const q = before ? 'before=' + before : 'after=' + after;
     const url = '/api/front-desk/market-cap/one-record?' + q;
     console.log(url);

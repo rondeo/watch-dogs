@@ -40,7 +40,6 @@ const routes: Routes = [
   {
     path: 'my-bot', component: Outlet,
     children: [
-      {path: '', redirectTo: 'follow-coin', pathMatch: 'full'},
       {path: 'sell-coins', component: BotSellCoinComponent}
     ]
   }
