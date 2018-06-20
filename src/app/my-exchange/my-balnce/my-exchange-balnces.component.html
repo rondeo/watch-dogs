@@ -1,42 +1,57 @@
 <div>
 
-    <mat-form-field class="w8" >
-        <mat-select [ngModel] = "exchange"  placeholder="Select Exchange" (change)="onEchangeChanged($event)">
+    <mat-form-field class="w8">
+        <mat-select [ngModel]="exchange" placeholder="Select Exchange" (change)="onEchangeChanged($event)">
             <mat-option *ngFor="let exch of exchangesPrivate" [value]="exch">
                 {{exch}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-
+    &nbsp;&nbsp;&nbsp;
+    <a  routerLink="/market-cap/gainers-losers/{{exchange}}">
+        <span class="btn fa fa-thumbs-o-up fa-2x"></span>
+        <span class="fa fa-thumbs-o-down fa-flip-horizontal fa-2x"></span>
+    </a>
 
     <div class="mat-subheading-1">My {{exchange}} <span class="mat-title"> ${{total}}</span></div>
     <section>
         <mat-checkbox (change)="onShowAll($event)">Show All</mat-checkbox>
 
         &nbsp; &nbsp;
-        <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="refreshBalances()"></span>
+        <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right"
+              (click)="refreshBalances()"></span>
         <table class="small">
             <tbody>
             <tr>
                 <th>Coin</th>
-                <th  class="btn large" (click)="sortByBalance()">Balance</th>
-                <th  class="btn large" (click)="onSortClick('percent_change_1h')">1h%</th>
-                <th  class="btn large" (click)="onSortClick('percent_change_24h')" >24h%</th>
-                <th  class="btn large" (click)="onSortClick('percent_change_7d')">7d%</th>
+                <th class="btn large" (click)="sortByBalance()">Balance</th>
+                <th class="btn large" (click)="onSortClick('percent_change_1h')">1h%</th>
+                <th class="btn large" (click)="onSortClick('percent_change_24h')">24h%</th>
+                <th class="btn large" (click)="onSortClick('percent_change_7d')">7d%</th>
                 <th>Price</th>
             </tr>
             <ng-container *ngFor="let balance of balancesAr">
                 <tr>
                     <td class="ell">
-                        <img class="w1 icon" src="assets/icons/{{balance.id}}.png" />
+                        <img class="w1 icon" src="assets/icons/{{balance.id}}.png"/>
                         <small class="btn" (click)="onSymbolClick(balance)">{{balance.symbol}}</small>
                     </td>
 
-                    <td><span  class="btn" (click)="onBalanceClick(balance)"><small class="grey">$</small>{{balance.balanceUS}}</span></td>
-                    <td><span [ngClass]="balance.percent_change_1h>0?'green':'red'">{{balance.percent_change_1h}}</span></td>
-                    <td><span [ngClass]="balance.percent_change_24h>0?'green':'red'">{{balance.percent_change_24h}}</span></td>
-                    <td><span [ngClass]="balance.percent_change_7d>0?'green':'red'">{{balance.percent_change_7d}}</span></td>
-                    <td><small class="btn" (click)="onPriceClick(balance)" ><small class="grey">$</small>{{balance.priceUS}}</small></td>
+                    <td><span class="btn" (click)="onBalanceClick(balance)"><small class="grey">$</small>{{balance.balanceUS}}</span>
+                    </td>
+                    <td><span [ngClass]="balance.percent_change_1h>0?'green':'red'">{{balance.percent_change_1h}}</span>
+                    </td>
+                    <td><span
+                            [ngClass]="balance.percent_change_24h>0?'green':'red'">{{balance.percent_change_24h}}</span>
+                    </td>
+                    <td><span [ngClass]="balance.percent_change_7d>0?'green':'red'">{{balance.percent_change_7d}}</span>
+                    </td>
+                    <td>
+                        <small class="btn" (click)="onPriceClick(balance)">
+                            <small class="grey">$</small>
+                            {{balance.priceUS}}
+                        </small>
+                    </td>
 
                 </tr>
             </ng-container>

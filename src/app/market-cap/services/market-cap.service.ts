@@ -42,7 +42,7 @@ export class MarketCapService {
     return this.coins[symbol];
   }*/
 
-  private currentExchange: string;
+ /* private currentExchange: string;
   setCurentExchange(exchange : string){
     this.currentExchange = exchange;
     localStorage.setItem('current-exchange', exchange);
@@ -50,7 +50,7 @@ export class MarketCapService {
   getCurrentExchange():string{
     if(!this.currentExchange) this.currentExchange = localStorage.getItem('current-exchange');
     return this.currentExchange
-  }
+  }*/
 
   /*  getCoinsData():Observable<{[symbol:string]:VOMarketCap}>{
 

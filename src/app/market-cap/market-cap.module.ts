@@ -15,7 +15,7 @@ import {CoinsExchangesComponent} from './coins-exchanges/coins-exchanges.compone
 import {FormsModule} from '@angular/forms';
 import {MarketCapMainComponent} from './market-cap-main/market-cap-main.component';
 
-import {UiModule} from "../ui/ui.module";
+import {UiModule} from '../ui/ui.module';
 
 
 const routes: Routes = [
@@ -25,7 +25,8 @@ const routes: Routes = [
       {path: '', redirectTo: 'selected', pathMatch: 'full'},
       {path: 'all-coins', component: AllCoinsTableComponent},
       {path: 'selected', component: SelectedCoinsComponent},
-      {path: 'gainers-losers', component: GainersLosersComponent},
+      {path: 'gainers-losers', redirectTo: 'gainers-losers/all', pathMatch: 'full'},
+      {path: 'gainers-losers/:exchange', component: GainersLosersComponent},
       {path: 'coin-exchanges/:coinId', component: CoinsExchangesComponent},
       {path: 'exchanges-list', component: ExchangesListComponent}
     ]

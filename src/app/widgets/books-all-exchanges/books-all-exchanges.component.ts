@@ -33,6 +33,7 @@ export class BooksAllExchangesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.amountInput = this.amountUS;
     this.getMarkets();
   }
 

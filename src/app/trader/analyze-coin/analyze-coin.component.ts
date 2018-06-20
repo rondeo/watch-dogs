@@ -4,6 +4,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMCAgregated} from '../../models/api-models';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class AnalyzeCoinComponent implements OnInit {
   @ViewChild('amount') amoubtView: ElementRef;
 
   coin: string;
+  coinMC: VOMCAgregated = new VOMCAgregated();
   exchange: string;
   market: string;
   amountUS = 1000;
@@ -40,11 +42,14 @@ export class AnalyzeCoinComponent implements OnInit {
       this.exchange = params.exchange;
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
+
+
         this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
           //  console.warn(res);
           this.marketCap.getData().then(MC => {
             this.coinPriceMC = MC[coin].price_usd;
-            this.allMarkets = res;
+            this.coinMC = MC[coin];
+              this.allMarkets = res;
           })
         })
       }
@@ -57,28 +62,6 @@ export class AnalyzeCoinComponent implements OnInit {
   isDisabled() {
     return !this.exchange || !this.market;
   }
-
-  /*onBooksClick(item) {
-    console.log(item);
-    this.market = item.market;
-    this.exchange = item.exchange;
-  }
-
-  onAmountlick(evt) {
-    let am = Number(evt);
-
-    if (am < 10) {
-      am = 10;
-      this.amoubtView.nativeElement.value = am
-    }
-    this.amountUS = am;
-  }
-
-
-  onExchangeMarketClick() {
-    //  const ar = this.market.split('_')
-    // this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
-  }*/
 
   onLineChartClick() {
     if (this.exchange && this.market) {

@@ -7,6 +7,7 @@ import {SortableTableComponent} from './sortable-table/sortable-table.component'
 import {LineChartComponent} from './line-chart/line-chart.component';
 import {CrossTableComponent} from './cross-table/cross-table.component';
 import {FormsModule} from '@angular/forms';
+import { McDataComponent } from './mc-data/mc-data.component';
 
 @NgModule({
   exports: [
@@ -15,7 +16,8 @@ import {FormsModule} from '@angular/forms';
     LineGraphComponent,
     SortableTableComponent,
     LineChartComponent,
-    CrossTableComponent
+    CrossTableComponent,
+    McDataComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import {FormsModule} from '@angular/forms';
     LineGraphComponent,
     SortableTableComponent,
     LineChartComponent,
-    CrossTableComponent
+    CrossTableComponent,
+    McDataComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

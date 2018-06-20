@@ -29,7 +29,7 @@ export interface MCdata {
 }
 
 
-export interface VOMCAgregated extends VOMarketCap{
+export class VOMCAgregated extends VOMarketCap{
   symbol: string;
   id: string;
   price_btc: number;

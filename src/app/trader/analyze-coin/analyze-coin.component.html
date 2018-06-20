@@ -1,29 +1,36 @@
 <div>
+    <app-mc-data [mcdata]="coinMC"> </app-mc-data>
+
+    <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
+
     <p>
-        <span class="mat-body-2">{{exchange}} {{market}}</span>
-        <button mat-raised-button color="primary"
-                (click)="onLineChartClick()"
-                [disabled]="!exchange"
-        ><span class="fa fa-line-chart fa-2x"></span></button>
-        <button
-                routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
-                mat-raised-button color="accent"
-                [disabled]="isDisabled()"
-        ><span class="fa fa-exchange fa-2x"></span></button>
-        <button
-                routerLink="/email-service/create-bot/{{exchange}}/{{market.split('_').join('/')}}"
-                [queryParams]="{ amount: amountUS }"
-                mat-raised-button color="accent"
-                [disabled]="isDisabled()"
-        ><span>WD</span></button>
+        &nbsp; &nbsp;
+        <a routerLink="/my-exchange/balances/{{exchange}}">
+            <span class="btn fa fa-dollar fa-2x dgreen"></span>
+            <span class="btn mat-body-2">{{exchange}}</span>
+        </a>
+        &nbsp; &nbsp;
+        <span class="mat-body-2"> {{market}}</span>
+        &nbsp; &nbsp;
+
+        <a color="primary"
+           (click)="onLineChartClick()"
+
+        ><span class="fa fa-line-chart fa-2x"></span>
+        </a>
+        &nbsp; &nbsp;
+        <a routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+           color="accent"
+        ><span class="fa fa-exchange fa-2x"></span>
+        </a>
+        &nbsp; &nbsp;
+        <a routerLink="/email-service/create-bot/{{exchange}}/{{market.split('_').join('/')}}"
+           [queryParams]="{ amount: amountUS }"
+           color="accent"
+        ><span>WD</span>
+        </a>
     </p>
 
-
-    <span class="mat-headline">{{coin}} </span>
-
-    <section>
-        <app-coin-day [coin]="coin"></app-coin-day>
-    </section>
 
     <p>
         <app-books-all-exchanges

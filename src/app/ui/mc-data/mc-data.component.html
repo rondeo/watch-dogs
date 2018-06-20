@@ -1,0 +1,8 @@
+<p class="mat-body">
+    <span> {{mcdata.name}} </span>
+    <span> {{mcdata.id}} </span>
+    <span>  ${{mcdata.price_usd}}</span>
+    <span [ngClass]="mcdata.percent_change_1h>0?'green':'red'">{{mcdata.percent_change_1h}}</span>
+    <span [ngClass]="mcdata.percent_change_24h>0?'dgreen':'dred'">{{mcdata.percent_change_24h}}</span>
+    <span [ngClass]="mcdata.percent_change_7d>0?'dgreen':'dred'">{{mcdata.percent_change_7d}}</span>
+</p>

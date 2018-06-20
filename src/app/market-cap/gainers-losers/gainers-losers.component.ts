@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MarketCapService} from '../services/market-cap.service';
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ApisPublicService} from "../../apis/apis-public.service";
 import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
@@ -33,6 +33,7 @@ export class GainersLosersComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
     private apiMarketCap: ApiMarketCapService,
     private service: MarketCapService
@@ -64,10 +65,22 @@ export class GainersLosersComponent implements OnInit {
       this.sortBy = state.sortBy || this.sortBy;
       this.asc_desc = state.asc_desc || this.asc_desc;
       this.top = state.top || this.top;
-      this.exchange = state.exchange;
     }
 
     this.downlaodTicker();
+
+    this.route.params.subscribe(params => {
+      if(params.exchange !== this.exchange) {
+        this.exchange = params.exchange;
+
+      }
+      this.loadExchange();
+
+    })
+
+
+
+
   }
 
   onSymbolSelected(symbol: string) {
@@ -75,15 +88,21 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async onExcgangeChange(evt) {
-    this.service.setCurentExchange(this.exchange);
+    // this.service.setCurentExchange(this.exchange);
     // this.exchange = evt.value;
-    this.loadExchange();
-    this.saveState();
+    this.router.navigateByUrl('/market-cap/gainers-losers/' + this.exchange);
+    // this.loadExchange();
+   //  this.saveState();
 
   }
 
   async loadExchange() {
     if (!this.exchange) return;
+    if (this.exchange === 'all'){
+      this.exchangeCoins = [];
+      this.sortData();
+      return;
+    }
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
     if (!api) {
       this.exchangeCoins = [];
