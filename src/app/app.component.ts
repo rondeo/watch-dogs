@@ -49,7 +49,10 @@ export class AppComponent implements OnInit {
   onExchangeLogin(loginType: ExchangeLogin) {
     let ref = this.dialog.open(LoginExchangeComponent, {
       width: '100vw',
-      height: '300px'
+      height: '300px',
+      data: {
+        exchange: loginType.exchange
+      }
     })
     ref.afterClosed().subscribe(data => {
       if (data && data.apiKey && data.password) {
@@ -62,7 +65,10 @@ export class AppComponent implements OnInit {
   onApplicationLogin(loginType: ExchangeLogin) {
     let ref = this.dialog.open(LoginFormComponent, {
       width: '300px',
-      height: '300px'
+      height: '300px',
+      data: {
+        exchange: loginType.exchange
+      }
     })
 
     ref.afterClosed().subscribe(data => {
