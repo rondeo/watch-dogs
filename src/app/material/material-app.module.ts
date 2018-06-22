@@ -18,7 +18,10 @@ import {
   MatTabsModule,
   MatSelectModule,
   MatSnackBarModule,
-  MatProgressSpinnerModule, MatChipsModule, MatSliderModule
+  MatProgressSpinnerModule,
+  MatChipsModule,
+  MatSliderModule,
+  MatTooltipModule
 
 } from '@angular/material';
 import {SortableTableComponent} from '../ui/sortable-table/sortable-table.component';
@@ -50,7 +53,8 @@ import {FormsModule} from '@angular/forms';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatSliderModule
+    MatSliderModule,
+    MatTooltipModule
 
   ],
   exports: [
@@ -72,6 +76,7 @@ import {FormsModule} from '@angular/forms';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatSliderModule,
+    MatTooltipModule
   ],
   declarations: [
     DialogSimpleComponent,

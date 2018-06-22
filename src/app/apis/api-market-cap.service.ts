@@ -74,13 +74,14 @@ export class ApiMarketCapService {
 
   async getDataWithRankChange(): Promise<VOMCObj>{
     if(this.data && this.data['BTC'].rankChange24h) return Promise.resolve(this.data);
-    const result  = await this.downloadOneRecord(moment().subtract(1, 'd').toISOString()).toPromise();
+    const result  = await this.downloadOneRecord(moment().subtract(1, 'd').format()).toPromise();
     console.log('day ago '+result.createdAt);
     const oldMC = result.data;
     const newMC = await this.getData();
     Object.values(newMC).forEach(function (item) {
       if(!!oldMC[item.symbol]) {
         const rankOld: number =  oldMC[item.symbol].rank;
+        item.rank24h = rankOld;
         item.rankChange24h = +(100 * (rankOld - item.rank)/rankOld).toFixed(2);
       }
     });

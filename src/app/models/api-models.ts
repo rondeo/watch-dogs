@@ -62,6 +62,7 @@ export class VOMCAgregated extends VOMarketCap{
   date: string;
   total_supply?: number;
   rankChange24h?: number;
+  rank24h?: number;
 }
 
 export const VOMCAGREGATED: VOMCAgregated = {

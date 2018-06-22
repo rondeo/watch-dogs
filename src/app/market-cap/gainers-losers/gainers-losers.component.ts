@@ -208,4 +208,15 @@ export class GainersLosersComponent implements OnInit {
     }
     return allCoins;
   }
+
+
+  onToBTCClick() {
+
+    this.sorted = this.allCoins.filter(function (item: VOMCAgregated) {
+      return item.tobtc_change_05h > 0 && item.tobtc_change_1h > 0  && item.tobtc_change_2h > 0  && item.tobtc_change_3h > 0
+    }).sort(function (a, b) {
+      return b.rankChange24h - a.rankChange24h;
+    }).slice(0, 50);
+  }
+
 }
