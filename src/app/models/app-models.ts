@@ -156,7 +156,6 @@ export interface VOOrder {
   isOpen: boolean;
   message?: string;
   action?: string;
-  act?: string
   date?: string;
   timestamp?: number;
   rate?: number;

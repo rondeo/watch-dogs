@@ -1,0 +1,14 @@
+<div>
+    <div class="mat-body">Open Orders {{market}} <span class="mat-body-2">{{orders.length}}</span></div>
+    <table>
+        <tbody>
+        <tr *ngFor="let order of orders">
+            <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
+            <td>{{order.amountCoin}}</td>
+            <td>{{order.rate}}</td>
+            <td>{{order.date}}</td>
+            <span class="btn fa fa-close dred fa-2x" (click)="onCancelOrderClick(order)"></span>
+        </tr>
+        </tbody>
+    </table>
+</div>

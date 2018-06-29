@@ -1,6 +1,8 @@
 <div>
-    <section>
-        <app-coin-day [coin]="coin" (coindatas)="onCoinDataChange($event)"></app-coin-day>
+    <section class="mat-body">
+        <span>Skips: {{skip}}</span>
+
+        <app-line-chart [graphs]="myGraps"></app-line-chart>
         <div class="triggers">
             <div>
                 <app-line-graph *ngIf="triggers" [linegraphs]="triggers" [horizont]="0" [vertical]="0" [height]="150"></app-line-graph>

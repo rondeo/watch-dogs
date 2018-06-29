@@ -25,6 +25,7 @@ export class SellCoinFilling {
     this.apiPrivate = apiPrivates.getExchangeApi(watchDog.exchange);
     this.apiPublic = apiPublics.getExchangeApi(watchDog.exchange);
     this.id = watchDog.id;
+    watchDog.status = WatchDogStatus.TO_SELL;
   }
 
   async sell(): Promise<WatchDogStatus> {

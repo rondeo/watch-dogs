@@ -70,42 +70,21 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       this.exchange = params.exchange;
       this.dowloadAllBalances();
     })
-
-
-    /*this.sub1 = this.apiService.connector$().subscribe(connector => {
-      this.currentConnector = connector;
-      if (!connector) return;
-
-      if(this.sub2)this.sub2.unsubscribe();
-
-      this.sub2 =  connector.balances$().subscribe(res=>{
-        this.isBalancesLoading = false;
-        if(!res) return;
-        this.data = res.filter(function (item) {
-          return !!item.id;
-        });
-
-        this.render();
-      });
-
-      /!*connector.isLogedIn$().subscribe(logedIn => {
-        connector.
-
-      })*!/
-
-    });*/
-
   }
 
+  async initAsync(){
+
+  }
 
 
   async dowloadAllBalances() {
     if(!this.exchange) return;
     this.isBalancesLoading = true;
     this.MC = await this.marketCap.getData();
-   // console.log(this.exchange);
-    this.balancesAll = await  this.privateService.getBalancesAll(this.exchange);
+   console.log(this.exchange);
+    this.balancesAll = await  this.privateService.getBalancesAll(this.exchange, true);
     const MC = this.MC;
+    console.log(this.balancesAll);
    // console.log(this.balancesAll);
     this.balancesAll.forEach(function (item) {
       const coinMC = MC[item.symbol];

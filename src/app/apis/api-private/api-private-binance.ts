@@ -13,6 +13,8 @@ import {Subject} from 'rxjs/Subject';
 import {UserLoginService} from '../../services/user-login.service';
 import {type} from 'os';
 import {WatchDog} from '../../models/watch-dog';
+import * as moment from 'moment';
+import {UTILS} from '../../com/utils';
 
 enum RequestType {
   GET,
@@ -34,12 +36,64 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
 
+  getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
+    let url = '/api/proxy/api.binance.com/api/v3/allOrders';
+    const data = {
+      symbol: coin + base
+    };
+    return this.call(url, data, RequestType.GET).map(res => {
+      console.log(res);
+
+      return res.map(function (item) {
+        return {
+          uuid: item.orderId,
+          action: item.side,
+          isOpen: item.status !== 'FILLED',
+          base: base,
+          coin: coin,
+          rate: +item.price,
+          amountBase: -1,
+          amountCoin: +item.origQty,
+          timestamp: item.time,
+          fee: -1,
+          date: moment(item.time).format('MM-DD HH a')
+        }
+      })
+    });
+  }
+
+
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
+    let url = '/api/proxy/api.binance.com/api/v3/openOrders';
+    const data = {
+      symbol: coin + base
+    };
+    return this.call(url, data, RequestType.GET).map(res => {
+      console.log(res);
+
+      return res.map(function (item) {
+        return {
+          uuid: item.orderId,
+          action: item.side,
+          isOpen: item.status !== 'FILLED',
+          base: base,
+          coin: coin,
+          rate: +item.price,
+          amountBase: -1,
+          amountCoin: +item.origQty,
+          timestamp: item.time,
+          fee: -1
+        }
+      })
+    });
+  }
+
 
   cancelOrder(orderId: string, base?: string, coin?: string) {
     let url = '/api/proxy/api.binance.com/api/v3/order';
     //console.log(url);
     const data = {
-      symbol: base + coin,
+      symbol: coin + base,
       orderId: orderId
     };
     return this.call(url, data, RequestType.POST).map(res => {
@@ -102,14 +156,18 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
     let market = base + '-' + coin;
+    const val = {amountCoin: quantity, rate: rate};
+
+    UTILS.formatDecimals(this.exchange, base, coin, val);
+
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
     let url = '/api/proxy/api.binance.com/api/v3/order';
     let data = {
       symbol: coin + base,
       side: 'BUY',
       type: 'LIMIT',
-      quantity: quantity,
-      price: rate,
+      quantity: val.amountCoin,
+      price: val.rate,
       timeInForce: 'GTC'
     };
 
@@ -133,8 +191,14 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
     let market = base + '-' + coin;
-    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+    console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
     let url = '/api/proxy/api.binance.com/api/v3/order';
+
+    const decimals = UTILS.decimals[this.exchange + base + coin];
+    if (decimals) {
+      quantity = UTILS.floorTo(quantity, decimals.amountDecimals);
+      rate = UTILS.floorTo(rate, decimals.rateDecimals);
+    }
 
     let data = {
       symbol: coin + base,
@@ -185,15 +249,15 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       return item + '=' + this.post[item];
     }, {post: data}).join('&');
     let signed = this.hash_hmac(load, cred.password);
-   // console.log(URL);
+    // console.log(URL);
     let url = URL;
-    const headers = new HttpHeaders().set('X-MBX-APIKEY', cred.apiKey).append( 'Content-type','application/x-www-form-urlencoded');
-    url =  URL + '?' + load + '&signature=' + signed;
+    const headers = new HttpHeaders().set('X-MBX-APIKEY', cred.apiKey).append('Content-type', 'application/x-www-form-urlencoded');
+    url = URL + '?' + load + '&signature=' + signed;
     switch (type) {
       case RequestType.GET:
         return this.http.get(url, {headers});
       case RequestType.POST:
-        url =  URL + '?signature=' + signed;
+        url = URL + '?signature=' + signed;
         return this.http.post(url, load, {headers});
       case RequestType.DELETE:
         return this.http.delete(url, {headers});

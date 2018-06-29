@@ -15,6 +15,7 @@
             <tbody>
             <tr class="small">
                 <th>Name</th>
+                <th>coin</th>
                 <th>Active</th>
                 <th>Status</th>
                 <th>Date</th>
@@ -24,6 +25,7 @@
             <ng-container *ngFor="let dog of watchDogs">
                 <tr>
                     <td><span class="btn" (click)="onNameClick(dog)">{{dog.name}}</span></td>
+                    <td><a routerLink="/trader/analyze-coin/{{dog.coin}}/{{dog.exchange}}">{{dog.coin}}</a></td>
                     <td><span class="btn fa {{!dog.isActive?'fa-play dgreen':'fa-stop dred'}}" (click)="isActiveClick(dog)"></span></td>
                     <td><small>{{dog.status}}</small></td>
                     <td><small>{{dog.date}}</small></td>

@@ -10,8 +10,8 @@ import {VOCandle} from '../../models/api-models';
 
 
 export class ApiPublicBinance extends ApiPublicAbstract {
-  exchange = 'binance';
 
+  exchange = 'binance';
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
@@ -119,6 +119,8 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     return this.http.get(url).map((res: any) => {
       let r = (<any>res);
 
+
+
       return {
         market: base + '_' + coin,
         exchange: 'binance',
@@ -129,7 +131,10 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           return {amountCoin: +o[1], rate: +o[0]}
         })
       }
-    }, console.error);
+    }, console.error).do(res =>{
+      const orders = res.sell;
+      UTILS.setDecimals(this.exchange, base, coin, orders);
+    });
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {

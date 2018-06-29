@@ -13,7 +13,7 @@ import {MongoService} from "../../src/app/apis/mongo.service";
 import {UtilsBot} from "../../src/app/com/utils-bot";
 import {GRAPHS} from "../../src/app/com/grpahs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {VOMCAgregated} from '../../src/app/shared/models';
+import {VOMCAgregated} from '../../src/app/models/api-models';
 
 @Component({
   selector: 'app-coin-graph',
@@ -117,9 +117,10 @@ export class CoinGraphComponent implements OnInit {
 
 
 
+    throw new Error(' con day OFF')
     // this.to = to;
     // const base = 'BTC';
-    const coin = this.coin;
+  /*  const coin = this.coin;
     const ticker = await this.marketcap.downloadTicker().toPromise();
     // const btcMC = ticker['BTC'];
     const coinMC = ticker[coin];
@@ -174,7 +175,7 @@ export class CoinGraphComponent implements OnInit {
       xs: labels,
       graphs: graphs
     }
-
+*/
 
   }
 

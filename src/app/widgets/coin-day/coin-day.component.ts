@@ -60,45 +60,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
-
-    this.momentTo = moment();//.subtract(12,'h');
-
-
-    /*this.route.params.subscribe(paramas => {
-      let coin = paramas.coin;
-      console.log(coin);
-      this.coin = coin;
-
-      this.cryptoCompare.getSocialStats(coin).subscribe(res => {
-        console.log(res);
-      })
-
-
-      this.filterDay();
-
-    });*/
-
-    // this.filterDay();
-
+    this.momentTo = moment();
   }
-
-/*  async showExchanges(){
-   // console.log(this.isExchanges);
-    if(!this.isExchanges) return;
-    const to = this.momentTo.valueOf();
-    const from = moment(to).subtract(1, 'd').valueOf();
-    this.market = 'BTC_' + this.coin;
-    const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance','bittrex'], 'BTC', this.coin, from, to);
-   // console.log(prices);
-
-    const line: VOLineGraph = {
-      ys: prices[0],
-      color: '#ff7f56',
-      label: 'binance'
-    }
-    this.myGraps2 = [line];
-  }*/
 
   async filterDay() {
     if (!this.coin) return;
@@ -126,15 +89,10 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
     const l = history.length;
 
-    //  console.log(coindatas);
-
     history = history.filter(function (item) {
       return !!item;
     })
-
-   // console.log('histpory', history);
     this.skips = l - history.length;
-
 
     const first: VOCoinData = _.first(history);
     const last: VOCoinData = _.last(history);
@@ -164,27 +122,6 @@ export class CoinDayComponent implements OnInit, OnChanges {
         volumes.push(item.volume);
         total_supply.push(item.total_supply);
         rank.push(item.rank);
-
-       //  const integ = GRAPHS.integralData(item);
-
-        /* const integ = GRAPHS.integralData(item);
-         if (trigger) {
-           trigger = false;
-           triggers.push(0);
-         } else {
-           trigger =
-             integ.cur_prev < 0 &&
-             integ.prev5_10 < 0 &&
-             integ.prev10_20 < 0 &&
-             integ.prev5_10 < 0;
-           triggers.push(trigger ? 2 : 1);
-
-         }
-       } else {
-         //pricebtcs.push(item.price_btc);
-         //// priceusds.push(item.price_usd);
-         //  volumes.push(item.volume);
-       }*/
 
       }
     })

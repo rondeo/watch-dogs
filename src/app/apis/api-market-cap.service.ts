@@ -61,7 +61,7 @@ export class ApiMarketCapService {
     if (this.coinsAr) return Promise.resolve(this.coinsAr);
      return new Promise<VOMC[]>(async (resolve, reject) => {
        const selected = await this.storage.getSelectedMC();
-       const sub = this.getAgregated().subscribe(data => {
+       const sub = this.getAgregated(0).subscribe(data => {
          selected.forEach(function (item) {
            data[item].selected = true;
          });
@@ -91,7 +91,7 @@ export class ApiMarketCapService {
   getData(): Promise<VOMCObj> {
     if(this.data) return Promise.resolve(this.data);
     return new Promise<VOMCObj>(async (resolve, reject) => {
-      const sub = this.getAgregated().subscribe(resolve, reject);
+      const sub = this.getAgregated(0).subscribe(resolve, reject);
       setTimeout(()=>sub.unsubscribe(), 30000);
     });
   }
@@ -101,12 +101,12 @@ export class ApiMarketCapService {
   private agrigatedTimestamp: number = 0;
   private isLoading: boolean;
 
-  private refreshAgrigated(): Subscription {
+ /* private refreshAgrigated(): Subscription {
     if(this.isLoading) return;
     this.isLoading = true;
     let url = '/api/marketcap/agrigated';
     console.log('%c LOADING ' + url, 'color:red');
-   return this.getAgregated()
+   return this.getAgregated(0)
      .share()
       .subscribe((res) => {
         this.agrigatedTimestamp = res['BTC'].timestamp;
@@ -115,11 +115,11 @@ export class ApiMarketCapService {
         this.agrigatedSub.next(res);
         this.isLoading = false;
       });
-  }
+  }*/
 
-  getAgregated(): Observable<{[symbol: string]:VOMCAgregated}>{
-    let url = '/api/marketcap/agrigated';
-    console.log('%c LOADING agrigated' + url, 'color:pink');
+  getAgregated(fromEnd: number): Observable<{[symbol: string]:VOMCAgregated}>{
+    let url = '/api/marketcap/agrigated/' + fromEnd;
+    console.log('%c LOADING agrigated ' + url, 'color:pink');
     return this.http.get(url)
       .map((res: { [id: string]: MCdata }) => {
         const out = {}
@@ -195,7 +195,11 @@ export class ApiMarketCapService {
        console.log(res);
 
 
-      return res.data.map(function (item) {
+      return res.data
+        .map(function (item) {
+          if(!item.d) return {
+            timestamp: item.t
+          }
         return {
           timestamp: item.t,
           price_btc: item.d[0],
@@ -215,12 +219,12 @@ export class ApiMarketCapService {
 
   private refreshInterval;
 
-  startAutoRefresh() {
+  /*startAutoRefresh() {
     if (this.refreshInterval) return
     this.refreshInterval = setInterval(() => {
-      this.refreshAgrigated();
+      this.refreshAgrigated(0);
     }, 6 * 60 * 1000)
-  }
+  }*/
 
   stopAutoRefresh() {
     clearInterval(this.refreshInterval);

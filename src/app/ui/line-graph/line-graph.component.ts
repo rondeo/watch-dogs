@@ -26,6 +26,8 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
   @Input() linegraphs: VOLineGraph[];
   @Input() textsxs: string[];
 
+  @Input() name: string;
+
   @Input() width: number = 600;
   @Input() height: number = 400;
 
@@ -69,6 +71,9 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
     let ys = line.ys;
     let min = _.min(ys);
     let max = _.max(ys);
+    if(this.name === 'test') {
+      console.log(min, max);
+    }
 
     if (min === 0) min = 1;
     let range = max - min;
@@ -76,9 +81,15 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
     line.max = max;
     line.range = range;
 
+    if(this.name === 'test') {
+      console.log(ys, range, min, this.heightG);
+    }
+
     ys = LineChartComponent.convertToScale(ys, range, min, this.heightG);
 
-
+if(this.name === 'test') {
+  console.log(ys);
+}
     let dx = this.widthG / (ys.length - 1);
     for (let i = 0, n = ys.length; i < n; i++) {
       ctx.lineTo(x0 + (i * dx), y0 - ys[i]);

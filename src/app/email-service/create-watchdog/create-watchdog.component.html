@@ -1,7 +1,7 @@
 <div>
     {{exchange}}
     {{base}}
-    {{coin}}
+    <a class="btn" routerLink="/trader/analyze-coin/{{coin}}" >{{coin}}</a>
     ${{amount}}
 
     <mat-radio-group [(ngModel)]="orderType">

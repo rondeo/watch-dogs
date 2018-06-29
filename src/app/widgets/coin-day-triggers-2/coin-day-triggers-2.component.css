@@ -1,0 +1,6 @@
+.triggers{
+    height: 0;
+}
+.triggers > div {
+    transform: translateY(-100%);
+}

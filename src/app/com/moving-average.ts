@@ -1,10 +1,10 @@
-
 import * as _ from 'lodash';
 import {VOCoinData, VOMCAgregated} from '../models/api-models';
 
 export interface VOMovingAvg {
   symbol: string;
   price_btc: number;
+  price03h: number;
   price05h: number;
   price1h: number;
   price2h: number;
@@ -22,6 +22,7 @@ export class MovingAverage {
     return {
       symbol: data.symbol,
       price_btc: data.price_btc,
+      price03h: 0,
       price05h: data.last5,
       price1h: data.last10,
       price2h: data.last20,
@@ -40,18 +41,28 @@ export class MovingAverage {
     return (price05h - ma.price1h < 0) && (price05h - ma.price2h < 0) && (price05h - ma.price3h < 0);
   }
 
+  static isMovingDown2(prev: VOMovingAvg, curr: VOMovingAvg): boolean {
+    ;
+    return (
+      (100 * ((curr.price2h - prev.price2h) / prev.price2h) < -0.11)
+
+      );
+  }
+
   static triggerMovingAvarages(mas: VOMovingAvg[]): { timestamp: number, trigger: number }[] {
     const out: { timestamp: number, trigger: number }[] = [];
+    let prevValue: VOMovingAvg = mas[0];
     mas.forEach(function (ma: VOMovingAvg) {
       const v = {
         timestamp: ma.timestamp,
         trigger: 1
       };
       if (ma.price05h) {
-        if (MovingAverage.isMovingDown(ma)) {
+        if (MovingAverage.isMovingDown2(prevValue, ma)) {
           v.trigger = 3;
         } else v.trigger = 2;
       }
+      prevValue = ma;
       out.push(v);
     });
     return out;
@@ -67,7 +78,8 @@ export class MovingAverage {
       const cur = coindatas[i];
       if (i < 30) {
         out.push({
-          symbol:'',
+          symbol: '',
+          price03h: 0,
           price05h: 0,
           price1h: 0,
           price2h: 0,
@@ -85,11 +97,14 @@ export class MovingAverage {
         continue;
       }
 
+      const prev = coindatas[i - 1];
+      const l_3 = coindatas.slice(i - 3, i);
       const l_5 = coindatas.slice(i - 5, i);
       const l_10 = coindatas.slice(i - 10, i);
       const l_20 = coindatas.slice(i - 20, i);
       const l_30 = coindatas.slice(i - 30, i);
 
+      const price03h = +(sumBy(l_3, 'price_btc') / 3).toFixed(12);
       const price05h = +(sumBy(l_5, 'price_btc') / 5).toFixed(12);
       const price1h = +(sumBy(l_10, 'price_btc') / 10).toFixed(12);
       const price2h = +(sumBy(l_20, 'price_btc') / 20).toFixed(12);
@@ -105,7 +120,8 @@ export class MovingAverage {
       const timestamp = cur.timestamp;
 
       out.push({
-        symbol:'',
+        symbol: '',
+        price03h,
         price05h,
         price1h,
         price2h,

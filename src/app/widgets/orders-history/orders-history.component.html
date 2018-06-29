@@ -1,0 +1,16 @@
+<div class="mat-body">
+    <div>
+        <span><small>Orders History {{exchange}} {{market}}</small></span>
+        <span class="mat-body-2">{{orders.length}}</span>
+    </div>
+    <table>
+        <tbody>
+        <tr *ngFor="let order of orders">
+            <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
+            <td>{{order.rate}}</td>
+            <td>{{order.amountUS}}</td>
+            <td>{{order.date}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

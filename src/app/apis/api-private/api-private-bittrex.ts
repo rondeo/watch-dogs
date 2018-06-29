@@ -63,6 +63,33 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
   }
 
+
+  getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
+    let market = base+'-'+coin;
+    let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
+    return this.call(uri, {market: market}).map(res=>{
+      console.log(' getOpenOrders  '+ market , res);
+
+      return res.result.map(function(o){
+        let a = o.Exchange.split('-')
+        return {
+          uuid:o.OrderUuid,
+          action:o.OrderType.substr(6),
+          isOpen:!o.Closed,
+          rate:o.Limit,
+          coin:a[1],
+          base:a[0],
+          exchange:'bittrex',
+          amountCoin:o.Quantity,
+          amountBase:o.Price,
+          date:o.Opened,
+          fee:0,
+          timestamp:new Date(o.Opened).getTime()
+        }
+      });
+    })
+  }
+
   cancelOrder(uuid: string): Observable<VOOrder> {
     let uri = 'https://bittrex.com/api/v1.1/market/cancel';
     return this.call(uri, {uuid: uuid}).map(res => {

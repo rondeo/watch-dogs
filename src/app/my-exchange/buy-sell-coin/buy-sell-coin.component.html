@@ -10,7 +10,7 @@
     <button mat-button
             routerLink="/email-service/create-bot/{{exchange}}/{{base}}/{{coin}}"
             [queryParams]="{amount:balanceCoinUS}"
-            [disabled]="!exchange || !base || !coin" >
+            [disabled]="!exchange || !base || !coin">
         <span>
             WD
         </span>
@@ -56,6 +56,21 @@
             </button>
         </mat-card-content>
     </mat-card>
+
+    <p>
+        <app-open-orders [exchange]="exchange" [market]="market"></app-open-orders>
+    </p>
+
+    <div>
+
+    <mat-checkbox #chckHistory >History</mat-checkbox>
+    <div *ngIf="chckHistory.checked">
+        <app-orders-history [exchange]="exchange" [market]="market"></app-orders-history>
+    </div>
+
+    </div>
+
+
     <section *ngIf="orderId">
         <span>{{orderId}}</span>
         <span class="btn fa fa-close dred" (click)="onCancelOrderClick()"></span>
@@ -85,6 +100,7 @@
     <mat-card>
         <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
     </mat-card>
+
 
     <mat-checkbox [(ngModel)]="isCoinDay"> Coin Day</mat-checkbox>
     <p *ngIf="isCoinDay">

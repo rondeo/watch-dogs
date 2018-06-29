@@ -1,9 +1,13 @@
 <div>
     <app-mc-data [mcdata]="coinMC"> </app-mc-data>
 
+
+
     <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
 
-    <p>
+
+
+    <menu>
         &nbsp; &nbsp;
         <a routerLink="/my-exchange/balances/{{exchange}}">
             <span class="btn fa fa-dollar fa-2x dgreen"></span>
@@ -29,19 +33,29 @@
            color="accent"
         ><span>WD</span>
         </a>
-    </p>
+    </menu>
 
 
     <p>
+        <mat-checkbox #booksCheck >Books</mat-checkbox>
         <app-books-all-exchanges
+                *ngIf="booksCheck.checked"
                 [coin]="coin"
                 (marketExchange)="onMarketExchangeChange($event)"
                 (amount)="onAmountChanged($event)"
         ></app-books-all-exchanges>
     </p>
 
+
+
     <p>
-        <app-market-snapshot [exchange]="exchange" [market]="market"></app-market-snapshot>
+        <mat-checkbox #marketCheck >Market</mat-checkbox>
+        <app-market-snapshot
+                *ngIf="marketCheck.checked"
+                [exchange]="exchange"
+                [market]="market"
+
+        ></app-market-snapshot>
     </p>
 
     <br/>

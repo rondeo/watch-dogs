@@ -14,6 +14,9 @@ import {TradesHistoryComponent} from './trades-history/trades-history.component'
 import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
 import { CoinDayTriggersComponent } from './coin-day-triggers/coin-day-triggers.component';
 import { BooksAllExchangesComponent } from './books-all-exchanges/books-all-exchanges.component';
+import { OpenOrdersComponent } from './open-orders/open-orders.component';
+import { OrdersHistoryComponent } from './orders-history/orders-history.component';
+import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers-2.component';
 
 
 @NgModule({
@@ -34,7 +37,10 @@ import { BooksAllExchangesComponent } from './books-all-exchanges/books-all-exch
     TradesHistoryComponent,
     CoinCandlesComponent,
     CoinDayTriggersComponent,
-    BooksAllExchangesComponent
+    BooksAllExchangesComponent,
+    OpenOrdersComponent,
+    OrdersHistoryComponent,
+    CoinDayTriggers2Component
   ],
   declarations:[
     CoinDayComponent,
@@ -46,7 +52,10 @@ import { BooksAllExchangesComponent } from './books-all-exchanges/books-all-exch
     TradesHistoryComponent,
     CoinCandlesComponent,
     CoinDayTriggersComponent,
-    BooksAllExchangesComponent
+    BooksAllExchangesComponent,
+    OpenOrdersComponent,
+    OrdersHistoryComponent,
+    CoinDayTriggers2Component
   ]
 })
 export class WidgetsModule { }

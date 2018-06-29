@@ -113,7 +113,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
       this.openOrders = res.map(function (item) {
         item.amountUS = Math.round(item.amountCoin * item.rate * this.pB);
         item.priceUS = +(item.rate * this.pB).toPrecision(3);
-        item.act = item.action.substr(0,1)
+        // item.act = item.action.substr(0,1)
         return item
       }, {pB:this.marketInit.priceBaseUS});
 
@@ -164,7 +164,7 @@ export class MyOrdersHistoryComponent implements OnInit, OnChanges, OnDestroy{
       this.ordersHistory = res.map(function (item) {
         item.amountUS = Math.round(item.amountCoin * item.rate * this.pB);
         item.priceUS = +(item.rate * this.pB).toPrecision(3);
-        item.act = item.action.substr(0,1)
+        // item.act = item.action.substr(0,1)
         return item
       }, {pB:this.marketInit.priceBaseUS});
      //console.warn(res);

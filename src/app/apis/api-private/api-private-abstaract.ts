@@ -24,9 +24,10 @@ export abstract class ApiPrivateAbstaract {
    */
 
 
-  loginSub:Subject<boolean> = new Subject()
+  loginSub: Subject<boolean> = new Subject()
+
   userLogin$() {
-    return  this.loginSub.asObservable();  // TOD dipatch  call after user login this.userLogin.exchangeLogin$();
+    return this.loginSub.asObservable();  // TOD dipatch  call after user login this.userLogin.exchangeLogin$();
   }
 
   private credentials: { apiKey: string, password: string };
@@ -53,7 +54,7 @@ export abstract class ApiPrivateAbstaract {
 
         let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balanceCoin);
         const myCoinprice = sellCoin.baseUS * rate;
-       // sellCoin.booksDelta = +(100 * (myCoinprice - sellCoin.coinUS) / sellCoin.coinUS).toPrecision(2);
+        // sellCoin.booksDelta = +(100 * (myCoinprice - sellCoin.coinUS) / sellCoin.coinUS).toPrecision(2);
         rate = +(rate - (rate * 0.01)).toFixed(8);
         return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order => {
           console.log(order);
@@ -104,5 +105,14 @@ export abstract class ApiPrivateAbstaract {
     });
 
     return null
+  }
+
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
+
+    return null;
+  }
+
+  getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
+    return null;
   }
 }
