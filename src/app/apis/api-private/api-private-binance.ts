@@ -24,7 +24,7 @@ enum RequestType {
 
 export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
-  balances: VOBalance[];
+
   exchange = 'binance';
 
 
@@ -129,9 +129,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     });
   }
 
-  downloadBalance(symbol: string): Observable<VOBalance> {
-    return this.downloadBalances().map(balances => balances.find(o => o.symbol === symbol));
-  }
+
 
   isLoadingBalances: boolean;
 
@@ -149,8 +147,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           available: +item.free,
           pending: +item.locked
         })
-      })
-
+      });
     })
   }
 

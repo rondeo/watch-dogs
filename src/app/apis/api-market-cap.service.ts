@@ -18,6 +18,7 @@ import {MCdata, VOCoinData, VOMC, VOMCAgregated, VOMCObj} from '../models/api-mo
 
 @Injectable()
 export class ApiMarketCapService {
+  static instance: ApiMarketCapService;
 
   static MC: { [symbol: string]: VOMarketCap };
   private data: { [symbol: string]: VOMCAgregated };
@@ -27,6 +28,7 @@ export class ApiMarketCapService {
     private http: HttpClient,
     private storage: StorageService
   ) {
+    ApiMarketCapService.instance = this;
   }
 
   async getCoin(symbol: string): Promise<VOMCAgregated> {

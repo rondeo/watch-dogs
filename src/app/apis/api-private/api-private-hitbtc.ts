@@ -71,7 +71,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   balancesSub: Subject<VOBalance[]>
 
-  downloadBalance(symbol: string): Observable<VOBalance> {
+  getBalance(symbol: string): Observable<VOBalance> {
     if (this.isLoadingBalances) return this.balancesSub.asObservable()
       .map(balabces => {
         return balabces.find(function (bal) {

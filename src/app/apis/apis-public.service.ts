@@ -20,6 +20,8 @@ import {VOCandle} from '../models/api-models';
 @Injectable()
 export class ApisPublicService {
 
+  static instance: ApisPublicService;
+
   static candelsToAvarage(res: VOCandle[]){
     return res.map(function (item: VOCandle) {
       return +((item.High + item.Low)/2).toPrecision(7);
@@ -31,6 +33,7 @@ export class ApisPublicService {
     private http: HttpClient,
     private storage: StorageService
   ) {
+    ApisPublicService.instance = this;
   }
 
   availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];

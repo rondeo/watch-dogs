@@ -26,9 +26,9 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     super(userLogin);
   }
 
-  sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
+ /* sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
     if (!sellCoin.coinUS) throw new Error(' need coin price')
-    return this.downloadBalance(sellCoin.coin).switchMap(balance => {
+    return this.getBalance(sellCoin.coin).switchMap(balance => {
       // console.log(balance);
       if (balance.balance * sellCoin.coinUS < 10) {
         sellCoin.balanceCoin = 0;
@@ -61,7 +61,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
       })
     })
 
-  }
+  }*/
 
 
   getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
@@ -142,9 +142,10 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     })
   }
 
-  isLoadingBalances: boolean;
+
 
   downloadBalances(): Observable<VOBalance[]> {
+
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
     this.isLoadingBalances = true;
     return this.call(uri, {}).map(res => {

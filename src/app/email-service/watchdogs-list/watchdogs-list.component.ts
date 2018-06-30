@@ -86,7 +86,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     this.botsService.deleteWatchDog(dog);
   }
 
-  onNameClick(dog: WatchDog) {
+  onEditClick(dog: WatchDog) {
     this.router.navigateByUrl('/email-service/watchdog-edit/' + dog.id)
   }
 

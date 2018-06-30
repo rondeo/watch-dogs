@@ -37,7 +37,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     const all = [];
 
     if (isNaN(wd.balanceBase) || wd.balanceBase < 0) {
-      const sub1 = api.downloadBalance(wd.base).map(balance => {
+      const sub1 = api.getBalance(wd.base).map(balance => {
         console.log(balance);
         wd.balanceBase = balance.balance;
         return balance;
@@ -46,7 +46,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     }
 
     if (isNaN(wd.balanceCoin) || wd.balanceCoin < 0) {
-      const sub2 = api.downloadBalance(wd.coin).map(balance => {
+      const sub2 = api.getBalance(wd.coin).map(balance => {
         console.log(balance);
         wd.balanceCoin = balance.balance;
         return balance;

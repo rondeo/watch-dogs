@@ -26,7 +26,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   /* sellCoin(sellCoin:VOSellCoin):Observable<VOSellCoin>{
      if(!sellCoin.coinPrice) throw new Error(' need coin price')
-     return this.downloadBalance(sellCoin.coin).switchMap(balance =>{
+     return this.getBalance(sellCoin.coin).switchMap(balance =>{
        // console.log(balance);
        if(balance.balance * sellCoin.coinPrice < 10) {
          sellCoin.balance = 0;
@@ -129,7 +129,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   balancesSub: Subject<VOBalance[]>
 
-  downloadBalance(symbol: string): Observable<VOBalance> {
+  getBalance(symbol: string): Observable<VOBalance> {
     if (this.isLoadingBalances) return this.balancesSub.asObservable()
       .map(balabces => {
         return balabces.find(function (bal) {

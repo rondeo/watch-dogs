@@ -12,6 +12,8 @@ import {ApiPrivateBinance} from './api-private/api-private-binance';
 @Injectable()
 export class ApisPrivateService {
 
+  static instance: ApisPrivateService;
+
   exchanges: { [exchange: string]: ApiPrivateAbstaract } = {};
 
   constructor(
@@ -19,6 +21,7 @@ export class ApisPrivateService {
     private storage: StorageService,
     private userLogin: UserLoginService
   ) {
+    ApisPrivateService.instance = this;
   }
 
   getAllAvailable(): string[] {

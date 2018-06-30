@@ -42,7 +42,7 @@ export class SellCoinFilling {
       this.watchDog.status = WatchDogStatus.SELLING_START;
 
 
-      this.apiPrivate.downloadBalance(this.watchDog.coin).subscribe((balance: VOBalance) => {
+      this.apiPrivate.getBalance(this.watchDog.coin).subscribe((balance: VOBalance) => {
         const base: string = this.watchDog.base;
         const coin = this.watchDog.coin;
         this.watchDog.balanceCoin = balance.balance;

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MyExchangeService} from '../services/my-exchange.service';
 import {VOBalance, VOMarket, VOOrder} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
@@ -21,6 +21,7 @@ import {VOMCObj} from '../../models/api-models';
 export class BuySellCoinComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private myService: MyExchangeService,
     private marketCap: ApiMarketCapService,
@@ -69,6 +70,14 @@ export class BuySellCoinComponent implements OnInit {
           this.setBalances();
         });*/
 
+    this.route.queryParams.subscribe(params => {
+      console.warn(params);
+      if(params.market && params.market !== this.market) {
+        this.market = params.market;
+        this.getBalances();
+      }
+
+    })
 
     this.sub1 = this.route.params.subscribe(params => {
       console.log(params)
@@ -144,7 +153,18 @@ export class BuySellCoinComponent implements OnInit {
     this.base = this.currentMarket.base;
     this.coin = this.currentMarket.coin;
     this.market = this.currentMarket.base + '_' + this.currentMarket.coin;
-    this.getBalances();
+    /// console.log(this.market);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        market: this.market
+      },
+      queryParamsHandling: 'merge'
+     // skipLocationChange: true
+    });
+
+
   }
 
   onRefreshBalancesClick() {

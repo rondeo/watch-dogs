@@ -69,7 +69,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
       const api = this.apisPrivate.getExchangeApi(item.exchange);
 
       if (isNaN(item.balanceBase) || item.balanceBase < 0) {
-        const sub1 = api.downloadBalance(item.base).map(balance => {
+        const sub1 = api.getBalance(item.base).map(balance => {
           console.log(balance);
           item.balanceBase = balance.balance;
           return balance;
@@ -78,7 +78,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
       }
 
       if (isNaN(item.balanceCoin) || item.balanceCoin < 0) {
-        const sub2 = api.downloadBalance(item.coin).map(balance => {
+        const sub2 = api.getBalance(item.coin).map(balance => {
           console.log(balance);
           item.balanceCoin = balance.balance;
           return balance;
