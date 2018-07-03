@@ -48,7 +48,7 @@ export class ApiMarketCapService {
 
   getCoinsDay(isRefresh = false): Promise<VOCoinsDay> {
     if (this.coinsDay && !isRefresh) return Promise.resolve(this.coinsDay);
-    const url = 'http://crypto.aesoft.ca:49890/coin-day-all';
+    const url = '/api/proxy-http/crypto.aesoft.ca:49890/coin-day-all';
     return this.http.get(url).map((res: any) => {
       const payload = res;
       const out = {};
