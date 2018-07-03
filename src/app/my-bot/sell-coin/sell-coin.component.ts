@@ -36,7 +36,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     const api = this.apisPrivate.getExchangeApi(wd.exchange);
     const all = [];
 
-    if (isNaN(wd.balanceBase) || wd.balanceBase < 0) {
+    /*if (isNaN(wd.balanceBase) || wd.balanceBase < 0) {
       const sub1 = api.getBalance(wd.base).map(balance => {
         console.log(balance);
         wd.balanceBase = balance.balance;
@@ -57,7 +57,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     if (!all.length) return Promise.resolve();
 
     await forkJoin(all).toPromise()
-    this.storage.saveWatchDogs();
+    this.storage.saveWatchDogs();*/
   }
 
 

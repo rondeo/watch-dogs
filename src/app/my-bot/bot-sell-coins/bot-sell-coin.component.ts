@@ -65,7 +65,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
   async checkBalance(wds: WatchDog[]) {
     const all = [];
 
-    wds.forEach((item, i) => {
+   /* wds.forEach((item, i) => {
       const api = this.apisPrivate.getExchangeApi(item.exchange);
 
       if (isNaN(item.balanceBase) || item.balanceBase < 0) {
@@ -92,7 +92,7 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
     if (!all.length) return Promise.resolve();
 
     await forkJoin(all).toPromise()
-    this.storage.saveWatchDogs();
+    this.storage.saveWatchDogs();*/
   }
 
  /* async addUSValues(wd: WatchDog[]) {

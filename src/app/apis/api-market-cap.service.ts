@@ -105,7 +105,7 @@ export class ApiMarketCapService {
   downloadTicker(refresh = false): Observable<{ [symbol: string]: VOMarketCap }> {
     if (!refresh && this.ticker) return Observable.of(this.ticker);
     //let url = '/api/marketcap/ticker';
-    const url = 'http://crypto.aesoft.ca:49890/market-cap';
+    const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     console.log('%c TICKER ' + url, 'color:blue');
     return this.http.get(url).map((res: any[]) => {
       this.ticker = ApiMarketCapService.mapDataMC(res);
