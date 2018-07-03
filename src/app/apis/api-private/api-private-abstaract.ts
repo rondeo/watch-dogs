@@ -88,6 +88,7 @@ export abstract class ApiPrivateAbstaract {
   isTickBalance = false;
   tickRefreshBalance(){
     if(this.isTickBalance) return;
+    this.isTickBalance = true;
     setTimeout(() => {
       this.isTickBalance = false;
       this.refreshBalances();

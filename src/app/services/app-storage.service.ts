@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {VOMarketCap, VOWatchdog} from '../models/app-models';
 import * as CryptoJS from 'crypto-js';
-//import * as crypto from 'crypto';
+
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import * as localforage from 'localforage';
@@ -12,7 +12,7 @@ import {ExchangeLogin} from './user-login.service';
 @Injectable()
 export class StorageService {
 
-  // selected: string[];
+  static instance: StorageService;
 
   readonly WATCH_DOGS = 'WATCH_DOGS';
   //email:string;
@@ -25,10 +25,13 @@ export class StorageService {
   // private isLogedInSub:BehaviorSubject<boolean>;
 
   constructor() {
+    StorageService.instance = this;
     //this.isLogedInSub = new BehaviorSubject(false);
     ///this.isLogedIn$ = this.isLogedInSub.asObservable();
     this.lastVisitedUrl = localStorage.getItem('lastVisitedUrl');
   }
+
+
 
   /*isLoggedIn():boolean{
     return  this.isLogedInSub.getValue();
@@ -115,45 +118,6 @@ export class StorageService {
     return this.saveSelectedMC();
   }
 
-
-  //////////////////////////////////////////////////////////
-
-  /*
-    processes: any[];
-
-    async saveProcess(process: any) {
-      const processes: any[] = await this.getProcesses();
-      const exists = processes.find(function (item) {
-        return item.id === process.id;
-      });
-      if (!exists) processes.push(process);
-
-      return this.upsert('PROCESSES', this.processes);
-    }
-
-    async getProcesses() {
-      if (this.processes) return Promise.resolve(this.processes)
-      else return this.select('PROCESSES').then(res => this.processes = res);
-    }*/
-
-
-  /*async setSoldCoin(sellCoin: VOSellCoin) {
-    const sellCoins = await this.getWatchDogs();
-    const sold: VOSellCoin = _.find(sellCoins, {
-      exchange: sellCoin.exchange,
-      base: sellCoin.base,
-      coin: sellCoin.coin
-    });
-
-    if (sold) {
-      sold.results = sellCoin.results;
-      sold.isActive = "SOLD";
-      await this.saveWatchDogs(sellCoins);
-    }
-    return sold
-  }*/
-
-
   private watchDogs: VOWatchdog[];
 
   async upsertWatchDog(wd: VOWatchdog) {
@@ -186,8 +150,11 @@ export class StorageService {
   }
 
   async select(index: string): Promise<any> {
-
     return localforage.getItem(index);
+  }
+
+  async remove(index: string): Promise<any>{
+    return localforage.removeItem(index);
   }
 
   //////////////////////////////////////////////////////////////////////////////

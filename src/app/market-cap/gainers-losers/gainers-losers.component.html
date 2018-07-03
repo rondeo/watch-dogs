@@ -18,7 +18,7 @@
                 <mat-option value="hitbtc">HitBtc</mat-option>
             </mat-select>
         </mat-form-field>
-        <span class="fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></span>
+        <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
     </p>
 
     <section>
@@ -28,8 +28,9 @@
             <tr>
                 <td></td>
                 <td class="btn" (click)="onUpClick()">UP</td>
-                <td colspan="4" class="text-center">
+                <td colspan="5" class="text-center">
                     <small class="btn" (click)="onToBTCClick()">% to btc</small>
+                    <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>
                 </td>
 
                 <td></td>
@@ -46,7 +47,8 @@
                 <th class="btn" (click)="onClickHeader('tobtc_change_05h')">0.5h%</th>
                 <th class="btn" (click)="onClickHeader('tobtc_change_1h')">1h%</th>
                 <th class="btn" (click)="onClickHeader('tobtc_change_2h')">2h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_3h')">3h%</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_3h')">4h%</th>
+                <th class="btn" (click)="onClickHeader('tobtc_change_24h')">24h%</th>
 
                 <th class="btn" (click)="onClickHeader('percent_change_1h')">1h%</th>
                 <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>
@@ -54,18 +56,16 @@
             </tr>
             <tr>
                 <td>
-                    <span  matTooltip="{{btcMC.price_usd.toLocaleString()}}"
-                           [matTooltipPosition]="'right'"
-                    >BTC</span>
+                    <span>BTC</span>
                 </td>
-
-                <td>{{btcMC.rank}}</td>
+                <td>1</td>
                 <td>{{btcMC.rankChange24h}}</td>
 
                 <td>{{btcMC.tobtc_change_05h}}</td>
                 <td>{{btcMC.tobtc_change_1h}}</td>
                 <td>{{btcMC.tobtc_change_2h}}</td>
                 <td>{{btcMC.tobtc_change_3h}}</td>
+                <td>{{btcMC.tobtc_change_24h}}</td>
 
                 <td>{{btcMC.percent_change_1h}}</td>
                 <td>{{btcMC.percent_change_24h}}</td>
@@ -83,12 +83,9 @@
                 </td>
 
                 <td>
-                    <small  matTooltip="{{item.id}} {{item.price_usd}}"
-                            [matTooltipPosition]="'above'"
-                    >
-                        <sub [ngClass]="(item.rankPrev - item.rank) >0?'dgreen':'dred'">{{item.rank}}</sub>
-                        <sup>{{(item.rankPrev - item.rank)}}</sup>
-                    </small>
+
+                        {{item.rank}}
+
                 </td>
 
                 <td class="w50" [ngClass]="item.rankChange24h>0?'dgreen':'dred'">
@@ -109,6 +106,10 @@
                 <td class="w50" [ngClass]="item.tobtc_change_3h>0?'dgreen':'dred'">
                     {{item.tobtc_change_3h}}
                 </td>
+                <td class="w50" [ngClass]="item.tobtc_change_24h>0?'dgreen':'dred'">
+                    {{item.tobtc_change_24h}}
+                </td>
+
 
                 <td class="w50" [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">
                     {{item.percent_change_1h}}

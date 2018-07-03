@@ -44,7 +44,7 @@ export class ApisPrivateService {
       case 'hitbtc':
         return new ApiPrivateHitbtc(this.http, this.userLogin);
       case 'cryptopia':
-        return null // new ApiPrivateCryptopia(this.http, this.storage);
+        return null; // new ApiPrivateCryptopia(this.http, this.storage);
       case 'binance':
         return new ApiPrivateBinance(this.http, this.userLogin);
 

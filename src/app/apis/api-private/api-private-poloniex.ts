@@ -127,9 +127,9 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   }
 
-  balancesSub: Subject<VOBalance[]>
+  // balancesSub: Subject<VOBalance[]>
 
-  getBalance(symbol: string): Observable<VOBalance> {
+/*  getBalance(symbol: string, isRefresh): Observable<VOBalance> {
     if (this.isLoadingBalances) return this.balancesSub.asObservable()
       .map(balabces => {
         return balabces.find(function (bal) {
@@ -143,10 +143,9 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     })
   }
 
-  isLoadingBalances: boolean;
+  isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
-    this.balancesSub = new Subject();
     this.isLoadingBalances = true;
     return this.call({command: 'returnBalances'}).map(res => {
       //console.log(res);

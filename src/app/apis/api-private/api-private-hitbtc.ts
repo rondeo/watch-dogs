@@ -69,7 +69,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       });
   }
 
-  balancesSub: Subject<VOBalance[]>
+ /* balancesSub: Subject<VOBalance[]>
 
   getBalance(symbol: string): Observable<VOBalance> {
     if (this.isLoadingBalances) return this.balancesSub.asObservable()
@@ -85,10 +85,9 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     })
   }
 
-  isLoadingBalances: boolean;
+  isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
-    this.balancesSub = new Subject();
     this.isLoadingBalances = true;
 
     const url = 'api/hitbtc/trading/balance';

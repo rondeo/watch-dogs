@@ -14,8 +14,11 @@ export interface VOMovingAvg {
   vol3h: number;
   timestamp: number;
   rank: number;
-  rankD: number;
+  rank24h?: number;
+  rankD?: number;
 }
+
+
 
 export class MovingAverage {
   static map(data: VOMCAgregated): VOMovingAvg {

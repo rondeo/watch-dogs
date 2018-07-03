@@ -3,9 +3,9 @@ import {MarketCapService} from '../services/market-cap.service';
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {ApisPublicService} from "../../apis/apis-public.service";
-import {ApiPublicAbstract} from "../../apis/api-public/api-public-abstract";
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOMCAGREGATED, VOMCAgregated} from '../../models/api-models';
 
 
@@ -20,14 +20,13 @@ export class GainersLosersComponent implements OnInit {
   asc_desc = 'desc';
   top: string = 'top300';
   exchange: string;
-  allCoins: VOMCAgregated[];
+  allCoins: any[];
 
-  sorted: VOMCAgregated[];
+  sorted: any[];
 
   sortBy: string = 'percent_change_24h';
 
-
-  btcMC:VOMCAgregated = VOMCAGREGATED;
+  btcMC: any = VOMCAGREGATED;
 
   exchangeCoins: string[] = [];
 
@@ -67,18 +66,16 @@ export class GainersLosersComponent implements OnInit {
       this.top = state.top || this.top;
     }
 
-    this.downlaodTicker();
+    this.downlaodMarketCap(false);
 
     this.route.params.subscribe(params => {
-      if(params.exchange !== this.exchange) {
+      if (params.exchange !== this.exchange) {
         this.exchange = params.exchange;
 
       }
       this.loadExchange();
 
     })
-
-
 
 
   }
@@ -92,13 +89,13 @@ export class GainersLosersComponent implements OnInit {
     // this.exchange = evt.value;
     this.router.navigateByUrl('/market-cap/gainers-losers/' + this.exchange);
     // this.loadExchange();
-   //  this.saveState();
+    //  this.saveState();
 
   }
 
   async loadExchange() {
     if (!this.exchange) return;
-    if (this.exchange === 'all'){
+    if (this.exchange === 'all') {
       this.exchangeCoins = [];
       this.sortData();
       return;
@@ -118,8 +115,8 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
-  onRefreshClick(){
-    this.downlaodTicker();
+  onRefreshClick() {
+    this.downlaodMarketCap(true);
   }
 
   onTopChange(evt) {
@@ -127,11 +124,47 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  async downlaodTicker() {
-    const ticker = await this.apiMarketCap.getDataWithRankChange();
-    this.btcMC = ticker['BTC']
-     console.log(ticker);
-    this.allCoins = Object.values(ticker);
+  async downlaodMarketCap(isRefresh) {
+    const MC = await this.apiMarketCap.downloadTicker(isRefresh).toPromise();
+    const coinDay = await this.apiMarketCap.getCoinsDay(isRefresh);
+    // console.log(coinDay);
+
+    const ma = await ApiMarketCapService.movingAfarageFromCoinDay(coinDay);
+
+    /*
+    *  symbol,
+    *  price03hD,
+        price1hD,
+        price2hD,
+        price4hD,
+        price24hD,
+        rank24hD
+    * */
+
+    const agregated = ma.map(function (item) {
+      const mc: VOMarketCap = MC[item.symbol] || new VOMarketCap();
+      return {
+        symbol: item.symbol,
+        tobtc_change_05h: +item.price03hD.toFixed(2),
+        tobtc_change_1h: +item.price1hD.toFixed(2),
+        tobtc_change_2h: +item.price2hD.toFixed(2),
+        tobtc_change_3h: +item.price4hD.toFixed(2),
+        tobtc_change_24h: +item.price24hD.toFixed(2),
+        rankChange24h: +item.rank24hD.toFixed(2),
+        rank: mc.rank,
+        price_usd: mc.price_usd,
+        percent_change_1h: mc.percent_change_1h,
+        percent_change_24h: mc.percent_change_24h,
+        percent_change_7d: mc.percent_change_7d
+      }
+    })
+
+
+    // console.log(agregated);
+
+    this.btcMC = _.find(agregated, {symbol: 'BTC'});
+
+    this.allCoins = agregated
     if (this.exchange) this.loadExchange();
     else this.sortData();
   }
@@ -190,7 +223,7 @@ export class GainersLosersComponent implements OnInit {
     let sorted = allCoins.sort(function (a, b) {
       const rankUpA = a.rankPrev - a.rank;
       const rankUpB = b.rankPrev - b.rank;
-      if(rankUpA > rankUpB) return -1;
+      if (rankUpA > rankUpB) return -1;
       else return 1
     });
 
@@ -199,7 +232,7 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
-  filterExhangeCoins(allCoins:VOMCAgregated[]): VOMCAgregated[]{
+  filterExhangeCoins(allCoins: VOMCAgregated[]): VOMCAgregated[] {
     const exchangeCoins = this.exchangeCoins || [];
     if (exchangeCoins.length) {
       return allCoins.filter(function (item) {
@@ -213,7 +246,7 @@ export class GainersLosersComponent implements OnInit {
   onToBTCClick() {
 
     this.sorted = this.filterExhangeCoins(this.allCoins).filter(function (item: VOMCAgregated) {
-      return item.tobtc_change_05h > 0 && item.tobtc_change_1h > 0  && item.tobtc_change_2h > 0  && item.tobtc_change_3h > 0
+      return item.tobtc_change_05h > 0 && item.tobtc_change_1h > 0 && item.tobtc_change_2h > 0 && item.tobtc_change_3h > 0
     }).sort(function (a, b) {
       return b.rankChange24h - a.rankChange24h;
     }).slice(0, 50);

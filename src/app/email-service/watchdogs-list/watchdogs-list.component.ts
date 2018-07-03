@@ -83,7 +83,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   async onDeleteClick(dog: WatchDog) {
     console.log(dog);
     if (!confirm('You want to delete Watchdog ' + dog.name + '?')) return;
-    this.botsService.deleteWatchDog(dog);
+    this.botsService.deleteWatchDogById(dog.id);
   }
 
   onEditClick(dog: WatchDog) {
