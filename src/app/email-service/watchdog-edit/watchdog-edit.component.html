@@ -12,7 +12,7 @@
 
     <section>
         <p>
-            <mat-form-field class="w6">
+           <!-- <mat-form-field class="w6">
                 <mat-select placeholder="Exchange" [(ngModel)]="watchDog.exchange">
                     <mat-option *ngFor="let exchange of exchanges" [value]="exchange">{{exchange}}</mat-option>
                 </mat-select>
@@ -28,18 +28,18 @@
                 <mat-select placeholder="Coin" [(ngModel)]="watchDog.coin" (ngModelChange)="onCoinChange($event)">
                     <mat-option *ngFor="let coin of selectedCoins" [value]="coin">{{coin}}</mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field>-->
 
-            <mat-input-container class="w6">
+           <!-- <mat-input-container class="w6">
                 <input class="w5" matInput placeholder="Amount" type="number" [(ngModel)]="watchDog.amount"/>
-            </mat-input-container>
+            </mat-input-container>-->
 
         </p>
 
         <p>
-            <mat-input-container>
+           <!-- <mat-input-container>
                 <input matInput placeholder="Name" type="text" [(ngModel)]="watchDog.name"/>
-            </mat-input-container>
+            </mat-input-container>-->
             <mat-radio-group [(ngModel)]="watchDog.orderType">
                 <mat-radio-button value="SELL">SELL</mat-radio-button>
                 <mat-radio-button value="BUY">BUY</mat-radio-button>
@@ -94,14 +94,14 @@
         </table>
     </section>
 
-    <section>
+   <!-- <section>
         <h4>Sell Script</h4>
         <app-add-script [scripAr]="watchDog.sellScripts"></app-add-script>
 
         <h4>Buy Script</h4>
         <app-add-script [scripAr]="watchDog.buyScripts"></app-add-script>
 
-    </section>
+    </section>-->
     <section>
         <h4>Reports</h4>
         <span class="btn fa fa-trash dred" (click)="onClearReportClick()"></span>

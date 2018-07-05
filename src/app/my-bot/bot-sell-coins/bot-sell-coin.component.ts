@@ -111,20 +111,20 @@ export class BotSellCoinComponent implements OnInit, OnDestroy {
 
     await this.checkBalance(wd);
 
-    const watchDogs = wd.map(function (item) {
+   /* const watchDogs = wd.map(function (item) {
       return new WatchDog(item);
-    });
+    });*/
 
    // await this.addUSValues(watchDogs);
 
-    const sellCoins = watchDogs.filter(function (item) {
+   /* const sellCoins = watchDogs.filter(function (item) {
       return item.sellScripts.toString().length && item.balanceCoin > 0 && item.coin !== 'BTC';
     });
 
     console.log(sellCoins);
     this.sellCoins = sellCoins;
 
-    this.downloadAgrigated();
+    this.downloadAgrigated();*/
 
   }
 

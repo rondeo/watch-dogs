@@ -5,7 +5,8 @@
 
 import {Observable} from 'rxjs/Observable';
 import {VOMCAgregated} from './api-models';
-import {WatchDogStatus} from './watch-dog';
+import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
+
 
 
 

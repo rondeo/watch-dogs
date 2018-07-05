@@ -1,4 +1,4 @@
-import {WatchDogStatus, WatchDog} from '../../models/watch-dog';
+
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {OrderType, VOBalance, VOOrder} from '../../models/app-models';
@@ -10,6 +10,8 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMovingAvg} from '../../com/moving-average';
 import * as moment from 'moment';
+import {WatchDogShared} from './watch-dog-shared';
+import {WatchDogStatus} from './watch-dog-status';
 
 
 export class SellCoinFilling {
@@ -26,27 +28,27 @@ export class SellCoinFilling {
   }
 
   constructor(
-    public watchDog: WatchDog
+    public shared: WatchDogShared
   ) {
-    this.id = watchDog.id;
+    this.id = shared.id;
     this.init();
   }
 
   async init() {
-    this.apiPrivate = ApisPrivateService.instance.getExchangeApi(this.watchDog.exchange);
-    this.apiPublic = ApisPublicService.instance.getExchangeApi(this.watchDog.exchange);
+    this.apiPrivate = ApisPrivateService.instance.getExchangeApi(this.shared.exchange);
+    this.apiPublic = ApisPublicService.instance.getExchangeApi(this.shared.exchange);
   }
 
   sell(): Promise<WatchDogStatus> {
-    console.log(moment().format('HH:mm') + ' ' + this.watchDog.wdId + ' SELL ')
-    this.watchDog.addHistory('SELL command');
-    if (this.watchDog.status === WatchDogStatus.SOLD_OUT || this.watchDog.status === WatchDogStatus.SOLD) {
+    console.log(moment().format('HH:mm') + ' ' + this.shared.wdId + ' SELL ')
+    this.shared.addHistory('SELL command');
+    if (this.shared.status === WatchDogStatus.SOLD_OUT || this.shared.status === WatchDogStatus.SOLD) {
       return;
     }
 
-    const base: string = this.watchDog.base;
-    const coin = this.watchDog.coin;
-    const balanceCoin = this.watchDog.balanceCoin;
+    const base: string = this.shared.base;
+    const coin = this.shared.coin;
+    const balanceCoin = this.shared.balanceCoin;
 
     this.statusChangesSub.next({
       status: WatchDogStatus.SELLING_IN_PROGRESS,
@@ -117,7 +119,7 @@ export class SellCoinFilling {
       return
     }
     try {
-      const order: VOOrder = await this.apiPrivate.getOrder(this.oredr.uuid, this.watchDog.base, this.watchDog.coin).toPromise();
+      const order: VOOrder = await this.apiPrivate.getOrder(this.oredr.uuid, this.shared.base, this.shared.coin).toPromise();
       if (order.isOpen) {
         this.statusChangesSub.next({
           status: WatchDogStatus.CHECKING_ORDER,
@@ -142,7 +144,7 @@ export class SellCoinFilling {
   }
 
   dectroy() {
-    this.watchDog = null;
+    this.shared = null;
     this.apiPrivate = null;
     this.apiPublic = null;
   }

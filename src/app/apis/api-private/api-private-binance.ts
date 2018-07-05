@@ -97,7 +97,6 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       orderId: orderId
     };
     return this.call(url, data, RequestType.POST).map(res => {
-
       return res
     });
   }

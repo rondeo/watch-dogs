@@ -275,7 +275,14 @@ export class BuySellCoinComponent implements OnInit {
   }
 
   private onError(error) {
-    this.snackBar.open('Error ' + error.message, 'x', {extraClasses: 'alert-red'});
+    console.error(error);
+    let msg;
+    if(error.error){
+      if(error.error.msg) msg = error.error.msg;
+      else msg = JSON.stringify(error.error)
+    }else msg = error.message;
+
+    this.snackBar.open('Error ' + msg, 'x', {extraClasses: 'alert-red'});
   }
 
   placeOrder(action: string, base: string, coin: string, rate: number, amountCoin: number): Observable<VOOrder> {

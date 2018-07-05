@@ -12,11 +12,12 @@ import * as moment from 'moment';
 import {GRAPHS} from '../../com/grpahs';
 import {VOMCAgregated, VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {WatchDog, WatchDogStatus} from '../../models/watch-dog';
+import {WatchDog} from '../../models/watch-dog';
 import {SellCoinFilling} from './sell-coin-filling';
 import {MovingAverage} from '../../com/moving-average';
 import {clearInterval} from 'timers';
 import {Subject} from 'rxjs/Subject';
+import {WatchDogStatus} from './watch-dog-status';
 
 
 @Injectable()
@@ -110,6 +111,7 @@ export class AppBotsService {
 
   async dryRun(action: string) {
     if (action === 'SELL') {
+      console.log('running test');
       WatchDog.isTest = true;
       const wds = this.getAllSellBots();
 
@@ -226,14 +228,14 @@ export class AppBotsService {
   async runBots() {
     const wds =   this.allWatchDogsSub.getValue();
 
-    console.log(' ALL ', wds);
+    // console.log(' ALL ', wds);
 
     const MC = await this.marketCap.getData();
     const promises = wds.map(function (item: WatchDog) {
       return item.run(MC[item.coin], MC[item.base]);
     });
    const results = await Promise.all(promises);
-   console.log(results);
+   // console.log(results);
   }
 
 

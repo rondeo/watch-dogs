@@ -1,12 +1,14 @@
 <div>
     <p>
-        <mat-form-field class="w5">
+        <mat-form-field class="w6">
             <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
                 <mat-option value="all">All</mat-option>
                 <mat-option value="top100">Top 100</mat-option>
+                <mat-option value="100_200">100-200</mat-option>
+                <mat-option value="after200"> > 200</mat-option>
                 <mat-option value="top200">Top 200</mat-option>
-                <mat-option value="after100"> >> 100</mat-option>
-                <mat-option value="after200"> >> 200</mat-option>
+                <mat-option value="after100"> > 100</mat-option>
+
             </mat-select>
         </mat-form-field>
         <mat-form-field class="w6">
@@ -26,15 +28,12 @@
         <table class="mat-body">
             <tbody>
             <tr>
-                <td></td>
-                <td class="btn" (click)="onUpClick()">UP</td>
+                <td colspan="3"></td>
                 <td colspan="5" class="text-center">
                     <small class="btn" (click)="onToBTCClick()">% to btc</small>
                     <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>
                 </td>
-
-                <td></td>
-                <td class="text-center">
+                <td  colspan="3" class="text-center">
                     <small>CMC</small>
                 </td>
             </tr>

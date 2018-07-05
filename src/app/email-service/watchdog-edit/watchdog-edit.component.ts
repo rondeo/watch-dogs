@@ -51,11 +51,11 @@ export class WatchdogEditComponent implements OnInit {
 
     if(!wd) {
       wd = new WatchDog(VOWATCHDOG);
-      wd.id = id;
+      //wd.id = id;
       wd.orderType = OrderType.SELL;
     }
-    if(!wd.sellScripts) wd.sellScripts = [];
-    if(!wd.buyScripts) wd.buyScripts = [];
+   // if(!wd.sellScripts) wd.sellScripts = [];
+   // if(!wd.buyScripts) wd.buyScripts = [];
     this.watchDog = wd;
   }
 
@@ -89,18 +89,18 @@ export class WatchdogEditComponent implements OnInit {
       this.snackBar.open('Select Exchange', 'x', {duration: 3000});
       return
     }
-    if (!this.watchDog.amount) {
+    /*if (!this.watchDog.amount) {
       this.snackBar.open('Set amount', 'x', {duration: 3000});
       return
-    }
-    if (!this.watchDog.name) this.watchDog.name = this.watchDog.exchange + ' ' + this.watchDog.base + ' ' + this.watchDog.coin + ' ' + this.watchDog.amount;
-    const sellScript = this.watchDog.sellScripts?this.watchDog.sellScripts.toString():null;
-    const buyScript = this.watchDog.buyScripts?this.watchDog.buyScripts.toString():null;
+    }*/
+    // if (!this.watchDog.name) this.watchDog.name = this.watchDog.exchange + ' ' + this.watchDog.base + ' ' + this.watchDog.coin + ' ' + this.watchDog.amount;
+   // const sellScript = this.watchDog.sellScripts?this.watchDog.sellScripts.toString():null;
+   // const buyScript = this.watchDog.buyScripts?this.watchDog.buyScripts.toString():null;
     // console.log(!sellScripts, !buyScripts);
-    if(this.watchDog.isActive && !sellScript && !buyScript){
+   /* if(this.watchDog.isActive && !sellScript && !buyScript){
       this.snackBar.open('Set Script', 'x', {extraClasses:'alert-red'});
       return
-    }
+    }*/
 
     this.saveWatchDog();
   }
@@ -115,10 +115,10 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   onClearReportClick() {
-    if (confirm('Delete reports"')) {
+   /* if (confirm('Delete reports"')) {
       this.watchDog.results = [];
       this.reports = '';
-    }
+    }*/
 
   }
 }

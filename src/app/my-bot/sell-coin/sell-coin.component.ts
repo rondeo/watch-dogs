@@ -74,7 +74,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
       const coin = this.watchdog.coin;
       const data = newValues[coin];
       console.log(data);
-      this.watchdog.coinMC = data;
+     //  this.watchdog.coinMC = data;
 
 
       const integ = GRAPHS.integralData(data);

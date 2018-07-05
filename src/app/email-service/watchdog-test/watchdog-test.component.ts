@@ -59,7 +59,7 @@ export class WatchdogTestComponent implements OnInit {
     if (!this.uid) throw new Error(' no id ');
     this.watchDog = await this.botsService.getWatchDogById(this.uid);
     if (!this.watchDog) throw new Error(' no WD for ' + this.uid);
-    this.scripts = this.watchDog.sellScripts;
+   // this.scripts = this.watchDog.sellScripts;
     this.exchange = this.watchDog.exchange;
     this.market = this.watchDog.base + '_' + this.watchDog.coin;
 

@@ -79,7 +79,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub1 = this.route.params.subscribe(params => {
       let uid = params['uid'];
       uid = uid.toUpperCase();
-      this.currentDog.id = uid;
+     // this.currentDog.id = uid;
       if(this.emailService.getWatchDogs()) this.setCurrentDogByUid(uid);
 
 
@@ -244,11 +244,11 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   setCurrentDog(dog:WatchDog){
-    if(dog){
+   /* if(dog){
       let script = (dog && dog.sellScripts)?dog.sellScripts.toString():'';
       this.setCurrentScript(script);
       this.currentDog = dog;
-    }else this.currentDog = new WatchDog(new VOWatchdog({}));
+    }else this.currentDog = new WatchDog(new VOWatchdog({}));*/
     console.log(' set dog ', dog);
   }
 

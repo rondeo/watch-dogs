@@ -66,7 +66,7 @@ export class EmailServiceService {
   }
   saveData(){
 
-    let data = this.watchDogs.map(function (item) {
+   /* let data = this.watchDogs.map(function (item) {
       let script = item.sellScripts.toString();
       if(script && script.length < 50) script = '';
 
@@ -81,7 +81,7 @@ export class EmailServiceService {
   });
 
     this.storage.setItem('watch-dogs',JSON.stringify(data));
-    this.watchDogsSub.next(this.watchDogs);
+    this.watchDogsSub.next(this.watchDogs);*/
   }
 
   marketCapData:{[id:string]:VOMarketCap}

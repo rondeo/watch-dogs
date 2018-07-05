@@ -194,6 +194,9 @@ export class GainersLosersComponent implements OnInit {
       case 'after200':
         allCoins = allCoins.filter(o => o.rank > 200);
         break;
+      case '100_200':
+        allCoins = allCoins.filter(o => o.rank < 200 && o.rank > 100);
+        break;
     }
 
 

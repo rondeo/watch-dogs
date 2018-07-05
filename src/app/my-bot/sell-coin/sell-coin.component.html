@@ -1,5 +1,5 @@
 <div>
-    <section>
+   <!-- <section>
         {{watchdog.base}}&nbsp;${{watchdog.baseUS}}
         &nbsp;&nbsp;
         <a routerLink="../coin-graph/{{watchdog.coin}}" class="btn">{{watchdog.coin}}</a>
@@ -8,9 +8,9 @@
         &nbsp; &nbsp;
         <span>%</span>
         &nbsp;
-        <app-mc-percent *ngIf="watchdog.coinMC" [marketcap]="watchdog.coinMC"></app-mc-percent>
+       &lt;!&ndash; <app-mc-percent *ngIf="watchdog.coinMC" [marketcap]="watchdog.coinMC"></app-mc-percent>&ndash;&gt;
     </section>
-
+-->
     <section>
         <app-line-chart [graphs]="myGraps"></app-line-chart>
     </section>
