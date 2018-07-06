@@ -5,7 +5,6 @@ import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
-import {b} from '@angular/core/src/render3';
 import {ApiPublicAbstract} from '../apis/api-public/api-public-abstract';
 import {ApisPublicService} from '../apis/apis-public.service';
 import {ApiPrivateAbstaract} from '../apis/api-private/api-private-abstaract';
@@ -14,6 +13,7 @@ import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {StorageService} from '../services/app-storage.service';
 import {SellCoinFilling} from '../app-services/app-bots-services/sell-coin-filling';
 import {Subscription} from 'rxjs/Subscription';
+import {IWatchDog, WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
 
 export interface RunResults {
   actiin: string;
@@ -22,27 +22,8 @@ export interface RunResults {
   date: string;
 }
 
-export enum WatchDogStatus {
-  INITIALIZED = 'INITIALIZED',
-  WAITING = 'WAITING',
-  TO_SELL = 'TO_SELL',
 
-  SELLING_IN_PROGRESS = 'SELLING_IN_PROGRESS',
-  SELLING_GOT_ORDER = 'SELLING_GOT_ORDER',
-  SELLING_ORDER_CLOSED = 'SELLING_ORDER_CLOSED',
-
-  ERROR_SELLING = 'ERROR_SELLING',
-
-  SOLD_OUT = 'SOLD_OUT',
-  SOLD = 'SOLD',
-
-  NO_BALANCE = 'NO_BALANCE',
-  NO_BALANCE_BASE = 'NO_BALANCE_BASE',
-
-  CHECKING_ORDER = 'CHECKING_ORDER'
-}
-
-export class WatchDog extends VOWatchdog {
+export class WatchDog extends VOWatchdog implements IWatchDog {
 
   static _statusChangedSub: Subject<WatchDog> = new Subject<WatchDog>();
 
@@ -56,7 +37,6 @@ export class WatchDog extends VOWatchdog {
   coinMC: VOMCAgregated;
   baseMC: VOMCAgregated;
   message: string;
-  history: any[];
   balanceBase: number;
   balanceCoin: number;
   wdId: string;
@@ -64,6 +44,10 @@ export class WatchDog extends VOWatchdog {
   sub1
   sub2
   sub3: Subscription;
+
+  errors: any[];
+  warns: any[];
+  logs: any[];
   //  isToSell: boolean;
 
   static isTest: boolean;
@@ -126,44 +110,11 @@ export class WatchDog extends VOWatchdog {
     this.baseMC = base;
   }
 
-  async getHistory(): Promise<any[]> {
-    if (this.history) return Promise.resolve(this.history);
-    return StorageService.instance.select(this.wdId + '-history').then(res => {
-      if (!res || !Array.isArray(res)) res = [];
-      this.history = res
-      return this.history;
-    });
-  }
-
-  async saveHistory(): Promise<any> {
-    return StorageService.instance.upsert(this.wdId + '-history', this.history);
-  }
-
-  async onError(msg: string) {
-    const errors = await StorageService.instance.select(this.wdId + '-errors') || [];
-    errors.push({
-      timestamp: moment().format(),
-      message: msg,
-    })
-    return await StorageService.instance.upsert(this.wdId + '-errors', errors);
-  }
-
-  async addHistory(msg: string) {
-    console.log(this.wdId + ' ' + msg + '  ' + this.status);
-    const h = await this.getHistory();
-    h.push({
-      time: moment().format('HH:mm'),
-      timestamp: moment().format(),
-      message: msg,
-      status: this.status
-    })
-  }
-
   createSellCoin() {
-    this.sellCoinFill = new SellCoinFilling(this);
+    this.sellCoinFill = new SellCoinFilling(this as IWatchDog);
     this.sub3 = this.sellCoinFill.statusChanged$().subscribe(status => {
       this.status = status.status;
-      this.addHistory(status.message);
+      this.log(status.message);
       switch (status.status) {
         case WatchDogStatus.SELLING_ORDER_CLOSED:
           ApisPrivateService.instance.getExchangeApi(this.exchange).refreshBalances();
@@ -180,7 +131,7 @@ export class WatchDog extends VOWatchdog {
 
   async runSellingStart(curr: VOMCAgregated, base: VOMCAgregated) {
     console.log(this.wdId + ' runSellingStart');
-    const history = await this.getHistory();
+
     if (!this.sellCoinFill) {
       this.createSellCoin();
       this.sellCoinFill.sell();
@@ -190,7 +141,7 @@ export class WatchDog extends VOWatchdog {
 
   async runWaiting(curr: VOMCAgregated, base: VOMCAgregated) {
     const date = moment().format('HH:mm');
-    const history = await this.getHistory();
+
     const status = this.status;
     const prev = this.coinMC;
     if (prev.timestamp === curr.timestamp) {
@@ -214,15 +165,14 @@ export class WatchDog extends VOWatchdog {
       moment(curr.timestamp).format('HH:mm'),
       moment(curr.timestamp).diff(prev.timestamp, 'minutes')
     ]
-    const data = {
+    const data = [
       date,
       values,
       isToSell,
       coinData,
       status
-    };
-    this.history.push(data);
-    return this.saveHistory();
+    ];
+    this.log(data.toString())
   }
 
   async run(curr: VOMCAgregated, base: VOMCAgregated): Promise<string> {
@@ -249,13 +199,6 @@ export class WatchDog extends VOWatchdog {
     );
   }
 
-  private setMessage(message: string) {
-    this.message = message;
-    if (!this.history) this.history = [];
-    this.history.push(message);
-    if (this.history.length > 100) this.history.shift();
-    this.setCurrentDate();
-  }
 
   destroy() {
     if (this.sellCoinFill) this.sellCoinFill.dectroy();
@@ -268,16 +211,13 @@ export class WatchDog extends VOWatchdog {
     this.sellCoinFill = null;
     this.baseMC = null;
     this.coinMC = null;
-    this.history = null;
+    this.warns = null;
+    this.logs = null;
+    StorageService.instance.remove(this.wdId + '-logs');
     StorageService.instance.remove(this.wdId + '-errors');
-    StorageService.instance.remove(this.wdId + '-history');
+    StorageService.instance.remove(this.wdId + '-warns');
 
   }
-
-  private setCurrentDate() {
-    this.date = moment().format('MM-DD, h:mm');
-  }
-
 
   toJSON(): VOWatchdog {
     return {
@@ -295,6 +235,41 @@ export class WatchDog extends VOWatchdog {
       amount: this.amount,
       _status: this._status
     }
+
+  }
+
+  async onError(msg: string) {
+    if (!this.errors) this.errors = await StorageService.instance.select(this.wdId + '-errors') || [];
+    console.error(this.wdId, msg);
+    this.errors.push({
+      timestamp: moment().format(),
+      message: msg,
+    })
+    return await StorageService.instance.upsert(this.wdId + '-errors', this.errors);
+  }
+
+  async warn(msg, obj) {
+    if (!this.warns) this.warns = await StorageService.instance.select(this.wdId + '-warns') || [];
+    console.warn(this.wdId, msg, obj);
+    this.warns.push({
+      timestamp: moment().format(),
+      message: msg,
+      data: obj
+    });
+    return await StorageService.instance.upsert(this.wdId + '-warns', this.warns);
+
+  }
+
+  async log(msg: string) {
+    if (!this.logs) this.logs = await StorageService.instance.select(this.wdId + '-logs') || [];
+    console.log(this.wdId, msg);
+    this.logs.push({
+      time: moment().format('HH:mm'),
+      timestamp: moment().format(),
+      message: msg,
+      status: this.status
+    });
+    await StorageService.instance.upsert(this.wdId + '-logs', this.logs);
 
   }
 

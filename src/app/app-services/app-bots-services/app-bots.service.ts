@@ -12,11 +12,12 @@ import * as moment from 'moment';
 import {GRAPHS} from '../../com/grpahs';
 import {VOMCAgregated, VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {WatchDog, WatchDogStatus} from '../../models/watch-dog';
+import {WatchDog} from '../../models/watch-dog';
 import {SellCoinFilling} from './sell-coin-filling';
 import {MovingAverage} from '../../com/moving-average';
 import {clearInterval} from 'timers';
 import {Subject} from 'rxjs/Subject';
+import {WatchDogStatus} from './watch-dog-status';
 
 
 @Injectable()

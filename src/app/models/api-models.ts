@@ -1,5 +1,6 @@
 import {VOMarketCap} from './app-models';
 
+
 export interface VOCoinData{
   timestamp: number;
   price_btc: number;

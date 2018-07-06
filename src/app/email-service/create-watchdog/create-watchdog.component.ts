@@ -7,9 +7,10 @@ import {MatDialog} from '@angular/material';
 import {OrderType, VOMarketCap, VOWatchdog} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {WatchDog, WatchDogStatus} from '../../models/watch-dog';
+import {WatchDog} from '../../models/watch-dog';
 import * as moment from 'moment';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+import {WatchDogStatus} from '../../app-services/app-bots-services/watch-dog-status';
 
 
 @Component({
