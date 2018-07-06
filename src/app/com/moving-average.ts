@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
-import {VOCoinData, VOMCAgregated} from '../models/api-models';
+import {VOCoinWeek, VOMCAgregated} from '../models/api-models';
+import {VOCoinsDay} from '../apis/api-market-cap.service';
 
 export interface VOMovingAvg {
   symbol: string;
@@ -72,7 +73,7 @@ export class MovingAverage {
   }
 
 
-  static movingAfarageFromVOCoinData(coindatas: VOCoinData[]): VOMovingAvg[] {
+  static movingAfarageFromCoinWeek(coindatas: VOCoinWeek[]): VOMovingAvg[] {
     const takeRight = _.takeRight;
     const sumBy = _.sumBy;
     const take = _.take;
@@ -143,6 +144,96 @@ export class MovingAverage {
 
 
     return out;
+  }
+
+  static async movingAverageFromCoinDay(coinDay: VOCoinsDay) {
+    return new Promise<{
+      symbol: string;
+      price03hD: number;
+      price1hD: number;
+      price2hD: number;
+      price4hD: number;
+      price24hD: number;
+      rank24hD: number;
+    } []>(function (resolve, reject) {
+
+      const takeRight = _.takeRight;
+      const sumBy = _.sumBy;
+      const take = _.take;
+      const out = [];
+      const L = coinDay['BTC'].length - 1;
+      const M = Math.round(L / 2);
+
+
+      for (let coin in coinDay) {
+        const values = coinDay[coin];
+        const cur = values[L];
+        const prev = values[L - 1];
+
+        const l_3 = values.slice(L - 3, L);
+
+        const price03h = +(sumBy(l_3, 'price_btc') / l_3.length);
+
+        // const l_05 = values.slice(L - 5, L);
+        // const price05h = +(sumBy(l_05, 'price_btc') / l_05.length).toFixed(12);
+
+        const l_10 = values.slice(L - 10, L);
+        const price1h = +(sumBy(l_10, 'price_btc') / l_10.length);
+
+        const l_20 = values.slice(L - 20, L);
+        const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
+
+        const l_40 = values.slice(L - 40, L);
+        const price4h = +(sumBy(l_40, 'price_btc') / l_40.length);
+
+        const l_80 = values.slice(L - 80, L);
+        const price8h = +(sumBy(l_80, 'price_btc') / l_80.length);
+
+
+        const price03hD = 100 * (price03h - price1h) / price1h;
+        const price1hD = 100 * (price1h - price2h) / price2h;
+        const price2hD = 100 * (price2h - price4h) / price4h;
+        const price4hD = 100 * (price4h - price8h) / price8h;
+
+
+        /*  const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
+          const vol1h_ = +(sumBy(l_10_, 'volume') / 10).toFixed(0);
+
+          const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
+          const vol2h_ = +(sumBy(l_20_, 'volume') / 20).toFixed(0);
+
+          const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
+          const vol3h_ = +(sumBy(l_30_, 'volume') / 30).toFixed(0);
+
+
+    */
+        const first10 = values.slice(0, 10);
+        const last10 = values.slice(L - 10, L);
+
+        const price1 = (sumBy(first10, 'price_btc') / first10.length);
+        const price2 = (sumBy(last10, 'price_btc') / last10.length);
+
+
+        const price24hD = 100 * (price2 - price1) / price1;
+
+        const rank1 = +(sumBy(first10, 'rank') / first10.length);
+        const rank2 = +(sumBy(last10, 'rank') / last10.length);
+        const rank24hD = +(100 * (rank1 - rank2) / rank1)
+
+        const rank = cur.rank;
+        const price_btc = cur.price_btc;
+        out.push({
+          symbol: coin,
+          price03hD,
+          price1hD,
+          price2hD,
+          price4hD,
+          price24hD,
+          rank24hD
+        })
+      }
+      resolve(out);
+    })
   }
 }
 

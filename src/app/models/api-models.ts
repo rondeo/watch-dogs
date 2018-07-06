@@ -1,7 +1,7 @@
 import {VOMarketCap} from './app-models';
 
 
-export interface VOCoinData{
+export interface VOCoinWeek{
   timestamp: number;
   price_btc: number;
   price_usd: number;

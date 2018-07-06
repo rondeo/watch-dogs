@@ -22,7 +22,6 @@ export interface RunResults {
   date: string;
 }
 
-
 export class WatchDog extends VOWatchdog implements IWatchDog {
 
   static _statusChangedSub: Subject<WatchDog> = new Subject<WatchDog>();
@@ -100,10 +99,8 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
           console.warn(' no balance for ' + this.base);
         }
       })
-    })
-
+    });
   }
-
 
   setDataMC(curr: VOMCAgregated, base: VOMCAgregated) {
     this.coinMC = curr;
@@ -135,7 +132,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
     if (!this.sellCoinFill) {
       this.createSellCoin();
       this.sellCoinFill.sell();
-    } else this.onError('selling excists ')
+    } else this.warn('selling excists ')
 
   }
 
@@ -156,7 +153,6 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
     const values: number[] = [prev.price_btc, curr.price_btc, prev.last20, curr.last20, -0.11];
 
     const percentChange2h = 100 * ((curr.last20 - prev.last20) / prev.last20);
-
     values.push(percentChange2h);
     const isToSell = percentChange2h < -0.11;
     if (isToSell) this.status = WatchDogStatus.TO_SELL;
@@ -248,7 +244,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
     return await StorageService.instance.upsert(this.wdId + '-errors', this.errors);
   }
 
-  async warn(msg, obj) {
+  async warn(msg, obj?: any) {
     if (!this.warns) this.warns = await StorageService.instance.select(this.wdId + '-warns') || [];
     console.warn(this.wdId, msg, obj);
     this.warns.push({

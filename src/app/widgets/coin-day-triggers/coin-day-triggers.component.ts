@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {VOCoinData} from '../../models/api-models';
+import {VOCoinWeek} from '../../models/api-models';
 import {MovingAverage, VOMovingAvg} from '../../com/moving-average';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -24,12 +24,13 @@ export class CoinDayTriggersComponent implements OnInit {
   }
 
 
-  onCoinDataChange(coindatas: VOCoinData[]) {
+  onCoinDataChange(coindatas: VOCoinWeek[]) {
+     console.log(coindatas)
     const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format());
     console.log(moment(_.last(coindatas).timestamp).format());
 
-    const mas = MovingAverage.movingAfarageFromVOCoinData(coindatas);
+    const mas = MovingAverage.movingAfarageFromCoinWeek(coindatas);
 
     const ma_3hs = [];
     const ma_2hs = [];
@@ -80,6 +81,7 @@ export class CoinDayTriggersComponent implements OnInit {
     ma_03hs.reverse();
     console.log(moment(_.first(mas).timestamp).format());
     console.log(moment(_.last(mas).timestamp).format());
+
     let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
 
     //  while(triggers.length < length) triggers.unshift(1);

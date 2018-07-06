@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
-import {VOCoinData} from '../../models/api-models';
+import {VOCoinWeek} from '../../models/api-models';
 import {MovingAverage, VOMovingAvg} from '../../com/moving-average';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -17,14 +17,14 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 })
 export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
-  @Output() coindatas: EventEmitter<VOCoinData[]> = new EventEmitter<VOCoinData[]>();
+  @Output() coindatas: EventEmitter<VOCoinWeek[]> = new EventEmitter<VOCoinWeek[]>();
 
   @Input() coin: string;
 
   triggers: VOLineGraph[];
 
 
-  lastValue: VOCoinData;
+  lastValue: VOCoinWeek;
 
   myGraps: VOGraphs;
 
@@ -76,14 +76,14 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
   }
 
-  async getCoinHistory(): Promise<VOCoinData[]> {
+  async getCoinHistory(): Promise<VOCoinWeek[]> {
     if (this.fullHistory) return Promise.resolve(this.fullHistory);
     else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
   }
 
-  fullHistory: VOCoinData[];
+  fullHistory: VOCoinWeek[];
 
-  drawData(history: VOCoinData[]) {
+  drawData(history: VOCoinWeek[]) {
 
     const l = history.length;
 
@@ -93,8 +93,8 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
     this.skip = l - history.length;
 
-    const first: VOCoinData = _.first(history);
-    const last: VOCoinData = _.last(history);
+    const first: VOCoinWeek = _.first(history);
+    const last: VOCoinWeek = _.last(history);
 
     this.lastValue = last;
 
@@ -125,7 +125,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
     console.log(history);
 
-    const mas = MovingAverage.movingAfarageFromVOCoinData(history);
+    const mas = MovingAverage.movingAfarageFromCoinWeek(history);
 
     const min = _.min( pricebtcs)
     const max = _.max(pricebtcs);
@@ -278,12 +278,12 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.filterDay();
   }
 
-  onCoinDataChange(coindatas: VOCoinData[]) {
+  onCoinDataChange(coindatas: VOCoinWeek[]) {
     const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(coindatas).timestamp).format('M/DD HH:mm'));
 
-    const mas = MovingAverage.movingAfarageFromVOCoinData(coindatas);
+    const mas = MovingAverage.movingAfarageFromCoinWeek(coindatas);
 
     console.log(moment(_.first(mas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(mas).timestamp).format('M/DD HH:mm'));

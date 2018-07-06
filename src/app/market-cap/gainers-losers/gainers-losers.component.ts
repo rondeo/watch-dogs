@@ -7,6 +7,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOMCAGREGATED, VOMCAgregated} from '../../models/api-models';
+import {MovingAverage} from '../../com/moving-average';
 
 
 @Component({
@@ -129,7 +130,7 @@ export class GainersLosersComponent implements OnInit {
     const coinDay = await this.apiMarketCap.getCoinsDay(isRefresh);
     // console.log(coinDay);
 
-    const ma = await ApiMarketCapService.movingAfarageFromCoinDay(coinDay);
+    const ma = await MovingAverage.movingAverageFromCoinDay(coinDay);
 
     /*
     *  symbol,

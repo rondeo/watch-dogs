@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../com/moving-average';
-import {VOCoinData, VOMCAgregated} from '../../models/api-models';
+import {VOCoinWeek, VOMCAgregated} from '../../models/api-models';
 import {WatchDog} from '../../models/watch-dog';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 
@@ -70,12 +70,12 @@ export class WatchdogTestComponent implements OnInit {
   }
 
 
-  onCoinDataChange(coindatas: VOCoinData[]) {
+  onCoinDataChange(coindatas: VOCoinWeek[]) {
     const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format());
     console.log(moment(_.last(coindatas).timestamp).format());
 
-    const mas = MovingAverage.movingAfarageFromVOCoinData(coindatas);
+    const mas = MovingAverage.movingAfarageFromCoinWeek(coindatas);
     console.log(moment(_.first(mas).timestamp).format());
     console.log(moment(_.last(mas).timestamp).format());
     let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
