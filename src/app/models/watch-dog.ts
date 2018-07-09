@@ -1,8 +1,9 @@
 import {VOBalance, VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
-import {VOMCAgregated} from './api-models';
+import {VOCoinDayValue, VOCoinsDayData, VOMCAgregated} from './api-models';
 import {MovingAverage, VOMovingAvg} from '../com/moving-average';
 import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {ApiPublicAbstract} from '../apis/api-public/api-public-abstract';
@@ -33,8 +34,8 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
   date: string;
   baseUS: number;
   coinUS: number;
-  coinMC: VOMCAgregated;
-  baseMC: VOMCAgregated;
+  coinMC: VOCoinDayValue;
+  baseMC: VOCoinDayValue;
   message: string;
   balanceBase: number;
   balanceCoin: number;
@@ -69,12 +70,11 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
 
   subscribeForBalances() {
     if (!this.exchange || !this.base || !this.coin) return;
-    ApiMarketCapService.instance.getData().then(MC => {
-      this.coinMC = MC[this.coin];
-      this.baseMC = MC[this.base];
+      //this.coinMC = MC[this.coin];
       const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.exchange);
       this.message = 'initialized';
       this.sub1 = api.balance$(this.coin).subscribe(balance => {
+        if(!this.coinMC) return;
         console.log(this.wdId, balance);
         if (balance) {
           this.balanceCoin = balance.balance;
@@ -85,11 +85,11 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
           this.coinUS = 0;
           this.status = WatchDogStatus.NO_BALANCE;
         }
-
       });
 
       this.sub2 = api.balance$(this.base).subscribe(balance => {
         //  console.log(this.wdId, balance);
+        if(!this.baseMC) return;
         if (balance) {
           this.balanceBase = balance.balance;
           this.baseUS = Math.round(this.balanceBase * this.baseMC.price_usd);
@@ -99,7 +99,6 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
           console.warn(' no balance for ' + this.base);
         }
       })
-    });
   }
 
   setDataMC(curr: VOMCAgregated, base: VOMCAgregated) {
@@ -136,8 +135,85 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
 
   }
 
-  async runWaiting(curr: VOMCAgregated, base: VOMCAgregated) {
+  async runWaiting2(coinValues:VOCoinDayValue[], coin:string) {
     const date = moment().format('HH:mm');
+    const sumBy = _.sumBy;
+    const MA: {
+      symbol: string;
+      price03hD: number;
+      price1hD: number;
+      price2hD: number;
+      price4hD: number;
+      price24hD: number;
+      rank24hD: number;
+    } = MovingAverage.movingAverageSnapFromCoinDay(coinValues, sumBy, coin);
+    //console.log(MA);
+
+
+
+
+  /*  const status = this.status;
+    const prev = this.coinMC;
+    if (prev.timestamp === curr.timestamp) {
+      console.log(this.wdId + ' sane timestamp ');
+      return;
+    }
+
+    this.coinMC = curr;
+    this.baseMC = base;
+    if (!prev) return this.status;
+
+    const values: number[] = [prev.price_btc, curr.price_btc, prev.last20, curr.last20, -0.11];
+
+    const percentChange2h = 100 * ((curr.last20 - prev.last20) / prev.last20);
+    values.push(percentChange2h);
+    const isToSell = percentChange2h < -0.11;
+    if (isToSell) this.status = WatchDogStatus.TO_SELL;
+    const coinData = [
+      moment(prev.timestamp).format('HH:mm'),
+      moment(curr.timestamp).format('HH:mm'),
+      moment(curr.timestamp).diff(prev.timestamp, 'minutes')
+    ]
+    const data = [
+      date,
+      values,
+      isToSell,
+      coinData,
+      status
+    ];
+    this.log(data.toString())*/
+  }
+
+  async run2(coinsDay: VOCoinsDayData): Promise<string> {
+    const coinValues = coinsDay[this.coin];
+    const baseValues = coinsDay[this.base];
+    const coinLast = _.last(coinValues);
+    const baseLast = _.last(baseValues);
+    const price_btc = _.last(coinsDay['BTC']).price_btc;
+    coinLast.price_usd = coinLast.price_btc * price_btc;
+    if(this.base !== 'BTC') baseLast.price_usd = baseLast.price_btc * price_btc;
+    else baseLast.price_usd = baseLast.price_btc;
+    this.coinMC = coinLast;
+    this.baseMC = baseLast;
+
+    ApisPrivateService.instance.getExchangeApi(this.exchange).tickRefreshBalance();
+    const status = this.status;
+    const date = moment().format('HH:mm');
+    console.log(date, this.wdId, this.status);
+    switch (this.status) {
+      case WatchDogStatus.WAITING:
+        await this.runWaiting2(coinValues, this.coin);
+        break;
+      case WatchDogStatus.TO_SELL:
+        // await this.runSellingStart(curr, base);
+        break;
+    }
+    return this.wdId + ' ' + this.status;
+  }
+
+ /* async runWaiting(curr: VOMCAgregated, base: VOMCAgregated) {
+    const date = moment().format('HH:mm');
+
 
     const status = this.status;
     const prev = this.coinMC;
@@ -169,9 +245,9 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
       status
     ];
     this.log(data.toString())
-  }
+  }*/
 
-  async run(curr: VOMCAgregated, base: VOMCAgregated): Promise<string> {
+ /* async run(curr: VOMCAgregated, base: VOMCAgregated): Promise<string> {
     ApisPrivateService.instance.getExchangeApi(this.exchange).tickRefreshBalance();
     const status = this.status;
     const date = moment().format('HH:mm');
@@ -185,7 +261,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
         break;
     }
     return this.wdId + ' ' + this.status;
-  }
+  }*/
 
   static isMovingDown2(prev: VOMovingAvg, curr: VOMovingAvg): boolean {
     ;

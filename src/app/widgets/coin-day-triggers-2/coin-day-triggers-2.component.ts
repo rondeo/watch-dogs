@@ -125,7 +125,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
     console.log(history);
 
-    const mas = MovingAverage.movingAfarageFromCoinWeek(history);
+    const mas = MovingAverage.movingAverageGraphFromCoinWeek(history);
 
     const min = _.min( pricebtcs)
     const max = _.max(pricebtcs);
@@ -283,7 +283,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     console.log(moment(_.first(coindatas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(coindatas).timestamp).format('M/DD HH:mm'));
 
-    const mas = MovingAverage.movingAfarageFromCoinWeek(coindatas);
+    const mas = MovingAverage.movingAverageGraphFromCoinWeek(coindatas);
 
     console.log(moment(_.first(mas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(mas).timestamp).format('M/DD HH:mm'));

@@ -67,7 +67,7 @@ export class GainersLosersComponent implements OnInit {
       this.top = state.top || this.top;
     }
 
-    this.downlaodMarketCap(false);
+    this.downlaodMarketCap();
 
     this.route.params.subscribe(params => {
       if (params.exchange !== this.exchange) {
@@ -117,7 +117,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   onRefreshClick() {
-    this.downlaodMarketCap(true);
+    this.downlaodMarketCap();
   }
 
   onTopChange(evt) {
@@ -125,12 +125,12 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  async downlaodMarketCap(isRefresh) {
-    const MC = await this.apiMarketCap.downloadTicker(isRefresh).toPromise();
-    const coinDay = await this.apiMarketCap.getCoinsDay(isRefresh);
+  async downlaodMarketCap() {
+    const MC = await this.apiMarketCap.downloadTicker().toPromise();
+    const coinDay = await this.apiMarketCap.getCoinsDay();
     // console.log(coinDay);
 
-    const ma = await MovingAverage.movingAverageFromCoinDay(coinDay);
+    const ma = await MovingAverage.movingAverageSnapFromCoinDays(coinDay);
 
     /*
     *  symbol,

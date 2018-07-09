@@ -75,7 +75,7 @@ export class WatchdogTestComponent implements OnInit {
     console.log(moment(_.first(coindatas).timestamp).format());
     console.log(moment(_.last(coindatas).timestamp).format());
 
-    const mas = MovingAverage.movingAfarageFromCoinWeek(coindatas);
+    const mas = MovingAverage.movingAverageGraphFromCoinWeek(coindatas);
     console.log(moment(_.first(mas).timestamp).format());
     console.log(moment(_.last(mas).timestamp).format());
     let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);

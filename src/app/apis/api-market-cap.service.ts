@@ -13,12 +13,10 @@ import * as moment from 'moment';
 import {clearInterval} from 'timers';
 import {BehaviorSubjectMy} from '../com/behavior-subject-my';
 import {Subscription} from 'rxjs/Subscription';
-import {MCdata, VOCoinWeek, VOMC, VOMCAgregated, VOMCObj} from '../models/api-models';
+import {MCdata, VOCoinsDayData, VOCoinWeek, VOMC, VOMCAgregated, VOMCObj} from '../models/api-models';
 import {VOMovingAvg} from '../com/moving-average';
 
-export interface VOCoinsDay {
-  [symbol: string]: { price_btc: number; volume: number; rank: number }[]
-}
+
 
 @Injectable()
 export class ApiMarketCapService {
@@ -28,7 +26,7 @@ export class ApiMarketCapService {
   private data: { [symbol: string]: VOMCAgregated };
   private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy(null);
 
-  private coinsDay: VOCoinsDay;
+  private coinsDay: VOCoinsDayData;
 
   constructor(
     private http: HttpClient,
@@ -46,11 +44,15 @@ export class ApiMarketCapService {
     });
   }
 
-  getCoinsDay(isRefresh = false): Promise<VOCoinsDay> {
-    if (this.coinsDay && !isRefresh) return Promise.resolve(this.coinsDay);
+
+  getCoinsDay(): Promise<VOCoinsDayData> {
     const url = '/api/proxy-http/crypto.aesoft.ca:49890/coin-day-all';
-    return this.http.get(url).map((res: any) => {
-      const payload = res;
+    return this.http.get(url, {observe: 'response'}).map((res: any) => {
+
+      //   console.log(res.headers.get('last-modified'));
+      // console.warn(res.headers.keys());
+      //  console.log(res);
+      const payload = res.body;
       const out = {};
       const timestams = [];
       for (const index in payload) {
@@ -68,8 +70,6 @@ export class ApiMarketCapService {
           })
         }
       }
-      ;
-      this.coinsDay = out;
       return out;
     }).toPromise();
   }
@@ -278,8 +278,6 @@ export class ApiMarketCapService {
     clearInterval(this.refreshInterval);
     this.refreshInterval = 0;
   }
-
-
 
 
 }

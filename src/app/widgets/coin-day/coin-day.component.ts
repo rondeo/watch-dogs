@@ -111,12 +111,20 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const volumes = [];
     const total_supply = [];
     const rank = [];
-    const triggers = [10];
 
+    const step_prices = [];
+   // console.log(history);
+    let stepprice = 0;
     history.forEach(function (item) {
       labels.push(' ');
       if (item) {
 
+        if(stepprice) {
+          if(item.price_btc > stepprice) stepprice += stepprice*0.001;
+          else stepprice -= stepprice*0.001;
+        } else  stepprice = item.price_btc;
+        step_prices.push(stepprice);
+       // item.price_btc = stepprice;
         pricebtcs.push(item.price_btc);
         priceusds.push(item.price_usd);
         volumes.push(item.volume);
@@ -124,8 +132,12 @@ export class CoinDayComponent implements OnInit, OnChanges {
         rank.push(item.rank);
 
       }
-    })
+    });
 
+    const min = _.min(pricebtcs);
+    const max = _.max(pricebtcs);
+    step_prices[0] = min;
+    step_prices[1] = max;
 
     const graphs = [
       {
@@ -138,11 +150,11 @@ export class CoinDayComponent implements OnInit, OnChanges {
         color: '#ff7f56',
         label: 'BTC'
       },
-      {
+     /* {
         ys: priceusds,
         color: '#88a5ff',
-        label: 'US'
-      },
+        label: 'USD'
+      },*/
       {
         ys: rank,
         color: '#c4bbc0',
