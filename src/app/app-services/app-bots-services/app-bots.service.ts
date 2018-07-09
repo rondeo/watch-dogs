@@ -111,24 +111,12 @@ export class AppBotsService {
 
   async dryRun(action: string) {
     if (action === 'SELL') {
-      console.log('running test');
       WatchDog.isTest = true;
       const wds = this.getAllSellBots();
-
-      const prevMC = await this.marketCap.getAgregated(1).toPromise();
-      console.log(prevMC);
-
-      wds.forEach(function (item: WatchDog) {
-        item.setDataMC(prevMC[item.coin], prevMC[item.base]);
+      const coinsDay = await this.marketCap.getCoinsDay();
+      const promises = wds.map(function (item: WatchDog) {
+        return item.run2(coinsDay);
       });
-
-      const MC = await this.marketCap.getData();
-
-      const wdsTosell = wds.filter(function (item: WatchDog) {
-        return item.run(MC[item.coin], MC[item.base])
-      });
-
-      console.log(' test ', wdsTosell);
 
       WatchDog.isTest = false;
     }
@@ -227,15 +215,21 @@ export class AppBotsService {
   //////////////// start stop bots ////////////////////////
   async runBots() {
     const wds =   this.allWatchDogsSub.getValue();
+    console.log(' ALL ', wds);
+   //  const MC = await this.marketCap.getData();
 
-    // console.log(' ALL ', wds);
+    const coinsDay = await this.marketCap.getCoinsDay();
 
-    const MC = await this.marketCap.getData();
+
     const promises = wds.map(function (item: WatchDog) {
-      return item.run(MC[item.coin], MC[item.base]);
+      return item.run2(coinsDay);
     });
+
+  /*  const promises = wds.map(function (item: WatchDog) {
+      return item.run(MC[item.coin], MC[item.base]);
+    });*/
    const results = await Promise.all(promises);
-   // console.log(results);
+   console.log(results);
   }
 
 

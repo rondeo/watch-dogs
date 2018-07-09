@@ -7,6 +7,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOMCAGREGATED, VOMCAgregated} from '../../models/api-models';
+import {MovingAverage} from '../../com/moving-average';
 
 
 @Component({
@@ -66,7 +67,7 @@ export class GainersLosersComponent implements OnInit {
       this.top = state.top || this.top;
     }
 
-    this.downlaodMarketCap(false);
+    this.downlaodMarketCap();
 
     this.route.params.subscribe(params => {
       if (params.exchange !== this.exchange) {
@@ -116,7 +117,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   onRefreshClick() {
-    this.downlaodMarketCap(true);
+    this.downlaodMarketCap();
   }
 
   onTopChange(evt) {
@@ -124,12 +125,12 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  async downlaodMarketCap(isRefresh) {
-    const MC = await this.apiMarketCap.downloadTicker(isRefresh).toPromise();
-    const coinDay = await this.apiMarketCap.getCoinsDay(isRefresh);
+  async downlaodMarketCap() {
+    const MC = await this.apiMarketCap.downloadTicker().toPromise();
+    const coinDay = await this.apiMarketCap.getCoinsDay();
     // console.log(coinDay);
 
-    const ma = await ApiMarketCapService.movingAfarageFromCoinDay(coinDay);
+    const ma = await MovingAverage.movingAverageSnapFromCoinDays(coinDay);
 
     /*
     *  symbol,

@@ -13,7 +13,7 @@ import {P} from '@angular/core/src/render3';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
-import {VOCoinData} from '../../models/api-models';
+import {VOCoinWeek} from '../../models/api-models';
 
 @Component({
   selector: 'app-coin-day',
@@ -23,9 +23,9 @@ import {VOCoinData} from '../../models/api-models';
 export class CoinDayComponent implements OnInit, OnChanges {
 
 
-  @Output() coindatas: EventEmitter<VOCoinData[]> = new EventEmitter<VOCoinData[]>();
+  @Output() coindatas: EventEmitter<VOCoinWeek[]> = new EventEmitter<VOCoinWeek[]>();
   @Input() coin: string;
-  mcCoin: VOCoinData;
+  mcCoin: VOCoinWeek;
 
   myGraps: VOGraphs;
   myGraps2: VOLineGraph[];
@@ -78,14 +78,14 @@ export class CoinDayComponent implements OnInit, OnChanges {
     //this.showExchanges();
   }
 
-  async getCoinHistory(): Promise<VOCoinData[]> {
+  async getCoinHistory(): Promise<VOCoinWeek[]> {
     if (this.fullHistory) return Promise.resolve(this.fullHistory);
     else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
   }
 
-  fullHistory: VOCoinData[];
+  fullHistory: VOCoinWeek[];
 
-  drawData(history: VOCoinData[]) {
+  drawData(history: VOCoinWeek[]) {
 
     const l = history.length;
 
@@ -94,8 +94,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
     })
     this.skips = l - history.length;
 
-    const first: VOCoinData = _.first(history);
-    const last: VOCoinData = _.last(history);
+    const first: VOCoinWeek = _.first(history);
+    const last: VOCoinWeek = _.last(history);
 
     this.mcCoin = last;
 
@@ -111,12 +111,20 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const volumes = [];
     const total_supply = [];
     const rank = [];
-    const triggers = [10];
 
+    const step_prices = [];
+   // console.log(history);
+    let stepprice = 0;
     history.forEach(function (item) {
       labels.push(' ');
       if (item) {
 
+        if(stepprice) {
+          if(item.price_btc > stepprice) stepprice += stepprice*0.001;
+          else stepprice -= stepprice*0.001;
+        } else  stepprice = item.price_btc;
+        step_prices.push(stepprice);
+       // item.price_btc = stepprice;
         pricebtcs.push(item.price_btc);
         priceusds.push(item.price_usd);
         volumes.push(item.volume);
@@ -124,8 +132,12 @@ export class CoinDayComponent implements OnInit, OnChanges {
         rank.push(item.rank);
 
       }
-    })
+    });
 
+    const min = _.min(pricebtcs);
+    const max = _.max(pricebtcs);
+    step_prices[0] = min;
+    step_prices[1] = max;
 
     const graphs = [
       {
@@ -138,11 +150,11 @@ export class CoinDayComponent implements OnInit, OnChanges {
         color: '#ff7f56',
         label: 'BTC'
       },
-      {
+     /* {
         ys: priceusds,
         color: '#88a5ff',
-        label: 'US'
-      },
+        label: 'USD'
+      },*/
       {
         ys: rank,
         color: '#c4bbc0',

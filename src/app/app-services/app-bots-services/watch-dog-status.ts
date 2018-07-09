@@ -17,3 +17,17 @@ export enum WatchDogStatus {
 
   CHECKING_ORDER = 'CHECKING_ORDER'
 }
+
+
+export interface IWatchDog {
+  id: string;
+  exchange: string;
+  status: WatchDogStatus;
+  base: string;
+  coin: string;
+  balanceCoin: number;
+  wdId: string;
+  log: (msg: string) => void;
+  warn: (msg: string, obj: any) => void;
+  onError: (err:any) => void;
+}

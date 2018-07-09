@@ -1,4 +1,3 @@
-
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {OrderType, VOBalance, VOOrder} from '../../models/app-models';
@@ -10,8 +9,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMovingAvg} from '../../com/moving-average';
 import * as moment from 'moment';
-import {WatchDogShared} from './watch-dog-shared';
-import {WatchDogStatus} from './watch-dog-status';
+import {WatchDogStatus, IWatchDog} from './watch-dog-status';
 
 
 export class SellCoinFilling {
@@ -28,44 +26,49 @@ export class SellCoinFilling {
   }
 
   constructor(
-    public shared: WatchDogShared
+    public watchDog: IWatchDog
   ) {
-    this.id = shared.id;
+    this.id = watchDog.id;
     this.init();
   }
 
   async init() {
-    this.apiPrivate = ApisPrivateService.instance.getExchangeApi(this.shared.exchange);
-    this.apiPublic = ApisPublicService.instance.getExchangeApi(this.shared.exchange);
+    this.apiPrivate = ApisPrivateService.instance.getExchangeApi(this.watchDog.exchange);
+    this.apiPublic = ApisPublicService.instance.getExchangeApi(this.watchDog.exchange);
   }
 
   sell(): Promise<WatchDogStatus> {
-    console.log(moment().format('HH:mm') + ' ' + this.shared.wdId + ' SELL ')
-    this.shared.addHistory('SELL command');
-    if (this.shared.status === WatchDogStatus.SOLD_OUT || this.shared.status === WatchDogStatus.SOLD) {
+    console.log(moment().format('HH:mm') + ' ' + this.watchDog.wdId + ' SELL ')
+    this.watchDog.log('SELL command');
+    if (this.watchDog.status === WatchDogStatus.SOLD_OUT || this.watchDog.status === WatchDogStatus.SOLD) {
       return;
     }
 
-    const base: string = this.shared.base;
-    const coin = this.shared.coin;
-    const balanceCoin = this.shared.balanceCoin;
+    const base: string = this.watchDog.base;
+    const coin = this.watchDog.coin;
+    const balanceCoin = this.watchDog.balanceCoin;
+
 
     this.statusChangesSub.next({
       status: WatchDogStatus.SELLING_IN_PROGRESS,
       message: 'downloading books'
     });
+    this.watchDog.log('start selling');
 
     this.apiPublic.downloadBooks(base, coin).subscribe(books => {
       console.log(books);
+
       let rate = UtilsBooks.getRateForAmountCoin(books.buy, balanceCoin);
       rate = (rate - rate * 0.02);
       if (rate > 0.001) rate = +rate.toFixed(8);
       else if (rate > 1) rate = +rate.toFixed(5);
       else if (rate > 100) rate = +rate.toFixed(0);
 
+      this.watchDog.log('downloaded books rate: ' + rate);
 
       return this.apiPrivate.sellLimit(base, coin, balanceCoin, rate).subscribe(order => {
         console.log(order);
+        this.watchDog.log('order result : ' + JSON.stringify(order));
         this.oredr = order;
         this.statusChangesSub.next({
           status: WatchDogStatus.SELLING_IN_PROGRESS,
@@ -81,6 +84,7 @@ export class SellCoinFilling {
             });
           }
         } else {
+          this.watchDog.onError('respond: '+ JSON.stringify(order))
           this.statusChangesSub.next({
             status: WatchDogStatus.ERROR_SELLING,
             message: JSON.stringify(order)
@@ -88,6 +92,7 @@ export class SellCoinFilling {
           setTimeout(() => this.sell(), 50 * 1000);
         }
       }, error => {
+        this.watchDog.onError(error);
         this.statusChangesSub.next({
           status: WatchDogStatus.ERROR_SELLING,
           message: JSON.stringify(error)
@@ -106,6 +111,7 @@ export class SellCoinFilling {
   private checkOrderCounter = 0;
 
   async checkOrder() {
+    this.watchDog.log('checking order ' + this.oredr.uuid);
     this.statusChangesSub.next({
       status: WatchDogStatus.CHECKING_ORDER,
       message: 'checkOrder ' + this.checkOrderCounter
@@ -119,7 +125,8 @@ export class SellCoinFilling {
       return
     }
     try {
-      const order: VOOrder = await this.apiPrivate.getOrder(this.oredr.uuid, this.shared.base, this.shared.coin).toPromise();
+      const order: VOOrder = await this.apiPrivate.getOrder(this.oredr.uuid, this.watchDog.base, this.watchDog.coin).toPromise();
+      this.watchDog.log('order ' + JSON.stringify(order));
       if (order.isOpen) {
         this.statusChangesSub.next({
           status: WatchDogStatus.CHECKING_ORDER,
@@ -133,6 +140,7 @@ export class SellCoinFilling {
         });
       }
     } catch (e) {
+      this.watchDog.onError(e);
       this.statusChangesSub.next({
         status: WatchDogStatus.ERROR_SELLING,
         message: JSON.stringify(e)
@@ -144,7 +152,7 @@ export class SellCoinFilling {
   }
 
   dectroy() {
-    this.shared = null;
+    this.watchDog = null;
     this.apiPrivate = null;
     this.apiPublic = null;
   }

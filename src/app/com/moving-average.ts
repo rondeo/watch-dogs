@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {VOCoinData, VOMCAgregated} from '../models/api-models';
+import {VOCoinDayValue, VOCoinsDayData, VOCoinWeek, VOMCAgregated} from '../models/api-models';
 
 export interface VOMovingAvg {
   symbol: string;
@@ -45,9 +45,9 @@ export class MovingAverage {
   }
 
   static isMovingDown2(prev: VOMovingAvg, curr: VOMovingAvg): boolean {
-    ;
+   // console.log(100 * ((curr.price2h - prev.price2h) / prev.price2h))
     return (
-      (100 * ((curr.price2h - prev.price2h) / prev.price2h) < -0.11)
+      (100 * ((curr.price2h - prev.price2h) / prev.price2h) < 0)
 
       );
   }
@@ -71,15 +71,14 @@ export class MovingAverage {
     return out;
   }
 
-
-  static movingAfarageFromVOCoinData(coindatas: VOCoinData[]): VOMovingAvg[] {
+  /*static movingAverageGraphFromCoinWeek2(coindatas: VOCoinWeek[]): VOMovingAvg[] {
     const takeRight = _.takeRight;
     const sumBy = _.sumBy;
     const take = _.take;
     const out: VOMovingAvg[] = [];
     for (let i = 0, n = coindatas.length; i < n; i++) {
       const cur = coindatas[i];
-      if (i < 30) {
+      if (i < 40) {
         out.push({
           symbol: '',
           price03h: 0,
@@ -143,6 +142,285 @@ export class MovingAverage {
 
 
     return out;
+  }*/
+
+
+  static stepGraphFromCoinDays(coindatas: VOCoinDayValue[]) {
+    const takeRight = _.takeRight;
+    const sumBy = _.sumBy;
+    const take = _.take;
+    const out = [];
+    for (let i = 0, n = coindatas.length; i < n; i++) {
+      const cur = coindatas[i];
+      if (i < 40) {
+        out.push({
+          symbol: '',
+          price03h: 0,
+          price05h: 0,
+          price1h: 0,
+          price2h: 0,
+          price4h: 0,
+
+          price03hD: 0,
+          price1hD: 0,
+          price2hD: 0,
+
+          vol1h: 0,
+          vol2h: 0,
+          vol3h: 0,
+
+          rank: cur.rank,
+
+          price_btc: cur.price_btc
+        });
+        continue;
+      }
+
+      const l_3 = coindatas.slice(i - 3, i);
+      const price03h = +(sumBy(l_3, 'price_btc') / l_3.length);
+
+      const l_5 = coindatas.slice(i - 5, i);
+      const price05h = +(sumBy(l_5, 'price_btc') / l_5.length);
+
+      const l_10 = coindatas.slice(i - 10, i);
+      const price1h = +(sumBy(l_10, 'price_btc') /l_10.length);
+
+      const l_20 = coindatas.slice(i - 20, i);
+      const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
+
+      const l_40 = coindatas.slice(i - 40, i);
+      const price4h = +(sumBy(l_40, 'price_btc') / l_40.length);
+
+      const price03hD = 100 * (price03h - price1h) / price1h;
+      const price1hD = 100 * (price1h - price2h) / price2h;
+      const price2hD = 100 * (price2h - price4h) / price4h;
+
+      /* const price3h = +(sumBy(l_30, 'price_btc') / 30).toFixed(12);
+
+       const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
+       const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
+       const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
+
+       const rankD = +(100 * ((sumBy(l_30, 'rank') / 30) - cur.rank) / cur.rank).toFixed(4);*/
+      const rank = cur.rank;
+      const price_btc = cur.price_btc;
+
+      out.push({
+        symbol: '',
+
+        price03h,
+        price05h,
+        price1h,
+        price2h,
+        price4h,
+
+        price03hD,
+        price1hD,
+        price2hD,
+
+        rank,
+        price_btc
+      })
+    }
+
+
+    return out;
+  }
+
+  static movingAverageGraphFromCoinWeek(coindatas: VOCoinWeek[]) {
+    const takeRight = _.takeRight;
+    const sumBy = _.sumBy;
+    const take = _.take;
+    const out = [];
+
+    let prev;
+   // let stepprice = 0;
+
+    for (let i = 0, n = coindatas.length; i < n; i++) {
+      const cur = coindatas[i];
+
+
+      if (i < 40) {
+        out.push({
+          symbol: '',
+        //  stepprice,
+          price03h: 0,
+          price05h: 0,
+          price1h: 0,
+          price2h: 0,
+          price4h: 0,
+
+          price03hD: 0,
+          price1hD: 0,
+          price2hD: 0,
+
+          vol1h: 0,
+          vol2h: 0,
+          vol3h: 0,
+
+          rank: cur.rank,
+
+          price_btc: cur.price_btc,
+          timestamp: cur.timestamp
+        });
+        continue;
+      }
+
+      const l_3 = coindatas.slice(i - 3, i);
+      const price03h = +(sumBy(l_3, 'price_btc') / l_3.length);
+
+      const l_5 = coindatas.slice(i - 5, i);
+      const price05h = +(sumBy(l_5, 'price_btc') / l_5.length);
+
+      const l_10 = coindatas.slice(i - 10, i);
+      const price1h = +(sumBy(l_10, 'price_btc') /l_10.length);
+
+      const l_20 = coindatas.slice(i - 20, i);
+      const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
+
+      const l_40 = coindatas.slice(i - 40, i);
+      const price4h = +(sumBy(l_40, 'price_btc') / l_40.length);
+
+      const price03hD = 100 * (price03h - price1h) / price1h;
+      const price1hD = 100 * (price1h - price2h) / price2h;
+      const price2hD = 100 * (price2h - price4h) / price4h;
+
+     /* const price3h = +(sumBy(l_30, 'price_btc') / 30).toFixed(12);
+
+      const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
+      const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
+      const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
+
+      const rankD = +(100 * ((sumBy(l_30, 'rank') / 30) - cur.rank) / cur.rank).toFixed(4);*/
+      const rank = cur.rank;
+      const price_btc = cur.price_btc;
+      const timestamp = cur.timestamp;
+
+      out.push({
+        symbol: '',
+       // stepprice,
+        price03h,
+        price05h,
+        price1h,
+        price2h,
+        price4h,
+
+        price03hD,
+        price1hD,
+        price2hD,
+
+        rank,
+        price_btc,
+        timestamp
+      })
+    }
+
+
+    return out;
+  }
+
+
+  static movingAverageSnapFromCoinDay(values: VOCoinDayValue[], sumBy: Function, coin: string):  {
+    symbol: string,
+    price03hD: number,
+    price1hD: number,
+    price2hD: number,
+    price4hD: number,
+    price24hD: number,
+    rank24hD: number;
+  }{
+    const L = values.length - 1;
+    const cur = values[L];
+    const prev = values[L - 1];
+
+    const l_3 = values.slice(L - 3, L);
+    const price03h = +(sumBy(l_3, 'price_btc') / l_3.length);
+
+    // const l_05 = values.slice(L - 5, L);
+    // const price05h = +(sumBy(l_05, 'price_btc') / l_05.length).toFixed(12);
+
+    const l_10 = values.slice(L - 10, L);
+    const price1h = +(sumBy(l_10, 'price_btc') / l_10.length);
+
+    const l_20 = values.slice(L - 20, L);
+    const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
+
+    const l_40 = values.slice(L - 40, L);
+    const price4h = +(sumBy(l_40, 'price_btc') / l_40.length);
+
+    const l_80 = values.slice(L - 80, L);
+    const price8h = +(sumBy(l_80, 'price_btc') / l_80.length);
+
+
+    const price03hD = 100 * (price03h - price1h) / price1h;
+    const price1hD = 100 * (price1h - price2h) / price2h;
+    const price2hD = 100 * (price2h - price4h) / price4h;
+    const price4hD = 100 * (price4h - price8h) / price8h;
+
+
+    /*  const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
+      const vol1h_ = +(sumBy(l_10_, 'volume') / 10).toFixed(0);
+
+      const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
+      const vol2h_ = +(sumBy(l_20_, 'volume') / 20).toFixed(0);
+
+      const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
+      const vol3h_ = +(sumBy(l_30_, 'volume') / 30).toFixed(0);
+
+
+*/
+    const first10 = values.slice(0, 10);
+    const last10 = values.slice(L - 10, L);
+
+    const price1 = (sumBy(first10, 'price_btc') / first10.length);
+    const price2 = (sumBy(last10, 'price_btc') / last10.length);
+
+
+    const price24hD = 100 * (price2 - price1) / price1;
+
+    const rank1 = +(sumBy(first10, 'rank') / first10.length);
+    const rank2 = +(sumBy(last10, 'rank') / last10.length);
+    const rank24hD = +(100 * (rank1 - rank2) / rank1)
+
+    const rank = cur.rank;
+    const price_btc = cur.price_btc;
+    return {
+      symbol: coin,
+      price03hD,
+      price1hD,
+      price2hD,
+      price4hD,
+      price24hD,
+      rank24hD
+    }
+  }
+  
+  static async movingAverageSnapFromCoinDays(coinDay: VOCoinsDayData) {
+    return new Promise<{
+      symbol: string;
+      price03hD: number;
+      price1hD: number;
+      price2hD: number;
+      price4hD: number;
+      price24hD: number;
+      rank24hD: number;
+    } []>(function (resolve, reject) {
+
+      const takeRight = _.takeRight;
+      const sumBy = _.sumBy;
+      const take = _.take;
+      const out = [];
+      const L = coinDay['BTC'].length - 1;
+      const M = Math.round(L / 2);
+
+      for (let coin in coinDay) {
+        const values = coinDay[coin];
+       const MA =  MovingAverage.movingAverageSnapFromCoinDay(values,sumBy, coin);
+        out.push(MA);
+
+      }
+      resolve(out);
+    })
   }
 }
 
