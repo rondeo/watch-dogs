@@ -153,7 +153,7 @@ export class BotBuyCoinService {
         priceBaseUS:priceBaseUS,
         rateLast:coindatas.rateLast,
         rateLastUS:coindatas.priceLastUS,
-        priceToMC: Math.round(10000 * (coindatas.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
+        priceToMC: MATH.round(10000 * (coindatas.priceLastUS - coinMC.price_usd) / coinMC.price_usd) / 100,
         //bubbles: coindatas.bubbles,
         duratinMin: coindatas.duration / 60,
         speedPerMin: (coindatas.speed * 60),

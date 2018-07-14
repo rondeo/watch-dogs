@@ -83,7 +83,7 @@ export class MarketHistoryData{
     if(!bubbles.length) return;
     let length = this.calculateLength(bubbles);
     let out = bubbles.map(function (o) {
-      return [Math.round(o.x/1000),+(o.y).toPrecision(4),Math.round(o.r)];
+      return [MATH.round(o.x/1000),+(o.y).toPrecision(4),MATH.round(o.r)];
     });
     console.log(this.id + ' saving data  for '+ length + ' min');
     localStorage.setItem(this.id, JSON.stringify(out));

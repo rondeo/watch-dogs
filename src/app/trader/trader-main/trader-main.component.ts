@@ -84,16 +84,16 @@ export class TraderMainComponent implements OnInit, OnDestroy {
 
       }
 
-      amountBase += Math.abs(item.amountCoin) * item.rate;
-      amountCoin += Math.abs(item.amountCoin);
+      amountBase += MATH.abs(item.amountCoin) * item.rate;
+      amountCoin += MATH.abs(item.amountCoin);
       total += item.amountCoin * item.rate;
     });
 
-    this.avgRate = Math.round(amountBase / amountCoin).toLocaleString();
-    this.amountPerMinute =  Math.round(amountBase).toLocaleString();
-    this.totalPerMinute =  Math.round(total).toLocaleString();
-    this.firstBuy =  Math.round(firstBuy).toLocaleString();
-    this.lastBuy =  Math.round(lastBuy).toLocaleString();
+    this.avgRate = MATH.round(amountBase / amountCoin).toLocaleString();
+    this.amountPerMinute =  MATH.round(amountBase).toLocaleString();
+    this.totalPerMinute =  MATH.round(total).toLocaleString();
+    this.firstBuy =  MATH.round(firstBuy).toLocaleString();
+    this.lastBuy =  MATH.round(lastBuy).toLocaleString();
 
     this.bitFinexTrades = lastMinute;
 

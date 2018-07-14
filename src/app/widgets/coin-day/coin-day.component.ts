@@ -14,6 +14,7 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {VOCoinWeek} from '../../models/api-models';
+import {MovingAverage} from '../../com/moving-average';
 
 @Component({
   selector: 'app-coin-day',
@@ -67,6 +68,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
     if (!this.coin) return;
    // console.warn(this.coin);
     this.fullHistory = await this.getCoinHistory();
+
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
 
@@ -85,7 +87,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   fullHistory: VOCoinWeek[];
 
-  drawData(history: VOCoinWeek[]) {
+  async drawData(history: VOCoinWeek[]) {
 
     const l = history.length;
 
@@ -112,18 +114,12 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const total_supply = [];
     const rank = [];
 
-    const step_prices = [];
-   // console.log(history);
-    let stepprice = 0;
-    history.forEach(function (item) {
+
+    console.log(history);
+
+    history.forEach(function (item, i) {
       labels.push(' ');
       if (item) {
-
-        if(stepprice) {
-          if(item.price_btc > stepprice) stepprice += stepprice*0.001;
-          else stepprice -= stepprice*0.001;
-        } else  stepprice = item.price_btc;
-        step_prices.push(stepprice);
        // item.price_btc = stepprice;
         pricebtcs.push(item.price_btc);
         priceusds.push(item.price_usd);
@@ -134,32 +130,49 @@ export class CoinDayComponent implements OnInit, OnChanges {
       }
     });
 
+
+    const medians = await MovingAverage.createMedianPriceBTC(history);
+    console.log(medians);
+
     const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);
-    step_prices[0] = min;
-    step_prices[1] = max;
+    medians.med_1hs[0] = min;
+    medians.med_1hs[1] = max;
+    medians.med_2hs[0] = min;
+    medians.med_2hs[1] = max;
 
     const graphs = [
       {
         ys: volumes,
-        color: '#05ff35',
+        color: '#969794',
         label: 'Vol'
       },
       {
-        ys: pricebtcs,
+        ys: medians.prices_btcs,
         color: '#ff7f56',
         label: 'BTC'
       },
-     /* {
-        ys: priceusds,
-        color: '#88a5ff',
-        label: 'USD'
-      },*/
       {
+        ys: medians.med_1hs,
+        color: '#00b922',
+        label: 'Med 1h'
+      },
+      {
+        ys: medians.med_2hs,
+        color: '#1743b9',
+        label: 'Med 2h'
+      },
+    /* {
+        ys: medians.med_2hs,
+        color: '#88a5ff',
+        label: 'Med 2 '
+      },
+      ,*/
+     /* {
         ys: rank,
         color: '#c4bbc0',
         label: 'Rank'
-      }
+      }*/
     ]
 
     this.myGraps = {

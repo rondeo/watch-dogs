@@ -137,6 +137,4 @@ export abstract class ApiPublicAbstract {
 
   abstract downloadTicker(): Observable<{ [market: string]: VOMarket }>;
 
-  abstract mapCoinDay(data): MarketDay;
-
 }

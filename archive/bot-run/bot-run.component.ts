@@ -76,7 +76,7 @@ export class BotRunComponent implements OnInit {
     let l = ar[ar.length-1].x;
     let f = ar[0].x
     let diff = l-f;
-    return Math.round(diff/1000/60);
+    return MATH.round(diff/1000/60);
   }
 
   downloadHistory(callBack:(err, res)=>void){
@@ -149,7 +149,7 @@ export class BotRunComponent implements OnInit {
   runBot(){
 
 
-   // let fromTime = (Math.ceil(Date.now()/1000/60) - 180) *60 *1000;
+   // let fromTime = (MATH.ceil(Date.now()/1000/60) - 180) *60 *1000;
    // let analytics =  UtilsOrder.tradeStatsOneMinutes(lastTrades, fromTime, this.marketInit.priceBaseUS,100, 20000);
 
 
@@ -204,7 +204,7 @@ export class BotRunComponent implements OnInit {
 
       this.allStats[id] = stats.concat(newstats);
     }else {
-      let fromTime = (Math.ceil(Date.now()/1000/60) - 180) *60 *1000;
+      let fromTime = (MATH.ceil(Date.now()/1000/60) - 180) *60 *1000;
 
       stats = UtilsOrder.tradeStatsOneMinutes(trades,fromTime, this.marketInit.priceBaseUS,100, 20000);
       this.allStats[id] = stats;

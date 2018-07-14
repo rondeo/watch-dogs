@@ -5535,7 +5535,7 @@ function toComment(sourceMap) {
      * Creates a function like `_.round`.
      *
      * @private
-     * @param {string} methodName The name of the `Math` method to use when rounding.
+     * @param {string} methodName The name of the `MATH` method to use when rounding.
      * @returns {Function} Returns the new round function.
      */
     function createRound(methodName) {
@@ -7074,7 +7074,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new array of filtered values.
      * @example
      *
-     * _.differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor);
+     * _.differenceBy([2.1, 1.2], [2.3, 3.4], MATH.floor);
      * // => [1.2]
      *
      * // The `_.property` iteratee shorthand.
@@ -7623,7 +7623,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new array of intersecting values.
      * @example
      *
-     * _.intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor);
+     * _.intersectionBy([2.1, 1.2], [2.3, 3.4], MATH.floor);
      * // => [2.1]
      *
      * // The `_.property` iteratee shorthand.
@@ -8218,7 +8218,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new duplicate free array.
      * @example
      *
-     * _.sortedUniqBy([1.1, 1.2, 2.3, 2.4], Math.floor);
+     * _.sortedUniqBy([1.1, 1.2, 2.3, 2.4], MATH.floor);
      * // => [1.1, 2.3]
      */
     function sortedUniqBy(array, iteratee) {
@@ -8432,7 +8432,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new array of combined values.
      * @example
      *
-     * _.unionBy([2.1], [1.2, 2.3], Math.floor);
+     * _.unionBy([2.1], [1.2, 2.3], MATH.floor);
      * // => [2.1, 1.2]
      *
      * // The `_.property` iteratee shorthand.
@@ -8512,7 +8512,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new duplicate free array.
      * @example
      *
-     * _.uniqBy([2.1, 1.2, 2.3], Math.floor);
+     * _.uniqBy([2.1, 1.2, 2.3], MATH.floor);
      * // => [2.1, 1.2]
      *
      * // The `_.property` iteratee shorthand.
@@ -8681,7 +8681,7 @@ function toComment(sourceMap) {
      * @returns {Array} Returns the new array of filtered values.
      * @example
      *
-     * _.xorBy([2.1, 1.2], [2.3, 3.4], Math.floor);
+     * _.xorBy([2.1, 1.2], [2.3, 3.4], MATH.floor);
      * // => [1.2, 3.4]
      *
      * // The `_.property` iteratee shorthand.
@@ -9172,7 +9172,7 @@ function toComment(sourceMap) {
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
-     * _.countBy([6.1, 4.2, 6.3], Math.floor);
+     * _.countBy([6.1, 4.2, 6.3], MATH.floor);
      * // => { '4': 1, '6': 2 }
      *
      * // The `_.property` iteratee shorthand.
@@ -9488,7 +9488,7 @@ function toComment(sourceMap) {
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
-     * _.groupBy([6.1, 4.2, 6.3], Math.floor);
+     * _.groupBy([6.1, 4.2, 6.3], MATH.floor);
      * // => { '4': [4.2], '6': [6.1, 6.3] }
      *
      * // The `_.property` iteratee shorthand.
@@ -15862,7 +15862,7 @@ function toComment(sourceMap) {
      * @returns {Function} Returns the new function.
      * @example
      *
-     * var func = _.over([Math.max, Math.min]);
+     * var func = _.over([MATH.max, MATH.min]);
      *
      * func(1, 2, 3, 4);
      * // => [4, 1]
@@ -16241,7 +16241,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 3.4.0
-     * @category Math
+     * @category MATH
      * @param {number} augend The first number in an addition.
      * @param {number} addend The second number in an addition.
      * @returns {number} Returns the total.
@@ -16260,7 +16260,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 3.10.0
-     * @category Math
+     * @category MATH
      * @param {number} number The number to round up.
      * @param {number} [precision=0] The precision to round up to.
      * @returns {number} Returns the rounded up number.
@@ -16283,7 +16283,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.7.0
-     * @category Math
+     * @category MATH
      * @param {number} dividend The first number in a division.
      * @param {number} divisor The second number in a division.
      * @returns {number} Returns the quotient.
@@ -16302,7 +16302,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 3.10.0
-     * @category Math
+     * @category MATH
      * @param {number} number The number to round down.
      * @param {number} [precision=0] The precision to round down to.
      * @returns {number} Returns the rounded down number.
@@ -16326,7 +16326,7 @@ function toComment(sourceMap) {
      * @static
      * @since 0.1.0
      * @memberOf _
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @returns {*} Returns the maximum value.
      * @example
@@ -16351,7 +16351,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.0.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {*} Returns the maximum value.
@@ -16378,7 +16378,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.0.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @returns {number} Returns the mean.
      * @example
@@ -16398,7 +16398,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.7.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {number} Returns the mean.
@@ -16424,7 +16424,7 @@ function toComment(sourceMap) {
      * @static
      * @since 0.1.0
      * @memberOf _
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @returns {*} Returns the minimum value.
      * @example
@@ -16449,7 +16449,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.0.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {*} Returns the minimum value.
@@ -16476,7 +16476,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.7.0
-     * @category Math
+     * @category MATH
      * @param {number} multiplier The first number in a multiplication.
      * @param {number} multiplicand The second number in a multiplication.
      * @returns {number} Returns the product.
@@ -16495,7 +16495,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 3.10.0
-     * @category Math
+     * @category MATH
      * @param {number} number The number to round.
      * @param {number} [precision=0] The precision to round to.
      * @returns {number} Returns the rounded number.
@@ -16518,7 +16518,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.0.0
-     * @category Math
+     * @category MATH
      * @param {number} minuend The first number in a subtraction.
      * @param {number} subtrahend The second number in a subtraction.
      * @returns {number} Returns the difference.
@@ -16537,7 +16537,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 3.4.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @returns {number} Returns the sum.
      * @example
@@ -16559,7 +16559,7 @@ function toComment(sourceMap) {
      * @static
      * @memberOf _
      * @since 4.0.0
-     * @category Math
+     * @category MATH
      * @param {Array} array The array to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {number} Returns the sum.
@@ -97074,7 +97074,7 @@ var MdTabGroup = /*@__PURE__*/(function () {
         var _this = this;
         // Clamp the next selected index to the bounds of 0 and the tabs length. Note the `|| 0`, which
         // ensures that values like NaN can't get through and which would otherwise throw the
-        // component into an infinite loop (since Math.max(NaN, 0) === NaN).
+        // component into an infinite loop (since MATH.max(NaN, 0) === NaN).
         this._indexToSelect =
             Math.min(this._tabs.length - 1, Math.max(this._indexToSelect || 0, 0));
         // If there is a change in selected index, emit a change event. Should not trigger if

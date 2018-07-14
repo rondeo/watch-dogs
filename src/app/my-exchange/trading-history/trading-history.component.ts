@@ -192,7 +192,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       amountBase:order.amountBase,
       amountCoin:order.amountCoin,
        amountUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
-     //  amountUS: Math.round(order.amountBase * priceBaseUS),
+     //  amountUS: MATH.round(order.amountBase * priceBaseUS),
       priceUS:+(order.rate * priceBaseUS).toPrecision(4) ,
       rate:order.rate,
       action:order.action,

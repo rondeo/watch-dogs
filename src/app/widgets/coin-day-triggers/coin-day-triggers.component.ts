@@ -24,10 +24,9 @@ export class CoinDayTriggersComponent implements OnInit {
   ngOnInit() {
   }
 
-
   onCoinDataChange(coindatas: VOCoinWeek[]) {
    // console.log(coindatas)
-    const length = coindatas.length;
+   /* const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format());
     console.log(moment(_.last(coindatas).timestamp).format());
 
@@ -109,6 +108,6 @@ export class CoinDayTriggersComponent implements OnInit {
         color: '#406995',
         label: null
       }
-    ];
+    ];*/
   }
 }

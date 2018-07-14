@@ -102,7 +102,7 @@ export class TradesData{
 
 
       /*let moreThen2 = newstats.filter(function (item) {
-        return Math.abs(item.minUS - item.avgRateUS)/item.avgRateUS > 0.02 || Math.abs(item.maxUS - item.avgRateUS)/item.avgRateUS > 0.02;
+        return MATH.abs(item.minUS - item.avgRateUS)/item.avgRateUS > 0.02 || MATH.abs(item.maxUS - item.avgRateUS)/item.avgRateUS > 0.02;
       })*/
 
 
@@ -131,13 +131,13 @@ export class TradesData{
     let out =[];
 
     bubbles.forEach(function (o) {
-      if( Math.abs(o.r) > 300){
+      if( MATH.abs(o.r) > 300){
         prev = o.y;
           out.push(o);
       }else if(o.r){
 
         console.log(' dust '+o.r +' ' + (o.y).toPrecision(5) + ' prev ' +  prev.toPrecision(5)+ ' % '+(100 * (o.y - prev)/prev).toFixed(2));
-        if(Math.abs(o.r) > 80 && prev && (100* Math.abs( o.y - prev)/prev) > 1.5){
+        if(MATH.abs(o.r) > 80 && prev && (100* MATH.abs( o.y - prev)/prev) > 1.5){
           dust.push(o);
         }
 
@@ -267,7 +267,7 @@ export class TradesData{
        let length = trades[trades.length-1].timestamp - trades[0].timestamp;
 
 
-      console.log(this.id +' length '+Math.round(length/1000/60)+ ' min  next trades download in '+ (delay/ 1000/60).toPrecision(4) + ' min');
+      console.log(this.id +' length '+MATH.round(length/1000/60)+ ' min  next trades download in '+ (delay/ 1000/60).toPrecision(4) + ' min');
       //console.log(this.id + ' coindatas length ' + UtilsOrder.calculateLength(coindatas) + ' min');
 
 
@@ -287,7 +287,7 @@ export class TradesData{
     if(!this.trades) this.trades = (JSON.parse(localStorage.getItem(this.id) || '[]')).map(function (o) {
       return {
         isActive:o[1] > 0?'BUY':'SELL',
-        amountCoin:Math.abs(o[1]),
+        amountCoin:MATH.abs(o[1]),
         timestamp:o[0] * 1000,
         rate:o[2],
         exchange:this.e,
@@ -306,7 +306,7 @@ export class TradesData{
       return item.amountCoin > this.d;
     },{d:this.dust}).map(function (o:VOOrder) {
       let amount = o.isActive ==='BUY'?o.amountCoin:-o.amountCoin;
-      return [Math.round(o.timestamp/1000),+(amount).toPrecision(4),+(o.rate).toPrecision(5)];
+      return [MATH.round(o.timestamp/1000),+(amount).toPrecision(4),+(o.rate).toPrecision(5)];
     });
 
     // console.log(this.id + ' saving '+ out.length);

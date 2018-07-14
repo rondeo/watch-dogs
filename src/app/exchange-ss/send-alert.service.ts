@@ -29,7 +29,7 @@ export class SendAlertService {
     let newV = newVal.percent_change_1h;
     let oldV= oldVal.percent_change_1h;
 
-    return (Math.abs(newV - oldV) > oldUsd * tolerance) ? newUsd:0
+    return (MATH.abs(newV - oldV) > oldUsd * tolerance) ? newUsd:0
 
   }*/
 
@@ -100,7 +100,7 @@ export class SendAlertService {
       let lastUsd = usdHistory[usdHistory.length - 1];
 
       let report
-      if (Math.abs(newUsd - lastUsd) > lastUsd * tollerance) {
+      if (MATH.abs(newUsd - lastUsd) > lastUsd * tollerance) {
         usdHistory.push(newUsd);
         //if(ar1.length>10) ar1.shift();
 

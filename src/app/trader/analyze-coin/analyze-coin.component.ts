@@ -5,6 +5,9 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCAgregated} from '../../models/api-models';
+import {VOMarketCap} from '../../models/app-models';
+import * as _ from 'lodash';
+import {MATH} from '../../com/math';
 
 
 @Component({
@@ -17,7 +20,8 @@ export class AnalyzeCoinComponent implements OnInit {
   @ViewChild('amount') amoubtView: ElementRef;
 
   coin: string;
-  coinMC: VOMCAgregated = new VOMCAgregated();
+  coinMC: VOMarketCap = new VOMarketCap()
+  baseMC:VOMarketCap = new VOMarketCap();
   exchange: string;
   market: string;
   amountUS = 1000;
@@ -33,7 +37,12 @@ export class AnalyzeCoinComponent implements OnInit {
   ) {
   }
 
+
+
+
   ngOnInit() {
+
+    // console.warn(MATH.medianOn([3, 5, 4, 7, 1, 1, 2, 3, 10, 10, 1000, 19999], 5));
 
     this.route.params.subscribe(params => {
       // console.log(params)
@@ -46,9 +55,10 @@ export class AnalyzeCoinComponent implements OnInit {
 
         this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
           //  console.warn(res);
-          this.marketCap.getData().then(MC => {
+          this.marketCap.downloadTicker().toPromise().then(MC => {
             this.coinPriceMC = MC[coin].price_usd;
             this.coinMC = MC[coin];
+            this.baseMC = MC['BTC'];
               this.allMarkets = res;
           })
         })

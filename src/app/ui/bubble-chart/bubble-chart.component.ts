@@ -259,13 +259,13 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
         let y = offsetY + height - ((o.y - minY) / scaleY);
         let r = 1;
-        let R = Math.abs(o.r);
+        let R = MATH.abs(o.r);
 
         ctx.fillStyle = o.r > 0 ? 'rgba(0,100,0,0.8)' : 'rgba(255,0,0,0.8)';
         if (R > 100000) {
           ctx.font = "18px Arial";
           ctx.fillText((R / 1000).toFixed(0), x - 6, y - 6);
-          r = Math.log(R);
+          r = MATH.log(R);
         } else if (R > 50000) {
           ctx.font = "10px Arial";
           ctx.fillText((R / 1000).toFixed(0), x - 6, y - 6);
@@ -278,7 +278,7 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
         else if (R > 100) r = 2;
 
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+        ctx.arc(x, y, r, 0, 2 * MATH.PI, false);
 
         ctx.fill();
       }

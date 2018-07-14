@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {VOMCAgregated} from '../../models/api-models';
+import {VOMarketCap} from '../../models/app-models';
 
 @Component({
   selector: 'app-mc-data',
@@ -8,7 +9,7 @@ import {VOMCAgregated} from '../../models/api-models';
 })
 export class McDataComponent implements OnInit, OnChanges {
 
-  @Input() mcdata: VOMCAgregated = new VOMCAgregated();
+  @Input() mcdata: VOMarketCap = new VOMarketCap();
   constructor() { }
 
   ngOnInit() {

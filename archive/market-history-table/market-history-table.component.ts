@@ -71,7 +71,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
       OpenBuyOrders:res.OpenBuyOrders,
       OpenSellOrders:res.OpenSellOrders,
       BaseVolume:Math.round(res.BaseVolume),
-     // Volume:Math.round(res.BaseVolume),
+     // Volume:MATH.round(res.BaseVolume),
       id:res.id,
       coin:res.coin,
       base:res.base,

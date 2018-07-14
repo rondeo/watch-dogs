@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import {VOCoinDayValue, VOCoinsDayData, VOCoinWeek, VOMCAgregated} from '../models/api-models';
+import {MATH} from './math';
 
 export interface VOMovingAvg {
   symbol: string;
@@ -17,7 +18,6 @@ export interface VOMovingAvg {
   rank24h?: number;
   rankD?: number;
 }
-
 
 
 export class MovingAverage {
@@ -45,11 +45,11 @@ export class MovingAverage {
   }
 
   static isMovingDown2(prev: VOMovingAvg, curr: VOMovingAvg): boolean {
-   // console.log(100 * ((curr.price2h - prev.price2h) / prev.price2h))
+    // console.log(100 * ((curr.price2h - prev.price2h) / prev.price2h))
     return (
       (100 * ((curr.price2h - prev.price2h) / prev.price2h) < 0)
 
-      );
+    );
   }
 
   static triggerMovingAvarages(mas: VOMovingAvg[]): { timestamp: number, trigger: number }[] {
@@ -145,86 +145,55 @@ export class MovingAverage {
   }*/
 
 
-  static stepGraphFromCoinDays(coindatas: VOCoinDayValue[]) {
+  static async createMedianPriceBTC(coindatas: VOCoinDayValue[]) {
     const takeRight = _.takeRight;
     const sumBy = _.sumBy;
     const take = _.take;
     const out = [];
-    for (let i = 0, n = coindatas.length; i < n; i++) {
-      const cur = coindatas[i];
-      if (i < 40) {
-        out.push({
-          symbol: '',
-          price03h: 0,
-          price05h: 0,
-          price1h: 0,
-          price2h: 0,
-          price4h: 0,
+    const med_2hs = [];
+    const med_2hOs = [];
+    const med_1hs = [];
+    const med_1hOs = [];
 
-          price03hD: 0,
-          price1hD: 0,
-          price2hD: 0,
+    const prices_btcs: number[] = coindatas.map(function (item) {
+      return item.price_btc;
+    })
 
-          vol1h: 0,
-          vol2h: 0,
-          vol3h: 0,
+    for (let i = 0, n = prices_btcs.length; i < n; i++) {
+      const cur = prices_btcs[i];
 
-          rank: cur.rank,
-
-          price_btc: cur.price_btc
-        });
+      if (i < 20) {
+        med_1hs.push(cur);
+        med_2hs.push(cur);
+        med_2hOs.push(cur);
+        med_1hOs.push(cur);
         continue;
       }
 
-      const l_3 = coindatas.slice(i - 3, i);
-      const price03h = +(sumBy(l_3, 'price_btc') / l_3.length);
+      const l_20 = prices_btcs.slice(i - 20, i);
+      const l_10 = prices_btcs.slice(i - 10, i);
 
-      const l_5 = coindatas.slice(i - 5, i);
-      const price05h = +(sumBy(l_5, 'price_btc') / l_5.length);
+      const med_2h = MATH.medianOn(l_20, 5);
+      med_2hs.push(med_2h);
 
-      const l_10 = coindatas.slice(i - 10, i);
-      const price1h = +(sumBy(l_10, 'price_btc') /l_10.length);
+      const med_2hO = MATH.median(l_20);
+      med_2hOs.push(med_2hO);
 
-      const l_20 = coindatas.slice(i - 20, i);
-      const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
+      const med_1h = MATH.medianOn(l_10, 3);
+      const med_1hO = MATH.median(l_10);
 
-      const l_40 = coindatas.slice(i - 40, i);
-      const price4h = +(sumBy(l_40, 'price_btc') / l_40.length);
+      med_1hs.push(med_1h);
 
-      const price03hD = 100 * (price03h - price1h) / price1h;
-      const price1hD = 100 * (price1h - price2h) / price2h;
-      const price2hD = 100 * (price2h - price4h) / price4h;
-
-      /* const price3h = +(sumBy(l_30, 'price_btc') / 30).toFixed(12);
-
-       const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
-       const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
-       const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
-
-       const rankD = +(100 * ((sumBy(l_30, 'rank') / 30) - cur.rank) / cur.rank).toFixed(4);*/
-      const rank = cur.rank;
-      const price_btc = cur.price_btc;
-
-      out.push({
-        symbol: '',
-
-        price03h,
-        price05h,
-        price1h,
-        price2h,
-        price4h,
-
-        price03hD,
-        price1hD,
-        price2hD,
-
-        rank,
-        price_btc
-      })
+      med_1hOs.push(med_1hO);
     }
 
-
-    return out;
+    return {
+      prices_btcs,
+      med_1hs,
+      med_2hs,
+      med_1hOs,
+      med_2hOs
+    }
   }
 
   static movingAverageGraphFromCoinWeek(coindatas: VOCoinWeek[]) {
@@ -234,7 +203,7 @@ export class MovingAverage {
     const out = [];
 
     let prev;
-   // let stepprice = 0;
+    // let stepprice = 0;
 
     for (let i = 0, n = coindatas.length; i < n; i++) {
       const cur = coindatas[i];
@@ -243,7 +212,7 @@ export class MovingAverage {
       if (i < 40) {
         out.push({
           symbol: '',
-        //  stepprice,
+          //  stepprice,
           price03h: 0,
           price05h: 0,
           price1h: 0,
@@ -273,7 +242,7 @@ export class MovingAverage {
       const price05h = +(sumBy(l_5, 'price_btc') / l_5.length);
 
       const l_10 = coindatas.slice(i - 10, i);
-      const price1h = +(sumBy(l_10, 'price_btc') /l_10.length);
+      const price1h = +(sumBy(l_10, 'price_btc') / l_10.length);
 
       const l_20 = coindatas.slice(i - 20, i);
       const price2h = +(sumBy(l_20, 'price_btc') / l_20.length);
@@ -285,20 +254,20 @@ export class MovingAverage {
       const price1hD = 100 * (price1h - price2h) / price2h;
       const price2hD = 100 * (price2h - price4h) / price4h;
 
-     /* const price3h = +(sumBy(l_30, 'price_btc') / 30).toFixed(12);
+      /* const price3h = +(sumBy(l_30, 'price_btc') / 30).toFixed(12);
 
-      const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
-      const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
-      const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
+       const vol1h = +(sumBy(l_10, 'volume') / 10).toFixed(0);
+       const vol2h = +(sumBy(l_20, 'volume') / 20).toFixed(0);
+       const vol3h = +(sumBy(l_30, 'volume') / 30).toFixed(0);
 
-      const rankD = +(100 * ((sumBy(l_30, 'rank') / 30) - cur.rank) / cur.rank).toFixed(4);*/
+       const rankD = +(100 * ((sumBy(l_30, 'rank') / 30) - cur.rank) / cur.rank).toFixed(4);*/
       const rank = cur.rank;
       const price_btc = cur.price_btc;
       const timestamp = cur.timestamp;
 
       out.push({
         symbol: '',
-       // stepprice,
+        // stepprice,
         price03h,
         price05h,
         price1h,
@@ -320,7 +289,7 @@ export class MovingAverage {
   }
 
 
-  static movingAverageSnapFromCoinDay(values: VOCoinDayValue[], sumBy: Function, coin: string):  {
+  static movingAverageSnapFromCoinDay(values: VOCoinDayValue[], sumBy: Function, coin: string): {
     symbol: string,
     price03hD: number,
     price1hD: number,
@@ -328,7 +297,7 @@ export class MovingAverage {
     price4hD: number,
     price24hD: number,
     rank24hD: number;
-  }{
+  } {
     const L = values.length - 1;
     const cur = values[L];
     const prev = values[L - 1];
@@ -394,7 +363,7 @@ export class MovingAverage {
       rank24hD
     }
   }
-  
+
   static async movingAverageSnapFromCoinDays(coinDay: VOCoinsDayData) {
     return new Promise<{
       symbol: string;
@@ -415,7 +384,7 @@ export class MovingAverage {
 
       for (let coin in coinDay) {
         const values = coinDay[coin];
-       const MA =  MovingAverage.movingAverageSnapFromCoinDay(values,sumBy, coin);
+        const MA = MovingAverage.movingAverageSnapFromCoinDay(values, sumBy, coin);
         out.push(MA);
 
       }

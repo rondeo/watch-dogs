@@ -25,7 +25,7 @@ export class ApisPrivateService {
   }
 
   getAllAvailable(): string[] {
-    return ['binance', 'bittrex', 'poloniex', 'hitbtc',]
+    return ['binance', 'bittrex', 'poloniex', 'hitbtc']
   }
 
   getExchangeApi(exchange: string): ApiPrivateAbstaract {

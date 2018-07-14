@@ -66,7 +66,7 @@ export class CoinDayComponent implements OnInit {
       this.toMC = _.last(mc.stamps).slice(5, -3).replace('-', '/');
       let steps = mc.stamps;
 
-      let d = Math.round(steps.length / 11);
+      let d = MATH.round(steps.length / 11);
       console.log(d);
 
       let vals = steps.filter(function (item, i) {

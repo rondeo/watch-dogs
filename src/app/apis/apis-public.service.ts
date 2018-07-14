@@ -14,6 +14,7 @@ import {StorageService} from '../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
 import {VOCandle} from '../models/api-models';
+import {ApiPublicOkex} from './api-public/api-public-okex';
 
 
 
@@ -36,7 +37,7 @@ export class ApisPublicService {
     ApisPublicService.instance = this;
   }
 
-  availableExhanges: string[] = ['binance', 'bittrex', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
+  availableExhanges: string[] = ['binance', 'bittrex','okex', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
 
   private myExchanges = ['poloniex'];
 
@@ -197,6 +198,8 @@ export class ApisPublicService {
         return new ApiPublicBittrex(this.http, this.storage);
       case 'bitfinex':
         return new ApiPublicBitfinex(this.http, this.storage);
+      case 'okex':
+        return new ApiPublicOkex(this.http, this.storage);
 
 
     }

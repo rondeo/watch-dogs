@@ -73,15 +73,17 @@ export class MarketSnapshotComponent implements OnInit {
   }
 
   ngOnChanges(evt: SimpleChanges) {
-    this.ngOnInit();
-  }
-
-  ngOnInit() {
-    this.analytics = VO_MARKET_SNAPSHOT;
+    console.log(' onchanges ');
     this.initAsync();
   }
 
+  ngOnInit() {
+    console.log(' ngOnInit  ')
+    this.analytics = VO_MARKET_SNAPSHOT;
+  }
+
   async initAsync() {
+    console.log('initAsync   ')
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
@@ -97,6 +99,7 @@ export class MarketSnapshotComponent implements OnInit {
 
 
   async downloadHistory() {
+    console.log('download history')
     this.isRefreshingHistory = true;
     if (!this.exchange) return;
     if (!this.baseMC || !this.coinMC) return;
@@ -125,8 +128,11 @@ export class MarketSnapshotComponent implements OnInit {
     const priceCoin = this.coinMC.price_usd
     // console.log(history, basePrice);
     const amount = this.amountFishUS / priceCoin;
+    console.log(history);
     this.fishes = history.filter(function (item) {
       return item.amountCoin > amount;
+    }).sort(function (a, b) {
+      return b.timestamp - a.timestamp;
     })
   }
 

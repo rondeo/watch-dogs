@@ -1141,7 +1141,7 @@ var AllCoinsService = (function () {
             //localStorage.setItem('exchange',JSON.stringify(reports));
             /*let now = Date.now();
             let diff=  - (item.last_updated*1000);
-            item.last_updated_date = Math.round(diff/1000/60)+ 'm';*/
+            item.last_updated_date = MATH.round(diff/1000/60)+ 'm';*/
             _this.setData(result);
         });
     };

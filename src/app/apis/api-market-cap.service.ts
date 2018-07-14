@@ -100,17 +100,15 @@ export class ApiMarketCapService {
     return out;
   }
 
-  ticker;
-
-  downloadTicker(refresh = false): Observable<{ [symbol: string]: VOMarketCap }> {
-    if (!refresh && this.ticker) return Observable.of(this.ticker);
+  ticker$;
+  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {  ;
     //let url = '/api/marketcap/ticker';
     const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     console.log('%c TICKER ' + url, 'color:blue');
-    return this.http.get(url).map((res: any[]) => {
-      this.ticker = ApiMarketCapService.mapDataMC(res);
-      return this.ticker;
-    });
+    this.ticker$ =  this.http.get(url).map((res: any[]) => {
+      return ApiMarketCapService.mapDataMC(res);
+    }).share();
+    return this.ticker$
   }
 
 

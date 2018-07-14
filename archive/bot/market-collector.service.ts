@@ -177,7 +177,7 @@ export class MarketCollectorService {
             //console.log(rateToBuyUS, rateToSellUS, percentDiff);
             // console.log(books);
 
-            let priceToMC = Math.round(10000* (rateToBuyUS - mc.price_usd)/mc.price_usd)/100;
+            let priceToMC = MATH.round(10000* (rateToBuyUS - mc.price_usd)/mc.price_usd)/100;
 
             let summary:IMarketSummary = {
               exchange:api.exchange,

@@ -86,7 +86,7 @@ export class ExchangeSsComponent implements OnInit {
       let lastUsd = usdHistory[usdHistory.length-1];
 
       let report
-      if(Math.abs(newUsd - lastUsd) > lastUsd*tollerance){
+      if(MATH.abs(newUsd - lastUsd) > lastUsd*tollerance){
         usdHistory.push(newUsd);
         //if(ar1.length>10) ar1.shift();
 
