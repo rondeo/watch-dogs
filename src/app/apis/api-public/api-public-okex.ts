@@ -95,7 +95,8 @@ export class ApiPublicOkex extends ApiPublicAbstract {
 
     return this.http.get(url).map((result: any) => {
 
-      let data: any[] = result.data;
+      let data: any[] = result.tickers;
+
       const indexed = {};
 
       const bases = [];

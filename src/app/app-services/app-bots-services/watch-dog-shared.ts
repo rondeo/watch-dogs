@@ -2,7 +2,7 @@ import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract'
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPrivateService} from '../../apis/apis-private.service';
-import {VOWatchdog} from '../../models/app-models';
+import {VOMarketCap, VOWatchdog} from '../../models/app-models';
 import {VOMCAgregated} from '../../models/api-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -19,8 +19,8 @@ export class WatchDogShared extends VOWatchdog {
   date: string;
   baseUS: number;
   coinUS: number;
-  coinMC: VOMCAgregated;
-  baseMC: VOMCAgregated;
+  coinMC: VOMarketCap;
+  baseMC: VOMarketCap;
   message: string;
 
   balanceBase: number;

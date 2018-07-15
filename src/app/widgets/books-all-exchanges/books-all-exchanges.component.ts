@@ -13,6 +13,7 @@ export class BooksAllExchangesComponent implements OnInit {
  // @ViewChild('amount') amoubtView: ElementRef;
 
   @Input() coin: string;
+  @Input() market: string;
   @Output() marketExchange: EventEmitter<{ exchange: string, market: string }> = new EventEmitter();
   @Output() amount: EventEmitter<number> = new EventEmitter();
 
@@ -20,11 +21,8 @@ export class BooksAllExchangesComponent implements OnInit {
   allMarkets: { exchange: string, market: string, selected: boolean }[];
   amountUS = 1000;
   coinPriceMC: number;
-
   amountInput:number;
-
   exchange: string;
-  market: string;
 
   constructor(
     private apiPublic: ApisPublicService,
@@ -37,17 +35,48 @@ export class BooksAllExchangesComponent implements OnInit {
     this.getMarkets();
   }
 
-
-  getMarkets() {
+  getAllMarketsForCoin() {
     const coin = this.coin;
     if(!coin) return;
-    this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
+    this.apiPublic.getAvailableMarketsForCoin(coin).then(res => {
       //  console.warn(res);
       this.marketCap.getData().then(MC => {
         this.coinPriceMC = MC[coin].price_usd;
-        this.allMarkets = res.map(o => Object.assign(o, {selected: false}));
+        console.log(res);
+        this.allMarkets = res.map(o => {
+          return {
+            exchange: o.exchange,
+            market: o.base + '_' + o.coin,
+            selected: false
+          }
+        });
       })
     })
+  }
+
+  getMarkets() {
+    if(!this.market) return this.getAllMarketsForCoin();
+    const ar = this.market.split('_');
+
+    this.apiPublic.getMarketAllExchanges(ar[0], ar[1]).then(res => {
+      //  console.warn(res);
+      this.marketCap.getData().then(MC => {
+        this.coinPriceMC = MC[ar[1]].price_usd;
+        console.log(res);
+        this.allMarkets = res.map(o => {
+          return {
+            exchange: o.exchange,
+            market: o.base + '_' + o.coin,
+            selected: false
+          }
+        });
+      })
+    })
+
+
+
+
+
   }
 
   onAmountEnter(evt) {

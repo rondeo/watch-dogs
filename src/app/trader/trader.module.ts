@@ -14,6 +14,7 @@ import {TraderRecorderComponent} from './trader-recorder/trader-recorder.compone
 import { AnalyzeCoinComponent } from './analyze-coin/analyze-coin.component';
 import {UiModule} from '../ui/ui.module';
 import {WidgetsModule} from '../widgets/widgets.module';
+import { CommonMarketsComponent } from './common-markets/common-markets.component';
 
 
 
@@ -25,6 +26,7 @@ const routes: Routes = [
       {path: 'market/:market', component: TraderMainComponent},
       {path: 'analyze-coin/:coin', component: AnalyzeCoinComponent},
       {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
+      {path: 'common-markets', component: CommonMarketsComponent}
 
     ]
   }
@@ -48,7 +50,8 @@ const routes: Routes = [
     TraderMainComponent,
     TraderSocketComponent,
     TraderRecorderComponent,
-    AnalyzeCoinComponent
+    AnalyzeCoinComponent,
+    CommonMarketsComponent
   ],
   providers: [SoketConnectorService]
 })

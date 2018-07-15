@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
-import {VOOrder} from '../../models/app-models';
+import {VOMarketCap, VOOrder} from '../../models/app-models';
 import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
@@ -51,9 +51,9 @@ export class MarketSnapshotComponent implements OnInit {
   analytics: VOMarketSnapshot;
   priceBaseUS: number;
   coinPriceUS: number;
-  private baseMC: VOMCAgregated;
-  private coinMC: VOMCAgregated;
-  private allCoins: { [symbol: string]: VOMCAgregated };
+  private baseMC: VOMarketCap;
+  private coinMC: VOMarketCap;
+  private allCoins: { [symbol: string]: VOMarketCap };
 
   private marketHistory: VOOrder[];
   fishes: VOOrder[];

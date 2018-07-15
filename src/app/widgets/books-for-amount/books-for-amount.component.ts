@@ -4,6 +4,7 @@ import {UtilsBooks} from '../../com/utils-books';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOMCAgregated} from '../../models/api-models';
+import {VOMarketCap} from '../../models/app-models';
 
 @Component({
   selector: 'app-books-for-amount',
@@ -23,9 +24,9 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   isRefreshing: boolean = false;
 
   private priceBaseUS: number;
-  private baseMC: VOMCAgregated;
-  private coinMC: VOMCAgregated;
-  private allCoins: { [symbol: string]: VOMCAgregated };
+  private baseMC: VOMarketCap;
+  private coinMC: VOMarketCap;
+  private allCoins: { [symbol: string]: VOMarketCap };
 
   constructor(
     private apiMarketCap: ApiMarketCapService,

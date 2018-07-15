@@ -55,7 +55,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
     const now = moment().format()
     const MC = await this.marketCap.download2Recors(moment().subtract(3,'h').format(), moment().format()).toPromise();
     console.log(MC['stamps']);
-    const exchangeCoins =  await this.exchangeApi.getAllCoins().toPromise();
+    const exchangeCoins =  await this.exchangeApi.getAllCoins();
 
 
     UtilsBot.filterMCandExchange(MC, exchangeCoins);
@@ -79,7 +79,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
   async loadMarketCap(){
     const MC = await  this.marketCap.downloadHistoryForLast3Hours().toPromise();
 
-    const exchangeCoins =  await this.exchangeApi.getAllCoins().toPromise();
+    const exchangeCoins =  await this.exchangeApi.getAllCoins();
     UtilsBot.filterMCandExchange(MC, exchangeCoins);
    // console.log(MC);
     const percent_ih = UtilsBot.mapResult(MC);

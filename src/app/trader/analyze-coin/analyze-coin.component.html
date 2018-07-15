@@ -39,7 +39,8 @@
         <mat-checkbox #booksCheck >Books</mat-checkbox>
         <app-books-all-exchanges
                 *ngIf="booksCheck.checked"
-                [coin]="coin"
+                [coin]="null"
+                [market]="market"
                 (marketExchange)="onMarketExchangeChange($event)"
                 (amount)="onAmountChanged($event)"
         ></app-books-all-exchanges>

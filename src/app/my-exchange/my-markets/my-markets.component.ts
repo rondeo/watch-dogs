@@ -38,7 +38,7 @@ export class MyMarketsComponent implements OnInit, OnDestroy {
 
       //connector.loadAllMarketSummaries();
 
-   /*   connector.getAllMarkets().toPromise().then(res=>{
+   /*   connector.getMarketAllExchanges().toPromise().then(res=>{
         console.warn(res);
       })*/
 

@@ -109,7 +109,7 @@ export interface VOMC extends VOMCAgregated{
   selected: boolean;
 }
 
-export type VOMCObj = {[symbol:string]: VOMCAgregated}
+export type VOMCObj = {[symbol:string]: VOMarketCap}
 
 export interface VOCandle{
   from: number;

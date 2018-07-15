@@ -45,12 +45,12 @@ export class MyExchangeService {
 
   async getAllMarkets(exchange: string): Promise<{ [market: string]: VOMarket }> {
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(exchange);
-    return api.getMarketsAvailable();
+    return api.getMarkets()
   }
 
   async getMarketsForCoin(exchange: string, coin: string): Promise<VOMarket[]> {
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(exchange);
-    const marketsAvailable = await api.getMarketsAvailable();
+    const marketsAvailable = await api.getMarkets();
 
     if (!marketsAvailable) throw new Error(' const marketsAvailable = await api.getMarketsAvailable() ');
     if(coin ==='USDT') return _.filter(Object.values(marketsAvailable), {base: coin});

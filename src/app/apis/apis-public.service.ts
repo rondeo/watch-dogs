@@ -15,7 +15,9 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
 import {VOCandle} from '../models/api-models';
 import {ApiPublicOkex} from './api-public/api-public-okex';
-
+import {ApiPublicHuobi} from './api-public/api-public-huobi';
+import {VOMarket} from '../models/app-models';
+import {validate} from 'codelyzer/walkerFactory/walkerFn';
 
 
 @Injectable()
@@ -23,11 +25,12 @@ export class ApisPublicService {
 
   static instance: ApisPublicService;
 
-  static candelsToAvarage(res: VOCandle[]){
+  static candelsToAvarage(res: VOCandle[]) {
     return res.map(function (item: VOCandle) {
-      return +((item.High + item.Low)/2).toPrecision(7);
+      return +((item.High + item.Low) / 2).toPrecision(7);
     });
   }
+
   private exchanges: { [index: string]: ApiPublicAbstract } = {};
 
   constructor(
@@ -37,27 +40,27 @@ export class ApisPublicService {
     ApisPublicService.instance = this;
   }
 
-  availableExhanges: string[] = ['binance', 'bittrex','okex', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
+  availableExhanges: string[] = ['binance', 'bittrex', 'okex', 'huobi', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
 
   private myExchanges = ['poloniex'];
 
 
   async getPriceFromExchangesByCandlesticks(excnanges: string[], base: string, coin: string, from: number, to: number): Promise<number[][]> {
-   return Promise.all( excnanges.map((exchange) => {
+    return Promise.all(excnanges.map((exchange) => {
       const api = this.getExchangeApi(exchange);
       return api.getCandlesticks(base, coin, from, to).then(ApisPublicService.candelsToAvarage);
     }));
 
 
-/*
-    return api.getCandlesticks(base, coin, from, to).map((res: VOCandle[]) => {
+    /*
+        return api.getCandlesticks(base, coin, from, to).map((res: VOCandle[]) => {
 
-      return res.map(function (item: VOCandle) {
-        return +((item.High + item.Low)/2).toPrecision(7);
+          return res.map(function (item: VOCandle) {
+            return +((item.High + item.Low)/2).toPrecision(7);
 
 
-      });
-    });*/
+          });
+        });*/
 
   }
 
@@ -82,7 +85,7 @@ export class ApisPublicService {
           count++;
           console.warn(item)
         } else {
-          const coins = await api.getAllCoins().toPromise();
+          const coins = await api.getAllCoins();
           if (coins[coin]) {
             subs.push(api.downloadMarketHistory(base, coin));
           }
@@ -107,7 +110,7 @@ export class ApisPublicService {
           count++;
           console.warn(item)
         } else {
-          const coins = await api.getAllCoins().toPromise();
+          const coins = await api.getAllCoins();
           if (coins[coin]) {
             subs.push(api.downloadBooks(base, coin));
           }
@@ -120,32 +123,44 @@ export class ApisPublicService {
     });
   }
 
-  getAvailableMarketsForCoin(coin: string): Observable<{ exchange: string, market: string }[]> {
-    return forkJoin(this.availableExhanges.map((item) => {
-      return this.getExchangeApi(item).getAllCoins(true).map(res => {
-        if (res[coin]) {
-          return {
-            exhcnge: item,
-            markets: res[coin]
-          }
-        } else return null
+  getAllMarkets(): Promise<{ [symbol: string]: VOMarket }[]> {
+    return Promise.all(
+      this.availableExhanges.map((item) => {
+        return this.getExchangeApi(item).getMarkets()
+      }))
+  }
 
+
+  getMarketAllExchanges(base: string, coin: string): Promise<VOMarket[]> {
+
+    return Promise.all(
+      this.availableExhanges.map((item) => {
+        return this.getExchangeApi(item).getMarkets().then(res => {
+          return res[base + '_' + coin];
+        });
+      })).then((res: VOMarket[]) => {
+      return res.filter(function (item) {
+        return !!item;
       });
-    })).map(res => {
 
-      const allMarkets = [];
+    });
+
+  }
+
+  getAvailableMarketsForCoin(coin: string): Promise<VOMarket[]> {
+    return Promise.all(this.availableExhanges.map((item) => {
+      return this.getExchangeApi(item).getMarkets().then(res => {
+        return Object.values(res).filter(function (item) {
+          return item.coin === coin;
+        });
+      });
+    })).then(res => {
+      let out = [];
       res.forEach(function (item) {
-        if (item) {
-          for (let str in item.markets) {
-            allMarkets.push({
-              exchange: item.exhcnge,
-              market: str + '_' + coin
-            })
-          }
-        }
-      })
-      return allMarkets
-    })
+        out = out.concat(item)
+      });
+      return out;
+    });
   }
 
   getExchangeApi(exchange: string): ApiPublicAbstract {
@@ -170,7 +185,7 @@ export class ApisPublicService {
       const allCoins = {};
       const ps = [];
       this.myExchanges.forEach((name) => {
-        const p = this.getExchangeApi(name).getAllCoins().toPromise().then((coinsObj) => {
+        const p = this.getExchangeApi(name).getAllCoins().then((coinsObj) => {
           allCoins[name] = coinsObj;
         })
         ps.push(p);
@@ -200,6 +215,8 @@ export class ApisPublicService {
         return new ApiPublicBitfinex(this.http, this.storage);
       case 'okex':
         return new ApiPublicOkex(this.http, this.storage);
+      case 'huobi':
+        return new ApiPublicHuobi(this.http, this.storage);
 
 
     }

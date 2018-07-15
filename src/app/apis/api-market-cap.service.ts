@@ -23,7 +23,7 @@ export class ApiMarketCapService {
   static instance: ApiMarketCapService;
 
   static MC: { [symbol: string]: VOMarketCap };
-  private data: { [symbol: string]: VOMCAgregated };
+  private data: { [symbol: string]: VOMarketCap };
   private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy(null);
 
   private coinsDay: VOCoinsDayData;
@@ -35,13 +35,9 @@ export class ApiMarketCapService {
     ApiMarketCapService.instance = this;
   }
 
-  async getCoin(symbol: string): Promise<VOMCAgregated> {
+  async getCoin(symbol: string): Promise<VOMarketCap> {
     if (this.data) return Promise.resolve(this.data[symbol]);
-    return new Promise<VOMCAgregated>((resolve, reject) => {
-      this.agregated$().subscribe(res => {
-        resolve(this.data[symbol]);
-      }, reject);
-    });
+    return this.getData().then(res => res[symbol]);
   }
 
 
@@ -149,12 +145,9 @@ export class ApiMarketCapService {
      return newMC;
    }*/
 
-  getData(): Promise<VOMCObj> {
+  getData(): Promise<{[symbol: string]: VOMarketCap}> {
     if (this.data) return Promise.resolve(this.data);
-    return new Promise<VOMCObj>(async (resolve, reject) => {
-      const sub = this.getAgregated(0).subscribe(resolve, reject);
-      setTimeout(() => sub.unsubscribe(), 30000);
-    });
+    return this.downloadTicker().do(data => this.data = _.keyBy(data, 'symbol')).toPromise();
   }
 
   private agrigated;

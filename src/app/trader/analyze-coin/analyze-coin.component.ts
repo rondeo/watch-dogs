@@ -51,22 +51,27 @@ export class AnalyzeCoinComponent implements OnInit {
       this.exchange = params.exchange;
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
-
-
-        this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
-          //  console.warn(res);
-          this.marketCap.downloadTicker().toPromise().then(MC => {
-            this.coinPriceMC = MC[coin].price_usd;
-            this.coinMC = MC[coin];
-            this.baseMC = MC['BTC'];
-              this.allMarkets = res;
-          })
-        })
+        this.coin = coin;
+        this.gatherAllMarketsForCoin();
       }
 
-      this.coin = coin;
-
     });
+  }
+
+  async gatherAllMarketsForCoin(){
+    if(!this.coin) return;
+    const markets = await this.apiPublic.getMarketAllExchanges('BTC', this.coin);
+    console.log(markets);
+   /* this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
+      //  console.warn(res);
+      this.marketCap.downloadTicker().toPromise().then(MC => {
+        this.coinPriceMC = MC[coin].price_usd;
+        this.coinMC = MC[coin];
+        this.baseMC = MC['BTC'];
+        this.allMarkets = res;
+      })
+    })*/
+
   }
 
   isDisabled() {

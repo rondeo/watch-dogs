@@ -108,11 +108,8 @@ export class GainersLosersComponent implements OnInit {
       return
     }
 
-    api.getAllCoins().subscribe(coins => {
-      // console.log(coins);
-      this.exchangeCoins = Object.keys(coins);
-      this.sortData();
-    })
+    this.exchangeCoins = await  api.getAllCoins();
+    this.sortData();
 
   }
 

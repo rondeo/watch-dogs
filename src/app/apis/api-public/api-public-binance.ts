@@ -18,7 +18,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
 
   async getCandlesticks(base: string, coin: string, from:number, to:number): Promise<VOCandle[]>{
-   const markets = await this.getMarketsAvailable();
+   const markets = await this.getMarkets();
    if(!markets[base+'_'+coin]) return Promise.resolve([]);
     const params = {
       symbol:coin+base,

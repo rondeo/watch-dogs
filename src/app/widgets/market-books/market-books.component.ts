@@ -5,6 +5,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {UtilsBooks} from '../../com/utils-books';
 import * as _ from 'lodash';
 import {VOMCAgregated} from '../../models/api-models';
+import {VOMarketCap} from '../../models/app-models';
 
 export class BooksDisplay {
   sell: string = '';
@@ -31,9 +32,9 @@ export class MarketBooksComponent implements OnInit, OnChanges {
   isRefreshing: boolean = false;
 
   private priceBaseUS: number;
-  private baseMC: VOMCAgregated;
-  private coinMC: VOMCAgregated;
-  private allCoins: { [symbol: string]: VOMCAgregated };
+  private baseMC: VOMarketCap;
+  private coinMC: VOMarketCap;
+  private allCoins: { [symbol: string]: VOMarketCap };
 
   constructor(
     private apiMarketCap: ApiMarketCapService,
