@@ -51,12 +51,10 @@
 
     <p>
         <mat-checkbox #marketCheck >Market</mat-checkbox>
-        <app-market-snapshot
+        <app-trades-all-exchanges
                 *ngIf="marketCheck.checked"
-                [exchange]="exchange"
                 [market]="market"
-
-        ></app-market-snapshot>
+        ></app-trades-all-exchanges>
     </p>
 
     <br/>

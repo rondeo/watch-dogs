@@ -4,6 +4,7 @@ import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOMCAgregated} from '../../models/api-models';
+import {ShowExternalPageService} from '../../services/show-external-page.service';
 
 export interface VOMarketSnapshot {
   buy: VOOrder[],
@@ -43,7 +44,7 @@ export const VO_MARKET_SNAPSHOT = {
   templateUrl: './market-snapshot.component.html',
   styleUrls: ['./market-snapshot.component.css']
 })
-export class MarketSnapshotComponent implements OnInit {
+export class TradesExchangeSnapshotComponent implements OnInit {
 
   @Input() exchange: string;
   @Input() market: string;
@@ -51,6 +52,7 @@ export class MarketSnapshotComponent implements OnInit {
   analytics: VOMarketSnapshot;
   priceBaseUS: number;
   coinPriceUS: number;
+
   private baseMC: VOMarketCap;
   private coinMC: VOMarketCap;
   private allCoins: { [symbol: string]: VOMarketCap };
@@ -66,24 +68,25 @@ export class MarketSnapshotComponent implements OnInit {
 
   constructor(
     private apiMarketCap: ApiMarketCapService,
-    private apisPublic: ApisPublicService
+    private apisPublic: ApisPublicService,
+    private showMarket: ShowExternalPageService
   ) {
 
 
   }
 
   ngOnChanges(evt: SimpleChanges) {
-    console.log(' onchanges ');
+   // console.log(' onchanges ');
     this.initAsync();
   }
 
   ngOnInit() {
-    console.log(' ngOnInit  ')
+   // console.log(' ngOnInit  ')
     this.analytics = VO_MARKET_SNAPSHOT;
   }
 
   async initAsync() {
-    console.log('initAsync   ')
+    //console.log('initAsync   ')
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
@@ -99,7 +102,7 @@ export class MarketSnapshotComponent implements OnInit {
 
 
   async downloadHistory() {
-    console.log('download history')
+   // console.log('download history')
     this.isRefreshingHistory = true;
     if (!this.exchange) return;
     if (!this.baseMC || !this.coinMC) return;
@@ -128,7 +131,7 @@ export class MarketSnapshotComponent implements OnInit {
     const priceCoin = this.coinMC.price_usd
     // console.log(history, basePrice);
     const amount = this.amountFishUS / priceCoin;
-    console.log(history);
+    // console.log(history);
     this.fishes = history.filter(function (item) {
       return item.amountCoin > amount;
     }).sort(function (a, b) {
@@ -139,6 +142,11 @@ export class MarketSnapshotComponent implements OnInit {
   onAmountFishChanged(evt) {
 
     this.calculeteFishes();
+  }
+
+  onMarketClick() {
+    const ar = this.market.split('_');
+    this.showMarket.showMarket(this.exchange, ar[0], ar[1]);
   }
 
 }

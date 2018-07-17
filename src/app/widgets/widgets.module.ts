@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CoinDayComponent} from './coin-day/coin-day.component';
 import {MarketBooksComponent} from './market-books/market-books.component';
-import {MarketSnapshotComponent} from './market-snapshot/market-snapshot.component';
+import {TradesExchangeSnapshotComponent} from './trades-exchange-snapshot/trades-exchange-snapshot.component';
 import {UiModule} from '../ui/ui.module';
 import {CommonModule} from '@angular/common';
 import {MaterialAppModule} from '../material/material-app.module';
@@ -17,6 +17,7 @@ import { BooksAllExchangesComponent } from './books-all-exchanges/books-all-exch
 import { OpenOrdersComponent } from './open-orders/open-orders.component';
 import { OrdersHistoryComponent } from './orders-history/orders-history.component';
 import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers-2.component';
+import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-exchanges.component';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers
   ],
   exports: [
     CoinDayComponent,
-    MarketSnapshotComponent,
+    TradesExchangeSnapshotComponent,
     MarketBooksComponent,
     BooksForAmountComponent,
     AmountCoinComponent,
@@ -40,11 +41,12 @@ import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers
     BooksAllExchangesComponent,
     OpenOrdersComponent,
     OrdersHistoryComponent,
-    CoinDayTriggers2Component
+    CoinDayTriggers2Component,
+    TradesAllExchangesComponent
   ],
   declarations:[
     CoinDayComponent,
-    MarketSnapshotComponent,
+    TradesExchangeSnapshotComponent,
     MarketBooksComponent,
     BooksForAmountComponent,
     AmountCoinComponent,
@@ -55,7 +57,8 @@ import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers
     BooksAllExchangesComponent,
     OpenOrdersComponent,
     OrdersHistoryComponent,
-    CoinDayTriggers2Component
+    CoinDayTriggers2Component,
+    TradesAllExchangesComponent
   ]
 })
 export class WidgetsModule { }
