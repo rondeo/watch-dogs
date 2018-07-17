@@ -18,6 +18,8 @@ import { OpenOrdersComponent } from './open-orders/open-orders.component';
 import { OrdersHistoryComponent } from './orders-history/orders-history.component';
 import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers-2.component';
 import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-exchanges.component';
+import { BtcTetherComponent } from './btc-tether/btc-tether.component';
+import {ValueColorDirective} from '../directives/value-color.directive';
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-e
     UiModule
   ],
   exports: [
+    BtcTetherComponent,
     CoinDayComponent,
     TradesExchangeSnapshotComponent,
     MarketBooksComponent,
@@ -58,7 +61,9 @@ import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-e
     OpenOrdersComponent,
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
-    TradesAllExchangesComponent
+    TradesAllExchangesComponent,
+    BtcTetherComponent,
+    ValueColorDirective
   ]
 })
 export class WidgetsModule { }

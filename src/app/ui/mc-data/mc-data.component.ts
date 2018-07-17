@@ -16,7 +16,7 @@ export class McDataComponent implements OnInit, OnChanges {
    // if(!this.mcdata) this.mcdata = new VOMCAgregated()
   }
   ngOnChanges(evt) {
-    console.log(evt);
+ //    console.log(evt);
   }
 
 }

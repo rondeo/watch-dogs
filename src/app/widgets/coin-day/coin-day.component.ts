@@ -55,7 +55,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   ngOnChanges(data: { [val: string]: SimpleChange }) {
     if (data.coin) {
-      console.warn(data);
+     //  console.warn(data);
       this.filterDay();
     }
   }
