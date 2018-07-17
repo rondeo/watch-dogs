@@ -10,23 +10,28 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return 'https://www.huobi.com/{{coin}}_{{base}}/exchange/'
+      .replace('{{base}}', base.toLowerCase()).replace('{{coin}}', coin.toLowerCase());
+  }
+
+
   downloadMarketHistory(base:string, coin:string) {
-    let url = '/api/proxy/api.huobipro.com//market/history/trade?size=200&symbol={{coin}}{{base}}'
+    let url = '/api/proxy/api.huobipro.com/market/history/trade?size=200&symbol={{coin}}{{base}}'
       .replace('{{base}}', base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
-    return this.http.get(url).map((res:any[]) => {
-
-      console.log(res);
-      return res.map(function (o) {
+    return this.http.get(url).map((res:any) => {
+      return res.data.map(function (o) {
+        o = o.data[0];
         return {
-          uuid:o.tid,
+          uuid:o.id,
           isOpen:false,
           base:base,
           coin:coin,
-          exchange:'okex',
-          action:o.type.toUpperCase(),
-          timestamp:o.date_ms,
+          exchange:'huobi',
+          action:o.direction.toUpperCase(),
+          timestamp:o.ts,
           amountCoin:o.amount,
           rate:o.price
         }
@@ -36,24 +41,25 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    let url = '/api/proxy/api.huobipro.com//market/history/trade?&type=step1&symbol={{coin}}{{base}}'
+    let url = '/api/proxy/api.huobipro.com/market/depth?&type=step0&symbol={{coin}}{{base}}'
       .replace('{{base}}',  base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
     return this.http.get(url).map((res: any) => {
-      res = res.tick;
-      if(!res.bids){
+      const result = res.tick;
+
+      if(!result.bids){
         console.log(res);
         throw new Error(this.exchange + ' wromg data ');
       }
-      let buy: VOTrade[] = res.bids.map(function (item) {
+      let buy: VOTrade[] = result.bids.map(function (item) {
         return {
           amountCoin: +item[1],
           rate: +item[0]
         }
       });
 
-      let sell = res.asks.map(function (item) {
+      let sell = result.asks.map(function (item) {
         return {
           amountCoin: +item[1],
           rate: +item[0]
@@ -62,7 +68,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
       return {
         market: base +'_'+coin,
-        exchange: 'okex',
+        exchange: 'huobi',
         buy: buy,
         sell: sell
       }

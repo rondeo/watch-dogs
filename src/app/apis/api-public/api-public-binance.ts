@@ -16,6 +16,10 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return 'https://www.binance.com/trade.html?symbol={{coin}}_{{base}}'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+  }
 
   async getCandlesticks(base: string, coin: string, from:number, to:number): Promise<VOCandle[]>{
    const markets = await this.getMarkets();

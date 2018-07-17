@@ -13,6 +13,11 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return  'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
     let url = 'api/bittrex/getorderbook/' + base + '-' + coin + '/' + 50;

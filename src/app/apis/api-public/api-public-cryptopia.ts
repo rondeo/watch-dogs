@@ -13,6 +13,11 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return 'https://www.cryptopia.co.nz/Exchange/?market={{coin}}_{{base}}'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
     let url = 'https://www.cryptopia.co.nz/api/GetMarketOrders/{{coin}}_{{base}}/100'.replace('{{base}}', base).replace('{{coin}}', coin);

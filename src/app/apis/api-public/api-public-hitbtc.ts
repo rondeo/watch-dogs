@@ -12,6 +12,11 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return  'https://hitbtc.com/{{coin}}-to-{{base}}'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
     let url = '/api/hitbtc/public/orderbook/{{coin}}{{base}}'

@@ -40,7 +40,8 @@ export class ApisPublicService {
     ApisPublicService.instance = this;
   }
 
-  availableExhanges: string[] = ['binance', 'bittrex', 'okex', 'huobi', 'poloniex', 'bitfinex', 'hitbtc'];//, 'cryptopia'];
+  availableExhanges: string[] = ['binance', 'bittrex', 'okex', 'huobi', 'poloniex', 'hitbtc'];
+  allExhanges: string[] = ['binance', 'bittrex', 'okex', 'huobi', 'poloniex', 'hitbtc', 'bitfinex', 'cryptopia'];
 
   private myExchanges = ['poloniex'];
 

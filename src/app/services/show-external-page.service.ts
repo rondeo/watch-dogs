@@ -1,40 +1,21 @@
 import {Injectable} from '@angular/core';
 import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
+import {ApisPublicService} from '../apis/apis-public.service';
 
 @Injectable()
 export class ShowExternalPageService {
 
+
   constructor(
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private apisPublic: ApisPublicService
   ) {
+
   }
 
-  static showMarket(exchange: string, base: string, coin: string) {
-    let url
-    switch (exchange) {
-      case 'bittrex':
-        url = 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-        break;
-      case 'binance':
-        url = 'https://www.binance.com/trade.html?symbol={{coin}}_{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-        break;
-      case 'poloniex':
-        url = 'https://poloniex.com/exchange#{{base}}_{{coin}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-        break;
-      case 'hitbtc':
-        url = 'https://hitbtc.com/{{coin}}-to-{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-        break;
-      case 'cryptopia':
-        url = 'https://www.cryptopia.co.nz/Exchange/?market={{coin}}_{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-        break;
-      case 'bitfinex':
-        url = 'https://www.bfxdata.com/orderbooks/{{coin}}{{base}}'.replace('{{base}}', base.toLowerCase()).replace('{{coin}}', coin.toLowerCase());
-        break;
-
-
-    }
-
+   showMarket(exchange: string, base: string, coin: string) {
+    const url = this.apisPublic.getExchangeApi(exchange).getMarketUrl(base, coin);
     if (url) window.open(url, '_blank');
     else console.warn(exchange);
   }

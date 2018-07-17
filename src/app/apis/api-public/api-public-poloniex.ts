@@ -14,6 +14,11 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return  'https://poloniex.com/exchange#{{base}}_{{coin}}'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
+  }
+
   downloadBooks(base:string, coin:string):Observable<VOBooks>{
     const url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);

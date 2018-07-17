@@ -8,6 +8,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOMCAGREGATED, VOMCAgregated} from '../../models/api-models';
 import {MovingAverage} from '../../com/moving-average';
+import {MatCheckboxChange} from '@angular/material';
 
 
 @Component({
@@ -23,13 +24,16 @@ export class GainersLosersComponent implements OnInit {
   exchange: string;
   allCoins: any[];
 
-  sorted: any[];
+  sorted: VOMCAgregated[];
+
+  sortedAndFiltered: VOMCAgregated[];
 
   sortBy: string = 'percent_change_24h';
 
   btcMC: any = VOMCAGREGATED;
-
   exchangeCoins: string[] = [];
+  exchgangeCoinsTop350: string[] = [];
+  exchanges: string[];
 
   constructor(
     private router: Router,
@@ -48,6 +52,10 @@ export class GainersLosersComponent implements OnInit {
   private misingImagesTimeout;
 
 
+  private setOut(ar:VOMCAgregated[]){
+    this.sortedAndFiltered =  _.take(ar, 50);
+  }
+
   saveState() {
     const state = {
       sortBy: this.sortBy,
@@ -59,6 +67,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.exchanges = this.apiPublic.allExhanges;
     const lastState = localStorage.getItem(this.pageId);
     if (lastState) {
       const state = JSON.parse(lastState);
@@ -79,6 +88,20 @@ export class GainersLosersComponent implements OnInit {
     })
 
 
+  }
+
+  allMarkets;
+
+  tooltipMessage: string = 'exchanges list';
+  async onMouseOver(item) {
+    const symbol = item.symbol;
+    if(!this.allMarkets) this.allMarkets = await this.apiPublic.getAllMarkets();
+    const result = this.allMarkets.filter(function (item) {
+      return !!item['BTC_' + symbol];
+    }).map(function (item) {
+      return item['BTC_' + symbol].exchange;
+    });
+    this.tooltipMessage = result.toString();
   }
 
   onSymbolSelected(symbol: string) {
@@ -109,6 +132,7 @@ export class GainersLosersComponent implements OnInit {
     }
 
     this.exchangeCoins = await  api.getAllCoins();
+
     this.sortData();
 
   }
@@ -177,7 +201,7 @@ export class GainersLosersComponent implements OnInit {
     if (!this.allCoins) return;
     // console.log('sort');
 
-    var allCoins: VOMCAgregated[] = this.allCoins;
+    var allCoins = this.allCoins;
 
     switch (this.top) {
       case 'top100':
@@ -195,16 +219,27 @@ export class GainersLosersComponent implements OnInit {
       case '100_200':
         allCoins = allCoins.filter(o => o.rank < 200 && o.rank > 100);
         break;
+      case '200_300':
+        allCoins = allCoins.filter(o => o.rank < 300 && o.rank > 200);
+        break;
     }
+
 
 
     allCoins = this.filterExhangeCoins(allCoins);
 
+    this.exchgangeCoinsTop350 = allCoins.map(function (item) {
+      return item.symbol;
+    });
+
+   // console.log(allCoins);
     // let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
     let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
 
     // console.log(sorted);
-    this.sorted = _.take(sorted, 50);
+
+    this.sorted = sorted;
+    this.filterselectedExchanges();
   }
 
   onClickHeader(criteria: string): void {
@@ -218,7 +253,7 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  onUpClick() {
+ /* onUpClick() {
     if (!this.allCoins) return;
     var allCoins: VOMCAgregated[] = this.allCoins;
     let sorted = allCoins.sort(function (a, b) {
@@ -231,7 +266,7 @@ export class GainersLosersComponent implements OnInit {
     sorted = this.filterExhangeCoins(sorted);
     this.sorted = _.take(sorted, 50);
 
-  }
+  }*/
 
   filterExhangeCoins(allCoins: VOMCAgregated[]): VOMCAgregated[] {
     const exchangeCoins = this.exchangeCoins || [];
@@ -245,12 +280,49 @@ export class GainersLosersComponent implements OnInit {
 
 
   onToBTCClick() {
-
     this.sorted = this.filterExhangeCoins(this.allCoins).filter(function (item: VOMCAgregated) {
       return item.tobtc_change_05h > 0 && item.tobtc_change_1h > 0 && item.tobtc_change_2h > 0 && item.tobtc_change_3h > 0
     }).sort(function (a, b) {
       return b.rankChange24h - a.rankChange24h;
-    }).slice(0, 50);
+    });
+    this.filterselectedExchanges();
   }
+
+  selectedExchanges: string[] = [];
+
+  onExchangesChange(evt: MatCheckboxChange, exchange:string){
+    if(evt.checked) {
+      if(this.selectedExchanges.indexOf(exchange) === -1)this.selectedExchanges.push(exchange);
+    }else {
+      if(this.selectedExchanges.indexOf(exchange) !== -1) this.selectedExchanges
+        .splice(this.selectedExchanges.indexOf(exchange),1);
+    }
+    this.filterselectedExchanges();
+  }
+
+  filterselectedExchanges(){
+    if(this.exchange && this.selectedExchanges.indexOf(this.exchange) !== -1)   this.selectedExchanges = this.selectedExchanges
+      .splice(this.selectedExchanges.indexOf(this.exchange), 1);
+
+    const apisPublic: ApiPublicAbstract[] = this.selectedExchanges.map((exchange)=>{
+      return this.apiPublic.getExchangeApi(exchange);
+    });
+    let sorted = this.sorted;
+  //   console.log(sorted);
+   Promise.all(apisPublic.map((api: ApiPublicAbstract) =>{
+     return api.getAllCoins();
+   })).then(coinsAll => {
+     if(coinsAll.length) {
+       const coins = _.intersection(...coinsAll);
+       sorted = sorted.filter(function (item) {
+         return coins.indexOf(item.symbol) !==-1;
+       })
+     }
+
+     this.setOut(sorted);
+
+   })
+  }
+
 
 }

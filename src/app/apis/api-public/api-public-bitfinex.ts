@@ -18,6 +18,11 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return 'https://www.bfxdata.com/orderbooks/{{coin}}{{base}}'
+      .replace('{{base}}', base.toLowerCase()).replace('{{coin}}', coin.toLowerCase())
+  }
+
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
     const url = '/api/proxy/api.bitfinex.com/v1/book/' + coin +(base === 'USDT'?'USD':base);
@@ -68,15 +73,16 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
    return this.downlaodMarketsAvailable().map(markets =>{
      const coins = {};
-     markets.forEach(function (item) {
-       let base = item.slice(-3).toUpperCase();
-       if (base === 'USD') base = 'USDT';
-       const coin = item.slice(0,-3).toUpperCase();
-       if(!coins[coin]) coins[coin] = {};
-       coins[coin][base] = -1;
+      markets.forEach(function (item) {
+       item = item.toUpperCase();
+       const m = new VOMarket();
+       m.exchange = 'bitfinex';
+       m.base=  item.slice(-3);
+       if (m.base === 'USD') m.base = 'USDT';
+       m.coin = item.slice(0,-3);
+       coins[m.base + '_' + m.coin] = m;
      });
-     this.allCoins = coins;
-     return coins;
+      return coins
    })
 
 

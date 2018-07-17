@@ -1,29 +1,46 @@
 <div>
-    <p>
+
         <mat-form-field class="w6">
             <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
                 <mat-option value="all">All</mat-option>
                 <mat-option value="top100">Top 100</mat-option>
-                <mat-option value="100_200">100-200</mat-option>
-                <mat-option value="after200"> > 200</mat-option>
                 <mat-option value="top200">Top 200</mat-option>
+                <mat-option value="100_200">100-200</mat-option>
+                <mat-option value="200_300">200-300</mat-option>
+                <mat-option value="after200"> > 200</mat-option>
                 <mat-option value="after100"> > 100</mat-option>
 
             </mat-select>
         </mat-form-field>
-        <mat-form-field class="w6">
-            <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
-                <mat-option value="all">All</mat-option>
-                <mat-option value="bittrex">Bittrex</mat-option>
-                <mat-option value="poloniex">Poloniex</mat-option>
-                <mat-option value="binance">Binance</mat-option>
-                <mat-option value="hitbtc">HitBtc</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
-    </p>
+
+    <mat-form-field class="w6">
+        <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
+            <mat-option value="all">All</mat-option>
+            <mat-option *ngFor="let exchange1 of exchanges" [value]="exchange1">{{exchange1}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <small>
+        <span> {{exchgangeCoinsTop350.length}} </span>
+        of
+        <span> {{exchangeCoins.length}} </span>
+    </small>
+
+
+    <button mat-button [matMenuTriggerFor]="menu"><span class="large">&</span> </button>
+    <mat-menu #menu="matMenu">
+        <div *ngFor="let exchange of exchanges">
+            <mat-checkbox [value]="exchange" (change)="onExchangesChange($event, exchange)" >{{exchange}}</mat-checkbox>
+        </div>
+    </mat-menu>
+
+    <div>
+        <span *ngFor="let exchange2 of selectedExchanges"> & {{exchange2}} </span>
+    </div>
+
 
     <section>
+        <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
 
         <table class="mat-body">
             <tbody>
@@ -72,7 +89,7 @@
 
             </tr>
 
-            <tr *ngFor="let item of sorted">
+            <tr *ngFor="let item of sortedAndFiltered">
                 <td>
                     <a class="btn small"
                        routerLink="/trader/analyze-coin/{{item.symbol}}/{{exchange}}"
@@ -88,7 +105,11 @@
                 </td>
 
                 <td class="w50" [ngClass]="item.rankChange24h>0?'dgreen':'dred'">
-                    <span title="{{item.rank24h}}">
+                    <span
+                            (mouseover)="onMouseOver(item)"
+                            matTooltip="{{tooltipMessage}}"
+                            class="btn"
+                    >
                          {{item.rankChange24h}}
                     </span>
                 </td>

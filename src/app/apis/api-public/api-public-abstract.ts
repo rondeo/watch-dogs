@@ -75,4 +75,6 @@ export abstract class ApiPublicAbstract {
 
   abstract downloadTicker(): Observable<{ [market: string]: VOMarket }>;
 
+  abstract getMarketUrl(base: string, coin: string): string;
 }
+

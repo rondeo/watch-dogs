@@ -44,7 +44,8 @@ export class WatchdogTestComponent implements OnInit {
     private storage: StorageService,
     private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar,
-    private botsService: AppBotsService
+    private botsService: AppBotsService,
+    private showExternalPageService:ShowExternalPageService
   ) {
   }
 
@@ -94,7 +95,7 @@ export class WatchdogTestComponent implements OnInit {
   onLineChartClick(){
     if(this.exchange && this.market) {
       const ar = this.market.split('_')
-      ShowExternalPageService.showMarket(this.exchange, ar[0], ar[1]);
+      this.showExternalPageService.showMarket(this.exchange, ar[0], ar[1]);
     }
   }
 

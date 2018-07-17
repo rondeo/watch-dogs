@@ -10,6 +10,11 @@ export class ApiPublicOkex extends ApiPublicAbstract {
     super(http, storage);
   }
 
+  getMarketUrl(base:string, coin: string): string{
+    return 'https://www.okex.com/market?product={{coin}}_{{base}}'
+      .replace('{{coin}}',coin.toLowerCase()).replace('{{base}}', base.toLowerCase());
+  }
+
   downloadMarketHistory(base:string, coin:string) {
     let url = '/api/proxy/www.okex.com/api/v1/trades.do?symbol={{coin}}_{{base}}&limit=300'
       .replace('{{base}}', base.toLowerCase())
@@ -17,7 +22,6 @@ export class ApiPublicOkex extends ApiPublicAbstract {
     console.log(url);
     return this.http.get(url).map((res:any[]) => {
 
-      console.log(res);
       return res.map(function (o) {
         return {
           uuid:o.tid,
@@ -30,7 +34,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
           amountCoin:o.amount,
           rate:o.price
         }
-      })
+      }).reverse()
     });
   }
 
@@ -46,18 +50,25 @@ export class ApiPublicOkex extends ApiPublicAbstract {
         console.log(res);
         throw new Error(this.exchange + ' wromg data ');
       }
+
       let buy: VOTrade[] = res.bids.map(function (item) {
         return {
           amountCoin: +item[1],
           rate: +item[0]
         }
+      }).sort(function (a, b) {
+        return b.rate - a.rate
       });
+
+
 
       let sell = res.asks.map(function (item) {
         return {
           amountCoin: +item[1],
           rate: +item[0]
         }
+      }).sort(function (a, b) {
+        return a.rate - b.rate
       });
 
       return {
