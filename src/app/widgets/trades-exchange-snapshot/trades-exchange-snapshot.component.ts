@@ -5,6 +5,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOMCAgregated} from '../../models/api-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
+import * as _ from 'lodash';
 
 export interface VOMarketSnapshot {
   buy: VOOrder[],
@@ -40,8 +41,8 @@ export const VO_MARKET_SNAPSHOT = {
 
 
 @Component({
-  selector: 'app-market-snapshot',
-  templateUrl: './market-snapshot.component.html',
+  selector: 'app-trades-exchange-snapshot',
+  templateUrl: './trades-exchange-snapshot.component.html',
   styleUrls: ['./market-snapshot.component.css']
 })
 export class TradesExchangeSnapshotComponent implements OnInit {
@@ -59,7 +60,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
 
   private marketHistory: VOOrder[];
   fishes: VOOrder[];
-  amountFishUS: number = 10000;
+  amountFishUS: number = 0;
 
 
   exchanges: string[];
@@ -115,7 +116,6 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     if (!history) throw new Error('No coindatas base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
     this.isRefreshingHistory = false
-    this.calculeteFishes();
 
   }
 
@@ -140,13 +140,31 @@ export class TradesExchangeSnapshotComponent implements OnInit {
   }
 
   onAmountFishChanged(evt) {
-
     this.calculeteFishes();
   }
 
   onMarketClick() {
     const ar = this.market.split('_');
     this.showMarket.showMarket(this.exchange, ar[0], ar[1]);
+  }
+
+  showFishes3(){
+
+    const fishes =  this.marketHistory.sort(function (a, b) {
+      return b.amountCoin - a.amountCoin;
+    }).slice(0,3);
+    const last = _.last(fishes);
+    this.fishes = fishes.sort(function (a, b) {
+      return b.timestamp - a.timestamp;
+    });
+    this.amountFishUS = Math.round(last.amountCoin * last.rate * this.priceBaseUS);
+  }
+  onFishClick(){
+    if(this.fishes && this.fishes.length) {
+      this.fishes = [];
+      return;
+    }
+    this.showFishes3();
   }
 
 }

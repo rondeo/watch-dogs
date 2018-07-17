@@ -115,7 +115,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const rank = [];
 
 
-    console.log(history);
+   //  console.log(history);
 
     history.forEach(function (item, i) {
       labels.push(' ');
@@ -132,7 +132,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
 
     const medians = await MovingAverage.createMedianPriceBTC(history);
-    console.log(medians);
+   //  console.log(medians);
 
     const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);

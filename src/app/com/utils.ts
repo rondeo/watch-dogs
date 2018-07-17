@@ -18,7 +18,7 @@ export class UTILS {
     if (!UTILS.decimals[exchange + base + coin]) {
       let maxRate = 0;
       let maxAmount = 0;
-      console.log(orders);
+      // console.log(orders);
       orders.forEach(function (item) {
         let ar = String(item.rate).split('.');
         if (ar.length === 2) {
@@ -37,7 +37,7 @@ export class UTILS {
         amountDecimals: maxAmount
       }
       UTILS.decimals[exchange + base + coin] = val;
-      console.log('setting decimals ', val);
+      // console.log('setting decimals ' + exchange + base + coin, val);
     }
   }
 

@@ -101,7 +101,9 @@ export class ApiMarketCapService {
     //let url = '/api/marketcap/ticker';
     const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     console.log('%c TICKER ' + url, 'color:blue');
+    if(this.ticker$) return this.ticker$;
     this.ticker$ =  this.http.get(url).map((res: any[]) => {
+      console.log('%c TICKER MAP ' + url, 'color:blue');
       return ApiMarketCapService.mapDataMC(res);
     }).share();
     return this.ticker$

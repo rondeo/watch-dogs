@@ -101,7 +101,8 @@ export abstract class ApiPrivateAbstaract {
     if (!this.isLoadingBalances) {
       this.downloadBalances().subscribe(balances => {
         this.isLoadingBalances = false;
-        console.log(moment().format('HH:mm a') + ' new balances ', balances);
+        console.log('balances ' + this.exchange)
+        //console.log(moment().format('HH:mm a') + ' new balances ', balances);
         this.balancesSub.next(balances)
       }, error => {
         this.isLoadingBalances = false;
