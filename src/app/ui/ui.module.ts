@@ -8,6 +8,7 @@ import {LineChartComponent} from './line-chart/line-chart.component';
 import {CrossTableComponent} from './cross-table/cross-table.component';
 import {FormsModule} from '@angular/forms';
 import { McDataComponent } from './mc-data/mc-data.component';
+import {DirectivesModule} from '../directives/directives.module';
 
 @NgModule({
   exports: [
@@ -21,7 +22,8 @@ import { McDataComponent } from './mc-data/mc-data.component';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    DirectivesModule
   ],
   declarations: [
     McPercentComponent,

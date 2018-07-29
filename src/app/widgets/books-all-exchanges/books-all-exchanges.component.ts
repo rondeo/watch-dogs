@@ -40,7 +40,7 @@ export class BooksAllExchangesComponent implements OnInit {
     if(!coin) return;
     this.apiPublic.getAvailableMarketsForCoin(coin).then(res => {
       //  console.warn(res);
-      this.marketCap.getData().then(MC => {
+      this.marketCap.getTicker().then(MC => {
         this.coinPriceMC = MC[coin].price_usd;
         console.log(res);
         this.allMarkets = res.map(o => {
@@ -60,7 +60,7 @@ export class BooksAllExchangesComponent implements OnInit {
 
     this.apiPublic.getMarketAllExchanges(ar[0], ar[1]).then(res => {
       //  console.warn(res);
-      this.marketCap.getData().then(MC => {
+      this.marketCap.getTicker().then(MC => {
         this.coinPriceMC = MC[ar[1]].price_usd;
        // console.log(res);
         this.allMarkets = res.map(o => {

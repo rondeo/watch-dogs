@@ -54,7 +54,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     let ar = pair.split('_');
     let base = ar[0];
     let coin = ar[1];
-    this.allCoins = await this.apiMarketCap.getData();
+    this.allCoins = await this.apiMarketCap.getTicker();
     this.baseMC = this.allCoins[base];
     this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
     this.coinMC = this.allCoins[coin];

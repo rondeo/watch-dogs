@@ -1,4 +1,5 @@
 import {VOMarketCap} from './app-models';
+
 export interface VOCoinDayValue {
   price_btc: number;
   volume: number;
@@ -10,9 +11,19 @@ export interface VOCoinsDayData {
   [symbol: string]: VOCoinDayValue[];
 }
 
-export interface VOCoinWeek extends VOCoinDayValue{
+export interface VOCoinWeek extends VOCoinDayValue {
   timestamp: number;
   total_supply: number;
+}
+
+export class VOMCData {
+  price_btc: number
+  price_usd: number;
+  volume_24h: number;
+  market_cap_usd: number;
+  available_supply: number;
+  total_supply: number;
+  max_supply: number;
 }
 
 export interface MCdata {
@@ -35,7 +46,7 @@ export interface MCdata {
 }
 
 
-export class VOMCAgregated extends VOMarketCap{
+export class VOMCAgregated extends VOMarketCap {
   symbol: string;
   id: string;
   price_btc: number;
@@ -74,7 +85,7 @@ export class VOMCAgregated extends VOMarketCap{
 export const VOMCAGREGATED: VOMCAgregated = {
   symbol: '',
   id: '',
-  name:'',
+  name: '',
   price_btc: 0,
   price_usd: 0,
   tobtc_last: 0,
@@ -105,13 +116,13 @@ export const VOMCAGREGATED: VOMCAgregated = {
   date: ''
 }
 
-export interface VOMC extends VOMCAgregated{
+export interface VOMC extends VOMCAgregated {
   selected: boolean;
 }
 
-export type VOMCObj = {[symbol:string]: VOMarketCap}
+export type VOMCObj = { [symbol: string]: VOMarketCap }
 
-export interface VOCandle{
+export interface VOCandle {
   from: number;
   to: number;
   Open: number;

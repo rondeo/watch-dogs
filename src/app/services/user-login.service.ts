@@ -60,6 +60,13 @@ export class UserLoginService {
     }
   }
 
+ createExchangeLogin(exchange: string) {
+    this.exchangeLoginSub.next({
+      exchange: exchange,
+      status: LoginStatus.EXCHANGE_LOGIN_REQIRED
+    })
+  }
+
   onLoginError(exchange: string, reason: LoginStatus) {
     this.exchangeLoginSub.next({
       exchange: exchange,
@@ -68,7 +75,7 @@ export class UserLoginService {
   }
 
   async setExchangeCredetials(exchange: string, credentials: string) {
-    await this.storage.setItem(exchange + '-credentials', credentials, true)
+    await this.storage.setItem(exchange + '-credentials', credentials, true);
     if (exchange === this.exchange) this.promiseResolve(credentials);
     this.exchange = null;
     this.exchangeLoginSub.next({

@@ -413,12 +413,12 @@ table tr.selected {
     filter: blur(2px);
 }
 
-.alert-red {
+.alert-red, .error, .alert {
     background-color: #9b0a02;
     color: white;
 }
 
-.alert-green {
+.alert-green, .success {
     background-color: #006500;
     color: white;
 }

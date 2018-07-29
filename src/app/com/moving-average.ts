@@ -144,6 +144,39 @@ export class MovingAverage {
     return out;
   }*/
 
+  static async movingAvarage(coindatas: VOCoinDayValue[]) {
+
+    const sum = _.sum;
+    const out = [];
+    const price_2h = [];
+    const price_1h = [];
+
+    const prices_btcs: number[] = coindatas.map(function (item) {
+      return item.price_btc;
+    })
+
+    for (let i = 0, n = prices_btcs.length; i < n; i++) {
+      const cur = prices_btcs[i];
+      if (i < 20) {
+        price_1h.push(cur);
+        price_2h.push(cur);
+        continue;
+      }
+
+      const l_20 = prices_btcs.slice(i - 20, i);
+      price_2h.push(sum(l_20) / l_20.length);
+
+      const l_10 = prices_btcs.slice(i - 10, i);
+      price_1h.push(sum(l_10) / l_10.length)
+    }
+
+    return {
+      prices_btcs,
+      price_1h,
+      price_2h
+    }
+  }
+
 
   static async createMedianPriceBTC(coindatas: VOCoinDayValue[]) {
     const takeRight = _.takeRight;

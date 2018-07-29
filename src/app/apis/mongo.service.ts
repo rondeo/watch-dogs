@@ -14,48 +14,29 @@ export class MongoService {
   constructor(private http: HttpClient) {
   }
 
-  saveData(table: string, payload: any): Promise<any> {
-    let url = 'http://localhost:8080/mongodb';
-    console.log(url);
-    return this.http.post(url, {table, payload}).toPromise();
-  }
 
 
-  geteData(table: string, find: any, fields: any, limit: number): Promise<any> {
 
-    let url = 'http://localhost:8080/mongodb?table=' + table + '&find=' + JSON.stringify(find) + '&fields=' + JSON.stringify(fields) + '&limit=' + limit;
+ private  geteData( find: any, fields: any, start: number,  limit: number): Promise<any> {
+
+    const url = '/api/mongo/transactions/btc?q=' + JSON.stringify(find) + '&fields='
+      + JSON.stringify(fields) + '&start=' + start +'&limit=' + limit;
     console.log(url);
     return this.http.get(url).toPromise();
   }
 
-  downloadCoinsBTCandUSD(to: string, from: string, coins: string[], limit: number): Promise<{[symbol:string]:{btc:number, usd:number}}[]> {
+
+  downloadBTCLarge(to: string, from: string, start: number = 0, limit: number = 100): Promise<{[symbol:string]:{btc:number, usd:number}}[]> {
     const find = {
       timestamp: {$gt: moment(from).valueOf(), $lt: moment(to).valueOf()}
     }
 
     const fields: any = {};
-    coins.forEach(function (item) {
-      fields[item+'.usd'] = 1;
-      fields[item+'.btc'] = 1;
-    });
+    return this.geteData(find, fields, start, limit).then((res: any) => {
+       console.log(res);
+      return res.data.map(function (item) {
 
-    fields.date = 1;
-    return this.geteData('last', find, fields, limit).then((res: any) => {
-     //  console.log(res);
-      return res.payload.map(function (itemObj) {
-
-        const out = {
-          date:itemObj.date
-        };
-
-        coins.forEach(function (coin) {
-          const item = itemObj[coin];
-          out[coin] =  {
-            btc: item.btc,
-            usd:item.usd
-          }
-        });
-        return out;
+          return item;
       })
     });
   }

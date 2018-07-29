@@ -22,7 +22,7 @@ export class ShowExternalPageService {
 
 
   async showCoinOnMarketCap(coin: string) {
-    const MC = await this.marketCap.getData();
+    const MC = await this.marketCap.getTicker();
     const mc = MC[coin];
     window.open('https://coinmarketcap.com/currencies/' + mc.id, '_blank');
   }

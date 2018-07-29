@@ -9,14 +9,15 @@ import {VOMarketCap} from '../../models/app-models';
 })
 export class McDataComponent implements OnInit, OnChanges {
 
-  @Input() mcdata: VOMarketCap = new VOMarketCap();
+  @Input() mcdata: VOMarketCap
+  coinMC: VOMarketCap = new VOMarketCap();
   constructor() { }
 
   ngOnInit() {
-   // if(!this.mcdata) this.mcdata = new VOMCAgregated()
   }
   ngOnChanges(evt) {
- //    console.log(evt);
+    this.coinMC = this.mcdata || new VOMarketCap();
+
   }
 
 }

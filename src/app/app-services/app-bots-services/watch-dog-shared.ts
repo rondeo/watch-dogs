@@ -34,7 +34,7 @@ export class WatchDogShared extends VOWatchdog {
 
   subscribeForBalances() {
     if (!this.wd.exchange || !this.wd.base || !this.wd.coin) return;
-    ApiMarketCapService.instance.getData().then(MC => {
+    ApiMarketCapService.instance.getTicker().then(MC => {
       this.coinMC = MC[this.wd.coin];
       this.baseMC = MC[this.wd.base];
       const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.wd.exchange);

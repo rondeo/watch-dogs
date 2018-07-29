@@ -67,6 +67,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.exchanges = this.apiPublic.allExhanges;
     const lastState = localStorage.getItem(this.pageId);
     if (lastState) {
@@ -76,7 +77,7 @@ export class GainersLosersComponent implements OnInit {
       this.top = state.top || this.top;
     }
 
-    this.downlaodMarketCap();
+    this.downlaodCoinsDay();
 
     this.route.params.subscribe(params => {
       if (params.exchange !== this.exchange) {
@@ -138,7 +139,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   onRefreshClick() {
-    this.downlaodMarketCap();
+    this.downlaodCoinsDay();
   }
 
   onTopChange(evt) {
@@ -146,12 +147,19 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  async downlaodMarketCap() {
-    const MC = await this.apiMarketCap.downloadTicker().toPromise();
+  async downlaodCoinsDay() {
+    const MC = await this.apiMarketCap.getTicker();
+
     const coinDay = await this.apiMarketCap.getCoinsDay();
-    // console.log(coinDay);
+
+
+    //  console.log(coinDay);
+
+
+
 
     const ma = await MovingAverage.movingAverageSnapFromCoinDays(coinDay);
+
 
     /*
     *  symbol,

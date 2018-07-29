@@ -137,7 +137,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     this.isLoadingBalances = true;
     return this.call(uri, {}, RequestType.GET).map(res => {
       this.isLoadingBalances = false;
-      console.log(res);
+      // console.log(res);
       return res.balances.map(function (item) {
         return new VOBalance({
           symbol: item.asset,

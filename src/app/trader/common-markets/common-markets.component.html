@@ -1,7 +1,31 @@
 <div>
+    <div class="mat-title">BTC markets</div>
     <section>
 
-        <mat-checkbox  *ngFor="let exchange of exchanges" [checked]="exchange.selected">{{exchange.exchange}}  &nbsp;&nbsp;&nbsp;</mat-checkbox>
+        <mat-checkbox
+                *ngFor="let exchange of exchanges" [(ngModel)]="exchange.selected"
+                (change)="onExchnageChange(exchange)"
+        >{{exchange.exchange}} &nbsp;&nbsp;&nbsp;
+        </mat-checkbox>
 
+    </section>
+
+    <section>
+        <table>
+            <tbody>
+            <tr>
+                <td> Market</td>
+                <td>Change</td>
+                <td *ngFor="let exchange of selectedExchanges">{{exchange}}</td>
+
+            </tr>
+
+            <tr *ngFor="let market of dataset">
+                <td class="btn" (click)="onSymbolClick(market)">{{market.market}}</td>
+                <td>{{market.change}}</td>
+                <td *ngFor="let value of market.values">{{value}}</td>
+            </tr>
+            </tbody>
+        </table>
     </section>
 </div>

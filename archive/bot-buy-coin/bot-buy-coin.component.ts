@@ -76,6 +76,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
 
   }
 
+/*
   async loadMarketCap(){
     const MC = await  this.marketCap.downloadHistoryForLast3Hours().toPromise();
 
@@ -86,6 +87,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
     console.log(percent_ih)
 
   }
+*/
 
 
   ngOnDestroy(){

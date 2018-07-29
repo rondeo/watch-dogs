@@ -4,7 +4,6 @@ import {VOBalance, VOTransfer} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSelectChange, MatSnackBar} from '@angular/material';
-import {ApiBase} from '../services/apis/api-base';
 import * as _ from 'lodash';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
@@ -35,18 +34,20 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   isPendingOrders: boolean;
   MC: VOMCObj;
 
-  currentConnector: ApiBase;
+
 
   constructor(
     private privateService: MyExchangeService,
     private apisPublic: ApisPublicService,
+    private apisPrivate: ApisPrivateService,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private marketCap: ApiMarketCapService,
     private myService: MyExchangeService,
-    private externalPage: ShowExternalPageService
+    private externalPage: ShowExternalPageService,
+
   ) {
   }
 
@@ -80,11 +81,11 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   async dowloadAllBalances() {
     if(!this.exchange) return;
     this.isBalancesLoading = true;
-    this.MC = await this.marketCap.getData();
-   console.log(this.exchange);
+    this.MC = await this.marketCap.getTicker();
+   // console.log(this.exchange);
     this.balancesAll = await  this.privateService.getBalancesAll(this.exchange, true);
     const MC = this.MC;
-    console.log(this.balancesAll);
+    // console.log(this.balancesAll);
    // console.log(this.balancesAll);
     this.balancesAll.forEach(function (item) {
       const coinMC = MC[item.symbol];
@@ -96,7 +97,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
         item.percent_change_24h = coinMC.percent_change_24h;
         item.percent_change_7d = coinMC.percent_change_7d;
       } else item.balanceUS = 0;
-
     })
     this.isBalancesLoading = false;
     this.render();
@@ -181,6 +181,14 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   onEchangeChanged(evt: MatSelectChange){
     //console.log(exch);
     this.router.navigateByUrl('/my-exchange/balances/' + evt.value);
+  }
+
+  onKeyClick(){
+    if(this.exchange) {
+      this.apisPrivate.getExchangeApi(this.exchange).resetCredetials();
+      this.apisPrivate.getExchangeApi(this.exchange).createLogin();
+    }
+
   }
 
 }

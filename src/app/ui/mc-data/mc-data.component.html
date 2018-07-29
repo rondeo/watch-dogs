@@ -1,11 +1,13 @@
 <div class="mat-body">
-    <span> {{mcdata.name}} </span>
-    <span> {{mcdata.id}} </span>
-    <span>  ${{mcdata.price_usd}}</span>
-    &nbsp;&nbsp;&nbsp;
-    <span [ngClass]="mcdata.percent_change_1h>0?'green':'red'">{{mcdata.percent_change_1h}}</span>
-    &nbsp;&nbsp;&nbsp;
-    <span [ngClass]="mcdata.percent_change_24h>0?'dgreen':'dred'">{{mcdata.percent_change_24h}}</span>
-    &nbsp;&nbsp;&nbsp;
-    <span [ngClass]="mcdata.percent_change_7d>0?'dgreen':'dred'">{{mcdata.percent_change_7d}}</span>
+    <span> {{coinMC.id}} </span>
+    <span class="mat-body-2"> {{coinMC.symbol}} </span>
+    <span> {{coinMC.name}} </span>
+    <small>$</small>
+    <span>{{coinMC.price_usd}}</span>
+    <small>h:</small>
+    <span [appValueColor]="coinMC.percent_change_1h" title="1 hour">{{coinMC.percent_change_1h}} </span>
+    <small>d:</small>
+    <span [appValueColor]="coinMC.percent_change_24h" title="1 day">{{coinMC.percent_change_24h}} </span>
+    <small>w:</small>
+    <span [appValueColor]="coinMC.percent_change_7d" title="1 week">{{coinMC.percent_change_7d}} </span>
 </div>

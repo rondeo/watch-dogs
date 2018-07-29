@@ -142,6 +142,9 @@ export abstract class ApiPrivateAbstaract {
 
   abstract buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
 
+  resetCredetials(){
+    this.credentials = null;
+  }
 
   protected getCredentials(): { apiKey: string, password: string } {
     if (!!this.credentials) return this.credentials;
@@ -166,5 +169,10 @@ export abstract class ApiPrivateAbstaract {
 
   getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
     return null;
+  }
+
+
+  createLogin(){
+    this.userLogin.createExchangeLogin(this.exchange);
   }
 }

@@ -1,7 +1,5 @@
 <div class="coin-graph">
-    <span class="mat-title"><small>Coin Day </small>
-        {{coin}}
-    </span>
+    <app-mc-data [mcdata]="coinMC"></app-mc-data>
     <p>
         <span>rank {{rankFirst}} - {{rankLast}}</span> &nbsp; &nbsp;
         <app-mc-percent *ngIf="mcCoin" [marketcap]="mcCoin"></app-mc-percent>

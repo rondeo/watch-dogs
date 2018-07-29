@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
     ref.afterClosed().subscribe(data => {
       if (data && data.apiKey && data.password) {
         this.userLogin.setExchangeCredetials(loginType.exchange, JSON.stringify(data));
+
       }
     })
 

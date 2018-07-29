@@ -130,7 +130,7 @@ export class BuySellCoinComponent implements OnInit {
 
 
   async getMarkets(marketSymbol?: string) {
-    if (!this.MC) this.MC = await this.marketCap.getData();
+    if (!this.MC) this.MC = await this.marketCap.getTicker();
     const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
     if (markets.length === 0) {
       console.log(await this.myService.getAllMarkets(this.exchange));

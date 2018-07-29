@@ -27,7 +27,7 @@ export class OrdersHistoryComponent implements OnInit, OnChanges {
    ;
   }
   async initAsync(){
-    this.MC =  await this.marketCap.getData();
+    this.MC =  await this.marketCap.getTicker();
     this.downloadOpenOrders()
 
   }

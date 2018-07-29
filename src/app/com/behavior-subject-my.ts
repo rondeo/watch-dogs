@@ -6,11 +6,13 @@ import {ISubscription, Subscription} from 'rxjs/Subscription';
 import {Subscriber} from 'rxjs/Subscriber';
 import {ObjectUnsubscribedError} from 'rxjs/util/ObjectUnsubscribedError';
 import {reject} from 'q';
+import {HttpClient} from '@angular/common/http';
 
 
 export class BehaviorSubjectMy<T> extends Subject<T> {
+  private _value: T;
 
-  constructor(private _value: T) {
+  constructor() {
     super();
   }
 

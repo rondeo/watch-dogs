@@ -15,6 +15,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {VOCoinWeek} from '../../models/api-models';
 import {MovingAverage} from '../../com/moving-average';
+import {VOMarketCap} from '../../models/app-models';
 
 @Component({
   selector: 'app-coin-day',
@@ -28,6 +29,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
   @Input() coin: string;
   mcCoin: VOCoinWeek;
 
+  coinMC: VOMarketCap;
   myGraps: VOGraphs;
   myGraps2: VOLineGraph[];
 
@@ -62,9 +64,17 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.momentTo = moment();
+  this.setCoinMC();
+  }
+
+  setCoinMC() {
+    this.apiMarketCap.ticker$().subscribe(MC => {
+      this.coinMC = MC[this.coin];
+    })
   }
 
   async filterDay() {
+    // console.warn(' using ');
     if (!this.coin) return;
    // console.warn(this.coin);
     this.fullHistory = await this.getCoinHistory();
@@ -112,7 +122,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const priceusds = [];
     const volumes = [];
     const total_supply = [];
-    const rank = [];
+    const ranks = [];
 
 
    //  console.log(history);
@@ -125,21 +135,35 @@ export class CoinDayComponent implements OnInit, OnChanges {
         priceusds.push(item.price_usd);
         volumes.push(item.volume);
         total_supply.push(item.total_supply);
-        rank.push(item.rank);
+        ranks.push(item.rank);
 
       }
     });
 
 
+    const coinsDay = await this.apiMarketCap.downloadCoinsDayHours30().toPromise();
+
+    const coinDay = coinsDay[this.coin].slice(8);
+
+console.log(coinDay);
+
     const medians = await MovingAverage.createMedianPriceBTC(history);
+
+   // const ma = await MovingAverage.movingAvarage(history);
    //  console.log(medians);
 
     const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);
+
     medians.med_1hs[0] = min;
     medians.med_1hs[1] = max;
     medians.med_2hs[0] = min;
     medians.med_2hs[1] = max;
+
+   /* ma.price_1h[0] = min;
+    ma.price_1h[1] = max;
+    ma.price_2h[0] = min;
+    ma.price_2h[0] = max;*/
 
     const graphs = [
       {
@@ -153,25 +177,26 @@ export class CoinDayComponent implements OnInit, OnChanges {
         label: 'BTC'
       },
       {
-        ys: medians.med_1hs,
+        ys: ranks,
         color: '#00b922',
-        label: 'Med 1h'
+        label: 'ranks'
       },
       {
-        ys: medians.med_2hs,
-        color: '#1743b9',
-        label: 'Med 2h'
+        ys: coinDay.map(function (item) {
+          return item.available_supply;
+        }),
+        color: '#5f95ff',
+        label: 'avai'
       },
     /* {
-        ys: medians.med_2hs,
-        color: '#88a5ff',
-        label: 'Med 2 '
+        ys: ma.price_1h,
+        color: '#0b8318',
+        label: 'MA 1h '
       },
-      ,*/
-     /* {
-        ys: rank,
-        color: '#c4bbc0',
-        label: 'Rank'
+      {
+        ys:ma.price_2h,
+        color: '#133075',
+        label: 'MA 2h'
       }*/
     ]
 

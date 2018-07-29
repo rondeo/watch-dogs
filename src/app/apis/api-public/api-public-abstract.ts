@@ -45,14 +45,15 @@ export abstract class ApiPublicAbstract {
   private marketsData: { timestamp: number, markets: { [symbol: string]: VOMarket } };
 
   async getMarkets(): Promise<{ [symbol: string]: VOMarket }> {
-    if (this.marketsData) return Promise.resolve(this.marketsData.markets);
+    const timeout = Date.now() - (5 * 60 * 1000);
+    if (this.marketsData && this.marketsData.timestamp > timeout) return Promise.resolve(this.marketsData.markets);
     const marketsData: { timestamp: number, markets: { [symbol: string]: VOMarket } } = await this.store.select(this.exchange + '-markets');
 
-    if (marketsData && marketsData.timestamp) {
+    if (marketsData && marketsData.timestamp && marketsData.timestamp > timeout) {
       this.marketsData = marketsData;
       return marketsData.markets;
-
     }
+
     const markets = await this.downloadTicker().toPromise();
     this.marketsData = {
       timestamp: Date.now(),
@@ -60,6 +61,7 @@ export abstract class ApiPublicAbstract {
     }
     await this.store.upsert(this.exchange + '-markets', this.marketsData);
     return markets;
+
   }
 
   marketsTimestamp: number = 0;

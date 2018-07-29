@@ -60,5 +60,9 @@ static weiToEther(wei: string) {
     numbers = numbers.slice(num, -num);
     return _.mean(numbers);
   }
+
+  static percent(val1:number, val2:number):number{
+    return Math.round(100 * (val1 - val2) / val2)
+  }
 }
 

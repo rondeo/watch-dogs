@@ -23,7 +23,7 @@ import {WatchDogStatus} from './watch-dog-status';
 @Injectable()
 export class AppBotsService {
 
-  private allWatchDogsSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy(null);
+  private allWatchDogsSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy();
   //  private sellCoinsCtr: AppSellCoin;
   id= 'AppBotsService';
   private _isSellRunningSub: BehaviorSubject<boolean>;
@@ -216,7 +216,7 @@ export class AppBotsService {
   async runBots() {
     const wds =   this.allWatchDogsSub.getValue();
     console.log(' ALL ', wds);
-   //  const MC = await this.marketCap.getData();
+   //  const MC = await this.marketCap.getTicker();
 
     const coinsDay = await this.marketCap.getCoinsDay();
 

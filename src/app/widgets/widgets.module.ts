@@ -20,6 +20,7 @@ import {CoinDayTriggers2Component} from './coin-day-triggers-2/coin-day-triggers
 import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-exchanges.component';
 import { BtcTetherComponent } from './btc-tether/btc-tether.component';
 import {ValueColorDirective} from '../directives/value-color.directive';
+import {DirectivesModule} from '../directives/directives.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {ValueColorDirective} from '../directives/value-color.directive';
     RouterModule,
     FormsModule,
     MaterialAppModule,
-    UiModule
+    UiModule,
+    DirectivesModule
   ],
   exports: [
     BtcTetherComponent,
@@ -62,8 +64,7 @@ import {ValueColorDirective} from '../directives/value-color.directive';
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
-    BtcTetherComponent,
-    ValueColorDirective
+    BtcTetherComponent
   ]
 })
 export class WidgetsModule { }

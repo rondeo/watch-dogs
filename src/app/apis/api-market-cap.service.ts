@@ -13,9 +13,8 @@ import * as moment from 'moment';
 import {clearInterval} from 'timers';
 import {BehaviorSubjectMy} from '../com/behavior-subject-my';
 import {Subscription} from 'rxjs/Subscription';
-import {MCdata, VOCoinsDayData, VOCoinWeek, VOMC, VOMCAgregated, VOMCObj} from '../models/api-models';
+import {MCdata, VOCoinsDayData, VOCoinWeek, VOMC, VOMCAgregated, VOMCData, VOMCObj} from '../models/api-models';
 import {VOMovingAvg} from '../com/moving-average';
-
 
 
 @Injectable()
@@ -23,8 +22,9 @@ export class ApiMarketCapService {
   static instance: ApiMarketCapService;
 
   static MC: { [symbol: string]: VOMarketCap };
-  private data: { [symbol: string]: VOMarketCap };
-  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy(null);
+  // private data: { [symbol: string]: VOMarketCap };
+  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
+  private tikerSub: BehaviorSubjectMy<{ [symbol: string]: VOMarketCap }> = new BehaviorSubjectMy();
 
   private coinsDay: VOCoinsDayData;
 
@@ -36,13 +36,38 @@ export class ApiMarketCapService {
   }
 
   async getCoin(symbol: string): Promise<VOMarketCap> {
-    if (this.data) return Promise.resolve(this.data[symbol]);
-    return this.getData().then(res => res[symbol]);
+    const data = await this.getTicker();
+    return data[symbol]
   }
 
+  downloadCoinsDayHours30(): Observable<{ [symbol: string]: VOMCData[] }> {
+    const url = '/api/proxy-http/crypto.aesoft.ca:49890/mc-hour-30';
+    console.log(url);
+    return this.http.get(url).map((res: any) => {
+      const headers = res.headers;
+      const data = res.data;
+      const out: { [symbol: string]: VOMCData[] } = {};
+      for (let str in data) {
+        out[str] = data[str].map(function (item) {
+          return item?{
+            rank: item[0],
+            price_btc: item[1],
+            price_usd: item[2],
+            volume_24h: item[3],
+            market_cap_usd: item[4],
+            available_supply: item[5],
+            total_supply: item[5],
+            max_supply: item[7]
+          }:null;
+        })
+      }
+      return out;
+    })
+  }
 
   getCoinsDay(): Promise<VOCoinsDayData> {
-    const url = '/api/proxy-http/crypto.aesoft.ca:49890/coin-day-all';
+    const url = '/api/proxy-http/crypto.aesoft.ca:49890/coin-day-all/0';
+    console.log(url);
     return this.http.get(url, {observe: 'response'}).map((res: any) => {
 
       //   console.log(res.headers.get('last-modified'));
@@ -96,17 +121,41 @@ export class ApiMarketCapService {
     return out;
   }
 
-  ticker$;
-  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {  ;
-    //let url = '/api/marketcap/ticker';
-    const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
+  refreshTicker() {
+    this.downloadTicker().subscribe(res => {
+      let current = 0
+      const cur = this.tikerSub.getValue();
+      if (cur) current = cur['BTC'].last_updated;
+      const timestamp = res['BTC'].last_updated;
+      if (timestamp !== current) {
+        console.log(' new marketcap ' + moment(timestamp * 1000).format('HH:mm'));
+        this.tikerSub.next(res)
+      }
+    });
+  }
+
+  tikerInterval;
+
+  ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
+    if (!this.tikerInterval) {
+      this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
+      this.refreshTicker();
+    }
+    return this.tikerSub.asObservable();
+  }
+
+  tickerGet$;
+
+  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
+    let url = '/api/marketcap-ticker';
+    // const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     console.log('%c TICKER ' + url, 'color:blue');
-    if(this.ticker$) return this.ticker$;
-    this.ticker$ =  this.http.get(url).map((res: any[]) => {
+    if (this.tickerGet$) return this.tickerGet$;
+    this.tickerGet$ = this.http.get(url).map((res: any[]) => {
       console.log('%c TICKER MAP ' + url, 'color:blue');
       return ApiMarketCapService.mapDataMC(res);
     }).share();
-    return this.ticker$
+    return this.tickerGet$
   }
 
 
@@ -147,9 +196,11 @@ export class ApiMarketCapService {
      return newMC;
    }*/
 
-  getData(): Promise<{[symbol: string]: VOMarketCap}> {
-    if (this.data) return Promise.resolve(this.data);
-    return this.downloadTicker().do(data => this.data = _.keyBy(data, 'symbol')).toPromise();
+
+  getTicker(): Promise<{ [symbol: string]: VOMarketCap }> {
+    const data = this.tikerSub.getValue();
+    if (data) return Promise.resolve(data);
+    return this.downloadTicker().toPromise();
   }
 
   private agrigated;
@@ -212,22 +263,22 @@ export class ApiMarketCapService {
 
   }
 
-  downloadHistoryForLast3Hours(length: number = 11): Observable<{ [coin: string]: VOMarketCap[] }> {
-    let url = '/api/marketcap/history/' + length
-    console.log(url);
-    return this.http.get(url).map((res: any) => {
-      // console.log(res);
-      const out: { [coin: string]: VOMarketCap[] } = {};
-      res.forEach(function (nextValue) {
-        for (let str in nextValue) {
-          if (!out[str]) out[str] = [];
-          out[str].push(Parsers.mapMCValue(nextValue[str]));
-        }
-      })
-      return out;
-    });
-  }
-
+  /* downloadHistoryForLast3Hours(length: number = 11): Observable<{ [coin: string]: VOMarketCap[] }> {
+     let url = '/api/marketcap/history/' + length
+     console.log(url);
+     return this.http.get(url).map((res: any) => {
+       // console.log(res);
+       const out: { [coin: string]: VOMarketCap[] } = {};
+       res.forEach(function (nextValue) {
+         for (let str in nextValue) {
+           if (!out[str]) out[str] = [];
+           out[str].push(Parsers.mapMCValue(nextValue[str]));
+         }
+       })
+       return out;
+     });
+   }
+ */
 
   getCoinWeek(coin: string): Observable<VOCoinWeek[]> {
     if (!coin) throw new Error(' no coin');
@@ -253,10 +304,10 @@ export class ApiMarketCapService {
     });
   }
 
-  getCoinDay(coin: string, from: string, to: string) {
-    const url = '/api/front-desk/market-cap-coin-day?coin=' + coin + '&from=' + from + '&to=' + to;
-    return this.http.get(url).map(Parsers.mapDataCharts);
-  }
+  /*  getCoinDay(coin: string, from: string, to: string) {
+      const url = '/api/front-desk/market-cap-coin-day?coin=' + coin + '&from=' + from + '&to=' + to;
+      return this.http.get(url).map(Parsers.mapDataCharts);
+    }*/
 
   private refreshInterval;
 
