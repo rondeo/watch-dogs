@@ -166,21 +166,15 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   private call(URL: string, post: any): Observable<any> {
 
     const cred = this.getCredentials();
-   //  console.log(cred);
     if (!cred) {
       const sub = new Subject();
-      this.userLogin$().subscribe(login => {
-       //  console.log(login);
-        if (login) {
-          this.call(URL, post).subscribe(res => {
-            sub.next(res);
-            sub.complete();
-          });
-        }
+      this.createLogin().then(cred =>{
+        this.call(URL, post)
+          .subscribe(res=> sub.next(res), err=>sub.error(err));
       })
-
       return sub.asObservable();
     }
+
     let headers: HttpHeaders = new HttpHeaders().set('Authorization', 'Basic ' + btoa(cred.apiKey + ':' + cred.password));
 
     if (post) {

@@ -62,7 +62,7 @@ static weiToEther(wei: string) {
   }
 
   static percent(val1:number, val2:number):number{
-    return Math.round(100 * (val1 - val2) / val2)
+    return Math.round(1009 * (val1 - val2) / val2)/10;
   }
 }
 

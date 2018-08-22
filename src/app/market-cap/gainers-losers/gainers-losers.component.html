@@ -47,8 +47,8 @@
             <tr>
                 <td colspan="3"></td>
                 <td colspan="5" class="text-center">
-                    <small class="btn" (click)="onToBTCClick()">% to btc</small>
-                    <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>
+                  <!--  <small class="btn" (click)="onToBTCClick()">% to btc</small>
+                    <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>-->
                 </td>
                 <td  colspan="3" class="text-center">
                     <small>CMC</small>
@@ -58,13 +58,9 @@
                 <th>Symbol</th>
 
                 <th class="btn" (click)="onClickHeader('rank')">Rank</th>
-                <th class="btn" (click)="onClickHeader('rankChange24h')">R 24h</th>
+                <th class="btn" (click)="onClickHeader('rankD')">R 15h</th>
+                <th> BTC D</th>
 
-                <th class="btn" (click)="onClickHeader('tobtc_change_05h')">0.5h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_1h')">1h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_2h')">2h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_3h')">4h%</th>
-                <th class="btn" (click)="onClickHeader('tobtc_change_24h')">24h%</th>
 
                 <th class="btn" (click)="onClickHeader('percent_change_1h')">1h%</th>
                 <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>
@@ -75,13 +71,7 @@
                     <span>BTC</span>
                 </td>
                 <td>1</td>
-                <td>{{btcMC.rankChange24h}}</td>
-
-                <td>{{btcMC.tobtc_change_05h}}</td>
-                <td>{{btcMC.tobtc_change_1h}}</td>
-                <td>{{btcMC.tobtc_change_2h}}</td>
-                <td>{{btcMC.tobtc_change_3h}}</td>
-                <td>{{btcMC.tobtc_change_24h}}</td>
+                <td>{{btcMC.rank}}</td>
 
                 <td>{{btcMC.percent_change_1h}}</td>
                 <td>{{btcMC.percent_change_24h}}</td>
@@ -104,35 +94,24 @@
 
                 </td>
 
-                <td class="w50" [ngClass]="item.rankChange24h>0?'dgreen':'dred'">
+                <td class="w50" [ngClass]="item.rankD>0?'dgreen':'dred'">
                     <span
                             (mouseover)="onMouseOver(item)"
                             matTooltip="{{tooltipMessage}}"
                             class="btn"
                     >
-                         {{item.rankChange24h}}
+                         {{item.rankD}}
                     </span>
                 </td>
 
-                <td class="w50" [ngClass]="item.tobtc_change_05h>0?'dgreen':'dred'">
-                    {{item.tobtc_change_05h}}
-                </td>
-                <td class="w50" [ngClass]="item.tobtc_change_1h>0?'dgreen':'dred'">
-                    {{item.tobtc_change_1h}}
-                </td>
-                <td class="w50" [ngClass]="item.tobtc_change_2h>0?'dgreen':'dred'">
-                    {{item.tobtc_change_2h}}
-                </td>
-                <td class="w50" [ngClass]="item.tobtc_change_3h>0?'dgreen':'dred'">
-                    {{item.tobtc_change_3h}}
-                </td>
-                <td class="w50" [ngClass]="item.tobtc_change_24h>0?'dgreen':'dred'">
-                    {{item.tobtc_change_24h}}
+                <td>
+                    <span [appValueColor]="item.price_btcD">
+                        {{item.price_btcD}}
+                    </span>
+
                 </td>
 
-
-                <td class="w50" [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">
-                    {{item.percent_change_1h}}
+                <td class="w50"  [appValueColor] ="item.percent_change_1h">
                 </td>
                 <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">
                     {{item.percent_change_24h}}

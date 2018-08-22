@@ -5,13 +5,27 @@ import {Directive, ElementRef, Input, OnChanges, OnInit} from '@angular/core';
 })
 export class ValueColorDirective implements OnChanges{
   @Input() appValueColor: number;
+  color = 'green';
   constructor(
     private el: ElementRef
   ) {
-
+    el.nativeElement.classList.add('green');
   }
   ngOnChanges(){
-    if(this.appValueColor) this.el.nativeElement.classList.add(this.appValueColor < 0?'dred':'dgreen');
+
+    if(!isNaN(+this.appValueColor))this.el.nativeElement.innerHTML = Number(this.appValueColor);
+    if(this.appValueColor) {
+
+      if(this.appValueColor < 0 && this.color === 'green') {
+        this.el.nativeElement.classList.remove('green');
+        this.el.nativeElement.classList.add('red');
+        this.color = 'red';
+      }else if(this.color === 'red') {
+        this.color = 'green';
+        this.el.nativeElement.classList.remove('red');
+        this.el.nativeElement.classList.add('green');
+      }
+    }
   }
 
 }

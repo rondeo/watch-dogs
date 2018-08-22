@@ -9,7 +9,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {StorageService} from './services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
-import {ExchangeLogin, LoginStatus, UserLoginService} from './services/user-login.service';
+
 import {LoginExchangeComponent} from './material/login-exchange/login-exchange.component';
 import {AppBotsService} from './app-services/app-bots-services/app-bots.service';
 
@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
     private storage: StorageService,
     private router: Router,
     private dialog: MatDialog,
-    private userLogin: UserLoginService,
     private botsService: AppBotsService,
     private snackBar: MatSnackBar
   ) {
@@ -46,62 +45,15 @@ export class AppComponent implements OnInit {
 
   }
 
-  onExchangeLogin(loginType: ExchangeLogin) {
-    let ref = this.dialog.open(LoginExchangeComponent, {
-      width: '100vw',
-      height: '300px',
-      data: {
-        exchange: loginType.exchange
-      }
-    })
-    ref.afterClosed().subscribe(data => {
-      if (data && data.apiKey && data.password) {
-        this.userLogin.setExchangeCredetials(loginType.exchange, JSON.stringify(data));
+  onExchangeLogin() {
 
-      }
-    })
 
   }
-
-  onApplicationLogin(loginType: ExchangeLogin) {
-    let ref = this.dialog.open(LoginFormComponent, {
-      width: '300px',
-      height: '300px',
-      data: {
-        exchange: loginType.exchange
-      }
-    })
-
-    ref.afterClosed().subscribe(data => {
-
-      if (data && data.email && data.password) {
-        let salt = this.storage.hashPassword1(data.password);
-        let password = this.storage.hashPassword1(salt);
-
-        /*this.auth.login(data.email, password).toPromise().then((res:any)=>{
-          console.log(res);
-          this.auth.setUser(res.user);
-
-        });*/
-        this.userLogin.setSalt(data.email, salt, loginType);
-
-        if (data.save) this.storage.storeUserSimple(data.email, salt);
-      }
-
-
-    })
-  }
-
   onLogout() {
-    if (confirm('You want to logout from Application')) {
-      this.auth.logout().toPromise().then((res: any) => {
-        console.log(res);
-        if (res.success) this.auth.setUser(null);
-        else this.snackBar.open(res.message, 'x', {extraClasses: ['alert-red']});
-      }).catch(err => {
-        this.snackBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
-      });
-    }
+
+  }
+
+  onLoginClick() {
 
   }
 
@@ -115,13 +67,6 @@ export class AppComponent implements OnInit {
   imageClass = '';
 
   ngOnInit(): void {
-
-    this.userLogin.exchangeLogin$().subscribe(exchangeLogin => {
-      //  console.log(exchangeLogin);
-      if (exchangeLogin.status === LoginStatus.APPLICATION_LOGIN_REQIRED) this.onApplicationLogin(exchangeLogin);
-      else if (exchangeLogin.status === LoginStatus.EXCHANGE_LOGIN_REQIRED) this.onExchangeLogin(exchangeLogin);
-
-    })
     this.auth.isOnline$().subscribe(res => {
       this.imageClass = res ? '' : 'glow-red';
       this.bgColor = res ? '' : 'bg-red';

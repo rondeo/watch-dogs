@@ -23,7 +23,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   }
 
 
-
   /* sellCoin(sellCoin:VOSellCoin):Observable<VOSellCoin>{
      if(!sellCoin.coinPrice) throw new Error(' need coin price')
      return this.getBalance(sellCoin.coin).switchMap(balance =>{
@@ -87,7 +86,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   }
 
 
-  getOrder(orderId, base:string, coin:string): Observable<VOOrder> {
+  getOrder(orderId, base: string, coin: string): Observable<VOOrder> {
     return this.call({
       command: 'returnOrderTrades',
       orderNumber: orderId
@@ -129,21 +128,21 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   // balancesSub: Subject<VOBalance[]>
 
-/*  getBalance(symbol: string, isRefresh): Observable<VOBalance> {
-    if (this.isLoadingBalances) return this.balancesSub.asObservable()
-      .map(balabces => {
-        return balabces.find(function (bal) {
+  /*  getBalance(symbol: string, isRefresh): Observable<VOBalance> {
+      if (this.isLoadingBalances) return this.balancesSub.asObservable()
+        .map(balabces => {
+          return balabces.find(function (bal) {
+            return bal.symbol === symbol;
+          })
+        })
+      return this.downloadBalances().map(res => {
+        return res.find(function (bal) {
           return bal.symbol === symbol;
         })
       })
-    return this.downloadBalances().map(res => {
-      return res.find(function (bal) {
-        return bal.symbol === symbol;
-      })
-    })
-  }
+    }
 
-  isLoadingBalances: boolean;*/
+    isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
     this.isLoadingBalances = true;
@@ -232,30 +231,24 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     const cred = this.getCredentials();
     if (!cred) {
       const sub = new Subject();
-      this.userLogin$().subscribe(login => {
-        console.log(login);
-        if (login) {
-          this.call(post).subscribe(res => {
-            sub.next(res);
-            sub.complete();
-          });
-        }
+      this.createLogin().then(cred => {
+        this.call(post)
+          .subscribe(res => sub.next(res), err => sub.error(err));
       })
-
       return sub.asObservable();
     }
 
-      post.nonce = Date.now();
-      let load = UTILS.toURLparams(post);
-      let signed = this.hash_hmac(load, cred.password);
-      let url = '/api/poloniex/private';
-      ;
-      console.log(url);
-      return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).map(res => {
 
-        return res
-      })
+    post.nonce = Date.now();
+    let load = UTILS.toURLparams(post);
+    let signed = this.hash_hmac(load, cred.password);
+    let url = '/api/poloniex/private';
+    ;
+    console.log(url);
+    return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).map(res => {
 
+      return res
+    })
 
 
   }

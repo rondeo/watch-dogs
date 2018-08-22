@@ -7,6 +7,14 @@ import {UtilsBooks} from '../../com/utils-books';
 import {MATH} from '../../com/math';
 import {MatSnackBar} from '@angular/material';
 
+ interface MarketDisplay {
+   market: string;
+   values: number[];
+   change: number;
+   selected: boolean;
+ }
+
+
 @Component({
   selector: 'app-common-markets',
   templateUrl: './common-markets.component.html',
@@ -22,11 +30,7 @@ export class CommonMarketsComponent implements OnInit {
   selectedExchanges: string[];
   commonMarketNames: string[];
 
-  dataset: {
-    market: string;
-    values: number[];
-    change: number;
-  }[];
+  dataset: MarketDisplay [];
 
   constructor(
     private apiPublic: ApisPublicService,
@@ -103,7 +107,8 @@ export class CommonMarketsComponent implements OnInit {
       return {
         market: item,
         values: values,
-        change: MATH.percent(last, first)
+        change: MATH.percent(last, first),
+        selected: false
       }
     })
 
@@ -144,9 +149,20 @@ export class CommonMarketsComponent implements OnInit {
         market: item.market,
         buy: UtilsBooks.getRateForAmountCoin(item.buy, amountCoin),
         sell: UtilsBooks.getRateForAmountCoin(item.sell, amountCoin),
+        amountCoin: amountCoin
       }
     })
 
+    return booksResults;
+  }
+
+  showBooksAnalys(booksResults: {
+    exchange: string,
+    market: string,
+    buy: number,
+    sell:number,
+    amountCoin: number
+  }[] ) {
 
     let results = booksResults[0].market;
     let maxBuy = 0;
@@ -170,12 +186,9 @@ export class CommonMarketsComponent implements OnInit {
 
   }
 
-  onSymbolClick(market: {
-    market: string,
-    values: number[],
-    change: number
-  }) {
+  onSymbolClick(market: MarketDisplay) {
 
+    this.selectMarket(market);
     const ar = market.market.split('_');
 
     const exchanges = this.selectedExchanges;
@@ -188,16 +201,67 @@ export class CommonMarketsComponent implements OnInit {
       this.marketCap.getCoin(ar[1]).then(mc =>{
         const price: number = mc.price_usd;
         const amountCoin = 1000 / price;
-        this.analizeBooks(res, amountCoin);
-        const prs2 = exchanges.map((item) => {
+       const result =  this.analizeBooks(res, amountCoin);
+       this.adjustValuesBybooks(result);
+       this.showBooksAnalys(result);
+        /*const prs2 = exchanges.map((item) => {
           return this.apiPublic.getExchangeApi(item).downloadMarketHistory(ar[0], ar[1]).toPromise();
 
-        });
+        });*/
 
       })
 
     })
 
-    console.log(market);
+      // console.log(market);
+  }
+
+
+  selectMarket(market: MarketDisplay) {
+    if(this.selected) this.selected.selected = false;
+    this.selected = market;
+    market.selected = true;
+  }
+
+  selected: MarketDisplay;
+  onValueClick(i:number, j:number) {
+
+    const market = this.dataset[i];
+    this.selectMarket(market);
+
+    const exchange = this.selectedExchanges[j];
+    const ar= market.market.split('_');
+    const url = this.apiPublic.getExchangeApi(exchange).getMarketUrl(ar[0], ar[1]);
+    window.open(url, exchange);
+
+  }
+
+
+  adjustValuesBybooks(booksResults: {
+    exchange: string,
+    market: string,
+    buy: number,
+    sell:number,
+    amountCoin: number
+  }[]) {
+    const market = this.selected;
+
+    if(market.market !== booksResults[0].market)
+      throw new Error(' ERROR markets not match ' + market.market  +' '+ booksResults[0].market);
+
+    const indexed = _.keyBy(booksResults, 'exchange');
+    console.log(indexed);
+    const values = [];
+    this.selectedExchanges.forEach(function (item) {
+      const books = indexed[item];
+      const value = (books.buy + books.sell) /2;
+      values.push(value);
+
+    })
+    const oldValues = this.selected.values;
+    console.log(oldValues, values);
+    this.selected.values = values;
+
+
   }
 }

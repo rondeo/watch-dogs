@@ -7,7 +7,7 @@ import * as _ from 'lodash'
 import {MongoService} from '../../apis/mongo.service';
 import {Moment} from 'moment';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {ApiCryptoCompareService, VOHistHour} from '../../apis/api-crypto-compare.service';
 import {P} from '@angular/core/src/render3';
 
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
@@ -33,7 +33,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
   myGraps: VOGraphs;
   myGraps2: VOLineGraph[];
 
-  isExchanges:boolean;
+  isExchanges: boolean;
 
   rankFirst: number;
   rankLast: number;
@@ -45,7 +45,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   momentTo: Moment;
   exchange: string;
-  market:string;
+  market: string;
 
   constructor(
     //  private route: ActivatedRoute,
@@ -57,14 +57,14 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
   ngOnChanges(data: { [val: string]: SimpleChange }) {
     if (data.coin) {
-     //  console.warn(data);
-      this.filterDay();
+      //  console.warn(data);
+      this.controller();
     }
   }
 
   ngOnInit() {
     this.momentTo = moment();
-  this.setCoinMC();
+    this.setCoinMC();
   }
 
   setCoinMC() {
@@ -73,49 +73,62 @@ export class CoinDayComponent implements OnInit, OnChanges {
     })
   }
 
+
+  async controller() {
+    const coinData = await this.getCoinHistory();
+    this.drawData(coinData);
+  }
+
   async filterDay() {
     // console.warn(' using ');
     if (!this.coin) return;
-   // console.warn(this.coin);
-    this.fullHistory = await this.getCoinHistory();
 
-    const to = this.momentTo.valueOf();
-    const from = moment(to).subtract(1, 'd').valueOf();
+    // console.warn(this.coin);
+    /* this.fullHistory = await this.getCoinHistory();
+
+     const to = this.momentTo.valueOf();
+     const from = moment(to).subtract(1, 'd').valueOf();
 
 
-    let history = this.fullHistory.filter(function (item) {
-      return item.timestamp < to && item.timestamp > from;
-    });
-    this.drawData(history);
+     let history = this.fullHistory.filter(function (item) {
+       return item.timestamp < to && item.timestamp > from;
+     });
+     this.drawData(history);
+ */
+
     //this.showExchanges();
   }
 
-  async getCoinHistory(): Promise<VOCoinWeek[]> {
-    if (this.fullHistory) return Promise.resolve(this.fullHistory);
-    else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
+  async getCoinHistory(): Promise<any[]> {
+    const to: string = moment().toISOString();
+    const from: string = moment().subtract(30, 'hours').toISOString();
+    const coinData = await this.apiMarketCap.getCoinHistory(this.coin, from, to).toPromise();
+    return coinData;
   }
 
   fullHistory: VOCoinWeek[];
 
-  async drawData(history: VOCoinWeek[]) {
+  async drawData(history: any[]) {
+    // console.log(history);
 
-    const l = history.length;
+    /*  const l = history.length;
 
-    history = history.filter(function (item) {
-      return !!item;
-    })
-    this.skips = l - history.length;
-
-    const first: VOCoinWeek = _.first(history);
-    const last: VOCoinWeek = _.last(history);
+      history = history.filter(function (item) {
+        return !!item;
+      })
+      this.skips = l - history.length;
+  */
+    const first = _.first(history);
+    const last = _.last(history);
 
     this.mcCoin = last;
 
-    this.from = moment(first.timestamp).format('M/D, h:mm a');
-    this.to = moment(last.timestamp).format('M/D, h:mm a');
+    this.from = moment(first.date).format('M/D, h:mm a');
+    this.to = moment(last.date).format('M/D, h:mm a');
 
-    this.rankFirst = first.rank
-    this.rankLast = last.rank;
+
+    //this.rankFirst = Object.values(first).rank;
+    //this.rankLast = last.rank;
     const labels = [];
     let trigger = false;
     const pricebtcs = [];
@@ -124,46 +137,68 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const total_supply = [];
     const ranks = [];
 
-
-   //  console.log(history);
+    //  console.log(history);
 
     history.forEach(function (item, i) {
       labels.push(' ');
       if (item) {
-       // item.price_btc = stepprice;
-        pricebtcs.push(item.price_btc);
-        priceusds.push(item.price_usd);
-        volumes.push(item.volume);
-        total_supply.push(item.total_supply);
-        ranks.push(item.rank);
+        const data: VOMarketCap =item[this.coin];
+        pricebtcs.push(data.price_btc);
+        ranks.push(data.rank);
+        volumes.push(data.volume_24h);
+        // item.price_btc = stepprice;
+        /*  pricebtcs.push(item.price_btc);
+          priceusds.push(item.price_usd);
+          volumes.push(item.volume);
+          total_supply.push(item.total_supply);
+          ranks.push(item.rank);*/
 
       }
-    });
+    }, {coin: this.coin});
 
 
-    const coinsDay = await this.apiMarketCap.downloadCoinsDayHours30().toPromise();
+    /* const histohour = (await this.cryptoCompare.getHistoMinute('BTC', this.coin).toPromise()).reduce(function (s, item: VOHistHour) {
+       for (let str in item) {
+         const ar = s[str] || [];
+         ar.push(item[str])
+         s[str] = ar;
+       }
+       return s
+     }, {
+       avg: [],
+       date: [],
+       last: [],
+       timestamp: [],
+       volumefrom: [],
+       volumeto: []
+     });
+ */
 
-    const coinDay = coinsDay[this.coin].slice(8);
+    //  console.log(histohour);
+    // const coinsDay = await this.apiMarketCap.downloadCoinsDayHours30().toPromise();
 
-console.log(coinDay);
+    //const coinDay = coinsDay[this.coin].slice(8);
 
-    const medians = await MovingAverage.createMedianPriceBTC(history);
+    // console.log(coinDay);
 
-   // const ma = await MovingAverage.movingAvarage(history);
-   //  console.log(medians);
+   // const medians = await MovingAverage.createMedianPriceBTC(history);
+
+    // const ma = await MovingAverage.movingAvarage(history);
+    //  console.log(medians);
 
     const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);
 
-    medians.med_1hs[0] = min;
+   /* medians.med_1hs[0] = min;
     medians.med_1hs[1] = max;
     medians.med_2hs[0] = min;
-    medians.med_2hs[1] = max;
+    medians.med_2hs[1] = max;*/
 
-   /* ma.price_1h[0] = min;
-    ma.price_1h[1] = max;
-    ma.price_2h[0] = min;
-    ma.price_2h[0] = max;*/
+
+    /* ma.price_1h[0] = min;
+     ma.price_1h[1] = max;
+     ma.price_2h[0] = min;
+     ma.price_2h[0] = max;*/
 
     const graphs = [
       {
@@ -172,7 +207,7 @@ console.log(coinDay);
         label: 'Vol'
       },
       {
-        ys: medians.prices_btcs,
+        ys: pricebtcs,
         color: '#ff7f56',
         label: 'BTC'
       },
@@ -180,24 +215,28 @@ console.log(coinDay);
         ys: ranks,
         color: '#00b922',
         label: 'ranks'
-      },
-      {
-        ys: coinDay.map(function (item) {
-          return item.available_supply;
-        }),
-        color: '#5f95ff',
-        label: 'avai'
-      },
-    /* {
-        ys: ma.price_1h,
-        color: '#0b8318',
-        label: 'MA 1h '
-      },
-      {
-        ys:ma.price_2h,
-        color: '#133075',
-        label: 'MA 2h'
-      }*/
+      }
+      /*  {
+          ys:histohour.last,
+          color: '#0b8318',
+          label: 'last  '
+        },
+         {
+          ys: histohour.volumeto,
+          color: '#83193f',
+          label: 'V@ '
+        }*/
+
+      /* {
+          ys: ma.price_1h,
+          color: '#0b8318',
+          label: 'MA 1h '
+        },
+        {
+          ys:ma.price_2h,
+          color: '#133075',
+          label: 'MA 2h'
+        }*/
     ]
 
     this.myGraps = {

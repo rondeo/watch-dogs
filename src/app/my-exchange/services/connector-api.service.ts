@@ -31,7 +31,7 @@ export class ConnectorApiService {
 
   private currentService: ApiBase;
 
-  salt: string;
+ //  salt: string;
   isLogedIn$: Observable<boolean>;
 
   connectorSub: BehaviorSubject<ApiBase> = new BehaviorSubject(null);
@@ -50,7 +50,7 @@ export class ConnectorApiService {
     storage.onSalt().subscribe(res => {
 
       //console.log(' on salt '+res);
-      this.salt = res;
+     // this.salt = res;
 
       if (res && this.currentService) {
         this.currentService.autoLogin();
@@ -121,7 +121,7 @@ export class ConnectorApiService {
     let connector: ApiBase = this.getPrivateAPI(exchange);
     this.currentService = connector;
     this.isLogedIn$ = connector.isLogedIn$();
-    if (this.salt) this.currentService.autoLogin();
+   // if (this.salt) this.currentService.autoLogin();
     this.connectorSub.next(connector);
     return connector;
   }

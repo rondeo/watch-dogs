@@ -3,7 +3,6 @@ import {VOMarketCap, VOOrder} from '../../models/app-models';
 import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
-import {VOMCAgregated} from '../../models/api-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import * as _ from 'lodash';
 

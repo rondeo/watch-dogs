@@ -206,18 +206,14 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     const cred = this.getCredentials();
     if (!cred) {
       const sub = new Subject();
-      this.userLogin$().subscribe(login => {
-        console.log(login);
-        if (login) {
-          this.call(URL, post).subscribe(res => {
-            sub.next(res);
-            sub.complete();
-          });
-        }
+      this.createLogin().then(cred =>{
+        this.call(URL, post)
+          .subscribe(res=> sub.next(res), err=>sub.error(err));
       })
-
       return sub.asObservable();
     }
+
+
     post.apikey = cred.apiKey;
     post.nonce = Math.ceil(Date.now() / 1000);
     let load = Object.keys(post).map(function (item) {

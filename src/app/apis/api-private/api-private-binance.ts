@@ -129,7 +129,6 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
 
-
   isLoadingBalances: boolean;
 
   downloadBalances(): Observable<VOBalance[]> {
@@ -227,18 +226,14 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     const cred = this.getCredentials();
     if (!cred) {
       const sub = new Subject();
-      this.userLogin$().subscribe(login => {
-        console.log(login);
-        if (login) {
-          this.call(URL, data, type).subscribe(res => {
-            sub.next(res);
-            sub.complete();
-          });
-        }
+      this.createLogin().then(cred => {
+        this.call(URL, data, type)
+          .subscribe(res => sub.next(res), err => sub.error(err));
       })
-
       return sub.asObservable();
     }
+
+
     data.recvWindow = 60000;
     data.timestamp = Date.now();
     let load = Object.keys(data).map(function (item) {

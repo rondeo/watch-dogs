@@ -146,20 +146,8 @@ export abstract class ApiPrivateAbstaract {
     this.credentials = null;
   }
 
-  protected getCredentials(): { apiKey: string, password: string } {
-    if (!!this.credentials) return this.credentials;
-    this.userLogin.getExchangeCredentials(this.exchange).then(str => {
-      if (str) {
-        let cred: { apiKey: string, password: string } = JSON.parse(str);
-        if (cred && cred.apiKey && cred.password) {
-          this.credentials = cred;
-          this.loginSub.next(true);
-
-        } else this.userLogin.onLoginError(this.exchange, LoginStatus.EXCHANGE_LOGIN_REQIRED);
-      } else this.userLogin.onLoginError(this.exchange, LoginStatus.EXCHANGE_LOGIN_REQIRED);
-    });
-
-    return null
+  getCredentials():{ apiKey: string, password: string } {
+     return this.credentials;
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
@@ -170,9 +158,10 @@ export abstract class ApiPrivateAbstaract {
   getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
     return null;
   }
-
-
   createLogin(){
-    this.userLogin.createExchangeLogin(this.exchange);
+    return  this.userLogin.getExchangeCredentials(this.exchange).then(str =>{
+      this.credentials = JSON.parse(str);
+      return this.credentials;
+    })
   }
 }

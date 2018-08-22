@@ -4,7 +4,6 @@
 
 
 import {Observable} from 'rxjs/Observable';
-import {VOMCAgregated} from './api-models';
 import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
 
 export interface VOBooksStats {
@@ -369,17 +368,19 @@ export class VOMarketCap {
   percent_change_24h: number;
   percent_change_7d: number;
 
-  volume_usd_24h?: number;
+  volume_24h: number;
 
-  tobtc_change_1h?: number;
-  tobtc_change_24h?: number;
-  tobtc_change_7d?: number;
+ // tobtc_change_1h?: number;
+ // tobtc_change_24h?: number;
+ // tobtc_change_7d?: number;
 
-  btcUS?: number;
+ // btcUS?: number;
+
   market_cap_usd?: number;
   available_supply?: number;
   total_supply?: number;
   max_supply?: number;
+
   last_updated?: number;
   selected?: boolean;
 

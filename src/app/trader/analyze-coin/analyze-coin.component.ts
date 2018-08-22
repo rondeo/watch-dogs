@@ -4,12 +4,13 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMCAgregated} from '../../models/api-models';
+
 import {VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {MATH} from '../../com/math';
 import {MongoService} from '../../apis/mongo.service';
 import * as moment from 'moment';
+import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class AnalyzeCoinComponent implements OnInit {
     private apiPublic: ApisPublicService,
     private marketCap: ApiMarketCapService,
     private showExtranPage: ShowExternalPageService,
-    private mongoBTC: MongoService
+    private mongoBTC: MongoService,
+    private cryptoCompare: ApiCryptoCompareService
   ) {
   }
 
@@ -45,9 +47,11 @@ export class AnalyzeCoinComponent implements OnInit {
 
   ngOnInit() {
 
-    this.mongoBTC.downloadBTCLarge('2018-07-16T02:26:43-04:00', moment('2018-07-16T02:26:43-04:00').subtract(1, 'd').format()).then(res =>{
+
+
+   /* this.mongoBTC.downloadBTCLarge('2018-07-16T02:26:43-04:00', moment('2018-07-16T02:26:43-04:00').subtract(1, 'd').format()).then(res =>{
       console.log(res);
-    })
+    })*/
 
     // console.warn(MATH.medianOn([3, 5, 4, 7, 1, 1, 2, 3, 10, 10, 1000, 19999], 5));
 

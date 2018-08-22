@@ -13,6 +13,7 @@ import {MyExchangeService} from '../services/my-exchange.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
+import {UserLoginService} from '../../services/user-login.service';
 
 @Component({
   selector: 'app-my-balnce',
@@ -47,6 +48,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     private marketCap: ApiMarketCapService,
     private myService: MyExchangeService,
     private externalPage: ShowExternalPageService,
+    private userLogin: UserLoginService
 
   ) {
   }
@@ -185,8 +187,12 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   onKeyClick(){
     if(this.exchange) {
-      this.apisPrivate.getExchangeApi(this.exchange).resetCredetials();
-      this.apisPrivate.getExchangeApi(this.exchange).createLogin();
+      this.userLogin.setExchnageCredentials(this.exchange).then(res =>{
+        this.apisPrivate.getExchangeApi(this.exchange).createLogin();
+      })
+
+     // this.apisPrivate.getExchangeApi(this.exchange).resetCredetials();
+      //this.apisPrivate.getExchangeApi(this.exchange).createLogin();
     }
 
   }

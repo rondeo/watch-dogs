@@ -52,7 +52,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
 
 
   async download2Records(){
-    const now = moment().format()
+  /*  const now = moment().format()
     const MC = await this.marketCap.download2Recors(moment().subtract(3,'h').format(), moment().format()).toPromise();
     console.log(MC['stamps']);
     const exchangeCoins =  await this.exchangeApi.getAllCoins();
@@ -72,7 +72,7 @@ export class BotBuyCoinComponent implements OnInit, OnDestroy {
     })
 
     console.log(gainers);
-    this.display = gainers.length?gainers: ar;
+    this.display = gainers.length?gainers: ar;*/
 
   }
 

@@ -1,13 +1,12 @@
 ///<reference path="../../services/auth-http.service.ts"/>
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthHttpService} from '../../services/auth-http.service';
 import {element} from 'protractor';
 import {DialogSimpleComponent} from '../../material/dialog-simple/dialog-simple.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {StorageService} from "../../services/app-storage.service";
-
+import {StorageService} from '../../services/app-storage.service';
 
 
 @Component({
@@ -19,52 +18,52 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   showPass: boolean;
-  login = {email: '', password: '', nickname:null};
-  selectedTab:number;
-  exists:boolean;
-  notMatch:boolean = true;
+  login = {email: '', password: '', nickname: null};
+  selectedTab: number;
+  exists: boolean;
+  notMatch: boolean = true;
 
-  confirmPassword:string;
+  confirmPassword: string;
 
 
   constructor(
-    private router:Router,
-    private route:ActivatedRoute,
-    private authHttp:AuthHttpService,
-    private storage:StorageService,
-    private dialog:MatDialog,
-    private snakBar:MatSnackBar
+    private router: Router,
+    private route: ActivatedRoute,
+    private authHttp: AuthHttpService,
+    private storage: StorageService,
+    private dialog: MatDialog,
+    private snakBar: MatSnackBar
   ) {
 
   }
 
-  onRegister(){
+  onRegister() {
     this.exists = false;
 
     let password = this.storage.hashPassword2(this.login.password)
-    this.authHttp.register(this.login.email, password).subscribe((res:any)=>{
+    this.authHttp.register(this.login.email, password).subscribe((res: any) => {
       console.log(res);
-      if(res.success && res.nickname){
+      if (res.success && res.nickname) {
 
-        this.snakBar.open( 'Registered ' + res.message,'x', {extraClasses:['alert-green']});
+        this.snakBar.open('Registered ' + res.message, 'x', {extraClasses: ['alert-green']});
 
-      }else{
+      } else {
 
-        if(res.error && res.error ==='exists'){
+        if (res.error && res.error === 'exists') {
           this.router.navigateByUrl('/login/login');
         }
 
-        this.snakBar.open((res.nickname || '') + ' '+ res.message, 'x', {extraClasses:['alert-red']});
+        this.snakBar.open((res.nickname || '') + ' ' + res.message, 'x', {extraClasses: ['alert-red']});
       }
 
-    }, error=>{
-      this.snakBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+    }, error => {
+      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
     })
   }
 
-  checkPassword(){
+  checkPassword() {
 
-    if(this.confirmPassword === this.login.password) this.notMatch = false;
+    if (this.confirmPassword === this.login.password) this.notMatch = false;
     else this.notMatch = true;
   }
 
@@ -73,9 +72,9 @@ export class LoginComponent implements OnInit {
 
       let topic = params.topic;
       console.log(topic);
-      if(topic) {
+      if (topic) {
 
-        switch (topic){
+        switch (topic) {
           case 'sign-in':
             this.selectedTab = 0;
             break
@@ -98,21 +97,24 @@ export class LoginComponent implements OnInit {
 
   }
 
-  onShowPasswordChanged($evt, chbox){
+  onShowPasswordChanged($evt, chbox) {
 
     this.showPass = chbox.checked;
 
   }
 
-  onLogin(){
+  onLogin() {
 
     let password = this.storage.hashPassword2(this.login.password);
-    this.authHttp.login(this.login.email, password).subscribe((res:any) => {
+
+    console.warn(password);
+
+    this.authHttp.login(this.login.email, password).subscribe((res: any) => {
       console.log(res);
 
 
-      this.snakBar.open( res.message,'x');
-      if(res.success) {
+      this.snakBar.open(res.message, 'x');
+      if (res.success) {
         let url = this.storage.getLastVisitedUrl();
         if (!url) url = '/email-service';
 
@@ -122,79 +124,81 @@ export class LoginComponent implements OnInit {
         setTimeout(() => {
           this.router.navigateByUrl(url)
         }, 3000);
-      }else this.snakBar.open( res.message,'x', {extraClasses:['alert-red']});
+      } else this.snakBar.open(res.message, 'x', {extraClasses: ['alert-red']});
 
-    }, error=>{
-      this.snakBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+    }, error => {
+      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
     });
   }
 
   signUp() {
 
-    console.log("Sign Up Data:" , this.login);
+    console.log('Sign Up Data:', this.login);
   }
 
-  onNicknameOK(){
-   // console.log(this.selectedTab);
+  onNicknameOK() {
+    // console.log(this.selectedTab);
     this.selectedTab = 0;
-   // console.log(this.selectedTab);
-   // this.router.navigateByUrl('/login/login');
+    // console.log(this.selectedTab);
+    // this.router.navigateByUrl('/login/login');
   }
 
-  onRequestNewNickname(){
+  onRequestNewNickname() {
     let url = 'api/login/new-nickname';
     let password = this.storage.hashPassword2(this.login.password);
     let out = {
-      email:this.login.email,
-      password:password,
-      nickname:this.login.nickname
+      email: this.login.email,
+      password: password,
+      nickname: this.login.nickname
     }
-    this.authHttp.post(url, out).subscribe((res:any)=>{
+    this.authHttp.post(url, out).subscribe((res: any) => {
       console.log(res);
-      this.snakBar.open(res.message,'x');
-      if(res.success){
+      this.snakBar.open(res.message, 'x');
+      if (res.success) {
 
         this.authHttp.setUserNickname(this.login.nickname)
       }
 
-    }, err=>{
-      this.snakBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+    }, err => {
+      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
     })
   }
 
 
-  onLogout(){
-    if(confirm('You want to logout from email service?')){
-      this.authHttp.logout().subscribe((res:any)=>{
+  onLogout() {
+    if (confirm('You want to logout from email service?')) {
+      this.authHttp.logout().subscribe((res: any) => {
 
-        if(res.success){
+        if (res.success) {
           this.authHttp.setUser(null);
-          this.snakBar.open( res.message,'x', {extraClasses:['alert-green']});
-        }else  this.snakBar.open( res.message,'x');
+          this.snakBar.open(res.message, 'x', {extraClasses: ['alert-green']});
+        } else this.snakBar.open(res.message, 'x');
 
-      }, error=>{
-        this.snakBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+      }, error => {
+        this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
       })
     }
   }
 
-  onRestPassword(){
+  onRestPassword() {
     let url = 'api/login/reset-password';
-    this.authHttp.post(url, this.login).subscribe((res:any)=>{
+    this.authHttp.post(url, this.login).subscribe((res: any) => {
       console.log(res);
-      if(res.success){
-        this.dialog.open(DialogSimpleComponent,{data:{
-          title:'Alert',
-          message:res.message
-        }});
+      if (res.success) {
+        this.dialog.open(DialogSimpleComponent, {
+          data: {
+            title: 'Alert',
+            message: res.message
+          }
+        });
 
-      }else{
+      } else {
 
-        this.snakBar.open( res.message,'x');
+        this.snakBar.open(res.message, 'x');
       }
-    }, err=>{
+    }, err => {
       console.log(err);
-      this.snakBar.open( 'Connection error','x', {extraClasses:['alert-red']});
+      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
     })
 
   }

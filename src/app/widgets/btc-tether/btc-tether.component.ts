@@ -20,6 +20,7 @@ export class BtcTetherComponent implements OnInit {
   ngOnInit() {
     this.marketCap.ticker$().subscribe(MC =>{
       this.btcMC = MC['BTC'];
+      this.btcMC.price_usd = Math.round(this.btcMC.price_usd);
       this.usdtMC = MC['USDT'];
       this.date = moment(this.btcMC.last_updated * 1000).format('LT');
     })

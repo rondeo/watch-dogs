@@ -24,9 +24,7 @@ export class EmailMainComponent implements OnInit, OnDestroy {
 
   private sub1;
   ngOnInit() {
-    this.sub1 = this.storage.onSalt().subscribe(res=>{
 
-    })
 
   }
   ngOnDestroy(){

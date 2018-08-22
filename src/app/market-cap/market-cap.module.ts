@@ -16,6 +16,7 @@ import {FormsModule} from '@angular/forms';
 import {MarketCapMainComponent} from './market-cap-main/market-cap-main.component';
 
 import {UiModule} from '../ui/ui.module';
+import {DirectivesModule} from '../directives/directives.module';
 
 
 const routes: Routes = [
@@ -40,6 +41,7 @@ const routes: Routes = [
     MaterialAppModule,
     UiModule,
     FormsModule,
+    DirectivesModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

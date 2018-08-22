@@ -7,6 +7,9 @@
             <mat-list>
                 <a mat-list-item routerLink='/market-cap/selected'>Coin Market Cap</a>
                 <hr/>
+                <a mat-list-item routerLink='/trader/common-markets'>Common Markets</a>
+                <hr/>
+
                 <a mat-list-item routerLink='/my-exchange/balances/'>Balances</a>
                 <hr/>
                 <a mat-list-item routerLink='/login/register'>Register</a>
@@ -20,7 +23,7 @@
             <ng-container *ngIf="isMenu">
                 <small> H: {{historyCounter}}</small>
                 <strong class="small">{{nickname}}</strong>
-                <a *ngIf="!isLogedIn" class="btn" (click)="onLogin()">Login</a>
+                <a *ngIf="!isLogedIn" class="btn" (click)="onLoginClick()">Login</a>
                 <a *ngIf="!!isLogedIn" class="btn" (click)="onLogout()">Logout</a>
                 <a  class="btn dred small " (click)="onClearStorage()">Clear Storage</a>
             </ng-container>

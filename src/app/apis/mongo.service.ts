@@ -4,8 +4,6 @@ import * as moment from "moment";
 import {VOMarketCap, VOMarketCapExt} from "../models/app-models";
 import {ApiMarketCapService} from "./api-market-cap.service";
 import {Parsers} from './parsers';
-import {VOMCAgregated} from '../models/api-models';
-
 
 
 @Injectable()
@@ -13,8 +11,6 @@ export class MongoService {
 
   constructor(private http: HttpClient) {
   }
-
-
 
 
  private  geteData( find: any, fields: any, start: number,  limit: number): Promise<any> {
@@ -41,7 +37,7 @@ export class MongoService {
     });
   }
 
-  downloadCoinHistory(to: string, from: string, coin: string, limit: number): Promise<VOMCAgregated[]> {
+  downloadCoinHistory(to: string, from: string, coin: string, limit: number): Promise<any[]> {
     console.log(to, from);
     const find = {
       timestamp: {$gt: moment(from).valueOf(), $lt: moment(to).valueOf()}

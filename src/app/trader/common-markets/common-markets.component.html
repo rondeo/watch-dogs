@@ -20,10 +20,10 @@
 
             </tr>
 
-            <tr *ngFor="let market of dataset">
+            <tr *ngFor="let market of dataset;  let i = index"  [ngClass]="market.selected?'selected':''" >
                 <td class="btn" (click)="onSymbolClick(market)">{{market.market}}</td>
                 <td>{{market.change}}</td>
-                <td *ngFor="let value of market.values">{{value}}</td>
+                <td *ngFor="let value of market.values;  let j = index" (click)="onValueClick(i, j)">{{value}}</td>
             </tr>
             </tbody>
         </table>

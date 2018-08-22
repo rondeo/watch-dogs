@@ -46,7 +46,7 @@ export interface MCdata {
 }
 
 
-export class VOMCAgregated extends VOMarketCap {
+/*export class VOMCAgregated extends VOMarketCap {
   symbol: string;
   id: string;
   price_btc: number;
@@ -80,9 +80,9 @@ export class VOMCAgregated extends VOMarketCap {
   total_supply?: number;
   rankChange24h?: number;
   rank24h?: number;
-}
+}*/
 
-export const VOMCAGREGATED: VOMCAgregated = {
+/*export const VOMCAGREGATED: VOMCAgregated = {
   symbol: '',
   id: '',
   name: '',
@@ -114,9 +114,13 @@ export const VOMCAGREGATED: VOMCAgregated = {
   last30: 0,
   ago3h: 0,
   date: ''
-}
-
+}*/
+/*
 export interface VOMC extends VOMCAgregated {
+  selected: boolean;
+}*/
+
+export class  VOMarketCapSelected extends VOMarketCap{
   selected: boolean;
 }
 

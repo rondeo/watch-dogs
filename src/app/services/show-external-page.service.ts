@@ -16,7 +16,7 @@ export class ShowExternalPageService {
 
    showMarket(exchange: string, base: string, coin: string) {
     const url = this.apisPublic.getExchangeApi(exchange).getMarketUrl(base, coin);
-    if (url) window.open(url, '_blank');
+    if (url) window.open(url, exchange);
     else console.warn(exchange);
   }
 

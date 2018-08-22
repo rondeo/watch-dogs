@@ -46,7 +46,7 @@ export class BotFollowCoinComponent implements OnInit {
 
   async downloadMCRecordAfter(date: string) {
 
-    const mc = await this.marketCap.downloadOneRecord(date, null).toPromise();
+  //  const mc = await this.marketCap.downloadOneRecord(date, null).toPromise();
 
   }
 
@@ -142,7 +142,7 @@ export class BotFollowCoinComponent implements OnInit {
 
   async analyseHistory() {
 
-    const weekago = moment().subtract(3, 'd');
+   /* const weekago = moment().subtract(3, 'd');
     weekago.add(10, 'h');
 
     const data0 = await this.marketCap.downloadOneRecord(weekago.format(), null).toPromise().then(this.filterMyCoins);
@@ -162,11 +162,11 @@ export class BotFollowCoinComponent implements OnInit {
     const symbols2: string[] = _.map(analytics2, 'symbol');
 
     console.log(symbols2.length);
-/*
+/!*
     const data3 = await this.marketCap.downloadOneRecord(weekago.add(1, 'h').format(), null).toPromise();
     let analytics3: CoinAnalytics[] = NewGainers.getrGanersByVolume(data0.data, data3.data);
     analytics3 = BotFollowCoinComponent.filterGainers(analytics3);
-    const symbols3: string[] = _.map(analytics3, 'symbol');*/
+    const symbols3: string[] = _.map(analytics3, 'symbol');*!/
 
     //console.log(symbols3.length);
 
@@ -177,7 +177,7 @@ export class BotFollowCoinComponent implements OnInit {
 
     if (gainers.length === 0) return;
 
-    const gainersSorted = _.takeRight(gainers, 20);
+    const gainersSorted = _.takeRight(gainers, 20);*/
 
    // const done = await this.getWeekForCoins(gainersSorted, weekago);
 

@@ -38,6 +38,7 @@ export class AllCoinsTableComponent implements OnInit {
 
   async iniiAsync(){
     this.allCoinsData = await this.marketCap.getCoinsArWithSelected();
+
   }
 
   calculateAvarage(){
