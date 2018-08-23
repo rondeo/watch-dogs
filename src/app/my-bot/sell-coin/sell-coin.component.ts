@@ -70,7 +70,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
   sub1
   ngOnInit() {
 
-   this.sub1 =  this.marketcap.agregated$().subscribe(newValues => {
+  /* this.sub1 =  this.marketcap.agregated$().subscribe(newValues => {
       const coin = this.watchdog.coin;
       const data = newValues[coin];
       console.log(data);
@@ -89,7 +89,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
       this.drawData();
     })
 
-    this.initAsync();
+    this.initAsync();*/
 
   }
 

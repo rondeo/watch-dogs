@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {VOCoinDayValue, VOCoinsDayData, VOCoinWeek, VOMCAgregated} from '../models/api-models';
+import {VOCoinDayValue, VOCoinsDayData} from '../models/api-models';
 import {MATH} from './math';
 
 export interface VOMovingAvg {
@@ -21,7 +21,7 @@ export interface VOMovingAvg {
 
 
 export class MovingAverage {
-  static map(data: VOMCAgregated): VOMovingAvg {
+  static map(data: any): VOMovingAvg {
     return {
       symbol: data.symbol,
       price_btc: data.price_btc,
@@ -229,7 +229,7 @@ export class MovingAverage {
     }
   }
 
-  static movingAverageGraphFromCoinWeek(coindatas: VOCoinWeek[]) {
+  static movingAverageGraphFromCoinWeek(coindatas: any[]) {
     const takeRight = _.takeRight;
     const sumBy = _.sumBy;
     const take = _.take;

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
-import {VOCoinWeek} from '../../models/api-models';
+
 import {MovingAverage, VOMovingAvg} from '../../com/moving-average';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -17,14 +17,14 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 })
 export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
-  @Output() coindatas: EventEmitter<VOCoinWeek[]> = new EventEmitter<VOCoinWeek[]>();
+  @Output() coindatas: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   @Input() coin: string;
 
   triggers: VOLineGraph[];
 
 
-  lastValue: VOCoinWeek;
+  lastValue: any;
 
   myGraps: VOGraphs;
 
@@ -64,7 +64,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
   async filterDay() {
     if (!this.coin) return;
     // console.warn(this.coin);
-    this.fullHistory = await this.getCoinHistory();
+    //this.fullHistory  = await this.getCoinHistory();
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
 
@@ -76,14 +76,14 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
   }
 
-  async getCoinHistory(): Promise<VOCoinWeek[]> {
+ /* async getCoinHistory(): Promise<any[]> {
     if (this.fullHistory) return Promise.resolve(this.fullHistory);
     else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
-  }
+  }*/
 
-  fullHistory: VOCoinWeek[];
+  fullHistory: any[];
 
-  drawData(history: VOCoinWeek[]) {
+  drawData(history: any[]) {
 
     const l = history.length;
 
@@ -93,8 +93,8 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
     this.skip = l - history.length;
 
-    const first: VOCoinWeek = _.first(history);
-    const last: VOCoinWeek = _.last(history);
+    const first: any = _.first(history);
+    const last: any = _.last(history);
 
     this.lastValue = last;
 
@@ -278,7 +278,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.filterDay();
   }
 
-  onCoinDataChange(coindatas: VOCoinWeek[]) {
+  onCoinDataChange(coindatas: any[]) {
     const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(coindatas).timestamp).format('M/DD HH:mm'));

@@ -53,15 +53,15 @@ export class AuthHttpService {
   }
 
   async autoLogin(){
-    let user =  await this.storage.restoreUserSimple();
+  /*  let user = {} // await this.storage.restoreUserSimple();
     console.warn(user);
-    let password2 = this.storage.hashPassword1(user.p);
+    let password2 =  '' // this.storage.hashPassword1(user.p);
     return this.login(user.u, password2).map((result: any) =>{
       if(result.success ==='logedin'){
         this.setUser(result.user);
       }
       return user;
-    })
+    })*/
   }
 
   isOnlineSub:BehaviorSubject<boolean>;

@@ -1,31 +1,8 @@
 <div class="coin-graph">
-    <app-mc-data [mcdata]="coinMC"></app-mc-data>
-    <p>
-        <span>rank {{rankFirst}} - {{rankLast}}</span> &nbsp; &nbsp;
-        <app-mc-percent *ngIf="mcCoin" [marketcap]="mcCoin"></app-mc-percent>
-    </p>
-    <div>
-        <div class="inline-block">
+        <div>
             <div>{{from}}</div>
             <div>{{to}}</div>
         </div>
-        &nbsp;
-        <div class="inline-block">
-            <a class="btn" (click)="onMinus12h()">-12h</a>
-            &nbsp;&nbsp;
-            <a class="btn" (click)="onPlus12h()">+12h</a>
-            &nbsp;&nbsp;
-            <a class="btn" (click)="onMinus1D()">-1D</a>
-            &nbsp;&nbsp;
-            <a class="btn" (click)="onPlus1D()">+1D</a>
-            &nbsp;&nbsp;
-            <a class="btn" (click)="onNowClick()">Last</a>
-            &nbsp;&nbsp;
-            <a class="btn" (click)="onAllClick()">All</a>
-            &nbsp;&nbsp;
-            <span class="dred">{{skips}}</span>
-        </div>
-    </div>
     <br/>
     <app-line-chart [graphs]="myGraps"></app-line-chart>
 

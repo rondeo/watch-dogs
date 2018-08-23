@@ -10,10 +10,6 @@ import * as _ from 'lodash';
 import * as cryptojs from 'crypto-js';
 import {Subject} from "rxjs/Subject";
 import {HttpClient} from "@angular/common/http";
-import {VOMCAgregated} from '../../../models/api-models';
-
-
-
 
 
 export interface IApiPublic{
@@ -297,8 +293,8 @@ return null;
     return this.http.get(url).map(this.mapBooks)
   }
 
-  private coinsSub:BehaviorSubject<{[symbol:string]:VOMCAgregated}> = new BehaviorSubject<{[p: string]: VOMCAgregated}>(null);
-  getCurrencies():Observable<{[symbol:string]:VOMCAgregated}> {
+  private coinsSub:BehaviorSubject<{[symbol:string]:VOMarketCap}> = new BehaviorSubject<{[p: string]: VOMarketCap}>(null);
+  getCurrencies():Observable<{[symbol:string]:VOMarketCap}> {
     if(!this.coinsSub.getValue())this.getAllMarkets();
     return this.coinsSub.asObservable();
   }

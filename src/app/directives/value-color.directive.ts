@@ -13,7 +13,7 @@ export class ValueColorDirective implements OnChanges{
   }
   ngOnChanges(){
 
-    if(!isNaN(+this.appValueColor))this.el.nativeElement.innerHTML = Number(this.appValueColor);
+    if(!isNaN(+this.appValueColor))this.el.nativeElement.innerText  = Number(this.appValueColor);
     if(this.appValueColor) {
 
       if(this.appValueColor < 0 && this.color === 'green') {

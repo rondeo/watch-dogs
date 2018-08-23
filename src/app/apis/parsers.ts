@@ -1,5 +1,5 @@
 import {VOMarketCap} from '../models/app-models';
-import {MCdata, VOMCAgregated} from '../models/api-models';
+import {MCdata} from '../models/api-models';
 
 export class Parsers {
   static mapMCValue(item) {
@@ -22,7 +22,7 @@ export class Parsers {
     }
   }
 
-  static mapAgrigated(item: MCdata, symbol: string): VOMCAgregated {
+  static mapAgrigated(item: MCdata, symbol: string): any {
     const price_btcs = item.price_btcs || item.prev
     const price_btc = item.btc,
       prev = price_btcs[0],
@@ -138,15 +138,15 @@ export class Parsers {
   }
 
 
-  static mapServerValues(data: { [id: string]: MCdata }): { [symbol: string]: VOMarketCap } {
-    let MC: { [symbol: string]: VOMarketCap } = {};
+  static mapServerValues(data: { [id: string]: MCdata }): { [symbol: string]: any } {
+    let MC: { [symbol: string]: any } = {};
 
     const percent_change_1h = data['BTC'].h1;
     const percent_change_24h = data['BTC'].data[0];
     const percent_change_7d = data['BTC'].data[1];
 
     for (let str in data) {
-      const item: MCdata = data[str];
+      const item: any = data[str];
       if (item.data) {
         MC[str] = {
           id: item.id,
@@ -158,10 +158,10 @@ export class Parsers {
           percent_change_1h: item.h1,
           percent_change_24h: +item.data[0],
           percent_change_7d: +item.data[1],
-          tobtc_change_1h: +(item.h1 - percent_change_1h).toFixed(2),
-          tobtc_change_24h: +(+item.data[0] - percent_change_24h).toFixed(2),
-          tobtc_change_7d: +(+item.data[1] - percent_change_7d).toFixed(2),
-          volume_usd_24h: item.vol,
+         // tobtc_change_1h: +(item.h1 - percent_change_1h).toFixed(2),
+         // tobtc_change_24h: +(+item.data[0] - percent_change_24h).toFixed(2),
+         // tobtc_change_7d: +(+item.data[1] - percent_change_7d).toFixed(2),
+         // volume_usd_24h: item.vol,
           //volumePrev:item.volP,
           market_cap_usd: item.data[2],
           available_supply: item.data[3],

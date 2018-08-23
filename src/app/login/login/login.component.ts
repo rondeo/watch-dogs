@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   onRegister() {
     this.exists = false;
 
-    let password = this.storage.hashPassword2(this.login.password)
+    let password = '' //this.storage.hashPassword2(this.login.password)
     this.authHttp.register(this.login.email, password).subscribe((res: any) => {
       console.log(res);
       if (res.success && res.nickname) {
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
 
-    let password = this.storage.hashPassword2(this.login.password);
+    let password = '' // this.storage.hashPassword2(this.login.password);
 
     console.warn(password);
 
@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit {
         let url = this.storage.getLastVisitedUrl();
         if (!url) url = '/email-service';
 
-        this.storage.setSalt(this.login.email, this.storage.hashPassword1(this.login.password));
+       // this.storage.setSalt(this.login.email, this.storage.hashPassword1(this.login.password));
         this.authHttp.setUser(res.user);
 
         setTimeout(() => {
@@ -145,7 +145,7 @@ export class LoginComponent implements OnInit {
 
   onRequestNewNickname() {
     let url = 'api/login/new-nickname';
-    let password = this.storage.hashPassword2(this.login.password);
+    let password = '' //this.storage.hashPassword2(this.login.password);
     let out = {
       email: this.login.email,
       password: password,

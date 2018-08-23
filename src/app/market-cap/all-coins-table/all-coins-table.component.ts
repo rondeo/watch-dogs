@@ -8,7 +8,7 @@ import {MarketCapService} from '../services/market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMC} from '../../models/api-models';
+
 import {Router} from '@angular/router';
 
 
@@ -20,7 +20,7 @@ import {Router} from '@angular/router';
 
 
 export class AllCoinsTableComponent implements OnInit {
-  allCoinsData:VOMC[];
+  allCoinsData:any[];
   average1h:number;
   average24h:number;
   average7d:number;

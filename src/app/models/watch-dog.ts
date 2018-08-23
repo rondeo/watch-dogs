@@ -1,5 +1,5 @@
 import {VOBalance, VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
-import {VOCoinDayValue, VOCoinsDayData, VOMCAgregated} from './api-models';
+import {VOCoinDayValue, VOCoinsDayData} from './api-models';
 import {MovingAverage, VOMovingAvg} from '../com/moving-average';
 import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
@@ -101,7 +101,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
       })
   }
 
-  setDataMC(curr: VOMCAgregated, base: VOMCAgregated) {
+  setDataMC(curr: any, base: any) {
     this.coinMC = curr;
     this.baseMC = base;
   }
@@ -125,7 +125,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
     })
   }
 
-  async runSellingStart(curr: VOMCAgregated, base: VOMCAgregated) {
+  async runSellingStart(curr: any, base: any) {
     console.log(this.wdId + ' runSellingStart');
 
     if (!this.sellCoinFill) {

@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {VOCoinWeek} from '../../models/api-models';
+
 import {MovingAverage, VOMovingAvg} from '../../com/moving-average';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
+import {VOMCObj} from '../../models/api-models';
 
 @Component({
   selector: 'app-coin-day-triggers',
@@ -24,7 +25,7 @@ export class CoinDayTriggersComponent implements OnInit {
   ngOnInit() {
   }
 
-  onCoinDataChange(coindatas: VOCoinWeek[]) {
+  onCoinDataChange(coindatas: VOMCObj[]) {
    // console.log(coindatas)
    /* const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format());

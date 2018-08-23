@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {VOMCAgregated} from '../../models/api-models';
+
 import {VOMarketCap} from '../../models/app-models';
 
 @Component({

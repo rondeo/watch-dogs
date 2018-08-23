@@ -3,7 +3,6 @@ import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOMarketCap, VOWatchdog} from '../../models/app-models';
-import {VOMCAgregated} from '../../models/api-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {WatchDogStatus} from './watch-dog-status';

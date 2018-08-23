@@ -127,7 +127,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
    let oldValue:any = {}
 
-    let newValue:VOMarketCap = {
+    let newValue: any = {
       id:oldValue.id,
       name: oldValue.name,
       symbol:oldValue.symbol,

@@ -1,10 +1,9 @@
-import {VOMCAgregated} from '../models/api-models';
 
 
 export class GRAPHS {
 
 
-  static integralData(item:VOMCAgregated){
+  static integralData(item:any){
     const cur = item.symbol === 'BTC' ? item.price_usd : item.price_btc
     const cur_prev = +(100 * (cur - item.prev) / item.prev).toFixed(4);
     const cur_prev5 = +(100 * (cur - item.last5) / item.last5).toFixed(4);
@@ -30,7 +29,7 @@ export class GRAPHS {
     }
   }
 
-  static mcAggregatedToGraphs(data: VOMCAgregated[]) {
+  static mcAggregatedToGraphs(data: any[]) {
 
     const current = [],
       cur_prev = [],

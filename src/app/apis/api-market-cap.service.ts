@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import {clearInterval} from 'timers';
 import {BehaviorSubjectMy} from '../com/behavior-subject-my';
 import {Subscription} from 'rxjs/Subscription';
-import {MCdata, VOCoinsDayData, VOCoinWeek, VOMarketCapSelected, VOMCData, VOMCObj} from '../models/api-models';
+import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '../models/api-models';
 import {VOMovingAvg} from '../com/moving-average';
 
 
@@ -296,14 +296,36 @@ export class ApiMarketCapService {
    }
  */
 
-  getCoinHistory(coin: string, from: string, to: string): Observable<VOCoinWeek[]> {
+  // uplight.ca API //////////////////////////////////////////////////////////////////
+  getCoinLongHistory(coin: string) {
+    const now = moment().toISOString();
+    const ago50H = moment().subtract(500, 'hours').toISOString();
+    return this.getCoinHistory5Hours(coin, ago50H, now);
+  }
+
+  getCoinHistory5Hours(coin: string, from: string, to: string): Observable<VOMCObj[]> {
     if (!coin) throw new Error(' no coin');
-    const url = 'http://localhost:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
+    const url = 'http://uplight.ca:50001/cmc-mongo/5-hours/coin-history/:symbol/:from/:to'
       .replace(':symbol', coin).replace(':from', from).replace(':to', to);
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
+  get30MinLast(): Observable<VOMCObj[]> {
+
+    const url = 'http://uplight.ca:50001/cmc-mongo/30-mins/last/1';
+    console.log(url);
+    return this.http.get(url).map((res: any) => res.data);
+  }
+
+  getCoinHistory(coin: string, from: string, to: string): Observable<VOMCObj[]> {
+    if (!coin) throw new Error(' no coin');
+    const url = 'http://uplight.ca:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
+      .replace(':symbol', coin).replace(':from', from).replace(':to', to);
+    console.log(url);
+    return this.http.get(url).map((res: any) => res.data);
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////
   /*  getCoinDay(coin: string, from: string, to: string) {
       const url = '/api/front-desk/market-cap-coin-day?coin=' + coin + '&from=' + from + '&to=' + to;
       return this.http.get(url).map(Parsers.mapDataCharts);

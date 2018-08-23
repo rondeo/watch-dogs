@@ -3,7 +3,6 @@ import {BooksDisplay} from '../market-books/market-books.component';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
-import {VOMCAgregated} from '../../models/api-models';
 import {VOMarketCap} from '../../models/app-models';
 
 @Component({

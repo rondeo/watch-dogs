@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 
 
+
 @Component({
   selector: 'app-analyze-coin',
   templateUrl: './analyze-coin.component.html',
@@ -20,7 +21,7 @@ import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 })
 export class AnalyzeCoinComponent implements OnInit {
 
-  @ViewChild('amount') amoubtView: ElementRef;
+  @ViewChild('amount') amountView: ElementRef;
 
   coin: string;
   coinMC: VOMarketCap = new VOMarketCap()
@@ -63,16 +64,19 @@ export class AnalyzeCoinComponent implements OnInit {
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
         this.coin = coin;
+
+        this.getLongHistory();
         this.gatherAllMarketsForCoin();
       }
 
     });
   }
 
+
   async gatherAllMarketsForCoin(){
     if(!this.coin) return;
-    const markets = await this.apiPublic.getMarketAllExchanges('BTC', this.coin);
-    console.log(markets);
+  //  const markets = await this.apiPublic.getMarketAllExchanges('BTC', this.coin);
+    // console.log(markets);
    /* this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
       //  console.warn(res);
       this.marketCap.downloadTicker().toPromise().then(MC => {
@@ -83,6 +87,11 @@ export class AnalyzeCoinComponent implements OnInit {
       })
     })*/
 
+  }
+
+ async getLongHistory(){
+    const longHistory = await this.marketCap.getCoinLongHistory(this.coin).toPromise();
+    console.log(longHistory);
   }
 
   isDisabled() {
@@ -106,6 +115,11 @@ export class AnalyzeCoinComponent implements OnInit {
 
   onAmountChanged(amount: number){
     this.amountUS = amount;
+  }
+
+  onCoinDataChange(coindatas: any[]) {
+    // console.warn(coindatas);
+
   }
 
 }

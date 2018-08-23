@@ -5,7 +5,7 @@ import {StorageService} from '../../services/app-storage.service';
 import {WatchDogService} from '../watch-dog.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ActivatedRoute} from '@angular/router';
-import {VOWatchdog} from '../../models/app-models';
+import {VOMarketCap, VOWatchdog} from '../../models/app-models';
 
 
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../com/moving-average';
-import {VOCoinWeek, VOMCAgregated} from '../../models/api-models';
+
 import {WatchDog} from '../../models/watch-dog';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 
@@ -28,7 +28,7 @@ export class WatchdogTestComponent implements OnInit {
 
   private uid: string;
   watchDog: WatchDog = new WatchDog(new VOWatchdog({}));
-  MC: VOMCAgregated;
+  MC: VOMarketCap;
   scripts: string[];
   exchange:string;
   market:string;
@@ -71,7 +71,7 @@ export class WatchdogTestComponent implements OnInit {
   }
 
 
-  onCoinDataChange(coindatas: VOCoinWeek[]) {
+  onCoinDataChange(coindatas: any[]) {
     const length = coindatas.length;
     console.log(moment(_.first(coindatas).timestamp).format());
     console.log(moment(_.last(coindatas).timestamp).format());

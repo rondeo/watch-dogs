@@ -10,11 +10,11 @@ import {StorageService} from '../../services/app-storage.service';
 import {HttpClient} from "@angular/common/http";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {Parsers} from '../../apis/parsers';
-import {VOMCAgregated} from '../../models/api-models';
+
 
 @Injectable()
 export class MarketCapService {
-  private coins: { [symbol: string]: VOMCAgregated };
+  private coins: { [symbol: string]: VOMarketCap };
   private coinsSubB: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
   timestamp = 0;
   delay = 6.1 * 60;

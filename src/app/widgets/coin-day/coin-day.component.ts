@@ -13,9 +13,9 @@ import {P} from '@angular/core/src/render3';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
-import {VOCoinWeek} from '../../models/api-models';
 import {MovingAverage} from '../../com/moving-average';
 import {VOMarketCap} from '../../models/app-models';
+import {VOMCObj} from '../../models/api-models';
 
 @Component({
   selector: 'app-coin-day',
@@ -25,27 +25,16 @@ import {VOMarketCap} from '../../models/app-models';
 export class CoinDayComponent implements OnInit, OnChanges {
 
 
-  @Output() coindatas: EventEmitter<VOCoinWeek[]> = new EventEmitter<VOCoinWeek[]>();
+  @Output() coindatas: EventEmitter<VOMCObj[]> = new EventEmitter<VOMCObj[]>();
+
   @Input() coin: string;
-  mcCoin: VOCoinWeek;
 
-  coinMC: VOMarketCap;
+  @Input() isWeek  = false;
+
   myGraps: VOGraphs;
-  myGraps2: VOLineGraph[];
-
-  isExchanges: boolean;
-
-  rankFirst: number;
-  rankLast: number;
-
-  skips: number;
-
   from: string = '';
   to: string = '';
 
-  momentTo: Moment;
-  exchange: string;
-  market: string;
 
   constructor(
     //  private route: ActivatedRoute,
@@ -63,72 +52,39 @@ export class CoinDayComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.momentTo = moment();
-    this.setCoinMC();
-  }
 
-  setCoinMC() {
-    this.apiMarketCap.ticker$().subscribe(MC => {
-      this.coinMC = MC[this.coin];
-    })
   }
-
 
   async controller() {
     const coinData = await this.getCoinHistory();
     this.drawData(coinData);
   }
 
-  async filterDay() {
-    // console.warn(' using ');
-    if (!this.coin) return;
-
-    // console.warn(this.coin);
-    /* this.fullHistory = await this.getCoinHistory();
-
-     const to = this.momentTo.valueOf();
-     const from = moment(to).subtract(1, 'd').valueOf();
-
-
-     let history = this.fullHistory.filter(function (item) {
-       return item.timestamp < to && item.timestamp > from;
-     });
-     this.drawData(history);
- */
-
-    //this.showExchanges();
-  }
-
   async getCoinHistory(): Promise<any[]> {
     const to: string = moment().toISOString();
-    const from: string = moment().subtract(30, 'hours').toISOString();
-    const coinData = await this.apiMarketCap.getCoinHistory(this.coin, from, to).toPromise();
+    const coin = this.coin;
+    let coinData
+    if(this.isWeek) {
+      const ago50H = moment().subtract(500, 'hours').toISOString();
+      coinData = await this.apiMarketCap.getCoinHistory5Hours(coin, ago50H, to).toPromise();
+
+    } else {
+      const from: string = moment().subtract(30, 'hours').toISOString();
+       coinData = await this.apiMarketCap.getCoinHistory(coin, from, to).toPromise();
+    }
+
+
+
     return coinData;
   }
 
-  fullHistory: VOCoinWeek[];
-
   async drawData(history: any[]) {
-    // console.log(history);
 
-    /*  const l = history.length;
-
-      history = history.filter(function (item) {
-        return !!item;
-      })
-      this.skips = l - history.length;
-  */
     const first = _.first(history);
     const last = _.last(history);
 
-    this.mcCoin = last;
-
     this.from = moment(first.date).format('M/D, h:mm a');
     this.to = moment(last.date).format('M/D, h:mm a');
-
-
-    //this.rankFirst = Object.values(first).rank;
-    //this.rankLast = last.rank;
     const labels = [];
     let trigger = false;
     const pricebtcs = [];
@@ -146,45 +102,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
         pricebtcs.push(data.price_btc);
         ranks.push(data.rank);
         volumes.push(data.volume_24h);
-        // item.price_btc = stepprice;
-        /*  pricebtcs.push(item.price_btc);
-          priceusds.push(item.price_usd);
-          volumes.push(item.volume);
-          total_supply.push(item.total_supply);
-          ranks.push(item.rank);*/
-
       }
     }, {coin: this.coin});
-
-
-    /* const histohour = (await this.cryptoCompare.getHistoMinute('BTC', this.coin).toPromise()).reduce(function (s, item: VOHistHour) {
-       for (let str in item) {
-         const ar = s[str] || [];
-         ar.push(item[str])
-         s[str] = ar;
-       }
-       return s
-     }, {
-       avg: [],
-       date: [],
-       last: [],
-       timestamp: [],
-       volumefrom: [],
-       volumeto: []
-     });
- */
-
-    //  console.log(histohour);
-    // const coinsDay = await this.apiMarketCap.downloadCoinsDayHours30().toPromise();
-
-    //const coinDay = coinsDay[this.coin].slice(8);
-
-    // console.log(coinDay);
-
-   // const medians = await MovingAverage.createMedianPriceBTC(history);
-
-    // const ma = await MovingAverage.movingAvarage(history);
-    //  console.log(medians);
 
     const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);
@@ -245,42 +164,5 @@ export class CoinDayComponent implements OnInit, OnChanges {
     }
 
     this.coindatas.emit(history);
-
-  }
-
-  onAllClick() {
-    this.drawData(this.fullHistory);
-
-  }
-
-  onMinus12h() {
-    this.momentTo.subtract(12, 'hours');
-    this.filterDay();
-
-    //this.getCoinHistory(to);
-  }
-
-  onPlus12h() {
-    this.momentTo.add(12, 'hours');
-    this.filterDay();
-  }
-
-
-  onMinus1D() {
-    this.momentTo.subtract(1, 'd');
-    this.filterDay();
-
-    //this.getCoinHistory(to);
-  }
-
-  onPlus1D() {
-    this.momentTo.add(1, 'd');
-    this.filterDay();
-    //  this.getCoinHistory(to);
-  }
-
-  onNowClick() {
-    this.momentTo = moment();
-    this.filterDay();
   }
 }

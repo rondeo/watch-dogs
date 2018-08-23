@@ -6,7 +6,7 @@ import {StorageService} from '../../services/app-storage.service';
 
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {VOMC} from '../../models/api-models';
+
 
 @Component({
   selector: 'app-selected-coins',
@@ -14,8 +14,8 @@ import {VOMC} from '../../models/api-models';
   styleUrls: ['./selected-coins.component.css']
 })
 export class SelectedCoinsComponent implements OnInit {
-  selectedCoins: VOMC[] = [];
-  private allCoinsData: VOMC[];
+  selectedCoins: any[] = [];
+  private allCoinsData: any[];
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -30,7 +30,10 @@ export class SelectedCoinsComponent implements OnInit {
 
   async initAsync() {
     this.allCoinsData = await this.marketCap.getCoinsArWithSelected();
-    this.selectedCoins = _.filter(this.allCoinsData, {selected: true});
+
+    this.selectedCoins = this.allCoinsData.filter(function (item) {
+      return item.selected;
+    });
   }
 
   onSymbolSelected(evt) {

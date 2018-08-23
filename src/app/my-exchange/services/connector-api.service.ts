@@ -47,7 +47,7 @@ export class ConnectorApiService {
 
     //this.bitfinex = new ApiBitfinex(http);
 
-    storage.onSalt().subscribe(res => {
+  /*  storage.onSalt().subscribe(res => {
 
       //console.log(' on salt '+res);
      // this.salt = res;
@@ -55,7 +55,7 @@ export class ConnectorApiService {
       if (res && this.currentService) {
         this.currentService.autoLogin();
       }
-    })
+    })*/
 
   }
 

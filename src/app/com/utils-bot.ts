@@ -1,7 +1,7 @@
 import {VOMarketCap} from "../models/app-models";
 
 import * as _ from 'lodash';
-import {VOMCAgregated} from '../models/api-models';
+
 
 
 
@@ -29,7 +29,7 @@ export class UtilsBot {
 
 
 
-  static analizeMongoData(data:VOMCAgregated[]){
+  static analizeMongoData(data:any[]){
 
    return data.map(function (coinMC) {
 
@@ -83,7 +83,7 @@ export class UtilsBot {
         const name:string = last.name;
 
         const priceD = +(100 * (last.price_usd - first.price_usd) / first.price_usd).toFixed(2);
-        const vD = +(100 * (last.volume_usd_24h - first.volume_usd_24h) / first.volume_usd_24h).toFixed(2);
+      //  const vD = +(100 * (last.volume_usd_24h - first.volume_usd_24h) / first.volume_usd_24h).toFixed(2);
 
         const mc_1h = last.percent_change_1h;
         const to_btc_1h = +(last.percent_change_1h - btcLast.percent_change_1h).toFixed(2)
@@ -96,7 +96,7 @@ export class UtilsBot {
         const dur = Math.round((last.last_updated - first.last_updated) / 60);
 
         result[str] = {
-          vD,
+       //   vD,
           priceD,
           to_btc_1h,
           price_to_btcD,

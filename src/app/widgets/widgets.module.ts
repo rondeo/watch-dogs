@@ -22,7 +22,6 @@ import { BtcTetherComponent } from './btc-tether/btc-tether.component';
 import {ValueColorDirective} from '../directives/value-color.directive';
 import {DirectivesModule} from '../directives/directives.module';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -47,7 +46,8 @@ import {DirectivesModule} from '../directives/directives.module';
     OpenOrdersComponent,
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
-    TradesAllExchangesComponent
+    TradesAllExchangesComponent,
+
   ],
   declarations:[
     CoinDayComponent,

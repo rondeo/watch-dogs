@@ -11,10 +11,7 @@ export interface VOCoinsDayData {
   [symbol: string]: VOCoinDayValue[];
 }
 
-export interface VOCoinWeek extends VOCoinDayValue {
-  timestamp: number;
-  total_supply: number;
-}
+
 
 export class VOMCData {
   price_btc: number

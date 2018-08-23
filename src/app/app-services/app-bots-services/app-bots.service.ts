@@ -10,7 +10,7 @@ import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {GRAPHS} from '../../com/grpahs';
-import {VOMCAgregated, VOMCObj} from '../../models/api-models';
+import { VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {WatchDog} from '../../models/watch-dog';
 import {SellCoinFilling} from './sell-coin-filling';
@@ -113,10 +113,10 @@ export class AppBotsService {
     if (action === 'SELL') {
       WatchDog.isTest = true;
       const wds = this.getAllSellBots();
-      const coinsDay = await this.marketCap.getCoinsDay();
+     /* const coinsDay = await this.marketCap.getCoinsDay();
       const promises = wds.map(function (item: WatchDog) {
         return item.run2(coinsDay);
-      });
+      });*/
 
       WatchDog.isTest = false;
     }
@@ -218,18 +218,18 @@ export class AppBotsService {
     console.log(' ALL ', wds);
    //  const MC = await this.marketCap.getTicker();
 
-    const coinsDay = await this.marketCap.getCoinsDay();
+   // const coinsDay = await this.marketCap.getCoinsDay();
 
-
+/*
     const promises = wds.map(function (item: WatchDog) {
       return item.run2(coinsDay);
     });
 
-  /*  const promises = wds.map(function (item: WatchDog) {
+  /!*  const promises = wds.map(function (item: WatchDog) {
       return item.run(MC[item.coin], MC[item.base]);
-    });*/
-   const results = await Promise.all(promises);
-   console.log(results);
+    });*!/
+   const results = await Promise.all(promises);*/
+  // console.log(results);
   }
 
 

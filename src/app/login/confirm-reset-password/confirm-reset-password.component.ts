@@ -43,7 +43,7 @@ export class ConfirmResetPasswordComponent implements OnInit {
   onSubmit(){
 
     let url = 'api/login/reset-password-confirm/'
-    let password = this.storage.hashPassword2(this.login.password)
+   /* let password = this.storage.hashPassword(this.login.password)
     this.http.post(url,{session:this.login.session, password:password}).subscribe((res:VOLoginResult)=>{
       this.snakBar.open(res.message, 'x');
       if(res.success){
@@ -52,7 +52,7 @@ export class ConfirmResetPasswordComponent implements OnInit {
         }, 3000);
       }
 
-    })
+    })*/
 
   }
 

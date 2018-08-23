@@ -8,7 +8,7 @@ import {VOMarketCap} from "../../models/app-models";
 })
 export class McPercentComponent implements OnInit {
 
-  @Input() marketcap:VOMarketCap;
+  @Input() marketcap:VOMarketCap = new VOMarketCap();
 
   constructor() { }
 
