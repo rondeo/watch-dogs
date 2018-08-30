@@ -176,14 +176,14 @@ return null;
   getBalance(coin:string, isRefresh = false ):Promise<VOBalance>{
     return new Promise((resolve, reject)=>{
 
-      this.balances$().subscribe(balances=>{
+     /* this.balances$().subscribe(balances=>{
         if(!balances) return;
           let balance = _.find(balances, {symbol:coin});
           if(balance) resolve(balance)
            else resolve({balance:0, symbol:coin})
       })
 
-
+*/
     })
   }
 

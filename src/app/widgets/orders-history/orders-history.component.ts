@@ -42,7 +42,7 @@ export class OrdersHistoryComponent implements OnInit, OnChanges {
     const ar = this.market.split('_');
     const MC = this.MC[ar[1]];
 
-    api.getAllOrderes(ar[0], ar[1]).subscribe(orders => {
+    api.getAllOrders(ar[0], ar[1]).subscribe(orders => {
       console.log(orders);
       orders.forEach(function (item) {
         item.amountUS = +(item.amountCoin * MC.price_usd).toFixed(0);

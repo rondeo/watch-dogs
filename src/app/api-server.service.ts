@@ -31,7 +31,7 @@ export class ApiServerService {
     return this.http.post(url, {payload:payload, email:this.email}).map(res=>res.json());
   }
 
-  getBalance(symbol:string, address:string):Observable<VOBalance>{
+  getBalance(symbol:string, address:string):Observable<any>{
 
     let url = '/api/coin/balance/{{symbol}}/{{address}}';
     url =  url.replace('{{symbol}}', symbol)
@@ -42,8 +42,8 @@ export class ApiServerService {
 
       return {
         id:'1',
+        symbol: symbol,
         address:address,
-        symbol:symbol,
         balance: res.json().result,
         priceUS:0,
         balanceUS:0,

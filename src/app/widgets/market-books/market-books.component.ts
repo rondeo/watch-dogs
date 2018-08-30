@@ -8,12 +8,17 @@ import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 
 export class BooksDisplay {
+  base: string;
+  coin:string;
   sell: number;
   buy: number;
   buyUS: string= '';
   sellUS: string = ''
   diff: string = '';
   us: string = ''
+  constructor(obj){
+    Object.assign(this, obj);
+  }
 }
 
 @Component({
@@ -91,10 +96,12 @@ export class MarketBooksComponent implements OnInit, OnChanges {
 
     const ratesSell = UtilsBooks.getRateForAmounts(books.buy, amount1, amount2, amount3);
 
-    const booksDisplay1 = new BooksDisplay();
-    const booksDisplay2 = new BooksDisplay();
-    const booksDisplay3 = new BooksDisplay();
-    const booksDisplay4 = new BooksDisplay();
+
+    const booksDisplay1 = new BooksDisplay({base, coin});
+    const booksDisplay2 = new BooksDisplay({base, coin});
+    const booksDisplay3 = new BooksDisplay({base, coin});
+    const booksDisplay4 = new BooksDisplay({base, coin});
+
 
     booksDisplay1.buyUS = (ratesBuy.rate1 * basePrice).toPrecision(4);
     booksDisplay1.buy = ratesBuy.rate1;

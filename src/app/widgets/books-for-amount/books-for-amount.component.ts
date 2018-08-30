@@ -16,7 +16,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   @Input() market: string;
   @Input() amountUS: number;
 
-  booksDisplay: BooksDisplay = new BooksDisplay();
+  booksDisplay: BooksDisplay = new BooksDisplay({});
 
   priceCoinUS: number;
 
@@ -63,18 +63,23 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
 
 
   private calculate() {
+    let ar = this.market.split('_');
 
+    const obj = {base: ar[0], coin: ar[1]};
     const coinPrice = this.coinMC.price_usd;
     const basePrice = this.baseMC.price_usd;
     const amount = this.amountUS / coinPrice;
     const ratesBuy = UtilsBooks.getRateForAmountCoin(this.books.sell, amount);
     const ratesSell = UtilsBooks.getRateForAmountCoin(this.books.buy, amount);
 
-    const booksDisplay1 = new BooksDisplay();
+    const booksDisplay1 = new BooksDisplay(obj);
 
-    booksDisplay1.buy = (ratesBuy * basePrice).toPrecision(4);
-    booksDisplay1.sell = (ratesSell * basePrice).toPrecision(4);
-    if (+booksDisplay1.buy && +booksDisplay1.sell) {
+    booksDisplay1.buy = ratesBuy;
+    booksDisplay1.buyUS = (ratesBuy * basePrice).toPrecision(4);
+    booksDisplay1.sell = ratesSell;
+    booksDisplay1.sellUS = (ratesSell * basePrice).toPrecision(4);
+
+    if (booksDisplay1.buy && booksDisplay1.sell) {
       booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell) / +booksDisplay1.sell).toFixed(2);
     } else booksDisplay1.diff = '0';
 
