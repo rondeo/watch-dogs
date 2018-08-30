@@ -66,6 +66,99 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
    }*/
 
+  getAllOpenOrders(): Observable<VOOrder[]> {
+    //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
+    return this.call({
+      command: 'returnOpenOrders',
+      currencyPair: 'all'
+    }).map(res => {
+      let out = [];
+     //  console.log(' AllOpenOrders ', res);
+      for(let str in res) {
+        const orders:any[] = res[str];
+        if(orders.length) {
+          const ar = str.split('_');
+          out = out.concat(orders.map(function (o) {
+            return {
+              uuid: o.orderNumber,
+              action: o.type.toUpperCase(),
+              isOpen: true,
+              rate: +o.rate,
+              coin: ar[1],
+              base: ar[0],
+              exchange: 'poloniex',
+              amountCoin: o.amount,
+              amountBase: o.amount * o.rate,
+              date: o.date,
+              timestamp: new Date(o.date).getTime(),
+              fee: 0
+            }
+          }))
+        }
+
+      }
+      return out;
+
+    });
+  }
+
+  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
+
+    //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
+    return this.call({
+      command: 'returnTradeHistory',
+      currencyPair: base + '_' + coin
+    }).map(res => {
+
+      console.log(' AllOrders ' + base + '_' + coin, res);
+      return res.map(function (o) {
+        return {
+          uuid: o.orderNumber,
+          action: o.type.toUpperCase(),
+          isOpen: true,
+          rate: +o.rate,
+          coin: coin,
+          base: base,
+          exchange: 'poloniex',
+          amountCoin: o.amount,
+          amountBase: o.amount * o.rate,
+          date: o.date,
+          timestamp: new Date(o.date).getTime(),
+          fee: 0
+
+        }
+      })
+    });
+  }
+
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
+    return this.call({
+      command: 'returnOpenOrders',
+      currencyPair: base + '_' + coin
+    }).map(res => {
+
+      console.log(' OpenOrders ' + base + '_' + coin, res);
+      return res.map(function (o) {
+        return {
+          uuid: o.orderNumber,
+          action: o.type.toUpperCase(),
+          isOpen: true,
+          rate: +o.rate,
+          coin: coin,
+          base: base,
+          exchange: 'poloniex',
+          amountCoin: o.amount,
+          amountBase: o.amount * o.rate,
+          date: o.date,
+          timestamp: new Date(o.date).getTime(),
+          fee: 0
+
+        }
+      })
+    })
+
+  }
+
   cancelOrder(orderId): Observable<VOOrder> {
     return this.call({
       command: 'cancelOrder',
@@ -146,9 +239,9 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   downloadBalances(): Observable<VOBalance[]> {
     this.isLoadingBalances = true;
+    const exchange = this.exchange;
     return this.call({command: 'returnBalances'}).map(res => {
-      //console.log(res);
-
+      console.log(res);
 
       if (!res) {
         console.warn('refreshBalances null')
@@ -159,9 +252,9 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       }
 
       let out = [];
-
       for (let str in res) {
         let bal = new VOBalance();
+        bal.exchange = exchange;
         bal.balance = +res[str];
         bal.symbol = str;
         out.push(bal)

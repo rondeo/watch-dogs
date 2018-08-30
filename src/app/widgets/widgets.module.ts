@@ -21,6 +21,8 @@ import { TradesAllExchangesComponent } from './trades-all-exchanges/trades-all-e
 import { BtcTetherComponent } from './btc-tether/btc-tether.component';
 import {ValueColorDirective} from '../directives/value-color.directive';
 import {DirectivesModule} from '../directives/directives.module';
+import { BalanceMarketComponent } from './balance-market/balance-market.component';
+import {PipesModule} from '../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -29,7 +31,8 @@ import {DirectivesModule} from '../directives/directives.module';
     FormsModule,
     MaterialAppModule,
     UiModule,
-    DirectivesModule
+    DirectivesModule,
+    PipesModule
   ],
   exports: [
     BtcTetherComponent,
@@ -47,7 +50,7 @@ import {DirectivesModule} from '../directives/directives.module';
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
-
+    BalanceMarketComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -64,7 +67,8 @@ import {DirectivesModule} from '../directives/directives.module';
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
-    BtcTetherComponent
+    BtcTetherComponent,
+    BalanceMarketComponent
   ]
 })
 export class WidgetsModule { }

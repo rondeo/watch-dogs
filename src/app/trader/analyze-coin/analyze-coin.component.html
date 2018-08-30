@@ -2,10 +2,10 @@
     <a routerLink="/trader/common-markets" class="btn">all</a>
 
     <app-mc-data [mcdata]="coinMC"></app-mc-data>
-    <app-mc-percent [marketcap]="coinMC"></app-mc-percent>
 
-    <app-coin-day [coin]="coin" (coindatas)="onCoinDataChange($event)"></app-coin-day>
-
+    <app-coin-day [coin]="coin" [isWeek]="true" (coindatas)="onCoinDataChange($event)"></app-coin-day>
+    <br/>
+    <br/>
     <app-coin-day [coin]="coin" (coindatas)="onCoinDataChange($event)"></app-coin-day>
 
    <!-- <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>-->

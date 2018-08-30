@@ -16,6 +16,7 @@ export class McDataComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
   ngOnChanges(evt) {
+
     this.coinMC = this.mcdata || new VOMarketCap();
 
   }

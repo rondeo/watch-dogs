@@ -1,0 +1,9 @@
+<div>
+    <span>{{base}}</span>
+    <span class="large"><sup>$</sup>{{balanceBase | toUs:base | async}}</span>            &nbsp;
+    <span>{{coin}}</span>
+    <span class="large"><sup>$</sup>{{balanceCoin | toUs:coin | async}}</span>
+    &nbsp;
+    <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
+       (click)="onRefreshBalancesClick()"></a>
+</div>

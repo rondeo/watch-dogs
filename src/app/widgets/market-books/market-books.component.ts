@@ -8,8 +8,10 @@ import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 
 export class BooksDisplay {
-  sell: string = '';
-  buy: string = '';
+  sell: number;
+  buy: number;
+  buyUS: string= '';
+  sellUS: string = ''
   diff: string = '';
   us: string = ''
 }
@@ -94,18 +96,25 @@ export class MarketBooksComponent implements OnInit, OnChanges {
     const booksDisplay3 = new BooksDisplay();
     const booksDisplay4 = new BooksDisplay();
 
-    booksDisplay1.buy = (ratesBuy.rate1 * basePrice).toPrecision(4);
-    booksDisplay1.sell = (ratesSell.rate1 * basePrice).toPrecision(4);
+    booksDisplay1.buyUS = (ratesBuy.rate1 * basePrice).toPrecision(4);
+    booksDisplay1.buy = ratesBuy.rate1;
+    booksDisplay1.sell = ratesSell.rate1;// = (ratesSell.rate1 * basePrice).toPrecision(4);
+    booksDisplay1.sellUS =  (ratesSell.rate1 * basePrice).toPrecision(4);
     booksDisplay1.us = '500';
     booksDisplay1.diff = (100 * (+booksDisplay1.buy - +booksDisplay1.sell) / +booksDisplay1.sell).toFixed(2);
 
-    booksDisplay2.buy = (ratesBuy.rate2 * basePrice).toPrecision(4);
-    booksDisplay2.sell = (ratesSell.rate2 * basePrice).toPrecision(4);
+    booksDisplay2.buy = ratesBuy.rate2;
+    booksDisplay2.sell = ratesSell.rate2;
+
+    booksDisplay2.buyUS = (ratesBuy.rate2 * basePrice).toPrecision(4);
+    booksDisplay2.sellUS = (ratesSell.rate2 * basePrice).toPrecision(4);
     booksDisplay2.us = '1200';
     booksDisplay2.diff = (100 * (+booksDisplay2.buy - +booksDisplay2.sell) / +booksDisplay2.sell).toFixed(2);
 
-    booksDisplay3.buy = (ratesBuy.rate3 * basePrice).toPrecision(4);
-    booksDisplay3.sell = (ratesSell.rate3 * basePrice).toPrecision(4);
+    booksDisplay3.buy = ratesBuy.rate3;
+    booksDisplay3.sell = ratesSell.rate3;
+    booksDisplay3.buyUS = (ratesBuy.rate3 * basePrice).toPrecision(4);
+    booksDisplay3.sellUS = (ratesSell.rate3 * basePrice).toPrecision(4);
     booksDisplay3.us = '5000';
     booksDisplay3.diff = (100 * (+booksDisplay3.buy - +booksDisplay3.sell) / +booksDisplay1.sell).toFixed(2);
 

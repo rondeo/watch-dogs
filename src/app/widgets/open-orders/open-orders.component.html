@@ -1,12 +1,15 @@
 <div>
-    <div class="mat-body">Open Orders {{market}} <span class="mat-body-2">{{orders.length}}</span></div>
+    <div class="mat-body">
+        <small>{{exchange}} {{market}} Open Orders: </small> <span class="mat-body-2">{{orders.length}}</span></div>
     <table>
         <tbody>
         <tr *ngFor="let order of orders">
+            <td><small>{{order.base + '_' + order.coin}}</small></td>
             <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
-            <td>{{order.amountCoin}}</td>
-            <td>{{order.rate}}</td>
-            <td>{{order.date}}</td>
+            <td>{{order.amountCoin | toUs:order.coin | async}}</td>
+            <td>{{order.rate | toUs3:order.base | async}}</td>
+            <td><small>{{order.rate}}</small></td>
+            <td><small>{{order.timestamp | toDate}}</small></td>
             <span class="btn fa fa-close dred fa-2x" (click)="onCancelOrderClick(order)"></span>
         </tr>
         </tbody>

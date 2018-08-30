@@ -15,6 +15,7 @@ import {type} from 'os';
 import {WatchDog} from '../../models/watch-dog';
 import * as moment from 'moment';
 import {UTILS} from '../../com/utils';
+import {ApiPublicBinance} from '../api-public/api-public-binance';
 
 enum RequestType {
   GET,
@@ -36,15 +37,18 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
 
-  getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
+  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
     let url = '/api/proxy/api.binance.com/api/v3/allOrders';
     const data = {
       symbol: coin + base
     };
+    console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {
-      console.log(res);
+      console.log(' allOrders ', res);
 
-      return res.map(function (item) {
+      return res.filter(function (item) {
+        return item.status !== 'CANCELED';
+      }).map(function (item) {
         return {
           uuid: item.orderId,
           action: item.side,
@@ -62,14 +66,40 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     });
   }
 
+  getAllOpenOrders(): Observable<VOOrder[]> {
+    let url = '/api/proxy/api.binance.com/api/v3/openOrders';
+    console.log(url);
+    return this.call(url, null, RequestType.GET).map(res => {
+      console.log(' allOpenOrders ', res);
+
+      return res.map(function (item) {
+        const market = ApiPublicBinance.parseSymbol(item.symbol);
+        const coin = market.coin;
+        const base = market.base;
+        return {
+          uuid: item.orderId,
+          action: item.side,
+          isOpen: item.status !== 'FILLED',
+          base: base,
+          coin: coin,
+          rate: +item.price,
+          amountBase: -1,
+          amountCoin: +item.origQty,
+          timestamp: item.time,
+          fee: -1
+        }
+      })
+    });
+  }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
     let url = '/api/proxy/api.binance.com/api/v3/openOrders';
     const data = {
       symbol: coin + base
     };
+    console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {
-      console.log(res);
+      console.log(' openOrders ', res);
 
       return res.map(function (item) {
         return {
@@ -91,12 +121,12 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   cancelOrder(orderId: string, base?: string, coin?: string) {
     let url = '/api/proxy/api.binance.com/api/v3/order';
-    //console.log(url);
+    console.log(url);
     const data = {
       symbol: coin + base,
       orderId: orderId
     };
-    return this.call(url, data, RequestType.POST).map(res => {
+    return this.call(url, data, RequestType.DELETE).map(res => {
       return res
     });
   }
@@ -104,7 +134,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   getOrder(orderId: string, base: string, coin: string): Observable<VOOrder> {
     // console.log(' getOrderById  ' + orderId);
     let url = '/api/proxy/api.binance.com/api/v3/order';
-    //console.log(url);
+    console.log(url);
     const data = {
       symbol: coin + base,
       orderId: orderId
@@ -133,17 +163,20 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   downloadBalances(): Observable<VOBalance[]> {
     let uri = '/api/proxy/api.binance.com/api/v3/account';
+    console.log(uri);
+    const exchange = this.exchange;
     this.isLoadingBalances = true;
     return this.call(uri, {}, RequestType.GET).map(res => {
       this.isLoadingBalances = false;
-      // console.log(res);
+
       return res.balances.map(function (item) {
         return new VOBalance({
+          exchange: exchange,
           symbol: item.asset,
-          address: '',
-          balance: +item.free,
+          balance: +item.free + +item.locked,
           available: +item.free,
-          pending: +item.locked
+          pending: +item.locked,
+          address: ''
         })
       });
     })
@@ -166,6 +199,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       timeInForce: 'GTC'
     };
 
+    console.log(url);
     return this.call(url, data, RequestType.POST).map(res => {
       console.log('result buyLimit market ' + market, res);
       return {
@@ -233,6 +267,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       return sub.asObservable();
     }
 
+    if(!data) data = {};
 
     data.recvWindow = 60000;
     data.timestamp = Date.now();

@@ -14,11 +14,57 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   apiPublic: ApiPublicHitbtc
   exchange = 'hitbtc';
 
+  static parseOrder(item) {
+    console.log(item.status);
+    let base = item.symbol.slice(-3);
+    if (base === 'USD') base = 'USDT';
+    const coin = item.symbol.slice(0, -3);
+    let isOpen = item.status === 'new';
+    return {
+      id: item.id,
+      isOpen: isOpen,
+      uuid: item.clientOrderId,
+      action: item.side.toUpperCase(),
+      rate: +item.price,
+      base: base,
+      coin: coin,
+      amountCoin: +item.quantity,
+      amountBase: +item.price * +item.quantity,
+      date: item.createdAt,
+      timestamp: new Date(item.createdAt).getTime(),
+      status: item.status
+    }
+  }
+
   constructor(
     private http: HttpClient,
     userLogin: UserLoginService
   ) {
     super(userLogin);
+  }
+
+  getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
+    const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+    return this.call(url, null).map(res => {
+      console.log('getOpenOrders', res);
+      return res.map(ApiPrivateHitbtc.parseOrder);
+    });
+  }
+
+  getAllOpenOrders(): Observable<VOOrder[]> {
+    const url = 'api/hitbtc/order'
+    return this.call(url, null).map(res => {
+      console.log('getAllOpenOrders', res);
+      return res.map(ApiPrivateHitbtc.parseOrder);
+    });
+  }
+
+  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
+    const url = 'api/hitbtc/history/order'
+    return this.call(url, null).map(res => {
+      console.log('getAllOrders', res);
+      return res.map(ApiPrivateHitbtc.parseOrder);
+    });
   }
 
 
@@ -69,33 +115,34 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       });
   }
 
- /* balancesSub: Subject<VOBalance[]>
+  /* balancesSub: Subject<VOBalance[]>
 
-  getBalance(symbol: string): Observable<VOBalance> {
-    if (this.isLoadingBalances) return this.balancesSub.asObservable()
-      .map(balabces => {
-        return balabces.find(function (bal) {
-          return bal.symbol === symbol;
-        })
-      })
-    return this.downloadBalances().map(res => {
-      return res.find(function (bal) {
-        return bal.symbol === symbol;
-      })
-    })
-  }
+   getBalance(symbol: string): Observable<VOBalance> {
+     if (this.isLoadingBalances) return this.balancesSub.asObservable()
+       .map(balabces => {
+         return balabces.find(function (bal) {
+           return bal.symbol === symbol;
+         })
+       })
+     return this.downloadBalances().map(res => {
+       return res.find(function (bal) {
+         return bal.symbol === symbol;
+       })
+     })
+   }
 
-  isLoadingBalances: boolean;*/
+   isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
     this.isLoadingBalances = true;
 
     const url = 'api/hitbtc/trading/balance';
-
+    const exchange = this.exchange;
 
     return this.call(url, null).map((res: any[]) => res.map(function (item: any) {
       if (item.currency === 'USD') item.currency = 'USDT';
       return {
+        exchange: exchange,
         symbol: item.currency,
         balance: +item.available + (+item.reserved),
         available: +item.available
@@ -168,9 +215,9 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     const cred = this.getCredentials();
     if (!cred) {
       const sub = new Subject();
-      this.createLogin().then(cred =>{
+      this.createLogin().then(cred => {
         this.call(URL, post)
-          .subscribe(res=> sub.next(res), err=>sub.error(err));
+          .subscribe(res => sub.next(res), err => sub.error(err));
       })
       return sub.asObservable();
     }

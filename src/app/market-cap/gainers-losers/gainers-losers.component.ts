@@ -168,15 +168,22 @@ export class GainersLosersComponent implements OnInit {
 
     const MCHoursFirst = _.first(MCHours);
     const MCHoursLast = _.last(MCHours);
+    const MC30MinLast = _.last(MC30Mins);
 
    const hours = moment.duration(moment((<any>MCHoursFirst).timestamp).diff(moment((<any>MCHoursLast).timestamp))).asHours();
 
    const out  =  [];
 
 
+   this.btcMC = MC['BTC'];
+
    for (let coin in MC) {
-     const f = MCHoursFirst[coin];
-     const l = MCHoursLast[coin];
+    /* const f = MCHoursFirst[coin];
+     const l = MCHoursLast[coin];*/
+
+     const f = MCHoursLast[coin];
+     const l = MC30MinLast[coin];
+
      if(f && l) {
        out.push(
         Object.assign(MC[coin], {

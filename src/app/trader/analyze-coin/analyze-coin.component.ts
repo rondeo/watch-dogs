@@ -64,8 +64,10 @@ export class AnalyzeCoinComponent implements OnInit {
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
         this.coin = coin;
-
-        this.getLongHistory();
+        this.marketCap.getCoin(coin).then(c=>{
+          this.coinMC = c;
+        })
+       // this.getLongHistory();
         this.gatherAllMarketsForCoin();
       }
 

@@ -1,11 +1,15 @@
 import * as _ from 'lodash';
 
 export class MATH {
+  static toValue(value: number): number {
+    return +(value > 1e-4 ? value.toPrecision(5) :value.toFixed(8));
+  }
+
   static toDisplayValue(value: number): number {
     if (value < 1e-4) return value;
   }
 
-static weiToEther(wei: string) {
+  static weiToEther(wei: string) {
     while (wei.length < 20) wei = '0' + wei;
     return wei.slice(0, 18) + '.' + wei.slice(18);
   }
@@ -48,7 +52,7 @@ static weiToEther(wei: string) {
   static median(numbers) {
     var median = 0, numsLen = numbers.length;
     MATH.sort(numbers);
-   //  console.log(numbers);
+    //  console.log(numbers);
     if (numsLen % 2 === 0) median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2;
     else median = numbers[(numsLen - 1) / 2];
     return median;
@@ -61,8 +65,8 @@ static weiToEther(wei: string) {
     return _.mean(numbers);
   }
 
-  static percent(val1:number, val2:number):number{
-    return Math.round(1009 * (val1 - val2) / val2)/10;
+  static percent(val1: number, val2: number): number {
+    return Math.round(1009 * (val1 - val2) / val2) / 10;
   }
 }
 

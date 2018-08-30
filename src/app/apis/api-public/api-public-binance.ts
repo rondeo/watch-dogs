@@ -51,6 +51,30 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
   }
 
+  static parseSymbol(symbol: string):{base: string, coin: string} {
+    let coin: string;
+    let base: string;
+    const id: string = symbol;
+    switch (id.slice(-3)) {
+      case 'BTC':
+        coin = id.slice(0, -3);
+        base = 'BTC';
+        break;
+      case 'ETH':
+        coin = id.slice(0, -3);
+        base = 'ETH';
+        break;
+      case 'SDT':
+        coin = id.slice(0, -4);
+        base = 'USDT';
+        break;
+      case 'BNB':
+        coin = id.slice(0, -3);
+        base = 'BNB';
+        break;
+    }
+    return {base, coin};
+  }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
@@ -62,27 +86,10 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       const allCoins = {}
       res.forEach(function (item) {
 
-        let coin: string;
-        let base: string;
-        const id: string = item.symbol;
-        switch (id.slice(-3)) {
-          case 'BTC':
-            coin = id.slice(0, -3);
-            base = 'BTC';
-            break;
-          case 'ETH':
-            coin = id.slice(0, -3);
-            base = 'ETH';
-            break;
-          case 'SDT':
-            coin = id.slice(0, -4);
-            base = 'USDT';
-            break;
-          case 'BNB':
-            coin = id.slice(0, -3);
-            base = 'BNB';
-            break;
-        }
+        const market = ApiPublicBinance.parseSymbol(item.symbol);
+        const coin = market.coin;
+        const base = market.base;
+        const id = item.symbol;
 
         const BaseVolume = 1e10,
           Volume = +item.volume,

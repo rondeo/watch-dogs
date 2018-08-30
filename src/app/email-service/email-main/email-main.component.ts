@@ -22,13 +22,13 @@ export class EmailMainComponent implements OnInit, OnDestroy {
     //this.isLoggedIn$ = auth.isLogedIn$;
   }
 
-  private sub1;
+ // private sub1;
   ngOnInit() {
 
 
   }
   ngOnDestroy(){
-    this.sub1.unsubscribe();
+   //  this.sub1.unsubscribe();
   }
 
   /*onLoginClick(){
@@ -37,14 +37,14 @@ export class EmailMainComponent implements OnInit, OnDestroy {
 
 
   onLogoutClick(){
-    if(confirm('You want to logout from Email Service?')) {
+   /* if(confirm('You want to logout from Email Service?')) {
 
       this.auth.logout().subscribe((res:any)=>{
         let color = res.error?'red':'black';
 
         this.snackBar.open(res.message,'x');
       })
-    }
+    }*/
 
   }
 }

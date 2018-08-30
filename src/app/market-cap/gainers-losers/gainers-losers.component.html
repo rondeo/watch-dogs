@@ -1,17 +1,17 @@
 <div>
 
-        <mat-form-field class="w6">
-            <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
-                <mat-option value="all">All</mat-option>
-                <mat-option value="top100">Top 100</mat-option>
-                <mat-option value="top200">Top 200</mat-option>
-                <mat-option value="100_200">100-200</mat-option>
-                <mat-option value="200_300">200-300</mat-option>
-                <mat-option value="after200"> > 200</mat-option>
-                <mat-option value="after100"> > 100</mat-option>
+    <mat-form-field class="w6">
+        <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
+            <mat-option value="all">All</mat-option>
+            <mat-option value="top100">Top 100</mat-option>
+            <mat-option value="top200">Top 200</mat-option>
+            <mat-option value="100_200">100-200</mat-option>
+            <mat-option value="200_300">200-300</mat-option>
+            <mat-option value="after200"> > 200</mat-option>
+            <mat-option value="after100"> > 100</mat-option>
 
-            </mat-select>
-        </mat-form-field>
+        </mat-select>
+    </mat-form-field>
 
     <mat-form-field class="w6">
         <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
@@ -27,10 +27,10 @@
     </small>
 
 
-    <button mat-button [matMenuTriggerFor]="menu"><span class="large">&</span> </button>
+    <button mat-button [matMenuTriggerFor]="menu"><span class="large">&</span></button>
     <mat-menu #menu="matMenu">
         <div *ngFor="let exchange of exchanges">
-            <mat-checkbox [value]="exchange" (change)="onExchangesChange($event, exchange)" >{{exchange}}</mat-checkbox>
+            <mat-checkbox [value]="exchange" (change)="onExchangesChange($event, exchange)">{{exchange}}</mat-checkbox>
         </div>
     </mat-menu>
 
@@ -47,10 +47,10 @@
             <tr>
                 <td colspan="3"></td>
                 <td colspan="5" class="text-center">
-                  <!--  <small class="btn" (click)="onToBTCClick()">% to btc</small>
-                    <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>-->
+                    <!--  <small class="btn" (click)="onToBTCClick()">% to btc</small>
+                      <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>-->
                 </td>
-                <td  colspan="3" class="text-center">
+                <td colspan="3" class="text-center">
                     <small>CMC</small>
                 </td>
             </tr>
@@ -72,10 +72,10 @@
                 </td>
                 <td>1</td>
                 <td>{{btcMC.rank}}</td>
-
-                <td>{{btcMC.percent_change_1h}}</td>
-                <td>{{btcMC.percent_change_24h}}</td>
-                <td>{{btcMC.percent_change_7d}}</td>
+                <td>0</td>
+                <td><span [appValueColor]="btcMC.percent_change_1h"></span></td>
+                <td><span [appValueColor]="btcMC.percent_change_24h"></span></td>
+                <td><span [appValueColor]="btcMC.percent_change_7d"></span></td>
 
             </tr>
 
@@ -90,7 +90,7 @@
 
                 <td>
 
-                        {{item.rank}}
+                    {{item.rank}}
 
                 </td>
 
@@ -111,7 +111,7 @@
 
                 </td>
 
-                <td class="w50"  [appValueColor] ="item.percent_change_1h">
+                <td class="w50" [appValueColor]="item.percent_change_1h">
                 </td>
                 <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">
                     {{item.percent_change_24h}}

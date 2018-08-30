@@ -17,9 +17,9 @@
                 <small>$</small>
                 {{books.us}}
             </td>
-            <td><span class="btn" (click)="onBookClick(books.sell)">{{books.sell}}</span></td>
+            <td><span class="btn" (click)="onBookClick(books.sell)" title="{{books.sell}}">{{books.sellUS}}</span></td>
             <td>{{books.diff}}</td>
-            <td><span class="btn" (click)="onBookClick(books.buy)" >{{books.buy}}</span></td>
+            <td><span class="btn" (click)="onBookClick(books.buy)" title="{{books.buy}}">{{books.buyUS}}</span></td>
         </tr>
     </table>
 </div>

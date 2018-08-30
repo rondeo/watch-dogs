@@ -20,7 +20,7 @@ export class ValueColorDirective implements OnChanges{
         this.el.nativeElement.classList.remove('green');
         this.el.nativeElement.classList.add('red');
         this.color = 'red';
-      }else if(this.color === 'red') {
+      }else if(this.color === 'red' && this.appValueColor > 0) {
         this.color = 'green';
         this.el.nativeElement.classList.remove('red');
         this.el.nativeElement.classList.add('green');

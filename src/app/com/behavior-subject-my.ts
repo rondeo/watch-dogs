@@ -1,6 +1,3 @@
-/**
- * @class BehaviorSubject<T>
- */
 import {Subject} from 'rxjs/Subject';
 import {ISubscription, Subscription} from 'rxjs/Subscription';
 import {Subscriber} from 'rxjs/Subscriber';

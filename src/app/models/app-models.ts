@@ -551,13 +551,15 @@ export interface VOOpenOrder {
 }*/
 
 export class VOBalance {
-  address?: string;
   symbol: string;
+  exchange: string;
   balance: number;
+
+  balanceUS?: number;
+  address?: string;
   index?: number;
   available?: number;
-  pending?: number
-  balanceUS?: number;
+  pending?: number;
   priceUS?: number;
   percent_change_1h?: number;
   percent_change_24h?: number;

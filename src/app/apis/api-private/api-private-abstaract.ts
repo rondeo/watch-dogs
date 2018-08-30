@@ -9,6 +9,7 @@ import {LoginStatus, UserLoginService} from '../../services/user-login.service';
 import {WatchDog} from '../../models/watch-dog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 
 export abstract class ApiPrivateAbstaract {
 
@@ -86,8 +87,9 @@ export abstract class ApiPrivateAbstaract {
   abstract getOrder(orderId, base: string, coin: string): Observable<VOOrder>;
 
   isTickBalance = false;
-  tickRefreshBalance(){
-    if(this.isTickBalance) return;
+
+  tickRefreshBalance() {
+    if (this.isTickBalance) return;
     this.isTickBalance = true;
     setTimeout(() => {
       this.isTickBalance = false;
@@ -97,11 +99,12 @@ export abstract class ApiPrivateAbstaract {
 
   balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject(null);
   isLoadingBalances: boolean;
+
   refreshBalances() {
     if (!this.isLoadingBalances) {
       this.downloadBalances().subscribe(balances => {
         this.isLoadingBalances = false;
-        console.log('balances ' + this.exchange)
+        // console.log('balances ' + this.exchange)
         //console.log(moment().format('HH:mm a') + ' new balances ', balances);
         this.balancesSub.next(balances)
       }, error => {
@@ -110,26 +113,66 @@ export abstract class ApiPrivateAbstaract {
     }
   }
 
+  openOrdersSub = new BehaviorSubject(null);
+  openOrders$(base: string, coin: string) {
+    const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
+    this.openOrdersSub.subscribe(res => {
+      if (!res) return;
+      const orders: VOOrder[] = res.filter(function (item: VOOrder) {
+        return item.base === base && item.coin === coin;
+      });
+      setTimeout(() => sub.next(orders), 20);
+    })
+   /* this.getOpenOrders(base, coin).subscribe(res =>{
+      console.warn(res);
+    })*/
+    return sub.asObservable()
+  }
+
+  refreshAllOpenOrders() {
+    this.getAllOpenOrders().subscribe(res => {
+      console.warn(res);
+      this.openOrdersSub.next(res)
+    });
+  }
+
+  allOrdersSub = new BehaviorSubject(null);
+
+  allOrders$(base: string, coin: string) {
+    const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
+    this.allOrdersSub.subscribe(res => {
+      console.warn(res);
+      if (!res) return;
+      const orders: VOOrder[] = res.filter(function (item: VOOrder) {
+        return item.base === base && item.coin === coin;
+      });
+      setTimeout(() => sub.next(orders), 20);
+    })
+    return sub.asObservable()
+  }
+
+  refreshAllOrders(base: string, coin: string) {
+    this.getAllOrders(base, coin).subscribe(res => this.allOrdersSub.next(res));
+  }
+
+
   balance$(symbol: string): Observable<VOBalance> {
-    console.log(symbol);
     const sub: Subject<VOBalance> = new Subject<VOBalance>();
     this.balancesSub.asObservable().subscribe(balances => {
       if (balances) {
         //  console.log(balances);
-        sub.next(_.find(balances, {symbol: symbol}));
+        setTimeout(() => sub.next(_.find(balances, {symbol: symbol})), 20);
       } else this.refreshBalances();
-    })
-
+    });
     return sub;
 
   }
 
-  async getBalance(symbol: string, isRefresh = false): Promise<VOBalance> {
-    if (!isRefresh && this.balancesSub.getValue()) {
+  async getBalance(symbol: string): Promise<VOBalance> {
+    if (this.balancesSub.getValue()) {
       const bal = _.find(this.balancesSub.getValue(), {symbol: symbol});
       return Promise.resolve(bal)
     }
-
     return this.downloadBalances().toPromise().then(bals => {
       this.balancesSub.next(bals);
       return _.find(bals, {symbol: symbol})
@@ -142,24 +185,28 @@ export abstract class ApiPrivateAbstaract {
 
   abstract buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
 
-  resetCredetials(){
+  resetCredetials() {
     this.credentials = null;
   }
 
-  getCredentials():{ apiKey: string, password: string } {
-     return this.credentials;
+  getCredentials(): { apiKey: string, password: string } {
+    return this.credentials;
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
 
     return null;
   }
-
-  getAllOrderes(base: string, coin: string): Observable<VOOrder[]> {
+  getAllOpenOrders() : Observable<VOOrder[]> {
     return null;
   }
-  createLogin(){
-    return  this.userLogin.getExchangeCredentials(this.exchange).then(str =>{
+
+  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
+    return null;
+  }
+
+  createLogin() {
+    return this.userLogin.getExchangeCredentials(this.exchange).then(str => {
       this.credentials = JSON.parse(str);
       return this.credentials;
     })

@@ -3,8 +3,8 @@
         <span>Trades</span>
         <span>{{exchange}}</span>
         <span class="btn" (click)="onMarketClick()">{{market}}</span>
-
     </p>
+
     <div class="mat-body-2">by CMC ${{coinPriceUS}}</div>
     &nbsp; &nbsp;
     <span class="mat-subheading-2">{{analytics.tolerance.toFixed(2)}}</span>%
@@ -13,7 +13,8 @@
     &nbsp;&nbsp;
     <span class="mat-subheading-2">{{(analytics.speed*60).toPrecision(2)}}/min</span>
     &nbsp;&nbsp;&nbsp;
-    <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshHistory()"></a>
+    <a [ngClass]="isRefreshingHistory ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
+       (click)="onRefreshHistory()"></a>
 
     <br/>
 
@@ -21,8 +22,10 @@
 
     <br/>
     <section>
-        <small>Bought:</small> {{(analytics.sumBuy/1000).toFixed(3).replace('.',',')}}
-        <small> Sold: </small> {{(analytics.sumSell/1000).toFixed(3).replace('.',',')}}
+        <small>Bought:</small>
+        {{(analytics.sumBuy/1000).toFixed(3).replace('.',',')}}
+        <small> Sold:</small>
+        {{(analytics.sumSell/1000).toFixed(3).replace('.',',')}}
         <small>Dust:</small>
         <sub class="green">b: {{analytics.dustCountBuy}}</sub>
         <sup class="red">s: {{analytics.dustCountSell}}</sup>
@@ -36,14 +39,13 @@
             <table class="small">
                 <tbody>
                 <tr *ngFor="let fish of fishes">
-                    <td>{{fish.action}} </td>
-                    <td>{{fish.amountUS}} </td>
-                    <td>{{fish.priceUS}} </td>
+                    <td>{{fish.action}}</td>
+                    <td>{{fish.amountUS}}</td>
+                    <td>{{fish.priceUS}}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
-
 
     </section>
 

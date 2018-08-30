@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOOrder} from '../../models/app-models';
 
@@ -11,32 +11,69 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
-  @Input() afeterTimestamp: number;
+  @Input() afterDate: string;
+  @Input() trigger: number;
 
+  @Output() openOrders: EventEmitter<VOOrder[]> = new EventEmitter();
   orders: VOOrder[] = [];
+
   constructor(
     private apisPrivate: ApisPrivateService
-  ) { }
+  ) {
+  }
 
+  private sub;
   ngOnInit() {
+  }
+
+  ngOnChanges() {
     this.downloadOpenOrders();
   }
 
-  ngOnChanges(){
-    this.downloadOpenOrders();
-  }
+  downloadOpenOrders() {
+    if (!this.exchange) return;
+    if(this.sub) this.sub.unsubscribe();
 
-  downloadOpenOrders(){
-    if(!this.exchange || !this.market) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    const ar = this.market.split('_');
-    api.getOpenOrders(ar[0], ar[1]).subscribe(orders => {
-      console.log(orders);
-      this.orders = orders;
-    })
+    if(!this.market) {
+      const api = this.apisPrivate.getExchangeApi(this.exchange);
+      this.sub = api.openOrdersSub.asObservable().subscribe(allOrders =>{
+        if(!allOrders) return;
+        this.orders = allOrders;
+        this.openOrders.emit(allOrders);
+      });
+
+    } else {
+      const ar = this.market.split('_');
+
+      this.sub = api.openOrders$(ar[0], ar[1])
+      //  api.getOpenOrders(ar[0], ar[1])
+
+        .subscribe(orders => {
+          console.log(orders);
+          if(this.orders.length !== orders.length) {
+            this.orders = orders;
+            this.openOrders.emit(orders);
+          }
+        });
+    }
+    api.refreshAllOpenOrders();
   }
 
   onCancelOrderClick(order: VOOrder) {
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
+    const id = order.uuid;
+    if (id) {
+      const msg = [order.action, order.coin, order.amountUS, order.priceUS].join(' ');
+      if (confirm('You want to cancel order ' + msg)) {
+        api.cancelOrder(id, order.base, order.coin).subscribe(res => {
+          setTimeout(function () {
+            api.refreshAllOpenOrders();
+          }, 3000)
+
+        })
+      }
+    }
 
   }
 }

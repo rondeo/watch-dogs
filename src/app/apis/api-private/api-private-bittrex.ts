@@ -63,12 +63,60 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
   }*/
 
+  getAllOpenOrders() :Observable<VOOrder[]>{
+    let url = 'https://bittrex.com/api/v1.1/market/getopenorders';
+    return this.call(url, null).map(res =>{
+      console.log(' allOpenOrders  ' , res);
+      return res.result.map(function(o){
+        let a = o.Exchange.split('-');
+        return {
+          uuid:o.OrderUuid,
+          action:o.OrderType.substr(6),
+          isOpen:!o.Closed,
+          rate:o.Limit,
+          coin:a[1],
+          base:a[0],
+          exchange:'bittrex',
+          amountCoin:o.Quantity,
+          amountBase:o.Price,
+          date:o.Opened,
+          fee:0,
+          timestamp:new Date(o.Opened).getTime()
+        }
+      });
+    })
+  }
+
+  getAllOrderes(base: string, coin: string) :Observable<VOOrder[]>{
+    let market = base+'-'+coin;
+    let url = 'https://bittrex.com/api/v1.1/account/getorderhistory';
+    return this.call(url, {market: market}).map(res =>{
+      console.log(' OrderHistory  '+ market , res);
+      return res.result.map(function(o){
+        let a = o.Exchange.split('-')
+        return {
+          uuid:o.OrderUuid,
+          action:o.OrderType.substr(6),
+          isOpen:!o.Closed,
+          rate:o.Limit,
+          coin:a[1],
+          base:a[0],
+          exchange:'bittrex',
+          amountCoin:o.Quantity,
+          amountBase:o.Price,
+          date:o.Opened,
+          fee:0,
+          timestamp:new Date(o.Opened).getTime()
+        }
+      });
+    })
+  }
 
   getOpenOrders(base:string, coin:string):Observable<VOOrder[]>{
     let market = base+'-'+coin;
     let uri = 'https://bittrex.com/api/v1.1/market/getopenorders';
     return this.call(uri, {market: market}).map(res=>{
-      console.log(' getOpenOrders  '+ market , res);
+      console.log(' OpenOrders  '+ market , res);
 
       return res.result.map(function(o){
         let a = o.Exchange.split('-')
@@ -129,9 +177,11 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     };
 
     const url = 'https://bittrex.com/api/v1.1/account/getbalance';
+    const exchange = this.exchange;
     return this.call(url, data).map(item => {
       item = item.result;
       return {
+        exchange: exchange,
         symbol: item.Currency,
         address: item.CryptoAddress,
         balance: item.Balance,
@@ -213,7 +263,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
       return sub.asObservable();
     }
 
-
+    if(!post) post = {};
     post.apikey = cred.apiKey;
     post.nonce = Math.ceil(Date.now() / 1000);
     let load = Object.keys(post).map(function (item) {

@@ -1,5 +1,7 @@
 <div>
+
     <a routerLink="/my-exchange/balances/{{exchange}}" class="btn mat-subheading-1">{{exchange}}</a>
+
     <mat-form-field class="w8">
         <mat-select [(ngModel)]="currentMarket" placeholder="Select Market" (ngModelChange)="onMarketChanged($event)">
             <mat-option *ngFor="let market of marketsAvailable" [value]="market">
@@ -7,6 +9,7 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
+
     <button mat-button
             routerLink="/email-service/create-bot/{{exchange}}/{{base}}/{{coin}}"
             [queryParams]="{amount:balanceCoinUS}"
@@ -15,19 +18,16 @@
             WD
         </span>
     </button>
+
+
+    <section>
+
     <app-amount-coin [amount]="amountUS" (amountChanged)="onAmountChanged($event)"></app-amount-coin>
 
     <mat-card>
-        <mat-card-content>
-            {{currentMarket.base}}
-            <span class="large"><sup>$</sup>{{balanceBaseUS}}</span>
-            &nbsp;
-            {{currentMarket.coin}}
-            <span class="large"><sup>$</sup>{{balanceCoinUS}}</span>
-            &nbsp;
-            <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
-               (click)="onRefreshBalancesClick()"></a>
 
+        <mat-card-content>
+            <app-balance-market [exchange]="exchange" [market]="market"></app-balance-market>
         </mat-card-content>
 
         <mat-card-title>
@@ -36,6 +36,7 @@
                 <mat-form-field class="w4">
                     <input matInput placeholder="Price" [(ngModel)]="userPriceUS"
                            (ngModelChange)="onUserPriceChanged($event)">
+                    <mat-hint>{{userRate}}</mat-hint>
                 </mat-form-field>
             </div>
         </mat-card-title>
@@ -56,55 +57,48 @@
             </button>
         </mat-card-content>
     </mat-card>
+    </section>
+    <hr/>
+    <br/>
 
-    <p>
-        <app-open-orders [exchange]="exchange" [market]="market"></app-open-orders>
-    </p>
-
+    <section>
+        <app-open-orders [exchange]="exchange" [market]="market" ></app-open-orders>
+    </section>
+    <hr/>
+    <br/>
     <div>
+        <mat-checkbox #chckHistory>All Orders</mat-checkbox>
+        <div *ngIf="chckHistory.checked">
+            <app-orders-history [exchange]="exchange" [market]="market"></app-orders-history>
+        </div>
 
-    <mat-checkbox #chckHistory >History</mat-checkbox>
-    <div *ngIf="chckHistory.checked">
-        <app-orders-history [exchange]="exchange" [market]="market"></app-orders-history>
     </div>
+    <hr/>
+    <br/>
 
-    </div>
-
-
-    <section *ngIf="orderId">
-        <span>{{orderId}}</span>
-        <span class="btn fa fa-close dred" (click)="onCancelOrderClick()"></span>
-    </section>
-
-    <section *ngIf="lastOrder">
-        <p>
-            <small>{{lastOrder.action}} {{lastOrder.coin}} : $</small>
-            {{lastOrder.amountCoinUS}}
-            <small>Price: $</small>
-            {{lastOrder.priceUS}}
-            <small> Fee: $</small>
-            {{lastOrder.feeUS}}
-            {{lastOrder.isOpen?'Open':'Closed'}}
-            <span *ngIf="lastOrder.isOpen" class="btn fa fa-close dred" (click)="onCancelOrderClick()"></span>
-        </p>
-
-    </section>
-
-    <mat-card>
+    <section>
         <app-market-books
                 [exchange]="exchange"
                 [market]="market"
                 (price)="onPriceClick($event)"
         ></app-market-books>
-    </mat-card>
-    <mat-card>
+    </section>
+    <hr/>
+    <br/>
+
+    <section>
         <app-trades-exchange-snapshot [exchange]="exchange" [market]="market"></app-trades-exchange-snapshot>
-    </mat-card>
+    </section>
+    <hr/>
+    <br/>
 
+    <section>
+        <mat-checkbox [(ngModel)]="isCoinDay"> Coin Day</mat-checkbox>
 
-    <mat-checkbox [(ngModel)]="isCoinDay"> Coin Day</mat-checkbox>
-    <p *ngIf="isCoinDay">
-        <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
-    </p>
+        <p *ngIf="isCoinDay">
+            <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
+        </p>
+    </section>
+
 
 </div>

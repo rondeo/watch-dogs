@@ -1,7 +1,25 @@
+import * as moment from 'moment';
+import {Moment} from 'moment';
 
 
 export class GRAPHS {
 
+
+  static createLabels12(fromS: string, toS:string, format = 'HH:mm'): string[] {
+    const from = moment(fromS);
+    const to = moment(toS);
+    const dur = moment.duration(moment(toS).diff(moment(fromS))).asHours();
+
+    const step = (dur / 12) * 60 * 60 * 1000;
+    const firstV = from.valueOf();
+    const lastV = to.valueOf();
+    const labels = [];
+    for(let i = firstV; i < lastV ; i+= step){
+      labels.push(moment(i).format(format))
+    }
+    labels.push(moment(lastV).format(format));
+    return labels;
+  }
 
   static integralData(item:any){
     const cur = item.symbol === 'BTC' ? item.price_usd : item.price_btc

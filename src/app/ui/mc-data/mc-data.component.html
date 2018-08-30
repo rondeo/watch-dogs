@@ -1,13 +1,22 @@
 <div class="mat-body">
-    <span> {{coinMC.id}} </span>
-    <span class="mat-body-2"> {{coinMC.symbol}} </span>
+    &nbsp;
     <span> {{coinMC.name}} </span>
+    &nbsp;
+    <span class="mat-body-2"> {{coinMC.symbol}} </span>
+    &nbsp;
+    <small>r</small>
+    <span>{{coinMC.rank}}</span>
+    &nbsp;
     <small>$</small>
-    <span>{{coinMC.price_usd}}</span>
-    <small>h:</small>
-    <span [appValueColor]="coinMC.percent_change_1h" title="1 hour">{{coinMC.percent_change_1h}} </span>
-    <small>d:</small>
-    <span [appValueColor]="coinMC.percent_change_24h" title="1 day">{{coinMC.percent_change_24h}} </span>
-    <small>w:</small>
-    <span [appValueColor]="coinMC.percent_change_7d" title="1 week">{{coinMC.percent_change_7d}} </span>
+    <span>{{coinMC.price_usd?coinMC.price_usd.toFixed(2):'--'}}</span>
+    &nbsp;
+    <small>h</small>
+    <span [appValueColor]="coinMC.percent_change_1h" title="1 hour"></span>
+    &nbsp;
+    <small>d</small>
+    <span [appValueColor]="coinMC.percent_change_24h" title="1 day"> </span>
+    &nbsp;
+    <small>w</small>
+    <span [appValueColor]="coinMC.percent_change_7d" title="1 week"> </span>
+    &nbsp;
 </div>

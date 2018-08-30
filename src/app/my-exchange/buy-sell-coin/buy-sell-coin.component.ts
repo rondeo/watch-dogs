@@ -12,6 +12,8 @@ import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
+import {Subscription} from '../../../../node_modules/rxjs';
+import {MATH} from '../../com/math';
 
 @Component({
   selector: 'app-buy-sell-coin',
@@ -30,57 +32,40 @@ export class BuySellCoinComponent implements OnInit {
   ) {
   }
 
+
+  isSellDisabled = false;
+  isBuyDisabled = false;
+
+
   isCoinDay = false;
   exchange: string;
   market: string;
   coin: string;
-  base: string;
+
   marketsAvailable: VOMarket[];
   currentMarket: VOMarket = new VOMarket();
-
-  balanceBaseUS: number;
-  balanceCoinUS: number;
-
-  balanceBase: VOBalance;
-  balanceCoin: VOBalance;
-
   amountUS = 100;
 
-  balances: VOBalance[];
-
-  MC: VOMCObj;
-
+  userRate: number;
   userPriceUS: number;
+  basePriceUS: number;
 
   private sub1;
+  private sub2;
 
-  isSellDisabled = true;
-  isBuyDisabled = true;
-
-  orderId: string;
-  lastOrder: VOOrder;
+  triggerOpenOrders = 0;
+  triggerAllOrders = 0;
 
   ngOnInit() {
-
-    /*  this.sub2 = this.apiService.connector$().subscribe(connector=>{
-        this.currentAPI = connector;
-        if(!connector) return;
-
-        this.currentAPI.balances$().subscribe(balances=>{
-          this.setBalances();
-        });*/
-
     this.route.queryParams.subscribe(params => {
       console.warn(params);
-      if(params.market && params.market !== this.market) {
-        this.market = params.market;
-        this.getBalances();
+      if (params.market) {
+       this.setMarket(params.market);
       }
-
-    })
+    });
 
     this.sub1 = this.route.params.subscribe(params => {
-      console.log(params)
+      console.log(params);
       this.exchange = params.exchange;
       const ar: string[] = params.coin.split('_');
       if (ar.length === 1) {
@@ -90,47 +75,23 @@ export class BuySellCoinComponent implements OnInit {
         this.coin = ar[1]
         this.getMarkets(ar[0] + '_' + ar[1]);
       }
-
     });
-
   }
 
-  isLoadinBalances = false;
-
-  async getBalances(isRefresh = false) {
-    this.isLoadinBalances = true;
-    const base = this.currentMarket.base, coin = this.currentMarket.coin
-    const balances: VOBalance[] = await this.myService.getBalances(this.exchange, [base, coin], isRefresh);
-    this.balanceBase = _.find(balances, {symbol: base})
-    this.balanceCoin = _.find(balances, {symbol: coin})
-
-    if (!this.balanceCoin) {
-      this.balanceCoin = new VOBalance();
-      this.balanceCoin.symbol = coin;
-      this.balanceCoin.balance = 0;
+  setMarket(market: string) {
+    if(this.market === market) return;
+    const base =  market.split('_')[0];
+    if(!this.market || this.market.split('_')[0] !== base) {
+      this.marketCap.getTicker().then(MC => {
+        this.basePriceUS = MC[base].price_usd;
+      })
     }
-    if (!this.balanceCoin) {
-      this.balanceBase = new VOBalance();
-      this.balanceBase.symbol = base;
-      this.balanceCoin.balance = 0;
-    }
-
-    this.balanceBaseUS = Math.round(this.balanceBase.balance * this.MC[base].price_usd);
-    this.balanceCoinUS = Math.round(this.balanceCoin.balance * this.MC[coin].price_usd);
-    this.isBuyDisabled = this.balanceBaseUS < 1;
-    this.isSellDisabled = this.balanceCoinUS < 1;
-    this.isLoadinBalances = false;
-    // console.log(this.balanceBase, this.balanceCoin);
-  }
-
-  async downloadTrades() {
-    const base = this.currentMarket.base, coin = this.currentMarket.coin;
+    this.market = market;
 
   }
-
 
   async getMarkets(marketSymbol?: string) {
-    if (!this.MC) this.MC = await this.marketCap.getTicker();
+    //  if (!this.MC) this.MC = await this.marketCap.getTicker();
     const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
     if (markets.length === 0) {
       console.log(await this.myService.getAllMarkets(this.exchange));
@@ -147,93 +108,110 @@ export class BuySellCoinComponent implements OnInit {
       this.currentMarket = markets[0];
       this.onMarketChanged(null)
     }
+
+
   }
 
   onMarketChanged(evt) {
-    this.base = this.currentMarket.base;
-    this.coin = this.currentMarket.coin;
-    this.market = this.currentMarket.base + '_' + this.currentMarket.coin;
+    const base = this.currentMarket.base;
+    const coin = this.currentMarket.coin;
+    // this.market = this.currentMarket.base + '_' + this.currentMarket.coin;
     /// console.log(this.market);
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        market: this.market
+        market: base + '_' + coin
       },
       queryParamsHandling: 'merge'
-     // skipLocationChange: true
+      // skipLocationChange: true
     });
 
 
   }
 
-  onRefreshBalancesClick() {
-    this.getBalances(true);
-  }
-
-
-  onPriceClick(price: number) {
-    this.userPriceUS = price;
+  async onPriceClick(rate: number) {
+    this.userRate = rate;
+    const basePrice = this.basePriceUS;
+    this.userPriceUS = +(rate * basePrice).toFixed(3);
 
   }
 
-  onUserPriceChanged(price) {
+  async onUserPriceChanged(price) {
     console.log(price);
+    const basePrice = await this.basePriceUS;
+    this.userRate = MATH.toValue(price / basePrice);
   }
 
-  onBuyClick() {
+  async onBuyClick() {
     const action = 'BUY';
+    const market = this.market;
+    const ar = market.split('_');
+    const base = ar[0];
+    const coin = ar[1];
 
-    const priceBaseUS = this.MC[this.base].price_usd;
+    const basePriceUS = this.basePriceUS;
+    const rate = +(this.userPriceUS / basePriceUS).toPrecision(5);
+    let amountBase = this.amountUS / basePriceUS;
 
-    const rate = +(this.userPriceUS / priceBaseUS).toPrecision(5);
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
 
-    let amountCoin = +(this.amountUS / priceBaseUS / rate).toFixed(8);
-
-
-    const left = this.balanceBase.balance - (amountCoin * rate);
-
+    const balanceBase = await api.getBalance(base);
+    console.log(balanceBase);
+    const left = balanceBase.balance - amountBase;
     let isMax = false;
-    if (left < (this.balanceBase.balance * 0.0025)) {
+    if (left * basePriceUS < 10) {
       isMax = true;
-      let amountBase = this.balanceBase.balance;
+      amountBase = balanceBase.balance;
       amountBase = amountBase - (amountBase * 0.0025);
-      amountCoin = +(amountBase / rate).toFixed(8);
+
+    }
+    if ((amountBase * basePriceUS) < 1) {
+      this.snackBar.open(
+        'Amount ' + base + ' too low $' + (amountBase * basePriceUS).toFixed(4),
+        'x', {extraClasses: 'alert-red', duration: 5000});
+      return
     }
 
-    this.confirmOrder(action, rate, amountCoin, priceBaseUS, isMax);
+    const amountCoin = +(amountBase / rate).toFixed(8);
+    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);
   }
 
 
-  onSellClick() {
+  async onSellClick() {
     const action = 'SELL';
-    const priceBaseUS = this.MC[this.base].price_usd;
-    const rate = +(this.userPriceUS / priceBaseUS).toPrecision(5)
+    const market = this.market;
+    const ar = market.split('_');
+    const base = ar[0];
+    const coin = ar[1];
+    const basePriceUS = this.basePriceUS;
+    const rate = +(this.userPriceUS / basePriceUS).toPrecision(5);
 
-    let amountCoin = +(this.amountUS / priceBaseUS / rate).toFixed(8);
-
-    const left = this.balanceCoin.balance - amountCoin;
+    let amountCoin = +(this.amountUS / basePriceUS / rate).toFixed(8);
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
+    const balanceCoin = await api.getBalance(coin);
+    console.log(balanceCoin);
+    const left = (balanceCoin.balance - amountCoin) * rate;
     let isMax = false;
-    if ((left * this.MC[this.coin].price_usd) < 10) {
+    if (left * basePriceUS < 10) {
       isMax = true;
-      amountCoin = this.balanceCoin.balance;
+      amountCoin = balanceCoin.balance;
     }
-
-    this.confirmOrder(action, rate, amountCoin, priceBaseUS, isMax);
+    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);
   }
 
-  confirmOrder(action: string, rate: number, amountCoin: number, priceBaseUS: number, isMax: boolean) {
+  confirmOrder(base: string, coin: string, action: string, rate: number, amountCoin: number, priceBaseUS: number, isMax: boolean) {
     //  console.log(arguments);
-    if (!this.base || !this.coin || isNaN(rate) || isNaN(amountCoin) || isNaN(priceBaseUS)) {
-      const msg = this.base + this.coin + ' rate: ' + rate + ' amountCoin: ' + amountCoin + ' priceBaseUS: ' + priceBaseUS
+    if (isNaN(rate) || isNaN(amountCoin) || isNaN(priceBaseUS)) {
+      const msg = ' rate: ' + rate + ' amountCoin: ' + amountCoin + ' priceBaseUS: ' + priceBaseUS
       this.snackBar.open(msg, 'x', {extraClasses: 'alert-red'});
       return
     }
-    const base = this.base;
-    const coin = this.coin;
+
     action = action.toUpperCase();
     let rateUS = +(rate * priceBaseUS).toPrecision(4);
-    amountCoin = +(amountCoin).toPrecision(5);
+    if(!isMax) amountCoin = +(amountCoin).toPrecision(5);
+
     let amountUS = (amountCoin * rate * priceBaseUS).toFixed(0);
     let feeUS = (+amountUS * 0.0025).toFixed(2);
     console.log(action + ' ' + base + '_' + coin + ' amountCoin ' + amountCoin + ' rate ' + rate + ' baseUS ' + priceBaseUS);
@@ -249,24 +227,24 @@ export class BuySellCoinComponent implements OnInit {
     }
   }
 
-
   private onResult(res: VOOrder) {
     console.log(res);
     // let amountUS = (amountCoin * rate * this.MC[this.base].price_usd).toFixed(2);
+    let msg = 'Order Set! ';
 
     if (res && res.uuid) {
-      const msg = res.uuid;
-
+      msg += ' id ' + res.uuid;
       if (res.amountCoin) {
-        this.showOrder(res);
         if (res.isOpen) {
-          this.checkOrder(res.uuid);
-        }
-      } else this.checkOrder(res.uuid);
+          msg += ' OPEN';
 
-      this.snackBar.open('Order Set! ' + msg, 'x', {extraClasses: 'alert-green', duration: 2000});
+        } else {
+          msg += ' CLOSED';
+        }
+      }
+      this.snackBar.open(msg, 'x', {extraClasses: 'alert-green', duration: 2000});
       setTimeout(() => {
-        this.getBalances(true);
+        this.refreshData(res.base, res.coin);
       }, 3000);
 
     } else {
@@ -277,16 +255,15 @@ export class BuySellCoinComponent implements OnInit {
   private onError(error) {
     console.error(error);
     let msg;
-    if(error.error){
-      if(error.error.msg) msg = error.error.msg;
+    if (error.error) {
+      if (error.error.msg) msg = error.error.msg;
       else msg = JSON.stringify(error.error)
-    }else msg = error.message;
+    } else msg = error.message;
 
     this.snackBar.open('Error ' + msg, 'x', {extraClasses: 'alert-red'});
   }
 
   placeOrder(action: string, base: string, coin: string, rate: number, amountCoin: number): Observable<VOOrder> {
-
     let obs: Observable<VOOrder>;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     if (action === 'SELL') obs = api.sellLimit(base, coin, amountCoin, rate);
@@ -294,55 +271,14 @@ export class BuySellCoinComponent implements OnInit {
     return obs;
   }
 
-  checkOrder(orderId) {
-    this.orderId = orderId;
-    const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
-    api.getOrder(orderId, this.base, this.coin).subscribe(res => {
-      console.warn(res);
-
-      if (res.amountCoin) {
-        this.showOrder(res);
-        this.orderId = null;
-      }
-
-
-      if (res.isOpen) {
-        setTimeout(() => this.checkOrder(orderId), 5000);
-        this.snackBar.open('Order in progress', 'x', {extraClasses: 'alert-red', duration: 2000});
-      } else {
-        this.orderId = null;
-        this.getBalances(true);
-      }
-    })
-
-  }
-
   onAmountChanged(amount: number) {
     this.amountUS = amount;
   }
 
-  onCancelOrderClick() {
-    if (!this.orderId) return;
-    const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
-    api.cancelOrder(this.orderId).subscribe(order => {
-      if (order.isOpen) {
-        this.snackBar.open('Cancel Order ' + this.orderId, 'x', {extraClasses: 'alert-red', duration: 2000});
-        setTimeout(() => this.onCancelOrderClick(), 5000);
-      } else {
-        this.snackBar.open('Order Canceled ', 'x', {extraClasses: 'alert-green', duration: 5000});
-        this.orderId = null;
-        this.getBalances(true);
-      }
-    })
+  refreshData(base, coin) {
+   const api =  this.apisPrivate.getExchangeApi(this.exchange);
+   api.refreshBalances();
+   api.refreshAllOpenOrders();
   }
 
-  showOrder(order: VOOrder) {
-    order.action = order.action==='B'?'Buy': 'Sell';
-    const coinMC = this.MC[order.coin];
-    const baseMC = this.MC[order.base];
-    order.feeUS = +(order.fee *  baseMC.price_usd).toFixed(2)
-    order.priceUS = +(order.rate * baseMC.price_usd).toPrecision(4);
-    order.amountUS = +(order.amountCoin * coinMC.price_usd).toFixed(0);
-    this.lastOrder = order;
-  }
 }

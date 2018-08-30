@@ -22,16 +22,13 @@ import {UserLoginService} from '../../services/user-login.service';
 })
 export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
-
   exchangesPrivate: string[];
 
   balancesAr: VOBalance[];
   balancesAll: VOBalance[];
-  total: string;
+  total: number;
   transfers: VOTransfer[];
-
   exchange: string;
-
   isPendingOrders: boolean;
   MC: VOMCObj;
 
@@ -93,8 +90,8 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       const coinMC = MC[item.symbol];
       if (coinMC) {
         item.id = coinMC.id;
-        item.balanceUS = +(item.balance * coinMC.price_usd).toFixed(2);
-        item.priceUS = coinMC.price_usd;
+        item.balanceUS = Math.round(item.balance * coinMC.price_usd);
+        item.priceUS = +(coinMC.price_usd).toFixed(3);
         item.percent_change_1h = coinMC.percent_change_1h;
         item.percent_change_24h = coinMC.percent_change_24h;
         item.percent_change_7d = coinMC.percent_change_7d;
@@ -113,12 +110,12 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     if (this.isShowAll) {
       ar = this.balancesAll;
     } else ar = this.balancesAll.filter(function (item) {
-      return +item.balance !== 0;
+      return item.balanceUS;
     });
 
-    this.total = ar.reduce(function (a, b) {
+    this.total = Math.round(ar.reduce(function (a, b) {
       return a + +b.balanceUS;
-    }, 0).toFixed(2);
+    }, 0));
 
     this.balancesAr = ar.sort(function (a, b) {
       return +a.balanceUS > +b.balanceUS ? -1 : 1;

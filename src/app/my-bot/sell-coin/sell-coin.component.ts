@@ -151,7 +151,7 @@ export class SellCoinComponent implements OnInit, OnDestroy {
     ]
 
     this.myGraps = {
-      xs: labels,
+      labelsX: labels,
       graphs: graphs
     }
 

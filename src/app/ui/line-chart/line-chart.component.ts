@@ -17,7 +17,7 @@ export interface VOGraph {
 }
 
 export interface VOGraphs {
-  xs: string[];
+  labelsX: string[];
   graphs: VOGraph[];
 }
 
@@ -122,8 +122,8 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   private drawXs() {
 
     let ctx = this.ctx;
-    let ar = this.graphs.xs;
-    let step = (this.widthG + 40) / ar.length;
+    let ar = this.graphs.labelsX;
+    let step = (this.widthG + (this.widthG/12)) / ar.length;
     let y = this.height;
     let x0 = this.paddingLeft - 20;
 

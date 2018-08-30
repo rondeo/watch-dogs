@@ -221,7 +221,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     ]
 
     this.myGraps = {
-      xs: labels,
+      labelsX: labels,
       graphs: graphs
     }
 

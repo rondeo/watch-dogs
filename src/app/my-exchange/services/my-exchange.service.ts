@@ -5,6 +5,7 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import * as _ from 'lodash';
 import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 
 @Injectable()
 export class MyExchangeService {
@@ -70,9 +71,13 @@ export class MyExchangeService {
     })
 
   }
-
-  async getBalances(exchange, symbols: string[], isRefresh = false): Promise<VOBalance[]> {
-    return this.getBalancesAll(exchange, isRefresh).then(balances => MyExchangeService.filterBalances(symbols, balances));
+  privateAPI(exchange: string): ApiPrivateAbstaract{
+    return this.apisPrivate.getExchangeApi(exchange);
   }
+
+ /* async getBalances(exchange: string, symbols: string[], isRefresh = false): Promise<VOBalance[]> {
+    if(!exchange) throw new Error(' no exchange provided ');
+    return this.getBalancesAll(exchange, isRefresh).then(balances => MyExchangeService.filterBalances(symbols, balances));
+  }*/
 
 }
