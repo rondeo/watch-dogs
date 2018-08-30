@@ -73,9 +73,9 @@
                 <td>1</td>
                 <td>{{btcMC.rank}}</td>
                 <td>0</td>
-                <td><span [appValueColor]="btcMC.percent_change_1h"></span></td>
-                <td><span [appValueColor]="btcMC.percent_change_24h"></span></td>
-                <td><span [appValueColor]="btcMC.percent_change_7d"></span></td>
+                <td><span [myValueColor]="btcMC.percent_change_1h"></span></td>
+                <td><span [myValueColor]="btcMC.percent_change_24h"></span></td>
+                <td><span [myValueColor]="btcMC.percent_change_7d"></span></td>
 
             </tr>
 
@@ -105,13 +105,13 @@
                 </td>
 
                 <td>
-                    <span [appValueColor]="item.price_btcD">
+                    <span [myValueColor]="item.price_btcD">
                         {{item.price_btcD}}
                     </span>
 
                 </td>
 
-                <td class="w50" [appValueColor]="item.percent_change_1h">
+                <td class="w50" [myValueColor]="item.percent_change_1h">
                 </td>
                 <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">
                     {{item.percent_change_24h}}

@@ -241,7 +241,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     this.isLoadingBalances = true;
     const exchange = this.exchange;
     return this.call({command: 'returnBalances'}).map(res => {
-      console.log(res);
+    //   console.log(res);
 
       if (!res) {
         console.warn('refreshBalances null')

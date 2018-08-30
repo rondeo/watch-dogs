@@ -20,6 +20,7 @@ import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
 import {WidgetsModule} from '../widgets/widgets.module';
 import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.component';
 import {PipesModule} from '../pipes/pipes.module';
+import {DirectivesModule} from '../directives/directives.module';
 
 
 @Component({
@@ -59,6 +60,7 @@ const routes: Routes = [
     MaterialAppModule,
     UiModule,
     WidgetsModule,
+    DirectivesModule,
     PipesModule,
     RouterModule.forChild(routes)
   ],

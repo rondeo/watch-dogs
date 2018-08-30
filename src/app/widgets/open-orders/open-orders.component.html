@@ -4,7 +4,7 @@
     <table>
         <tbody>
         <tr *ngFor="let order of orders">
-            <td><small>{{order.base + '_' + order.coin}}</small></td>
+            <td><small class="btn" (click)="onOrderMarketClick(order.base + '_' + order.coin)">{{order.base + '_' + order.coin}}</small></td>
             <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
             <td>{{order.amountCoin | toUs:order.coin | async}}</td>
             <td>{{order.rate | toUs3:order.base | async}}</td>

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOOrder} from '../../models/app-models';
+import {ShowExternalPageService} from '../../services/show-external-page.service';
 
 @Component({
   selector: 'app-open-orders',
@@ -18,7 +19,8 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
   orders: VOOrder[] = [];
 
   constructor(
-    private apisPrivate: ApisPrivateService
+    private apisPrivate: ApisPrivateService,
+    private externalPages: ShowExternalPageService
   ) {
   }
 
@@ -74,6 +76,9 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
         })
       }
     }
+  }
 
+  onOrderMarketClick(market: string){
+    this.externalPages.showMarket(this.exchange, market);
   }
 }

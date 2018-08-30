@@ -17,7 +17,8 @@ export class ToUs3Pipe implements PipeTransform {
     if (!symbol) return;
     if (this.MC) return Promise.resolve(Math.round(1000 * (this.MC[symbol].price_usd * value)) / 1000);
     this.MC = await this.marketCap.getTicker();
-    return Math.round(1000 * this.MC[symbol].price_usd * value) / 1000;
+    const out = this.MC[symbol].price_usd * value;
+    return +out.toPrecision(3);
   }
 
 }

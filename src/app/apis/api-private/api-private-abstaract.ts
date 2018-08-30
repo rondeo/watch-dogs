@@ -131,8 +131,7 @@ export abstract class ApiPrivateAbstaract {
 
   refreshAllOpenOrders() {
     this.getAllOpenOrders().subscribe(res => {
-      console.warn(res);
-      this.openOrdersSub.next(res)
+      this.openOrdersSub.next(res);
     });
   }
 

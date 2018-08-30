@@ -32,8 +32,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   isPendingOrders: boolean;
   MC: VOMCObj;
 
-
-
   constructor(
     private privateService: MyExchangeService,
     private apisPublic: ApisPublicService,
@@ -62,7 +60,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.exchangesPrivate = this.privateService.getMyPivateExchanges()
     this.route.params.subscribe(params => {
-
       if(this.exchange !== params.exchange) {
         this.balancesAll = [];
         this.balancesAr = [];
@@ -91,10 +88,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       if (coinMC) {
         item.id = coinMC.id;
         item.balanceUS = Math.round(item.balance * coinMC.price_usd);
-        item.priceUS = +(coinMC.price_usd).toFixed(3);
-        item.percent_change_1h = coinMC.percent_change_1h;
-        item.percent_change_24h = coinMC.percent_change_24h;
-        item.percent_change_7d = coinMC.percent_change_7d;
       } else item.balanceUS = 0;
     })
     this.isBalancesLoading = false;

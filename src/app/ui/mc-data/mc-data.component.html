@@ -11,12 +11,12 @@
     <span>{{coinMC.price_usd?coinMC.price_usd.toFixed(2):'--'}}</span>
     &nbsp;
     <small>h</small>
-    <span [appValueColor]="coinMC.percent_change_1h" title="1 hour"></span>
+    <span [myValueColor]="coinMC.percent_change_1h" title="1 hour"></span>
     &nbsp;
     <small>d</small>
-    <span [appValueColor]="coinMC.percent_change_24h" title="1 day"> </span>
+    <span [myValueColor]="coinMC.percent_change_24h" title="1 day"> </span>
     &nbsp;
     <small>w</small>
-    <span [appValueColor]="coinMC.percent_change_7d" title="1 week"> </span>
+    <span [myValueColor]="coinMC.percent_change_7d" title="1 week"> </span>
     &nbsp;
 </div>

@@ -27,9 +27,9 @@
             <tr>
                 <th>Coin</th>
                 <th class="btn large" (click)="sortByBalance()">Balance</th>
-                <th class="btn large" (click)="onSortClick('percent_change_1h')">1h%</th>
-                <th class="btn large" (click)="onSortClick('percent_change_24h')">24h%</th>
-                <th class="btn large" (click)="onSortClick('percent_change_7d')">7d%</th>
+                <th>1h%</th>
+                <th>24h%</th>
+                <th>7d%</th>
                 <th>Price</th>
             </tr>
             <ng-container *ngFor="let balance of balancesAr">
@@ -38,20 +38,24 @@
                         <img class="w1 icon" src="assets/icons/{{balance.id}}.png"/>
                         <small class="btn" (click)="onSymbolClick(balance)">{{balance.symbol}}</small>
                     </td>
-
-                    <td><span class="btn" (click)="onBalanceClick(balance)"><small class="grey">$</small>{{balance.balanceUS}}</span>
+                    <td>
+                        <span class="btn" (click)="onBalanceClick(balance)">
+                            <small class="grey">$</small>
+                            {{balance.balance | toUs:balance.symbol | async}}
+                        </span>
                     </td>
-                    <td><span [ngClass]="balance.percent_change_1h>0?'green':'red'">{{balance.percent_change_1h}}</span>
+                    <td>
+                        <span [myValueColor] = "'percent_change_1h' | cmc:balance.symbol | async"></span>
                     </td>
-                    <td><span
-                            [ngClass]="balance.percent_change_24h>0?'green':'red'">{{balance.percent_change_24h}}</span>
+                    <td>
+                        <span [myValueColor] = "'percent_change_24h' | cmc:balance.symbol | async"></span>
                     </td>
-                    <td><span [ngClass]="balance.percent_change_7d>0?'green':'red'">{{balance.percent_change_7d}}</span>
+                    <td> <span [myValueColor] = "'percent_change_7d' | cmc:balance.symbol | async"></span>
                     </td>
                     <td>
                         <small class="btn" (click)="onPriceClick(balance)">
                             <small class="grey">$</small>
-                            {{balance.priceUS}}
+                            {{1 | toUs3:balance.symbol | async}}
                         </small>
                     </td>
 

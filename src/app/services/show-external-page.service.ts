@@ -14,8 +14,10 @@ export class ShowExternalPageService {
 
   }
 
-   showMarket(exchange: string, base: string, coin: string) {
-    const url = this.apisPublic.getExchangeApi(exchange).getMarketUrl(base, coin);
+  showMarket(exchange: string, baseOrMarket: string, coin?: string) {
+    if (coin) baseOrMarket += '_' + coin;
+    const ar = baseOrMarket.split('_');
+    const url = this.apisPublic.getExchangeApi(exchange).getMarketUrl(ar[0], ar[1]);
     if (url) window.open(url, exchange);
     else console.warn(exchange);
   }
