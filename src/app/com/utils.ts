@@ -3,6 +3,45 @@ import {ApiPublicBinance} from '../apis/api-public/api-public-binance';
 
 export class UTILS {
 
+  static xmlToJson(xml):string | any {
+    // Create the return object
+    let obj: any = {};
+    if (xml.nodeType === 1) { // element
+      // do attributes
+      if (xml.attributes.length > 0) {
+        obj['@attributes'] = {};
+        for (let j = 0; j < xml.attributes.length; j++) {
+          const attribute = xml.attributes.item(j);
+          obj['@attributes'][attribute.nodeName] = attribute.nodeValue;
+        }
+      }
+    } else if (xml.nodeType === 3) { // text
+      const str = xml.nodeValue.trim();
+      if (str.length) return str;
+    } else if (xml.nodeType === 4) {
+      return xml.data;
+    }
+    // do children
+    if (xml.hasChildNodes()) {
+      for (let i = 0, n = xml.childNodes.length; i < n; i++) {
+        const item = xml.childNodes.item(i);
+        const nodeName = item.nodeName;
+
+        if (typeof(obj[nodeName]) === 'undefined') {
+          const out = this.xmlToJson(item);
+          if (Object.keys(out).length) obj[nodeName] = out;
+        } else {
+          const out2 = UTILS.xmlToJson(item);
+          if (Object.keys(out2).length === 0) continue;
+          if (typeof(obj[nodeName].push) === 'undefined') obj[nodeName] = [obj[nodeName], out2];
+          else obj[nodeName].push(out2);
+
+        }
+      }
+    }
+    return obj;
+  }
+
   static floorTo = function (number, n) {
     var k = Math.pow(10, n);
     return (Math.floor(number * k) / k);

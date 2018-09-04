@@ -20,7 +20,7 @@ export class BooksAllExchangesComponent implements OnInit {
   selected: { exchange: string, market: string, selected: boolean };
   allMarkets: { exchange: string, market: string, selected: boolean }[];
   amountUS = 1000;
-  coinPriceMC: number;
+  coinPriceMC: string;
   amountInput:number;
   exchange: string;
 
@@ -41,7 +41,7 @@ export class BooksAllExchangesComponent implements OnInit {
     this.apiPublic.getAvailableMarketsForCoin(coin).then(res => {
       //  console.warn(res);
       this.marketCap.getTicker().then(MC => {
-        this.coinPriceMC = MC[coin].price_usd;
+        this.coinPriceMC = '$' +MC[coin].price_usd;
         console.log(res);
         this.allMarkets = res.map(o => {
           return {
@@ -61,7 +61,10 @@ export class BooksAllExchangesComponent implements OnInit {
     this.apiPublic.getMarketAllExchanges(ar[0], ar[1]).then(res => {
       //  console.warn(res);
       this.marketCap.getTicker().then(MC => {
-        this.coinPriceMC = MC[ar[1]].price_usd;
+        const basePrice = MC[ar[0]].price_usd;
+        const coinPrice = MC[ar[1]].price_usd;
+
+        this.coinPriceMC = (coinPrice / basePrice).toPrecision(5) + ' $' + coinPrice.toPrecision(5);
        // console.log(res);
         this.allMarkets = res.map(o => {
           return {

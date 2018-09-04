@@ -108,9 +108,11 @@ export class ApiMarketCapService {
   }*/
 
 
-  static mapDataMC(data: any) {
+  static mapDataMC(data: any[]) {
     const out = {};
+
     data.forEach(function (item) {
+
       if (!out[item.symbol]) out[item.symbol] = {
         id: item.id,
         name: item.name,
@@ -129,7 +131,7 @@ export class ApiMarketCapService {
         last_updated: item.last_updated,
         stamp: item.stamp
       }
-    })
+    });
     return out;
   }
 

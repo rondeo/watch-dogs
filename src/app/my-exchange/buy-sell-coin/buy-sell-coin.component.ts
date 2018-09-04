@@ -60,7 +60,7 @@ export class BuySellCoinComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       console.warn(params);
       if (params.market) {
-       this.setMarket(params.market);
+        this.setMarket(params.market);
       }
     });
 
@@ -79,9 +79,9 @@ export class BuySellCoinComponent implements OnInit {
   }
 
   setMarket(market: string) {
-    if(this.market === market) return;
-    const base =  market.split('_')[0];
-    if(!this.market || this.market.split('_')[0] !== base) {
+    if (this.market === market) return;
+    const base = market.split('_')[0];
+    if (!this.market || this.market.split('_')[0] !== base) {
       this.marketCap.getTicker().then(MC => {
         this.basePriceUS = MC[base].price_usd;
       })
@@ -123,8 +123,8 @@ export class BuySellCoinComponent implements OnInit {
       queryParams: {
         market: base + '_' + coin
       },
-      queryParamsHandling: 'merge'
-      // skipLocationChange: true
+      queryParamsHandling: 'merge',
+      replaceUrl: true
     });
 
 
@@ -210,7 +210,7 @@ export class BuySellCoinComponent implements OnInit {
 
     action = action.toUpperCase();
     let rateUS = +(rate * priceBaseUS).toPrecision(4);
-    if(!isMax) amountCoin = +(amountCoin).toPrecision(5);
+    if (!isMax) amountCoin = +(amountCoin).toPrecision(5);
 
     let amountUS = (amountCoin * rate * priceBaseUS).toFixed(0);
     let feeUS = (+amountUS * 0.0025).toFixed(2);
@@ -276,9 +276,9 @@ export class BuySellCoinComponent implements OnInit {
   }
 
   refreshData(base, coin) {
-   const api =  this.apisPrivate.getExchangeApi(this.exchange);
-   api.refreshBalances();
-   api.refreshAllOpenOrders();
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
+    api.refreshBalances();
+    api.refreshAllOpenOrders();
   }
 
 }

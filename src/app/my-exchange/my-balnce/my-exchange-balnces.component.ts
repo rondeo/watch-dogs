@@ -172,7 +172,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   onEchangeChanged(evt: MatSelectChange){
     //console.log(exch);
-    this.router.navigateByUrl('/my-exchange/balances/' + evt.value);
+    this.router.navigateByUrl('/my-exchange/balances/' + evt.value, {replaceUrl:true});
   }
 
   onKeyClick(){

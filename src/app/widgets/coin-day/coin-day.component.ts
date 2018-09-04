@@ -89,7 +89,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
     let dur = moment.duration(moment(last.date).diff(moment(first.date))).asHours();
 
-    let labels = []
+    let labels = [];
 
     if (dur > 40) {
       this.duration = (dur / 24).toFixed(2) + ' days ' + moment(first.date).format('MM-DD HH:MM')+ ' - ' + moment(last.date).format('MM-DD HH:MM');
@@ -98,9 +98,6 @@ export class CoinDayComponent implements OnInit, OnChanges {
       labels = GRAPHS.createLabels12(first.date, last.date);
       this.duration = dur.toFixed(1) + ' hours ' + moment(first.date).format('DD HH:mm')+ ' - ' + moment(last.date).format('DD-HH:mm');
     }
-
-
-
 
 
     let trigger = false;
@@ -120,9 +117,12 @@ export class CoinDayComponent implements OnInit, OnChanges {
        // label = moment(item['date']).format('HH')
 
         const data: VOMarketCap = item[this.coin];
-        pricebtcs.push(data.price_btc);
-        ranks.push(data.rank);
-        volumes.push(data.volume_24h);
+        if(!!data){
+          pricebtcs.push(data.price_btc);
+          ranks.push(data.rank);
+          volumes.push(data.volume_24h);
+        }
+
       }
 
      // console.log(label)

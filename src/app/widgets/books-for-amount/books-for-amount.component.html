@@ -1,7 +1,7 @@
 <div class="mat-body-2">
-    <span title="{{booksDisplay.sell}}">{{booksDisplay.sell  | toUs3:booksDisplay.base | async}}</span>
+    <span title="{{booksDisplay.sell}}">{{booksDisplay.sell | myDisplNum}}</span>
     <small class="dred"><small>%</small>{{booksDisplay.diff}}</small>
-    <span title="{{booksDisplay.buy}}">{{booksDisplay.buy | toUs3:booksDisplay.base | async}}</span>
+    <span title="{{booksDisplay.buy}}">{{booksDisplay.buy | myDisplNum}}</span>
     &nbsp;&nbsp;&nbsp;
     <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></a>
 </div>

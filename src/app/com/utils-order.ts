@@ -410,9 +410,12 @@ export class UtilsOrder{
 
     let fishes = [];
 
+    let numberOffset = 1e-8;
+
     history.forEach(function (item) {
 
       let priceUS = this.b * item.rate;
+
       let amountUS =  item.amountCoin  * item.rate * this.b;
 
 
@@ -427,7 +430,7 @@ export class UtilsOrder{
 
       let bbl:VOBubble = {
         x:item.timestamp,
-        y:priceUS,
+        y:item.rate / this.o,
         r:item.action === 'BUY'?amountUS:-amountUS
       };
 
@@ -445,24 +448,27 @@ export class UtilsOrder{
         sumSell += amountUS;
         this.sell.push(item);
       }
-    },{b:priceBaseUS, buy:buy, sell:sell});
+    },{o: numberOffset, b:priceBaseUS, buy:buy, sell:sell});
+
+   bubbles.reverse();
 
    let tolerance = (100*(max - min)/max);
     //console.log(bubbles);
     return{
-      buy:buy,
-      sell:sell,
-      bubbles:bubbles.reverse(),
-      dustCountBuy:dustCountBuy,
-      dustCountSell:dustCountSell,
-      min:min,
-      max:max,
-      sumBuy:sumBuy,
-      sumSell:sumSell,
-      fishes:fishes,
-      tolerance:tolerance,
-      speed:speed,
-      duration:duration
+      numberOffset,
+      buy,
+      sell,
+      bubbles,
+      dustCountBuy,
+      dustCountSell,
+      min,
+      max,
+      sumBuy,
+      sumSell,
+      fishes,
+      tolerance,
+      speed,
+      duration
     }
 
   }

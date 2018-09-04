@@ -91,13 +91,22 @@
     </section>
     <hr/>
     <br/>
-
     <section>
         <mat-checkbox [(ngModel)]="isCoinDay"> Coin Day</mat-checkbox>
 
         <p *ngIf="isCoinDay">
             <app-coin-day-triggers [coin]="coin"></app-coin-day-triggers>
         </p>
+    </section>
+    <hr/>
+    <br/>
+    <section>
+            <mat-checkbox #booksCheck >Books</mat-checkbox>
+            <app-books-all-exchanges
+                    *ngIf="booksCheck.checked"
+                    [coin]="null"
+                    [market]="market"
+            ></app-books-all-exchanges>
     </section>
 
 

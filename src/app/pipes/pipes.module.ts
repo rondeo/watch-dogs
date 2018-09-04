@@ -5,6 +5,8 @@ import {ApisModule} from '../apis/apis.module';
 import { ToUs3Pipe } from './to-us3.pipe';
 import { ToDatePipe } from './to-date.pipe';
 import { CmcPipe } from './cmc.pipe';
+import { MyDisplNumPipe } from './my-displ-num.pipe';
+import { RedditPipe } from './reddit.pipe';
 
 @NgModule({
   imports: [
@@ -15,13 +17,16 @@ import { CmcPipe } from './cmc.pipe';
     ToUsPipe,
     ToUs3Pipe,
     ToDatePipe,
-    CmcPipe
+    CmcPipe,
+    MyDisplNumPipe
   ],
   declarations: [
     ToUsPipe,
     ToUs3Pipe,
     ToDatePipe,
-    CmcPipe
+    CmcPipe,
+    MyDisplNumPipe,
+    RedditPipe
   ]
 })
 export class PipesModule { }

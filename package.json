@@ -47,6 +47,7 @@
     "ng2-localforage": "^0.1.30",
     "nodemon": "^1.17.4",
     "pako": "^1.0.6",
+    "rss-to-json": "^1.0.4",
     "rxjs": "^5.5.10",
     "signalr-client": "0.0.17",
     "socket.io": "^2.1.1",

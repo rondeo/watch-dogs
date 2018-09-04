@@ -19,6 +19,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   booksDisplay: BooksDisplay = new BooksDisplay({});
 
   priceCoinUS: number;
+  rate: string;
 
   isRefreshing: boolean = false;
 
@@ -58,6 +59,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
     this.coinMC = this.allCoins[coin];
     this.priceCoinUS = this.coinMC ? this.coinMC.price_usd : -1;
+    this.rate = (this.priceCoinUS / this.priceBaseUS).toPrecision(5);
     this.downloadBooks();
   }
 

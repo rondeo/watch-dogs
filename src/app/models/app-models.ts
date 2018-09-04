@@ -6,6 +6,8 @@
 import {Observable} from 'rxjs/Observable';
 import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
 
+
+
 export interface VOBooksStats {
   exchange: string;
   coin: string;
@@ -391,6 +393,20 @@ export class VOMarketCapExt extends VOMarketCap {
   tobase_change_1h?: number;
   tobase_change_24h: number;
   tobase_change_7d: number;
+}
+
+export class VOMCDisplay extends VOMarketCap {
+  rankD: number;
+  price_btcD: number;
+  news1: number;
+  news2: number;
+}
+
+export class VONews{
+  author: string;
+  title: string;
+  text: string;
+  url: string;
 }
 
 /*

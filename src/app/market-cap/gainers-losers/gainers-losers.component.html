@@ -40,6 +40,7 @@
 
 
     <section>
+        <mat-checkbox [(ngModel)]="isToBTC" (ngModelChange)="onToBtcChange($event)" >To BTC</mat-checkbox>
         <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
 
         <table class="mat-body">
@@ -83,6 +84,7 @@
                 <td>
                     <a class="btn small"
                        routerLink="/trader/analyze-coin/{{item.symbol}}/{{exchange}}"
+                       title="{{item.name}}"
                     >
                         {{item.symbol}}
                     </a>
@@ -108,16 +110,21 @@
                     <span [myValueColor]="item.price_btcD">
                         {{item.price_btcD}}
                     </span>
-
                 </td>
 
-                <td class="w50" [myValueColor]="item.percent_change_1h">
+                <td>
+                    <span class="w50" [myValueColor]="item.percent_change_1h"></span>
                 </td>
-                <td class="w50" [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">
-                    {{item.percent_change_24h}}
+                <td>
+                    <span class="w50" [myValueColor]="item.percent_change_24h"></span>
                 </td>
                 <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">
                     {{item.percent_change_7d}}
+                </td>
+                <td>
+                    <small class="btn" (click)="onNewsClick(item.name, 0)">{{item.news1}}</small>
+                    <small class="btn" (click)="onNewsClick(item.name, 1)">{{item.news2}}</small>
+
                 </td>
             </tr>
             </tbody>

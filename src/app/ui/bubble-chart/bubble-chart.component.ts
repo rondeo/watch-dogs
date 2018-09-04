@@ -96,13 +96,7 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
       let value = minY + pozY;
       pozY = height - (pozY/scaleY);
       pozY += offsetY;
-      let display
-      if(value >=10000){
-        display = (value/1e3).toFixed(2).replace('.', ',');
-      }else{
-        display = (value).toPrecision(4);
-      }
-
+      const display = (value *= 1e8).toString().substr(0, 4);
       ctx.font = "9px Arial";
       ctx.fillText(display,4,pozY);
       ctx.beginPath();

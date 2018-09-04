@@ -51,7 +51,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
 
   analytics: VOMarketSnapshot;
   priceBaseUS: number;
-  coinPriceUS: number;
+  coinPrice: string;
 
   private baseMC: VOMarketCap;
   private coinMC: VOMarketCap;
@@ -96,7 +96,9 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     this.baseMC = this.allCoins[base];
     this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
     this.coinMC = this.allCoins[coin];
-    this.coinPriceUS = this.coinMC ? this.coinMC.price_usd : -1;
+    const basePrice = this.baseMC.price_usd;
+    const coinPrice = this.coinMC.price_usd;
+    this.coinPrice =  (coinPrice / basePrice).toPrecision(5) + ' $' + coinPrice.toPrecision(5);
     this.downloadHistory();
   }
 

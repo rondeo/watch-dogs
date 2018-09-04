@@ -11,7 +11,7 @@ export class WatchDogShared extends VOWatchdog {
 
   sub1
   sub2
-  status: WatchDogStatus
+  status: WatchDogStatus;
   wdId: string
   history: any[];
 
