@@ -9,7 +9,6 @@ import { MyDisplNumPipe } from './my-displ-num.pipe';
 import { CmcMarketPipe } from './cmc-market.pipe';
 import { ToTimePipe } from './to-time.pipe';
 
-
 @NgModule({
   imports: [
     CommonModule,

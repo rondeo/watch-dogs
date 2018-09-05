@@ -82,6 +82,7 @@
 
             <tr *ngFor="let item of sortedAndFiltered">
                 <td>
+                    <img class="w1 icon" src="assets/icons/{{item.id}}.png" title="{{item.id}}"/>
                     <a class="btn small"
                        routerLink="/trader/analyze-coin/{{item.symbol}}/{{exchange}}"
                        title="{{item.name}}"
