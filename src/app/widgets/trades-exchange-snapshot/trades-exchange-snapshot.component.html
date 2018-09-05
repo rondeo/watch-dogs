@@ -40,8 +40,9 @@
                 <tbody>
                 <tr *ngFor="let fish of fishes">
                     <td>{{fish.action}}</td>
-                    <td>{{fish.amountUS}}</td>
-                    <td>{{fish.priceUS}}</td>
+                    <td>${{fish.amountUS}}</td>
+                    <td>{{fish.rate}}</td>
+                    <td>{{fish.timestamp | toTime}}</td>
                 </tr>
                 </tbody>
             </table>

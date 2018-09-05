@@ -1,6 +1,7 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOBooks} from '../../models/app-models';
 
 
 @Component({
@@ -98,6 +99,15 @@ export class BooksAllExchangesComponent implements OnInit {
     const copy = JSON.parse(JSON.stringify(item));
     delete copy.selected;
     this.marketExchange.emit(copy);
+  }
+
+  onExternalLinkClick(books:VOBooks) {
+   // console.log(books);
+    const url = this.apiPublic.getExchangeApi(books.exchange).getMarketURL(books.market);
+    window.open(url, books.exchange);
+
+
+
   }
 
 }

@@ -24,6 +24,7 @@ import {DirectivesModule} from '../directives/directives.module';
 import { BalanceMarketComponent } from './balance-market/balance-market.component';
 import {PipesModule} from '../pipes/pipes.module';
 
+
 @NgModule({
   imports: [
     CommonModule,

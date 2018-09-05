@@ -32,11 +32,11 @@
 
         <mat-card-title>
             <div>
-                &nbsp; &nbsp; &nbsp; &nbsp;
-                <mat-form-field class="w4">
-                    <input matInput placeholder="Price" [(ngModel)]="userPriceUS"
+                &nbsp; &nbsp;
+                <mat-form-field class="w6">
+                    <input matInput placeholder="Rate" [(ngModel)]="userRate"
                            (ngModelChange)="onUserPriceChanged($event)">
-                    <mat-hint>{{userRate}}</mat-hint>
+                    <mat-hint>${{userPriceUS}}</mat-hint>
                 </mat-form-field>
             </div>
         </mat-card-title>

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from '@angular/core';
 import {BooksDisplay} from '../market-books/market-books.component';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
@@ -16,14 +16,12 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   @Input() market: string;
   @Input() amountUS: number;
 
+  @Output() rate: EventEmitter<number> = new EventEmitter();
   booksDisplay: BooksDisplay = new BooksDisplay({});
-
-  priceCoinUS: number;
-  rate: string;
 
   isRefreshing: boolean = false;
 
-  private priceBaseUS: number;
+
   private baseMC: VOMarketCap;
   private coinMC: VOMarketCap;
   private allCoins: { [symbol: string]: VOMarketCap };
@@ -55,18 +53,14 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     let base = ar[0];
     let coin = ar[1];
     this.allCoins = await this.apiMarketCap.getTicker();
-    this.baseMC = this.allCoins[base];
-    this.priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
     this.coinMC = this.allCoins[coin];
-    this.priceCoinUS = this.coinMC ? this.coinMC.price_usd : -1;
-    this.rate = (this.priceCoinUS / this.priceBaseUS).toPrecision(5);
+    this.baseMC = this.allCoins[base];
     this.downloadBooks();
   }
 
 
   private calculate() {
     let ar = this.market.split('_');
-
     const obj = {base: ar[0], coin: ar[1]};
     const coinPrice = this.coinMC.price_usd;
     const basePrice = this.baseMC.price_usd;
@@ -91,23 +85,28 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
 
   private books;
 
-  async downloadBooks() {
-    if (!this.baseMC || !this.coinMC) return;
-    this.isRefreshing = true;
+  downloadBooks() {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
-    this.books = await api.downloadBooks(this.baseMC.symbol, this.coinMC.symbol).toPromise();
-    this.isRefreshing = false;
-    //console.log(this.books);
-    //  console.log(books);
-    this.calculate();
 
-    //  console.log(ratesBuy, ratesSell);
+    this.isRefreshing = true;
+    api.books$(this.market).subscribe(books =>{
+
+      if(!books) return;
+      this.books = books;
+      this.isRefreshing = false;
+      this.calculate();
+    })
 
   }
 
   onRefreshClick() {
-    this.downloadBooks();
+    const api = this.apisPublic.getExchangeApi(this.exchange);
+    api.refreshBooks(this.market);
+    this.isRefreshing = api.booksProgress;
   }
 
+  onBookClick(rate: number) {
+    this.rate.emit(rate);
+  }
 }

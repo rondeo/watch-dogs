@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/fromPromise';
 import {UTILS} from '../../com/utils';
 import {VOCandle} from '../../models/api-models';
+import {BehaviorSubject} from '../../../../node_modules/rxjs';
 
 export interface MarketDay {
   Ask: number[];
@@ -71,12 +72,35 @@ export abstract class ApiPublicAbstract {
     return Promise.resolve([]);
   }
 
+  refreshBooks(market:string){
+    if(this.booksProgress) return;
+    this.booksProgress = true;
+    const ar = market.split('_');
+    this.downloadBooks(ar[0], ar[1]).subscribe(res => {
+      this.booksSub.next(res);
+      this.booksProgress = false;
+    }, err =>{
+      this.booksProgress = false;
+    });
+  }
+  booksProgress = false;
+  booksSub = new BehaviorSubject<VOBooks>(null);
+  books$(market: string){
+    if(!this.booksSub.getValue()) this.refreshBooks(market);
+    return  this.booksSub.asObservable();
+  }
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 
   abstract downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]>;
 
   abstract downloadTicker(): Observable<{ [market: string]: VOMarket }>;
 
+
   abstract getMarketUrl(base: string, coin: string): string;
+
+  getMarketURL(market:string): string{
+    const ar = market.split('_');
+    return this.getMarketUrl(ar[0], ar[1]);
+  }
 }
 

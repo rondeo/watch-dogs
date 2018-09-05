@@ -169,6 +169,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     return this.call(uri, {}, RequestType.GET).map(res => {
       this.isLoadingBalances = false;
 
+      console.log(res);
       return res.balances.map(function (item) {
         return new VOBalance({
           exchange: exchange,
@@ -184,11 +185,15 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
     let market = base + '-' + coin;
-    const val = {amountCoin: quantity, rate: rate};
+    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+    if(isNaN(quantity) && isNaN(rate)) {
+      console.warn(' not a number ' + quantity + '  ' + rate);
+    }
+    const val = {amountCoin: +quantity, rate: +rate};
 
     UTILS.formatDecimals(this.exchange, base, coin, val);
 
-    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+
     let url = '/api/proxy/api.binance.com/api/v3/order';
     let data = {
       symbol: coin + base,

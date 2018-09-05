@@ -12,8 +12,7 @@ import {MatCheckboxChange} from '@angular/material';
 import {VOMarketCapSelected} from '../../models/api-models';
 import * as  moment from 'moment';
 import {MATH} from '../../com/math';
-import {RedditService} from '../../apis/news/reddit.service';
-import {NewsService} from '../../apis/news.service';
+import {NewsService} from '../../apis/news/news.service';
 
 
 @Component({
@@ -189,13 +188,23 @@ export class GainersLosersComponent implements OnInit {
       }
     }
 
-    await this.news.addNews(out);
+    this.news.addNews(out).subscribe(res =>{
+      console.log(' NEWS done');
+      this.showData(out);
+    });
+
+    this.showData(out);
+
+    // console.log(out);
+  }
+
+  showData(out){
     this.allCoinsOrig = out;
     if (this.isToBTC) this.allCoins = this.convertToBTC(out);
     else this.allCoins = JSON.parse(JSON.stringify(out));
+
     if (this.exchange) this.loadExchange();
     else this.sortData();
-    // console.log(out);
   }
 
 
@@ -339,9 +348,7 @@ export class GainersLosersComponent implements OnInit {
           return coins.indexOf(item.symbol) !== -1;
         })
       }
-
       this.setOut(sorted);
-
     })
   }
 
@@ -357,7 +364,9 @@ export class GainersLosersComponent implements OnInit {
   }
 
   onNewsClick(symbol: string, num: number) {
-    this.news.showNews(symbol, num);
+     this.news.getNews(symbol).then(res =>{
+       console.log(res);
+     })
 
   }
 

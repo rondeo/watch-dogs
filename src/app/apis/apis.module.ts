@@ -6,9 +6,9 @@ import {ApisBooksService} from "./apis-books.service";
 import {ApisPrivateService} from "./apis-private.service";
 import {MongoService} from "./mongo.service";
 import {ApiCryptoCompareService} from "./api-crypto-compare.service";
-import {RedditService} from './news/reddit.service';
-import {NewsService} from './news.service';
-import {CoindeskService} from './news/coindesk.service';
+
+import {NewsService} from './news/news.service';
+
 
 
 @NgModule({
@@ -17,13 +17,10 @@ import {CoindeskService} from './news/coindesk.service';
   providers: [
     ApisPublicService,
     ApiMarketCapService,
-    ApisBooksService,
     ApisPrivateService,
     MongoService,
     ApiCryptoCompareService,
-    RedditService,
-    NewsService,
-    CoindeskService
+    NewsService
   ]
 })
 

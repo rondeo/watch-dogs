@@ -1,7 +1,18 @@
-<div class="mat-body-2">
-    <span title="{{booksDisplay.sell}}">{{booksDisplay.sell | myDisplNum}}</span>
+<div class="mat-body-2 inline-block">
+    <span
+            title="{{booksDisplay.sell}}"
+            class="btn"
+            (click)="onBookClick(booksDisplay.sell)"
+    >
+        {{booksDisplay.sell | myDisplNum}}
+    </span>
     <small class="dred"><small>%</small>{{booksDisplay.diff}}</small>
-    <span title="{{booksDisplay.buy}}">{{booksDisplay.buy | myDisplNum}}</span>
-    &nbsp;&nbsp;&nbsp;
+    <span
+            title="{{booksDisplay.buy}}"
+            class="btn"
+            (click)="onBookClick(booksDisplay.buy)"
+    >
+        {{booksDisplay.buy | myDisplNum}}
+    </span>    &nbsp;&nbsp;&nbsp;
     <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right" (click)="onRefreshClick()"></a>
 </div>

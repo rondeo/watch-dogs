@@ -400,6 +400,7 @@ export class VOMCDisplay extends VOMarketCap {
   price_btcD: number;
   news1: number;
   news2: number;
+  news3: number;
 }
 
 export class VONews{

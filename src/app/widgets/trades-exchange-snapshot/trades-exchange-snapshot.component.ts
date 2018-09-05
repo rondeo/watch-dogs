@@ -150,7 +150,6 @@ export class TradesExchangeSnapshotComponent implements OnInit {
   }
 
   showFishes3(){
-
     const fishes =  this.marketHistory.sort(function (a, b) {
       return b.amountCoin - a.amountCoin;
     }).slice(0,3);
@@ -158,6 +157,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     this.fishes = fishes.sort(function (a, b) {
       return b.timestamp - a.timestamp;
     });
+
     this.amountFishUS = Math.round(last.amountCoin * last.rate * this.priceBaseUS);
   }
   onFishClick(){

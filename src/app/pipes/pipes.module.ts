@@ -6,7 +6,9 @@ import { ToUs3Pipe } from './to-us3.pipe';
 import { ToDatePipe } from './to-date.pipe';
 import { CmcPipe } from './cmc.pipe';
 import { MyDisplNumPipe } from './my-displ-num.pipe';
-import { RedditPipe } from './reddit.pipe';
+import { CmcMarketPipe } from './cmc-market.pipe';
+import { ToTimePipe } from './to-time.pipe';
+
 
 @NgModule({
   imports: [
@@ -17,8 +19,10 @@ import { RedditPipe } from './reddit.pipe';
     ToUsPipe,
     ToUs3Pipe,
     ToDatePipe,
+    ToTimePipe,
     CmcPipe,
-    MyDisplNumPipe
+    MyDisplNumPipe,
+    CmcMarketPipe
   ],
   declarations: [
     ToUsPipe,
@@ -26,7 +30,8 @@ import { RedditPipe } from './reddit.pipe';
     ToDatePipe,
     CmcPipe,
     MyDisplNumPipe,
-    RedditPipe
+    CmcMarketPipe,
+    ToTimePipe
   ]
 })
 export class PipesModule { }

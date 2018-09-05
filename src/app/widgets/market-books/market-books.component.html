@@ -1,25 +1,50 @@
 <div>
     <span class="mat-title">Books {{exchange}} {{market}}</span>
     &nbsp;&nbsp;&nbsp;
-    <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshClick()"></a>
+   <!-- <a [ngClass]="isRefreshing ?'scale05':''" class="btn fa fa-refresh fa-2x dgreen" (click)="onRefreshClick()"></a>-->
 
-    <p class="mat-body-2">by MC ${{priceCoinUS}}</p>
-
+    <p class="mat-body-2">by MC {{market | cmcMarket | async}}</p>
     <table>
         <tr>
-            <td>Inst</td>
-            <td><span class="btn" (click)="onToSellClick()">to Sell</span></td>
-            <td>% 4</td>
-            <td><span class="btn" (click)="onToBuyClick()">to Buy</span></td>
-        </tr>
-        <tr *ngFor="let books of bookDisplays">
             <td>
-                <small>$</small>
-                {{books.us}}
+                $500
             </td>
-            <td><span class="btn" (click)="onBookClick(books.sell)" title="{{books.sell}}">{{books.sellUS}}</span></td>
-            <td>{{books.diff}}</td>
-            <td><span class="btn" (click)="onBookClick(books.buy)" title="{{books.buy}}">{{books.buyUS}}</span></td>
+            <td>
+                <app-books-for-amount
+                        [exchange]="exchange"
+                        [market]="market"
+                        [amountUS]="500"
+                        (rate)="onBookClick($event)"
+                ></app-books-for-amount>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                $1000
+            </td>
+            <td>
+                <app-books-for-amount
+                        [exchange]="exchange"
+                        [market]="market"
+                        [amountUS]="1000"
+                        (rate)="onBookClick($event)"
+                ></app-books-for-amount>
+            </td>
+
+        </tr>
+        <tr>
+           <td>
+               $10000
+           </td>
+            <td>
+                <app-books-for-amount
+                        [exchange]="exchange"
+                        [market]="market"
+                        [amountUS]="10000"
+                        (rate)="onBookClick($event)"
+                ></app-books-for-amount>
+            </td>
         </tr>
     </table>
 </div>

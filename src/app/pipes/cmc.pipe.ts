@@ -10,7 +10,7 @@ export class CmcPipe implements PipeTransform {
   constructor(
     private marketCap: ApiMarketCapService
   ){
-    console.log('constarctor')
+   //  console.log('constarctor')
   }
 
   async transform(prop: string, symbol:string): Promise<number> {

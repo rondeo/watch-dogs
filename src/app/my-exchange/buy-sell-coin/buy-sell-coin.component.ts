@@ -140,7 +140,8 @@ export class BuySellCoinComponent implements OnInit {
   async onUserPriceChanged(price) {
     console.log(price);
     const basePrice = await this.basePriceUS;
-    this.userRate = MATH.toValue(price / basePrice);
+    this.userPriceUS = +(this.userRate * basePrice).toFixed(3);
+    // this.userRate = MATH.toValue(price / basePrice);
   }
 
   async onBuyClick() {
@@ -151,13 +152,12 @@ export class BuySellCoinComponent implements OnInit {
     const coin = ar[1];
 
     const basePriceUS = this.basePriceUS;
-    const rate = +(this.userPriceUS / basePriceUS).toPrecision(5);
+    const rate = this.userRate;
     let amountBase = this.amountUS / basePriceUS;
-
     const api = this.apisPrivate.getExchangeApi(this.exchange);
 
     const balanceBase = await api.getBalance(base);
-    console.log(balanceBase);
+   //  console.log(balanceBase);
     const left = balanceBase.balance - amountBase;
     let isMax = false;
     if (left * basePriceUS < 10) {
@@ -185,12 +185,12 @@ export class BuySellCoinComponent implements OnInit {
     const base = ar[0];
     const coin = ar[1];
     const basePriceUS = this.basePriceUS;
-    const rate = +(this.userPriceUS / basePriceUS).toPrecision(5);
+    const rate = this.userRate;
 
     let amountCoin = +(this.amountUS / basePriceUS / rate).toFixed(8);
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const balanceCoin = await api.getBalance(coin);
-    console.log(balanceCoin);
+   //  console.log(balanceCoin);
     const left = (balanceCoin.balance - amountCoin) * rate;
     let isMax = false;
     if (left * basePriceUS < 10) {

@@ -16,7 +16,9 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
 
   curExchange: string;
   balanceBase: number;
+  pendingBase: number;
   balanceCoin: number;
+  pendingCoin: number;
   coin: string;
   base: string;
 
@@ -48,13 +50,18 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
     this.sub1 = api.balance$(ar[0]).subscribe(bal => {
+      console.log(bal);
       this.base = bal.symbol;
-      this.balanceBase = bal.balance;
+      this.balanceBase = bal.available;
+      this.pendingBase = bal.pending;
       this.isLoadinBalances = false;
     });
     this.sub2 = api.balance$(ar[1]).subscribe(bal => {
+      console.log(bal);
       this.coin = bal.symbol;
-      this.balanceCoin = bal.balance;
+      this.balanceCoin = bal.available;
+      this.pendingCoin = bal.pending;
+
       this.isLoadinBalances = false;
     });
 
