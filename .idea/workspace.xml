@@ -1,11 +1,1516 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="rate buy sell">
-      <change beforePath="$PROJECT_DIR$/src/app/directives/directives.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/directives/directives.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/pipes.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pipes/pipes.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.html" afterDir="false" />
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="icons">
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/0chain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/achain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/acute-angle-cloud.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/adtoken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/aelf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/aion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/airbloc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/airswap.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/all-sports.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/alqo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/amber.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/apex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/apis.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/appcoins.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/arbitrage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/arcblock.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/aston.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/atn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/aurora-dao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/aurora.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/b2bcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/babb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/banca.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bankex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bean-cash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bezant.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bhpcash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bibox-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bismuth.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitbay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-atom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-cash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-interest.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-private.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitcore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitnewchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bitrent.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blackmoon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blockmason.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blocknet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blockport.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blockv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/blox.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bluzelle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bnktothefuture.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/boscoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bottos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bread.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bulwark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/burst.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/byteball.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/bytecoin-bcn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/c20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cappasity.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cardano.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cashaa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/casinocoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/centrality.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/chainlink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cindicator.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cobinhood.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/colossusxt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/constellation.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/content-neutrality-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/contentbox.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cortex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cosmo-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/coss.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/covesting.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cpchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/credits.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/credo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/crowd-machine.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cryptaur.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/crypterium.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cube.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cybermiles.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/cybervein.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dadi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/daex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dai.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/data.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/databits.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/datum.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/datx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/decent-bet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/decent.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/decentraland.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/decred.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/deepbrain-chain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/deeponion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/delphy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/deviantcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dew.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/diamond.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/digitalnote.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/digitex-futures.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/digixdao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dignity.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dimcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dimecoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/distributed-credit-chain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dmarket.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/docademic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dock.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dragonchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dropil.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/dynamic-trading-rights.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/e-dinar-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ebcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/eccoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/educare.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/egretia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/eidoo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/elastos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/electra.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/electrifyasia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/electroneum.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/endor-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/enigma-project.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/enjin-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/envion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/eos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/eosdac.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ethereum-classic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/etherparty.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ethlend.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ethos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/everex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/everus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/eximchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/experience-points.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/external-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/firstblood.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/flash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/flo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/fnkos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/fortuna.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/funfair.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/fusion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/fuzex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/game.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/gamecredits.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/genaro-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/genesis-vision.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/gifto.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/gincoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/gochain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/gonetwork.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/google.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/grid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/groestlcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/havven.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/hempcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/hi-mutual-society.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/high-performance-blockchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/hive-project.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/holo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/html-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/huobi-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/hydro-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/hydrogen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ignis.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/iht-real-estate-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/incent.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ins-ecosystem.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/internet-node-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/iot-chain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/iotex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ivy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/jibrel-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/kickico.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/kucoin-shares.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/kyber-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/lamden.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/latoken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/legolas-exchange.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/libra-credit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/lightpaycoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/linkey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/linkeye.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/lisk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/litecoin-cash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/local-coin-swap.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/loom-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/loopring.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/loyalcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/luxcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/lympo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mainframe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/matrix-ai-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mco.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/medibloc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/medishares.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/medx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/melon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mercury.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/metal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/metaverse.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/metronome.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/minexcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mithril.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mixin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mktcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/moac.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mobius.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/modum.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/moeda-loyalty-points.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mooncoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/mossland.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/naga.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nanjcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nano.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nebulas-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nectar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nem.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/neumark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/new-power-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nexo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nexty.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nexus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nix.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nkn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/noah-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nolimitcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nucleus-vision.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/nuls.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/odem.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/odyssey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/olympus-labs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/omisego.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/oneroot-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ontology.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/origintrail.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ost.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/oyster.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/paccoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/pascal-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/paypex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/paypie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/pchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/phore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/pillar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/poa-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/polymath-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/polyswarm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/populous.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/power-ledger.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/presearch.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/prochain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/propy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/pumapay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/pundi-x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/qash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/qlink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/quantstamp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/quarkchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/qubitica.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/qunqun.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/raiden-network-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ravencoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/rchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/red-pulse.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/refereum.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/repo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/republic-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/request-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/restart-energy-mwat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/revain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/revolutionvr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ripio-credit-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ripple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/rlc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/rock.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/rubycoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ruff.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/russian-mining-coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/sakura-bloom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/salt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/scorum-coins.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/scroll.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/scryinfo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/seele.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/selfkey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/sentinel-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/shield-xsh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/siacoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/singularitynet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/sirin-labs-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/skycoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/smartcash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/smartlands.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/smartmesh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/sophiatx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/spacechain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/spankchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/spectre-dividend.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/spectrecoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/spindle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/srcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/stakenet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/stasis-eurs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/status.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/stellar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/storiqa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/storm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/streamr-datacoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/sureremit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/swarm-fund.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/swftcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tatatu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/te-food.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/telcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ternio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tezos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/thekey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/theta-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/time-new-bank.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tokenclub.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tokenomy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tokenpay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tomochain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/trade-token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/traxia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/tron.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/truechain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/trueusd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ttc-protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/u-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ucash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/ugchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/unikoin-gold.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/universa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/uptoken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/utrust.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/uttoken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/vechain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/vertcoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/viacoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/vibe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/viberate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/vite.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wabi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wabnetwork.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/waltonchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wanchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/waves.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wax.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/waykichain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wepower.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/whitecoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/wings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/xinfin-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/xtrabytes.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/xyo-network.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/yee.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/zebi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/zeepin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/zencash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/zilliqa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/icons/zper.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/0x.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/0x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/achain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/adtoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/adx-net.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/adx-net.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/aeon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/aeon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/aeternity.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/aeternity.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/aragon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/aragon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ardor.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/ardor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/ark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/asch.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/asch.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/augur.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/augur.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/aurumcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/aurumcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bancor.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bancor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/basic-attention-token.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/basic-attention-token.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/binance-coin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/binance-coin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitbay.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcny.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitcny.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcoin-cash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcoin-diamond.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-diamond.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcoin-gold.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin-gold.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcoindark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitcoindark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitcore.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitshares.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitshares.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bitusd.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bitusd.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/blackcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/blackcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/blocknet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/boolberry.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/boolberry.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bridgecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bridgecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/burst.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/byteball.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bytecoin-bcn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/bytom.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/bytom.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/cardano.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/casinocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/chainlink.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/civic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/civic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/clams.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/clams.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/cloakcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/cloakcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/cofound-it.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/cofound-it.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/counterparty.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/counterparty.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/cryptonex.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/cryptonex.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/databits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/decent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/decred.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/deeponion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dent.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/dent.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dentacoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/dentacoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/diamond.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/digibyte.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/digibyte.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/digitalnote.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/digixdao.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dimecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/district0x.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/district0x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dogecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/dogecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/dynamic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/dynamic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/e-dinar-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/eccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/edgeless.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/edgeless.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/einsteinium.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/einsteinium.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/elastic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/elastic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/electra.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/emercoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/emercoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/enigma-project.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/eos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ethereum-classic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ethereum.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/ethereum.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/expanse.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/expanse.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/factom.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/factom.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/feathercoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/feathercoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/firstblood.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/flash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/funfair.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gamecredits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gas.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/gas.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/global-currency-reserve.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/global-currency-reserve.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gnosis-gno.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/gnosis-gno.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/golem-network-tokens.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/golem-network-tokens.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gridcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/gridcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/groestlcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gulden.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/gulden.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/guppy.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/guppy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/gxchain.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/gxchain.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/hempcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/hshare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/hshare.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/humaniq.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/humaniq.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/iconomi.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/iconomi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/incent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ion.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/ion.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/iostoken.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/iostoken.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/iota.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/iota.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/kin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/kin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/komodo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/komodo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/leocoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/leocoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/library-credit.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/library-credit.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/linda.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/linda.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/lisk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/litecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/litecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/loopring.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/lunyr.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/lunyr.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/maidsafecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/maidsafecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/maker.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/maker.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/melon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/metal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/metaverse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/mintcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/mintcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/mobilego.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/mobilego.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/monacoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/monacoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/monero.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/monero.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/monetha.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/monetha.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/mooncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/mothership.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/mothership.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/myriad.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/myriad.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/namecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/namecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nav-coin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/nav-coin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/neblio.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/neblio.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nebulas-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nem.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/neo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/neo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nexus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nolimitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/novacoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/novacoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/numeraire.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/numeraire.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/nxt.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/nxt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/omisego.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/omni.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/omni.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/oraclechain.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/oraclechain.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/paccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/particl.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/particl.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/pascal-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/peercoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/peercoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/peerplays-ppy.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/peerplays-ppy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/pepe-cash.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/pepe-cash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/pillar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/pivx.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/pivx.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/poet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/poet.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/polybius.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/polybius.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/populous.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/potcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/potcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/primas.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/primas.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/primecoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/primecoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/prizm.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/prizm.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/pura.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/pura.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/qtum.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/qtum.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/quantum-resistant-ledger.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/quantum-resistant-ledger.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/quantum.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/quantum.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/radium.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/radium.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/reddcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/reddcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/rialto.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/rialto.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ripple.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/rise.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/rise.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/rlc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/rubycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/safe-exchange-coin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/safe-exchange-coin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/salus.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/salus.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/santiment.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/santiment.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/shift.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/shift.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/siacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/singulardtv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/singulardtv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/skycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/smartcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/soarcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/soarcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/solarcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/solarcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/sonm.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/sonm.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/spectrecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/status.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/steem-dollars.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/steem-dollars.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/steem.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/steem.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/stellar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/storj.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/storj.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/stratis.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/stratis.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/substratum.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/substratum.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/suncontract.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/suncontract.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/synereo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/synereo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/syscoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/syscoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/taas.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/taas.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tao.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tenx.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/tenx.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tether.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/tether.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tezos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tierion.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/tierion.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/tokencard.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/tokencard.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/triggers.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/triggers.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/ubiq.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/ubiq.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/unikoin-gold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/unobtanium.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/unobtanium.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/vechain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/verge.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/verge.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/vericoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/vericoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/veritaseum.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/veritaseum.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/vertcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/viacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/viberate.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/wagerr.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/wagerr.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/waves.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/whitecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/wings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/xtrabytes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/yoyow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/yoyow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/zcash.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/zcash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/zclassic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/zclassic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/zcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/zcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/zencash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/assets/icons/zrcoin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/icons/zrcoin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/1337.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/1credit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/23-skidoo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/2give.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/300-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/42-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/808coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/8bit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/9coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/abncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aces.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/acoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/adcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/adelphoi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/adshares.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/advanced-internet-blocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/adzcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/agoras-tokens.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/agrello-delta.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/agrolifecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aidos-kuneen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/airtoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/alexium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/alis.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/allion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/allsafe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/alpacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/alphabitcoinfund.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/altcoin-alt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ambercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/amis.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ammo-rewards.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/amsterdamcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/anarchistsprime.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/animecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/anoncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/antibitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/antilitecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/antimatter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/applebyte.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/applecoin-apw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/apx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aquariuscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/arbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/arcade-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/arcticcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/argentum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/argus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aricoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/artex-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aseancoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/asiacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/asiadigicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/asiccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/asset-backed-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/atbcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/atc-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/atmcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/atmos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/atomic-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/attention-token-of-media.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/audiocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aureus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/auroracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/authorship.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/avatarcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/aventus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/avoncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/axfunds.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/axiom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/b3coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bagcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bankcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bata.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/batcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bbqcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bcap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/beatcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/beavercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/belacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/benjirolls.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/berncash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bestchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/betacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/biblepay.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bigup.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/billarycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/biobar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bios-crypto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bipcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/birds.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bit20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitalphacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitasean.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitbar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitbean.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitbtc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcedi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcentavo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcloud.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoin-21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoin-planet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoin-plus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoin-scrypt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoin-unlimited.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcoinfast.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcointx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitconnect.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcrystals.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitcurrency.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitdeal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/biteur.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitfid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitgem.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitgold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitmark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitok.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitpark-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitquark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitquence.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitqy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitradio.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitsend.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitsilver.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitstar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitswift.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bittokens.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitvolt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bitzeny.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blackmoon-crypto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blackstar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blakecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blakestar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blazecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blazercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blitzcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blockcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blockchain-index.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blockpay.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/blocktix.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bluecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bnrtxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bolenum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bolivarcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bongger.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/boostcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bottlecaps.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bowscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/braincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/brat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/breakout-stake.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/breakout.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/briacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/britcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/btcdragon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/btcgold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/btctalkcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/btsr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bumbacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bunnycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/burstocean.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/bytecent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/c-bit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cabbage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cachecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cagecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/californium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/caliphcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/campuscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/canada-ecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cannabiscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cannacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cannation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/capricoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/carboncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cashcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cashme.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/casino.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/catcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cbd-crystals.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ccminer.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/centra.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/centurion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chaincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chancoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cheapcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chesscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chronobank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/chronos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/circuits-of-value.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/clinton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/clubcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coeval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coexistcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coimatic-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coin2-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coindash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coinonat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coinonatx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/colossuscoin-v2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/comet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/compcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/compucoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/concoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/condensate.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/corgicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/coupecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/crave.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cream.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/creatio.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/creativecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/creditbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/crevacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/crown.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/crtcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/crypto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptocarbon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptoescudo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptoforecast.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptogenic-bullion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptojacks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptonite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptoping.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cryptoworldx-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cthulhu-offerings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cubits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/curecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cvcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cybercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cycling-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/cypher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dalecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dao-casino.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dappster.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/darcrus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/darklisk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/darsek.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/das.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dashcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dashs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/daxxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/debitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/deltacredits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/denarius-dnr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/destiny.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/deuscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/deutsche-emark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/devcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dhg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dibcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digicube.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digital-bullion-gold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digital-credits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digital-developers-fund.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digital-money-bits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digital-rupees.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digitalcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digitalfund.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/digitalprice.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dinastycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dix-asset.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dnotes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dochain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dollar-online.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dollarcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/donationcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dopecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dotcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/doubloon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dpay.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/draftcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dreamcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dt-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dubaicoin-dbix.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dubstep.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/dynamiccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/e-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/e-gulden.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/earthcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eb3-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ebittree-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eboostcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ecobit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ecocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/edrcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eggcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ego.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/elacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/elcoin-el.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/electionchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/elementrem.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/elysium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/embercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/embers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/emerald.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/emoneypower.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/encryptotel.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/energycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/enigma.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/environ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eot-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/equitrader.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ergo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eryllium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/espers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eternity.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ethbits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ether-for-the-rest-of-the-world.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ethereum-dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ethereum-movie-venture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/etheriya.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/etheroll.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/etherx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/eurocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/europecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/evergreencoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/evil-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/evotion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/excelcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/exclusivecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/faircoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/falcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fantomcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fargocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fastcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fazzcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fedoracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fedorashare.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fibocoins.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fimkrypto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/firecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fireflycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/first-bitcoin-capital.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/first-bitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/firstcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/flavorcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/flaxscript.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/flik.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/florincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fluttercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/flycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/foldingcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fonziecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/francs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/franko.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/frankywillcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/frazcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/freicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fucktoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fuda-energy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fuelcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fujicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fujinto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/funcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fundyourselfnow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/futcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/future-digital-currency.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/futurexe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/fuzzballs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gaia.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gambit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gambleo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gamebet-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gameleaguecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gameunits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ganjacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gapcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gaycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gbcgoldcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/geertcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/genstake.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/geocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/geysercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/giga-watt-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/global-business-revolution.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/global-tour-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/globalboost-y.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/globalcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/globaltoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gokucoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gold-pressed-latinum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldblocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldmaxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldpay-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldpieces.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldreserve.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goldunioncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/golfcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/golos-gold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/golos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/goodomy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gpu-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/grantcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/greencoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/growers-international.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/guccionecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gulfcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/guncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gxshares.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/gycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hacker-gold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/halcyon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/halloween-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/happy-creator-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/happycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/harmonycoin-hmc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hbcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/health-care-chain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/healthywormcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/heat-ledger.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/helleniccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hempcoin-hmp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hexx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/high-voltage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hirocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hive.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hobonickels.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hodlcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/honey.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/htmlcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hubii-network.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/huncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/huntercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hush.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hyper.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/hyperstake.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/i0coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ibank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ico-openledger.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ico.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/icobid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/icoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/iconic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/idice.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/impact.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/impulsecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/incakoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/independent-money-system.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/infchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/infinitecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/inflationcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/influxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/inpay.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/insanecoin-insn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/international-diamond.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/internet-of-people.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/internet-of-things.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/internxt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/investfeed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/invisiblecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/iocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/iou1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/irishcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/islacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/iticoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ixcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ixledger.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/janus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jetcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jewels.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jin-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jinn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jio-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/jobscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/joincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/joulecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/karbowanec.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/karmacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kashhcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kayi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kekcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kexcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kibicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kilocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kingn-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kittehcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kobocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kolschcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/korecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kronecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/krypstal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kurrent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/kushcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lanacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/landcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lathaan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lazaruscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/leacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/legends-room.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lepaoquan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lepen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/letitride.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/leviarcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/levoplus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lex4all.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/link-platform.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/linkedcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/linx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/litebar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/litebitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/litecoin-ultra.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/litecred.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/litedoge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lltoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lomocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lottocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ltbcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/luckchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/luna-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/lykke.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/machinecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/macro1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/macron.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/magi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/magnum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/malcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mantracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mao-zedong.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/marijuanacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/marscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/martexcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/marxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/master-swiscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/masternodecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mavro.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/maxcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mazacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mcap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/megacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/memetic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mergecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/metal-music-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/metalcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/microcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mikethemug.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/milocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mind-gene.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mindcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/minereum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/miners-reward-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mineum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/minex.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/miyucoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mmxvi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mobilecash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/moin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mojocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/monaco.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/monacocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/moneta2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/monetaryunit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/money.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/moneycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/monster-byte.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/motocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/moving-cloud-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mtmgaming.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/musicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mustangcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mybit-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/mysterium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/namocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nautiluscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/neoscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/neptune-classic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/netbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/netcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/netko.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/neuro.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/neutron.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nevacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/neverdie.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/newbium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/newyorkcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nexium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nexxus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nimiq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/noblecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nodecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nubits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nushares.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nvo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/nyancoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/o2olondoncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/oax.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/obits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ocow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/octanox.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/octocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ohm-wallet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/okcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/omicron.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/onix.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/opal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/openanx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/operand.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/opescoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/opus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/orbitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/orlycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ormeus-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/osmiumcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ox-fina.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/p7coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pabyosi-coin-special.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pakcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pandacoin-pnd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pangea-poker.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/parallelcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/parkbyte.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pascal-lite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/patientory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/paycoin2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/paycon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/paypeer.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/peacecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/peepcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/peoplecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pesetacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pesobit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/petrodollar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/philosopher-stones.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/phoenixcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/photon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/picoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/piecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/piggycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pinkcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pinkdog.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pirate-blocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pizzacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/platinumbar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/plncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pluton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pokecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ponzicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/popularcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/posex.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/postcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/posw-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/powercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/prcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/president-clinton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/president-johnson.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/president-sanders.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/president-trump.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/primalbase.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/prime-xi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/primulon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/printerium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/prismchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/procurrency.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/project-decorum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/project-x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/protean.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/prototanium.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/psilocybin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/pulse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/purevidz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/putin-classic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/putincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/px.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/qibuck-asset.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/qora.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quartz-qrz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quatloo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quazarcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/qubitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quebecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/quotient.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/qwark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rabbitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/raiblocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rare-pepe-party.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ratecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rawcoin2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/redcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/reecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/regacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/remicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/renos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/revenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/revolvercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rhfcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/richcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ride-my-car.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/riecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rimbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ripto-bux.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rivetz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ronpaulcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/roulettetoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/royalcoin-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/royalcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/royalties.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rsgpcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rubies.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rublebit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rupaya.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rupee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/russiacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/rustbits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/safe-trade-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/safecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sakuracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sativacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/satoshimadness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/save-and-gain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/scorecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/secretcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/securecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/selfiecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/senderon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sequence.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sexcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shadow-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shadowcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sharkcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shellcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shilling.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/shorty.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sibcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sigmacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/signatum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sixeleven.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/skeincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/skincoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/slevin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/slimcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sling.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/smartcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/smileycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/smoke.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/snakeeyes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/socialcoin-socc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/soilcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sojourn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/solarflarecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/solaris.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/songcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sooncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/soulcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sovereign-hero.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/spacecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/speedcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sphere.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sphre-air.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sportscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/spots.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/spreadcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sprouts.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sproutsextreme.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stakecoin-stcn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/starcredits.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/starta.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/startcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stealthcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/steps.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sterlingcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stex.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/storjcoin-x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stox.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stress.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/stronghands.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sumokoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/supercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/supernet-unity.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/superturbostake.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/suretly.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/swagbucks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/swaptoken.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/swarm-city.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/swing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sydpak.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/sync.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/syndicate.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/synergy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/t-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tagcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tagrcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tajcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tattoocoin-limited.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tattoocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/teamup.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/techshares.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tekcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tellurion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/teracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/terracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/terranova.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/teslacoilcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/teslacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/the-champcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/the-cypherfunks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/the-vegan-initiative.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/thecreed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/thegcccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/theresa-may-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tickets.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tigercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tilecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/timereum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/titcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tittiecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/toacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/todaycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tokes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/topaz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/topcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/torcoin-tor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trackr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tradecoin-v2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/transfercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/triangles.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trickycoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tristar-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trollcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/truckcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trueflip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trumpcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trust.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/trustplus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/turbocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tychocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/tyrocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ucoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ufo-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ug-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ugain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ulatech.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ultimate-secure-cash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ultracoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unbreakablecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/uncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/uniburst.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unify.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unitus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unity-ingot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/universal-currency.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/universalroyalcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/universe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/unrealcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ur.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/uro.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/usde.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/useless-ethereum-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/utacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/valorbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vaperscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vault-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vcash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vector.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vegascoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/veltor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/veriumreserve.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/veros.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/version.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/victoriouscoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vip-tokens.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/virta-unique-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/virtacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/virtacoinplus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/virtualcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/visio.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/voise.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/voisecom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/voxels.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/voyacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vpncoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vslice.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vsync.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/vtorrent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wa-space.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/walton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/warp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/waves-community-token.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wavesgo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wayguide.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wearesatoshi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wexcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wild-beast-block.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wink.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wmcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/women.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/woodcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/worldcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wowcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wowecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/wyvern.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/x-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/x2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xaucoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xaurum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xcurrency.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xde-ii.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xenixcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xiaomicoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xonecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/xtd-coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/yacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/yashcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/ybcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/yescoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/yocoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/yogold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zayedcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zccoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zeitcoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zengold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zennies.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zero.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zetacoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zetamicron.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zilbercoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zonecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zsecoin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/icons/zurcoin.png" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -42,7 +1547,7 @@
         <counts>
           <entry key="HTML" value="1878" />
           <entry key="JSON" value="5" />
-          <entry key="PLAIN_TEXT" value="323" />
+          <entry key="PLAIN_TEXT" value="328" />
           <entry key="TypeScript" value="24109" />
         </counts>
       </usages-collector>
@@ -51,7 +1556,7 @@
           <entry key="html" value="1878" />
           <entry key="json" value="5" />
           <entry key="ts" value="24109" />
-          <entry key="txt" value="323" />
+          <entry key="txt" value="328" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -78,7 +1583,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="300">
-              <caret line="29" column="26" lean-forward="true" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
+              <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -87,7 +1592,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="465">
-              <caret line="31" column="14" lean-forward="true" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
+              <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
               <folding>
                 <element signature="e#0#66#0" expanded="true" />
               </folding>
@@ -108,7 +1613,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="e#1152#1158#0" expanded="true" />
               </folding>
@@ -132,7 +1637,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/directives/directives.module.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="12" column="4" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+              <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -144,7 +1649,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/directives/coin-icon.directive.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
-              <caret line="3" column="26" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="26" />
+              <caret line="3" column="26" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -152,8 +1657,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="91" column="21" lean-forward="true" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
+            <state relative-caret-position="454">
+              <caret line="86" column="85" selection-start-line="86" selection-start-column="85" selection-end-line="86" selection-end-column="85" />
             </state>
           </provider>
         </entry>
@@ -162,7 +1667,7 @@
         <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="435">
-              <caret line="176" column="45" lean-forward="true" selection-start-line="176" selection-start-column="45" selection-end-line="176" selection-end-column="45" />
+              <caret line="176" column="45" selection-start-line="176" selection-start-column="45" selection-end-line="176" selection-end-column="45" />
               <folding>
                 <element signature="e#0#71#0" expanded="true" />
               </folding>
@@ -343,44 +1848,14 @@
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="market-cap" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="market-cap" type="462c0819:PsiDirectoryNode" />
-              <item name="gainers-losers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="my-exchange" type="462c0819:PsiDirectoryNode" />
-              <item name="buy-sell-coin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="pipes" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="icons" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -409,11 +1884,11 @@
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\widgets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\assets" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\news" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\directives" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\models" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\shared" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\ui" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -562,14 +2037,7 @@
       <workItem from="1534083920493" duration="860000" />
       <workItem from="1534097091105" duration="451000" />
       <workItem from="1534261040530" duration="9744000" />
-      <workItem from="1534352295501" duration="273312000" />
-    </task>
-    <task id="LOCAL-00006" summary="balances my exchange">
-      <created>1527041333752</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1527041333752</updated>
+      <workItem from="1534352295501" duration="275453000" />
     </task>
     <task id="LOCAL-00007" summary="login and credentials">
       <created>1527369373256</created>
@@ -907,11 +2375,18 @@
       <option name="project" value="LOCAL" />
       <updated>1536177578060</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="icons">
+      <created>1536182004186</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1536182004186</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1051236000" />
+    <option name="totallyTimeSpent" value="1053377000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -924,7 +2399,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="2514" height="1456" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8253615" visible="true" weight="0.16788916" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1065,6 +2539,7 @@
         <option value="$PROJECT_DIR$/../watch-dogs-server/mc-server/models.js" />
         <option value="$PROJECT_DIR$/../watch-dogs-server/db-services/aggr-minutes.js" />
         <option value="$PROJECT_DIR$/../watch-dogs-server/db-services/aggr-days.js" />
+        <option value="$PROJECT_DIR$/../watch-dogs-server/server/utils/download-image-icon-save.js" />
       </list>
     </option>
   </component>
@@ -1098,7 +2573,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="amount" />
     <MESSAGE value="coin day with trigger" />
     <MESSAGE value="sort" />
     <MESSAGE value="no message" />
@@ -1123,7 +2597,8 @@
     <MESSAGE value="coindesk RSS" />
     <MESSAGE value="update" />
     <MESSAGE value="rate buy sell" />
-    <option name="LAST_COMMIT_MESSAGE" value="rate buy sell" />
+    <MESSAGE value="icons" />
+    <option name="LAST_COMMIT_MESSAGE" value="icons" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1507,7 +2982,7 @@
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
-          <caret line="29" column="26" lean-forward="true" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
+          <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -1523,7 +2998,7 @@
     <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
-          <caret line="176" column="45" lean-forward="true" selection-start-line="176" selection-start-column="45" selection-end-line="176" selection-end-column="45" />
+          <caret line="176" column="45" selection-start-line="176" selection-start-column="45" selection-end-line="176" selection-end-column="45" />
           <folding>
             <element signature="e#0#71#0" expanded="true" />
           </folding>
@@ -1540,7 +3015,7 @@
     <entry file="file://$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
-          <caret line="31" column="14" lean-forward="true" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
+          <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
           <folding>
             <element signature="e#0#66#0" expanded="true" />
           </folding>
@@ -1564,7 +3039,7 @@
     <entry file="file://$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
           <folding>
             <element signature="e#1152#1158#0" expanded="true" />
           </folding>
@@ -1584,7 +3059,7 @@
     <entry file="file://$PROJECT_DIR$/src/app/directives/directives.module.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="12" column="4" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -1594,14 +3069,14 @@
     <entry file="file://$PROJECT_DIR$/src/app/directives/coin-icon.directive.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
-          <caret line="3" column="26" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="26" />
+          <caret line="3" column="26" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="91" column="21" lean-forward="true" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
+        <state relative-caret-position="454">
+          <caret line="86" column="85" selection-start-line="86" selection-start-column="85" selection-end-line="86" selection-end-column="85" />
         </state>
       </provider>
     </entry>
