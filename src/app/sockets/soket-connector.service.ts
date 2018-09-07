@@ -42,8 +42,6 @@ export class SoketConnectorService {
 
   }
 
-
-
   private creataSoket(exchange: string, market:string, channel:string): any  {
     switch (exchange) {
       case 'bitfinex':

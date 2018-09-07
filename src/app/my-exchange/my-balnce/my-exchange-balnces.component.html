@@ -41,7 +41,7 @@
                     <td>
                         <span class="btn" (click)="onBalanceClick(balance)">
                             <small class="grey">$</small>
-                            {{balance.balance | toUs:balance.symbol | async}}
+                            {{balance.balance | coin2us:balance.symbol | async}}
                         </span>
                     </td>
                     <td>
@@ -55,7 +55,7 @@
                     <td>
                         <small class="btn" (click)="onPriceClick(balance)">
                             <small class="grey">$</small>
-                            {{1 | toUs3:balance.symbol | async}}
+                            {{1 | coin2us3:balance.symbol | async}}
                         </small>
                     </td>
 

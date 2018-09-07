@@ -6,12 +6,6 @@
                 <input matInput placeholder="$ Amount" [(ngModel)]="amountInput"
                        (keyup.enter)="onAmountEnter($event)">
             </mat-form-field>
-
-       <!-- <input class="w5" #amount type="number" min="10" max="1000000"
-               step="10000" (keyup.enter)="onAmountEnter(amount.value)"
-               value="1000"/>
-    </span>-->
-
     <div class="mat-body-2">By CMC {{coinPriceMC}}</div>
     <table>
         <tr *ngFor="let item of allMarkets" class="{{item.selected?'selected':''}}">

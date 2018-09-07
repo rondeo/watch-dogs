@@ -1,8 +1,10 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {ConnectorApiService} from "../../my-exchange/services/connector-api.service";
-import {ChannelEvents, Channels, IChannel} from "../../my-exchange/services/apis/socket-models";
+import {ConnectorApiService} from '../../my-exchange/services/connector-api.service';
+import {ChannelEvents, Channels, IChannel} from '../../my-exchange/services/apis/socket-models';
 import * as _ from 'lodash';
-import {VOOrder} from "../../models/app-models";
+import {VOOrder} from '../../models/app-models';
+import {ApisPublicService} from '../../apis/apis-public.service';
+import {SocketBase} from '../../apis/sockets/soket-base';
 
 @Component({
   selector: 'app-trades-history',
@@ -11,107 +13,58 @@ import {VOOrder} from "../../models/app-models";
 })
 export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() exchange:string;
-  @Input() base:string;
-  @Input() coin:string;
-  @Input() priceBaseUS:number;
-
-
-  amountSell:number;
-  amountBuy:number;
-
-  accummulate:VOOrder[] = [];
-
-  currentPrice:number;
-
-  accumSum:number = 0;
-
-  deals:number;
-  inteval;
+  @Input() exchange: string;
+  @Input() market: string;
 
   constructor(
-    private connector:ConnectorApiService
-  ) { }
-
-
-  ngOnDestroy(){
-    clearInterval(this.inteval);
-    this.sub.unsubscribe();
+    private apiPubblic: ApisPublicService
+  ) {
   }
 
-  ngOnChanges(evt){
-    //console.warn(evt);
+
+  ngOnDestroy() {
+    if (this.sub) this.sub.unsubscribe();
+    if(this.socket) this.socket.unsubscribeFromTrades(this.market);
+  }
+
+  ngOnChanges(evt) {
+    this.ctrConnect();
   }
 
   ngOnInit() {
 
-    this.subscribe();
-    this.inteval = setInterval(()=>this.analize(), 2000);
-
-  }
-
-  archive:VOOrder[] = [];
-
-  addToArchive(ar:VOOrder[]){
-    if(ar.length ===0 ) return;
-    ar = _.sortBy(ar, 'timestamp', 'desc');
-
-    this.archive = this.archive.concat(ar);
-  }
-
-  analize(){
-    let ar = this.accummulate;
-    this.deals = ar.length;
-    if(!ar.length) return;
-    let sum = 0;
-    let amount = 0;
-
-     ar.forEach(function (item) {
-      amount += item.amountUS;
-      sum += item.amountUS * item.priceUS;
-    })
-
-    this.accumSum = 0;
-
-
-    //console.warn(sum, amount);
-    this.currentPrice  = +(sum/amount).toPrecision(4);
-    this.accummulate = [];
-    this.addToArchive(ar);
   }
 
 
-  parseData(data:VOOrder){
-    if(this.priceBaseUS){
-      data.amountUS = data.amountCoin * data.rate * this.priceBaseUS;
-      data.priceUS = data.rate * this.priceBaseUS;
-      this.accumSum += Math.round(data.action==='BUY'? data.amountUS:-data.amountUS);
-      this.accummulate.push(data);
+  archive: VOOrder[] = [];
+
+  addToArchive(ar: VOOrder[]) {
+
+  }
+
+  analize() {
+
+  }
+
+  socket: SocketBase;
+  ctrConnect() {
+    if (!this.exchange || !this.market) return;
+    const api = this.apiPubblic.getExchangeApi(this.exchange);
+    if (api && api.hasSocket()) {
+      const socket: SocketBase = api.getTradesSocket();
+       socket.subscribeForTrades(this.market).subscribe(res =>{
+         console.log(res);
+       })
+      this.socket = socket;
     }
+  }
+
+  parseData(data: VOOrder) {
+
 
   }
 
   sub;
-  subscribe(){
-    console.log('subscribe ', this.base, this.coin, this.exchange);
-    if(this.base && this.coin && this.exchange){
-     /* let ch:IChannel = this.connector.bitfinex.getChannel(Channels.TRADES, this.base, this.coin);
-
-     this.sub =  ch.subscribe(ChannelEvents.DATA, res=>{
-        //console.log(res);
-        this.parseData(res)
-
-      })
-
-      let cb2 = ch.subscribe(ChannelEvents.HEART_BEAT, hb=>{
-        console.log('HB '+ hb);
-      });
-      */
-
-    }
-
-  }
-
 
 
 }

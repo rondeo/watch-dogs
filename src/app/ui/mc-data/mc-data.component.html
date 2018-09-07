@@ -6,9 +6,10 @@
     &nbsp;
     <small>r</small>
     <span>{{coinMC.rank}}</span>
-    &nbsp;
+    &nbsp;<small>B</small>
+    <span>{{coinMC.price_btc?coinMC.price_btc:'--'}}</span>
     <small>$</small>
-    <span>{{coinMC.price_usd?coinMC.price_usd.toFixed(2):'--'}}</span>
+    <span>{{coinMC.price_usd | myUs}}</span>
     &nbsp;
     <small>h</small>
     <span [myValueColor]="coinMC.percent_change_1h" title="1 hour"></span>

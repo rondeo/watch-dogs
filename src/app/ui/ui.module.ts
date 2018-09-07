@@ -9,6 +9,7 @@ import {CrossTableComponent} from './cross-table/cross-table.component';
 import {FormsModule} from '@angular/forms';
 import { McDataComponent } from './mc-data/mc-data.component';
 import {DirectivesModule} from '../directives/directives.module';
+import {PipesModule} from '../pipes/pipes.module';
 
 @NgModule({
   exports: [
@@ -23,7 +24,8 @@ import {DirectivesModule} from '../directives/directives.module';
   imports: [
     CommonModule,
     FormsModule,
-    DirectivesModule
+    DirectivesModule,
+    PipesModule
   ],
   declarations: [
     McPercentComponent,

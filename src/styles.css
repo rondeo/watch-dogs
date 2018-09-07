@@ -171,6 +171,11 @@ md-sidenav {
     border: solid thin red;
 }
 
+.yellow{
+    color: #c69418;
+}
+
+
 body {
     font-family: Roboto, Arial, sans-serif;
     /*margin: 10px 10px 0 10px;*/
@@ -364,7 +369,7 @@ table tr.selected {
 
 .btn.fa {
     text-decoration: none;
-    text-shadow: 2px 2px #bebab9;
+    text-shadow: 1px 1px #bebab9;
 }
 
 .not-available {

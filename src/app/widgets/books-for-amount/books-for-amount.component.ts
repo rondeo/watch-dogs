@@ -33,12 +33,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(evt: any) {
-    if (evt.exchange && evt.market) {
-
-    } else if (evt.amountUS) {
-      // console.log(this.amountUS);
-      this.calculate();
-    }
+   this.initAsync();
 
   }
 
@@ -47,9 +42,10 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   }
 
   async initAsync() {
-    let pair = this.market;
-    if (!pair || pair.indexOf('_') === -1) return;
-    let ar = pair.split('_');
+    let market = this.market;
+    if (!market) return;
+    let ar = market.split('_');
+    if(ar.length !== 2) return;
     let base = ar[0];
     let coin = ar[1];
     this.allCoins = await this.apiMarketCap.getTicker();

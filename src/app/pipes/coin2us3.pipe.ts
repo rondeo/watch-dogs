@@ -3,10 +3,10 @@ import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {VOMCObj} from '../models/api-models';
 
 @Pipe({
-  name: 'toUs3'
+  name: 'coin2us3'
 })
-export class ToUs3Pipe implements PipeTransform {
-  private MC: VOMCObj
+export class Coin2us3Pipe implements PipeTransform {
+  private MC: VOMCObj;
 
   constructor(
     private marketCap: ApiMarketCapService

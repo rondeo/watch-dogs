@@ -1,10 +1,10 @@
 <div>
     <span>{{base}}</span>
-    <span class="large"><sup>$</sup>{{balanceBase | toUs:base | async}}</span>
-    <span *ngIf="pendingBase"> ({{pendingBase | toUs:base | async}})</span>&nbsp;
+    <span class="large"><sup>$</sup>{{balanceBase | coin2us:base | async}}</span>
+    <span *ngIf="pendingBase"> ({{pendingBase | coin2us:base | async}})</span>&nbsp;
     <span>{{coin}}</span>
-    <span class="large"><sup>$</sup>{{balanceCoin | toUs:coin | async}}</span>
-    <span *ngIf="pendingCoin"> ({{pendingCoin | toUs:coin | async}})</span>
+    <span class="large"><sup>$</sup>{{balanceCoin | coin2us:coin | async}}</span>
+    <span *ngIf="pendingCoin"> ({{pendingCoin | coin2us:coin | async}})</span>
     &nbsp;
     <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
        (click)="onRefreshBalancesClick()"></a>

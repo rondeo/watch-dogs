@@ -390,9 +390,9 @@ export class VOMarketCap {
 }
 
 export class VOMarketCapExt extends VOMarketCap {
-  tobase_change_1h?: number;
-  tobase_change_24h: number;
-  tobase_change_7d: number;
+  btc_change_1h: string;
+  btc_change_30h: string;
+  btc_change_10d: string;
 }
 
 export class VOMCDisplay extends VOMarketCap {

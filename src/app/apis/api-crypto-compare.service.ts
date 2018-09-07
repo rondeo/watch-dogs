@@ -3,6 +3,19 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
 
+
+export interface VOTweeterAccount{
+  Points:number
+  account_creation: string;
+  favourites: string;
+  followers: number;
+  following: string;
+  link: "https://twitter.com/enjincs"
+  lists: number
+  name: string;
+  statuses: number;
+}
+
 export interface VOCryptoCompare {
   Id: string;
   Url: string;
@@ -44,18 +57,27 @@ export class ApiCryptoCompareService {
 
   getSocialStats(symbol: string) {
     return this.getCoinLists().switchMap(coins => {
-      console.log(coins[symbol]);
-      const url = 'api/proxy-cache-5min/www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
+      if(!coins[symbol]){
+        console.warn(symbol, coins);
+        return Observable.of({});
+      }
+      const url = 'api/proxy-cache-5min/https://www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
       console.log(url);
-      return this.http.get(url).map(res => {
-        console.log(res);
-        return res
+      return this.http.get(url).map((res: any) => {
+        console.log(res.Data);
+        return res.Data || {};
       })
     })
   }
 
+  getTweeterAccount(symbol:string):Observable<VOTweeterAccount> {
+    return this.getSocialStats(symbol).map(res =>{
+      return res.Twitter;
+    })
+  }
+
   getCoinLists() {
-    const url = 'api/proxy-cache-5min/www.cryptocompare.com/api/data/coinlist';
+    const url = 'api/proxy-cache-5min/https://www.cryptocompare.com/api/data/coinlist';
     if (this.coinList) return Observable.of(this.coinList);
     else return (<any> this.http.get(url)).map(res => {
       this.coinList = res.Data;

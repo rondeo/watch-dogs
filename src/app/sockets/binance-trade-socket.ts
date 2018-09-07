@@ -9,13 +9,10 @@ export class BinanceTradesSocket extends SocketBase {
 
   constructor() {
     super();
-
   }
 
   marketsIds:any ={};
-
   sockets:WebSocket[];
-
   createSocket(channel, market):WebSocket {
 
     const marketId = market.split('_').reverse().join('').toLocaleLowerCase();

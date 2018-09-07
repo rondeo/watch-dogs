@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToUsPipe } from './to-us.pipe';
+import { Coin2usPipe } from './coin2us.pipe';
 import {ApisModule} from '../apis/apis.module';
-import { ToUs3Pipe } from './to-us3.pipe';
+import { Coin2us3Pipe } from './coin2us3.pipe';
 import { ToDatePipe } from './to-date.pipe';
 import { CmcPipe } from './cmc.pipe';
 import { MyDisplNumPipe } from './my-displ-num.pipe';
 import { CmcMarketPipe } from './cmc-market.pipe';
 import { ToTimePipe } from './to-time.pipe';
+import { MyUsPipe } from './my-us.pipe';
 
 @NgModule({
   imports: [
@@ -15,22 +16,24 @@ import { ToTimePipe } from './to-time.pipe';
     ApisModule
   ],
   exports:[
-    ToUsPipe,
-    ToUs3Pipe,
+    Coin2usPipe,
+    Coin2us3Pipe,
     ToDatePipe,
     ToTimePipe,
     CmcPipe,
     MyDisplNumPipe,
-    CmcMarketPipe
+    CmcMarketPipe,
+    MyUsPipe
   ],
   declarations: [
-    ToUsPipe,
-    ToUs3Pipe,
+    Coin2usPipe,
+    Coin2us3Pipe,
     ToDatePipe,
     CmcPipe,
     MyDisplNumPipe,
     CmcMarketPipe,
-    ToTimePipe
+    ToTimePipe,
+    MyUsPipe
   ]
 })
 export class PipesModule { }

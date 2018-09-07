@@ -9,6 +9,7 @@ import 'rxjs/add/observable/fromPromise';
 import {UTILS} from '../../com/utils';
 import {VOCandle} from '../../models/api-models';
 import {BehaviorSubject} from '../../../../node_modules/rxjs';
+import {SocketBase} from '../sockets/soket-base';
 
 export interface MarketDay {
   Ask: number[];
@@ -29,6 +30,7 @@ export abstract class ApiPublicAbstract {
   exchange: string;
   allCoins: { [coin: string]: { [base: string]: number } };
 
+  protected socket: SocketBase;
   constructor(
     protected http: HttpClient,
     protected store: StorageService
@@ -86,8 +88,15 @@ export abstract class ApiPublicAbstract {
   booksProgress = false;
   booksSub = new BehaviorSubject<VOBooks>(null);
   books$(market: string){
-    if(!this.booksSub.getValue()) this.refreshBooks(market);
+    const books = this.booksSub.getValue();
+    if(!books || books.market !== market) this.refreshBooks(market);
     return  this.booksSub.asObservable();
+  }
+  hasSocket(){
+    return false;
+  }
+  getTradesSocket(): SocketBase{
+    return this.socket;
   }
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 

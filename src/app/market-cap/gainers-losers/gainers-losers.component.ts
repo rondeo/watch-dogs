@@ -13,6 +13,7 @@ import {VOMarketCapSelected} from '../../models/api-models';
 import * as  moment from 'moment';
 import {MATH} from '../../com/math';
 import {NewsService} from '../../apis/news/news.service';
+import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 
 
 @Component({
@@ -51,8 +52,11 @@ export class GainersLosersComponent implements OnInit {
     private apiPublic: ApisPublicService,
     private apiMarketCap: ApiMarketCapService,
     private service: MarketCapService,
-    private news: NewsService
+    private news: NewsService,
+    private cryptoCompare: ApiCryptoCompareService
   ) {
+
+
   }
 
   onSymbolClick(mc: VOMarketCap) {
@@ -88,13 +92,23 @@ export class GainersLosersComponent implements OnInit {
       this.sortBy = state.sortBy || this.sortBy;
       this.asc_desc = state.asc_desc || this.asc_desc;
       this.top = state.top || this.top;
+
     }
 
     this.route.params.subscribe(params => {
-      if (params.exchange !== this.exchange) {
-        this.exchange = params.exchange;
+      // console.log(params.exchange)
+      // if (params.exchange !== this.exchange) {
+
+      if (params.exchange === 'last') {
+        const last = localStorage.getItem('GainersLosersComponent-exchange') || 'all';
+        this.router.navigateByUrl('/market-cap/gainers-losers/' + last);
+      } else {
+        if (params.exchange !== this.exchange) this.exchange = params.exchange;
+        localStorage.setItem('GainersLosersComponent-exchange', this.exchange);
+        this.loadExchange();
       }
-      this.loadExchange();
+      //}
+
 
     });
 
@@ -155,40 +169,59 @@ export class GainersLosersComponent implements OnInit {
 
   async ctrDownlaodCoinsDay() {
 
-    const MC = await this.apiMarketCap.getTicker();
 
-    const MC30Mins = await this.apiMarketCap.getTicker30Min().toPromise();
-    const MCHours = await this.apiMarketCap.getTickerHours().toPromise();
+    const ago10ds = _.first(await this.apiMarketCap.getTicker5HoursFrom(moment().subtract('10', 'd').format()).toPromise());
 
-    const MCHoursFirst = _.first(MCHours);
-    const MCHoursLast = _.last(MCHours);
-    const MC30MinLast = _.last(MC30Mins);
+    const ago30hs = _.first(await this.apiMarketCap.getTicker30MinFrom(moment().subtract('30', 'h').format()).toPromise());
 
-    const hours = moment.duration(moment((<any>MCHoursFirst).timestamp).diff(moment((<any>MCHoursLast).timestamp))).asHours();
+    const MC30Mins = await this.apiMarketCap.getTickers30Min(2).toPromise();
+
+
+    const ago30mins = _.first(MC30Mins);
+    const ago1hs = _.last(MC30Mins);
+
+    const nowMC = await this.apiMarketCap.getTicker();
+
+
+   // const MCHours = await this.apiMarketCap.getTickers5Hours(1).toPromise();
+
+   // const MCHoursFirst = _.first(MCHours);
+
+    //const MCHoursLast = _.last(MCHours);
+   // const MC30MinLast = _.last(MC30Mins);
+
+    //const hours = moment.duration(moment((<any>MCHoursFirst).timestamp).diff(moment((<any>MCHoursLast).timestamp))).asHours();
 
     const out = [];
 
-    this.btcMC = MC['BTC'];
+    this.btcMC = nowMC['BTC'];
 
-    for (let coin in MC) {
-      /* const f = MCHoursFirst[coin];
-       const l = MCHoursLast[coin];*/
+    for (let coin in nowMC) {
 
-      const f = MCHoursLast[coin];
-      const l = MC30MinLast[coin];
+     // const f = MCHoursLast[coin];
+      //const last = MC30MinLast[coin];
 
+      const ago10d: VOMarketCap = ago10ds[coin];
+      const ago30h: VOMarketCap = ago30hs[coin];
+      const ago30min: VOMarketCap = ago30mins[coin];
+      const ago1h: VOMarketCap = ago1hs[coin];
+      const now: VOMarketCap = nowMC[coin];
 
-      if (f && l) {
+      if (ago30min && ago1h && ago30h && ago10d) {
         out.push(
-          Object.assign(MC[coin], {
-            rankD: MATH.percent(f.rank, l.rank),
-            price_btcD: MATH.percent(l.price_btc, f.price_btc)
+          Object.assign(now, {
+            rankD: MATH.percent(ago1h.rank, ago30min.rank),
+            rank30h: MATH.percent(ago30h.rank, ago30min.rank),
+            // price_btcD: MATH.percent(last.price_btc, f.price_btc),
+            btc_change1h: (ago30min && ago1h) ? MATH.percent(ago30min.price_btc, ago1h.price_btc) : '-',
+            btc_change30h: ago30h ? MATH.percent(ago30min.price_btc, ago30h.price_btc) : '-',
+            btc_change10d: ago10d ? MATH.percent(ago30min.price_btc, ago10d.price_btc) : '-'
           })
         )
       }
     }
 
-    this.news.addNews(out).subscribe(res =>{
+    this.news.addNews(out).subscribe(res => {
       console.log(' NEWS done');
       this.showData(out);
     });
@@ -198,16 +231,16 @@ export class GainersLosersComponent implements OnInit {
     // console.log(out);
   }
 
-  showData(out){
+  showData(out) {
     this.allCoinsOrig = out;
-    if (this.isToBTC) this.allCoins = this.convertToBTC(out);
-    else this.allCoins = JSON.parse(JSON.stringify(out));
+    //if (this.isToBTC) this.allCoins = this.convertToBTC(out);
+    this.allCoins = JSON.parse(JSON.stringify(out));
 
     if (this.exchange) this.loadExchange();
     else this.sortData();
   }
 
-
+/*
   convertToBTC(orig: VOMCDisplay[]): VOMCDisplay[] {
     orig = JSON.parse(JSON.stringify(orig));
 
@@ -219,7 +252,7 @@ export class GainersLosersComponent implements OnInit {
       return item;
     })
 
-  }
+  }*/
 
   onFilterClick() {
 
@@ -353,7 +386,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
 
-  onToBtcChange(evt) {
+ /* onToBtcChange(evt) {
     if (this.isToBTC) this.allCoins = this.convertToBTC(this.allCoinsOrig);
     else this.allCoins = JSON.parse(JSON.stringify(this.allCoinsOrig));
 
@@ -362,12 +395,27 @@ export class GainersLosersComponent implements OnInit {
     localStorage.setItem('isToBtc', this.isToBTC ? 'true' : 'false');
 
   }
+*/
+  onNewsClick(coin: VOMarketCap, num: number) {
 
-  onNewsClick(symbol: string, num: number) {
-     this.news.getNews(symbol).then(res =>{
-       console.log(res);
-     })
+    this.news.getNews(coin.name).then(res => {
+      console.log(res);
+    });
 
+    this.cryptoCompare.getTweeterAccount(coin.symbol).subscribe(res =>{
+      console.log('Tweeter account ', res);
+    });
+
+  }
+
+  openBTCMarketClick(coin:VOMarketCap){
+    if(this.exchange && this.exchange !== 'all'){
+      const api = this.apiPublic.getExchangeApi(this.exchange);
+      if(api){
+        const url = api.getMarketURL('BTC_'+coin.symbol);
+        window.open(url, this.exchange);
+      }
+    }
   }
 
 }

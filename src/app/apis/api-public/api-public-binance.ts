@@ -6,16 +6,23 @@ import {StorageService} from "../../services/app-storage.service";
 import  * as moment from 'moment';
 import {UTILS} from '../../com/utils';
 import {VOCandle} from '../../models/api-models';
+import {SocketBase} from '../sockets/soket-base';
+import {BinanceTradesSocket} from '../sockets/binance-trade-socket';
 
 
 
 export class ApiPublicBinance extends ApiPublicAbstract {
 
   exchange = 'binance';
+
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
 
+  hasSocket(){
+    this.socket = new BinanceTradesSocket();
+    return true;
+  }
   getMarketUrl(base:string, coin: string): string{
     return 'https://www.binance.com/trade.html?symbol={{coin}}_{{base}}'
       .replace('{{base}}', base).replace('{{coin}}', coin);

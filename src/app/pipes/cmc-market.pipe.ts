@@ -16,6 +16,7 @@ export class CmcMarketPipe implements PipeTransform {
   }
 
   async transform(market: string): Promise<string> {
+    if(!market) return Promise.resolve('');
     if (CmcMarketPipe.data[market]) Promise.resolve(CmcMarketPipe.data[market]);
     const ar = market.split('_');
     const MC = await this.marketCap.getTicker();

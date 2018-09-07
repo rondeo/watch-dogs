@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'myDisplNum'
@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MyDisplNumPipe implements PipeTransform {
 
   transform(value: number): string {
-    return (value *= 1e8).toString().substr(0, 4);
+    return isNaN(value) ? '' : Math.round(value *= 1e8).toString().substr(0, 4);
   }
 
 }

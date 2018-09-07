@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {ApiMarketCapService} from '../apis/api-market-cap.service';
 
 @Pipe({
-  name: 'toUs'
+  name: 'coin2us'
 })
-export class ToUsPipe implements PipeTransform {
+export class Coin2usPipe implements PipeTransform {
 
   private MC
   constructor(

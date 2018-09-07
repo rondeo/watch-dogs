@@ -40,40 +40,36 @@
 
 
     <section>
-        <mat-checkbox [(ngModel)]="isToBTC" (ngModelChange)="onToBtcChange($event)" >To BTC</mat-checkbox>
+       <!-- <mat-checkbox [(ngModel)]="isToBTC" (ngModelChange)="onToBtcChange($event)" >To BTC</mat-checkbox>-->
         <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
 
         <table class="mat-body">
             <tbody>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="5" class="text-center">
-                    <!--  <small class="btn" (click)="onToBTCClick()">% to btc</small>
-                      <span class="mat-body-2"> <sup>$</sup> {{(+btcMC.price_usd.toFixed(0)).toLocaleString()}}</span>-->
-                </td>
-                <td colspan="3" class="text-center">
-                    <small>CMC</small>
-                </td>
-            </tr>
             <tr class="small">
                 <th>Symbol</th>
 
                 <th class="btn" (click)="onClickHeader('rank')">Rank</th>
-                <th class="btn" (click)="onClickHeader('rankD')">R 15h</th>
-                <th> BTC D</th>
+                <th class="btn" (click)="onClickHeader('rankD')">R 1h</th>
+                <th class="btn" (click)="onClickHeader('rank30h')">R 30h</th>
 
 
-                <th class="btn" (click)="onClickHeader('percent_change_1h')">1h%</th>
-                <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>
-                <th class="btn" (click)="onClickHeader('percent_change_7d')">7d%</th>
+
+
+                <th class="btn" (click)="onClickHeader('btc_change1h')">1h%</th>
+             <!--   <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>-->
+                <th class="btn" (click)="onClickHeader('btc_change30h')">30h%</th>
+               <!-- <th class="btn" (click)="onClickHeader('percent_change_7d')">7d%</th>-->
+                <th class="btn" (click)="onClickHeader('btc_change10d')">10d%</th>
+                <th>news</th>
             </tr>
             <tr>
                 <td>
                     <span>BTC</span>
                 </td>
-                <td>1</td>
-                <td>{{btcMC.rank}}</td>
-                <td>0</td>
+                <td colspan="2">
+                    <small>$</small>{{btcMC.price_usd}}
+                </td>
+
                 <td><span [myValueColor]="btcMC.percent_change_1h"></span></td>
                 <td><span [myValueColor]="btcMC.percent_change_24h"></span></td>
                 <td><span [myValueColor]="btcMC.percent_change_7d"></span></td>
@@ -92,12 +88,10 @@
                 </td>
 
                 <td>
-
                     {{item.rank}}
-
                 </td>
 
-                <td class="w50" [ngClass]="item.rankD>0?'dgreen':'dred'">
+                <td  [ngClass]="item.rankD>0?'dgreen':'dred'">
                     <span
                             (mouseover)="onMouseOver(item)"
                             matTooltip="{{tooltipMessage}}"
@@ -108,22 +102,32 @@
                 </td>
 
                 <td>
-                    <span [myValueColor]="item.price_btcD">
-                        {{item.price_btcD}}
-                    </span>
+                    <span [myValueColor]="item.rank30h"></span>
                 </td>
 
+
+
                 <td>
-                    <span class="w50" [myValueColor]="item.percent_change_1h"></span>
+                    <span class="w50" [myValueColor]="item.btc_change1h"></span>
                 </td>
-                <td>
+               <!-- <td>
                     <span class="w50" [myValueColor]="item.percent_change_24h"></span>
+                </td>-->
+                <td>
+                    <a class="btn" (click)="openBTCMarketClick(item)">
+                        <span [myValueColor]="item.btc_change30h"></span>
+                    </a>
+
                 </td>
-                <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">
+
+               <!-- <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">
                     {{item.percent_change_7d}}
+                </td>-->
+                <td>
+                    <span [myValueColor]="item.btc_change10d"></span>
                 </td>
                 <td>
-                    <small class="btn" (click)="onNewsClick(item.name, 1)">{{item.news1}}</small>
+                    <small class="btn" (click)="onNewsClick(item, 1)">{{item.news1}}</small>
                 </td>
             </tr>
             </tbody>

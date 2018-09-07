@@ -43,7 +43,7 @@ export class BooksAllExchangesComponent implements OnInit {
       //  console.warn(res);
       this.marketCap.getTicker().then(MC => {
         this.coinPriceMC = '$' +MC[coin].price_usd;
-        console.log(res);
+       //  console.log(res);
         this.allMarkets = res.map(o => {
           return {
             exchange: o.exchange,
@@ -65,7 +65,7 @@ export class BooksAllExchangesComponent implements OnInit {
         const basePrice = MC[ar[0]].price_usd;
         const coinPrice = MC[ar[1]].price_usd;
 
-        this.coinPriceMC = (coinPrice / basePrice).toPrecision(5) + ' $' + coinPrice.toPrecision(5);
+        this.coinPriceMC = (coinPrice / basePrice).toPrecision(5).substr(0, 10) + ' $' + coinPrice.toPrecision(5).substr(0, 6);
        // console.log(res);
         this.allMarkets = res.map(o => {
           return {

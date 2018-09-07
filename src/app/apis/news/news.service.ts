@@ -30,9 +30,7 @@ export class NewsService {
   spectroCoinURL = this.proxy + 'https://blog.spectrocoin.com/en/feed/';
 
   cache = {};
-
   news;
-
   constructor(
     private http: HttpClient,
     private store: StorageService

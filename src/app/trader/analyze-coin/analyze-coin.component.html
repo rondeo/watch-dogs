@@ -1,5 +1,6 @@
 <div>
-    <a routerLink="/trader/common-markets" class="btn">all</a>
+    <!--<a routerLink="/trader/common-markets" class="btn">all</a>-->
+    <app-trades-history [market]="market" [exchange]="exchange"></app-trades-history>
 
     <app-mc-data [mcdata]="coinMC"></app-mc-data>
 
@@ -26,7 +27,8 @@
         ><span class="fa fa-line-chart fa-2x"></span>
         </a>
         &nbsp; &nbsp;
-        <a routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{market}}"
+        <a routerLink="/my-exchange/buy-sell-coin/{{exchange}}/{{coin}}"
+           [queryParams] = "{market:market}"
            color="accent"
         ><span class="fa fa-exchange fa-2x"></span>
         </a>

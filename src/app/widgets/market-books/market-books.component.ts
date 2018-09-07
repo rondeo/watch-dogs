@@ -49,6 +49,8 @@ export class MarketBooksComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    if(!this.exchange) console.error(' no exchange');
+    if(!this.market) console.error( ' no market');
 
 
    /* const baseMC = this.allCoins[base];
