@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterModule, Routes} from "@angular/router";
 import {MaterialAppModule} from "../material/material-app.module";
-import {ChartsModule} from "ng2-charts";
+
 import {TraderOutletComponent} from "./trader-outlet/trader-outlet.component";
 import {TraderMainComponent} from "./trader-main/trader-main.component";
 import {SoketConnectorService} from "../sockets/soket-connector.service";
@@ -39,7 +39,6 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     MaterialAppModule,
-    ChartsModule,
     ApisModule,
     UiModule,
     WidgetsModule,

@@ -1,6 +1,5 @@
 import {Subject} from "rxjs/Subject";
 import {SocketBase} from "./soket-base";
-import {SocketChannel} from '../apis/sockets/socket-channel';
 
 
 export class PoloniexTradesSocket extends SocketBase {
@@ -73,11 +72,9 @@ export class PoloniexTradesSocket extends SocketBase {
 
   }
 
-  async createChannel(channel: string, market: string): Promise<SocketChannel> {
-    console.log('createChannel', channel, market);
+  async createChannelId(channel, market): Promise<string> {
+    console.log('createChannelId', channel, market);
     const id = Date.now();
-
-    const socket = await this.getSocket(channel, market);
 
     switch (channel) {
       case 'trades':
@@ -90,12 +87,7 @@ export class PoloniexTradesSocket extends SocketBase {
         break;
     }
 
-
-
-
-
-
-   // return Promise.resolve(this.exchange + market);
+    return Promise.resolve(this.exchange + market);
   }
 
 

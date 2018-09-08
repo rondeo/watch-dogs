@@ -9,7 +9,7 @@ export class ApiBitcoinAverageService {
   ) { }
 
   getExchanges(){
-    const url ='api/proxy-cache-5min/apiv2.bitcoinaverage.com/weighting/exchanges';
+    const url ='api/proxy-5min/apiv2.bitcoinaverage.com/weighting/exchanges';
     return this.http.get(url);
 
   }

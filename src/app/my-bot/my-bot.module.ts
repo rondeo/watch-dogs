@@ -5,7 +5,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialAppModule} from "../material/material-app.module";
 
-import {ChartsModule} from "ng2-charts";
+
 import {MatDatepickerModule} from "@angular/material";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {MatMomentDatetimeModule} from "@mat-datetimepicker/moment";
@@ -48,7 +48,6 @@ const routes: Routes = [
 @NgModule({
   imports: [
     ApisModule,
-    ChartsModule,
     CommonModule,
     BrowserModule,
     FormsModule,

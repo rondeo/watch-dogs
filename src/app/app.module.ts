@@ -6,7 +6,7 @@ import {Router, RouterModule} from '@angular/router';
 import {rootRouterConfig} from './app.routes';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
-import {ChartsModule} from 'ng2-charts'
+
 
 
 import {AppComponent} from './app.component';

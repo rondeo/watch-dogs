@@ -298,7 +298,7 @@ export class ApiMarketCapService {
 
   getCoinHistory5Hours(coin: string, from: string, to: string): Observable<VOMCObj[]> {
     if (!coin) throw new Error(' no coin');
-    const url = 'http://uplight.ca:50001/cmc-mongo/5-hours/coin-history/:symbol/:from/:to'
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/5-hours/coin-history/:symbol/:from/:to'
       .replace(':symbol', coin).replace(':from', from).replace(':to', to);
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
@@ -306,39 +306,39 @@ export class ApiMarketCapService {
 
   get30MinLast(): Observable<VOMCObj[]> {
 
-    const url = 'http://uplight.ca:50001/cmc-mongo/30-mins/last/1';
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/30-mins/last/1';
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
   getTickers30Min(limit = 2): Observable<VOMCObj[]> {
-    const url = 'http://uplight.ca:50001/cmc-mongo/30-min/last/' + limit;
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/30-min/last/' + limit;
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
   getTicker30MinFrom(from: string, limit = 1): Observable<VOMCObj[]> {
-    const url = 'http://uplight.ca:50001/cmc-mongo/30-mins/from/' +from + '/' + limit;
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/30-mins/from/' +from + '/' + limit;
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
   getCoinHistory(coin: string, from: string, to: string): Observable<VOMCObj[]> {
     if (!coin) throw new Error(' no coin');
-    const url = 'http://uplight.ca:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
       .replace(':symbol', coin).replace(':from', from).replace(':to', to);
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
   getTickers5Hours(limit = 2): Observable<VOMCObj[]> {
-    const url = 'api/proxy-1hour/http://uplight.ca:50001/cmc-mongo/hours/last/' + limit;
+    const url = 'api/proxy-cache-5min/api/proxy-1hour/http://uplight.ca:50001/cmc-mongo/hours/last/' + limit;
     console.log(url);
     return this.http.get(url).map((res: any) => res.data);
   }
 
   getTicker5HoursFrom(from: string, limit = 1) {
-    const url = 'http://uplight.ca:50001/cmc-mongo/hours/from/' + from + '/' + limit;
+    const url = 'api/proxy-cache-5min/http://uplight.ca:50001/cmc-mongo/hours/from/' + from + '/' + limit;
     return this.http.get(url).map((res: any) => res.data);
   }
 

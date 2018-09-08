@@ -75,7 +75,7 @@
                     <span>{{coinMC.symbol}}</span>
                 </td>
                 <td><span [ngClass]="coinMC.percent_change_1h>0?'dgreen':'dred'">{{coinMC.percent_change_1h}}</span>
-                    <sub>{{coinMC.tobtc_change_1h}}</sub></td>
+                    <sub>{{coinMC.percent_change_1h}}</sub></td>
                 <td>
                     <span [ngClass]="coinMC.percent_change_24h>0?'dgreen':'dred'">{{coinMC.percent_change_24h}}</span>
 

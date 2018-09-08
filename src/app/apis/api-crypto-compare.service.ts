@@ -61,7 +61,7 @@ export class ApiCryptoCompareService {
         console.warn(symbol, coins);
         return Observable.of({});
       }
-      const url = 'api/proxy-cache-5min/https://www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
+      const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
       console.log(url);
       return this.http.get(url).map((res: any) => {
         console.log(res.Data);
@@ -77,7 +77,7 @@ export class ApiCryptoCompareService {
   }
 
   getCoinLists() {
-    const url = 'api/proxy-cache-5min/https://www.cryptocompare.com/api/data/coinlist';
+    const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/coinlist';
     if (this.coinList) return Observable.of(this.coinList);
     else return (<any> this.http.get(url)).map(res => {
       this.coinList = res.Data;
@@ -87,7 +87,7 @@ export class ApiCryptoCompareService {
   }
 
   getMarkets(base: string, coin: string) {
-    const url = 'api/proxy-cache-5min/https://www.cryptocompare.com/api/data/coinsnapshot/?fsym={{coin}}&tsym={{base}}'
+    const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/coinsnapshot/?fsym={{coin}}&tsym={{base}}'
       .replace('{{coin}}', coin).replace('{{base}}', base);
     return this.http.get(url).map((res: any) => {
       return res.Data
@@ -95,7 +95,7 @@ export class ApiCryptoCompareService {
   }
 
   getHistoHour(base: string, coin: string, limit = 25): Observable<VOHistHour[]> {
-    const url = 'api/proxy-cache-5min/https://min-api.cryptocompare.com/data/histohour?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG'
+    const url = 'api/proxy-5min/https://min-api.cryptocompare.com/data/histohour?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG'
       .replace('{{coin}}', coin).replace('{{base}}', base).replace('{{limit}}', String(limit));
     return this.http.get(url).map((res: any) => {
       return res.Data.map(function (item) {
@@ -114,7 +114,7 @@ export class ApiCryptoCompareService {
   }
 
   getHistoMinute(base: string, coin: string, limit = 240): Observable<VOHistHour[]> {
-    const url = 'api/proxy-cache-5min/https://min-api.cryptocompare.com/data/histominute?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG&&aggregate=6'
+    const url = 'api/proxy-5min/https://min-api.cryptocompare.com/data/histominute?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG&&aggregate=6'
       .replace('{{coin}}', coin).replace('{{base}}', base).replace('{{limit}}', String(limit));
     return this.http.get(url).map((res: any) => {
       return res.Data.map(function (item) {

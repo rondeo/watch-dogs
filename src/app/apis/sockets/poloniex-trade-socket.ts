@@ -66,7 +66,7 @@ export class PoloniexTradesSocket extends SocketBase {
             amountCoin: +(msg[2] ? msg[4] : -msg[4]),
             rate: +msg[3]
           };
-          this.dispatch(this.exchange + market, data, 'trades');
+          //this.dispatch(this.exchange + market, data, 'trades');
 
           break
       }
