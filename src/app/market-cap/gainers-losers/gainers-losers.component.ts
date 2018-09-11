@@ -169,20 +169,25 @@ export class GainersLosersComponent implements OnInit {
 
   async ctrDownlaodCoinsDay() {
 
+    let ago10ds, ago30hs, MC30Mins, nowMC
 
-    const ago10ds = _.first(await this.apiMarketCap.getTicker5HoursFrom(moment().subtract('10', 'd').format()).toPromise());
+    try{
+      ago10ds = _.first(await this.apiMarketCap.getTicker5HoursFrom(moment().subtract('10', 'd').format()).toPromise());
+      ago30hs = _.first(await this.apiMarketCap.getTicker30MinFrom(moment().subtract('30', 'h').format()).toPromise());
+      MC30Mins = await this.apiMarketCap.getTickers30Min(2).toPromise();
+      nowMC = await this.apiMarketCap.getTicker();
 
-    const ago30hs = _.first(await this.apiMarketCap.getTicker30MinFrom(moment().subtract('30', 'h').format()).toPromise());
-
-    const MC30Mins = await this.apiMarketCap.getTickers30Min(2).toPromise();
+    } catch (e) {
+      console.error(e);
+    }
 
 
     const ago30mins = _.first(MC30Mins);
     const ago1hs = _.last(MC30Mins);
 
-    const nowMC = await this.apiMarketCap.getTicker();
-
-
+    // console.log(ago30mins);
+    // console.log(ago1hs);
+    // console.log(ago10ds);
    // const MCHours = await this.apiMarketCap.getTickers5Hours(1).toPromise();
 
    // const MCHoursFirst = _.first(MCHours);
@@ -193,7 +198,6 @@ export class GainersLosersComponent implements OnInit {
     //const hours = moment.duration(moment((<any>MCHoursFirst).timestamp).diff(moment((<any>MCHoursLast).timestamp))).asHours();
 
     const out = [];
-
     this.btcMC = nowMC['BTC'];
 
     for (let coin in nowMC) {
@@ -201,24 +205,29 @@ export class GainersLosersComponent implements OnInit {
      // const f = MCHoursLast[coin];
       //const last = MC30MinLast[coin];
 
+
       const ago10d: VOMarketCap = ago10ds[coin];
       const ago30h: VOMarketCap = ago30hs[coin];
       const ago30min: VOMarketCap = ago30mins[coin];
       const ago1h: VOMarketCap = ago1hs[coin];
       const now: VOMarketCap = nowMC[coin];
 
-      if (ago30min && ago1h && ago30h && ago10d) {
+      if (ago30min && ago1h) {
         out.push(
           Object.assign(now, {
             rankD: MATH.percent(ago1h.rank, ago30min.rank),
-            rank30h: MATH.percent(ago30h.rank, ago30min.rank),
+            rank30h:ago30h? MATH.percent(ago30h.rank, ago30min.rank):'-',
             // price_btcD: MATH.percent(last.price_btc, f.price_btc),
             btc_change1h: (ago30min && ago1h) ? MATH.percent(ago30min.price_btc, ago1h.price_btc) : '-',
             btc_change30h: ago30h ? MATH.percent(ago30min.price_btc, ago30h.price_btc) : '-',
             btc_change10d: ago10d ? MATH.percent(ago30min.price_btc, ago10d.price_btc) : '-'
           })
         )
+      } else {
+
+
       }
+
     }
 
     this.news.addNews(out).subscribe(res => {
@@ -228,7 +237,7 @@ export class GainersLosersComponent implements OnInit {
 
     this.showData(out);
 
-    // console.log(out);
+    //  console.log(out);
   }
 
   showData(out) {

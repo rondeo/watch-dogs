@@ -19,7 +19,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    let url = '/api/hitbtc/public/orderbook/{{coin}}{{base}}'
+    let url = '/api/proxy-5min/https://api.hitbtc.com/api/2/public/orderbook/{{coin}}{{base}}'
       .replace('{{base}}', base === 'USDT' ? 'USD' : base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any) => {
@@ -71,7 +71,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
 */
 
   downloadTicker():Observable<{[market:string]:VOMarket}> {
-    let url = '/api/hitbtc/public/ticker';
+    let url = '/api/proxy-5min/https://api.hitbtc.com/api/2/public/ticker';
     console.log(url);
 
 
@@ -113,7 +113,8 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
     if (base === 'USDT') base = 'USD';
-    let url = '/api/hitbtc/public/trades/{{coin}}{{base}}?sort=DESC'.replace('{{base}}', base).replace('{{coin}}', coin);
+    let url = '/api/proxy/https://api.hitbtc.com/api/2/public/trades/{{coin}}{{base}}?sort=DESC'
+      .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any) => {
       ///console.warn(res);

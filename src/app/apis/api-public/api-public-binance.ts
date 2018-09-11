@@ -38,7 +38,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       endTime: to
     };
 
-    const url = '/api/proxy/api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    const url = '/api/proxy-1hour/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
     return this.http.get(url).map((res: any[]) => {
       return res.map(function (item) {
         return {

@@ -20,7 +20,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    let url = 'api/bittrex/getorderbook/' + base + '-' + coin + '/' + 50;
+    let url = '/api/proxy/https://bittrex.com/api/v1.1/public/getorderbook?type=both&market=' + base + '-' + coin + '&depth=' + 50;
     console.log(url)
     return this.http.get(url).map((res: any) => {
       let r = (<any>res).result;
@@ -57,7 +57,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
   }*/
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
-    let url = '/api/bittrex/summaries';
+    let url = '/api/proxy-5min/https://bittrex.com/api/v1.1/public/getmarketsummaries';
     console.log(url);
 
     return this.http.get(url).map((result: any) => {
@@ -102,7 +102,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
   downloadMarketHistory(base: string, coin: string) {
 
     let market = base + '-' + coin;
-    let url = 'api/bittrex/getmarkethistory/' + market;
+    let url = '/api/proxy/https://bittrex.com/api/v1.1/public/getmarkethistory?market=' + market;
     console.log(url);
 
     return this.http.get(url).map((res: any) => {
