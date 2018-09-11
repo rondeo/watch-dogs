@@ -16,7 +16,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
   }
 
   downloadMarketHistory(base:string, coin:string) {
-    let url = '/api/proxy/www.okex.com/api/v1/trades.do?symbol={{coin}}_{{base}}&limit=300'
+    let url = '/api/proxy/https://www.okex.com/api/v1/trades.do?symbol={{coin}}_{{base}}&limit=300'
       .replace('{{base}}', base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
@@ -40,7 +40,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    let url = '/api/proxy/www.okex.com/api/v1/depth.do?symbol={{coin}}_{{base}}'
+    let url = '/api/proxy/https://www.okex.com/api/v1/depth.do?symbol={{coin}}_{{base}}'
       .replace('{{base}}',  base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
@@ -101,7 +101,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
 
   downloadTicker():Observable<{[market:string]:VOMarket}> {
     // https://www.okex.com/api/v1/tickers.do
-    let url = '/api/proxy/www.okex.com/api/v1/tickers.do';
+    let url = '/api/proxy-5min/https://www.okex.com/api/v1/tickers.do';
     console.log(url);
 
     return this.http.get(url).map((result: any) => {
@@ -139,7 +139,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
 
   downloadTicker2():Observable<{[market:string]:VOMarket}> {
     //
-    let url = '/api/proxy/www.okex.com/v2/spot/markets/products';
+    let url = '/api/proxy-5min/https://www.okex.com/v2/spot/markets/products';
     console.log(url);
 
     return this.http.get(url).map((result: any) => {

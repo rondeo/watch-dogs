@@ -38,7 +38,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
 
   getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
-    let url = '/api/proxy/api.binance.com/api/v3/allOrders';
+    let url = '/api/proxy/https://api.binance.com/api/v3/allOrders';
     const data = {
       symbol: coin + base
     };
@@ -67,7 +67,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   getAllOpenOrders(): Observable<VOOrder[]> {
-    let url = '/api/proxy/api.binance.com/api/v3/openOrders';
+    let url = '/api/proxy/https://api.binance.com/api/v3/openOrders';
     console.log(url);
     return this.call(url, null, RequestType.GET).map(res => {
       console.log(' allOpenOrders ', res);
@@ -93,7 +93,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
-    let url = '/api/proxy/api.binance.com/api/v3/openOrders';
+    let url = '/api/proxy/https://api.binance.com/api/v3/openOrders';
     const data = {
       symbol: coin + base
     };
@@ -120,7 +120,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
 
   cancelOrder(orderId: string, base?: string, coin?: string) {
-    let url = '/api/proxy/api.binance.com/api/v3/order';
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
     console.log(url);
     const data = {
       symbol: coin + base,
@@ -133,7 +133,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   getOrder(orderId: string, base: string, coin: string): Observable<VOOrder> {
     // console.log(' getOrderById  ' + orderId);
-    let url = '/api/proxy/api.binance.com/api/v3/order';
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
     console.log(url);
     const data = {
       symbol: coin + base,
@@ -162,7 +162,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   isLoadingBalances: boolean;
 
   downloadBalances(): Observable<VOBalance[]> {
-    let uri = '/api/proxy/api.binance.com/api/v3/account';
+    let uri = '/api/proxy/https://api.binance.com/api/v3/account';
     console.log(uri);
     const exchange = this.exchange;
     this.isLoadingBalances = true;
@@ -194,7 +194,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     UTILS.formatDecimals(this.exchange, base, coin, val);
 
 
-    let url = '/api/proxy/api.binance.com/api/v3/order';
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
     let data = {
       symbol: coin + base,
       side: 'BUY',
@@ -226,7 +226,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
     let market = base + '-' + coin;
     console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-    let url = '/api/proxy/api.binance.com/api/v3/order';
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
 
     const decimals = UTILS.decimals[this.exchange + base + coin];
     if (decimals) {

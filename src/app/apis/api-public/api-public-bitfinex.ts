@@ -25,7 +25,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    const url = '/api/proxy/api.bitfinex.com/v1/book/' + coin +(base === 'USDT'?'USD':base);
+    const url = '/api/proxy/https://api.bitfinex.com/v1/book/' + coin +(base === 'USDT'?'USD':base);
     console.log(url)
     return this.http.get(url).map((res: any) => {
       let r = (<any>res);
@@ -60,7 +60,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 */
 
  private  getItems(ids: string[]): Observable<any> {
-   const url = '/api/proxy/api.bitfinex.com/v1/pubticker/';
+   const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/';
     return from(ids).pipe(
       concatMap(id => <Observable<any>> this.http.get(url + id).map(res=>{
         console.log(res);
@@ -89,7 +89,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   }
 
   private getTickerForMarket(market: string) {
-    const url = '/api/proxy/api.bitfinex.com/v1/pubticker/' + market;
+    const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/' + market;
     return this.http.get(url).map(res => {
       console.log(res);
       return res;
@@ -97,7 +97,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   }
 
   private downlaodMarketsAvailable():Observable<string[]>{
-    let url = '/api/proxy/api.bitfinex.com/v1/symbols';
+    let url = '/api/proxy-1hour/https://api.bitfinex.com/v1/symbols';
     console.log(url);
     return <any>this.http.get(url)
   }
@@ -121,7 +121,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   }*/
 
   downloadMarketHistory(base: string, coin: string) {
-    let url = 'https://api.bitfinex.com/v2/trades/t{{coin}}{{base}}/hist'
+    let url = 'api/proxy/https://api.bitfinex.com/v2/trades/t{{coin}}{{base}}/hist'
       .replace('{{base}}', (base === 'USDT'?'USD':base))
       .replace('{{coin}}', coin);
     console.log(url);

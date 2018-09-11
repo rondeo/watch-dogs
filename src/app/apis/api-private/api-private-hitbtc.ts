@@ -44,7 +44,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
-    const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
+    const url = 'api/proxy//order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
     return this.call(url, null).map(res => {
       console.log('getOpenOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);

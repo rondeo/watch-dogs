@@ -67,7 +67,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
   }*/
 
   downloadTicker():Observable<{[market:string]:VOMarket}>{
-    let url  = 'https://poloniex.com/public?command=returnTicker';
+    let url  = '/api/proxy-5min/https://poloniex.com/public?command=returnTicker';
     console.log(url);
 
     return this.http.get(url).map(result=>{

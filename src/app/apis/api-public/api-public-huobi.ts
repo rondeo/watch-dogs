@@ -17,7 +17,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
 
   downloadMarketHistory(base:string, coin:string) {
-    let url = '/api/proxy/api.huobipro.com/market/history/trade?size=200&symbol={{coin}}{{base}}'
+    let url = '/api/proxy/https://api.huobipro.com/market/history/trade?size=200&symbol={{coin}}{{base}}'
       .replace('{{base}}', base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
@@ -41,7 +41,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
 
-    let url = '/api/proxy/api.huobipro.com/market/depth?&type=step0&symbol={{coin}}{{base}}'
+    let url = '/api/proxy/https://api.huobipro.com/market/depth?&type=step0&symbol={{coin}}{{base}}'
       .replace('{{base}}',  base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
@@ -78,7 +78,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
   downloadTicker():Observable<{[market:string]:VOMarket}> {
     // https://www.okex.com/api/v1/tickers.do
-    let url = '/api/proxy/api.huobipro.com//market/tickers';
+    let url = '/api/proxy-5min/https://api.huobipro.com//market/tickers';
     console.log(url);
 
     return this.http.get(url).map((result: any) => {
