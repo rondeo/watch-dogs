@@ -28,17 +28,21 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       .replace('{{base}}', base).replace('{{coin}}', coin);
   }
 
-  async getCandlesticks(base: string, coin: string, from:number, to:number): Promise<VOCandle[]>{
+  async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]>{
    const markets = await this.getMarkets();
    if(!markets[base+'_'+coin]) return Promise.resolve([]);
     const params = {
       symbol:coin+base,
       interval:'5m',
+      limit: limit,
       startTime: from,
       endTime: to
     };
+    if(!limit) delete params.limit;
+    if(!from) delete params.startTime;
+    if(!to) delete params.endTime;
 
-    const url = '/api/proxy-1hour/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    const url = '/api/proxy-5min/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
     return this.http.get(url).map((res: any[]) => {
       return res.map(function (item) {
         return {

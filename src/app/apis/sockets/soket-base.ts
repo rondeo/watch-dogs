@@ -19,6 +19,7 @@ export abstract class SocketBase {
   hb: number;
   exchange: string;
   market: string;
+  marketIDs = {};
   statusSub: BehaviorSubject<string> = new BehaviorSubject('CLOSED');
 
   HB: string;
@@ -39,8 +40,9 @@ export abstract class SocketBase {
     }, 60000);
   }*/
 
-  onOpen(evt, ws: WebSocket, resolve, reject) {
-    console.log('%c ' + this.exchange + ' OPEN', 'color:green');
+  onOpen(evt, resolve, reject) {
+    const ws: WebSocket = <WebSocket>evt.currentTarget;
+    console.log('%c ' + this.exchange + ' OPEN '+ ws.url, 'color:green');
     if (ws.readyState === ws.OPEN) {
       resolve(ws);
     } else reject();
@@ -70,46 +72,49 @@ export abstract class SocketBase {
     if (this.ws) return Promise.resolve(this.ws);
     return new Promise<WebSocket>((resolve, reject) => {
       const ws = new WebSocket(this.socketUrl);
-      //ws.addEventListener('message', (evt) => this.onMessage(evt));
-      ws.addEventListener('open', (evt) => this.onOpen(evt, ws, resolve, reject));
+      ws.addEventListener('message', (evt) => this.onMessage(evt));
+      ws.addEventListener('open', (evt) => this.onOpen(evt, resolve, reject));
       ws.addEventListener('close', (evt) => this.onClose(evt, ws));
       ws.addEventListener('error', (evt) => this.onError(evt));
-    })
+    });
   }
 
 
   abstract async subscribeForChannel(chanel: SocketChannel): Promise<any>
 
+  abstract onMessage(m: MessageEvent): void;
   channels = {};
   serverChannels = {};
 
-  getChannel(channel: string, market: string) {
+  getChannel(channel: string, market: string): SocketChannel {
     const id = channel + '=' + market;
     if (this.channels[id]) return this.channels[id];
     const ch = new SocketChannel();
+    ch.id = id;
     ch.channel = channel;
     ch.market = market;
     this.channels[id] = ch;
     this.subscribeForChannel(ch).then(socket => {
 
     });
+
     return ch;
   }
 
-  subscribe(chanel: string, market: string): Observable<any> {
-    return this.getChannel(chanel, market).sub.asObservable();
+  subscribe(chanel: string, market: string): SocketChannel{
+    return this.getChannel(chanel, market);
   }
 
-  unsubscribeFromTrades(market: string) {
+ /* unsubscribeFromTrades(market: string) {
     const ch = this.channels['trades' + '=' + market];
     if (ch) {
       ch.unsubscribe();
       ch.destroy();
     }
 
-  }
+  }*/
 
-  subscribeForTrades(market: string): Observable<any> {
+  subscribeForTrades(market: string): SocketChannel {
     return this.subscribe('trades', market);
   }
 
@@ -117,7 +122,19 @@ export abstract class SocketBase {
     return this.subscribe('books', market)
   }
 
+  subscribeForKline(market: string) {
+    return this.subscribe('kline_5m', market)
+  }
 
+  dispatch(channelID, market, data): boolean{
+    const channel: SocketChannel = this.channels[channelID + '=' + market];
+    if(channel && channel.hasSubscribers()) {
+      channel.dispatch(data);
+      return true;
+    }
+    if(channel)  delete this.channels[channel.id];
+    return false;
+  }
   //  isQ: boolean;
 
   /* send(params) {

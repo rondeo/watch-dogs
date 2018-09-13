@@ -1,6 +1,10 @@
 import * as _ from 'lodash';
 
 export class MATH {
+
+  static toString(value:number, length = 4){
+    return (value * 1e8).toString().substr(0, length);
+  }
   static toValue(value: number): number {
     return +(value > 1e-4 ? value.toPrecision(5) :value.toFixed(8));
   }

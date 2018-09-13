@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import {VOOrder} from '../../models/app-models';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {SocketBase} from '../../apis/sockets/soket-base';
+import {SocketChannel} from '../../apis/sockets/socket-channel';
 
 @Component({
   selector: 'app-trades-history',
@@ -22,9 +23,10 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
+  sub1;
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
-    if(this.socket) this.socket.unsubscribeFromTrades(this.market);
+    if(this.sub1) this.sub1.unsubscribe();
   }
 
   ngOnChanges(evt) {
@@ -46,16 +48,15 @@ export class TradesHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
-  socket: SocketBase;
+  socket: SocketChannel;
   ctrConnect() {
     if (!this.exchange || !this.market) return;
     const api = this.apiPubblic.getExchangeApi(this.exchange);
     if (api && api.hasSocket()) {
-      const socket: SocketBase = api.getTradesSocket();
-       socket.subscribeForTrades(this.market).subscribe(res =>{
+      const socket = api.getTradesSocket().subscribeForTrades(this.market);
+     this.sub1 =  socket.data$().subscribe(res =>{
          console.log(res);
-       })
-      this.socket = socket;
+       });
     }
   }
 

@@ -2,6 +2,8 @@ import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import * as  moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {VOCandle, VOGraphs} from '../../ui/candlesticks/candlesticks.component';
 
 @Component({
   selector: 'app-coin-candles',
@@ -11,9 +13,10 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 export class CoinCandlesComponent implements OnInit, OnChanges{
 
   @Input() market: string;
-  @Input() numberTo: number;
+  @Input() exchange: string;
 
-  myGraps: VOLineGraph[];
+
+  myGraps: VOGraphs;
 
   constructor(
     private apiPublic: ApisPublicService
@@ -21,17 +24,42 @@ export class CoinCandlesComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(evt:{[val:string]: SimpleChange}){
-    this.showExchanges();
+   // this.showExchanges();
+    this.getData();
   }
   ngOnInit() {
-    this.showExchanges();
+   // this.showExchanges();
   }
 
+  getData(){
+    const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
+    if(!api) return;
 
-  async showExchanges() {
+    const ar = this.market.split('_');
+    api.getCandlesticks(ar[0], ar[1]).then(res =>{
+      const candles: VOCandle[] = res.map(function (item) {
+        return {
+          c:item.Close,
+          h: item.High,
+          l: item.Low,
+          o: item.Open,
+          t: item.from,
+          v: item.Volume
+        };
+      })
+
+      this.myGraps = {
+        labelsX: null,
+        candles: candles
+      }
+    })
+  }
+
+ /* async showExchanges() {
     const to = this.numberTo;
     const from = moment(to).subtract(1, 'd').valueOf();
     const ar = this.market.split('_');
+
     const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance', 'bittrex'], ar[0], ar[1], from, to);
     // console.log(prices);
 
@@ -41,5 +69,5 @@ export class CoinCandlesComponent implements OnInit, OnChanges{
       label: 'binance'
     }
     this.myGraps = [line];
-  }
+  }*/
 }

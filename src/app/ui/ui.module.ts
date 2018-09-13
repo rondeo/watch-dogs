@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import { McDataComponent } from './mc-data/mc-data.component';
 import {DirectivesModule} from '../directives/directives.module';
 import {PipesModule} from '../pipes/pipes.module';
+import { CandlesticksComponent } from './candlesticks/candlesticks.component';
 
 @NgModule({
   exports: [
@@ -19,7 +20,8 @@ import {PipesModule} from '../pipes/pipes.module';
     SortableTableComponent,
     LineChartComponent,
     CrossTableComponent,
-    McDataComponent
+    McDataComponent,
+    CandlesticksComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import {PipesModule} from '../pipes/pipes.module';
     SortableTableComponent,
     LineChartComponent,
     CrossTableComponent,
-    McDataComponent
+    McDataComponent,
+    CandlesticksComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

@@ -1,59 +1,44 @@
-import {Subject} from "rxjs/Subject";
-import {SocketBase} from "./soket-base";
+import {Subject} from 'rxjs/Subject';
+import {SocketBase} from './soket-base';
 import {SocketChannel} from './socket-channel';
 
 
 export class BinanceTradesSocket extends SocketBase {
   exchange = 'binance';
   socketUrl = 'wss://stream.binance.com:9443/ws/';
+
   //HB = '.';
 
   constructor() {
     super();
   }
 
-  marketsIds:any ={};
-  sockets:WebSocket[] = [];
+  sockets: WebSocket[] = [];
 
-  async createSocket(channel: SocketChannel):Promise<WebSocket> {
-    return new Promise<WebSocket>((resolve, reject) =>{
+
+  async getSocket(channel: SocketChannel): Promise<WebSocket> {
+    return new Promise<WebSocket>((resolve, reject) => {
       const marketId = channel.market.split('_').reverse().join('').toLocaleLowerCase();
       // this.marketsIds[marketId] = market;
-      const suffix = marketId +'@' + channel.channel.slice(0,-1);
 
-      const ws = new WebSocket(this.socketUrl + suffix);
+      this.marketIDs[marketId] = channel.market;
+      let ch: string;
 
-      const onFirstMessage = function(msg){
-        let data: any = JSON.parse(msg.data);
-       // console.log(data);
-       // console.log(channel);
+      switch (channel.channel) {
+        case 'trades':
+          ch = 'trade';
+          break;
+        case 'books':
+          ch = 'depth';
+          break;
+      }
 
-        if(data.e + 's' === channel.channel && data.s ===  channel.market.split('_').reverse().join(''))  {
-          const out = {
-            exchange:'binance',
-            market: channel.market,
-            amountCoin:data.m? -data.q:+data.q,
-            rate: +data.p,
-            timestamp:+data.T,
-            uuid: +data.b
-          };
-          channel.dispatch(out);
-        }
-      };
+      const url = this.socketUrl + marketId + '@' + ch;
+      console.log(url);
+      const ws = new WebSocket(url);
 
-      ws.addEventListener('message',onFirstMessage);
-      ws.addEventListener('open', (evt) => {
-        // console.log(evt);
-        channel.unsubscribe = function(){
-          console.warn(' unsubscribe ', channel);
-          ws.close();
-        }
-        console.log(ws.readyState, ws.OPEN);
-        if (ws.readyState === ws.OPEN) {
-
-          resolve(ws);
-        } else reject();
-      });
+      ws.addEventListener('message', (evt) => this.onMessage(evt));
+      ws.addEventListener('open', (evt)=> this.onOpen(evt, resolve, reject));
       ws.addEventListener('close', (evt) => {
         console.log('close  ', evt)
       });
@@ -65,43 +50,42 @@ export class BinanceTradesSocket extends SocketBase {
 
   }
 
-  unsubscribeChannel(channel: SocketChannel){
-    channel.unsubscribe();
-    channel.destroy();
-
-  }
-
-  async subscribeForChannel(channel: SocketChannel):Promise<any>{
+  async subscribeForChannel(channel: SocketChannel): Promise<any> {
     console.log('createChannelId', channel);
-    const socket = await this.createSocket(channel);
+    const socket = await this.getSocket(channel);
     this.sockets.push(socket);
     return socket
   }
 
 
-  /*onMessage(m: MessageEvent) {
+  onMessage(m: MessageEvent) {
 
     let dataM: any = JSON.parse(m.data);
 
-   console.log(dataM);
+    console.log(dataM);
 
     let channel = dataM.e;
     const marketId = dataM.s.toLocaleLowerCase();
-    let market = this.marketsIds[marketId];
+    let market = this.marketIDs[marketId];
 
     if (dataM.e === 'trade') {
       channel = 'trades';
       const data = {
-        amountCoin:dataM.m? -dataM.q:+dataM.q,
+        market: market,
+        exchange: this.exchange,
+        amountCoin: dataM.m ? -dataM.q : +dataM.q,
         rate: +dataM.p,
-        timestamp:+dataM.T,
+        timestamp: +dataM.T,
         uuid: +dataM.b
       };
 
-      const id = this.exchange + channel + market;
-      this.dispatch(id, data);
+      if (!this.dispatch(channel, market, data)) {
+        console.log(' no subscribers closing ' + this.exchange + '  ' + channel + '  ' + market)
+        const ws: WebSocket = <WebSocket>m.currentTarget;
+        ws.close();
+      }
     }
 
-  }*/
+  }
 
 }

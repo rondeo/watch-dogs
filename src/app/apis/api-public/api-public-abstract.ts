@@ -70,7 +70,7 @@ export abstract class ApiPublicAbstract {
   marketsTimestamp: number = 0;
 
 
-  async getCandlesticks(base: string, coin: string, from: number, to: number): Promise<VOCandle[]> {
+  async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]> {
     return Promise.resolve([]);
   }
 

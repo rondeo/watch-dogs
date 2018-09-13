@@ -7,9 +7,9 @@ export class SocketChannel {
   ws: WebSocket;
   serverID: string;
   sub:Subject<any> = new Subject();
- /* subscribe(): Subscription{
-    return this.sub.asObservable().subscribe;
-  }*/
+  data$(): Observable<any>{
+    return this.sub.asObservable()
+  }
 
   dispatch(obj: any) {
     this.sub.next(obj);
@@ -17,6 +17,10 @@ export class SocketChannel {
 
   setSoket(ws: WebSocket){
 
+  }
+
+  hasSubscribers(){
+    return this.sub.observers.length;
   }
 
   unsubscribe(){

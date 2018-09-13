@@ -4,18 +4,17 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterModule, Routes} from "@angular/router";
 import {MaterialAppModule} from "../material/material-app.module";
-
 import {TraderOutletComponent} from "./trader-outlet/trader-outlet.component";
-import {TraderMainComponent} from "./trader-main/trader-main.component";
+
 import {SoketConnectorService} from "../sockets/soket-connector.service";
 import {TraderSocketComponent} from './trader-socket/trader-socket.component';
 import {ApisModule} from "../apis/apis.module";
-import {TraderRecorderComponent} from './trader-recorder/trader-recorder.component';
+
 import { AnalyzeCoinComponent } from './analyze-coin/analyze-coin.component';
 import {UiModule} from '../ui/ui.module';
 import {WidgetsModule} from '../widgets/widgets.module';
 import { CommonMarketsComponent } from './common-markets/common-markets.component';
-
+import { LiveTraderComponent } from './live-trader/live-trader.component';
 
 
 const routes: Routes = [
@@ -23,7 +22,7 @@ const routes: Routes = [
     path: 'trader', component: TraderOutletComponent,
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
-      {path: 'market/:market', component: TraderMainComponent},
+      {path: 'live-trader/:exchange/:market', component:LiveTraderComponent},
       {path: 'analyze-coin/:coin', component: AnalyzeCoinComponent},
       {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
       {path: 'common-markets', component: CommonMarketsComponent}
@@ -46,11 +45,10 @@ const routes: Routes = [
   ],
   declarations: [
     TraderOutletComponent,
-    TraderMainComponent,
     TraderSocketComponent,
-    TraderRecorderComponent,
     AnalyzeCoinComponent,
-    CommonMarketsComponent
+    CommonMarketsComponent,
+    LiveTraderComponent
   ],
   providers: [SoketConnectorService]
 })
