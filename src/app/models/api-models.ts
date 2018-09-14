@@ -126,10 +126,11 @@ export type VOMCObj = { [symbol: string]: VOMarketCap }
 export interface VOCandle {
   from: number;
   to: number;
-  Open: number;
-  Close: number;
-  High: number;
-  Low: number;
+  open: number;
+  close: number;
+  high: number;
+  low: number;
   Trades?: number;
   Volume?: number;
+  isClosed?: boolean
 }

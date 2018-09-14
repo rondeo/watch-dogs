@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import {MATH} from '../../com/math';
 
 
-export interface VOCandle {
+export interface VOCandleMin {
   h: number;
   l: number;
   o: number;
@@ -15,7 +15,7 @@ export interface VOCandle {
 
 export interface VOGraphs {
   labelsX: string[];
-  candles: VOCandle[];
+  candles: VOCandleMin[];
 }
 
 
@@ -46,7 +46,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   y0: number;
   x0: number;
 
-  static convertToScale(item: VOCandle, scale: number, min: number): VOCandle {
+  static convertToScale(item: VOCandleMin, scale: number, min: number): VOCandleMin {
     return {
       h: Math.round((item.h - min) * scale),
       l: Math.round((item.l - min) * scale),
@@ -96,7 +96,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     for (let i = 0, n = ar.length; i < n; i++) {
       const x = x0 + (i * dx);
-      const item: VOCandle = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
+      const item: VOCandleMin = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#333333';

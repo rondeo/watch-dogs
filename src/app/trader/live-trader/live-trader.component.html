@@ -1,3 +1,6 @@
-<app-coin-candles [exchange]="exchange" [market]="market">
+<app-coin-candles [exchange]="exchange" [market]="market" (candles)="onCandles($event)">
 
 </app-coin-candles>
+
+
+<app-rsi-indicator [candles]="candles"></app-rsi-indicator>

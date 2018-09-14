@@ -176,7 +176,7 @@ export class CommonMarketsComponent implements OnInit {
 
     let color = '';
     if(maxBuy > minSell) {
-      color ='alert';
+      color ='bd-red';
     }
 
     console.log(color);

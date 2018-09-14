@@ -31,12 +31,15 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
   private ctx: CanvasRenderingContext2D;
-  @Input() graphs: VOGraphs
+  @Input() graphs: VOGraphs;
 
-
+  @Input() myWidth:number;
+  @Input() myHeight: number;
   lines: VOLine[];
 
-  ratio: number = 600 / 400;
+
+
+  ratio: number;
   width: number = 600;
   height: number = 400;
   widthG: number;
@@ -51,7 +54,6 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   y0: number;
   x0: number;
 
-
   static convertToScale(ar: number[], range: number, min: number, height: number): number[] {
     if (range === 0) range = 1;
     return ar.map(function (item) {
@@ -60,6 +62,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   }
 
   constructor() {
+
   }
 
   drawData() {
@@ -76,6 +79,9 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   private resise;
 
   ngOnInit() {
+    this.width = this.myWidth || 600;
+    this.height = this.myHeight || 400;
+    this.ratio = this.width / this.height;
     window.addEventListener('resize', event => {
       clearTimeout(this.resise);
       this.resise = setTimeout(() => this.onResise(), 500);

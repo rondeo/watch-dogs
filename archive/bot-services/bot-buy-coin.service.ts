@@ -99,8 +99,8 @@ export class BotBuyCoinService {
      /!*   market.LastUS = +(market.Last * priceBase).toPrecision(5);
         market.AskUS = +(market.Ask * priceBase).toPrecision(5);
         market.BidUS = +(market.Bid * priceBase).toPrecision(5);
-        market.LowUS = +(market.Low * priceBase).toPrecision(5);
-        market.HighUS = +(market.High * priceBase).toPrecision(5);
+        market.LowUS = +(market.low * priceBase).toPrecision(5);
+        market.HighUS = +(market.high * priceBase).toPrecision(5);
 *!/
 
         return market;

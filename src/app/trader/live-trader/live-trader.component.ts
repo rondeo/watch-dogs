@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {VOCandle} from '../../models/api-models';
 
 @Component({
   selector: 'app-live-trader',
@@ -10,6 +11,9 @@ export class LiveTraderComponent implements OnInit {
 
   exchange: string;
   market: string;
+
+  candles: VOCandle[];
+
   constructor(
     private route: ActivatedRoute
   ) { }
@@ -22,6 +26,10 @@ export class LiveTraderComponent implements OnInit {
 
     })
 
+  }
+
+  onCandles(candles) {
+    this.candles = candles;
   }
 
 }

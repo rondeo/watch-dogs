@@ -59907,7 +59907,7 @@ function _throwError() {
     throw new Error("Runtime compiler is not loaded");
 }
 /**
- * Low-level service for running the angular compiler during runtime
+ * low-level service for running the angular compiler during runtime
  * to create {\@link ComponentFactory}s, which
  * can later be used to create and render a Component instance.
  *
@@ -77930,7 +77930,7 @@ ReadyState.Loading = 3;
 ReadyState.Done = 4;
 ReadyState.Cancelled = 5;
 ReadyState[ReadyState.Unsent] = "Unsent";
-ReadyState[ReadyState.Open] = "Open";
+ReadyState[ReadyState.Open] = "open";
 ReadyState[ReadyState.HeadersReceived] = "HeadersReceived";
 ReadyState[ReadyState.Loading] = "Loading";
 ReadyState[ReadyState.Done] = "Done";
@@ -81995,7 +81995,7 @@ var ScrollStrategyOptions = /*@__PURE__*/(function () {
          */
         this.noop = function () { return new NoopScrollStrategy(); };
         /**
-         * Close the overlay as soon as the user scrolls.
+         * close the overlay as soon as the user scrolls.
          */
         this.close = function () { return new CloseScrollStrategy(_this._scrollDispatcher); };
         /**
@@ -91746,7 +91746,7 @@ var MdSidenav = /*@__PURE__*/(function () {
         configurable: true
     });
     /**
-     * Open this sidenav, and return a Promise that will resolve when it's fully opened (or get
+     * open this sidenav, and return a Promise that will resolve when it's fully opened (or get
      * rejected if it didn't).
      * @return {?}
      */
@@ -91754,7 +91754,7 @@ var MdSidenav = /*@__PURE__*/(function () {
         return this.toggle(true);
     };
     /**
-     * Close this sidenav, and return a Promise that will resolve when it's fully closed (or get
+     * close this sidenav, and return a Promise that will resolve when it's fully closed (or get
      * rejected if it didn't).
      * @return {?}
      */
@@ -92134,7 +92134,7 @@ var MdSidenavContainer = /*@__PURE__*/(function () {
      * @return {?}
      */
     MdSidenavContainer.prototype._closeModalSidenav = function () {
-        // Close all open sidenav's where closing is not disabled and the mode is not `side`.
+        // close all open sidenav's where closing is not disabled and the mode is not `side`.
         [this._start, this._end]
             .filter(function (sidenav) { return sidenav && !sidenav.disableClose && sidenav.mode !== 'side'; })
             .forEach(function (sidenav) { return sidenav.close(); });
@@ -99579,7 +99579,7 @@ var MdDialogRef = /*@__PURE__*/(function () {
         });
     }
     /**
-     * Close the dialog.
+     * close the dialog.
      * @param {?=} dialogResult Optional reports to return to the dialog opener.
      * @return {?}
      */
@@ -99900,7 +99900,7 @@ var MdDialog = /*@__PURE__*/(function () {
          * Gets an observable that is notified when all open dialog have finished closing.
          */
         this.afterAllClosed = this._afterAllClosed.asObservable();
-        // Close all of the dialogs when the user goes forwards/backwards in coindatas or when the
+        // close all of the dialogs when the user goes forwards/backwards in coindatas or when the
         // location hash changes. Note that this usually doesn't include clicking on links (unless
         // the user is using the `HashLocationStrategy`).
         if (!_parentDialog && _location) {
@@ -100118,7 +100118,7 @@ var MdDialogClose = /*@__PURE__*/(function () {
         /**
          * Screenreader label for the button.
          */
-        this.ariaLabel = 'Close dialog';
+        this.ariaLabel = 'close dialog';
     }
     Object.defineProperty(MdDialogClose.prototype, "_matDialogClose", {
         /**
@@ -101288,7 +101288,7 @@ var MdDatepickerIntl = /*@__PURE__*/(function () {
         /**
          * A label for the button used to open the calendar popup (used by screen readers).
          */
-        this.openCalendarLabel = 'Open calendar';
+        this.openCalendarLabel = 'open calendar';
         /**
          * A label for the previous month button (used by screen readers).
          */
@@ -101886,7 +101886,7 @@ var MdDatepicker = /*@__PURE__*/(function () {
             this._datepickerInput._valueChange.subscribe(function (value) { return _this._selected = value; });
     };
     /**
-     * Open the calendar.
+     * open the calendar.
      * @return {?}
      */
     MdDatepicker.prototype.open = function () {
@@ -101903,7 +101903,7 @@ var MdDatepicker = /*@__PURE__*/(function () {
         this.opened = true;
     };
     /**
-     * Close the calendar.
+     * close the calendar.
      * @return {?}
      */
     MdDatepicker.prototype.close = function () {
@@ -101927,7 +101927,7 @@ var MdDatepicker = /*@__PURE__*/(function () {
         this.opened = false;
     };
     /**
-     * Open the calendar as a dialog.
+     * open the calendar as a dialog.
      * @return {?}
      */
     MdDatepicker.prototype._openAsDialog = function () {
@@ -101939,7 +101939,7 @@ var MdDatepicker = /*@__PURE__*/(function () {
         this._dialogRef.componentInstance.datepicker = this;
     };
     /**
-     * Open the calendar as a popup.
+     * open the calendar as a popup.
      * @return {?}
      */
     MdDatepicker.prototype._openAsPopup = function () {
@@ -107533,7 +107533,7 @@ var PROFILER_GLOBAL_NAME = 'profiler';
  *
  * Usage:
  *
- * 1. Open developer console (e.g. in Chrome Ctrl + Shift + j)
+ * 1. open developer console (e.g. in Chrome Ctrl + Shift + j)
  * 1. Type `ng.` (usually the console will show auto-complete suggestion)
  * 1. Try the change detection profiler `ng.profiler.timeChangeDetection()`
  *    then hit Enter.

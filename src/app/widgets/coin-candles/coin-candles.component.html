@@ -1,5 +1,9 @@
 <p>
-    <span>{{exchange}}</span>
-    <span>{{market}}</span>
+    <a class="btn" (click)="onMarketClick()">
+        <span>{{exchange}}</span>
+        <span>{{market}}</span>
+    </a>
+
+    <a class="right btn fa fa-refresh fa-2x dgreen" [ngClass]="isRquesting?'scale05':''" (click)="onRefreshClick()"></a>
     <app-candlesticks  [graphs]="myGraps"></app-candlesticks>
 </p>

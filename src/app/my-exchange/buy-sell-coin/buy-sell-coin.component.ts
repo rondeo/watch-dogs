@@ -95,7 +95,7 @@ export class BuySellCoinComponent implements OnInit {
     const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
     if (markets.length === 0) {
       console.log(await this.myService.getAllMarkets(this.exchange));
-      this.snackBar.open(' No Markets for ' + this.coin + ' on ' + this.exchange, 'x', {duration: 3000, extraClasses: 'alert-red'});
+      this.snackBar.open(' No Markets for ' + this.coin + ' on ' + this.exchange, 'x', {duration: 3000, extraClasses: 'bg-red'});
     }
     this.marketsAvailable = markets;
     if (marketSymbol) {

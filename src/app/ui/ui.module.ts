@@ -11,6 +11,8 @@ import { McDataComponent } from './mc-data/mc-data.component';
 import {DirectivesModule} from '../directives/directives.module';
 import {PipesModule} from '../pipes/pipes.module';
 import { CandlesticksComponent } from './candlesticks/candlesticks.component';
+import { RsiIndicatorComponent } from './rsi-indicator/rsi-indicator.component';
+import { IndicatorComponent } from './indicator/indicator.component';
 
 @NgModule({
   exports: [
@@ -21,7 +23,9 @@ import { CandlesticksComponent } from './candlesticks/candlesticks.component';
     LineChartComponent,
     CrossTableComponent,
     McDataComponent,
-    CandlesticksComponent
+    CandlesticksComponent,
+    RsiIndicatorComponent,
+    IndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +41,9 @@ import { CandlesticksComponent } from './candlesticks/candlesticks.component';
     LineChartComponent,
     CrossTableComponent,
     McDataComponent,
-    CandlesticksComponent
+    CandlesticksComponent,
+    RsiIndicatorComponent,
+    IndicatorComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

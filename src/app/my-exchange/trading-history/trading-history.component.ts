@@ -119,7 +119,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
         let msg = myOrder.isActive + ' $'+ (myOrder.amountCoin * myOrder.rate * this.marketInit.priceBaseUS);
 
-        this.snackBar.open('Open ' + msg + 'wait 3sec', 'x', {duration:2000});
+        this.snackBar.open('open ' + msg + 'wait 3sec', 'x', {duration:2000});
 
         this.trackOrderTimeout = setTimeout(()=>this.checkingOrder(myOrder), 30000);
       }else{

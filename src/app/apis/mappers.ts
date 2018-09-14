@@ -419,8 +419,8 @@ export class Mappers{
       market.Ask = +item.AskPrice;
       market.Bid = +item.BidPrice;
       market.Last = +item.LastPrice;
-      market.Low = +item.LowPrice;
-      market.High = +item.HighPrice;
+      market.low = +item.LowPrice;
+      market.high = +item.HighPrice;
       market.change =  +item.Change;
       // market.Volume = +item.Volume;
       market.BaseVolume =  +item.Volume * +item.LastPrice;

@@ -235,8 +235,8 @@ export class VOCurrency {
   Bid:number;
   Ask:number;
 
-  High: number;
-  Low:number;
+  high: number;
+  low:number;
   Volume:number
   OpenBuyOrders:number;
   OpenSellOrders:number;
@@ -259,8 +259,8 @@ export interface IVOMarket {
   exchange: string;
   Volume: number;
   Last: number;
-  High: number;
-  Low: number;
+  high: number;
+  low: number;
   Ask: number;
   Bid: number;
   BaseVolume: number;
@@ -415,10 +415,10 @@ export interface VOMarketB {
   pair: string;
   coinToBuy: string;
   MarketName: string;
-  High: number;
+  high: number;
   dHigh?: string;
   usHigh?: string;
-  Low: number;
+  low: number;
   dLow?: string;
   usLow?: string;
   Volume: number;

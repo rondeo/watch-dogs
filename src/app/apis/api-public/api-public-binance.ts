@@ -42,16 +42,17 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     if(!from) delete params.startTime;
     if(!to) delete params.endTime;
 
-    const url = '/api/proxy-5min/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    const url = '/api/proxy/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    console.log(url);
     return this.http.get(url).map((res: any[]) => {
       return res.map(function (item) {
         return {
           from:+item[0],
           to:+item[6],
-          Open:+item[1],
-          High: +item[2],
-          Low: +item[3],
-          Close: +item[4],
+          open:+item[1],
+          high: +item[2],
+          low: +item[3],
+          close: +item[4],
           Trades: +item[8],
           Volume: +item[5]
         }

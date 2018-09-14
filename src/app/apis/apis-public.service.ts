@@ -27,7 +27,7 @@ export class ApisPublicService {
 
   static candelsToAvarage(res: VOCandle[]) {
     return res.map(function (item: VOCandle) {
-      return +((item.High + item.Low) / 2).toPrecision(7);
+      return +((item.high + item.low) / 2).toPrecision(7);
     });
   }
 
@@ -54,10 +54,10 @@ export class ApisPublicService {
 
 
     /*
-        return api.getCandlesticks(base, coin, from, to).map((res: VOCandle[]) => {
+        return api.getCandlesticks(base, coin, from, to).map((res: VOCandleMin[]) => {
 
-          return res.map(function (item: VOCandle) {
-            return +((item.High + item.Low)/2).toPrecision(7);
+          return res.map(function (item: VOCandleMin) {
+            return +((item.high + item.low)/2).toPrecision(7);
 
 
           });

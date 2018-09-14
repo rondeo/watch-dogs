@@ -1,73 +1,93 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange} from '@angular/core';
 import * as  moment from 'moment';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {VOCandle, VOGraphs} from '../../ui/candlesticks/candlesticks.component';
+import {VOCandleMin, VOGraphs} from '../../ui/candlesticks/candlesticks.component';
+import {MatSnackBar} from '@angular/material';
+import {VOCandle} from '../../models/api-models';
 
 @Component({
   selector: 'app-coin-candles',
   templateUrl: './coin-candles.component.html',
   styleUrls: ['./coin-candles.component.css']
 })
-export class CoinCandlesComponent implements OnInit, OnChanges{
+export class CoinCandlesComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() market: string;
   @Input() exchange: string;
 
+  @Output() candles: EventEmitter<VOCandle[]>  = new EventEmitter()
 
   myGraps: VOGraphs;
+  private interval;
+  isRquesting = false;
 
   constructor(
-    private apiPublic: ApisPublicService
+    private apiPublic: ApisPublicService,
+    private snackBar: MatSnackBar
   ) {
   }
 
-  ngOnChanges(evt:{[val:string]: SimpleChange}){
-   // this.showExchanges();
+  ngOnChanges(evt: { [val: string]: SimpleChange }) {
+    // this.showExchanges();
     this.getData();
   }
+
   ngOnInit() {
-   // this.showExchanges();
+
+    // this.showExchanges();
   }
 
-  getData(){
+  getData() {
+    clearInterval(this.interval);
+    this.isRquesting = true;
+    this.interval = setInterval(() => this.getData(), 60 * 1000);
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
-    if(!api) return;
+    if (!api) throw new Error(' no api for ' + this.exchange);;
 
     const ar = this.market.split('_');
-    api.getCandlesticks(ar[0], ar[1]).then(res =>{
-      const candles: VOCandle[] = res.map(function (item) {
+    api.getCandlesticks(ar[0], ar[1]).then(res => {
+
+      this.candles.emit(res);
+      const candles: VOCandleMin[] = res.map(function (item) {
         return {
-          c:item.Close,
-          h: item.High,
-          l: item.Low,
-          o: item.Open,
+          c: item.close,
+          h: item.high,
+          l: item.low,
+          o: item.open,
           t: item.from,
           v: item.Volume
         };
-      })
-
+      });
+      setTimeout(() => {
+        this.isRquesting = false;
+      }, 500);
       this.myGraps = {
         labelsX: null,
         candles: candles
       }
+    }, err => {
+      this.isRquesting = false;
+      this.snackBar.open('Error communication', 'x', {extraClasses: 'error'})
     })
   }
 
- /* async showExchanges() {
-    const to = this.numberTo;
-    const from = moment(to).subtract(1, 'd').valueOf();
+  ngOnDestroy() {
+    clearInterval(this.interval)
+  }
+
+
+  onRefreshClick() {
+    this.getData();
+  }
+
+  onMarketClick() {
+    const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
+    if (!api) return;
     const ar = this.market.split('_');
+    const url = api.getMarketUrl(ar[0], ar[1]);
+    window.open(url, this.exchange);
+  }
 
-    const prices = await this.apiPublic.getPriceFromExchangesByCandlesticks(['binance', 'bittrex'], ar[0], ar[1], from, to);
-    // console.log(prices);
-
-    const line: VOLineGraph = {
-      ys: prices[0],
-      color: '#ff7f56',
-      label: 'binance'
-    }
-    this.myGraps = [line];
-  }*/
 }

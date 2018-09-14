@@ -113,8 +113,8 @@ export class MarketHistoryLineComponent implements OnInit, OnChanges, OnDestroy 
 
 
 
-   // let min = UtilsOrder.makeLine(marketSummary.Low * priceBaseUS,10);
-   // let max = UtilsOrder.makeLine(marketSummary.High * priceBaseUS, 10);
+   // let min = UtilsOrder.makeLine(marketSummary.low * priceBaseUS,10);
+   // let max = UtilsOrder.makeLine(marketSummary.high * priceBaseUS, 10);
 
     let charts = UtilsOrder.createCharts(history);
 
