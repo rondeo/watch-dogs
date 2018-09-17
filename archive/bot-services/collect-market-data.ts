@@ -98,7 +98,7 @@ export class CollectMarketData {
           marketStats.LastUS = +(market.Last * priceBaseUS).toPrecision(5);
           marketStats.AskUS = +(market.Ask * priceBaseUS).toPrecision(5);
           marketStats.BidUS = +(market.Bid * priceBaseUS).toPrecision(5);
-          marketStats.LowUS = +(market.Low * priceBaseUS).toPrecision(5);
+          marketStats.LowUS = +(market.low * priceBaseUS).toPrecision(5);
           marketStats.HighUS = +(market.High * priceBaseUS).toPrecision(5);
 
           recommended.marketStats = marketStats;

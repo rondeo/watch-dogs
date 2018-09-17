@@ -1,6 +1,6 @@
 import {SMMA} from './sma';
 
-export class RSI {
+export class Rsi2 {
     input = 'candle';
     lastClose = null;
     weight: number;

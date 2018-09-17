@@ -408,8 +408,8 @@ export class ApiBittrex extends ApiBase   {
 
      // market.Volume = +item.Volume;
       market.Last = +item.Last;
-      market.High = +item.High;
-      market.Low = +item.Low;
+      market.high = +item.High;
+      market.low = +item.Low;
       market.Ask = +item.Ask;
       market.Bid = +item.Bid;
       market.BaseVolume = +item.BaseVolume;

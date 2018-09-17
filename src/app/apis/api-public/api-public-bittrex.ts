@@ -78,8 +78,8 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
         market.id = item.MarketName;
         market.exchange = 'bittrex';
         market.Last = +item.Last;
-        market.High = +item.High;
-        market.Low = +item.Low;
+        market.high = +item.High;
+        market.low = +item.Low;
         market.Ask = +item.Ask;
         market.Bid = +item.Bid;
         market.BaseVolume = +item.BaseVolume;

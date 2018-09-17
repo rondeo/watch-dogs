@@ -49,8 +49,8 @@ export class Mappers{
        // market.Volume = +item.quoteVolume || 0;
         market.BaseVolume = +item.baseVolume|| 0;
         market.Last = +item.last;
-        market.High = 0;
-        market.Low = 0;
+        market.high = 0;
+        market.low = 0;
         market.Ask = +item.ask;
         market.Bid = +item.bid;
         market.PrevDay = market.Last * +item.percentChange;
@@ -98,8 +98,8 @@ export class Mappers{
         // market.Volume = +item.quoteVolume || 0;
         market.BaseVolume = +item.baseVolume|| 0;
         market.Last = +item.last;
-        market.High = +item.high24hr;
-        market.Low = +item.low24hr;
+        market.high = +item.high24hr;
+        market.low = +item.low24hr;
         market.Ask = +item.lowestAsk;
         market.Bid = +item.highestBid;
         market.PrevDay = market.Last * +item.percentChange;
@@ -142,8 +142,8 @@ export class Mappers{
        // market.Volume = +item.volume_1day || 0;
         market.BaseVolume = +item.volume_1day  * +item.average_price;
         market.Last = +item.closing_price;
-        market.High = +item.max_price;
-        market.Low = +item.min_price;
+        market.high = +item.max_price;
+        market.low = +item.min_price;
         market.Ask = +item.buy_price;
         market.Bid = +item.sell_price;
         market.PrevDay = +item.average_price;
@@ -180,8 +180,8 @@ export class Mappers{
        // market.Volume = +item.volume || 0;
         market.BaseVolume =  +item.volume * +item.last;
         market.Last = +item.last;
-        market.High = +item.high;
-        market.Low = +item.low;
+        market.high = +item.high;
+        market.low = +item.low;
         market.Ask = +item.first;
         market.Bid = 0;
         market.PrevDay = +item.yesterday_last;
@@ -220,8 +220,8 @@ export class Mappers{
      // market.Volume = +item.vol || 0;
       market.BaseVolume =+item.vol *  +item.last;
       market.Last = +item.last;
-      market.High = +item.high;
-      market.Low = +item.low;
+      market.high = +item.high;
+      market.low = +item.low;
       market.Ask = +item.buy;
       market.Bid = +item.sell;
 
@@ -254,8 +254,8 @@ export class Mappers{
       // market.Volume = +item.vol || 0;
       market.BaseVolume = +item.vol * +item.avg;;
       market.Last = +item.last_trade
-      market.High = +item.high;
-      market.Low = +item.low;
+      market.high = +item.high;
+      market.low = +item.low;
       market.Ask = +item.buy_price;
       market.Bid = +item.sell_price;
       market.PrevDay = +item.avg;
@@ -281,8 +281,8 @@ export class Mappers{
   //  market.Volume = +result.volume;
     market.BaseVolume = +result.volume * +result.last_price;
     market.Last = +result.last_price;
-    market.Low = +result.low;
-    market.High = +result.high;
+    market.low = +result.low;
+    market.high = +result.high;
     market.Ask = +result.ask;
     market.Bid = +result.bid;
     market.PrevDay =-1;
@@ -339,8 +339,8 @@ export class Mappers{
 
        // market.Volume = +item.volume24h;
         market.Last = +item.last_price;
-        market.High = +item.high24h;
-        market.Low = +item.low24h;
+        market.high = +item.high24h;
+        market.low = +item.low24h;
         market.Ask = +item.ask;
         market.Bid = +item.bid;
         market.disabled = item.disabled;
@@ -479,8 +479,8 @@ export class Mappers{
 
      // market.Volume = +data.quoteVolume;
       market.Last = +data.last;
-      market.High = +data.highestBid;
-      market.Low = +data.lowestAsk;
+      market.high = +data.highestBid;
+      market.low = +data.lowestAsk;
       market.Ask = +data.lowestAsk;
       market.Bid = +data.highestBid;
       market.BaseVolume = +data.baseVolume;
@@ -539,8 +539,8 @@ export class Mappers{
 
       market.Last = +item.last;
 
-      market.High = +item.high;
-      market.Low = +item.low;
+      market.high = +item.high;
+      market.low = +item.low;
 
       market.PrevDay = +item.open;
       let basePrice = 1;
@@ -597,8 +597,8 @@ export class Mappers{
 
      // market.Volume = +item.Volume;
       market.Last = +item.Last;
-      market.High = +item.High;
-      market.Low = +item.Low;
+      market.high = +item.High;
+      market.low = +item.Low;
       market.Ask = +item.Ask;
       market.Bid = +item.Bid;
       market.BaseVolume = +item.BaseVolume;
@@ -661,8 +661,8 @@ export class Mappers{
 
      // market.Volume = +item.Volume;
       market.Last = item.LastPrice;
-      market.High = item.High;
-      market.Low = item.Low;
+      market.high = item.High;
+      market.low = item.Low;
       market.Ask = item.AskPrice;
       market.Bid = item.BidPrice;
       market.BaseVolume = item.BaseVolume;
@@ -698,8 +698,8 @@ export class Mappers{
       market.id = item.symbol;
 
       market.Last = item.last;
-      market.High = +item.high;
-      market.Low = item.low;
+      market.high = +item.high;
+      market.low = item.low;
       market.Ask = item.best_ask;
       market.Bid = item.best_bid;
       //market.Volume = item.volume;
@@ -722,8 +722,8 @@ export class Mappers{
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toPrecision(2);
     item.usBid =(item.Bid * base).toPrecision(2);
-    item.usLow = parseFloat((item.Low * base).toPrecision(2));
-    item.usHigh = parseFloat((item.High * base).toPrecision(2));
+    item.usLow = parseFloat((item.low * base).toPrecision(2));
+    item.usHigh = parseFloat((item.high * base).toPrecision(2));
     item.usLast = parseFloat((item.Last * base).toPrecision(2));
     item.usPrevDay = (item.PrevDay * base).toFixed(2);
     if(marketCap){
@@ -744,8 +744,8 @@ export class Mappers{
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toFixed(2);
     item.usBid =(item.Bid * base).toFixed(2);
-    item.usLow = parseFloat((item.Low * base).toPrecision(4));
-    item.usHigh = parseFloat((item.High * base).toPrecision(4));
+    item.usLow = parseFloat((item.low * base).toPrecision(4));
+    item.usHigh = parseFloat((item.high * base).toPrecision(4));
     item.usLast = parseFloat((item.Last * base).toPrecision(4));
     item.usPrevDay = (item.PrevDay * base).toFixed(2);
     if(marketCap){
@@ -765,8 +765,8 @@ export class Mappers{
     item.dBaseVolume = item.BaseVolume.toFixed(2);
     item.usAsk = (item.Ask * base).toPrecision(prec);
     item.usBid =(item.Bid * base).toPrecision(prec);
-    item.usLow = parseFloat((item.Low * base).toPrecision(prec));
-    item.usHigh = parseFloat((item.High * base).toPrecision(prec));
+    item.usLow = parseFloat((item.low * base).toPrecision(prec));
+    item.usHigh = parseFloat((item.high * base).toPrecision(prec));
     item.usLast = parseFloat((item.Last * base).toPrecision(prec));
     item.usPrevDay = (item.PrevDay * base).toPrecision(prec);
     if(marketCap){
@@ -808,8 +808,8 @@ export class Mappers{
      // market.Volume = result.vol;
       market.BaseVolume = result.vol * result.last;// result.vol_cur;
       market.Last = result.last;
-      market.Low = result.low;
-      market.High = result.high;
+      market.low = result.low;
+      market.high = result.high;
       market.Ask = result.sell
       market.Bid = +result.buy
       market.PrevDay = result.avg;

@@ -93,8 +93,8 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
         market.id = item.symbol;
         market.exchange = 'hitbtc';
         market.Last = +item.last;
-        market.High = +item.high;
-        market.Low = +item.low;
+        market.high = +item.high;
+        market.low = +item.low;
         market.Ask = +item.ask;
         market.Bid = +item.bid;
         market.BaseVolume = +item.volume * +item.last;

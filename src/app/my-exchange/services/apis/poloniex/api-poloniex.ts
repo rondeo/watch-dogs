@@ -464,8 +464,8 @@ export class ApiPoloniex extends ApiBase {
 
       // market.Volume = +data.quoteVolume;
       market.Last = +data.last;
-      market.High = +data.highestBid;
-      market.Low = +data.lowestAsk;
+      market.high = +data.highestBid;
+      market.low = +data.lowestAsk;
       market.Ask = +data.lowestAsk;
       market.Bid = +data.highestBid;
       market.BaseVolume = +data.baseVolume;

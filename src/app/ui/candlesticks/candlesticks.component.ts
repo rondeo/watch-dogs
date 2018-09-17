@@ -2,21 +2,7 @@ import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@an
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {MATH} from '../../com/math';
-
-
-export interface VOCandleMin {
-  h: number;
-  l: number;
-  o: number;
-  c: number;
-  t: number;
-  v: number;
-}
-
-export interface VOGraphs {
-  labelsX: string[];
-  candles: VOCandleMin[];
-}
+import {VOCandle} from '../../models/api-models';
 
 
 @Component({
@@ -29,7 +15,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
   private ctx: CanvasRenderingContext2D;
-  @Input() graphs: VOGraphs;
+  @Input() candles: VOCandle[];
 
   ratio: number = 600 / 400;
   width: number = 600;
@@ -46,7 +32,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   y0: number;
   x0: number;
 
-  static convertToScale(item: VOCandleMin, scale: number, min: number): VOCandleMin {
+  /*static convertToScale(item: VOCandleMin, scale: number, min: number): VOCandleMin {
     return {
       h: Math.round((item.h - min) * scale),
       l: Math.round((item.l - min) * scale),
@@ -56,15 +42,15 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
       v: item.v
     }
 
-  }
+  }*/
 
   constructor() {
   }
 
 
   private drawGraphs() {
-    if (!this.graphs) return;
-    const ar = this.graphs.candles;
+    if (!this.candles) return;
+    const ar = this.candles;
     if (!Array.isArray(ar)) return;
     // const x0 = this.x0 + 50;
     const offsetY = Math.round(this.heightG * 0.3);
@@ -78,9 +64,9 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     let min = 100000000000000000;
     let max = -100000000000000;
     ar.forEach(function (item) {
-      if (item.l < min) min = item.l;
-      if (item.h > max) max = item.h;
-      if (item.v > maxV) maxV = item.v;
+      if (item.low < min) min = item.low;
+      if (item.high > max) max = item.high;
+      if (item.Volume > maxV) maxV = item.Volume;
     });
 
     let scaleV = offsetY / maxV;
@@ -96,20 +82,20 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     for (let i = 0, n = ar.length; i < n; i++) {
       const x = x0 + (i * dx);
-      const item: VOCandleMin = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
+      const item: VOCandle = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#333333';
-      ctx.moveTo(x, Yo - (item.l * scale));
-      ctx.lineTo(x, Yo - (item.h * scale));
+      ctx.moveTo(x, Yo - (item.low * scale));
+      ctx.lineTo(x, Yo - (item.high * scale));
       ctx.stroke();
       ctx.beginPath();
       ctx.lineWidth = 4;
-      ctx.strokeStyle = item.o < item.c ? 'green' : 'red';
-      ctx.moveTo(x, Yo - (item.o * scale));
-      ctx.lineTo(x, Yo - (item.c * scale));
+      ctx.strokeStyle = item.open < item.close ? 'green' : 'red';
+      ctx.moveTo(x, Yo - (item.open * scale));
+      ctx.lineTo(x, Yo - (item.close * scale));
       ctx.moveTo(x, Y0);
-      ctx.lineTo(x, Y0 - (item.v * scaleV));
+      ctx.lineTo(x, Y0 - (item.Volume * scaleV));
       ctx.stroke();
     }
     this.drawYs(offsetY, height, min, max, maxV);
@@ -170,7 +156,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
   redraw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
-    if (!this.graphs || !this.widthG) return;
+    if (!this.candles || !this.widthG) return;
     this.drwaHorizonts();
     this.drwaVerticals();
     this.drawGraphs();
@@ -178,9 +164,9 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private createLabels(): string[] {
-    const ar = this.graphs.candles;
-    const from = ar[0].t;
-    const to = ar[ar.length - 1].t;
+    const ar = this.candles;
+    const from = ar[0].to;
+    const to = ar[ar.length - 1].to;
     const step = Math.floor((to - from) / 12);
     const out: string[] = [];
     for (let i = from; i < to; i += step) {
@@ -193,10 +179,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   private drawXs() {
 
     let ctx = this.ctx;
-    let ar: string[] = this.graphs.labelsX;
-    if (!Array.isArray(ar)) {
-      ar = this.createLabels();
-    }
+      const ar = this.createLabels();
     let step = (this.widthG + (this.widthG / 12)) / ar.length;
     let y = this.height;
     let x0 = this.paddingLeft - 10;

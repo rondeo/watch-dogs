@@ -1,46 +1,36 @@
-export class SMA {
-  input = 'price';
-  prices = [];
-  result = 0;
-  age = 0;
-  sum = 0;
+export class Sma {
+  slow = 26;
+  fast = 12;
+  signal = 9;
 
-  constructor(public windowLength: number) {
+  constructor(){
 
   }
 
-  update(price: number) {
-    const tail = this.prices[this.age] || 0; // oldest price in window
-    this.prices[this.age] = price;
-    this.sum += price - tail;
-    this.result = this.sum / this.prices.length;
-    this.age = (this.age + 1) % this.windowLength
-  }
+  ctr(lasts: number[]) {
+    const fasts: number[] = [];
+    const slows: number[] = [];
+    let sum12 = 0;
+    let sum26 = 0;
+    let val12 = 0;
+    let val26 = 0;
+    let sig = 0;
 
-}
+    for (let i = 0, n = lasts.length; i < n; i++) {
+      if (i > 12) {
+        val12 = sum12 / 12;
+        fasts.push(val12)
+        sum12 -= lasts[i - 13];
+        sum12 += lasts[i];
+      } else fasts.push(1);
+      if (i > 26) {
+        val26 = sum26 / 26;
+        fasts.push(val26);
+        sum26 -= lasts[i - 27];
+        sum26 += lasts[i];
 
-export class SMMA {
-  input = 'price';
-  sma: SMA;
-  prices = [];
-  result = 0;
-  age = 0;
-
-  constructor(public weight: number) {
-    this.sma = new SMA(weight);
-  }
-
-  update(price) {
-    this.prices[this.age] = price;
-    if (this.prices.length < this.weight) {
-      this.sma.update(price);
-    } else if (this.prices.length === this.weight) {
-      this.sma.update(price);
-      this.result = this.sma.result;
-    } else {
-      this.result = (this.result * (this.weight - 1) + price) / this.weight;
+      } else slows.push(1)
     }
 
-    this.age++;
   }
 }

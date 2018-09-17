@@ -134,3 +134,7 @@ export interface VOCandle {
   Volume?: number;
   isClosed?: boolean
 }
+
+export interface VOCandleExt extends VOCandle{
+  rsi: any;
+}

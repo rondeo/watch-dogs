@@ -1,66 +1,250 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="canglesticks">
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/StochRSI.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/base.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/Candles.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/rsi.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/sma.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/stochastic.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/CCI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/DEBUG_single-advice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/DEBUG_toggle-advice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/DEMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/MACD.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/PPO.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/RSI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/StochRSI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/TMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/TSI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/UO.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/CCI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/DEMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/EMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/LRC.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/MACD.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/PPO.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/RSI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMMA.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/TSI.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/UO.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/noop.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/talib-macd.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/tulip-adx.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/tulip-macd.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/tulip-multi-strat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/varPPO.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/indicators-list.html" afterDir="false" />
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="RSI">
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/macd.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/core/sma01.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/StockData.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/AverageGain.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/AverageLoss.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/FixedSizeLinkedList.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/Highest.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/LinkedList.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/Lowest.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/NumberFormatter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/SD.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/Utils/Sum.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/AbandonedBaby.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/Bearish.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishEngulfingPattern.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishHammerStick.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishHarami.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishHaramiCross.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishInvertedHammerStick.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishMarubozu.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BearishSpinningTop.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/Bullish.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishEngulfingPattern.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishHammerStick.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishHarami.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishHaramiCross.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishInvertedHammerStick.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishMarubozu.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/BullishSpinningTop.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/CandlestickFinder.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/DarkCloudCover.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/Doji.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/DownsideTasukiGap.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/DragonFlyDoji.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/EveningDojiStar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/EveningStar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/GraveStoneDoji.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/HammerPattern.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/HammerPatternUnconfirmed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/HangingMan.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/HangingManUnconfirmed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/MorningDojiStar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/MorningStar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/PiercingLine.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/ShootingStar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/ShootingStarUnconfirmed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/ThreeBlackCrows.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/ThreeWhiteSoldiers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/TweezerBottom.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/TweezerTop.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/chart_types/HeikinAshi.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/chart_types/Renko.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/chart_types/TypicalPrice.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/ADX.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/ATR.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/MinusDM.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/PlusDM.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/TrueRange.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/drawingtools/fibonacci.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/indicator/indicator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/KST.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/PSAR.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/ROC.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/Stochastic.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/StochasticRSI.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/TRIX.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/momentum/WilliamsR.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/EMA.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/MACD.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/SMA.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/WEMA.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/WMA.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/WilderSmoothing.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/oscillators/AwesomeOscillator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/oscillators/CCI.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/oscillators/RSI.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/patterndetection/patterndetection.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/AverageGain.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/AverageLoss.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/FixedSizeLinkedList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/Highest.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/Lowest.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/SD.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/Sum.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/AbandonedBaby.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/Bearish.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishEngulfingPattern.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishHammerStick.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishHarami.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishHaramiCross.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishInvertedHammerStick.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishMarubozu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BearishSpinningTop.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/Bullish.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishEngulfingPattern.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishHammerStick.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishHarami.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishHaramiCross.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishInvertedHammerStick.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishMarubozu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/BullishSpinningTop.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/CandlestickFinder.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/DarkCloudCover.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/Doji.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/DownsideTasukiGap.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/DragonFlyDoji.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/EveningDojiStar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/EveningStar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/GraveStoneDoji.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/HammerPattern.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/HammerPatternUnconfirmed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/HangingMan.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/HangingManUnconfirmed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/MorningDojiStar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/MorningStar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/PiercingLine.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/ShootingStar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/ShootingStarUnconfirmed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/ThreeBlackCrows.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/ThreeWhiteSoldiers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/TweezerBottom.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/TweezerTop.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHammerPattern.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHammerPatternUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHammerStick.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHangingMan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHangingManUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHarami.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishHaramiCross.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishInvertedHammerPattern.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishInvertedHammerPatternUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishInvertedHammerStick.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishMarubozu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishShootingStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishShootingStarUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BearishSpinningTop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/Bullish.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHammerPattern.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHammerPatternUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHammerStick.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHangingMan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHangingManUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHarami.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishHaramiCross.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishInvertedHammerPattern.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishInvertedHammerPatternUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishInvertedHammerStick.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishMarubozu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishShootingStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishShootingStarUnconfirmed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/BullishSpinningTop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/EveningDojiStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/EveningStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/MorningDojiStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/MorningStar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/PiercingLine.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/ThreeBlackCrows.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/ThreeWhiteSoldiers.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/TweezerBottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/TweezerTop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/abandonedbaby.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/bearish.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/bearishEngulfing.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/bullishEngulfingPattern.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/darkCloudCover.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/doji.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/downsideTasukiGap.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/dragonFlyDoji.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/candlestick/images/graveStoneDoji.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/chart_types/HeikinAshi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/chart_types/Renko.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/chart_types/TypicalPrice.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/data.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/directionalmovement/ADX.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/directionalmovement/ATR.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/directionalmovement/MinusDM.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/directionalmovement/PlusDM.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/mocha.opts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/KST.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/PSAR.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/ROC.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/Stochastic.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/StochasticRSI.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/TRIX.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/momentum/WilliamsR.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/EMA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/MACD.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/SMA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/WEMA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/WMA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/WilderSmoothing.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/node.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/oscillators/AwesomeOscillator.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/oscillators/CCI.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/oscillators/RSI.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volatility/BollingerBands.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/ADL.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/ForceIndex.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/MFI.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/OBV.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/VWAP.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/test/volume/VolumeProfile.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volatility/BollingerBands.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/ADL.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/ForceIndex.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/MFI.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/OBV.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/VWAP.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/libs/techind/volume/VolumeProfile.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/bot-services/bot-buy-coin.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/bot-services/bot-buy-coin.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/market-history-line/market-history-line.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/market-history-line/market-history-line.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pub/vendor.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/pub/vendor.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/db-schema-create-and-populate.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/db-schema-create-and-populate.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/apis-public.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/apis-public.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/archive/bot-services/collect-market-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/bot-services/collect-market-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/archive/market-history-table/market-history-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/archive/market-history-table/market-history-table.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/archive/market-history-table/market-history-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/archive/market-history-table/market-history-table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-cryptopia.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-cryptopia.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-hitbtc.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/mappers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/mappers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/models/api-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/api-models.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/models/app-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/app-models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/trading-history/trading-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/trading-history/trading-history.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/trader/common-markets/common-markets.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/common-markets/common-markets.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-poloniex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/libs/core/rsi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/libs/core/rsi2.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/libs/core/sma.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/libs/core/sma.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/libs/core/stochastic.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/libs/core/rsi1.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/libs/indicators-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/libs/indicators-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/ui/ui.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/ui.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -76,96 +260,113 @@
     <session id="651870418">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="13" />
-          <entry key="project.open.time.1" value="4" />
+          <entry key="project.closed" value="15" />
+          <entry key="project.open.time.1" value="5" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.15" value="2" />
           <entry key="project.open.time.19" value="1" />
-          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.2" value="2" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="Angular2LanguageService" value="16" />
+          <entry key="Angular2LanguageService" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="77" />
-          <entry key="HTML" value="2536" />
+          <entry key="HTML" value="2662" />
           <entry key="JSON" value="5" />
-          <entry key="PLAIN_TEXT" value="421" />
-          <entry key="TypeScript" value="36275" />
+          <entry key="PLAIN_TEXT" value="442" />
+          <entry key="TypeScript" value="39294" />
+          <entry key="tsconfig" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="77" />
-          <entry key="html" value="2536" />
-          <entry key="json" value="5" />
-          <entry key="ts" value="36275" />
-          <entry key="txt" value="421" />
+          <entry key="html" value="2662" />
+          <entry key="json" value="15" />
+          <entry key="ts" value="39294" />
+          <entry key="txt" value="442" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="8" />
-          <entry key="HTML" value="100" />
+          <entry key="HTML" value="106" />
           <entry key="JSON" value="5" />
-          <entry key="JavaScript" value="5" />
-          <entry key="TypeScript" value="369" />
+          <entry key="JavaScript" value="8" />
+          <entry key="TypeScript" value="439" />
+          <entry key="tsconfig" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="8" />
-          <entry key="html" value="100" />
-          <entry key="js" value="5" />
-          <entry key="json" value="5" />
-          <entry key="ts" value="369" />
+          <entry key="html" value="106" />
+          <entry key="js" value="8" />
+          <entry key="json" value="6" />
+          <entry key="ts" value="439" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.43336484">
+    <splitter split-orientation="horizontal" split-proportion="0.46124762">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/SD.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="311">
-                  <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="28" />
-                  <folding>
-                    <element signature="e#0#66#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="255">
+                  <caret line="17" column="24" lean-forward="true" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/MACD.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/MACD.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="960">
+                  <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/indicator/indicator.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="240">
+                  <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/stochastic.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="326">
-                  <caret line="36" column="55" lean-forward="true" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="396">
-                  <caret line="113" column="24" lean-forward="true" selection-start-line="113" selection-start-column="24" selection-end-line="113" selection-end-column="24" />
+                <state relative-caret-position="330">
+                  <caret line="88" lean-forward="true" selection-start-line="88" selection-end-line="88" />
                   <folding>
                     <element signature="e#0#66#0" expanded="true" />
                   </folding>
@@ -174,67 +375,52 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
-                  <caret line="15" column="17" lean-forward="true" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+                <state relative-caret-position="555">
+                  <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.html">
+            <entry file="file://$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state>
-                  <caret selection-end-line="4" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/indicator/indicator.component.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="45">
-                  <caret line="3" column="6" lean-forward="true" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="44" column="20" lean-forward="true" selection-start-line="40" selection-start-column="2" selection-end-line="44" selection-end-column="20" />
+                <state relative-caret-position="120">
+                  <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
                   <folding>
-                    <element signature="e#0#92#0" expanded="true" />
+                    <element signature="e#0#66#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/patterndetection/patterndetection.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="4" column="21" lean-forward="true" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+                <state relative-caret-position="180">
+                  <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+                  <folding>
+                    <element signature="e#0#67#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/ui/ui.module.ts">
+            <entry file="file://$PROJECT_DIR$/node_modules/technicalindicators/typings/keras-js/index.d.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="27" column="22" lean-forward="true" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
+                <state>
+                  <caret column="15" selection-start-column="15" selection-end-column="15" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html">
+            <entry file="file://$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="75">
-                  <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+                <state relative-caret-position="15">
+                  <caret line="1" column="14" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -243,91 +429,52 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="675">
-                  <caret line="54" column="26" selection-start-line="54" selection-start-column="26" selection-end-line="54" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#0#48#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/StochRSI.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="285">
-                  <caret line="25" column="4" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="31" />
+                <state relative-caret-position="-15">
+                  <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/indicators-list.html">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/sma01.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="270">
-                  <caret line="361" column="91" selection-start-line="361" selection-start-column="91" selection-end-line="361" selection-end-column="91" />
+                <state relative-caret-position="75">
+                  <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/news/rss.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/EMA.js">
               <provider selected="true" editor-type-id="text-editor" />
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/RSI.js">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/StochRSI.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="27" selection-start-line="27" selection-end-line="27" />
+                <state relative-caret-position="495">
+                  <caret line="36" column="35" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/rsi1.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="270">
+                  <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMMA.js">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/Candles.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="375">
-                  <caret line="25" column="1" selection-start-line="3" selection-end-line="25" selection-end-column="1" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMA.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="11" selection-start-line="11" selection-end-line="19" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/sma.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/sockets/binance-trade-socket.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="930">
-                  <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+                <state relative-caret-position="90">
+                  <caret line="6" selection-start-line="6" selection-end-line="6" />
                 </state>
               </provider>
             </entry>
@@ -346,10 +493,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>promiseReject</find>
-      <find>[appValueColor]</find>
-      <find>coin</find>
-      <find>market</find>
       <find>getMarkets</find>
       <find>MC</find>
       <find>userPriceUS</find>
@@ -376,6 +519,10 @@
       <find>addIndicator</find>
       <find>onTrade</find>
       <find>convertToScale</find>
+      <find>graphs</find>
+      <find>CandleData</find>
+      <find>getConfig</find>
+      <find>model.bin</find>
     </findStrings>
     <replaceStrings>
       <replace>myValueColor</replace>
@@ -395,57 +542,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/sockets/soket-connector.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/sockets/poloniex-trade-socket.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/all-main-coins/all-main-coins.component.html" />
-        <option value="$PROJECT_DIR$/src/app/trader/analyze-coin/analyze-coin.component.html" />
-        <option value="$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.html" />
-        <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/sockets/poloniex-trade-socket.ts" />
-        <option value="$PROJECT_DIR$/src/app/app.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-bot/my-bot.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/email-service/watchdog-edit/watchdog-edit.component.html" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.html" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-hitbtc.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-hitbtc.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/sockets/binance-trade-socket.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/sockets/socket-channel.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/sockets/soket-base.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/trader.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.html" />
         <option value="$PROJECT_DIR$/src/app/com/math.ts" />
         <option value="$PROJECT_DIR$/src/styles.css" />
-        <option value="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.html" />
-        <option value="$PROJECT_DIR$/src/app/trader/libs/core/sma.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/core/rsi.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/StochRSI.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/base.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/indicators-list.html" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/core/Candles.ts" />
-        <option value="$PROJECT_DIR$/src/app/models/api-models.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" />
-        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/ui.module.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.html" />
         <option value="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html" />
-        <option value="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/core/stochastic.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/core/rsi2.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/core/rsi3.ts" />
+        <option value="$PROJECT_DIR$/src/app/models/app-models.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/mappers.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/poloniex/api-public-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-hitbtc.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/bittrex/api-bittrex.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-hitbtc.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/services/apis/api-cryptopia.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-cryptopia.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/core/sma.ts" />
+        <option value="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html" />
+        <option value="$PROJECT_DIR$/src/app/ui/ui.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/core/rsi1.ts" />
+        <option value="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/core/macd.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" />
+        <option value="$PROJECT_DIR$/src/app/models/api-models.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.html" />
+        <option value="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/indicator/indicator.ts" />
+        <option value="$PROJECT_DIR$/tsconfig.json" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/moving_averages/EMA.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/Utils/SD.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/moving_averages/MACD.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/StockData.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/oscillators/CCI.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/momentum/KST.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/technicalindicators/directionalmovement/ADX.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/libs/techind/patterndetection/patterndetection.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.html" />
+        <option value="$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts" />
       </list>
     </option>
   </component>
@@ -471,9 +618,8 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="54" />
-    <option name="y" value="-8" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="64" />
     <option name="width" value="2514" />
     <option name="height" value="1456" />
   </component>
@@ -483,6 +629,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -513,7 +660,8 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="trader" type="462c0819:PsiDirectoryNode" />
+              <item name="apis" type="462c0819:PsiDirectoryNode" />
+              <item name="api-public" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -521,7 +669,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="trader" type="462c0819:PsiDirectoryNode" />
-              <item name="analyze-coin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -536,6 +683,23 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="trader" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="techind" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="trader" type="462c0819:PsiDirectoryNode" />
+              <item name="live-trader" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -544,39 +708,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="candlesticks" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="indicator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="line-chart" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="line-graph" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="rsi-indicator" type="462c0819:PsiDirectoryNode" />
+              <item name="macd-indicator" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -584,27 +716,19 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="widgets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="widgets" type="462c0819:PsiDirectoryNode" />
-              <item name="coin-candles" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SearchEverywhereHistoryKey" value="coin-day.c&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;api-server.service&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/api-server.service.ts&#10;btc-t&#9;null&#9;null&#10;mongo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/mongo.service.ts&#10;btc&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;coin-day.&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;mc-da&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/ui/mc-data/mc-data.component.ts&#10;api-ma&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-market-cap.service.ts&#10;api-pr&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-private/api-private-abstaract.ts&#10;books-all&#9;null&#9;null&#10;coin-day&#9;null&#9;null&#10;util&#9;null&#9;null&#10;show&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/services/show-external-page.service.ts&#10;market&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/market-snapshot/market-snapshot.component.ts&#10;books-for&#9;null&#9;null&#10;gaine&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/market-cap/gainers-losers/gainers-losers.component.ts&#10;math&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/com/math.ts&#10;coin&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/coin-day-triggers/coin-day-triggers.component.ts&#10;gainer&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/market-cap/gainers-losers/gainers-losers.component.ts&#10;storag&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/services/app-storage.service.ts&#10;app-bo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/app-bots-services/app-bots.service.ts&#10;login-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/material/login-exchange/login-exchange.component.ts&#10;model&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/models.ts" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../DigitalMagic" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/node_modules/technicalindicators/declarations/index.d.ts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../technicalindicators" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="D:\Projects\Bitcoin\watch-dogs\node_modules\tslint" />
@@ -615,19 +739,19 @@
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2018.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\techind" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\technicalindicators" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\gekko" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\sockets" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\api-public" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\assets" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\news" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\directives" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\models" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\gekko" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\sockets" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\api-public" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\com" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\widgets" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -782,14 +906,9 @@
       <workItem from="1536408597060" duration="30149000" />
       <workItem from="1536762836559" duration="33376000" />
       <workItem from="1536890386458" duration="611000" />
-      <workItem from="1536929085562" duration="17609000" />
-    </task>
-    <task id="LOCAL-00014" summary="remove shared module">
-      <created>1528575480964</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1528575480964</updated>
+      <workItem from="1536929085562" duration="20298000" />
+      <workItem from="1537028621929" duration="1250000" />
+      <workItem from="1537041983793" duration="33017000" />
     </task>
     <task id="LOCAL-00015" summary="refactoring">
       <created>1528577477378</created>
@@ -1127,11 +1246,18 @@
       <option name="project" value="LOCAL" />
       <updated>1536802458196</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="RSI">
+      <created>1536954483568</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1536954483568</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1182273000" />
+    <option name="totallyTimeSpent" value="1219229000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1143,12 +1269,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="2514" height="1456" extended-state="6" />
+    <frame x="64" y="0" width="2514" height="1456" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.81868744" visible="true" weight="0.13773431" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8142381" visible="true" weight="0.12795436" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.18131258" side_tool="true" visible="true" weight="0.13773431" />
+      <window_info id="npm" order="2" sideWeight="0.18576196" side_tool="true" visible="true" weight="0.12795436" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="DB Browser" order="4" sideWeight="0.49730563" weight="0.25577927" />
       <window_info anchor="bottom" id="Messages" order="0" />
@@ -1312,7 +1438,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="coin day" />
     <MESSAGE value="watch dog shared" />
     <MESSAGE value="logs" />
     <MESSAGE value="clean" />
@@ -1337,7 +1462,8 @@
     <MESSAGE value="publish" />
     <MESSAGE value="move to proxy" />
     <MESSAGE value="canglesticks" />
-    <option name="LAST_COMMIT_MESSAGE" value="canglesticks" />
+    <MESSAGE value="RSI" />
+    <option name="LAST_COMMIT_MESSAGE" value="RSI" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1365,350 +1491,373 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/rxjs/src/util/toSubscriber.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/Candles.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/rxjs/src/Observable.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/rsi2.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="196" column="22" selection-start-line="196" selection-start-column="22" selection-end-line="196" selection-end-column="22" />
+        <state relative-caret-position="296">
+          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/rxjs/src/Subject.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader-recorder/trader-recorder.component.html" />
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader-main/trader-main.component.html" />
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader-main/trader-main.component.ts" />
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader-recorder/trader-recorder.component.ts" />
-    <entry file="file://$PROJECT_DIR$/src/app/apis/sockets/socket-channel.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/rsi3.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
-          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/sockets/soket-base.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1515">
-          <caret line="106" selection-start-line="106" selection-end-line="106" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/analyze-coin/analyze-coin.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="67" column="26" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="29" column="5" lean-forward="true" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="388" column="25" selection-start-line="388" selection-start-column="20" selection-end-line="388" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/UO.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/base.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1215">
-          <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/math.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="17" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/RSI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMMA.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="1" selection-start-line="3" selection-end-line="25" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/SMA.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="11" selection-start-line="11" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/sockets/binance-trade-socket.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="930">
-          <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/StochRSI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="25" column="4" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/indicators-list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="361" column="91" selection-start-line="361" selection-start-column="91" selection-end-line="361" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trader/libs/StochRSI.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
+        <state relative-caret-position="495">
           <caret line="36" column="35" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/news/rss.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/StochRSI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-15">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/gekko/strategies/indicators/EMA.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/rsi.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/Candles.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/sma.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
+        <state relative-caret-position="240">
+          <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/ui/ui.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="72" column="97" selection-start-line="72" selection-start-column="97" selection-end-line="72" selection-end-column="97" />
+        <state relative-caret-position="210">
+          <caret line="29" column="15" lean-forward="true" selection-start-line="29" selection-start-column="15" selection-end-line="29" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-cryptopia.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="155" column="26" selection-start-line="155" selection-start-column="26" selection-end-line="155" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/sma01.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/rsi1.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="52" column="7" lean-forward="true" selection-start-line="45" selection-start-column="6" selection-end-line="52" selection-end-column="7" />
           <folding>
-            <element signature="e#0#67#0" expanded="true" />
+            <element signature="e#0#66#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/models/api-models.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="746">
-          <caret line="133" column="18" lean-forward="true" selection-start-line="133" selection-start-column="18" selection-end-line="133" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="54" column="26" selection-start-line="54" selection-start-column="26" selection-end-line="54" selection-end-column="26" />
+        <state relative-caret-position="283">
+          <caret line="80" column="33" lean-forward="true" selection-start-line="80" selection-start-column="33" selection-end-line="80" selection-end-column="33" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/macd.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="62" column="30" lean-forward="true" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="72" column="94" selection-start-line="72" selection-start-column="94" selection-end-line="72" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="51" column="9" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/models/api-models.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="132" column="18" lean-forward="true" selection-start-line="132" selection-start-column="18" selection-end-line="132" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/line-graph/line-graph.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2649">
-          <folding>
-            <element signature="e#0#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="11" column="21" lean-forward="true" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#50#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#113#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/analyze-coin/analyze-coin.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="33" column="20" selection-start-line="33" selection-start-column="2" selection-end-line="33" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/ui.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="27" column="22" lean-forward="true" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="4" />
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="44" column="20" lean-forward="true" selection-start-line="40" selection-start-column="2" selection-end-line="44" selection-end-column="20" />
+        <state relative-caret-position="1440">
+          <caret line="96" column="24" lean-forward="true" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
           <folding>
             <element signature="e#0#92#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html">
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/coin-candles/coin-candles.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="42" column="33" lean-forward="true" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#113#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/Utils/FixedSizeLinkedList.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="53" column="15" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/EMA.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/WMA.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="4" column="21" lean-forward="true" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#13#80#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/indicator/indicator.component.html">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/Utils/SD.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/volume/ADL.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding>
+            <element signature="e#45#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/StockData.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/Doji.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/AbandonedBaby.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="52" lean-forward="true" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/CandlestickFinder.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="75" column="5" lean-forward="true" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/oscillators/CCI.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/momentum/KST.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="553">
+          <caret line="54" column="35" selection-start-line="54" selection-start-column="35" selection-end-line="54" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/chart_types/Renko.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/drawingtools/fibonacci.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/directionalmovement/ADX.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="25" column="52" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/volatility/BollingerBands.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-559">
+          <caret line="3" column="49" selection-start-line="3" selection-start-column="49" selection-end-line="3" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/config.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
-          <caret line="3" column="6" lean-forward="true" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+          <caret line="3" column="25" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/test/Utils/SD.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="24" lean-forward="true" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/technicalindicators/declarations/index.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
-          <caret line="15" column="17" lean-forward="true" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+          <caret line="14" column="45" lean-forward="true" selection-start-line="14" selection-start-column="45" selection-end-line="14" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/test/moving_averages/MACD.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/technicalindicators/typings/keras-js/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/patterndetection/patterndetection.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/moving_averages/MACD.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/indicator/indicator.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="14" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="113" column="24" lean-forward="true" selection-start-line="113" selection-start-column="24" selection-end-line="113" selection-end-column="24" />
+        <state relative-caret-position="330">
+          <caret line="88" lean-forward="true" selection-start-line="88" selection-end-line="88" />
           <folding>
             <element signature="e#0#66#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/core/stochastic.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="36" column="55" lean-forward="true" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
         </state>
       </provider>
     </entry>

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-export class Stochastic {
+export class Rsi1 {
   period = 14;
   dataKey = 'rsi';
 

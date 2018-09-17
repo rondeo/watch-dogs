@@ -22,6 +22,7 @@ export class IndicatorComponent implements OnInit {
   @Input() area:number[];
   @Input() myWidth:number;
   @Input() myHeight: number;
+  @Input() myTitle: string;
   lines: VOLine[];
 
 
@@ -79,21 +80,30 @@ export class IndicatorComponent implements OnInit {
     });
   }
 
+  drawTitle(){
+    const ctx = this.ctx;
+    ctx.fillStyle = '#000000';
+    ctx.font = "12px Arial";
+    ctx.fillText(this.myTitle ||'', 0, 12);
+  }
 
   redraw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.ctx.restore();
+    this.drawTitle();
     if (!this.graphs) return;
     this.drwaHorizonts();
     this.drwaVerticals();
     this.drawLines();
     this.drawXs();
     this.drawArea();
+
+
   }
 
   drawArea(){
     if(!Array.isArray(this.area)) return;
-    console.log(this.area);
+    //  console.log(this.area);
     const ctx = this.ctx;
     let y = this.area[1];
     const h = (this.area[1] - this.area[0]) * this.scale;
@@ -223,13 +233,13 @@ export class IndicatorComponent implements OnInit {
     ctx.stroke();
 
 
-    if (min < 0) {
+   /* if (min < 0) {
       let zero = (this.heightG * (0 - min)) / range;
       zero = y0 - zero;
       ctx.moveTo(0, zero);
       ctx.lineTo(this.width, zero);
       ctx.stroke();
-    }
+    }*/
   }
 
   private drwaHorizonts() {

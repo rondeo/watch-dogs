@@ -123,8 +123,8 @@ export class ApiPublicOkex extends ApiPublicAbstract {
 
         market.exchange = 'okex';
         market.Last = +item.last;
-        market.High = +item.high;
-        market.Low = +item.low;
+        market.high = +item.high;
+        market.low = +item.low;
         market.Ask = +item.sell;
         market.Bid = +item.buy;
         market.BaseVolume = +item.vol * +item.last;
@@ -161,8 +161,8 @@ export class ApiPublicOkex extends ApiPublicAbstract {
         market.id = item.productId;
         market.exchange = 'okex';
         market.Last = +item.last;
-        market.High = +item.high;
-        market.Low = +item.low;
+        market.high = +item.high;
+        market.low = +item.low;
         market.Ask = +item.sell;
         market.Bid = +item.buy;
         market.BaseVolume = +item.volume * +item.last;

@@ -389,8 +389,8 @@ export class ApiCryptopia extends ApiBase  {
 
    //   market.Volume = +item.Volume;
       market.Last = item.LastPrice;
-      market.High = item.High;
-      market.Low = item.Low;
+      market.high = item.High;
+      market.low = item.Low;
       market.Ask = item.AskPrice;
       market.Bid = item.BidPrice;
       market.BaseVolume = item.BaseVolume;

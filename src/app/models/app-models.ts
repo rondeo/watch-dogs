@@ -304,10 +304,11 @@ export class VOMarket {
   usAsk?: string;
 
   // marketCap?:VOMarketCap;
-  High: number;
+  high: number;
   dHigh?: string;
+
   usHigh?: number;
-  Low: number;
+  low: number;
   dLow?: string;
   usLow?: number;
   // Volume?: number;

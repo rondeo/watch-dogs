@@ -1,8 +1,8 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {VOCandle} from '../../models/api-models';
-import {Stochastic} from '../../trader/libs/core/stochastic';
 import {VOGraphs} from '../line-chart/line-chart.component';
 import * as _ from 'lodash';
+import {Rsi1} from '../../trader/libs/core/rsi1';
 
 @Component({
   selector: 'app-rsi-indicator',
@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 export class RsiIndicatorComponent implements OnInit, OnChanges {
 
   @Input() candles: VOCandle[];
+  @Input() lasts: number[];
 
   myGraphs: VOGraphs;
 
@@ -29,13 +30,14 @@ export class RsiIndicatorComponent implements OnInit, OnChanges {
   ctr() {
   //  console.log(this.candles);
     if (!Array.isArray(this.candles)) return;
-    let mod = new Stochastic();
+    let mod = new Rsi1();
     mod.ctrModifier(this.candles);
+
+
    // console.log(this.candles);
 
     const out = this.candles.map(function (item: any) {
       return Number(item.rsi.value)
-
     });
     // console.log(out);
 
@@ -53,7 +55,7 @@ export class RsiIndicatorComponent implements OnInit, OnChanges {
 
     let min =  _.min(out);
     let max =  _.max(out);
-    console.log(min, max);
+   //  console.log(min, max);
     this.area = [
      min+= min * 0.2,
      max-= max*0.2

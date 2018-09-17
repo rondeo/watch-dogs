@@ -102,8 +102,8 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
 
         market.exchange = 'huobi';
         market.Last = +item.close;
-        market.High = +item.high;
-        market.Low = +item.low;
+        market.high = +item.high;
+        market.low = +item.low;
        // market.Ask = +item.sell;
        // market.Bid = +item.buy;
         market.BaseVolume = +item.vol;

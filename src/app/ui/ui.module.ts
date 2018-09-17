@@ -13,6 +13,7 @@ import {PipesModule} from '../pipes/pipes.module';
 import { CandlesticksComponent } from './candlesticks/candlesticks.component';
 import { RsiIndicatorComponent } from './rsi-indicator/rsi-indicator.component';
 import { IndicatorComponent } from './indicator/indicator.component';
+import { MacdIndicatorComponent } from './macd-indicator/macd-indicator.component';
 
 @NgModule({
   exports: [
@@ -25,7 +26,8 @@ import { IndicatorComponent } from './indicator/indicator.component';
     McDataComponent,
     CandlesticksComponent,
     RsiIndicatorComponent,
-    IndicatorComponent
+    IndicatorComponent,
+    MacdIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,8 @@ import { IndicatorComponent } from './indicator/indicator.component';
     McDataComponent,
     CandlesticksComponent,
     RsiIndicatorComponent,
-    IndicatorComponent
+    IndicatorComponent,
+    MacdIndicatorComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

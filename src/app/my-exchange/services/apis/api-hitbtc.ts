@@ -365,8 +365,8 @@ export class ApiHitbtc extends ApiBase  {
 
     //  market.Volume = +item.volume;
       market.Last = +item.last;
-      market.High = +item.high;
-      market.Low = +item.low;
+      market.high = +item.high;
+      market.low = +item.low;
       market.Ask = +item.ask;
       market.Bid = +item.bid;
       market.BaseVolume =+item.volume *  +item.last;

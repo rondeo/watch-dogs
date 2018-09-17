@@ -66,7 +66,7 @@ export class MarketHistoryTableComponent implements OnInit, OnChanges {
       Ask:parseFloat((res.Ask * basePrice).toPrecision(4)),
       Bid:parseFloat((res.Bid * basePrice).toPrecision(4)),
       High:parseFloat((res.High * basePrice).toPrecision(4)),
-      Low:parseFloat((res.Ask * basePrice).toPrecision(4)),
+      low:parseFloat((res.Ask * basePrice).toPrecision(4)),
       Last:parseFloat((res.Last * basePrice).toPrecision(4)),
       OpenBuyOrders:res.OpenBuyOrders,
       OpenSellOrders:res.OpenSellOrders,
