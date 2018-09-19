@@ -14,6 +14,9 @@ export interface VOGraph {
   min?: number;
   max?: number;
   range?: number;
+  hist?: boolean;
+  offsetY?: number;
+  draw0?: boolean;
 }
 
 export interface VOGraphs {
@@ -178,13 +181,13 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     let y0 = this.y0;
     let x0 = this.x0;
     let ys = line.ys;
-    let min = _.min(ys);
-    let max = _.max(ys);
+    let min = isNaN(line.min)?_.min(ys):line.min;
+    let max = isNaN(line.max)?_.max(ys):line.max;
 
-    if (min === 0) min = 1;
+   // if (min === 0) min = 1;
     let range = max - min;
-    line.min = min;
-    line.max = max;
+   // line.min = min;
+    // line.max = max;
     line.range = range;
 
     ys = LineChartComponent.convertToScale(ys, range, min, this.heightG);

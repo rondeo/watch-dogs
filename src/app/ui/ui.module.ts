@@ -14,6 +14,8 @@ import { CandlesticksComponent } from './candlesticks/candlesticks.component';
 import { RsiIndicatorComponent } from './rsi-indicator/rsi-indicator.component';
 import { IndicatorComponent } from './indicator/indicator.component';
 import { MacdIndicatorComponent } from './macd-indicator/macd-indicator.component';
+import { StochComponent } from './stoch/stoch.component';
+import { VolumeHistComponent } from './volume-hist/volume-hist.component';
 
 @NgModule({
   exports: [
@@ -27,7 +29,9 @@ import { MacdIndicatorComponent } from './macd-indicator/macd-indicator.componen
     CandlesticksComponent,
     RsiIndicatorComponent,
     IndicatorComponent,
-    MacdIndicatorComponent
+    MacdIndicatorComponent,
+    StochComponent,
+    VolumeHistComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +50,9 @@ import { MacdIndicatorComponent } from './macd-indicator/macd-indicator.componen
     CandlesticksComponent,
     RsiIndicatorComponent,
     IndicatorComponent,
-    MacdIndicatorComponent
+    MacdIndicatorComponent,
+    StochComponent,
+    VolumeHistComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

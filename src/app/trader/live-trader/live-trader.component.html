@@ -1,6 +1,14 @@
+<mat-checkbox #checkRSI >RSI</mat-checkbox>
+<mat-checkbox #checkMACD >MACD</mat-checkbox>
+<mat-checkbox #checkStoch >Stoch</mat-checkbox>
+
 <app-candlesticks  [candles]="candles"></app-candlesticks>
 
 
-<app-rsi-indicator [candles]="candles" [lasts]="lasts"></app-rsi-indicator>
+<app-volume-hist [candles]="candles" ></app-volume-hist>
 
-<app-macd-indicator [lasts]="lasts"></app-macd-indicator>
+<app-rsi-indicator *ngIf="checkRSI.checked" [closes]="closes"></app-rsi-indicator>
+
+<app-macd-indicator *ngIf="checkMACD.checked" [lasts]="closes"></app-macd-indicator>
+
+<app-stoch *ngIf="checkStoch.checked" [closes]="closes" [highs]="highs" [lows]="lows"></app-stoch>

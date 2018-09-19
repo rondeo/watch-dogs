@@ -17,13 +17,16 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   private ctx: CanvasRenderingContext2D;
   @Input() candles: VOCandle[];
 
-  ratio: number = 600 / 400;
+  @Input() myWidth: number;
+  @Input() myHeight: number;
+
+  ratio: number = 600 / 250;
   width: number = 600;
-  height: number = 400;
+  height: number = 250;
   widthG: number = 0;
   heightG: number = 0;
   vertical = 12;
-  horizont = 10;
+  horizont = 6;
   padding = 10;
   paddingTop = 30;
   paddingBottom = 20;
@@ -53,7 +56,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const ar = this.candles;
     if (!Array.isArray(ar)) return;
     // const x0 = this.x0 + 50;
-    const offsetY = Math.round(this.heightG * 0.3);
+    const offsetY = 0;// Math.round(this.heightG * 0.3);
 
 
     const Y0 = this.y0;
@@ -94,8 +97,6 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
       ctx.strokeStyle = item.open < item.close ? 'green' : 'red';
       ctx.moveTo(x, Yo - (item.open * scale));
       ctx.lineTo(x, Yo - (item.close * scale));
-      ctx.moveTo(x, Y0);
-      ctx.lineTo(x, Y0 - (item.Volume * scaleV));
       ctx.stroke();
     }
     this.drawYs(offsetY, height, min, max, maxV);
@@ -104,7 +105,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
   drawYs(offsetY: number, height: number, min: number, max: number, maxV:number) {
 
-    const step = (max - min) / 7;
+    const step = (max - min) / 6;
     const out = [];
     for (let i = min; i < max; i += step) out.push(MATH.toString(i))
     out.push(MATH.toString(max));
@@ -114,24 +115,26 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const x = this.widthG + this.paddingLeft + 5;
     let y = this.height - this.paddingBottom - offsetY;
     const lastY = y - height;
-    const step2 = Math.round((y - lastY) / 7);
+    const step2 = Math.round((y - lastY) / 6);
 
     out.forEach(function (item) {
       ctx.fillText(item, x, y + 3);
       y-= step2;
     });
 
-    ctx.fillStyle = '#550000';
+   /* ctx.fillStyle = '#550000';
     ctx.font = '8px Arial';
     const yV = (this.height - this.paddingBottom - offsetY) + step2 * 2;
     const firstV = Math.round(maxV /3).toString();
     ctx.fillText(firstV, x, yV );
-
+*/
   }
 
   private resize;
 
   ngOnInit() {
+    this.width = this.myWidth || this.width;
+    this.height = this.myHeight || this.height;
     window.addEventListener('resize', event => {
       clearTimeout(this.resize);
       this.resize = setTimeout(() => this.onResize(), 500);

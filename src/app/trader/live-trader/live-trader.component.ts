@@ -16,7 +16,10 @@ export class LiveTraderComponent implements OnInit {
   exchange: string;
   market: string;
 
-  lasts: number[];
+  closes: number[];
+  highs: number[];
+  lows: number[];
+
   candles: VOCandle[];
 
   constructor(
@@ -50,11 +53,18 @@ export class LiveTraderComponent implements OnInit {
 
     const ar = this.market.split('_');
     api.getCandlesticks(ar[0], ar[1], 100).then(res => {
-      const lasts = res.map(function (item) {
-        return Math.round(item.close * 1e8);
+      const highs = [];
+      const closes = [];
+      const lows = [];
+      res.forEach(function (item) {
+        closes.push(Math.round(item.close * 1e8));
+        lows.push(Math.round(item.low * 1e8));
+        highs.push(Math.round(item.high * 1e8));
       });
 
-      this.lasts = lasts;
+      this.closes = closes;
+      this.highs = highs;
+      this.lows = lows;
       this.candles = res;
       setTimeout(() => {
         this.isRquesting = false;

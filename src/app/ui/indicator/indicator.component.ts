@@ -19,12 +19,11 @@ export class IndicatorComponent implements OnInit {
   @ViewChild('myContainer') container;
   private ctx: CanvasRenderingContext2D;
   @Input() graphs: VOGraphs;
-  @Input() area:number[];
-  @Input() myWidth:number;
+  @Input() area: number[];
+  @Input() myWidth: number;
   @Input() myHeight: number;
   @Input() myTitle: string;
   lines: VOLine[];
-
 
 
   ratio: number;
@@ -36,23 +35,23 @@ export class IndicatorComponent implements OnInit {
   horizont = 3;
 
   padding = 10;
-  paddingTop = 30;
-  paddingBottom = 20;
+  paddingTop = 0;
+  paddingBottom = 0;
   paddingLeft = 10;
   paddingRight = 50;
 
   y0: number;
   x0: number;
 
- /* static convertToScale(ar: number[], range: number, min: number, height: number): number[] {
-    if (range === 0) range = 1;
-    const scale = height / range;
+  /* static convertToScale(ar: number[], range: number, min: number, height: number): number[] {
+     if (range === 0) range = 1;
+     const scale = height / range;
 
-    return ar.map(function (item) {
-      return (this.scale * item) - (this.min * this.scale);
-    }, {h: height, min: min, range: range, scale: scale});
-  }
-*/
+     return ar.map(function (item) {
+       return (this.scale * item) - (this.min * this.scale);
+     }, {h: height, min: min, range: range, scale: scale});
+   }
+ */
   constructor() {
 
   }
@@ -80,11 +79,12 @@ export class IndicatorComponent implements OnInit {
     });
   }
 
-  drawTitle(){
+  drawTitle() {
+    console.log(this.myTitle);
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
-    ctx.font = "12px Arial";
-    ctx.fillText(this.myTitle ||'', 0, 12);
+    ctx.font = '12px Arial';
+    ctx.fillText(this.myTitle || '', 0, 12);
   }
 
   redraw() {
@@ -101,30 +101,29 @@ export class IndicatorComponent implements OnInit {
 
   }
 
-  drawArea(){
-    if(!Array.isArray(this.area)) return;
+  drawArea() {
+    if (!Array.isArray(this.area)) return;
     //  console.log(this.area);
     const ctx = this.ctx;
     let y = this.area[1];
     const h = (this.area[1] - this.area[0]) * this.scale;
     const x = this.x0;
     const w = this.widthG;
-    y =  this.y0 - ((y - this.min)*this.scale);
+    y = this.y0 - ((y - this.min) * this.scale);
 
     ctx.beginPath();
     ctx.lineWidth = 0.3;
-    ctx.setLineDash([5,5]);
+    ctx.setLineDash([5, 5]);
     ctx.moveTo(x, y);
     ctx.lineTo(this.widthG, y);
     ctx.moveTo(x, y + h);
     ctx.lineTo(this.widthG, y + h);
     ctx.stroke();
     ctx.fillStyle = 'rgba(0,225,225,0.15)';
-    ctx.fillRect(x,y,w,h);
+    ctx.fillRect(x, y, w, h);
     ctx.setLineDash([]);
 
-   // ctx.fillStyle = 'rgba(225,225,225,0.5)';
-
+    // ctx.fillStyle = 'rgba(225,225,225,0.5)';
 
 
   }
@@ -145,7 +144,7 @@ export class IndicatorComponent implements OnInit {
 
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
-    this.ctx = el.getContext("2d");
+    this.ctx = el.getContext('2d');
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
@@ -160,12 +159,12 @@ export class IndicatorComponent implements OnInit {
 
     let ctx = this.ctx;
     let ar = this.graphs.labelsX;
-    let step = (this.widthG + (this.widthG/12)) / ar.length;
+    let step = (this.widthG + (this.widthG / 12)) / ar.length;
     let y = this.height;
     let x0 = this.paddingLeft - 20;
 
     ctx.fillStyle = '#000000';
-    ctx.font = "12px Arial";
+    ctx.font = '12px Arial';
     ar.forEach(function (item, i) {
       ctx.fillText(item, x0 + (i * step), y);
     });
@@ -184,62 +183,111 @@ export class IndicatorComponent implements OnInit {
 
   drawYs() {
 
-   /* let ctx = this.ctx;
-    let x0 = this.x0 + 50;
-    let y0 = this.y0;
-    this.graphs.graphs.forEach(function (graph, i) {
-      ctx.fillStyle = graph.color;
-      ctx.font = "12px Arial";
-      let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
-      let min = graph.min;
-      let max = graph.max;
+    /* let ctx = this.ctx;
+     let x0 = this.x0 + 50;
+     let y0 = this.y0;
+     this.graphs.graphs.forEach(function (graph, i) {
+       ctx.fillStyle = graph.color;
+       ctx.font = "12px Arial";
+       let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
+       let min = graph.min;
+       let max = graph.max;
 
-      ctx.fillText(graph.label + ' ' + percent + '%', x0 + i * 90, 12, 80);
-      ctx.fillText(min.toPrecision(4), 2, y0 - (i * 20), 40);
-      ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
-    });*/
+       ctx.fillText(graph.label + ' ' + percent + '%', x0 + i * 90, 12, 80);
+       ctx.fillText(min.toPrecision(4), 2, y0 - (i * 20), 40);
+       ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
+     });*/
   }
 
-  scale:number;
-  min:number;
+  scale: number;
+  min: number;
+
+  my0;
   private drawline(line: VOGraph) {
     let ctx = this.ctx;
     ctx.strokeStyle = line.color;
     ctx.beginPath();
     ctx.lineWidth = 1;
-    let y0 = this.y0;
+    const y0 = this.y0;
     let x0 = this.x0;
     let ys = line.ys;
-    let min = _.min(ys);
-    let max = _.max(ys);
-    if (min === 0) min = 1;
+    let min = isNaN(line.min) ? _.min(ys) : line.min;
+    let max = isNaN(line.max) ? _.max(ys) : line.max;
+
     let range = max - min;
-    line.min = min;
-    line.max = max;
+    // line.min = min;
+    // line.max = max;
     line.range = range;
 
     const scale = this.heightG / range;
     this.scale = scale;
     this.min = min;
+    // console.warn(line.color+ ' ' + (min * scale))
     ys = ys.map(function (item) {
       return (item - min) * scale
     })// IndicatorComponent.convertToScale(ys, range, min, this.heightG);
 
 
+    let zero = (this.heightG * (0 - min)) / range;
+    zero = y0 - zero;
+
+    if(line.hist){
+       const offsetY = 0;// - this.my0 ;// line.offsetY * scale;
+      // console.warn(offsetY);
+      this.drawHist(ctx, ys, x0, y0, zero);
+    } else {
+      let dx = this.widthG / (ys.length - 1);
+      for (let i = 0, n = ys.length; i < n; i++) {
+        ctx.lineTo(x0 + (i * dx), y0 - ys[i]);
+      }
+      ctx.stroke();
+    }
+
+    this.my0 = zero;
+
+     if (line.draw0) {
+
+
+
+     //   console.log(y0 +'  --  ' + zero);
+
+     //  console.log(this.my0);
+
+     /*  ctx.beginPath();
+       ctx.lineWidth = 0.5;
+       ctx.setLineDash([5, 10]);
+       zero = y0 - zero;
+       console.warn(zero);
+       ctx.moveTo(this.y0, zero);
+       ctx.lineTo(this.widthG, zero);
+       ctx.stroke();
+       ctx.setLineDash([]);*/
+     }
+  }
+  drawHist(ctx: CanvasRenderingContext2D, ys: number[], x0:number, y0:number, zero:number){
+   // console.log(this.my0, this.heightG);
+    const Y0 = zero;//(this.heightG /2) ;// + offsetY;
+
+    const offset = this.my0 - zero;
+   // console.warn(Y0);
+
+    //console.log(this.my0);
+    //console.log(Y0);
+    // console.log(this.y0);
     let dx = this.widthG / (ys.length - 1);
     for (let i = 0, n = ys.length; i < n; i++) {
-      ctx.lineTo(x0 + (i * dx), y0 - ys[i]);
-    }
-    ctx.stroke();
+      const x = x0 + (i * dx);
+      const y = this.y0  - ys[i];
 
 
-   /* if (min < 0) {
-      let zero = (this.heightG * (0 - min)) / range;
-      zero = y0 - zero;
-      ctx.moveTo(0, zero);
-      ctx.lineTo(this.width, zero);
+
+      const color = 'red' ;//= y < Y0?'green':'red';
+      ctx.strokeStyle = color;
+      ctx.beginPath();
+       ctx.moveTo(x, Y0 + offset);
+      ctx.lineTo(x, y + offset);
       ctx.stroke();
-    }*/
+    }
   }
 
   private drwaHorizonts() {

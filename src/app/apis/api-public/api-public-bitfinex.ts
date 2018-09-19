@@ -9,6 +9,8 @@ import {concatMap, delay} from "rxjs/operators";
 import {timer} from "rxjs/observable/timer";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
+import {VOCandle} from '../../models/api-models';
+import {UTILS} from '../../com/utils';
 
 export class ApiPublicBitfinex extends ApiPublicAbstract{
   exchange = 'bitfinex';
@@ -23,8 +25,39 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
       .replace('{{base}}', base.toLowerCase()).replace('{{coin}}', coin.toLowerCase())
   }
 
-  downloadBooks(base: string, coin: string): Observable<VOBooks> {
+  async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]>{
+   // const markets = await this.getMarkets();
+   // if(!markets[base+'_'+coin]) return Promise.resolve([]);
+    const params = {
+      start: from,
+      end: to
+    };
+    if(!from) delete params.start;
+    if(!to) delete params.end;
+    if(base === 'USDT') base = 'USD';
 
+    const url = 'api/proxy-1min/https://api.bitfinex.com/v2/candles/trade:5m:t'
+      +coin+base+'/hist?limit='+limit+'?'+UTILS.toURLparams(params);
+    console.log(url);
+    return this.http.get(url).map((res: any[]) => {
+      return res.reverse().map(function (item) {
+        return {
+          from:0,
+          to:+item[0],
+          open:+item[1],
+          high: +item[3],
+          low: +item[4],
+          close: +item[2],
+          Volume: +item[5]
+        }
+      })
+
+
+    }).toPromise()
+
+  }
+
+  downloadBooks(base: string, coin: string): Observable<VOBooks> {
     const url = '/api/proxy/https://api.bitfinex.com/v1/book/' + coin +(base === 'USDT'?'USD':base);
     console.log(url)
     return this.http.get(url).map((res: any) => {

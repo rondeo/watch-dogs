@@ -29,7 +29,7 @@ export class TrueRange extends Indicator {
 
     this.result = [];
 
-    this.generator = (function* ():IterableIterator<number | undefined >{
+    this.generator = (function* (){
       var current:CandleData = yield;
       var previousClose,result;
       while (true) {
