@@ -1,11 +1,12 @@
-import {SMMA} from './sma';
+
+declare var SMMA: any
 
 export class Rsi2 {
     input = 'candle';
     lastClose = null;
     weight: number;
-    avgU: SMMA;
-    avgD: SMMA;
+    avgU//: SMMA;
+    avgD//: SMMA;
     u = 0;
     d = 0;
     rs = 0;

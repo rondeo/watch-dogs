@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ValueColorDirective} from './value-color.directive';
 import { CoinIconDirective } from './coin-icon.directive';
+import { SaveValueDirective } from './save-value.directive';
 
 @NgModule({
   imports: [
@@ -9,11 +10,13 @@ import { CoinIconDirective } from './coin-icon.directive';
   ],
   exports: [
     ValueColorDirective,
-    CoinIconDirective
+    CoinIconDirective,
+    SaveValueDirective
   ],
   declarations: [
    ValueColorDirective,
-   CoinIconDirective
+   CoinIconDirective,
+   SaveValueDirective
   ]
 })
 export class DirectivesModule { }

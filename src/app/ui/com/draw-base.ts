@@ -1,6 +1,4 @@
 import {Input, ViewChild} from '@angular/core';
-import {DrawGrid} from './draw-grid';
-
 export class DrawBase {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
@@ -52,10 +50,20 @@ export class DrawBase {
     console.error('Implement please');
   }
 
+  drawXs(){
+
+  }
+
+  drawYs(){
+
+  }
+
   redraw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawGrid(this.ctx, this.vertical, this.horizont, this.widthG, this.heightG, this.paddingLeft, this.paddingTop);
     this.drawGraphs();
+    this.drawXs();
+    this.drawYs();
   }
 
   setSize() {

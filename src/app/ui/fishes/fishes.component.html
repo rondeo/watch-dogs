@@ -1,0 +1,27 @@
+<section>
+   <span> {{startTime}} </span>
+    <span> - </span>
+     <span> {{endTime}} </span>
+    <small>Bought:</small>
+    {{(sumBuy/1000).toFixed(3).replace('.',',')}}
+    <small> Sold:</small>
+    {{(sumSell/1000).toFixed(3).replace('.',',')}}
+    <div>
+       <span class="fa fa-ship"></span>
+        <mat-form-field class="w4">
+            <input matInput placeholder="Results" [(ngModel)]="resultsLength"
+                   (ngModelChange)="onResultsLengthChanged($event)">
+        </mat-form-field>
+        <table class="small">
+            <tbody>
+            <tr *ngFor="let fish of fishes">
+                <td>{{fish.action}}</td>
+                <td><small>$</small>{{fish.amountUS.toLocaleString()}}</td>
+                <td>{{fish.rate}}</td>
+                <td>{{fish.timestamp | toTime}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

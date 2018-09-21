@@ -160,7 +160,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
 
-      return res.map(function (o) {
+      return res.reverse().map(function (o) {
         return {
           uuid: o[0],
           isOpen: false,

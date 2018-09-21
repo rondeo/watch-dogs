@@ -19,7 +19,7 @@ export class StochComponent implements OnInit, OnChanges {
   signalPeriod = 3;
 
 
-  area: number[]
+  area: number[];
 
   myGraphs: VOGraphs;
   constructor() { }

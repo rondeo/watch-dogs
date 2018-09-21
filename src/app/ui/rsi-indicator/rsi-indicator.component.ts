@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {VOCandle} from '../../models/api-models';
 import {VOGraphs} from '../line-chart/line-chart.component';
 import * as _ from 'lodash';
-import {Rsi1} from '../../trader/libs/core/rsi1';
+
 import {RSI} from '../../trader/libs/techind';
 
 @Component({
@@ -12,7 +12,6 @@ import {RSI} from '../../trader/libs/techind';
 })
 export class RsiIndicatorComponent implements OnInit, OnChanges {
 
-  @Input() candles: VOCandle[];
   @Input() closes: number[];
 
   myGraphs: VOGraphs;

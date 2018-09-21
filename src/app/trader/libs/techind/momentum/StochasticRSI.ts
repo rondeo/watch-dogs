@@ -18,7 +18,7 @@ export class StochasticRsiInput extends IndicatorInput{
 };
 
 export class StochasticRSIOutput{
-  stochRSI : number
+  stochRSI : number;
   k:number;
   d:number;
 };

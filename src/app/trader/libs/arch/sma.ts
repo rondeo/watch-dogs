@@ -1,4 +1,4 @@
-export class Sma {
+export class SSMA {
   slow = 26;
   fast = 12;
   signal = 9;

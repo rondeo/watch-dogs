@@ -15,6 +15,7 @@ import {UiModule} from '../ui/ui.module';
 import {WidgetsModule} from '../widgets/widgets.module';
 import { CommonMarketsComponent } from './common-markets/common-markets.component';
 import { LiveTraderComponent } from './live-trader/live-trader.component';
+import {DirectivesModule} from '../directives/directives.module';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
     ApisModule,
     UiModule,
     WidgetsModule,
+    DirectivesModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

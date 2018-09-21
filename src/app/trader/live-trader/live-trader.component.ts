@@ -5,6 +5,7 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {MatSnackBar} from '@angular/material';
+import {VOOrder} from '../../models/app-models';
 
 @Component({
   selector: 'app-live-trader',
@@ -21,6 +22,8 @@ export class LiveTraderComponent implements OnInit {
   lows: number[];
 
   candles: VOCandle[];
+
+  ordersHistory: VOOrder[]
 
   constructor(
     private route: ActivatedRoute,
@@ -74,6 +77,13 @@ export class LiveTraderComponent implements OnInit {
       this.isRquesting = false;
       this.snackBar.open('Error communication', 'x', {extraClasses: 'error'})
     })
+
+
+    api.downloadMarketHistory(ar[0], ar[1]).subscribe(res =>{
+     this.ordersHistory = res;
+    })
   }
+
+
 
 }

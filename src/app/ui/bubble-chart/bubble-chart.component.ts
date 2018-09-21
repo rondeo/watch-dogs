@@ -114,7 +114,6 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
     bubbles.forEach(function (o:VOBubble) {
       if(o.y) {
-
         let amount = o.y;
 
         let x = offsetX + ((o.x - startTime) / scaleX);

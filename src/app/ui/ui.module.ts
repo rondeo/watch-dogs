@@ -16,6 +16,9 @@ import { IndicatorComponent } from './indicator/indicator.component';
 import { MacdIndicatorComponent } from './macd-indicator/macd-indicator.component';
 import { StochComponent } from './stoch/stoch.component';
 import { VolumeHistComponent } from './volume-hist/volume-hist.component';
+import { BubblesComponent } from './bubbles/bubbles.component';
+import { FishesComponent } from './fishes/fishes.component';
+import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
 
 @NgModule({
   exports: [
@@ -31,7 +34,9 @@ import { VolumeHistComponent } from './volume-hist/volume-hist.component';
     IndicatorComponent,
     MacdIndicatorComponent,
     StochComponent,
-    VolumeHistComponent
+    VolumeHistComponent,
+    FishesComponent,
+    StochRsiComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +57,9 @@ import { VolumeHistComponent } from './volume-hist/volume-hist.component';
     IndicatorComponent,
     MacdIndicatorComponent,
     StochComponent,
-    VolumeHistComponent
+    VolumeHistComponent,
+    FishesComponent,
+    StochRsiComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

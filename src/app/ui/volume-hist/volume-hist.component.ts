@@ -3,7 +3,6 @@ import {VOCandle} from '../../models/api-models';
 import {MATH} from '../../com/math';
 import * as moment from 'moment';
 import {VOGraphs} from '../line-chart/line-chart.component';
-import {DrawGrid} from '../com/draw-grid';
 import {DrawBase} from '../com/draw-base';
 
 @Component({
@@ -54,12 +53,14 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
       ctx.lineTo(x, Y0 - (item.Volume * scaleV));
       ctx.stroke();
     }
+    this.maxV = maxV
 
-    this.drawYs(maxV);
+   //  this.drawYs();
   }
 
-
-  drawYs( maxV:number) {
+  maxV
+  drawYs() {
+    const  maxV:number = this.maxV;
     const step = (maxV) / 3;
     const out = [];
     for (let i = 0; i < maxV; i += step) out.push(Math.round(i))
