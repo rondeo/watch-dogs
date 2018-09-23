@@ -59,6 +59,7 @@ export class DrawBase {
   }
 
   redraw() {
+    if(!this.widthG) return;
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawGrid(this.ctx, this.vertical, this.horizont, this.widthG, this.heightG, this.paddingLeft, this.paddingTop);
     this.drawGraphs();

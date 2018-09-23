@@ -97,8 +97,6 @@ export class IndicatorComponent implements OnInit {
     this.drawLines();
     this.drawXs();
     this.drawArea();
-
-
   }
 
   drawArea() {

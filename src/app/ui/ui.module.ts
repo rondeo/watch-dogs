@@ -20,6 +20,7 @@ import { BubblesComponent } from './bubbles/bubbles.component';
 import { FishesComponent } from './fishes/fishes.component';
 import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
 
+
 @NgModule({
   exports: [
     McPercentComponent,

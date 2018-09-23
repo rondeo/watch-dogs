@@ -43,7 +43,7 @@ export class StochRsiComponent implements OnInit, OnChanges {
     };
 
     const stochRSI = new StochasticRSI(input);
-    console.log(stochRSI.getResult());
+   //  console.log(stochRSI.getResult());
     const results: {stochRSI: number, k: number, d: number}[] = stochRSI.getResult();
 
     while(results.length < length) results.unshift({stochRSI:0, k:0, d:0});

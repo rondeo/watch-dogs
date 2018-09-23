@@ -4,7 +4,6 @@ var assert = require("assert");
 
 var inputForceIndex = {
   open : [
-
   ],
   high : [
   ],

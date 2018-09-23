@@ -7,7 +7,15 @@
         font-size: 13px;
     }
 }
+.relative{
+    position: relative;
 
+}
+.absolute{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 .text-narrow {
     transform: scaleX(0.5);
     font-family: "Helvetica Narrow", "Arial Narrow", sans-serif;

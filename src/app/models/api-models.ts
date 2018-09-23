@@ -123,6 +123,7 @@ export class  VOMarketCapSelected extends VOMarketCap{
 
 export type VOMCObj = { [symbol: string]: VOMarketCap }
 
+
 export interface VOCandle {
   from: number;
   to: number;
@@ -133,6 +134,7 @@ export interface VOCandle {
   Trades?: number;
   Volume?: number;
   isClosed?: boolean
+  index?: number;
 }
 
 export interface VOCandleExt extends VOCandle{

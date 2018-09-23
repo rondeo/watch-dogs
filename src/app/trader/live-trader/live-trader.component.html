@@ -1,9 +1,16 @@
 <mat-checkbox #checkRSI appSaveValue >RSI</mat-checkbox>
 <mat-checkbox #checkMACD >MACD</mat-checkbox>
 <mat-checkbox #checkStoch >Stoch</mat-checkbox>
+<mat-checkbox #checkStochRSI >StochRSI</mat-checkbox>
 <mat-checkbox #checkFish ><span class="fa fa-ship"></span></mat-checkbox>
 
+
+
 <app-candlesticks  [candles]="candles"></app-candlesticks>
+
+
+
+
 
 <app-volume-hist [candles]="candles" ></app-volume-hist>
 
@@ -13,7 +20,7 @@
 
 <app-stoch *ngIf="checkStoch.checked" [closes]="closes" [highs]="highs" [lows]="lows"></app-stoch>
 
-<app-stoch-rsi [closes]="closes"></app-stoch-rsi>
+<app-stoch-rsi  *ngIf="checkStochRSI.checked"  [closes]="closes"></app-stoch-rsi>
 
 
 

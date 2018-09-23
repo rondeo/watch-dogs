@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import {MATH} from '../../com/math';
 import {VOCandle} from '../../models/api-models';
+import {LinesOverlay} from './lines-overlay';
 
 
 @Component({
@@ -51,6 +52,14 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
+  linesOverlay: LinesOverlay;
+
+  drawOverlay() {
+    this.linesOverlay.addResistance(this.candles);
+    this.linesOverlay.drawLines(this.gX0, this.scaleX, this.gY0, this.gScaleY);
+
+  }
+
   private drawGraphs() {
     if (!this.candles) return;
     const ar = this.candles;
@@ -61,7 +70,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     const Y0 = this.y0;
     //const y0 = this.y0 - offsetY;
-    const x0 = this.x0;
+   // const x0 = this.x0;
 
     let maxV = 0;
     let min = 100000000000000000;
@@ -69,41 +78,67 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     ar.forEach(function (item) {
       if (item.low < min) min = item.low;
       if (item.high > max) max = item.high;
-      if (item.Volume > maxV) maxV = item.Volume;
     });
 
-    let scaleV = offsetY / maxV;
+    // let scaleV = offsetY / maxV;
     let range = max - min;
     const height = Math.round(this.heightG - offsetY);
 
     let dx = this.widthG / (ar.length - 1);
 
-    let ctx = this.ctx;
-    const scale = height / (range || 1);
+    const minX = ar[0].to;
+    const maxX = ar[ar.length - 1].to;
+    const rangeX = maxX - minX;
 
-    const Yo = this.y0 - offsetY + (min * scale);
+    const scaleX = this.widthG / rangeX;
+
+
+
+    let ctx = this.ctx;
+    const scaleY = height / (range || 1);
+
+    const Yo = this.y0 - offsetY + (min * scaleY);
+
+
+
+    this.gX0 = this.x0 + (minX * scaleX);
+
+    const x0 = this.x0 - (minX * scaleX);
+
+    this.gX0 = x0;
+    this.scaleX = scaleX;
+
+
+    this.gY0 = Yo;
+    this.gScaleY = scaleY;
 
     for (let i = 0, n = ar.length; i < n; i++) {
-      const x = x0 + (i * dx);
+
       const item: VOCandle = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
+      const x = x0 +  (item.to  * scaleX);  // (i * dx);
+
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#333333';
-      ctx.moveTo(x, Yo - (item.low * scale));
-      ctx.lineTo(x, Yo - (item.high * scale));
+      ctx.moveTo(x, Yo - (item.low * scaleY));
+      ctx.lineTo(x, Yo - (item.high * scaleY));
       ctx.stroke();
       ctx.beginPath();
       ctx.lineWidth = 4;
       ctx.strokeStyle = item.open < item.close ? 'green' : 'red';
-      ctx.moveTo(x, Yo - (item.open * scale));
-      ctx.lineTo(x, Yo - (item.close * scale));
+      ctx.moveTo(x, Yo - (item.open * scaleY));
+      ctx.lineTo(x, Yo - (item.close * scaleY));
       ctx.stroke();
     }
     this.drawYs(offsetY, height, min, max, maxV);
   }
 
+  gX0: number;
+  scaleX: number;
+  gY0: number;
+  gScaleY: number;
 
-  drawYs(offsetY: number, height: number, min: number, max: number, maxV:number) {
+  drawYs(offsetY: number, height: number, min: number, max: number, maxV: number) {
 
     const step = (max - min) / 6;
     const out = [];
@@ -119,15 +154,15 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     out.forEach(function (item) {
       ctx.fillText(item, x, y + 3);
-      y-= step2;
+      y -= step2;
     });
 
-   /* ctx.fillStyle = '#550000';
-    ctx.font = '8px Arial';
-    const yV = (this.height - this.paddingBottom - offsetY) + step2 * 2;
-    const firstV = Math.round(maxV /3).toString();
-    ctx.fillText(firstV, x, yV );
-*/
+    /* ctx.fillStyle = '#550000';
+     ctx.font = '8px Arial';
+     const yV = (this.height - this.paddingBottom - offsetY) + step2 * 2;
+     const firstV = Math.round(maxV /3).toString();
+     ctx.fillText(firstV, x, yV );
+ */
   }
 
   private resize;
@@ -164,6 +199,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     this.drwaVerticals();
     this.drawGraphs();
     this.drawXs();
+    this.drawOverlay();
   }
 
   private createLabels(): string[] {
@@ -182,7 +218,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   private drawXs() {
 
     let ctx = this.ctx;
-      const ar = this.createLabels();
+    const ar = this.createLabels();
     let step = (this.widthG + (this.widthG / 12)) / ar.length;
     let y = this.height;
     let x0 = this.paddingLeft - 10;
@@ -223,7 +259,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
-    let step =this.widthG / n;
+    let step = this.widthG / n;
     // console.warn(step);
     let height = this.heightG;
     for (let i = 0; i < n + 1; i++) {
@@ -239,6 +275,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
+    this.linesOverlay = new LinesOverlay(this.ctx);
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }

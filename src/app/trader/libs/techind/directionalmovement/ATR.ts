@@ -7,10 +7,10 @@ import { WEMA }         from '../moving_averages/WEMA';
 import { TrueRange }    from './TrueRange';
 
 export class ATRInput extends IndicatorInput {
-  low:number[]
-  high:number[]
-  close:number[]
-  period:number
+  low:number[];
+  high:number[];
+  close:number[];
+  period:number;
 };
 
 export class ATR extends Indicator {
