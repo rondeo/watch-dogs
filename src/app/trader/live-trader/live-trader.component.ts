@@ -6,6 +6,7 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {MatSnackBar} from '@angular/material';
 import {VOOrder} from '../../models/app-models';
+import {EnumOverlay} from '../../ui/candlesticks/candlesticks.component';
 
 @Component({
   selector: 'app-live-trader',
@@ -20,6 +21,8 @@ export class LiveTraderComponent implements OnInit {
   closes: number[];
   highs: number[];
   lows: number[];
+
+  overlays:EnumOverlay[] = [];
 
   candles: VOCandle[];
 
@@ -84,6 +87,19 @@ export class LiveTraderComponent implements OnInit {
     })
   }
 
+
+  onResSupChange(evt){
+    const ar = this.overlays.slice(0);
+    const ind= ar.indexOf(EnumOverlay.SUPPORT_RESISTANCE);
+    if(evt.checked && ind === -1){
+
+    ar.push(EnumOverlay.SUPPORT_RESISTANCE)
+      this.overlays = ar;
+    } else {
+      if(ind !== -1) ar.splice(ind, 1)
+    }
+    this.overlays = ar;
+  }
 
 
 }

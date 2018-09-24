@@ -2,11 +2,12 @@
 <mat-checkbox #checkMACD >MACD</mat-checkbox>
 <mat-checkbox #checkStoch >Stoch</mat-checkbox>
 <mat-checkbox #checkStochRSI >StochRSI</mat-checkbox>
+<mat-checkbox (change)="onResSupChange($event)" >Res/Sup</mat-checkbox>
 <mat-checkbox #checkFish ><span class="fa fa-ship"></span></mat-checkbox>
 
 
 
-<app-candlesticks  [candles]="candles"></app-candlesticks>
+<app-candlesticks  [candles]="candles" [overlays]="overlays"></app-candlesticks>
 
 
 

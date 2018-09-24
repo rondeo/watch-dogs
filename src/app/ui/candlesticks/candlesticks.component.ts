@@ -5,6 +5,9 @@ import {MATH} from '../../com/math';
 import {VOCandle} from '../../models/api-models';
 import {LinesOverlay} from './lines-overlay';
 
+export enum EnumOverlay{
+  SUPPORT_RESISTANCE
+}
 
 @Component({
   selector: 'app-candlesticks',
@@ -15,11 +18,15 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
+  @ViewChild('myOverlay') overlayView;
   private ctx: CanvasRenderingContext2D;
+  private overlayCTX: CanvasRenderingContext2D;
   @Input() candles: VOCandle[];
 
   @Input() myWidth: number;
   @Input() myHeight: number;
+
+  @Input() overlays: EnumOverlay[];
 
   ratio: number = 600 / 250;
   width: number = 600;
@@ -51,12 +58,15 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   constructor() {
   }
 
-
   linesOverlay: LinesOverlay;
 
-  drawOverlay() {
-    this.linesOverlay.addResistance(this.candles);
-    this.linesOverlay.drawLines(this.gX0, this.scaleX, this.gY0, this.gScaleY);
+  async drawOverlay() {
+
+    this.linesOverlay.clear(this.width, this.height);
+    if(!this.overlays || !this.overlays.length) return;
+    // console.error(this.overlays);
+    if(this.overlays.indexOf(EnumOverlay.SUPPORT_RESISTANCE) !== -1) await this.linesOverlay.addResistance(this.candles);
+    await this.linesOverlay.drawLines(this.gX0, this.scaleX, this.gY0, this.gScaleY);
 
   }
 
@@ -216,7 +226,6 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private drawXs() {
-
     let ctx = this.ctx;
     const ar = this.createLabels();
     let step = (this.widthG + (this.widthG / 12)) / ar.length;
@@ -275,14 +284,17 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
-    this.linesOverlay = new LinesOverlay(this.ctx);
+    this.overlayCTX = this.overlayView.nativeElement.getContext('2d');
+    this.linesOverlay = new LinesOverlay(this.overlayCTX);
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
 
   ngOnChanges(evt) {
-
-    if (this.ctx) this.redraw();
+    if(!this.ctx) return;
+  //  console.error(evt);
+    if (evt.candles) this.redraw();
+    else if(evt.overlays) this.drawOverlay();
 
   }
 }

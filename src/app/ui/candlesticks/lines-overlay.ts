@@ -1,4 +1,4 @@
-import {ResistanceLevel} from '../../trader/libs/levels/resistance-level';
+import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 import {VOCandle} from '../../models/api-models';
 
 export interface Point {
@@ -21,18 +21,15 @@ export class LinesOverlay {
   graphs: SomeLine[];
 
   constructor(private ctx: CanvasRenderingContext2D) {
-
   }
 
-
-  addResistance(candles: VOCandle[]) {
+  async addResistance(candles: VOCandle[]) {
     const step = candles[1].to - candles[0].to;
-    const resist = new ResistanceLevel(candles);
-    const data = resist.result;
+    const resist = new ResistanceSupport(candles);
+    const data = await resist.getResult();
 
     const out = [];
-
-    data.maxs.forEach(function (item) {
+    data.resistance.forEach(function (item) {
       out.push({
         color: 'blue',
         from: {
@@ -46,7 +43,7 @@ export class LinesOverlay {
       })
     });
 
-    data.mins.forEach(function (item) {
+    data.support.forEach(function (item) {
       out.push({
         color: 'red',
         from: {
@@ -59,47 +56,17 @@ export class LinesOverlay {
         },
       })
     });
-
-
-
-   /* const lines = [
-      {
-        from: {
-          x: data.maxs[0].to,
-          y: data.maxs[0].high
-        },
-        to: {
-          x: data.maxs[0].to + (10 * step),
-          y: data.maxs[0].high
-        },
-        color: '#333333'
-      }
-    ];*/
     this.graphs = out;
   }
 
-  drawLines(x0: number, scaleX: number, y0: number, gScaleY: number) {
+  async drawLines(x0: number, scaleX: number, y0: number, gScaleY: number) {
     const graphs: SomeLine[] = this.graphs;
     const ctx = this.ctx;
 
-    //const width = Math.round(widthG);
-
-    //const Yo = yStart +  ( graphs.minY  * scaleY);
-
-    // const rangeX = graphs.maxX - graphs.minX;
-
-    // const scaleX = width / (rangeX || 1);
-
-
-    // const minX = graphs.minX;
-    // const X0 = x0 + (graphs.minX * scaleX);
-
-
     graphs.forEach(function (item) {
-      // item.from.x = 0;
-      // item.to.x = 400;
       ctx.strokeStyle = item.color;
       ctx.lineWidth = 1;
+      ctx.setLineDash([5, 5]);
       ctx.beginPath();
       const x1 = x0 + (item.from.x * scaleX)//((item.from.x - minX) * scaleX);
       const y1 = y0 - (item.from.y * gScaleY);
@@ -108,7 +75,11 @@ export class LinesOverlay {
       ctx.stroke();
     })
 
+    ctx.setLineDash([]);
   }
 
 
+  clear(width: number, height: number) {
+    this.ctx.clearRect(0, 0, width, height);
+  }
 }
