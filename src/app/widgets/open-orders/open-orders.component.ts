@@ -12,8 +12,8 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
-  @Input() afterDate: string;
-  @Input() trigger: number;
+ /* @Input() afterDate: string;*/
+  @Input() refresh: number;
 
   @Output() openOrders: EventEmitter<VOOrder[]> = new EventEmitter();
   orders: VOOrder[] = [];
@@ -32,11 +32,19 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
     this.downloadOpenOrders();
   }
 
-  downloadOpenOrders() {
-    if (!this.exchange) return;
-    if(this.sub) this.sub.unsubscribe();
+  async downloadOpenOrders() {
+    if(!this.exchange || !this.market) return;
+    console.warn(this.exchange, this.market);
+
+   //  if (!this.exchange) return;
+    // if(this.sub) this.sub.unsubscribe();
 
     const api = this.apisPrivate.getExchangeApi(this.exchange);
+
+    const oprders = await api.getOpenOrders2(this.market).toPromise();
+
+    this.orders = oprders;
+    /*
     if(!this.market) {
       const api = this.apisPrivate.getExchangeApi(this.exchange);
       this.sub = api.openOrdersSub.asObservable().subscribe(allOrders =>{
@@ -59,7 +67,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
           }
         });
     }
-    api.refreshAllOpenOrders();
+    api.refreshAllOpenOrders();*/
   }
 
   onCancelOrderClick(order: VOOrder) {

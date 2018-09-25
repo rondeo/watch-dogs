@@ -6,6 +6,6 @@
     <span class="large"><sup>$</sup>{{balanceCoin | coin2us:coin | async}}</span>
     <span *ngIf="pendingCoin"> ({{pendingCoin | coin2us:coin | async}})</span>
     &nbsp;
-    <a [ngClass]="isLoadinBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
+    <a [ngClass]="isLoadingBalances?'scale05':''" class="btn fa fa-refresh fa-2x dgreen"
        (click)="onRefreshBalancesClick()"></a>
 </div>

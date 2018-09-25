@@ -7,7 +7,7 @@ import * as moment from 'moment';
 export class ToDatePipe implements PipeTransform {
 
   transform(value: number): string {
-   return value? moment(value).format('MM/DD HH:mm'):'';
+   return value? moment(value).format('MM-DD HH:mm'):'';
   }
 
 }

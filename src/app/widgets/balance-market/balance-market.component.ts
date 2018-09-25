@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {VOBalance} from '../../models/app-models';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApisPrivateService} from '../../apis/apis-private.service';
@@ -13,6 +13,8 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
+  @Output() balanceBaseChange: EventEmitter<VOBalance> = new EventEmitter<VOBalance>();
+  @Output() balanceCoinChange: EventEmitter<VOBalance> = new EventEmitter<VOBalance>();
 
   curExchange: string;
   balanceBase: number;
@@ -22,7 +24,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
   coin: string;
   base: string;
 
-  isLoadinBalances = false;
+  isLoadingBalances = false;
 
   constructor(
     private apiPrivate: ApisPrivateService
@@ -50,25 +52,30 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
     this.sub1 = api.balance$(ar[0]).subscribe(bal => {
-      console.log(bal);
+     //  console.log(bal);
       this.base = bal.symbol;
+      if(this.balanceBase !== bal.available || this.pendingBase !== bal.pending){
+        this.balanceBaseChange.emit(bal);
+      }
       this.balanceBase = bal.available;
       this.pendingBase = bal.pending;
-      this.isLoadinBalances = false;
+      this.isLoadingBalances = false;
     });
     this.sub2 = api.balance$(ar[1]).subscribe(bal => {
-      console.log(bal);
+     //  console.log(bal);
+      if(this.balanceCoin !== bal.available || this.pendingCoin !== bal.pending){
+        this.balanceCoinChange.emit(bal);
+      }
       this.coin = bal.symbol;
       this.balanceCoin = bal.available;
       this.pendingCoin = bal.pending;
-
-      this.isLoadinBalances = false;
+      this.isLoadingBalances = false;
     });
 
   }
 
   onRefreshBalancesClick() {
-    this.isLoadinBalances = true;
+    this.isLoadingBalances = true;
     const api = this.apiPrivate.getExchangeApi(this.exchange);
     api.refreshBalances()
   }

@@ -150,8 +150,8 @@ export abstract class ApiPrivateAbstaract {
     return sub.asObservable()
   }
 
-  refreshAllOrders(base: string, coin: string) {
-    this.getAllOrders(base, coin).subscribe(res => this.allOrdersSub.next(res));
+  refreshAllOrders(base: string, coin: string, from: number, to: number) {
+    this.getAllOrders(base, coin, from, to).subscribe(res => this.allOrdersSub.next(res));
   }
 
 
@@ -192,6 +192,10 @@ export abstract class ApiPrivateAbstaract {
     return this.credentials;
   }
 
+  getOpenOrders2(market: string) {
+    const ar = market.split('_');
+    return this.getOpenOrders(ar[0], ar[1]);
+  }
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
 
     return null;
@@ -200,7 +204,12 @@ export abstract class ApiPrivateAbstaract {
     return null;
   }
 
-  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
+  getAllOrders2(market: string, from: number, to: number) {
+    const ar = market.split('_');
+    return this.getAllOrders(ar[0], ar[1], from, to);
+  }
+
+  getAllOrders(base: string, coin: string, from: number, to: number): Observable<VOOrder[]> {
     return null;
   }
 

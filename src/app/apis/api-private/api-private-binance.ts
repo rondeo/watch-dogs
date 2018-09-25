@@ -37,10 +37,12 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
 
-  getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
+  getAllOrders(base: string, coin: string, startTime: number, endTime: number): Observable<VOOrder[]> {
     let url = '/api/proxy/https://api.binance.com/api/v3/allOrders';
     const data = {
-      symbol: coin + base
+      symbol: coin + base,
+      startTime,
+      endTime
     };
     console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {

@@ -93,6 +93,16 @@ export class UtilsBooks {
     return 0
   }
 
+  static getRateForAmountBase(ar: { amountCoin, rate: number }[], amountBase: number): number {
+    let prices: number[] = [];
+    let sum = 0;
+    for (let i = 0, n = ar.length; i < n; i++) {
+      let item = ar[i];
+      sum += +item.amountCoin * item.rate;
+      if (sum >= amountBase) return item.rate;
+    }
+    return 0
+  }
 
   static getHistoryDuration(res): number {
     let l = res.length;

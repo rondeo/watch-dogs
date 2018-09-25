@@ -23,6 +23,7 @@ import {ValueColorDirective} from '../directives/value-color.directive';
 import {DirectivesModule} from '../directives/directives.module';
 import { BalanceMarketComponent } from './balance-market/balance-market.component';
 import {PipesModule} from '../pipes/pipes.module';
+import { BuySellPanelComponent } from './buy-sell-panel/buy-sell-panel.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import {PipesModule} from '../pipes/pipes.module';
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
-    BalanceMarketComponent
+    BalanceMarketComponent,
+    BuySellPanelComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -69,7 +71,8 @@ import {PipesModule} from '../pipes/pipes.module';
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
     BtcTetherComponent,
-    BalanceMarketComponent
+    BalanceMarketComponent,
+    BuySellPanelComponent
   ]
 })
 export class WidgetsModule { }

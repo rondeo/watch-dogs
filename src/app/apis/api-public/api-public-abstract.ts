@@ -98,6 +98,10 @@ export abstract class ApiPublicAbstract {
   getTradesSocket(): SocketBase{
     return this.socket;
   }
+  downloadBooks2(market: string) {
+    const ar = market.split('_');
+    return this.downloadBooks(ar[0], ar[1]);
+  }
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 
   abstract downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]>;

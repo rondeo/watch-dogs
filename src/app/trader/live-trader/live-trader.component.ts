@@ -7,12 +7,14 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {MatSnackBar} from '@angular/material';
 import {VOOrder} from '../../models/app-models';
 import {EnumOverlay} from '../../ui/candlesticks/candlesticks.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-live-trader',
   templateUrl: './live-trader.component.html',
   styleUrls: ['./live-trader.component.css']
 })
+
 export class LiveTraderComponent implements OnInit {
 
   exchange: string;
@@ -26,7 +28,7 @@ export class LiveTraderComponent implements OnInit {
 
   candles: VOCandle[];
 
-  ordersHistory: VOOrder[]
+  ordersHistory: VOOrder[];
 
   constructor(
     private route: ActivatedRoute,
@@ -101,5 +103,12 @@ export class LiveTraderComponent implements OnInit {
     this.overlays = ar;
   }
 
+  ordersHistoryAfter:number;
+  onNewOrder(order: VOOrder){
+    this.downloadOrders();
+  }
+  downloadOrders(){
+    this.ordersHistoryAfter = moment().subtract(20, 'hours').valueOf();
+  }
 
 }
