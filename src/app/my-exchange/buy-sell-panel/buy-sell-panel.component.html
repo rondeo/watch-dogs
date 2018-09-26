@@ -1,0 +1,150 @@
+<app-balance-market
+            [market]="market"
+            [exchange]="exchange"
+    ></app-balance-market>
+
+<hr/>
+<mat-form-field class="w6">
+    <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
+        <mat-option *ngFor="let exchange1 of exchanges" [value]="exchange1">{{exchange1}}</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field class="w6">
+    <mat-select [(ngModel)]="market" (change)="onMarketChange($event)" placeholder="Market">
+        <mat-option *ngFor="let market1 of markets" [value]="market1">{{market1}}</mat-option>
+    </mat-select>
+</mat-form-field>
+
+&nbsp; &nbsp;
+<small>$</small>
+<mat-form-field class="w6">
+    <input matInput placeholder="$ Max Trading"
+           [(ngModel)]="tradingAmountUS"
+           (blur)="onTradinAmontChanged()"
+    >
+    <mat-hint> </mat-hint>
+</mat-form-field>
+
+<mat-checkbox
+            #checkAbs
+            [checked]="true"
+            (change)="onAbsoluteChaged($event)"
+    >Abs
+    </mat-checkbox>
+
+<section>
+
+
+    <div>
+        <div><small>Trading Balance</small></div>
+        <span>{{base}}</span>
+        <sup>$</sup>
+        <span>{{tradingBalanceBaseUS}}</span>
+        &nbsp; &nbsp;
+        <span>{{coin}}</span>
+        <sup>$</sup>
+        <span>{{balanceCoinUS}}</span>
+        &nbsp; &nbsp;
+        <button mat-raised-button
+                color="primary"
+                (click)="on50_50Click()"
+        >50/50
+        </button>
+    </div>
+
+
+
+
+    <diV>
+        <mat-card>
+            <mat-card-title>
+                <mat-form-field>
+                    <input matInput placeholder="Buy Rate"
+                           [(ngModel)]="rateBuy"
+                           (focus)="onFocusBuy(null)"
+                    >
+                    <mat-hint><span (click)="onFocusBuy('first')" >{{bookBuy}}</span>
+                        <small (click)="onFocusBuy('b1000')" >({{bookBuy1000US}})</small>
+                    </mat-hint>
+                </mat-form-field>
+            </mat-card-title>
+
+            &nbsp; &nbsp;
+            <mat-card-content>
+                <button mat-fab
+                        [ngClass]="isBuyDisabled?'':'green-color'"
+                        (click)="onBuyClick(25)"
+                >25%
+                </button>
+                <button mat-fab
+                        [ngClass]="isBuyDisabled?'':'green-color'"
+                        (click)="onBuyClick(50)"
+                >50%
+                </button>
+                <button mat-fab
+                        [ngClass]="isBuyDisabled?'':'green-color'"
+                        (click)="onBuyClick(75)"
+                >75%
+                </button>
+                <button mat-fab
+                        class="green-color"
+                        (click)="onBuyClick(100)"
+                >100%
+                </button>
+            </mat-card-content>
+
+        </mat-card>
+
+        &nbsp; &nbsp; &nbsp; &nbsp;
+
+        <mat-card>
+            <mat-card-title>
+                <mat-form-field>
+                    <input matInput placeholder="Sell Rate"
+                           [(ngModel)]="rateSell"
+                           (focus)="onFocusSell(null)"
+
+                    >
+                    <mat-hint><span (click)="onFocusSell('first')" >{{bookSell}}</span>
+                        <small (click)="onFocusSell('b1000')" >({{bookSell1000US}})</small>
+                    </mat-hint>
+                </mat-form-field>
+            </mat-card-title>
+
+            <button mat-fab class="btn-sell" color="accent"
+                    (click)="onSellClick(25)"
+            >25%
+            </button>
+            <button mat-fab class="btn-sell" color="accent"
+                    (click)="onSellClick(50)"
+            >50%
+            </button>
+            <button mat-fab class="btn-sell" color="accent"
+                    (click)="onSellClick(75)"
+            >75%
+            </button>
+            <button mat-fab class="btn-sell" color="accent"
+                    (click)="onSellClick(100)"
+            >100%
+            </button>
+        </mat-card>
+
+    </diV>
+</section>
+
+<app-open-orders
+        [exchange]="exchange"
+        [market]="market"
+        [refresh]="ordersHistoryAfter"
+>
+
+</app-open-orders>
+
+
+<app-orders-history
+        [exchange]="exchange"
+        [market]="market"
+        [afterTimestamp]="ordersHistoryAfter"
+></app-orders-history>
+

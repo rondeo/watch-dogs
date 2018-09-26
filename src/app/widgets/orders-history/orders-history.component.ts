@@ -15,9 +15,12 @@ export class OrdersHistoryComponent implements OnInit, OnChanges {
   @Input() exchange: string;
   @Input() market: string;
   @Input() afterTimestamp: number;
+  from:string;
 
   orders: VOOrder[] = [];
   MC: VOMCObj
+
+  isProgress = false;
 
   constructor(
     private apisPrivate: ApisPrivateService,
@@ -27,7 +30,6 @@ export class OrdersHistoryComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.initAsync();
-    ;
   }
 
   async initAsync() {
@@ -40,33 +42,38 @@ export class OrdersHistoryComponent implements OnInit, OnChanges {
     this.downloadOrders();
   }
 
+  lastCall = 0;
   async downloadOrders() {
     if (!this.exchange || !this.market) return;
+    const now = Date.now();
+    if((now - this.lastCall) < 3000) return;
+    this.lastCall = now;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const ar = this.market.split('_');
     const MC = await this.marketCap.getTicker();
-
     const price_usd = MC[ar[1]].price_usd;
-
     const after: number = this.afterTimestamp || moment().subtract(23, 'hours').valueOf();
-
+    this.from = moment(after).format('MM-DD HH:mm');
+    this.isProgress = true;
     const orders = await api.getAllOrders(ar[0], ar[1], after, moment().valueOf()).toPromise();//.subscribe(orders => {
-    console.log(' all orders', orders);
+    setTimeout(()=>{
+      this.isProgress = false;
+    }, 500)
+   //  console.log(' all orders', orders);
     orders.forEach(function (item) {
       item.amountUS = +(item.amountCoin * price_usd).toFixed(0);
       });
 
       this.orders = orders.sort(function (a, b) {
         return b.timestamp - a.timestamp;
-      })
-      /*.filter(function (item) {
-              return item.timestamp > after;
-            });*/
-   //  })
-  }
-
-  onCancelOrderClick(order: VOOrder) {
+      });
 
   }
+
+  onRefreshClick(){
+    this.downloadOrders();
+  }
+
+
 
 }

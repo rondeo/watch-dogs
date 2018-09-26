@@ -196,7 +196,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
     this.coinMC = coinLast;
     this.baseMC = baseLast;
 
-    ApisPrivateService.instance.getExchangeApi(this.exchange).tickRefreshBalance();
+    // ApisPrivateService.instance.getExchangeApi(this.exchange).tickRefreshBalance();
     const status = this.status;
     const date = moment().format('HH:mm');
     console.log(date, this.wdId, this.status);

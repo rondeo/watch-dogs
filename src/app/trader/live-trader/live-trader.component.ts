@@ -28,8 +28,6 @@ export class LiveTraderComponent implements OnInit {
 
   candles: VOCandle[];
 
-  ordersHistory: VOOrder[];
-
   constructor(
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
@@ -81,15 +79,12 @@ export class LiveTraderComponent implements OnInit {
     }, err => {
       this.isRquesting = false;
       this.snackBar.open('Error communication', 'x', {extraClasses: 'error'})
-    })
+    });
 
-
-    api.downloadMarketHistory(ar[0], ar[1]).subscribe(res =>{
+   /* api.downloadMarketHistory(ar[0], ar[1]).subscribe(res =>{
      this.ordersHistory = res;
-    })
+    })*/
   }
-
-
   onResSupChange(evt){
     const ar = this.overlays.slice(0);
     const ind= ar.indexOf(EnumOverlay.SUPPORT_RESISTANCE);
@@ -101,14 +96,6 @@ export class LiveTraderComponent implements OnInit {
       if(ind !== -1) ar.splice(ind, 1)
     }
     this.overlays = ar;
-  }
-
-  ordersHistoryAfter:number;
-  onNewOrder(order: VOOrder){
-    this.downloadOrders();
-  }
-  downloadOrders(){
-    this.ordersHistoryAfter = moment().subtract(20, 'hours').valueOf();
   }
 
 }

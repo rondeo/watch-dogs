@@ -3,6 +3,8 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 
 @Component({
   selector: 'app-fishes',
@@ -13,6 +15,9 @@ export class FishesComponent implements OnInit, OnChanges {
 
   @Input() ordersHistory: VOOrder[];
 
+  @Input() exchange: string;
+  @Input() market: string;
+  @Input() refresh: number;
 
   sumSell: number;
   sumBuy: number;
@@ -23,16 +28,35 @@ export class FishesComponent implements OnInit, OnChanges {
 
   fishes:VOOrder[];
   constructor(
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private apisPublic: ApisPublicService
   ) { }
 
   ngOnInit() {
-
-
+    this.sortOn = localStorage.getItem('FishesComponent-sortOn');
   }
 
   ngOnChanges(){
-    this.showFishes()
+    this.downloadHistory();
+  }
+
+  isProgress = false
+  timeout;
+  downloadHistory(){
+    clearTimeout(this.timeout);
+    if(!this.market || ! this.exchange) return;
+
+    this.isProgress = true;
+    const api: ApiPublicAbstract = this.apisPublic.getExchangeApi(this.exchange);
+    api.downloadOrders(this.market).toPromise().then(res =>{
+      this.ordersHistory = res;
+      setTimeout(()=>{
+        this.isProgress = false;
+      }, 500)
+      this.timeout = setTimeout(()=>this.downloadHistory(), 60 * 1000);
+      this.showFishes();
+    })
+
   }
 
   filterResults(){
@@ -40,9 +64,10 @@ export class FishesComponent implements OnInit, OnChanges {
       return b.amountCoin - a.amountCoin;
     }).slice(0,this.resultsLength);
 
-    this.fishes = fishes.sort(function (a, b) {
+    this.sort(fishes);
+    /*this.fishes = fishes.sort(function (a, b) {
       return b.timestamp - a.timestamp;
-    });
+    });*/
   }
 
   async showFishes(){
@@ -70,6 +95,23 @@ export class FishesComponent implements OnInit, OnChanges {
 
   onResultsLengthChanged(evt) {
     this.filterResults();
+  }
+
+  onRefreshClick(){
+    this.downloadHistory();
+  }
+
+  sort(orders: VOOrder[]){
+    this.fishes = _.orderBy(orders, this.sortOn, this.isDesc?'desc':'asc');
+  }
+  sortOn = 'timestamp';
+  isDesc = false;
+  sortOnClick(sort: string){
+    if(this.sortOn === sort) this.isDesc = !this.isDesc;
+    localStorage.setItem('FishesComponent-sortOn', sort);
+    this.sortOn = sort;
+    this.sort(this.fishes);
+
   }
   /*onFishClick(){
     if(this.fishes && this.fishes.length) {

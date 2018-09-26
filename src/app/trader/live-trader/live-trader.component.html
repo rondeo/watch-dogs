@@ -1,26 +1,4 @@
-<app-buy-sell-panel
-        [exchange]="'binance'"
-        [market]="'USDT_BTC'"
-        (newOrder)="onNewOrder($event)"
-></app-buy-sell-panel>
 
-<app-open-orders
-        [exchange]="'binance'"
-        [market]="'USDT_BTC'"
-        [refresh]="ordersHistoryAfter"
->
-
-</app-open-orders>
-
-<section>
-    <app-orders-history
-            [exchange]="'binance'"
-            [market]="'USDT_BTC'"
-            [afterTimestamp]="ordersHistoryAfter"
-    ></app-orders-history>
-</section>
-
-<!--
 <mat-checkbox #checkRSI appSaveValue >RSI</mat-checkbox>
 <mat-checkbox #checkMACD >MACD</mat-checkbox>
 <mat-checkbox #checkStoch >Stoch</mat-checkbox>
@@ -28,13 +6,7 @@
 <mat-checkbox (change)="onResSupChange($event)" >Res/Sup</mat-checkbox>
 <mat-checkbox #checkFish ><span class="fa fa-ship"></span></mat-checkbox>
 
-
-
 <app-candlesticks  [candles]="candles" [overlays]="overlays"></app-candlesticks>
-
-
-
-
 
 <app-volume-hist [candles]="candles" ></app-volume-hist>
 
@@ -46,6 +18,9 @@
 
 <app-stoch-rsi  *ngIf="checkStochRSI.checked"  [closes]="closes"></app-stoch-rsi>
 
-
-
-<app-fishes *ngIf="checkFish.checked" [ordersHistory]="ordersHistory"></app-fishes>-->
+<app-fishes
+        *ngIf="checkFish.checked"
+        [exchange]="exchange"
+        [market]="market"
+        [refresh]="refreshSignal"
+></app-fishes>

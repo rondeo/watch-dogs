@@ -21,7 +21,7 @@ import {WidgetsModule} from '../widgets/widgets.module';
 import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.component';
 import {PipesModule} from '../pipes/pipes.module';
 import {DirectivesModule} from '../directives/directives.module';
-
+import {BuySellPanelComponent} from './buy-sell-panel/buy-sell-panel.component';
 
 @Component({
   selector: 'app-my-main',
@@ -30,9 +30,6 @@ import {DirectivesModule} from '../directives/directives.module';
 export class MyMainComponent{
 
 }
-
-
-
 const routes: Routes = [
   {
     path: 'my-exchange', component: MyMainComponent,
@@ -44,7 +41,8 @@ const routes: Routes = [
 
      // {path: 'orders-coindatas', component:  MyOrdersHistoryComponent},
       {path: 'buy-sell/:exchage/:market', component: MyBuySellComponent},
-      {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent}
+      {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent},
+      {path: 'buy-sell-panel/:exchange/:market', component:  BuySellPanelComponent}
 
     ]
   }
@@ -72,7 +70,8 @@ const routes: Routes = [
     TradingHistoryComponent,
     MyOrdersHistoryComponent,
     AllMainCoinsComponent,
-    BuySellCoinComponent
+    BuySellCoinComponent,
+    BuySellPanelComponent
   ],
   providers:[
     ConnectorApiService,

@@ -18,6 +18,7 @@ import { StochComponent } from './stoch/stoch.component';
 import { VolumeHistComponent } from './volume-hist/volume-hist.component';
 import { FishesComponent } from './fishes/fishes.component';
 import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
+import {MaterialAppModule} from '../material/material-app.module';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
     CommonModule,
     FormsModule,
     DirectivesModule,
-    PipesModule
+    PipesModule,
+    MaterialAppModule
   ],
   declarations: [
     McPercentComponent,

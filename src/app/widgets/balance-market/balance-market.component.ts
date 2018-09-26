@@ -13,6 +13,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
+  @Input() timestamp: number;
   @Output() balanceBaseChange: EventEmitter<VOBalance> = new EventEmitter<VOBalance>();
   @Output() balanceCoinChange: EventEmitter<VOBalance> = new EventEmitter<VOBalance>();
 
@@ -38,7 +39,6 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
   private sub2;
 
   ngOnChanges() {
-
 
     if (!this.market || !this.exchange) return;
 

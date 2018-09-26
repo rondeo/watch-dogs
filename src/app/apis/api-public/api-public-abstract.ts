@@ -102,6 +102,10 @@ export abstract class ApiPublicAbstract {
     const ar = market.split('_');
     return this.downloadBooks(ar[0], ar[1]);
   }
+  downloadOrders(market) {
+    const ar = market.split('_');
+    return this.downloadMarketHistory(ar[0], ar[1]);
+  }
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 
   abstract downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]>;

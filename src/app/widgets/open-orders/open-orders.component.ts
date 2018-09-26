@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOOrder} from '../../models/app-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-open-orders',
@@ -12,10 +13,9 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
- /* @Input() afterDate: string;*/
   @Input() refresh: number;
-
-  @Output() openOrders: EventEmitter<VOOrder[]> = new EventEmitter();
+  @Output() openOrdersChange: EventEmitter<VOOrder[]> = new EventEmitter();
+  @Output() orderCanceled: EventEmitter<VOOrder> = new EventEmitter();
   orders: VOOrder[] = [];
 
   constructor(
@@ -25,6 +25,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
   }
 
   private sub;
+
   ngOnInit() {
   }
 
@@ -32,42 +33,22 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
     this.downloadOpenOrders();
   }
 
+  timeout;
+  lastCall = 0;
+
   async downloadOpenOrders() {
-    if(!this.exchange || !this.market) return;
-    console.warn(this.exchange, this.market);
-
-   //  if (!this.exchange) return;
-    // if(this.sub) this.sub.unsubscribe();
-
+    const now = Date.now();
+    if((now - this.lastCall) < 3000) return;
+    this.lastCall = now;
+    clearTimeout(this.timeout);
+    if (!this.exchange || !this.market) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-
-    const oprders = await api.getOpenOrders2(this.market).toPromise();
-
-    this.orders = oprders;
-    /*
-    if(!this.market) {
-      const api = this.apisPrivate.getExchangeApi(this.exchange);
-      this.sub = api.openOrdersSub.asObservable().subscribe(allOrders =>{
-        if(!allOrders) return;
-        this.orders = allOrders;
-        this.openOrders.emit(allOrders);
-      });
-
-    } else {
-      const ar = this.market.split('_');
-
-      this.sub = api.openOrders$(ar[0], ar[1])
-      //  api.getOpenOrders(ar[0], ar[1])
-
-        .subscribe(orders => {
-          console.log(orders);
-          if(this.orders.length !== orders.length) {
-            this.orders = orders;
-            this.openOrders.emit(orders);
-          }
-        });
-    }
-    api.refreshAllOpenOrders();*/
+    const orders = await api.getOpenOrders2(this.market).toPromise();
+    if (this.orders.length !== orders.length) this.openOrdersChange.emit(orders);
+    this.orders = orders;
+    /* if(this.orders.length) {
+      this.timeout =  setTimeout(() =>this.downloadOpenOrders(), 10000)
+     }*/
   }
 
   onCancelOrderClick(order: VOOrder) {
@@ -77,8 +58,9 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
       const msg = [order.action, order.coin, order.amountUS, order.priceUS].join(' ');
       if (confirm('You want to cancel order ' + msg)) {
         api.cancelOrder(id, order.base, order.coin).subscribe(res => {
-          setTimeout(function () {
-            api.refreshAllOpenOrders();
+          this.orderCanceled.emit(order)
+          this.timeout = setTimeout(() => {
+            this.downloadOpenOrders();
           }, 3000)
 
         })
@@ -86,7 +68,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
     }
   }
 
-  onOrderMarketClick(market: string){
+  onOrderMarketClick(market: string) {
     this.externalPages.showMarket(this.exchange, market);
   }
 }

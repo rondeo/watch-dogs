@@ -1,16 +1,19 @@
 <div class="mat-body">
     <div>
-        <span><small> {{exchange}} {{market}} All orders: </small></span>
+        <span><small> {{exchange}} {{market}} From: {{from}} </small></span>
+        &nbsp; &nbsp;
         <span class="mat-body-2">{{orders.length}}</span>
+        &nbsp; &nbsp;
+        <span class="fa fa-refresh btn dgreen" [ngClass] = "isProgress?'scale05':''" (click)="onRefreshClick()"></span>
     </div>
     <table>
         <tbody>
         <tr *ngFor="let order of orders">
             <td><small>{{order.timestamp | toDate }}</small></td>
             <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
-            <td>{{order.rate | coin2us3:order.base | async}}</td>
             <td><small>{{order.rate}}</small></td>
             <td>{{order.amountCoin | coin2us:order.coin | async}}</td>
+            <td>{{order.rate | coin2us3:order.base | async}}</td>
         </tr>
         </tbody>
     </table>

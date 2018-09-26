@@ -46,7 +46,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
     console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {
-      console.log(' allOrders ', res);
+    //   console.log(' allOrders ', res);
 
       return res.filter(function (item) {
         return item.status !== 'CANCELED';
@@ -72,7 +72,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     let url = '/api/proxy/https://api.binance.com/api/v3/openOrders';
     console.log(url);
     return this.call(url, null, RequestType.GET).map(res => {
-      console.log(' allOpenOrders ', res);
+      // console.log(' allOpenOrders ', res);
 
       return res.map(function (item) {
         const market = ApiPublicBinance.parseSymbol(item.symbol);
@@ -170,8 +170,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     this.isLoadingBalances = true;
     return this.call(uri, {}, RequestType.GET).map(res => {
       this.isLoadingBalances = false;
-
-     //  console.log(res);
+       // console.log(res);
       return res.balances.map(function (item) {
         return new VOBalance({
           exchange: exchange,

@@ -86,15 +86,17 @@ export abstract class ApiPrivateAbstaract {
 
   abstract getOrder(orderId, base: string, coin: string): Observable<VOOrder>;
 
-  isTickBalance = false;
 
-  tickRefreshBalance() {
-    if (this.isTickBalance) return;
-    this.isTickBalance = true;
-    setTimeout(() => {
-      this.isTickBalance = false;
-      this.refreshBalances();
-    }, 5 * 60 * 1000);
+  stopRefreshInterval(){
+    clearInterval(this.refreshBalancesInterval);
+    this.refreshBalancesInterval = null;
+  }
+
+  refreshBalancesInterval;
+  startRefreshBalances(delay?: number){
+    if(!delay) delay = 10;
+    if(this.refreshBalancesInterval) return;
+    this.refreshBalancesInterval = setInterval(()=>this.refreshBalances(), delay * 1000);
   }
 
   balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject(null);
@@ -172,10 +174,13 @@ export abstract class ApiPrivateAbstaract {
       const bal = _.find(this.balancesSub.getValue(), {symbol: symbol});
       return Promise.resolve(bal)
     }
-    return this.downloadBalances().toPromise().then(bals => {
-      this.balancesSub.next(bals);
-      return _.find(bals, {symbol: symbol})
+    return new Promise<VOBalance>((resolve, reject)=>{
+      this.downloadBalances().subscribe(bals=>{
+        resolve(_.find(bals, {symbol: symbol}));
+        this.balancesSub.next(bals);
+      },reject);
     });
+
   }
 
   abstract downloadBalances(): Observable<VOBalance[]>;
