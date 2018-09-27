@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOOrder} from '../../models/app-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
   templateUrl: './open-orders.component.html',
   styleUrls: ['./open-orders.component.css']
 })
-export class OpenOrdersComponent implements OnInit, OnChanges {
+export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() exchange: string;
   @Input() market: string;
@@ -30,38 +30,40 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.downloadOpenOrders();
+    this.subscribe();
   }
 
   timeout;
   lastCall = 0;
 
-  async downloadOpenOrders() {
-    const now = Date.now();
-    if((now - this.lastCall) < 3000) return;
-    this.lastCall = now;
-    clearTimeout(this.timeout);
+  subscribe(){
+    if(this.sub) this.sub.unsubscribe();
     if (!this.exchange || !this.market) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    const orders = await api.getOpenOrders2(this.market).toPromise();
-    if (this.orders.length !== orders.length) this.openOrdersChange.emit(orders);
-    this.orders = orders;
-    /* if(this.orders.length) {
-      this.timeout =  setTimeout(() =>this.downloadOpenOrders(), 10000)
-     }*/
-  }
+    const ar = this.market.split('_');
 
+    api.openOrders$(ar[0], ar[1]).subscribe(orders =>{
+      if (this.orders.length !== orders.length) {
+        this.openOrdersChange.emit(orders);
+        api.refreshBalances();
+        api.refreshAllOrders(ar[0], ar[1],moment().subtract(23,'h').valueOf(), moment().valueOf() );
+      }
+      this.orders = orders;
+    })
+    api.refreshAllOpenOrders();
+  }
   onCancelOrderClick(order: VOOrder) {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const id = order.uuid;
     if (id) {
       const msg = [order.action, order.coin, order.amountUS, order.priceUS].join(' ');
       if (confirm('You want to cancel order ' + msg)) {
-        api.cancelOrder(id, order.base, order.coin).subscribe(res => {
-          this.orderCanceled.emit(order)
-          this.timeout = setTimeout(() => {
-            this.downloadOpenOrders();
-          }, 3000)
+        api.cancelOrder2(id, order.base +'_'+ order.coin).then(res => {
+          this.orderCanceled.emit(order);
+         /* this.timeout = setTimeout(() => {
+
+            // this.downloadOpenOrders();
+          }, 3000)*/
 
         })
       }
@@ -70,5 +72,8 @@ export class OpenOrdersComponent implements OnInit, OnChanges {
 
   onOrderMarketClick(market: string) {
     this.externalPages.showMarket(this.exchange, market);
+  }
+  ngOnDestroy(){
+    if(this.sub) this.sub.unsubscribe();
   }
 }

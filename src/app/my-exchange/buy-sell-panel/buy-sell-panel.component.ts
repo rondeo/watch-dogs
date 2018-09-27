@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {VOBalance, VOBooks, VOOrder} from '../../models/app-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {MatSnackBar} from '@angular/material';
@@ -15,23 +15,23 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './buy-sell-panel.component.html',
   styleUrls: ['./buy-sell-panel.component.css']
 })
-export class BuySellPanelComponent implements OnInit {
+export class BuySellPanelComponent implements OnInit, OnDestroy {
 
   exchanges: string[];
-  markets =['USDT_BTC'];
+  markets = ['USDT_BTC'];
   //@Input();
   exchange: string;
- // @Input()
+  // @Input()
   market: string;
   @Input() displayNewOrder = true;
-  @Output() newOrder: EventEmitter<VOOrder> = new EventEmitter();
+  // @Output() newOrder: EventEmitter<VOOrder> = new EventEmitter();
 
   selectedExchange: string;
 
-  balanceBase: VOBalance;
-  balanceCoin: VOBalance;
+  //balanceBase: VOBalance;
+  // balanceCoin: VOBalance;
 
-  coin:string;
+  coin: string;
   base: string;
 
   rateBuy: number;
@@ -41,11 +41,17 @@ export class BuySellPanelComponent implements OnInit {
   bookSell: number;
   bookBuy1000US: number;
   bookSell1000US: number;
- //  fullAmountUS: number;
+  //  fullAmountUS: number;
   tradingAmountUS: number;
-
   tradingBalanceBaseUS: number;
-  balanceCoinUS: number;
+  tradingBalanceBasePendingUS: number;
+
+  pendingBaseUS: number = 0;
+
+  balanceCoinAvailable: number;
+  balanceCoinAvailableUS: number;
+  balanceCoinPendingUS: number;
+
 
   constructor(
     private apisPrivate: ApisPrivateService,
@@ -59,16 +65,16 @@ export class BuySellPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params=>{
-     // console.log(params);
-     // console.log(this.exchange);
-      if(this.exchange !== params.exchange)this.exchange = params.exchange;
-      if(this.market !== params.market)this.market = params.market;
+    this.route.params.subscribe(params => {
+      // console.log(params);
+      // console.log(this.exchange);
+      if (this.exchange !== params.exchange) this.exchange = params.exchange;
+      if (this.market !== params.market) this.market = params.market;
       const ar = this.market.split('_');
       this.base = ar[0];
       this.coin = ar[1];
-      this.tradingAmountUS = +localStorage.getItem('tradingAmount-'+this.exchange + '-'+ this.market);
-      this.getBalances();
+      this.tradingAmountUS = +localStorage.getItem('tradingAmount-' + this.exchange + '-' + this.market);
+      this.subscribe();
       this.downloadBooks();
     });
 
@@ -91,17 +97,15 @@ export class BuySellPanelComponent implements OnInit {
     const MC = await this.marketCap.getTicker();
     percent = percent / 100;
     let amountUS = percent * this.tradingAmountUS / 2;
-    if(amountUS > this.tradingBalanceBaseUS ) amountUS = this.tradingBalanceBaseUS;
-    if(amountUS < 10) {
-      this.snackBar.open('Minimum trading amount $10 got ' + amountUS, 'x', {duration:3000});
+    if (amountUS > this.tradingBalanceBaseUS) amountUS = this.tradingBalanceBaseUS;
+    if (amountUS < 10) {
+      this.snackBar.open('Minimum trading amount $10 got ' + amountUS, 'x', {duration: 3000});
       return;
     }
     const priceBase = MC[this.base].price_usd;
     const amountBase = amountUS / priceBase;
     let amountCoin = amountBase / this.rateBuy;
-
     amountCoin = +amountCoin.toPrecision(5);
-
     /*let amountCoin;
     if (this.isAbsolute) {
       amountCoin =  amountBase / this.rateBuy;
@@ -116,27 +120,28 @@ export class BuySellPanelComponent implements OnInit {
   }
 
   async onSellClick(percent: number) {
+    await this.downloadBooks();
     if (isNaN(this.rateSell)) return;
     percent = percent / 100;
     let amountUS = percent * this.tradingAmountUS / 2;
-    if(amountUS > this.balanceCoinUS) amountUS = this.balanceCoinUS;
+    if (amountUS > this.balanceCoinAvailableUS) amountUS = this.balanceCoinAvailableUS;
 
-    if(amountUS < 10) {
-      this.snackBar.open('Minimum trading amount $10 got ' + amountUS, 'x', {duration:3000});
+    if (amountUS < 10) {
+      this.snackBar.open('Minimum trading amount $10 got ' + amountUS, 'x', {duration: 3000});
       return;
     }
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[this.coin].price_usd;
-    let amountCoin =  amountUS / priceCoin;
+    let amountCoin = amountUS / priceCoin;
     amountCoin = +amountCoin.toPrecision(5);
 
 
-  /*  let amountCoin;
-    if (this.isAbsolute) {
+    /*  let amountCoin;
+      if (this.isAbsolute) {
 
-      amountCoin = await this.getPercentOfCoin(percent / 100);
-    } else {
-      amountCoin = this.balanceCoin.available * percent / 100;*/
+        amountCoin = await this.getPercentOfCoin(percent / 100);
+      } else {
+        amountCoin = this.balanceCoin.available * percent / 100;*/
     //}
 
     this.sellCoin(amountCoin);
@@ -145,7 +150,7 @@ export class BuySellPanelComponent implements OnInit {
   async sellCoin(amount: number) {
     const rateSell = this.rateSell;
     console.log('sell coin ' + amount + ' rate ' + rateSell);
-    if (amount > this.balanceCoin.available) amount = this.balanceCoin.available;
+    if (amount > this.balanceCoinAvailable) amount = this.balanceCoinAvailable;
     if (isNaN(rateSell)) return;
     const ar = this.market.split('_');
     const MC = await this.marketCap.getTicker();
@@ -154,12 +159,13 @@ export class BuySellPanelComponent implements OnInit {
     if (!await this.confirm(msg)) return;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     try {
-      const order = await api.sellLimit(ar[0], ar[1], amount, rateSell).toPromise();
-      this.newOrder.emit(order);
+      const order = await api.sellLimit2(this.market, amount, rateSell);
+
+      //this.newOrder.emit(order);
     } catch (e) {
       console.warn(e);
     }
-    api.startRefreshBalances();
+    // api.startRefreshBalances();
   }
 
   async buyCoin(amount: number) {
@@ -178,13 +184,18 @@ export class BuySellPanelComponent implements OnInit {
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     if (!await this.confirm(msg)) return;
     try {
-      const order = await api.buyLimit(ar[0], ar[1], amount, rateBuy).toPromise();
-      this.onNewOrder(order);
+
+      const order = await api.buyLimit2(this.market, amount, rateBuy)
+      const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
+      this.snackBar.open(msg, 'x', {duration: 30000});
+      // api.refreshAllOpenOrders();
+      //this.onNewOrder(order);
 
     } catch (e) {
+      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
       console.warn(e);
     }
-    api.startRefreshBalances();
+    //api.startRefreshBalances();
   }
 
   async confirm(msg) {
@@ -196,38 +207,86 @@ export class BuySellPanelComponent implements OnInit {
     })
   }
 
-  async getBalances(){
-    if(!this.exchange || ! this.market) return;
-    const api = this.apisPrivate.getExchangeApi(this.exchange);
-    const ar = this.market.split('_');
-    const balanceBase:VOBalance  =  await api.getBalance(ar[0]);
-    if(!this.balanceBase || this.balanceBase.available !== balanceBase.available) this.onBalanceChange(balanceBase);
+  private sub1;
+  private sub2;
+  private sub3;
 
-    const balanceCoin: VOBalance = await api.getBalance(ar[1]);
-    if(!this.balanceCoin || this.balanceCoin.available !== balanceCoin.available) this.onBalanceChange(balanceCoin);
+  subscribe() {
+    if (!this.exchange || !this.market) return;
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
+    const base = this.base;
+    const coin = this.coin;
+    this.marketCap.getTicker().then(MC => {
+      const priceBase = base === 'USDT' ? 1 : MC[base].price_usd;
+      const priceCoin = MC[coin].price_usd;
+      const api = this.apisPrivate.getExchangeApi(this.exchange);
+      this.sub1 = api.balance$(base).subscribe((balance: VOBalance) => {
+
+        const balanceBase = balance.available + balance.pending;
+        if (!this.tradingAmountUS) this.tradingBalanceBaseUS = Math.round(balanceBase * priceBase);
+
+        //  const tradingBalanceBaseUS = this.tradingAmountUS? this.tradingAmountUS - balanceCoinUS: (balanceBase * priceBase);
+      });
+
+      this.sub2 = api.balance$(coin).subscribe((balance: VOBalance) => {
+        this.balanceCoinAvailable = balance.available;
+
+
+        const balanceCoinAvailableUS = Math.round(balance.available * priceCoin);
+        this.balanceCoinPendingUS = Math.round(balance.pending * priceCoin);
+        this.balanceCoinAvailableUS = balanceCoinAvailableUS;
+        this.calculateBase();
+      });
+
+      this.sub3 = api.openOrders$(base, coin).subscribe(orders => {
+        let sum = 0;
+        orders.forEach(function (item) {
+          if (item.action === 'BUY') sum += item.amountCoin;
+        });
+        this.pendingBaseUS = Math.round(priceCoin * sum);
+        this.calculateBase();
+      })
+    })
 
   }
 
-  onBalanceChange(bal: VOBalance) {
-    const ar = this.market.split('_');
-    // console.log(bal);
-    if (bal.symbol === ar[0]) this.balanceBase = bal;
-    if (bal.symbol === ar[1]) this.balanceCoin = bal;
-    if (this.balanceBase && this.balanceCoin) {
-      this.marketCap.getTicker().then(MC => {
-        const balanceBase = this.balanceBase.available + this.balanceBase.pending;
-        const balanceCoin = this.balanceCoin.available + this.balanceCoin.pending;
-        const priceBase = ar[0] === 'USDT' ? 1 : MC[ar[0]].price_usd;
-        const priceCoin = MC[ar[1]].price_usd;
-        const balanceCoinUS = (balanceCoin * priceCoin);
-        const tradingBalanceBaseUS = this.tradingAmountUS? this.tradingAmountUS - balanceCoinUS: (balanceBase * priceBase);
-        this.tradingBalanceBaseUS = Math.round(tradingBalanceBaseUS);
-        this.balanceCoinUS = Math.round(balanceCoinUS);
+  calculateBase() {
+    if (this.tradingAmountUS) this.tradingBalanceBaseUS = this.tradingAmountUS - (this.balanceCoinPendingUS + this.balanceCoinAvailableUS) - this.pendingBaseUS;
+  }
 
-        if(!this.tradingAmountUS) this.tradingAmountUS = Math.round((balanceBase * priceBase) + (balanceCoin * priceCoin))
+  /* async getBalances(){
+     if(!this.exchange || ! this.market) return;
+     const api = this.apisPrivate.getExchangeApi(this.exchange);
+     const ar = this.market.split('_');
+     const balanceBase:VOBalance  =  await api.getBalance(ar[0]);
+     if(!this.balanceBase || this.balanceBase.available !== balanceBase.available) this.onBalanceChange(balanceBase);
 
-      })
-    }
+     const balanceCoin: VOBalance = await api.getBalance(ar[1]);
+     if(!this.balanceCoin || this.balanceCoin.available !== balanceCoin.available) this.onBalanceChange(balanceCoin);
+
+   }*/
+
+  onBalanceChange(deltaUS: number) {
+    /* const ar = this.market.split('_');
+     // console.log(bal);
+     if (bal.symbol === ar[0]) this.balanceBase = bal;
+     if (bal.symbol === ar[1]) this.balanceCoin = bal;
+     if (this.balanceBase && this.balanceCoin) {
+       this.marketCap.getTicker().then(MC => {
+         const balanceBase = this.balanceBase.available + this.balanceBase.pending;
+         const balanceCoin = this.balanceCoin.available + this.balanceCoin.pending;
+         const priceBase = ar[0] === 'USDT' ? 1 : MC[ar[0]].price_usd;
+         const priceCoin = MC[ar[1]].price_usd;
+         const balanceCoinUS = (balanceCoin * priceCoin);
+         const tradingBalanceBaseUS = this.tradingAmountUS? this.tradingAmountUS - balanceCoinUS: (balanceBase * priceBase);
+         this.tradingBalanceBaseUS = Math.round(tradingBalanceBaseUS);
+         this.balanceCoinUS = Math.round(balanceCoinUS);
+
+         if(!this.tradingAmountUS) this.tradingAmountUS = Math.round((balanceBase * priceBase) + (balanceCoin * priceCoin))
+
+       })
+     }*/
 
     this.downloadAllAndOpenOrders();
 
@@ -242,9 +301,8 @@ export class BuySellPanelComponent implements OnInit {
     const priceCoin = MC[ar[1]].price_usd;
 
 
-
     const baseUS = this.tradingBalanceBaseUS;
-    const coinUS = this.balanceCoinUS;
+    const coinUS = this.balanceCoinAvailableUS + this.balanceCoinPendingUS;
     const diff = baseUS - coinUS;
     if (Math.abs(diff) < 20) {
       this.snackBar.open('Difference $' + diff + ' less then 20', 'x', {duration: 3000});
@@ -262,7 +320,7 @@ export class BuySellPanelComponent implements OnInit {
 
 
   async downloadBooks() {
-    if(!this.market || ! this.exchange) return;
+    if (!this.market || !this.exchange) return;
     const ar = this.market.split('_');
     const api: ApiPublicAbstract = this.apisPublic.getExchangeApi(this.exchange);
     const books: VOBooks = await api.downloadBooks2(this.market).toPromise();
@@ -310,22 +368,15 @@ export class BuySellPanelComponent implements OnInit {
   }
 
   ordersHistoryAfter: number;
-
-  onNewOrder(order: VOOrder) {
-    const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
-    this.snackBar.open(msg, 'x', {duration: 30000});
-    this.downloadAllAndOpenOrders();
-    this.newOrder.emit(order);
-  }
-
   /*
-    async getMyOrdersHistory() {
-      const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
-      const orders = await api.getAllOrders2(this.market).toPromise();
-      console.log(' all orders ', orders);
 
+    onNewOrder(order: VOOrder) {
+
+      //this.downloadAllAndOpenOrders();
+      // this.newOrder.emit(order);
     }
   */
+
 
   isAbsolute: boolean = true;
 
@@ -333,17 +384,22 @@ export class BuySellPanelComponent implements OnInit {
     this.isAbsolute = evt.checked;
     if (this.isAbsolute) {
 
-
     }
   }
 
   onExcgangeChange(evt) {
-    this.router.navigate(['/my-exchange/buy-sell-panel/'+this.exchange+'/'+this.market]);
+    this.router.navigate(['/my-exchange/buy-sell-panel/' + this.exchange + '/' + this.market]);
   }
 
 
-  onTradinAmontChanged(){
-    localStorage.setItem('tradingAmount-'+this.exchange + '-'+ this.market, String(this.tradingAmountUS));
+  onTradinAmontChanged() {
+    localStorage.setItem('tradingAmount-' + this.exchange + '-' + this.market, String(this.tradingAmountUS));
+  }
+
+  ngOnDestroy() {
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
+    if (this.sub2) this.sub3.unsubscribe();
   }
 
 }

@@ -18,9 +18,26 @@
 
 <app-stoch-rsi  *ngIf="checkStochRSI.checked"  [closes]="closes"></app-stoch-rsi>
 
-<app-fishes
-        *ngIf="checkFish.checked"
-        [exchange]="exchange"
-        [market]="market"
-        [refresh]="refreshSignal"
-></app-fishes>
+<section  *ngIf="checkFish.checked">
+    <app-fishes
+            [exchange]="'bitfinex'"
+            [market]="market"
+            [refresh]="refreshSignal"
+    ></app-fishes>
+
+    <app-fishes
+            [exchange]="'huobi'"
+            [market]="market"
+            [refresh]="refreshSignal"
+    ></app-fishes>
+    <app-fishes
+            [exchange]="'okex'"
+            [market]="market"
+            [refresh]="refreshSignal"
+    ></app-fishes>
+    <app-fishes
+            [exchange]="'binance'"
+            [market]="market"
+            [refresh]="refreshSignal"
+    ></app-fishes>
+</section>

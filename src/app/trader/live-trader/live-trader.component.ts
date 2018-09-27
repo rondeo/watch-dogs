@@ -24,6 +24,8 @@ export class LiveTraderComponent implements OnInit {
   highs: number[];
   lows: number[];
 
+  refreshSignal:number;
+
   overlays:EnumOverlay[] = [];
 
   candles: VOCandle[];

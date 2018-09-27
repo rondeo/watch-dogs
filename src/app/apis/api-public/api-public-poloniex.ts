@@ -119,7 +119,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
     url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url)
-    return this.http.get(url).map((res:any)=>{
+    return this.http.get(url).map((res:any[])=>{
       // console.log(res);
 
       return res.map(function(item) {

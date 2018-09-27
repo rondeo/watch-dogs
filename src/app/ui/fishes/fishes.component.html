@@ -1,36 +1,53 @@
-<section>
-   <span> {{startTime}} </span>
-    <span> - </span>
-     <span> {{endTime}} </span>
-    <small>Buy:</small>
-    {{(sumBuy/1000).toFixed(3).replace('.',',')}}
-    <small> Sell:</small>
-    {{(sumSell/1000).toFixed(3).replace('.',',')}}
-    <div>
-       <span class="fa fa-ship"></span>
-        &nbsp;&nbsp;
-        <mat-form-field class="w4">
-            <input matInput placeholder="Results" [(ngModel)]="resultsLength"
-                   (ngModelChange)="onResultsLengthChanged($event)">
-        </mat-form-field>
-        &nbsp;&nbsp;
-        <span class="fa fa-refresh fa-2x btn dgreen" [ngClass]="isProgress?'scale05':''" (click)="onRefreshClick()"></span>
-        <table class="small">
-            <tbody>
-            <tr>
-                <td></td>
-                <td><span (click)="sortOnClick('amountUS')" class="btn">$US</span></td>
-                <td><span (click)="sortOnClick('rate')"  class="btn">Rate</span></td>
-                <td><span (click)="sortOnClick('timestamp')"  class="btn">Time</span></td>
-            </tr>
-            <tr *ngFor="let fish of fishes">
-                <td>{{fish.action}}</td>
-                <td><small>$</small>{{fish.amountUS.toLocaleString()}}</td>
-                <td>{{fish.rate}}</td>
-                <td>{{fish.timestamp | toTime}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<section class="inline-block small">
+    <mat-card>
+        <div>
+            <span>{{exchange}} </span>
+            <span> {{market}}</span>
+
+        </div>
+        <div>
+            <span> {{startTime}} </span>
+            <span> - </span>
+            <span> {{endTime}} </span>
+        </div>
+        <div>{{volPerMinute}}</div>
+        <div>{{tradesPerMinute}}</div>
+        <small>Buy:</small>
+        {{(sumBuy/1000).toFixed(3).replace('.',',')}}
+        <small> Sell:</small>
+        {{(sumSell/1000).toFixed(3).replace('.',',')}}
+
+        <div>
+
+            <span class="fa fa-ship"></span> &nbsp;&nbsp;
+            <mat-form-field class="w4">
+                <input matInput placeholder="Results" [(ngModel)]="resultsLength"
+                       (ngModelChange)="onResultsLengthChanged($event)">
+            </mat-form-field>
+            &nbsp;&nbsp;
+            <span class="fa fa-refresh fa-2x btn dgreen" [ngClass]="isProgress?'scale05':''"
+                  (click)="onRefreshClick()"></span>
+
+            <table>
+                <tbody>
+                <tr>
+                    <td></td>
+                    <td><span (click)="sortOnClick('amountUS')" class="btn">$US</span></td>
+                    <td><span (click)="sortOnClick('rate')" class="btn">Rate</span></td>
+                    <td><span (click)="sortOnClick('timestamp')" class="btn">Time</span></td>
+                </tr>
+                <tr *ngFor="let fish of fishes">
+                    <td>{{fish.action}}</td>
+                    <td>
+                        <small>$</small>
+                        {{fish.amountUS.toLocaleString()}}
+                    </td>
+                    <td>{{fish.rate}}</td>
+                    <td>{{fish.timestamp | toTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card>
 
 </section>

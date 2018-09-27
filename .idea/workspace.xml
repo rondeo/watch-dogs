@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="buy sell panel">
-      <change afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" afterDir="false" />
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="buy sell amount fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/models/watch-dog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/watch-dog.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/ui.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/ui.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/buy-sell-panel/buy-sell-panel.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/buy-sell-panel/buy-sell-panel.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/buy-sell-panel/buy-sell-panel.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -62,41 +56,41 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="121" />
-          <entry key="HTML" value="4717" />
+          <entry key="HTML" value="5176" />
           <entry key="JSON" value="5" />
           <entry key="JavaScript" value="1" />
-          <entry key="PLAIN_TEXT" value="648" />
-          <entry key="TypeScript" value="58789" />
+          <entry key="PLAIN_TEXT" value="670" />
+          <entry key="TypeScript" value="61162" />
           <entry key="tsconfig" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="121" />
-          <entry key="html" value="4717" />
+          <entry key="html" value="5176" />
           <entry key="js" value="1" />
           <entry key="json" value="15" />
-          <entry key="ts" value="58789" />
-          <entry key="txt" value="648" />
+          <entry key="ts" value="61162" />
+          <entry key="txt" value="670" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="10" />
-          <entry key="HTML" value="147" />
+          <entry key="HTML" value="150" />
           <entry key="JSON" value="5" />
           <entry key="JavaScript" value="15" />
-          <entry key="TypeScript" value="580" />
+          <entry key="TypeScript" value="591" />
           <entry key="tsconfig" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="10" />
-          <entry key="html" value="147" />
+          <entry key="html" value="150" />
           <entry key="js" value="15" />
           <entry key="json" value="6" />
-          <entry key="ts" value="580" />
+          <entry key="ts" value="591" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -109,38 +103,17 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="20" column="6" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+                <state relative-caret-position="225">
+                  <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="394">
-                  <caret line="175" column="5" lean-forward="true" selection-start-line="175" selection-start-column="5" selection-end-line="175" selection-end-column="5" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="478">
-                  <caret line="172" column="27" lean-forward="true" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
-                  <folding>
-                    <element signature="e#0#71#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="89">
+                  <caret line="107" column="44" lean-forward="true" selection-start-line="107" selection-start-column="44" selection-end-line="107" selection-end-column="44" />
                 </state>
               </provider>
             </entry>
@@ -148,8 +121,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+                <state relative-caret-position="704">
+                  <caret line="144" column="11" selection-start-line="144" selection-start-column="11" selection-end-line="144" selection-end-column="11" />
                   <folding>
                     <element signature="e#638#644#1" expanded="true" />
                     <element signature="e#645#651#1" expanded="true" />
@@ -158,6 +131,62 @@
                     <element signature="e#1326#1332#0" expanded="true" />
                     <element signature="e#1333#1339#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="300">
+                  <caret line="63" column="6" lean-forward="true" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+                  <folding>
+                    <element signature="e#0#77#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="150">
+                  <caret line="10" column="41" lean-forward="true" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#125#131#0" expanded="true" />
+                    <element signature="e#198#204#0" expanded="true" />
+                    <element signature="e#205#211#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="120">
+                  <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+                  <folding>
+                    <element signature="e#0#88#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="508">
+                  <caret line="148" column="13" selection-start-line="148" selection-start-column="13" selection-end-line="148" selection-end-column="13" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="135">
+                  <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
                 </state>
               </provider>
             </entry>
@@ -213,8 +242,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>this.exchange</find>
-      <find>toUs</find>
       <find>btn.f</find>
       <find>coinPriceMC</find>
       <find>socket</find>
@@ -242,7 +269,9 @@
       <find>ngOnC</find>
       <find>ordersHistory</find>
       <find>fullAmountUS</find>
+      <find>startTime</find>
       <find>buyCoin</find>
+      <find>canc</find>
     </findStrings>
     <replaceStrings>
       <replace>myValueColor</replace>
@@ -262,9 +291,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" />
-        <option value="$PROJECT_DIR$/src/app/directives/directives.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/trader.module.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/volume-hist/volume-hist.component.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/arch/sma.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/libs/arch/rsi2.ts" />
@@ -296,23 +322,26 @@
         <option value="$PROJECT_DIR$/src/app/pipes/to-date.pipe.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts" />
         <option value="$PROJECT_DIR$/src/app/models/watch-dog.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/buy-sell-panel/buy-sell-panel.component.html" />
         <option value="$PROJECT_DIR$/src/app/widgets/buy-sell-panel/buy-sell-panel.component.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/ui.module.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html" />
-        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" />
-        <option value="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" />
+        <option value="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html" />
+        <option value="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html" />
+        <option value="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" />
+        <option value="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html" />
       </list>
     </option>
   </component>
@@ -339,8 +368,7 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="143" />
-    <option name="y" value="4" />
+    <option name="x" value="77" />
     <option name="width" value="2514" />
     <option name="height" value="1456" />
   </component>
@@ -388,6 +416,14 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="apis" type="462c0819:PsiDirectoryNode" />
+              <item name="api-public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -424,7 +460,30 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="fishes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="widgets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="widgets" type="462c0819:PsiDirectoryNode" />
+              <item name="trades-history" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -638,14 +697,7 @@
       <workItem from="1537644595944" duration="14802000" />
       <workItem from="1537714362955" duration="638000" />
       <workItem from="1537717053146" duration="10051000" />
-      <workItem from="1537754532372" duration="62577000" />
-    </task>
-    <task id="LOCAL-00021" summary="list sell buy">
-      <created>1528668003051</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1528668003051</updated>
+      <workItem from="1537754532372" duration="83964000" />
     </task>
     <task id="LOCAL-00022" summary="commit">
       <created>1529024468053</created>
@@ -983,11 +1035,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537847484959</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="buy sell amount fixed">
+      <created>1537991900013</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1537991900013</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1398512000" />
+    <option name="totallyTimeSpent" value="1419899000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -999,17 +1058,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="143" y="4" width="2514" height="1456" extended-state="0" />
+    <frame x="77" y="0" width="2514" height="1456" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8068506" visible="true" weight="0.14588428" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.80686694" visible="true" weight="0.14588428" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.19314939" side_tool="true" visible="true" weight="0.14588428" />
+      <window_info id="npm" order="2" sideWeight="0.19313304" side_tool="true" visible="true" weight="0.14588428" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="DB Browser" order="4" sideWeight="0.49730563" weight="0.25577927" />
       <window_info anchor="bottom" id="Messages" order="0" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.49837002" weight="0.3017706" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4979625" visible="true" weight="0.19091609" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4979625" visible="true" weight="0.28252503" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -1167,7 +1226,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="houbi public" />
     <MESSAGE value="all markets" />
     <MESSAGE value="exterior page" />
     <MESSAGE value="markets snapshots" />
@@ -1192,7 +1250,8 @@
     <MESSAGE value="stochRSI" />
     <MESSAGE value="support resistance" />
     <MESSAGE value="buy sell panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="buy sell panel" />
+    <MESSAGE value="buy sell amount fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="buy sell amount fixed" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1220,29 +1279,6 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/volume/ForceIndex.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/volume/ADL.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/overlays/lines-overlay/lines-overlay.component.html" />
-    <entry file="file://$PROJECT_DIR$/src/app/ui/resistance-support/resistance-support.component.html" />
-    <entry file="file://$PROJECT_DIR$/node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="130" column="17" selection-start-line="130" selection-start-column="17" selection-end-line="130" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/ui/resistance-support/resistance-support.component.ts" />
     <entry file="file://$PROJECT_DIR$/src/app/ui/overlays/lines-overlay/lines-overlay.component.ts" />
     <entry file="file://$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html">
@@ -1382,15 +1418,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -1418,9 +1445,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1442,16 +1466,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
           <caret line="198" column="7" selection-start-line="198" selection-start-column="7" selection-end-line="198" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="24" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="41" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#88#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1482,16 +1496,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="37" lean-forward="true" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/widgets/widgets.module.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -1508,52 +1512,6 @@
           <caret line="44" column="72" lean-forward="true" selection-start-line="44" selection-start-column="72" selection-end-line="44" selection-end-column="72" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="39" selection-start-line="9" selection-start-column="39" selection-end-line="9" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-          <folding>
-            <element signature="e#119#125#0" expanded="true" />
-            <element signature="e#125#131#0" expanded="true" />
-            <element signature="e#199#205#0" expanded="true" />
-            <element signature="e#206#212#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
-          <folding>
-            <element signature="e#309#315#0" expanded="true" />
-            <element signature="e#315#321#0" expanded="true" />
-            <element signature="e#525#531#0" expanded="true" />
-            <element signature="e#531#537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1578,24 +1536,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="175" column="5" lean-forward="true" selection-start-line="175" selection-start-column="5" selection-end-line="175" selection-end-column="5" />
+        <state>
+          <folding>
+            <element signature="e#0#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-bittrex.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3105">
+          <folding>
+            <element signature="e#0#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="162" column="35" lean-forward="true" selection-start-line="162" selection-start-column="35" selection-end-line="162" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="124" column="37" lean-forward="true" selection-start-line="124" selection-start-column="37" selection-end-line="124" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1485">
+          <caret line="99" column="62" lean-forward="true" selection-start-line="99" selection-start-column="62" selection-end-line="99" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="6" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="107" column="44" lean-forward="true" selection-start-line="107" selection-start-column="44" selection-end-line="107" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+        <state relative-caret-position="704">
+          <caret line="144" column="11" selection-start-line="144" selection-start-column="11" selection-end-line="144" selection-end-column="11" />
           <folding>
             <element signature="e#638#644#1" expanded="true" />
             <element signature="e#645#651#1" expanded="true" />
@@ -1607,10 +1648,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+          <caret line="10" column="41" lean-forward="true" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+          <folding>
+            <element signature="e#125#131#0" expanded="true" />
+            <element signature="e#198#204#0" expanded="true" />
+            <element signature="e#205#211#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="63" column="6" lean-forward="true" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="508">
+          <caret line="148" column="13" selection-start-line="148" selection-start-column="13" selection-end-line="148" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#88#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
         </state>
       </provider>
     </entry>

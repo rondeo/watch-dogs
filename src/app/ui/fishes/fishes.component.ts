@@ -23,6 +23,9 @@ export class FishesComponent implements OnInit, OnChanges {
   sumBuy: number;
   resultsLength: number = 7;
 
+  volPerMinute: string;
+  tradesPerMinute: string;
+
   startTime: string;
   endTime: string;
 
@@ -40,7 +43,7 @@ export class FishesComponent implements OnInit, OnChanges {
     this.downloadHistory();
   }
 
-  isProgress = false
+  isProgress = false;
   timeout;
   downloadHistory(){
     clearTimeout(this.timeout);
@@ -72,15 +75,18 @@ export class FishesComponent implements OnInit, OnChanges {
 
   async showFishes(){
     if(!this.ordersHistory) return;
+    const ordersHistory = this.ordersHistory;
+
     const MC = await this.marketCap.getTicker();
     let base  = this.ordersHistory[0].base;
     let coin = this.ordersHistory[0].coin;
     let priceBaseUS = 1;
-    this.startTime = moment(this.ordersHistory[0].timestamp).format('HH:mm');
-    this.endTime = moment(this.ordersHistory[this.ordersHistory.length-1].timestamp).format('HH:mm');
+    const from = ordersHistory[ordersHistory.length-1].timestamp;
+    const to = ordersHistory[0].timestamp;
+    this.endTime = moment(to).format('HH:mm');
+    this.startTime = moment(from).format('HH:mm');
+
     if(base !=='USDT') priceBaseUS = MC[base].price_usd;
-
-
     let bought = 0;
     let sold = 0;
     this.ordersHistory.forEach(function (o) {
@@ -90,6 +96,9 @@ export class FishesComponent implements OnInit, OnChanges {
 
     this.sumBuy = bought;
     this.sumSell = sold ;
+    const speed = 60 * (bought + sold) / (to - from);
+    this.volPerMinute = 'V: '+ speed.toPrecision(3) + 'k/min';
+    this.tradesPerMinute = 'T: ' + (60000 * ordersHistory.length /(to - from)).toPrecision(4)+ '/min';
     this.filterResults();
   }
 
@@ -105,7 +114,7 @@ export class FishesComponent implements OnInit, OnChanges {
     this.fishes = _.orderBy(orders, this.sortOn, this.isDesc?'desc':'asc');
   }
   sortOn = 'timestamp';
-  isDesc = false;
+  isDesc = true;
   sortOnClick(sort: string){
     if(this.sortOn === sort) this.isDesc = !this.isDesc;
     localStorage.setItem('FishesComponent-sortOn', sort);

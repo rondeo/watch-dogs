@@ -34,17 +34,17 @@
     </mat-checkbox>
 
 <section>
-
-
     <div>
         <div><small>Trading Balance</small></div>
         <span>{{base}}</span>
         <sup>$</sup>
-        <span>{{tradingBalanceBaseUS}}</span>
+        <span>{{tradingBalanceBaseUS}} </span>
+        <span *ngIf="pendingBaseUS">({{pendingBaseUS}})</span>
         &nbsp; &nbsp;
         <span>{{coin}}</span>
         <sup>$</sup>
-        <span>{{balanceCoinUS}}</span>
+        <span> {{balanceCoinAvailableUS}} </span>
+        <span *ngIf="balanceCoinPendingUS">({{balanceCoinPendingUS}})</span>
         &nbsp; &nbsp;
         <button mat-raised-button
                 color="primary"

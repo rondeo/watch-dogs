@@ -4,13 +4,21 @@
     <table>
         <tbody>
         <tr *ngFor="let order of orders">
-            <td><small class="btn" (click)="onOrderMarketClick(order.base + '_' + order.coin)">{{order.base + '_' + order.coin}}</small></td>
-            <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
-            <td>{{order.amountCoin | coin2us:order.coin | async}}</td>
-            <td>{{order.rate | coin2us3:order.base | async}}</td>
-            <td><small>{{order.rate}}</small></td>
-            <td><small>{{order.timestamp | toDate}}</small></td>
-            <span class="btn fa fa-close dred fa-2x" (click)="onCancelOrderClick(order)"></span>
+            <td>
+                <small>{{order.timestamp | toDate}}</small>
+            </td>
+            <td >
+                <span class="{{order.action==='SELL'?'red':'green'}}">{{order.action}}</span>
+            </td>
+            <td>
+                <span>${{order.amountCoin | coin2us:order.coin | async}}</span>
+            </td>
+            <td>
+                <small>{{order.rate}}</small>
+            </td>
+            <td>
+                <span class="btn fa fa-close dred fa-2x" (click)="onCancelOrderClick(order)"></span>
+            </td>
         </tr>
         </tbody>
     </table>
