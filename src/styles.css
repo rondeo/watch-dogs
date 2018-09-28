@@ -2,6 +2,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /*@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';*/
 
+
 @media (max-width: 400px) {
     html {
         font-size: 13px;
@@ -41,7 +42,10 @@
     height: 100px;
     overflow-y: scroll;
 }
-
+.scrollY300 {
+    height: 300px;
+    overflow-y: scroll;
+}
 div.scrollmenu {
     background-color: #333;
     overflow: auto;
@@ -331,6 +335,12 @@ table tr.selected {
 
 .w15 {
     width: 15em !important;
+}
+.w20{
+    width: 20em !important;
+}
+.w30{
+    width: 30em !important;
 }
 
 .w32 {

@@ -117,8 +117,6 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
      });
       return coins
    })
-
-
   }
 
   private getTickerForMarket(market: string) {

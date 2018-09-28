@@ -1,14 +1,13 @@
+<mat-checkbox #checkRSI appSaveValue>RSI</mat-checkbox>
+<mat-checkbox #checkMACD>MACD</mat-checkbox>
+<mat-checkbox #checkStoch>Stoch</mat-checkbox>
+<mat-checkbox #checkStochRSI>StochRSI</mat-checkbox>
+<mat-checkbox (change)="onResSupChange($event)">Res/Sup</mat-checkbox>
+<mat-checkbox #checkFish><span class="fa fa-ship"></span></mat-checkbox>
 
-<mat-checkbox #checkRSI appSaveValue >RSI</mat-checkbox>
-<mat-checkbox #checkMACD >MACD</mat-checkbox>
-<mat-checkbox #checkStoch >Stoch</mat-checkbox>
-<mat-checkbox #checkStochRSI >StochRSI</mat-checkbox>
-<mat-checkbox (change)="onResSupChange($event)" >Res/Sup</mat-checkbox>
-<mat-checkbox #checkFish ><span class="fa fa-ship"></span></mat-checkbox>
+<app-candlesticks [candles]="candles" [overlays]="overlays"></app-candlesticks>
 
-<app-candlesticks  [candles]="candles" [overlays]="overlays"></app-candlesticks>
-
-<app-volume-hist [candles]="candles" ></app-volume-hist>
+<app-volume-hist [candles]="candles"></app-volume-hist>
 
 <app-rsi-indicator *ngIf="checkRSI.checked" [closes]="closes"></app-rsi-indicator>
 
@@ -16,9 +15,35 @@
 
 <app-stoch *ngIf="checkStoch.checked" [closes]="closes" [highs]="highs" [lows]="lows"></app-stoch>
 
-<app-stoch-rsi  *ngIf="checkStochRSI.checked"  [closes]="closes"></app-stoch-rsi>
+<app-stoch-rsi *ngIf="checkStochRSI.checked" [closes]="closes"></app-stoch-rsi>
 
-<section  *ngIf="checkFish.checked">
+<div>
+
+
+    <table>
+        <tbody>
+        <!-- <tr>
+             <td></td>
+             <td><span (click)="sortOnClick('amountUS')" class="btn">$US</span></td>
+             <td><span (click)="sortOnClick('rate')" class="btn">Rate</span></td>
+             <td><span (click)="sortOnClick('timestamp')" class="btn">Time</span></td>
+         </tr>-->
+        <tr *ngFor="let fish of fishes">
+            <td>{{fish.action}}</td>
+            <td>
+                <small>$</small>
+                {{fish.amountUS.toLocaleString()}}
+            </td>
+            <td>{{fish.rate}}</td>
+            <td>{{fish.timestamp | toTime}}</td>
+            <td>{{fish.overlap}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<section *ngIf="checkFish.checked">
     <app-fishes
             [exchange]="'bitfinex'"
             [market]="market"

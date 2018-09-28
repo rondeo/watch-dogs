@@ -1,17 +1,20 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {OrdersHistoryService} from '../../app-services/market-history/orders-history.service';
+import {Subscription} from 'rxjs/Subscription';
+import {OrdersHistory} from '../../app-services/market-history/orders-history';
 
 @Component({
   selector: 'app-fishes',
   templateUrl: './fishes.component.html',
   styleUrls: ['./fishes.component.css']
 })
-export class FishesComponent implements OnInit, OnChanges {
+export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() ordersHistory: VOOrder[];
 
@@ -32,20 +35,42 @@ export class FishesComponent implements OnInit, OnChanges {
   fishes:VOOrder[];
   constructor(
     private marketCap: ApiMarketCapService,
-    private apisPublic: ApisPublicService
+    private apisPublic: ApisPublicService,
+    private ordersHistoryService: OrdersHistoryService
   ) { }
 
   ngOnInit() {
     this.sortOn = localStorage.getItem('FishesComponent-sortOn');
   }
+  ngOnDestroy(){
+    if(this.sub1) this.sub1.unsubscribe();
+    if(this.sub2) this.sub2.unsubscribe();
+  }
 
+  sub1:Subscription;
+  sub2:Subscription;
   ngOnChanges(){
-    this.downloadHistory();
+    if(this.sub1) this.sub1.unsubscribe();
+    if(this.sub2) this.sub2.unsubscribe();
+    if(!this.market || ! this.exchange) return;
+
+    const ctr:OrdersHistory = this.ordersHistoryService.getOrdersHistory(this.exchange, this.market);
+    this.sub1 = ctr.orders$().subscribe(newOrders =>{
+      // console.log(newOrders);
+      this.ordersHistory = newOrders;
+      this.showFishes();;
+    });
+
+    this.sub2 = ctr.ordersStats$().subscribe(stats =>{
+
+    })
+
+   // this.downloadHistory();
   }
 
   isProgress = false;
   timeout;
-  downloadHistory(){
+ /* downloadHistory(){
     clearTimeout(this.timeout);
     if(!this.market || ! this.exchange) return;
 
@@ -61,7 +86,7 @@ export class FishesComponent implements OnInit, OnChanges {
     })
 
   }
-
+*/
   filterResults(){
     const fishes =  this.ordersHistory.sort(function (a, b) {
       return b.amountCoin - a.amountCoin;
@@ -76,13 +101,12 @@ export class FishesComponent implements OnInit, OnChanges {
   async showFishes(){
     if(!this.ordersHistory) return;
     const ordersHistory = this.ordersHistory;
-
     const MC = await this.marketCap.getTicker();
     let base  = this.ordersHistory[0].base;
     let coin = this.ordersHistory[0].coin;
     let priceBaseUS = 1;
-    const from = ordersHistory[ordersHistory.length-1].timestamp;
-    const to = ordersHistory[0].timestamp;
+    const from = ordersHistory[0].timestamp;
+    const to = ordersHistory[ordersHistory.length -1].timestamp;
     this.endTime = moment(to).format('HH:mm');
     this.startTime = moment(from).format('HH:mm');
 
@@ -107,7 +131,7 @@ export class FishesComponent implements OnInit, OnChanges {
   }
 
   onRefreshClick(){
-    this.downloadHistory();
+    // this.downloadHistory();
   }
 
   sort(orders: VOOrder[]){

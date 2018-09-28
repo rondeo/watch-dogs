@@ -141,7 +141,7 @@ export abstract class ApiPrivateAbstaract {
   }
 
   refreshOrdersTimeout;
-  isRefershOpenOrders
+  isRefershOpenOrders;
   refreshAllOpenOrders() {
     console.log(' refreshAllOpenOrders  ' +   this.isRefershOpenOrders);
     if(this.isRefershOpenOrders){
