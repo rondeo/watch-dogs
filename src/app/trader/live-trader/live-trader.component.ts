@@ -38,6 +38,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   fishes:VOOrder[] =[];
 
+
   constructor(
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
@@ -57,9 +58,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       console.log(params);
       this.getData();
     });
-    this.storage.select('fishes').then(res =>{
-      this.fishes = res || [];
-    });
     this.subscribe();
 
   }
@@ -73,11 +71,12 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   sub1: Subscription;
   sub2: Subscription;
+  sub3: Subscription;
 
   subscribe() {
     const ar = this.market.split('_');
     const ctr = this.ordersHistory.getOrdersHistory(this.exchange, this.market);
-    this.sub1 = ctr.ordersAlerts$(20).subscribe(diff => {
+    this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
       // console.warn('diff  ', diff);
       this.snackBar.open(' Volume '+ this.exchange +' ' + this.market + ' ' + diff + '%', 'x')
     });
@@ -85,15 +84,17 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       const coinPrice = MC[ar[1]].price_usd;
       const coinAmount = 20000 / coinPrice;
 
+       this.sub3 = ctr.sharksHistory$(100).subscribe(res=>{
+         if(!res) return;
+         console.log(' sharksHistory$ ',res);
+         this.fishes = _.clone(res).reverse();
+       });
+
       this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders=>{
         console.log('new fishes ', orders);
-        orders.forEach(function (item) {
-          item.amountUS = Math.round(item.amountCoin * coinPrice);
-        });
 
-
-        this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
-        this.storage.upsert('fishes', this.fishes);
+       // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
+        // this.storage.upsert('fishes', this.fishes);
 
       })
     })

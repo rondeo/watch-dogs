@@ -17,17 +17,11 @@
 
 <app-stoch-rsi *ngIf="checkStochRSI.checked" [closes]="closes"></app-stoch-rsi>
 
-<div>
 
+<div class="w20 float-left">
 
     <table>
         <tbody>
-        <!-- <tr>
-             <td></td>
-             <td><span (click)="sortOnClick('amountUS')" class="btn">$US</span></td>
-             <td><span (click)="sortOnClick('rate')" class="btn">Rate</span></td>
-             <td><span (click)="sortOnClick('timestamp')" class="btn">Time</span></td>
-         </tr>-->
         <tr *ngFor="let fish of fishes">
             <td>{{fish.action}}</td>
             <td>
@@ -41,6 +35,7 @@
         </tbody>
     </table>
 </div>
+
 
 
 <section *ngIf="checkFish.checked">

@@ -28,6 +28,33 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       .replace('{{base}}', base).replace('{{coin}}', coin);
   }
 
+  async downloadCandle(market:string, hist: number): Promise<VOCandle[]>{
+    const markets = await this.getMarkets();
+    if(!markets[market]) return Promise.resolve([]);
+    const params = {
+      symbol:market.split('_').join(''),
+      interval:'1m'
+    };
+    const url = '/api/proxy/https://api.binance.com/api/v1/klines';
+    console.log(url);
+   return await this.http.get(url, {params}).map((res: any[]) => {
+     console.log(res);
+      return res.map(function (item) {
+        return {
+          from:+item[0],
+          to:+item[6],
+          open:+item[1],
+          high: +item[2],
+          low: +item[3],
+          close: +item[4],
+          Trades: +item[8],
+          Volume: +item[5]
+        }
+      })
+    }).toPromise();
+
+  }
+
   async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]>{
    const markets = await this.getMarkets();
    if(!markets[base+'_'+coin]) return Promise.resolve([]);

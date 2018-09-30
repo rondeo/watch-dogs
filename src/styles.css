@@ -137,6 +137,10 @@ nav>a{
     height: 30px;
     margin: auto;
 }
+.float-left{
+    float: left;
+}
+
 
 .right {
     float: right;

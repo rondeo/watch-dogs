@@ -9,7 +9,7 @@ import {IApiPublic} from "../api-base";
 import {VOMarket} from "../../../../models/app-models";
 
 
-export class ApiPublicBitfinex  implements IApiPublic{
+/*xport class ApiPublicBitfinex  implements IApiPublic{
   exchange = 'bitfinex';
   constructor(private http:HttpClient){
 
@@ -55,6 +55,6 @@ export class ApiPublicBitfinex  implements IApiPublic{
     });
   }
 
-}
+}*/
 
 //applyMixins (ApiPublicBitfinex, [HttpConnector, SoketConnector]);

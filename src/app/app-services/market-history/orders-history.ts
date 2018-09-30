@@ -12,16 +12,17 @@ import {SharksAlert} from './sharks-alert';
 // [to, bought, sold, volPerMinute, ordersPerMinute];
 
 export class OrdersHistory {
-  private allOrders: VOOrder[];
+  // private allOrders: VOOrder[];
   private statsHistory: number[][] = [];
 
   exchange: string;
   ordersSub: BehaviorSubject<VOOrder[]> = new BehaviorSubject<VOOrder[]>(null);
-  newOrdersSub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
+ //  newOrdersSub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
   coinPrice: number;
   ordersStatsSub: Subject<number[]> = new Subject();
 
-  alerts: OrdersStatsAlerts;
+  statsAlerts: OrdersStatsAlerts;
+  sharksAlert: SharksAlert;
 
   constructor(
     private api: ApiPublicAbstract,
@@ -40,13 +41,14 @@ export class OrdersHistory {
   }
 
   lastTimestamp = 0;
-
   getOrders() {
+
     this.api.downloadOrders(this.market).subscribe(res => {
       setTimeout(() => this.getOrders(), 30000);
       res = _.orderBy(res, 'timestamp');
-      this.processStats(res);
-      this.ordersSub.next(res);
+      res.forEach(function (o) {
+        o.amountUS = Math.round(o.amountCoin * this.p);
+      },{p:this.coinPrice});
 
       const firstTimestamp = res[0].timestamp;
       const lastTimestamp = this.lastTimestamp;
@@ -54,52 +56,37 @@ export class OrdersHistory {
       const overlap = firstTimestamp - lastTimestamp;
       this.lastTimestamp = res[res.length - 1].timestamp;
 
+      if(this.statsAlerts) this.statsAlerts.next(res, overlap);
+
+      this.ordersSub.next(res);
       let newOrders = res.filter(function (item) {
         return item.timestamp > lastTimestamp;
       });
+
+      console.log(this.exchange + this.market + ' new orders ' + newOrders.length);
       if(this.sharksAlert) this.sharksAlert.next(newOrders, overlap);
 
-      if (!this.allOrders) this.allOrders = newOrders;
-      else this.allOrders = this.allOrders.concat(newOrders).slice(0, 1000);
-      this.newOrdersSub.next(newOrders);
+      //if (!this.allOrders) this.allOrders = newOrders;
+      //else this.allOrders = this.allOrders.concat(newOrders).slice(0, 1000);
+      //this.newOrdersSub.next(newOrders);
       localStorage.setItem('orders-history-lastTimestamp', String(this.lastTimestamp))
     })
   }
 
-  processStats(ar: VOOrder[]) {
-    const coinPrice = this.coinPrice;
-    const to = ar[ar.length - 1].timestamp;
-    const from = ar[0].timestamp;
-    let bought = 0;
-    let sold = 0;
-    ar.forEach(function (o) {
-      o.amountUS = Math.round(o.amountCoin * coinPrice);
-      o.action === 'BUY' ? bought += o.amountUS : sold += o.amountUS;
-    });
 
-    const volPerMinute = 60 * (bought + sold) / (to - from);
-    const ordersPerMinute = (60000 * ar.length / (to - from));
-    const stats = [to, bought, sold, volPerMinute, ordersPerMinute];
-
-    this.statsHistory.push(stats);
-    if (this.statsHistory.length > 1000) this.statsHistory.shift();
-    if(this.alerts) {
-      this.alerts.next(this.statsHistory);
-    }
-
-    this.storage.upsert('statsHistory' + this.exchange + this.market, this.statsHistory);
-    this.ordersStatsSub.next(stats);
-  }
-
-  sharksAlert: SharksAlert;
   sharksAlert$(amountCoin:number){
-    if(!this.sharksAlert) this.sharksAlert = new SharksAlert();
+    if(!this.sharksAlert) this.sharksAlert = new SharksAlert(this.exchange, this.market, this.storage);
     return this.sharksAlert.alerts$(amountCoin);
   }
-  ordersAlerts$(volumePercent: number) {
-    if(!this.alerts) this.alerts = new OrdersStatsAlerts();
-    this.alerts.setVolumeUP(volumePercent);
-    return this.alerts.alertSub.asObservable();
+
+  sharksHistory$(length=100){
+    if(!this.sharksAlert) this.sharksAlert = new SharksAlert(this.exchange, this.market, this.storage);
+    return this.sharksAlert.history$(length);
+  }
+  ordersVolumeAlerts$(volumePercent: number) {
+    if(!this.statsAlerts) this.statsAlerts = new OrdersStatsAlerts(this.exchange, this.market, this.storage);
+    this.statsAlerts.setVolumeUP(volumePercent);
+    return this.statsAlerts.volumeAlert$();
   }
 
   ordersStats$() {
@@ -109,10 +96,10 @@ export class OrdersHistory {
   orders$(): Observable<VOOrder[]> {
     return this.ordersSub.asObservable();
   }
-
+/*
   newOrders$(): Observable<VOOrder[]> {
     return this.newOrdersSub.asObservable();
-  }
+  }*/
 
 
 }

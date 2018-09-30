@@ -15,7 +15,7 @@ import {UTILS} from '../../com/utils';
 export class ApiPublicBitfinex extends ApiPublicAbstract{
   exchange = 'bitfinex';
 
-  private allMarkets: string[]
+  private allMarkets: string[];
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
@@ -94,6 +94,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 
  private  getItems(ids: string[]): Observable<any> {
    const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/';
+
     return from(ids).pipe(
       concatMap(id => <Observable<any>> this.http.get(url + id).map(res=>{
         console.log(res);
@@ -121,6 +122,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 
   private getTickerForMarket(market: string) {
     const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/' + market;
+    console.log(url);
     return this.http.get(url).map(res => {
       console.log(res);
       return res;
@@ -155,6 +157,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     let url = 'api/proxy/https://api.bitfinex.com/v2/trades/t{{coin}}{{base}}/hist'
       .replace('{{base}}', (base === 'USDT'?'USD':base))
       .replace('{{coin}}', coin);
+
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
 

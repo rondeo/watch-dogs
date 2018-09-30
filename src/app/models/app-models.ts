@@ -172,6 +172,9 @@ export interface VOOrder {
   minutes?: string;
 }
 
+export interface VOOrderExt extends VOOrder{
+  overlap: number
+}
 
 export interface ConfigAPI {
   isMarketComplex: boolean;
