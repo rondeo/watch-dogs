@@ -14,12 +14,14 @@ export class CandlesService {
     private storage: StorageService
   ) { }
 
-  getCandlesHist(exchange: string, market): CandlesHist{
+  getCandlesHist(exchange: string, market: string): CandlesHist{
     const id = exchange+'_'+market;
-    let hist: CandlesHist = this.collection[id]
+    let hist: CandlesHist = this.collection[id];
     if(!hist) {
       hist = new CandlesHist(exchange, market, this.apisPublic, this.storage);
-      const MC = this.marketCap.getTicker().then(MC => {
+      this.marketCap.getTicker().then(MC => {
+
+       //  console.log(market);
         const coinPrice = MC[market.split('_')[1]].price_usd;
         hist.coinPriceUS = coinPrice;
         hist.start();

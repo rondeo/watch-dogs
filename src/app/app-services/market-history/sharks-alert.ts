@@ -21,13 +21,30 @@ export class SharksAlert {
     overlap = Math.round(overlap / 1000);
     // console.log('new orders '+ newOrders.length)
     // console.log(this.value);
-    let res = newOrders.filter(function (item) {
-      return item.amountCoin > this.v;
+
+
+    const indexed = {};
+    newOrders.forEach(function (item) {
+      const id = item.action + item.amountCoin;
+      const exists = indexed[id];
+      if(!exists) {
+        indexed[id] = Object.assign({overlap: overlap,  orders:1}, item)
+      } else {
+        exists.orders ++;
+      }
+    });
+
+
+    let res = Object.values<VOOrderExt>(indexed).filter(function (item:VOOrderExt) {
+      return item.amountCoin > this.v || (item.orders * item.amountCoin) > this.v;
     }, {v: this.value});
 
-    const resExt: VOOrderExt[] = res.map(function (item) {
+    const resExt: VOOrderExt[] = res;
+    // console.log(res)
+
+    /*const resExt: VOOrderExt[] = res.map(function (item) {
       return Object.assign({overlap: overlap}, item)
-    });
+    })*/;
 
     let history = this.historySub.getValue() || [];
     if (resExt.length) {
@@ -38,6 +55,10 @@ export class SharksAlert {
       this.historySub.next(history);
     }
   }
+  summSaneAmounts(){
+
+  }
+
 
   history$(length = 100) {
     this.length = length;

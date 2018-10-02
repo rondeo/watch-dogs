@@ -23,6 +23,7 @@ import {ValueColorDirective} from '../directives/value-color.directive';
 import {DirectivesModule} from '../directives/directives.module';
 import { BalanceMarketComponent } from './balance-market/balance-market.component';
 import {PipesModule} from '../pipes/pipes.module';
+import { CandleVolumeAlertComponent } from './alerts/candle-volume-alert/candle-volume-alert.component';
 
 
 
@@ -52,8 +53,8 @@ import {PipesModule} from '../pipes/pipes.module';
     OrdersHistoryComponent,
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
-    BalanceMarketComponent
-
+    BalanceMarketComponent,
+    CandleVolumeAlertComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -71,7 +72,8 @@ import {PipesModule} from '../pipes/pipes.module';
     CoinDayTriggers2Component,
     TradesAllExchangesComponent,
     BtcTetherComponent,
-    BalanceMarketComponent
+    BalanceMarketComponent,
+    CandleVolumeAlertComponent
   ]
 })
 export class WidgetsModule { }

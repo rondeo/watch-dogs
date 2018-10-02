@@ -7,7 +7,9 @@
 
 <app-candlesticks [candles]="candles" [overlays]="overlays"></app-candlesticks>
 
-<app-volume-hist [candles]="candles"></app-volume-hist>
+
+<app-volume-hist [values]="volumes"></app-volume-hist>
+<app-volume-hist [values]="triggers1"></app-volume-hist>
 
 <app-rsi-indicator *ngIf="checkRSI.checked" [closes]="closes"></app-rsi-indicator>
 
@@ -19,21 +21,26 @@
 
 
 <div class="w20 float-left">
-
     <table>
         <tbody>
         <tr *ngFor="let fish of fishes">
+            <td>{{fish.timestamp | toTime}}</td>
             <td>{{fish.action}}</td>
             <td>
                 <small>$</small>
                 {{fish.amountUS.toLocaleString()}}
+                <sub>x{{fish.orders}}</sub>
             </td>
-            <td>{{fish.rate}}</td>
-            <td>{{fish.timestamp | toTime}}</td>
+            <td>{{fish.rate | myDisplNum}}</td>
             <td>{{fish.overlap}}</td>
         </tr>
         </tbody>
     </table>
+</div>
+
+<div class="w20 float-left">
+    <app-candle-volume-alert [exchange]="'binance'" [market]="market"></app-candle-volume-alert>
+    <app-candle-volume-alert [exchange]="'bitfinex'" [market]="market"></app-candle-volume-alert>
 </div>
 
 

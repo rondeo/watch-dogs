@@ -15,7 +15,7 @@ import {ApiHitbtc} from "./apis/api-hitbtc";
 import {ApiPublicPoloniex} from "./apis/poloniex/api-public-poloniex";
 import {ApiPublicOkex} from "./apis/okex/api-public-okex";
 import {ApiPublicBittrex} from "./apis/bittrex/api-public-bittrex";
-import {ApiPublicBitfinex} from "./apis/bitfinex/api-public-bitfinex";
+
 import {ApiPublicBinance} from "./apis/binance/api-public-binance";
 
 
@@ -74,8 +74,8 @@ export class ConnectorApiService {
         return new ApiPublicPoloniex(this.http);
       case 'okex':
         return new ApiPublicOkex(this.http);
-      case 'bitfinex':
-        return new ApiPublicBitfinex(this.http);
+      // case 'bitfinex':
+       //  return new ApiPublicBitfinex(this.http);
       case 'binance':
         return new ApiPublicBinance(this.http);
       default:

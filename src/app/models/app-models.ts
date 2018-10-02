@@ -155,12 +155,14 @@ export interface VOOrder {
   isOpen: boolean;
   message?: string;
   action?: string;
+  type?: string;
   date?: string;
   timestamp?: number;
   rate?: number;
   exchange?: string;
   priceUS?: number;
   amountUS?: number;
+  stopPrice?:number;
   // amountCoinUS?: number; priceUS?: number;
   amountCoin?: number;
   amountBase?: number;
@@ -173,7 +175,8 @@ export interface VOOrder {
 }
 
 export interface VOOrderExt extends VOOrder{
-  overlap: number
+  overlap: number,
+  orders: number;
 }
 
 export interface ConfigAPI {

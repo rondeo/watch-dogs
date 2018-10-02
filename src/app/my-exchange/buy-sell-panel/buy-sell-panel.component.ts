@@ -9,6 +9,7 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MATH} from '../../com/math';
 
 @Component({
   selector: 'app-buy-sell-panel',
@@ -53,6 +54,11 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   balanceCoinPendingUS: number;
 
 
+  sliderSellValue: number;
+
+  volumes: number[];
+
+
   constructor(
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
@@ -63,6 +69,21 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   ) {
     this.exchanges = this.apisPrivate.getAllAvailable();
   }
+
+
+  onSladerSellChange(evt){
+    const val = evt.value / 100;
+    this.focusSell = null;
+    this.rateSell = +(this.bookSell + (this.bookSell * val)).toPrecision(5);
+  }
+
+  onSladerBuyChange(evt){
+    const val = evt.value / 100;
+    this.focusBuy = null;
+    this.rateBuy = +(this.bookBuy + (this.bookBuy * val)).toPrecision(5);
+  }
+
+
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -115,8 +136,38 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       const amountBase = this.balanceBase.available * percent / 100;
       amountCoin = amountBase / this.rateBuy;
     }*/
-
     this.buyCoin(amountCoin);
+  }
+
+  async setStopLoss(){
+    const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
+    const openOrders: VOOrder[] = api.openOrdersSub.getValue();
+    console.log(openOrders);
+    if (isNaN(this.rateSell)) return;
+    //if(!openOrders.length) {
+    try{
+      const MC = await this.marketCap.getTicker();
+      const priceCoin = MC[this.coin].price_usd;
+      const coinAmount = (this.balanceCoinAvailable - (this.balanceCoinAvailable * 0.002));
+      const rate = this.rateSell;
+
+      const percent = MATH.percent(rate, this.bookSell);
+
+      if(await this.confirm('STOP LOSS ' + rate + '\n '+percent+ '%\n' +   Math.round(priceCoin * coinAmount))){
+        const res = await api.stopLoss(this.market, coinAmount , this.rateSell , 2);
+        console.log(res);
+      }
+    } catch (e) {
+      console.warn(e);
+      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses:'error'});
+    }
+
+   // }
+  }
+
+
+  stopLossClick(){
+    this.setStopLoss();
   }
 
   async onSellClick(percent: number) {
@@ -156,8 +207,11 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
     const msg = 'Sell  $' + Math.round(amount * priceCoin) + '\n' + amount + '\n' + rateSell;
+
     if (!await this.confirm(msg)) return;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
+
+
     try {
       const order = await api.sellLimit2(this.market, amount, rateSell);
 

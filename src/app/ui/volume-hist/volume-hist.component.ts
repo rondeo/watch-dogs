@@ -4,6 +4,7 @@ import {MATH} from '../../com/math';
 import * as moment from 'moment';
 import {VOGraphs} from '../line-chart/line-chart.component';
 import {DrawBase} from '../com/draw-base';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-volume-hist',
@@ -12,8 +13,8 @@ import {DrawBase} from '../com/draw-base';
 })
 export class VolumeHistComponent extends DrawBase implements OnInit {
 
-  @Input() candles: VOCandle[];
-  @Input() area: number[];
+ //  @Input() candles: VOCandle[];
+  @Input() values: number[];
 
   constructor() {
     super();
@@ -21,8 +22,9 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
 
 
   drawGraphs() {
-    if (!this.candles || !this.widthG) return;
-    const ar = this.candles;
+    const ar = this.values;
+    if (!ar || !this.widthG) return;
+
     if (!Array.isArray(ar)) return;
     // const x0 = this.x0 + 50;
     const offsetY = this.heightG;
@@ -32,8 +34,9 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
 
     let maxV = 0;
 
-    ar.forEach(function (item) {
-      if (item.Volume > maxV) maxV = item.Volume;
+   ar.forEach(function (item) {
+     const v = Math.abs(item);
+      if (v > maxV) maxV = v;
     });
     let scaleV = offsetY / maxV;
     // let range = max - min;
@@ -45,20 +48,19 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
 
     for (let i = 0, n = ar.length; i < n; i++) {
       const x = x0 + (i * dx);
-      const item: VOCandle = ar[i];
+      const item = ar[i];
       ctx.beginPath();
       ctx.lineWidth = 4;
-      ctx.strokeStyle = item.open < item.close ? 'green' : 'red';
+      ctx.strokeStyle = item > 0 ? 'green' : 'red';
       ctx.moveTo(x, Y0);
-      ctx.lineTo(x, Y0 - (item.Volume * scaleV));
+      ctx.lineTo(x, Y0 - (Math.abs(item * scaleV)));
       ctx.stroke();
     }
     this.maxV = maxV
-
    //  this.drawYs();
   }
 
-  maxV
+  maxV;
   drawYs() {
     const  maxV:number = this.maxV;
     const step = (maxV) / 3;

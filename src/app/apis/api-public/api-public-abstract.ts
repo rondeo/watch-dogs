@@ -69,9 +69,14 @@ export abstract class ApiPublicAbstract {
 
   marketsTimestamp: number = 0;
 
+  getLastMinuteCandle(market: string):Promise<VOCandle>{
+    return this.downloadCandles(market, '1m', 1).then(res => res[0])
 
-  downloadCandle(market:string, hist: number){
+  }
 
+  downloadCandles(market:string, interval: string, limit: number): Promise<VOCandle[]>{
+
+    return null;
   }
 
   async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]> {

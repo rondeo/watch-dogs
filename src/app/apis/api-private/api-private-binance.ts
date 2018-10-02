@@ -46,7 +46,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
     console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {
-    //   console.log(' allOrders ', res);
+      //   console.log(' allOrders ', res);
 
       return res.filter(function (item) {
         return item.status !== 'CANCELED';
@@ -72,7 +72,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     let url = '/api/proxy/https://api.binance.com/api/v3/openOrders';
     console.log(url);
     return this.call(url, null, RequestType.GET).map(res => {
-      // console.log(' allOpenOrders ', res);
+       console.log(' allOpenOrders ', res);
 
       return res.map(function (item) {
         const market = ApiPublicBinance.parseSymbol(item.symbol);
@@ -81,6 +81,8 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         return {
           uuid: item.orderId,
           action: item.side,
+          type: item.type,
+          stopPrice:+item.stopPrice,
           isOpen: item.status !== 'FILLED',
           base: base,
           coin: coin,
@@ -99,11 +101,13 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     const data = {
       symbol: coin + base
     };
-    console.log(url);
+    console.warn(url);
+
     return this.call(url, data, RequestType.GET).map(res => {
       console.log(' openOrders ', res);
 
       return res.map(function (item) {
+        console.log(item);
         return {
           uuid: item.orderId,
           action: item.side,
@@ -170,7 +174,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     this.isLoadingBalances = true;
     return this.call(uri, {}, RequestType.GET).map(res => {
       this.isLoadingBalances = false;
-       // console.log(res);
+      // console.log(res);
       return res.balances.map(function (item) {
         return new VOBalance({
           exchange: exchange,
@@ -184,10 +188,60 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     })
   }
 
+  async stopLoss(market: string, quantity: number, stopPrice: number, percent = 2) {
+    percent = percent / 100;
+    const ar = market.split('_');
+    const base = ar[0];
+    const coin = ar[1];
+    if (isNaN(quantity) && isNaN(stopPrice)) {
+      console.warn(' not a number ' + quantity + '  ' + stopPrice);
+      return null;
+    }
+
+    const val = {amountCoin: +quantity, rate: +stopPrice};
+    const val2 = {amountCoin: +quantity, rate: +stopPrice - (+stopPrice * percent)};
+
+    UTILS.formatDecimals(this.exchange, base, coin, val);
+
+    UTILS.formatDecimals(this.exchange, base, coin, val2);
+
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
+    let data = {
+      symbol: coin + base,
+      side: 'SELL',
+      type: 'STOP_LOSS_LIMIT',
+      quantity: val.amountCoin,
+      stopPrice: val.rate,
+      price: val2.rate,
+      timeInForce: 'GTC'
+    };
+
+    console.log(url);
+    return this.call(url, data, RequestType.POST).map(res => {
+      console.log('result STOP_LOSS market ' + market, res);
+      return {
+        uuid: res.orderId,
+        action: res.side,
+        isOpen: res.status !== 'FILLED',
+        base: base,
+        coin: coin,
+        rate: +res.price,
+        amountBase: -1,
+        amountCoin: +res.origQty,
+        fee: -1
+      }
+    }).toPromise();
+
+  }
+
+  takeProfit(market: string, quantity: number, stopPrice: number) {
+
+  }
+
   buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
-    let market = base + '-' + coin;
-    console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
-    if(isNaN(quantity) && isNaN(rate)) {
+    // let market = base + '-' + coin;
+    console.log(' buy market ' + base + coin + '  quantity: ' + quantity + ' rate:' + rate);
+    if (isNaN(quantity) && isNaN(rate)) {
       console.warn(' not a number ' + quantity + '  ' + rate);
     }
     const val = {amountCoin: +quantity, rate: +rate};
@@ -207,7 +261,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
     console.log(url);
     return this.call(url, data, RequestType.POST).map(res => {
-      console.log('result buyLimit market ' + market, res);
+      console.log('result buyLimit market ' + base + coin, res);
       return {
         uuid: res.orderId,
         action: res.side,
@@ -273,7 +327,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       return sub.asObservable();
     }
 
-    if(!data) data = {};
+    if (!data) data = {};
 
     data.recvWindow = 60000;
     data.timestamp = Date.now();

@@ -45,6 +45,16 @@ export class UTILS {
 
   static decimals: { [symbol: string]: { rateDecimals: number, amountDecimals: number } } = {};
 
+  static formatDecimals2(exchange: string, base: string, coin: string, data: { amountCoin: number, rate: number }) {
+    if (!UTILS.decimals[exchange + base + coin]) {
+      throw new Error(' no formatter for ' + exchange + base + coin);
+    }
+    const val = UTILS.decimals[exchange + base + coin];
+    const amountDecimals = val.amountDecimals;
+    data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
+    data.rate = +data.rate.toFixed(val.rateDecimals);
+  }
+
   static formatDecimals(exchange: string, base: string, coin: string, data: { amountCoin: number, rate: number }) {
     if (!UTILS.decimals[exchange + base + coin]) {
       throw new Error(' no formatter for ' + exchange + base + coin);

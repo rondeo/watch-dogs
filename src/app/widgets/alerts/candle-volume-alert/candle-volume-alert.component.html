@@ -1,0 +1,16 @@
+<section>
+    <div>
+        <span>Volume Alerts: </span>
+        <span>{{exchange}} </span>
+        <span> {{market}}</span>
+    </div>
+    <table>
+        <tbody>
+        <tr *ngFor="let alert of alerts">
+            <td>{{alert.time}}</td>
+            <td>{{alert.value1}}</td>
+            <td>{{alert.value2}}</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
