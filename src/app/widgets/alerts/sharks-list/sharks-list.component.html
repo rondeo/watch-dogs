@@ -1,0 +1,18 @@
+<section>
+    <span>{{exchange}} {{market}}</span>
+    <table class="w20">
+        <tbody>
+        <tr *ngFor="let fish of sharks">
+            <td>{{fish.timestamp | toTime}}</td>
+            <td>{{fish.action}}</td>
+            <td>
+                <small>$</small>
+                {{fish.amountUS.toLocaleString()}}
+                <sub>x{{fish.orders}}</sub>
+            </td>
+            <td>{{fish.rate | myDisplNum}}</td>
+            <td>{{fish.overlap}}</td>
+        </tr>
+        </tbody>
+    </table>
+</section>

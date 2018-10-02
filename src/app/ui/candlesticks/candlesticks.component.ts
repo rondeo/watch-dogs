@@ -292,7 +292,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(evt) {
     if(!this.ctx) return;
-  //  console.error(evt);
+   // console.log(evt);
     if (evt.candles) this.redraw();
     else if(evt.overlays) this.drawOverlay();
 

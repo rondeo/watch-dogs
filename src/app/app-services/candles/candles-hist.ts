@@ -21,7 +21,7 @@ export class CandlesHist {
     private market: string,
     private apisPublic: ApisPublicService,
     private storage: StorageService,
-    private length = 240
+    private length = 120
   ) {
     this.key1 = 'oneminutecandle-' + exchange + '_' + market;
   }

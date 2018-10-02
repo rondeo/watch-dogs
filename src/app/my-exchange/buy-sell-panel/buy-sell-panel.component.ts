@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {VOBalance, VOBooks, VOOrder} from '../../models/app-models';
+import {VOBalance, VOBooks, VOOrder, VOOrderExt} from '../../models/app-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {MatSnackBar} from '@angular/material';
 import {ApisPrivateService} from '../../apis/apis-private.service';
@@ -8,8 +8,10 @@ import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MATH} from '../../com/math';
+import {OrdersHistoryService} from '../../app-services/market-history/orders-history.service';
 
 @Component({
   selector: 'app-buy-sell-panel',
@@ -63,6 +65,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
     private marketCap: ApiMarketCapService,
+    private ordersHistory: OrdersHistoryService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router
@@ -260,7 +263,6 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       }, 100);
     })
   }
-
   private sub1;
   private sub2;
   private sub3;
@@ -271,7 +273,9 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     if (this.sub2) this.sub2.unsubscribe();
     const base = this.base;
     const coin = this.coin;
+
     this.marketCap.getTicker().then(MC => {
+
       const priceBase = base === 'USDT' ? 1 : MC[base].price_usd;
       const priceCoin = MC[coin].price_usd;
       const api = this.apisPrivate.getExchangeApi(this.exchange);

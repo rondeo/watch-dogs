@@ -84,7 +84,8 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const hist = this.candleService.getCandlesHist(this.exchange, this.market);
     hist.candles$().subscribe(candles=>{
       if(!candles) return;
-      this.candles = candles;
+      //console.log(' NEW CANDLES ', _.last(candles));
+      this.candles = _.clone(candles);
 
       this.volumes = candles.map(function (item) {
         return  item.close > item.open?item.Volume: -item.Volume;
@@ -116,29 +117,38 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
       this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders=>{
         console.log('new fishes ', orders);
-        this.drawSignals();
+        //  this.drawSignals();
        // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
         // this.storage.upsert('fishes', this.fishes);
 
       })
     })
-
   }
 
   async drawSignals(){
-
     const candles = this.candles;
-    const fishes: VOOrderExt[] = _.clone(this.fishes).reverse();
+    let fishes: VOOrderExt[] = _.clone(this.fishes).reverse();
+
     if(!fishes.length || ! candles.length) return;
-    const out = [];
-    const ordersAr = this.candles.map(function (item) {
-      const time = item.to;
-      const fAr = [];
-      // fishes[0].timestamp;
-      while(fishes.length && fishes[0].timestamp < time)fAr.push(fishes.shift());
-      return fAr;
+    const startTime = candles[0].to;
+    const length = candles.length;
+    let endTime =  _.last(candles).to;
+    fishes = fishes.filter(function (item) {
+      return item.timestamp > startTime;
     });
-    //console.log(ordersAr);
+
+    const lastFishTime = _.last(fishes).timestamp;
+
+    if(lastFishTime > endTime) endTime = lastFishTime;
+
+    const step = (endTime - startTime)/length;
+    endTime+=step;
+    const ordersAr = [];
+    for(let i = startTime; i< endTime; i+=step){
+      const fAr = [];
+      while(fishes.length && fishes[0].timestamp < i)fAr.push(fishes.shift());
+      ordersAr.push(fAr);
+    }
     const signals = ordersAr.map(function (far) {
       let val = 0;
       if(!far.length) return 0;
@@ -148,7 +158,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       });
       return val;
     });
-   // console.log(signals);
+    console.log(_.last(signals));
     this.triggers1 = signals;
   }
 
