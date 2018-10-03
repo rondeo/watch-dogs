@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {AppBotsService} from './app-bots-services/app-bots.service';
-import {OrdersHistoryService} from './market-history/orders-history.service';
+import {MarketsHistoryService} from './market-history/markets-history.service';
 import {TradesHistoryService} from './tests/trades-history.service';
 import {CandlesService} from './candles/candles.service';
 
@@ -13,7 +13,7 @@ import {CandlesService} from './candles/candles.service';
   declarations: [],
   providers:[
     AppBotsService,
-    OrdersHistoryService,
+    MarketsHistoryService,
     TradesHistoryService,
     CandlesService
   ]

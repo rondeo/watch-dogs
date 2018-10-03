@@ -9,7 +9,7 @@ import {VOOrder, VOOrderExt} from '../../models/app-models';
 import {EnumOverlay} from '../../ui/candlesticks/candlesticks.component';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {OrdersHistoryService} from '../../app-services/market-history/orders-history.service';
+import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
 import {Subscription} from 'rxjs/Subscription';
 import {TradesHistoryService} from '../../app-services/tests/trades-history.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
@@ -47,7 +47,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
     private snackBar: MatSnackBar,
-    private ordersHistory: OrdersHistoryService,
+    private marketsHistory: MarketsHistoryService,
    private candleService: CandlesService,
    // private tradesHistoryService: TradesHistoryService,
     private marketCap: ApiMarketCapService,
@@ -96,7 +96,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
 
 
-    const ctr = this.ordersHistory.getOrdersHistory(this.exchange, this.market);
+    const ctr = this.marketsHistory.getOrdersHistory(this.exchange, this.market);
 
     this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
       // console.warn('diff  ', diff);

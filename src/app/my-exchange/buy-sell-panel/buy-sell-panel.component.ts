@@ -11,7 +11,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MATH} from '../../com/math';
-import {OrdersHistoryService} from '../../app-services/market-history/orders-history.service';
+import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-buy-sell-panel',
@@ -65,7 +66,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
     private marketCap: ApiMarketCapService,
-    private ordersHistory: OrdersHistoryService,
+    private marketsHistory: MarketsHistoryService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router
@@ -85,8 +86,6 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     this.focusBuy = null;
     this.rateBuy = +(this.bookBuy + (this.bookBuy * val)).toPrecision(5);
   }
-
-
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -157,7 +156,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       const percent = MATH.percent(rate, this.bookSell);
 
       if(await this.confirm('STOP LOSS ' + rate + '\n '+percent+ '%\n' +   Math.round(priceCoin * coinAmount))){
-        const res = await api.stopLoss(this.market, coinAmount , this.rateSell , 2);
+        const res = await api.stopLoss2(this.market, coinAmount , this.rateSell , 2);
         console.log(res);
       }
     } catch (e) {
@@ -222,6 +221,9 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.warn(e);
     }
+
+    this.focusBuy = 'first';
+    this.focusSell = 'first';
     // api.startRefreshBalances();
   }
 
@@ -252,6 +254,8 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
       console.warn(e);
     }
+    this.focusBuy = 'first';
+    this.focusSell = 'first';
     //api.startRefreshBalances();
   }
 
@@ -263,16 +267,24 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       }, 100);
     })
   }
-  private sub1;
-  private sub2;
-  private sub3;
+  private sub1: Subscription;
+  private sub2: Subscription;
+  private sub3: Subscription;
+  private sub4: Subscription;
 
   subscribe() {
     if (!this.exchange || !this.market) return;
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
+    if(this.sub4) this.sub4.unsubscribe();
     const base = this.base;
     const coin = this.coin;
+
+    const history = this.marketsHistory.getOrdersHistory('bitfinex', 'USDT_BTC');
+    history.signalBuySell$().subscribe(signal =>{
+      console.warn(moment().format('HH:mm'), signal);
+      this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
+    });
 
     this.marketCap.getTicker().then(MC => {
 

@@ -27,6 +27,9 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   private sub;
 
   ngOnInit() {
+    setInterval(()=>{
+
+    }, 30000);
   }
 
   ngOnChanges() {
@@ -38,6 +41,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
 
   subscribe(){
     if(this.sub) this.sub.unsubscribe();
+    clearTimeout(this.timeout);
     if (!this.exchange || !this.market) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const ar = this.market.split('_');
@@ -48,6 +52,10 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
         api.refreshBalances();
         api.refreshAllOrders(ar[0], ar[1],moment().subtract(23,'h').valueOf(), moment().valueOf() );
       }
+     /* this.timeout = setTimeout(() => {
+        api.refreshAllOpenOrders();
+      }, 30000)
+*/
       this.orders = orders;
     })
     api.refreshAllOpenOrders();
@@ -60,10 +68,6 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
       if (confirm('You want to cancel order ' + msg)) {
         api.cancelOrder2(id, order.base +'_'+ order.coin).then(res => {
           this.orderCanceled.emit(order);
-         /* this.timeout = setTimeout(() => {
-
-            // this.downloadOpenOrders();
-          }, 3000)*/
 
         })
       }

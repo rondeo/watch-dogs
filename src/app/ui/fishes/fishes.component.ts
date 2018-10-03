@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import {ApisPublicService} from '../../apis/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {OrdersHistoryService} from '../../app-services/market-history/orders-history.service';
+import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
 import {Subscription} from 'rxjs/Subscription';
 import {OrdersHistory} from '../../app-services/market-history/orders-history';
 
@@ -36,7 +36,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private marketCap: ApiMarketCapService,
     private apisPublic: ApisPublicService,
-    private ordersHistoryService: OrdersHistoryService
+    private marketsHistoryService: MarketsHistoryService
   ) { }
 
   ngOnInit() {
@@ -54,7 +54,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     if(this.sub2) this.sub2.unsubscribe();
     if(!this.market || ! this.exchange) return;
 
-    const ctr:OrdersHistory = this.ordersHistoryService.getOrdersHistory(this.exchange, this.market);
+    const ctr:OrdersHistory = this.marketsHistoryService.getOrdersHistory(this.exchange, this.market);
     this.sub1 = ctr.orders$().subscribe(newOrders =>{
       // console.log(newOrders);
       this.ordersHistory = newOrders;

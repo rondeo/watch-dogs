@@ -146,7 +146,7 @@ export abstract class ApiPrivateAbstaract {
   isRefershOpenOrders;
 
   refreshAllOpenOrders() {
-    console.log(' refreshAllOpenOrders  ' + this.isRefershOpenOrders);
+   //  console.log(' refreshAllOpenOrders  ' + this.isRefershOpenOrders);
     if (this.isRefershOpenOrders) {
       console.warn(' refreshing ')
       return;
@@ -157,7 +157,7 @@ export abstract class ApiPrivateAbstaract {
       if (res.length) {
         clearTimeout(this.refreshOrdersTimeout);
         this.refreshOrdersTimeout = setTimeout(() => {
-          console.log(' refreshAllOpenOrders by timeout  ');
+         // console.log(' refreshAllOpenOrders by timeout  ');
           this.refreshAllOpenOrders()
         }, 30000);
       }
@@ -238,9 +238,20 @@ export abstract class ApiPrivateAbstaract {
   }
 
 
+  async stopLoss2(market: string, quantity: number, stopPrice: number, percent:number) {
+    return this.stopLoss(market, quantity, stopPrice, percent).then(res =>{
+      this.refreshAllOpenOrders();
+      this.refreshBalances();
+      return res;
+    })
+
+  }
+
   async stopLoss(market: string, quantity: number, stopPrice: number, percent:number) {
+
     return null;
   }
+
 
   takeProfit(market: string, quantity: number, stopPrice: number) {
 

@@ -37,6 +37,7 @@ export class OrdersHistory {
   }
 
   start() {
+    console.log('Orders history START '+ this.exchange);
     this.getOrders();
   }
 
@@ -70,9 +71,16 @@ export class OrdersHistory {
       //else this.allOrders = this.allOrders.concat(newOrders).slice(0, 1000);
       //this.newOrdersSub.next(newOrders);
       localStorage.setItem('orders-history-lastTimestamp', String(this.lastTimestamp))
+    }, err =>{
+      console.error(err);
+      setTimeout(() => this.getOrders(), 10000);
     })
   }
 
+  signalBuySell$(){
+    if(!this.sharksAlert) this.sharksAlert = new SharksAlert(this.exchange, this.market, this.storage);
+    return this.sharksAlert.signalBuySell$();
+  }
 
   sharksAlert$(amountCoin:number){
     if(!this.sharksAlert) this.sharksAlert = new SharksAlert(this.exchange, this.market, this.storage);
