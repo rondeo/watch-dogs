@@ -46,6 +46,7 @@ export class CandleVolumeAlertComponent implements OnInit, OnChanges {
     this.unsubscribe();
     this.DBID = 'CandleVolumeAlert'+ this.exchange+ this.market;
     this.storage.select(this.DBID).then(res => this.alerts = res || []);
+
     const hist = this.candleService.getCandlesHist(this.exchange,this.market );
     this.sub1 = hist.volumeAlert$().subscribe(res =>{
       console.log(this.exchange + this.market + ' volumeAlert$ ' , res);

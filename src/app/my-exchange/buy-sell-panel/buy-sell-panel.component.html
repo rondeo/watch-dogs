@@ -160,14 +160,12 @@
                     (click)="onSellClick(100)"
             >100%
             </button>
-            <button mat-fab class="btn-sell"
-                    (click)="setStopLoss()"
-            >STOP
-            </button>
         </mat-card>
 
     </diV>
 </section>
+
+
 
 <app-open-orders
         [exchange]="exchange"
@@ -186,8 +184,10 @@
 
 </div>
 <div class="float-left">
-    <app-sharks-list [market]="market" [exchange]="'bitfinex'"></app-sharks-list>
+    <app-sharks-list [market]="market" [exchange]="'bitfinex'" (signal)="onSignal($event)"></app-sharks-list>
 </div>
 <div class="float-left">
     <app-sharks-list [market]="market" [exchange]="'binance'"></app-sharks-list>
 </div>
+
+<app-candles-pattern [exchange]="'binance'" [market]="'USDT_BTC'"></app-candles-pattern>

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {VOBalance, VOBooks, VOOrder, VOOrderExt} from '../../models/app-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {ApisPrivateService} from '../../apis/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApisPublicService} from '../../apis/apis-public.service';
@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MATH} from '../../com/math';
 import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
 import {Subscription} from 'rxjs/Subscription';
+import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
 
 @Component({
   selector: 'app-buy-sell-panel',
@@ -20,6 +21,7 @@ import {Subscription} from 'rxjs/Subscription';
   styleUrls: ['./buy-sell-panel.component.css']
 })
 export class BuySellPanelComponent implements OnInit, OnDestroy {
+
 
   exchanges: string[];
   markets = ['USDT_BTC'];
@@ -68,6 +70,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     private marketCap: ApiMarketCapService,
     private marketsHistory: MarketsHistoryService,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -145,20 +148,22 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     const openOrders: VOOrder[] = api.openOrdersSub.getValue();
     console.log(openOrders);
-    if (isNaN(this.rateSell)) return;
+
+    const rate = this.rateBuy;
+    if (isNaN(rate)) return;
     //if(!openOrders.length) {
     try{
       const MC = await this.marketCap.getTicker();
       const priceCoin = MC[this.coin].price_usd;
       const coinAmount = (this.balanceCoinAvailable - (this.balanceCoinAvailable * 0.002));
-      const rate = this.rateSell;
-
+      if(coinAmount * priceCoin < 10) return;
       const percent = MATH.percent(rate, this.bookSell);
 
-      if(await this.confirm('STOP LOSS ' + rate + '\n '+percent+ '%\n' +   Math.round(priceCoin * coinAmount))){
-        const res = await api.stopLoss2(this.market, coinAmount , this.rateSell , 2);
-        console.log(res);
-      }
+      const ref = this.dialog.open(ConfirmStopLossComponent, {data:{rate}});
+      const data: {stopPrice:number, sellPrice: number} = await ref.afterClosed().toPromise();
+      if(!data) return;
+      const res = await api.stopLoss(this.market, coinAmount , data.stopPrice, data.sellPrice);
+
     } catch (e) {
       console.warn(e);
       this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses:'error'});
@@ -280,12 +285,12 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const base = this.base;
     const coin = this.coin;
 
-    const history = this.marketsHistory.getOrdersHistory('bitfinex', 'USDT_BTC');
+ /*   const history = this.marketsHistory.getOrdersHistory('bitfinex', 'USDT_BTC');
     history.signalBuySell$().subscribe(signal =>{
       console.warn(moment().format('HH:mm'), signal);
       this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
     });
-
+*/
     this.marketCap.getTicker().then(MC => {
 
       const priceBase = base === 'USDT' ? 1 : MC[base].price_usd;
@@ -437,6 +442,9 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     this.ordersHistoryAfter = moment().subtract(20, 'hours').valueOf();
   }
 
+  onSignal(signal) {
+    this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
+  }
   ordersHistoryAfter: number;
   /*
 

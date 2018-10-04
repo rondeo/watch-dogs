@@ -188,8 +188,49 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     })
   }
 
-  async stopLoss(market: string, quantity: number, stopPrice: number, percent = 2) {
-    percent = percent / 100;
+/*  async _stopLoss2(market: string, quantity: number, stopPrice: number) {
+
+    const ar = market.split('_');
+    const base = ar[0];
+    const coin = ar[1];
+    if (isNaN(quantity) && isNaN(stopPrice)) {
+      console.warn(' not a number ' + quantity + '  ' + stopPrice);
+      return null;
+    }
+    const val = {amountCoin: +quantity, rate: +stopPrice};
+
+    UTILS.formatDecimals(this.exchange, base, coin, val);
+
+    let url = '/api/proxy/https://api.binance.com/api/v3/order';
+    let data = {
+      symbol: coin + base,
+      side: 'SELL',
+      type: 'STOP_LOSS',
+      quantity: val.amountCoin,
+      stopPrice: val.rate
+    };
+
+    console.log(url);
+    return this.call(url, data, RequestType.POST).map(res => {
+      console.log('result STOP_LOSS market ' + market, res);
+      return {
+        uuid: res.orderId,
+        action: res.side,
+        isOpen: res.status !== 'FILLED',
+        base: base,
+        coin: coin,
+        rate: +res.price,
+        amountBase: -1,
+        amountCoin: +res.origQty,
+        fee: -1
+      }
+    }).toPromise();
+
+  }*/
+
+
+  async _stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
+
     const ar = market.split('_');
     const base = ar[0];
     const coin = ar[1];
@@ -199,7 +240,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     }
 
     const val = {amountCoin: +quantity, rate: +stopPrice};
-    const val2 = {amountCoin: +quantity, rate: +stopPrice - (+stopPrice * percent)};
+    const val2 = {amountCoin: +quantity, rate: +sellPrice};
 
     UTILS.formatDecimals(this.exchange, base, coin, val);
 

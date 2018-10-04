@@ -132,11 +132,12 @@ export interface VOCandle {
   high: number;
   low: number;
   Trades?: number;
-  Volume?: number;
-  isClosed?: boolean
-  index?: number;
+  Volume: number;
+  isClosed?: boolean;
+  time?:string;
 }
 
 export interface VOCandleExt extends VOCandle{
   rsi: any;
+  index: number;
 }

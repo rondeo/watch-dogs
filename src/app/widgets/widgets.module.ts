@@ -25,6 +25,7 @@ import { BalanceMarketComponent } from './balance-market/balance-market.componen
 import {PipesModule} from '../pipes/pipes.module';
 import { CandleVolumeAlertComponent } from './alerts/candle-volume-alert/candle-volume-alert.component';
 import { SharksListComponent } from './alerts/sharks-list/sharks-list.component';
+import { CandlesPatternComponent } from './alerts/candles-pattern/candles-pattern.component';
 
 
 
@@ -56,7 +57,8 @@ import { SharksListComponent } from './alerts/sharks-list/sharks-list.component'
     TradesAllExchangesComponent,
     BalanceMarketComponent,
     CandleVolumeAlertComponent,
-    SharksListComponent
+    SharksListComponent,
+    CandlesPatternComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -76,7 +78,8 @@ import { SharksListComponent } from './alerts/sharks-list/sharks-list.component'
     BtcTetherComponent,
     BalanceMarketComponent,
     CandleVolumeAlertComponent,
-    SharksListComponent
+    SharksListComponent,
+    CandlesPatternComponent
   ]
 })
 export class WidgetsModule { }

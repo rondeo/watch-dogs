@@ -237,9 +237,8 @@ export abstract class ApiPrivateAbstaract {
     })
   }
 
-
-  async stopLoss2(market: string, quantity: number, stopPrice: number, percent:number) {
-    return this.stopLoss(market, quantity, stopPrice, percent).then(res =>{
+  async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
+    return this._stopLoss(market, quantity, stopPrice, sellPrice).then(res =>{
       this.refreshAllOpenOrders();
       this.refreshBalances();
       return res;
@@ -247,11 +246,10 @@ export abstract class ApiPrivateAbstaract {
 
   }
 
-  async stopLoss(market: string, quantity: number, stopPrice: number, percent:number) {
+  async _stopLoss(market: string, quantity: number, stopPrice: number, sellPrice:number) {
 
     return null;
   }
-
 
   takeProfit(market: string, quantity: number, stopPrice: number) {
 

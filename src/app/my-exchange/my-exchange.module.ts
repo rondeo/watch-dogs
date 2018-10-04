@@ -22,6 +22,7 @@ import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.compon
 import {PipesModule} from '../pipes/pipes.module';
 import {DirectivesModule} from '../directives/directives.module';
 import {BuySellPanelComponent} from './buy-sell-panel/buy-sell-panel.component';
+import { ConfirmStopLossComponent } from './confirm-stop-loss/confirm-stop-loss.component';
 
 @Component({
   selector: 'app-my-main',
@@ -71,11 +72,15 @@ const routes: Routes = [
     MyOrdersHistoryComponent,
     AllMainCoinsComponent,
     BuySellCoinComponent,
-    BuySellPanelComponent
+    BuySellPanelComponent,
+    ConfirmStopLossComponent
   ],
   providers:[
     ConnectorApiService,
     MyExchangeService
+  ],
+  entryComponents: [
+    ConfirmStopLossComponent
   ]
 
 })

@@ -14,7 +14,7 @@ export enum BuySellType {
   BUY_STRONG = 'BUY_STRONG'
 }
 
-export interface BuySellSignal {
+export interface SignalBuySell {
   rate: number,
   type: BuySellType
 }
@@ -22,7 +22,7 @@ export interface BuySellSignal {
 export class SharksAlert {
   alertSub: Subject<VOOrderExt[]> = new Subject();
   historySub: BehaviorSubject<VOOrderExt[]> = new BehaviorSubject(null);
-  signalBuySellSub: Subject<BuySellSignal> = new Subject();
+  signalBuySellSub: Subject<SignalBuySell> = new Subject();
   value: number;
   length: number;
   private strorageIndex: string;
