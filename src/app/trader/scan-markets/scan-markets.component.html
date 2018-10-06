@@ -1,0 +1,44 @@
+<div>
+    <div>{{coin}}
+        <a class="btn" (click)="onMarketClick()">
+            <small>{{exchange}} {{market}}</small>
+        </a>
+        <button mat-button=""></button>
+    </div>
+
+    <div>
+        <div>
+            <small>lastVolume</small>
+            {{lastVolume}}
+        </div>
+        <div>
+            <small> lastHighPrice</small>
+            {{lastHighPrice}}
+        </div>
+
+        <div>
+            <small> medianVolume</small>
+            {{medianVolume}}
+        </div>
+        <div>
+            <small> meanVolume</small>
+            {{meanVolume}}
+        </div>
+        <div>
+            <small>maxPrice</small>
+            {{maxPrice}}
+        </div>
+    </div>
+    <div class="horizontal">
+        <div class="scrollY600">
+            <app-sortable-table [consAvailable]="coinsAvailable"
+                                (selectedSymbol)="onCoinSelected($event)"></app-sortable-table>
+        </div>
+        <div >
+            <app-table-props [dataset]="notifications" (selected)="onDatasetClick($event)"></app-table-props>
+        </div>
+    </div>
+   <app-candlesticks [candles]="candles"></app-candlesticks>
+    <app-volume-hist [values]="volumes"></app-volume-hist>
+
+</div>

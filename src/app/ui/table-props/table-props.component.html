@@ -1,0 +1,15 @@
+<table *ngIf="dataset">
+  <tbody>
+  <tr *ngIf="dataset.length">
+      <td *ngFor="let key of objectKeys(dataset[0])">
+          <span>{{key}}</span>
+      </td>
+  </tr>
+  <tr *ngFor="let item of dataset; let i = index">
+      <td *ngFor="let value of objectValues(item); let j = index ">
+          <span (click)="onValueClick(i,j)">{{value}}</span>
+      </td>
+  </tr>
+
+  </tbody>
+</table>

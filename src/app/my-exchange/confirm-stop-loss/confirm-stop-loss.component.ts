@@ -10,11 +10,13 @@ export class ConfirmStopLossComponent implements OnInit {
 
   stopPrice: number;
   sellPrice: number;
+  msg:string
 
   constructor(
     private dialogRef: MatDialogRef<{ triggerPrice: string, setPrice: string}>,
-    @Inject(MAT_DIALOG_DATA) public data: {rate: number}
+    @Inject(MAT_DIALOG_DATA) public data: {rate: number, msg:string}
   ) {
+    this.msg = data.msg;
     let rate = data.rate;
     const l = data.rate.toString().length;
     rate = +(rate - (rate * 0.004)).toString().substr(0, l);

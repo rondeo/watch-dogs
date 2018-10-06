@@ -13,6 +13,7 @@ export class BitfinexTradesSocket extends SocketBase {
     super();
   }
 
+
   async createChannelId(channel, market): Promise<string> {
     console.log('createChannelId', channel, market);
 
@@ -77,7 +78,6 @@ export class BitfinexTradesSocket extends SocketBase {
     let channel: string;
     const chanId = msg[0];
     const market = this.channels[chanId];
-
 
     if (!market) {
       console.warn(' no market ', msg);

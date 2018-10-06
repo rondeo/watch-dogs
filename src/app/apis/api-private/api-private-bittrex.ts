@@ -4,7 +4,7 @@ import {ApiPrivateAbstaract} from './api-private-abstaract';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as cryptojs from 'crypto-js';
 import * as _ from 'lodash';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiPublicBittrex} from '../api-public/api-public-bittrex';
 
@@ -273,8 +273,10 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     URL += '?' + load;
     console.log(URL);
     let signed = this.hash_hmac(URL, cred.password);
-    let url = '/api/bittrex/private';
-    return this.http.post(url, {uri: URL, signed: signed});
+    let url ='api/proxy/' + URL; //'/api/bittrex/private';
+    const headers = new HttpHeaders({apisign:signed});
+
+    return this.http.get(url, {headers});
   }
 
   hash_hmac(text, password) {

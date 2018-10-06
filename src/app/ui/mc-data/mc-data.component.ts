@@ -9,7 +9,7 @@ import {VOMarketCap} from '../../models/app-models';
 })
 export class McDataComponent implements OnInit, OnChanges {
 
-  @Input() mcdata: VOMarketCap
+  @Input() mcdata: VOMarketCap;
   coinMC: VOMarketCap = new VOMarketCap();
   constructor() { }
 

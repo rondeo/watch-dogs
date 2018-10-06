@@ -32,6 +32,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -56,6 +57,7 @@ import {FormsModule} from '@angular/forms';
     MatSliderModule,
     MatTooltipModule
 
+
   ],
   exports: [
     MatButtonModule,
@@ -77,6 +79,7 @@ import {FormsModule} from '@angular/forms';
     MatChipsModule,
     MatSliderModule,
     MatTooltipModule
+
   ],
   declarations: [
     DialogSimpleComponent,

@@ -58,14 +58,13 @@
     </div>
 
 
-
-
     <diV>
         <div class="">
             <diV>
 
             </diV>
-            <div>
+            <div class="horizontal">
+
                 <mat-card>
                     <mat-card-title>
                         <mat-form-field>
@@ -112,6 +111,10 @@
                         </button>
                     </mat-card-content>
 
+                </mat-card>
+
+                <mat-card>
+                    <app-trader-socket [market]="'USDT_BTC'" [exchange]="'bitfinex'"></app-trader-socket>
                 </mat-card>
 
             </div>

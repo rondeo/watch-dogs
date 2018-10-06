@@ -32,7 +32,6 @@ export class BuySellCoinComponent implements OnInit {
   ) {
   }
 
-
   isSellDisabled = false;
   isBuyDisabled = false;
 

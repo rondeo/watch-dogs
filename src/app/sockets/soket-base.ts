@@ -98,6 +98,7 @@ export abstract class SocketBase {
     this.ws = this.createSocket(channel, market);
     let id = await this.createChannelId(channel, market);
 
+
     this.subscribers[id] = {
       channel,
       market,

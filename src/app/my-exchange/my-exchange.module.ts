@@ -23,6 +23,7 @@ import {PipesModule} from '../pipes/pipes.module';
 import {DirectivesModule} from '../directives/directives.module';
 import {BuySellPanelComponent} from './buy-sell-panel/buy-sell-panel.component';
 import { ConfirmStopLossComponent } from './confirm-stop-loss/confirm-stop-loss.component';
+import {TraderModule} from '../trader/trader.module';
 
 @Component({
   selector: 'app-my-main',
@@ -39,17 +40,13 @@ const routes: Routes = [
       {path: 'balances', component: MyExchangeBalncesComponent},
       {path: 'balances/:exchange', component: MyExchangeBalncesComponent},
       {path: 'markets/:exchange', component: MyMarketsComponent},
-
      // {path: 'orders-coindatas', component:  MyOrdersHistoryComponent},
-      {path: 'buy-sell/:exchage/:market', component: MyBuySellComponent},
+      {path: 'buy-sell/:exchange/:market', component: MyBuySellComponent},
       {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent},
       {path: 'buy-sell-panel/:exchange/:market', component:  BuySellPanelComponent}
-
     ]
   }
 ];
-
-
 
 @NgModule({
   imports: [
@@ -61,6 +58,7 @@ const routes: Routes = [
     WidgetsModule,
     DirectivesModule,
     PipesModule,
+    TraderModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

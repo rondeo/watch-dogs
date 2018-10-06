@@ -120,12 +120,9 @@ export class CandlesHist {
     const n = vals.length
     const last = vals[n-1];
     const pre = vals[n-2];
-    const prepre = vals[n-3]
-    console.log(last, pre, prepre);
-    const D0 = Math.abs(last - pre);
-    const D1 = Math.abs(pre - prepre);
-    console.log(D0, D1);
-
+   // const prepre = vals[n-3];
+    const D0 = last - pre;
+    const D1 = pre;  // Math.abs(pre - prepre);
     return MATH.percent(D0, D1);
   }
 
@@ -177,9 +174,6 @@ export class CandlesHist {
 
 
  async  analyze(data: VOCandle[]) {
-    if(!data[0].time) data.forEach(function (o) {
-      o.time = moment(o.to).format('HH:mm');
-    });
     await Promise.resolve();
     const last = _.last(data);
 
@@ -192,7 +186,7 @@ export class CandlesHist {
     });
 
 
-   const mean = Math.round(_.mean(vols));
+  // const mean = Math.round(_.mean(vols));
 
    const accel= this.acceliration(meds);
 
@@ -200,25 +194,26 @@ export class CandlesHist {
 
    const lastPrice = (last.high + last.low)/2;
 
-   const percentPrice = Math.round(1e4 * (lastPrice - medPrice)/medPrice)/1e2;
+   const direction = Math.round(1e4 * (lastPrice - medPrice)/medPrice)/1e2;
 
 
+   console.log('%c '+moment().format('HH:mm'), 'color:green');
 
 
-   console.log(' mean ' + mean + ' lastV '+ last.Volume + ' percentPrice ' + percentPrice);
+   //console.log(' mean ' + mean + ' lastV '+ last.Volume);
 
     const hights = data.map(function (o) {
       return o.high;
     });
 
 
-    const isUp = this.isGoingUp(data);
+    //const isUp = this.isGoingUp(data);
     const waterfall = this.isWaterFall(data);
 
     //const consold:VOCandle = this.consolidationLevel2(data);
    const whatLevel = this.whatLevel2(data);
 
-    console.log('%c '+moment().format('HH:mm')+' waterfall ' + waterfall + '  isup '+ isUp + ' level ' + whatLevel + '%', 'color:red');
+   // console.log('%c '+moment().format('HH:mm')+' waterfall ' + waterfall + '  isup '+ isUp + ' level ' + whatLevel + '%', 'color:red');
     // this.signalStatsSub.next('waterfall');
     const sorted = _.sortBy(data, 'Volume').reverse();
     const index = sorted.indexOf(last);
@@ -232,7 +227,7 @@ export class CandlesHist {
 
    const body = Math.round(1e4 * (cBody) / cFull)/1e2;
 
-    const out = {accel, openclose, priceD, body,  index};
+    const out = {direction, accel, openclose, priceD, body,  index};
 
     console.log(out);
     if(index < 20){

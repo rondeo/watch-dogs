@@ -19,6 +19,7 @@ import { VolumeHistComponent } from './volume-hist/volume-hist.component';
 import { FishesComponent } from './fishes/fishes.component';
 import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
 import {MaterialAppModule} from '../material/material-app.module';
+import { TablePropsComponent } from './table-props/table-props.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {MaterialAppModule} from '../material/material-app.module';
     StochComponent,
     VolumeHistComponent,
     FishesComponent,
-    StochRsiComponent
+    StochRsiComponent,
+    TablePropsComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +63,8 @@ import {MaterialAppModule} from '../material/material-app.module';
     StochComponent,
     VolumeHistComponent,
     FishesComponent,
-    StochRsiComponent
+    StochRsiComponent,
+    TablePropsComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

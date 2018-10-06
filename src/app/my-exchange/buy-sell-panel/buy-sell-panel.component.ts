@@ -156,10 +156,15 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       const MC = await this.marketCap.getTicker();
       const priceCoin = MC[this.coin].price_usd;
       const coinAmount = (this.balanceCoinAvailable - (this.balanceCoinAvailable * 0.002));
-      if(coinAmount * priceCoin < 10) return;
+
       const percent = MATH.percent(rate, this.bookSell);
 
-      const ref = this.dialog.open(ConfirmStopLossComponent, {data:{rate}});
+      let msg;
+
+      if(coinAmount * priceCoin < 10)msg =  'Not enough amount';
+
+      const ref = this.dialog.open(ConfirmStopLossComponent, {data:{rate, msg}});
+      if(coinAmount * priceCoin < 10) return;
       const data: {stopPrice:number, sellPrice: number} = await ref.afterClosed().toPromise();
       if(!data) return;
       const res = await api.stopLoss(this.market, coinAmount , data.stopPrice, data.sellPrice);

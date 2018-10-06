@@ -2,11 +2,12 @@ import * as _ from 'lodash';
 
 export class MATH {
 
-  static toString(value:number, length = 4){
+  static toString(value: number, length = 4) {
     return (value * 1e8).toString().substr(0, length);
   }
+
   static toValue(value: number): number {
-    return +(value > 1e-4 ? value.toPrecision(5) :value.toFixed(8));
+    return +(value > 1e-4 ? value.toPrecision(5) : value.toFixed(8));
   }
 
   static toDisplayValue(value: number): number {
@@ -53,7 +54,8 @@ export class MATH {
     });
   }
 
-  static median(numbers) {
+  static median(numbers: number[]) {
+    numbers = numbers.slice(0);
     var median = 0, numsLen = numbers.length;
     MATH.sort(numbers);
     //  console.log(numbers);
