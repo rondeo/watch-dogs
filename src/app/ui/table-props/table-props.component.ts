@@ -19,7 +19,6 @@ export class TablePropsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-    console.log(this.dataset)
 
   }
 

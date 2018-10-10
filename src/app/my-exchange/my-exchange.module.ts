@@ -41,6 +41,7 @@ const routes: Routes = [
       {path: 'balances/:exchange', component: MyExchangeBalncesComponent},
       {path: 'markets/:exchange', component: MyMarketsComponent},
      // {path: 'orders-coindatas', component:  MyOrdersHistoryComponent},
+      {path: 'buy-sell/:exchange', component: MyBuySellComponent},
       {path: 'buy-sell/:exchange/:market', component: MyBuySellComponent},
       {path: 'buy-sell-coin/:exchange/:coin', component: BuySellCoinComponent},
       {path: 'buy-sell-panel/:exchange/:market', component:  BuySellPanelComponent}

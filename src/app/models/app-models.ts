@@ -7,7 +7,6 @@ import {Observable} from 'rxjs/Observable';
 import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
 
 
-
 export interface VOBooksStats {
   exchange: string;
   coin: string;
@@ -162,7 +161,7 @@ export interface VOOrder {
   exchange?: string;
   priceUS?: number;
   amountUS?: number;
-  stopPrice?:number;
+  stopPrice?: number;
   // amountCoinUS?: number; priceUS?: number;
   amountCoin?: number;
   amountBase?: number;
@@ -174,7 +173,7 @@ export interface VOOrder {
   minutes?: string;
 }
 
-export interface VOOrderExt extends VOOrder{
+export interface VOOrderExt extends VOOrder {
   overlap: number,
   orders: number;
 }
@@ -379,11 +378,11 @@ export class VOMarketCap {
 
   volume_24h: number;
 
- // tobtc_change_1h?: number;
- // tobtc_change_24h?: number;
- // tobtc_change_7d?: number;
+  // tobtc_change_1h?: number;
+  // tobtc_change_24h?: number;
+  // tobtc_change_7d?: number;
 
- // btcUS?: number;
+  // btcUS?: number;
 
   market_cap_usd?: number;
   available_supply?: number;
@@ -393,7 +392,9 @@ export class VOMarketCap {
   last_updated?: number;
   selected?: boolean;
 
-
+  constructor(obj?: any) {
+    if (obj) Object.assign(this, obj);
+  }
 }
 
 export class VOMarketCapExt extends VOMarketCap {
@@ -410,7 +411,7 @@ export class VOMCDisplay extends VOMarketCap {
   news3: number;
 }
 
-export class VONews{
+export class VONews {
   author: string;
   title: string;
   text: string;
@@ -590,8 +591,9 @@ export class VOBalance {
   percent_change_7d?: number;
   id?: string;
   isDetails?: boolean;
-  constructor(obj?: VOBalance){
-    if(obj)Object.assign(this,obj);
+
+  constructor(obj?: VOBalance) {
+    if (obj) Object.assign(this, obj);
   }
 }
 
@@ -632,9 +634,9 @@ export class WalletModel {
 
 }
 */
-export enum OrderType{
-  SELL='SELL',
-  BUY='BUY'
+export enum OrderType {
+  SELL = 'SELL',
+  BUY = 'BUY'
 }
 
 export class VOWatchdog {
@@ -646,21 +648,20 @@ export class VOWatchdog {
   name: string;
   isActive: boolean;
   // isEmail: boolean;
-  results: string[] =[];
+  results: string[] = [];
   sellScripts: string[] = [];
   buyScripts: string[] = [];
   amount: number;
   orderID: string;
   _status: WatchDogStatus;
+
   constructor(obj: any) {
     Object.assign(this, obj);
-  //  if(obj.action)this.orderType = obj.action
+    //  if(obj.action)this.orderType = obj.action
   }
 }
 
-export const VOWATCHDOG = new VOWatchdog({
-
-})
+export const VOWATCHDOG = new VOWatchdog({})
 
 
 /*

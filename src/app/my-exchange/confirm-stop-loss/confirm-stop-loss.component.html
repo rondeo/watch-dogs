@@ -7,6 +7,7 @@
             <mat-form-field class="w6">
                 <input matInput placeholder="Trigger Price"
                        [(ngModel)]="stopPrice"
+                       (ngModelChange)="onPriceCanage()"
                 >
                 <mat-hint></mat-hint>
             </mat-form-field>

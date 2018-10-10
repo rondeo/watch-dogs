@@ -134,7 +134,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   async onBalanceClick(balance: VOBalance) {
     const symbol = balance.symbol;
-    this.router.navigateByUrl('/my-exchange/buy-sell-coin/' + this.exchange + '/' + symbol)
+    this.router.navigateByUrl('/my-exchange/buy-sell/' + this.exchange + '/BTC_' + symbol)
    //  console.log(balance)
 
   }

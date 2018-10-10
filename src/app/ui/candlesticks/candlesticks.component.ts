@@ -5,7 +5,7 @@ import {MATH} from '../../com/math';
 import {VOCandle} from '../../models/api-models';
 import {LinesOverlay} from './lines-overlay';
 
-export enum EnumOverlay{
+export enum EnumOverlay {
   SUPPORT_RESISTANCE
 }
 
@@ -63,9 +63,9 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   async drawOverlay() {
 
     this.linesOverlay.clear(this.width, this.height);
-    if(!this.overlays || !this.overlays.length) return;
+    if (!this.overlays || !this.overlays.length) return;
     // console.error(this.overlays);
-    if(this.overlays.indexOf(EnumOverlay.SUPPORT_RESISTANCE) !== -1) await this.linesOverlay.addResistance(this.candles);
+    if (this.overlays.indexOf(EnumOverlay.SUPPORT_RESISTANCE) !== -1) await this.linesOverlay.addResistance(this.candles);
     await this.linesOverlay.drawLines(this.gX0, this.scaleX, this.gY0, this.gScaleY);
 
   }
@@ -75,12 +75,12 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const ar = this.candles;
     if (!Array.isArray(ar)) return;
     // const x0 = this.x0 + 50;
-    const offsetY = 0;// Math.round(this.heightG * 0.3);
+    // const offsetY = 0;// Math.round(this.heightG * 0.3);
 
 
-    const Y0 = this.y0;
+    // const Y0 = this.y0;
     //const y0 = this.y0 - offsetY;
-   // const x0 = this.x0;
+    // const x0 = this.x0;
 
     let maxV = 0;
     let min = 100000000000000000;
@@ -92,7 +92,9 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     // let scaleV = offsetY / maxV;
     let range = max - min;
-    const height = Math.round(this.heightG - offsetY);
+
+
+    const height = Math.round(this.heightG);
 
     let dx = this.widthG / (ar.length - 1);
 
@@ -103,21 +105,29 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const scaleX = this.widthG / rangeX;
 
 
-
     let ctx = this.ctx;
+
+
+    const dateFrom = moment(_.first(ar).to).format('MM/DD HH:mm');
+    const dateTo = moment(_.last(ar).to).format('MM/DD HH:mm');
+    const percentRange = (100 * range / min).toFixed(2);
+    ctx.font = '11px Arial';
+    ctx.fillText(percentRange + '% '+ dateFrom + ' - ' + dateTo, this.widthG / 2, 22);
+
+
+
+
     const scaleY = height / (range || 1);
 
-    const Yo = this.y0 - offsetY + (min * scaleY);
+    const Yo = this.y0 + (min * scaleY);
 
 
-
-    this.gX0 = this.x0 + (minX * scaleX);
+    // this.gX0 = this.x0 + (minX * scaleX);
 
     const x0 = this.x0 - (minX * scaleX);
 
     this.gX0 = x0;
     this.scaleX = scaleX;
-
 
     this.gY0 = Yo;
     this.gScaleY = scaleY;
@@ -125,7 +135,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     for (let i = 0, n = ar.length; i < n; i++) {
 
       const item: VOCandle = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
-      const x = x0 +  (item.to  * scaleX);  // (i * dx);
+      const x = x0 + (item.to * scaleX);  // (i * dx);
 
       ctx.beginPath();
       ctx.lineWidth = 1;
@@ -140,7 +150,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
       ctx.lineTo(x, Yo - (item.close * scaleY));
       ctx.stroke();
     }
-    this.drawYs(offsetY, height, min, max, maxV);
+    this.drawYs(height, min, max, maxV);
   }
 
   gX0: number;
@@ -148,7 +158,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   gY0: number;
   gScaleY: number;
 
-  drawYs(offsetY: number, height: number, min: number, max: number, maxV: number) {
+  drawYs(height: number, min: number, max: number, maxV: number) {
 
     const step = (max - min) / 6;
     const out = [];
@@ -158,7 +168,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     ctx.fillStyle = '#000000';
     ctx.font = '11px Arial';
     const x = this.widthG + this.paddingLeft + 5;
-    let y = this.height - this.paddingBottom - offsetY;
+    let y = this.height - this.paddingBottom;
     const lastY = y - height;
     const step2 = Math.round((y - lastY) / 6);
 
@@ -280,21 +290,89 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  startPoint: { x: number, y: number };
+
+  onMouseMove(evt) {
+    const g0 = this.gY0 / this.gScaleY;
+
+    // const height = Math.round(this.heightG - offsetY);
+    const startPos = this.startPoint;
+    const pos = this.getMousePos(this.moveElement, evt);
+    const distY = pos.y - startPos.y;
+
+    const start = g0 - (startPos.y / this.gScaleY);
+
+    const diff = distY / this.gScaleY
+
+    const curValue = (start - diff);
+
+
+    const perc = (100 * Math.abs(diff) / start).toFixed(2);
+
+    let precision = 8;
+    if (start > 0.001) precision = 5;
+    if (start > 1) precision = 3;
+    if (start > 100) precision = 1;
+    const ctx = this.overlayCTX;
+    ctx.clearRect(0, 0, 300, 20);
+    ctx.fillText(perc + '%', 5, 20);
+
+    ctx.fillText(start.toFixed(precision), 150, 20);
+    ctx.fillText(curValue.toFixed(precision), 50, 20);
+    ctx.fillStyle = '#000000';
+    ctx.font = '12px Arial';
+
+
+    //const pos2 = this.getMousePos(el, evt)
+    // console.log(start , diff, perc);
+
+  }
+
+  getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  };
+
+  moveElement
+  onMouseMoveHandler: EventListenerOrEventListenerObject = this.onMouseMove.bind(this);
+
+  onMouseDown(el, evt) {
+    var pos = this.getMousePos(el, evt);
+    this.moveElement = el;
+    if (!this.startPoint) {
+      this.startPoint = pos;
+      const ctx = this.overlayCTX;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+      ctx.stroke();
+      el.addEventListener('mousemove', this.onMouseMoveHandler);
+    } else {
+      //  console.log('removing');
+      this.overlayCTX.clearRect(0, 0, this.width, this.height);
+      el.removeEventListener('mousemove', this.onMouseMoveHandler);
+      this.startPoint = null;
+    }
+  }
 
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
-    this.overlayCTX = this.overlayView.nativeElement.getContext('2d');
+    el = this.overlayView.nativeElement
+    this.overlayCTX = el.getContext('2d');
+    el.addEventListener('mousedown', (evt) => this.onMouseDown(el, evt));
     this.linesOverlay = new LinesOverlay(this.overlayCTX);
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
 
   ngOnChanges(evt) {
-    if(!this.ctx) return;
-   // console.log(evt);
+    if (!this.ctx) return;
+    // console.log(evt);
     if (evt.candles) this.redraw();
-    else if(evt.overlays) this.drawOverlay();
+    else if (evt.overlays) this.drawOverlay();
 
   }
 }

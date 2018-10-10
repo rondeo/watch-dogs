@@ -30,6 +30,7 @@ import {LoginFormComponent} from './login-form/login-form.component';
 import {LoginExchangeComponent} from './login-exchange/login-exchange.component';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import { DialogInputComponent } from './dialog-input/dialog-input.component';
 
 
 
@@ -78,18 +79,21 @@ import {FormsModule} from '@angular/forms';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatSliderModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DialogInputComponent
 
   ],
   declarations: [
     DialogSimpleComponent,
     LoginFormComponent,
-    LoginExchangeComponent
+    LoginExchangeComponent,
+    DialogInputComponent
   ],
   entryComponents: [
     DialogSimpleComponent,
     LoginFormComponent,
-    LoginExchangeComponent
+    LoginExchangeComponent,
+    DialogInputComponent
   ]
 })
 

@@ -1,11 +1,16 @@
 <div>
     <div class="mat-body">
-        <small>{{exchange}} {{market}} Open Orders: </small> <span class="mat-body-2">{{orders.length}}</span></div>
+        <small>{{exchange}} {{market}} Open Orders: </small> <span class="mat-body-2">{{orders.length}}</span>
+        <a class="fa fa-refresh btn green" (click)="onRefreshClick()"></a>
+    </div>
     <table>
         <tbody>
         <tr *ngFor="let order of orders">
             <td>
                 <small>{{order.timestamp | toDate}}</small>
+            </td>
+            <td>
+                <small>{{order.base}}_{{order.coin}}</small>
             </td>
             <td >
                 <span class="{{order.action==='SELL'?'red':'green'}}">{{order.action}}</span>

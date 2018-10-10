@@ -125,12 +125,19 @@ export abstract class ApiPrivateAbstaract {
     }
   }
 
+
+  allOpenOrders$(){
+    const orders = this.openOrdersSub.getValue();
+    if(!orders) this.refreshAllOpenOrders();
+    return this.openOrdersSub.asObservable();
+  }
+
   openOrdersSub = new BehaviorSubject(null);
 
   openOrders$(base: string, coin: string) {
     const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
     this.openOrdersSub.subscribe(res => {
-      if (!res) return;
+      if (!res) return sub.asObservable();
       const orders: VOOrder[] = res.filter(function (item: VOOrder) {
         return item.base === base && item.coin === coin;
       });
@@ -142,6 +149,10 @@ export abstract class ApiPrivateAbstaract {
     return sub.asObservable()
   }
 
+  stopRefreshOpenOrders(){
+    clearTimeout(this.refreshOrdersTimeout);
+    this.refreshOrdersTimeout = null;
+  }
   refreshOrdersTimeout;
   isRefershOpenOrders;
 
@@ -158,12 +169,15 @@ export abstract class ApiPrivateAbstaract {
         clearTimeout(this.refreshOrdersTimeout);
         this.refreshOrdersTimeout = setTimeout(() => {
          // console.log(' refreshAllOpenOrders by timeout  ');
-          this.refreshAllOpenOrders()
+          this.refreshAllOpenOrders();
+
         }, 30000);
       }
       else console.log(' stop refreshing open orders ');
       // const old: VOOrder[] = this.openOrdersSub.getValue();
       //if(!old  || old.length !== res.length) this.ref
+      const old: VOOrder[] = this.openOrdersSub.getValue();
+      if(old && old.length !== res.length) this.refreshBalances();
       this.openOrdersSub.next(res);
     }, err => {
       this.isRefershOpenOrders = false;

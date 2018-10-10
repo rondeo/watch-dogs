@@ -27,9 +27,6 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   private sub;
 
   ngOnInit() {
-    setInterval(()=>{
-
-    }, 30000);
   }
 
   ngOnChanges() {
@@ -39,26 +36,17 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   timeout;
   lastCall = 0;
 
+
+allOrders: VOOrder[];
   subscribe(){
     if(this.sub) this.sub.unsubscribe();
-    clearTimeout(this.timeout);
-    if (!this.exchange || !this.market) return;
+    if (!this.exchange) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    const ar = this.market.split('_');
-
-    api.openOrders$(ar[0], ar[1]).subscribe(orders =>{
-      if (this.orders.length !== orders.length) {
-        this.openOrdersChange.emit(orders);
-        api.refreshBalances();
-        api.refreshAllOrders(ar[0], ar[1],moment().subtract(23,'h').valueOf(), moment().valueOf() );
-      }
-     /* this.timeout = setTimeout(() => {
-        api.refreshAllOpenOrders();
-      }, 30000)
-*/
+    api.allOpenOrders$().subscribe(orders =>{
+      if(!orders) return;
       this.orders = orders;
-    })
-    api.refreshAllOpenOrders();
+    });
+
   }
   onCancelOrderClick(order: VOOrder) {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
@@ -68,7 +56,6 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
       if (confirm('You want to cancel order ' + msg)) {
         api.cancelOrder2(id, order.base +'_'+ order.coin).then(res => {
           this.orderCanceled.emit(order);
-
         })
       }
     }
@@ -79,5 +66,11 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnDestroy(){
     if(this.sub) this.sub.unsubscribe();
+
+  }
+
+  onRefreshClick(){
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
+    api.refreshAllOpenOrders();
   }
 }

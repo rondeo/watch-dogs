@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-title>
+        <span>{{message}}</span>
+
+
+    </mat-card-title>
+    <mat-card-content>
+        <mat-form-field>
+            <input matInput placeholder="Suspend Hours" [(ngModel)]="userInput"/>
+            <mat-hint>not number just delete value</mat-hint>
+        </mat-form-field>
+        <br/>
+        <br/>
+        <button mat-button (click)="onOkClick()">OK</button>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+
+        <button mat-button  (click)="onCancelClick()">Cancel </button>
+    </mat-card-content>
+
+</mat-card>
+
+
+<div>
+
+</div>

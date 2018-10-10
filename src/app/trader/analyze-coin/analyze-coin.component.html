@@ -2,7 +2,7 @@
     <!--<a routerLink="/trader/common-markets" class="btn">all</a>-->
     <app-trades-history [market]="market" [exchange]="exchange"></app-trades-history>
 
-    <app-mc-data [mcdata]="coinMC"></app-mc-data>
+    <app-mc-data [coin]="coin"></app-mc-data>
 
     <app-coin-day [coin]="coin" [isWeek]="true" (coindatas)="onCoinDataChange($event)"></app-coin-day>
     <br/>

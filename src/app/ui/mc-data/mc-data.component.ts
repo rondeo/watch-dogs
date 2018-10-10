@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 
 import {VOMarketCap} from '../../models/app-models';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 @Component({
   selector: 'app-mc-data',
@@ -9,16 +10,18 @@ import {VOMarketCap} from '../../models/app-models';
 })
 export class McDataComponent implements OnInit, OnChanges {
 
-  @Input() mcdata: VOMarketCap;
+  @Input() coin: string;
   coinMC: VOMarketCap = new VOMarketCap();
-  constructor() { }
+  constructor(
+    private marketcap: ApiMarketCapService
+  ) { }
 
   ngOnInit() {
   }
+
   ngOnChanges(evt) {
-
-    this.coinMC = this.mcdata || new VOMarketCap();
-
+    if(!this.coin) this.coinMC = new VOMarketCap();
+    else this.marketcap.ticker$().subscribe(MC => this.coinMC = MC[this.coin]);
   }
 
 }

@@ -19,7 +19,7 @@ export class ConfirmStopLossComponent implements OnInit {
     this.msg = data.msg;
     let rate = data.rate;
     const l = data.rate.toString().length;
-    rate = +(rate - (rate * 0.004)).toString().substr(0, l);
+    rate = +(rate - (rate * 0.005)).toString().substr(0, l);
     this.stopPrice = rate;
     this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
   }
@@ -37,5 +37,12 @@ export class ConfirmStopLossComponent implements OnInit {
 
   onCancelClick(){
     this.dialogRef.close();
+  }
+
+  onPriceCanage(){
+    const rate = this.stopPrice;
+    const l = rate.toString().length;
+    this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
+
   }
 }

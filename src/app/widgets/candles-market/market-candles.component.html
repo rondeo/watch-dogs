@@ -1,0 +1,8 @@
+<p>
+    <mat-form-field class="w6">
+        <input matInput placeholder="Interval" [(ngModel)]="interval"/>
+    </mat-form-field>
+    <button mat-raised-button (click)="onGoClick()">GO</button>
+    <app-candlesticks [candles]="myCandles"></app-candlesticks>
+    <app-volume-hist [values]="volumes"></app-volume-hist>
+</p>

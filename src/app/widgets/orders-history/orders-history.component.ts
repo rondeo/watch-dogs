@@ -48,7 +48,8 @@ export class OrdersHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
   subscribe(){
     if(this.sub1) this.sub1.unsubscribe();
-    const api = this.apisPrivate.getExchangeApi(this.exchange)
+    if(!this.exchange || !this.market) return;
+    const api = this.apisPrivate.getExchangeApi(this.exchange);
     const ar = this.market.split('_');
     this.marketCap.getTicker().then(MC=>{
       const price_usd = MC[ar[1]].price_usd;

@@ -4,6 +4,7 @@ import {AppBotsService} from './app-bots-services/app-bots.service';
 import {MarketsHistoryService} from './market-history/markets-history.service';
 import {TradesHistoryService} from './tests/trades-history.service';
 import {CandlesService} from './candles/candles.service';
+import {ScanMarketsService} from './scanner/scan-markets.service';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {CandlesService} from './candles/candles.service';
     AppBotsService,
     MarketsHistoryService,
     TradesHistoryService,
-    CandlesService
+    CandlesService,
+    ScanMarketsService
   ]
 })
 export class AppServicesModule { }

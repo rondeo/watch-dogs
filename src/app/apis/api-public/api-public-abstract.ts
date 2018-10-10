@@ -74,7 +74,7 @@ export abstract class ApiPublicAbstract {
 
   }
 
-  downloadCandles(market:string, interval: string, limit: number): Promise<VOCandle[]>{
+  downloadCandles(market:string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]>{
 
     return null;
   }

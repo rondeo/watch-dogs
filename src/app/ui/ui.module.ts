@@ -22,6 +22,7 @@ import {MaterialAppModule} from '../material/material-app.module';
 import { TablePropsComponent } from './table-props/table-props.component';
 
 
+
 @NgModule({
   exports: [
     McPercentComponent,

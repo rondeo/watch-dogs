@@ -1,13 +1,23 @@
 <div>
+    <app-mc-data [coin]="coin"></app-mc-data>
     <section>
+        <mat-form-field class="w8">
+            <mat-select [ngModel]="selectedMarket" placeholder="Market" (change)="onMarketSelected($event)">
+                <mat-option *ngFor="let market of markets" [value]="market">
+                    {{market}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
+        <button mat-raised-button
+                (click)="stopLossClick()"
+        >Stop Loss
+        </button>
         <app-amount-coin [amount]="amountUS" (amountChanged)="onAmountChanged($event)"></app-amount-coin>
-
-
-        <mat-card-content>
             <app-balance-market [exchange]="exchange" [market]="market"></app-balance-market>
-        </mat-card-content>
+    </section>
 
+    <section>
         <diV class="horizontal">
             <mat-card>
                 <mat-card-title>
@@ -32,9 +42,7 @@
 
             </mat-card>
 
-
             &nbsp; &nbsp; &nbsp; &nbsp;
-
 
             <mat-card>
                 <mat-card-title>
@@ -56,8 +64,34 @@
             </mat-card>
 
         </diV>
-
-
     </section>
+
+    <section>
+        <mat-checkbox #booksCheck >Books</mat-checkbox>
+        <app-books-all-exchanges
+                *ngIf="booksCheck.checked"
+                [coin]="null"
+                [market]="market"
+        ></app-books-all-exchanges>
+    </section>
+    <section>
+        <mat-checkbox #candlesCheck >Candles</mat-checkbox>
+
+        <app-market-candles *ngIf="candlesCheck.checked" [market]="market" [exchange]="exchange"></app-market-candles>
+    </section>
+
+
+    <app-open-orders
+            [exchange]="exchange"
+            [market]="market"
+            [refresh]="ordersRefresh"
+    >
+    </app-open-orders>
+
+    <app-orders-history
+            [exchange]="exchange"
+            [market]="market"
+            [afterTimestamp]="ordersRefresh"
+    ></app-orders-history>
 
 </div>

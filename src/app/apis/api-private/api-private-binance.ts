@@ -38,7 +38,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
 
   getAllOrders(base: string, coin: string, startTime: number, endTime: number): Observable<VOOrder[]> {
-    let url = '/api/proxy/https://api.binance.com/api/v3/allOrders';
+    let url = '/api/proxy/https://api.binance.com/api/v3/myTrades';
     const data = {
       symbol: coin + base,
       startTime,
@@ -46,9 +46,9 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
     console.log(url);
     return this.call(url, data, RequestType.GET).map(res => {
-      //   console.log(' allOrders ', res);
+       // console.log(' allOrders ', res);
 
-      return res.filter(function (item) {
+ /*     return res.filter(function (item) {
         return item.status !== 'CANCELED';
       }).map(function (item) {
         return {
@@ -62,6 +62,24 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           amountCoin: +item.origQty,
           timestamp: item.time,
           fee: -1,
+          date: moment(item.time).format('MM-DD HH a')
+        }
+      })
+    });*/
+      return res.filter(function (item) {
+        return item.status !== 'CANCELED';
+      }).map(function (item) {
+        return {
+          uuid: item.orderId,
+          action: item.isBuyer?'BUY':'SELL',
+          isOpen: false,
+          base: base,
+          coin: coin,
+          rate: +item.price,
+          amountBase: -1,
+          amountCoin: +item.qty,
+          timestamp: item.time,
+          fee: item.commission,
           date: moment(item.time).format('MM-DD HH a')
         }
       })

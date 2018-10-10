@@ -1,43 +1,48 @@
 <div>
     <div>{{coin}}
-        <a class="btn" (click)="onMarketClick()">
-            <small>{{exchange}} {{market}}</small>
-        </a>
-        <button mat-button=""></button>
+            <a (click)="onCurrentMarketClick()" class="btn">
+                <small>{{exchange}} {{market}}</small>
+            </a>
+        <button mat-button="" (click)="onStartClick()">{{isRunning?'Stop':'Start'}}</button>
+        <button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>
     </div>
 
     <div>
-        <div>
-            <small>lastVolume</small>
-            {{lastVolume}}
-        </div>
-        <div>
-            <small> lastHighPrice</small>
-            {{lastHighPrice}}
-        </div>
-
-        <div>
-            <small> medianVolume</small>
-            {{medianVolume}}
-        </div>
-        <div>
-            <small> meanVolume</small>
-            {{meanVolume}}
-        </div>
-        <div>
-            <small>maxPrice</small>
-            {{maxPrice}}
-        </div>
+       <app-table-props [dataset]="currentData"></app-table-props>
     </div>
+    <mat-checkbox #cmc> CMC</mat-checkbox>
     <div class="horizontal">
-        <div class="scrollY600">
-            <app-sortable-table [consAvailable]="coinsAvailable"
-                                (selectedSymbol)="onCoinSelected($event)"></app-sortable-table>
+        <div *ngIf="cmc.checked">
+            <div class="scrollY600">
+                <app-sortable-table
+                        [consAvailable]="coinsAvailable"
+                        (selectedSymbol)="onCoinSelected($event)"></app-sortable-table>
+            </div>
+
+            <mat-form-field class="w6">
+                <input matInput placeholder="Date" [(ngModel)]="analizeTime">
+            </mat-form-field>
+            <button mat-button
+                    (click)="onAnaliseCandlesClick()"
+            >Get
+            </button>
+
         </div>
-        <div >
+        <div class="scrollY600" >
             <app-table-props [dataset]="notifications" (selected)="onDatasetClick($event)"></app-table-props>
+
         </div>
     </div>
+
+
+    <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}" >{{exchange}} {{selectedMarket}}</a>
+
+    <app-mc-data [coin]="selectedCoin"></app-mc-data>
+
+    <div>
+        <app-table-props [dataset]="analysData"></app-table-props>
+    </div>
+
    <app-candlesticks [candles]="candles"></app-candlesticks>
     <app-volume-hist [values]="volumes"></app-volume-hist>
 

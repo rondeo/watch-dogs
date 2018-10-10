@@ -12,12 +12,18 @@
         <span class="btn fa fa-thumbs-o-up fa-2x"></span>
         <span class="fa fa-thumbs-o-down fa-flip-horizontal fa-2x"></span>
     </a>
+    <a  routerLink="/my-exchange/buy-sell/{{exchange}}/">
+        <span class="btn fa fa-dollar fa-2x green"></span>
+    </a>
     &nbsp;&nbsp;&nbsp;
     <a class="btn fa fa-key fa-2x right" (click)="onKeyClick()"></a>
 
     <div class="mat-subheading-1">My {{exchange}} <span class="mat-title"> ${{total}}</span></div>
     <section>
         <mat-checkbox (change)="onShowAll($event)">Show All</mat-checkbox>
+        <a mat-button routerLink="/my-exchange/buy-sell/{{exchange}}/x" >
+            Buy/Sell
+        </a>
 
         &nbsp; &nbsp;
         <span [ngClass]="isBalancesLoading?'scale05':''" class="btn fa fa-refresh fa-2x dgreen right"

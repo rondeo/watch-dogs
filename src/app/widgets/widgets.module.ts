@@ -11,7 +11,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {BotsRunningComponent} from './bots-running/bots-running.component';
 import {TradesHistoryComponent} from './trades-history/trades-history.component';
-import { CoinCandlesComponent } from './coin-candles/coin-candles.component';
+
 import { CoinDayTriggersComponent } from './coin-day-triggers/coin-day-triggers.component';
 import { BooksAllExchangesComponent } from './books-all-exchanges/books-all-exchanges.component';
 import { OpenOrdersComponent } from './open-orders/open-orders.component';
@@ -26,6 +26,7 @@ import {PipesModule} from '../pipes/pipes.module';
 import { CandleVolumeAlertComponent } from './alerts/candle-volume-alert/candle-volume-alert.component';
 import { SharksListComponent } from './alerts/sharks-list/sharks-list.component';
 import { CandlesPatternComponent } from './alerts/candles-pattern/candles-pattern.component';
+import { MarketCandlesComponent } from './candles-market/market-candles.component';
 
 
 
@@ -48,7 +49,6 @@ import { CandlesPatternComponent } from './alerts/candles-pattern/candles-patter
     AmountCoinComponent,
     BotsRunningComponent,
     TradesHistoryComponent,
-    CoinCandlesComponent,
     CoinDayTriggersComponent,
     BooksAllExchangesComponent,
     OpenOrdersComponent,
@@ -58,7 +58,8 @@ import { CandlesPatternComponent } from './alerts/candles-pattern/candles-patter
     BalanceMarketComponent,
     CandleVolumeAlertComponent,
     SharksListComponent,
-    CandlesPatternComponent
+    CandlesPatternComponent,
+    MarketCandlesComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -68,7 +69,6 @@ import { CandlesPatternComponent } from './alerts/candles-pattern/candles-patter
     AmountCoinComponent,
     BotsRunningComponent,
     TradesHistoryComponent,
-    CoinCandlesComponent,
     CoinDayTriggersComponent,
     BooksAllExchangesComponent,
     OpenOrdersComponent,
@@ -79,7 +79,8 @@ import { CandlesPatternComponent } from './alerts/candles-pattern/candles-patter
     BalanceMarketComponent,
     CandleVolumeAlertComponent,
     SharksListComponent,
-    CandlesPatternComponent
+    CandlesPatternComponent,
+    MarketCandlesComponent
   ]
 })
 export class WidgetsModule { }
