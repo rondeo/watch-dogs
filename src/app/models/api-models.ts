@@ -11,8 +11,6 @@ export interface VOCoinsDayData {
   [symbol: string]: VOCoinDayValue[];
 }
 
-
-
 export class VOMCData {
   price_btc: number
   price_usd: number;

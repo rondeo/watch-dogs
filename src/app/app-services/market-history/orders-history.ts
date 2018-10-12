@@ -22,7 +22,6 @@ export class OrdersHistory {
   ordersStatsSub: Subject<number[]> = new Subject();
 
   statsAlerts: OrdersStatsAlerts;
-
   sharksAlert: SharksAlert;
   constructor(
     private api: ApiPublicAbstract,

@@ -1,0 +1,127 @@
+import {VOCandle} from '../../models/api-models';
+import {VOMarketCap} from '../../models/app-models';
+import * as _ from 'lodash';
+import {MATH} from '../../com/math';
+import * as moment from 'moment';
+import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
+
+export class CandlesStats {
+  static analysData;
+  static data;
+
+  static async analyze(candles: VOCandle[], market: string, MC: VOMarketCap) {
+    const n = candles.length;
+    const coin = market.split('_')[1];
+    let last = _.last(candles);
+    let first = _.first(candles);
+
+    const prev = candles[n-2];
+    const highs = _.orderBy(candles.slice(0, candles.length - 1), 'high').reverse();
+
+    const sortedVol = _.orderBy(candles, 'Volume').reverse();
+
+    const sortedPrice = _.orderBy(candles, 'close').reverse();
+
+    const VI = sortedVol.indexOf(prev);
+
+
+
+    const prelast = candles[n - 2];
+
+    if ((last.to - last.from) !== (prelast.to - prelast.from)) console.error(' not full last ', last, prelast)
+
+
+    const vols = candles.map(function (o) {
+      return o.Volume;
+    });
+
+    const closes = candles.map(function (o) {
+      return o.close;
+    });
+
+
+    const minClose = _.min(closes);
+
+
+
+
+
+    // const LH = last.high;
+    const lastV = last.Volume;
+
+
+    let minutes = (last.to - prev.to) / 60000;
+
+    const S = (prev.Trades / minutes).toPrecision(3);
+    const maxPrice = _.max(closes);
+
+
+    const medPrice = MATH.median(closes);
+
+    // const price20 = _.mean(closes.slice(-20).slice(0, 10));
+    // const avg10 = _.mean(closes.slice(-10));
+    // const medV = MATH.median(vols);
+
+    const meanV = Math.round(_.mean(vols));
+
+    let msg = '';
+    let isRed = false;
+
+
+    // const PD1h = MATH.percent(avg10, price20);  // MATH.percent(LH, maxPrice);
+    // console.log(market, avg10, medPrice)
+    const PDmed = MATH.percent(last.high, medPrice);
+    const PDprev = MATH.percent(last.close, prev.close);
+    const PDall = MATH.percent(last.close, first.close)
+
+    const V3 = Math.round(_.sum(_.takeRight(vols, 3))/3);
+
+    const VD3 = MATH.percent(V3, meanV);// MATH.percent(lastV, meanV);
+    // const VMD = MATH.percent(lastV, medV);
+
+    const time = moment().format('HH:mm');
+    const ts = moment(last.to).format('HH:mm');
+    const x = 'x';
+    const rank = MC ? MC.rank : -1;
+    const resSup: ResistanceSupport = new ResistanceSupport(candles);
+
+    let resistance:VOCandle[] =  await resSup.getResistance(candles.slice(0,-1));
+    resistance = _.take(_.orderBy(resistance, 'high').reverse(), 3);
+
+   let resist= _.map(resistance,'high');
+
+   const RS = resistance.map(function (o) {
+     return o.high + ' ' + o.time;
+   })
+
+
+    const resAvg = _.mean(resist);
+
+    const BrRes =  MATH.percent(last.high, resAvg);
+
+
+    // console.log(last.high, resAvg, BR);
+
+    const AMPL = MATH.percent(last.close, minClose);
+
+    const data = {time, ts, market, rank, BrRes, PDprev, PDmed, PDall, AMPL, VD3, VI, S, x};
+
+
+    const myData = {
+      resAvg,
+      resist,
+      candles,
+      last,
+      sortedVol,
+      sortedPrice,
+      vols,
+      closes
+    }
+
+    CandlesStats.data = data;
+    CandlesStats.analysData = myData;
+    return data
+
+    // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
+  }
+}

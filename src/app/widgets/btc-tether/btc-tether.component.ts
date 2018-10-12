@@ -1,33 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMarketCap} from '../../models/app-models';
+import {VOAlert, VOMarketCap, VOOrder} from '../../models/app-models';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+import {ApisPublicService} from '../../apis/apis-public.service';
+import {Subject} from 'rxjs/Subject';
+import {StorageService} from '../../services/app-storage.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {VOCandle} from '../../models/api-models';
+import {Observable} from 'rxjs/Observable';
+import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-btc-tether',
   templateUrl: './btc-tether.component.html',
   styleUrls: ['./btc-tether.component.css']
 })
+
 export class BtcTetherComponent implements OnInit {
-
-  btcMC:VOMarketCap = new VOMarketCap();
-  usdtMC:VOMarketCap = new VOMarketCap();
-  date: string;
+  btcMC$;
+  usdtMC$;
   constructor(
-    private marketCap: ApiMarketCapService
-  ) { }
+    private btcusdt: BtcUsdtService,
+    private snackBar: MatSnackBar
 
-  ngOnInit() {
-    this.marketCap.ticker$().subscribe(MC =>{
-      this.btcMC = MC['BTC'];
-      this.btcMC.price_usd = Math.round(this.btcMC.price_usd);
-      this.usdtMC = MC['USDT'];
-      this.date = moment(this.btcMC.last_updated * 1000).format('LT');
-    })
+  ) {
+
   }
 
-
-
-
+  ngOnInit() {
+    this.btcMC$ = this.btcusdt.btcMC$;
+    this.usdtMC$ = this.btcusdt.usdtMC$;
+    this.btcusdt.alertSub.subscribe(alert =>{
+      this.snackBar.open(alert, 'x', {extraClasses:'error'});
+    });
+    this.btcusdt.start();
+  }
 
 }

@@ -10,13 +10,16 @@ import {exitCodeFromResult} from '@angular/compiler-cli';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {VOMarketCap} from '../../models/app-models';
+import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
+import {CandlesStats} from './candles-stats';
 
 export class ScannerMarkets {
   runningSub = new BehaviorSubject(false);
   exchange: string;
   //  notifications: any[];
   markets: string[];
-  interval: string = '30m';
+  interval: string = '5m';
+  userExclude: string[] = ['BTC_DENT'];
   MC: VOMCObj;
   candles: { [index: string]: VOCandle[] };
   _coinsAvailable: string[] = [];
@@ -57,7 +60,7 @@ export class ScannerMarkets {
     console.log(moment().format('HH:mm') + market);
     localStorage.setItem('last-market' + this.exchange, market);
     const candles = await this.getCandles(market);
-    this.processCandles(candles, market);
+    this.ctr(candles, market);
     const nextMarket = await this.getMarketAfter(market);
     this.timeout = setTimeout(()=>{
       this.nextMarket(nextMarket)
@@ -67,13 +70,13 @@ export class ScannerMarkets {
   }
 
   async getCandles(market: string) {
-
     let candles: VOCandle[] = await this.storage.select('candles-' + this.exchange + market + this.interval);
 
     const now: number = Date.now();
     if (candles) {
-
-      let newcandels: VOCandle[] = await this.api.downloadCandles(market, this.interval, 2);
+      //if(!candles[0].time)
+        candles.forEach(function (o) { o.time = moment(o.to).format('DD HH:mm'); });
+      let newcandels: VOCandle[] = await this.api.downloadCandles(market, this.interval, 5);
       newcandels.forEach(function (o) {
         o.time = moment(o.to).format('HH:mm');
       });
@@ -91,17 +94,19 @@ export class ScannerMarkets {
     return candles;
   }
 
-  processCandles(candles: VOCandle[], market: string) {
-
+  async ctr(candles: VOCandle[], market: string) {
     const MC = this.MC[market.split('_')[1]];
-    const isNote = ScannerMarkets.analyze(candles, market, MC);
-    const BR = ScannerMarkets.data.BR;
-    if (BR < -5) {
-      this.addExclude(market, 'BR ' + BR, 5);
-    }
-    this.currentMarketSub.next(ScannerMarkets.data);
-    if (isNote) {
-      this.notify(ScannerMarkets.data);
+
+    const data =  await CandlesStats.analyze(candles, market, MC);
+
+    this.currentMarketSub.next(data);
+    //const BR = data.BrRes;
+    if(data.AMPL > 10) {
+      this.addExclude(market, 'AMPL ' + data.AMPL, 24);
+    }else if (data.BrRes < -5) {
+      this.addExclude(market, 'BR ' + data.BrRes, 3);
+    }else if (data.BrRes > 0 &&  data.PDprev > 0) {
+      this.notify(data);
       // console.log(lastHigh, lastV);
       // console.log(maxPrice, medV, meanV);
     }
@@ -121,111 +126,15 @@ export class ScannerMarkets {
   }
 
 
-  async analyse1MinuteCandles(market: string) {
+  /*async analyse1MinuteCandles(market: string) {
     let candles1min: VOCandle[] = await this.api.downloadCandles(market, '1m', 30);
     const candles30min: VOCandle[] = await this.getCandles(market);
     console.log(candles1min, candles30min);
 
-  }
-
-
-  static analysData;
-  static data;
-
-
-  static analyze(candles: VOCandle[], market: string, MC: VOMarketCap) {
-    const n = candles.length;
-    const coin = market.split('_')[1];
-    let last = _.last(candles);
-    const prev = candles[n-2];
-    const highs = _.orderBy(candles.slice(0, candles.length - 1), 'high').reverse();
-
-    const sortedVol = _.orderBy(candles, 'Volume').reverse();
-
-    const sortedPrice = _.orderBy(candles, 'close').reverse();
-
-    const resistance = (highs[0].high + highs[1].high) / 2;
-
-    const VI = sortedVol.indexOf(last);
-
-
-    const PI = sortedPrice.indexOf(last);
-
-
-    const prelast = candles[n - 2];
-
-    if ((last.to - last.from) !== (prelast.to - prelast.from)) console.error(' not full last ', last, prelast)
-
-
-    const vols = candles.map(function (o) {
-      return o.Volume;
-    });
-
-    const closes = candles.map(function (o) {
-      return o.close;
-    });
+  }*/
 
 
 
-    // const LH = last.high;
-    const lastV = last.Volume;
-
-    let minutes = (last.to - prev.to) / 60000;
-
-    const S = (prev.Trades / minutes).toPrecision(3);
-    const maxPrice = _.max(closes);
-
-
-    const medPrice = MATH.median(closes);
-
-    // const price20 = _.mean(closes.slice(-20).slice(0, 10));
-    // const avg10 = _.mean(closes.slice(-10));
-    // const medV = MATH.median(vols);
-
-    const meanV = Math.round(_.mean(vols));
-
-    let msg = '';
-    let isRed = false;
-
-
-    // const PD1h = MATH.percent(avg10, price20);  // MATH.percent(LH, maxPrice);
-    // console.log(market, avg10, medPrice)
-    const PD = MATH.percent(last.high, medPrice);
-    const P30m = MATH.percent(last.close, prev.close);
-
-    const V3 = Math.round(_.sum(_.takeRight(vols, 3)));
-
-
-
-    const VD = MATH.percent(V3, meanV);// MATH.percent(lastV, meanV);
-    // const VMD = MATH.percent(lastV, medV);
-
-    const time = moment().format('HH:mm');
-    const ts = moment(last.to).format('HH:mm');
-    const x = 'x';
-    const R = MC ? MC.rank : -1;
-
-    const BR = MATH.percent(last.high, resistance);
-
-    const data = {time, ts, market, R, BR, PD, P30m, VD, VI, PI, S, x};
-
-
-    const myData = {
-      resistance,
-      candles,
-      last,
-      sortedVol,
-      sortedPrice,
-      vols,
-      closes
-    }
-
-    ScannerMarkets.data = data;
-    ScannerMarkets.analysData = myData;
-    return BR > 0 &&  P30m >0;
-
-    // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
-  }
 
   timeout;
 
@@ -233,7 +142,7 @@ export class ScannerMarkets {
     console.log('ADD EXCLUDE ', market, reason, hours);
     const postpone = moment().add(hours, 'hours').valueOf();
 
-    let excludes = await this.getExcludes();
+    let excludes = (await this.getExcludes()) || [];
 
 
     const exists = excludes.find(function (o) {
@@ -273,18 +182,21 @@ export class ScannerMarkets {
     const excludes = excludes1.filter(function (o) {
       return o.postpone > now;
     });
+
     if(excludes1.length !==excludes.length) this.saveExcludes(excludes);
 
     const exls = excludes.map(function (o) {
       return o.market;
     })
 
-    const available = _.difference(this.markets, exls);
+    let available = _.difference(this.markets, exls);
+    available = _.difference(available, this.userExclude);
+
 
     let ind = available.indexOf(market);
     if(ind === -1 || ind === available.length -1) ind = 0;
     else ind++;
-    console.log('availabe' + available.length);
+    console.log('available ' + available.length);
     return available[ind];
   }
 

@@ -49,95 +49,6 @@ export class VOTransaction {
 }
 
 
-/*
-export class ConfigApp {
-  exchangesPublic: ConfigAPI[] = [
-    {
-      uid: 'poloniex',
-      name: 'Poloniex',
-      isMarketComplex: false,
-      enabled: true,
-      apiCurrencies: '/api/poloniex/currencies',
-      apiMarkets: '/api/poloniex/markets-summary',
-      apiMarket: '',
-      apiOrderBook: '/api/poloniex/orderBook/{{pair}}/{{depth}}',
-      webMarket: 'https://poloniex.com/exchange#{{base}}_{{coin}}',
-      apiVolume24h: '',
-      apiTradeHistory: ''
-    },
-    {
-      uid: 'bittrex',
-      name: 'Bittrex',
-      enabled: true,
-      isMarketComplex: false,
-      apiMarket: '',
-      apiMarkets: '/api/bittrex/markets-summary',
-      apiOrderBook: '/api/bittrex/getorderbook/{{pair}}/{{depth}}',
-      apiTradeHistory: '',
-      webMarket: 'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'
-    },
-    {
-      uid: 'cryptopia',
-      name: 'Cryptopia',
-      isMarketComplex: false,
-      enabled: true,
-      apiMarkets: '/api/cryptopia/markets-summary',
-      apiMarket: '',
-      apiOrderBook: '/api/cryptopia/getorderbook/{{pair}}/{{depth}}',
-      apiTradeHistory: '',
-      webMarket: 'https://www.cryptopia.co.nz/Exchange?market={{coin}}_{{base}}'
-    },
-    {
-      uid: 'hitbtc',
-      name: 'HitBTC',
-      enabled: true,
-      isMarketComplex: false,
-      apiCurrencies: '/api/y/hitbtcrencies',
-      apiMarkets: '/api/hitbtc/markets-summary',
-      apiMarket: '',
-      apiOrderBook: '/api/hitbtc/getorderbook/{{pair}}/{{depth}}',
-      apiTradeHistory: '',
-      webMarket: 'https://hitbtc.com/exchange/{{base}}-to-{{coin}}'
-    },
-    {
-      uid: 'livecoin',
-      name: 'Livecoin',
-      enabled: true,
-      isMarketComplex: false,
-      apiCurrencies: '',
-      apiMarkets: '/api/livecoin/markets',
-      apiMarket: '',
-      apiOrderBook: '',
-      apiTradeHistory: '',
-      webMarket: 'https://www.livecoin.net/en/trade/orderbook/{{coin}}{{base}}'
-    },
-    {
-      uid: 'bitfinex',
-      name: 'Bitfinex',
-      enabled: true,
-      isMarketComplex: true,
-      apiCurrencies: '/api/bitfinex/currencies',
-      apiMarkets: '',
-      apiMarket: '/api/bitfinex/market/{{id}}',
-      apiOrderBook: '',
-      apiTradeHistory: '',
-      webMarket: 'https://www.bfxdata.com/orderbooks/{{coin}}{{base}}'
-    },
-    {
-      uid: 'yobit',
-      name: 'YObit',
-      enabled: true,
-      isMarketComplex: true,
-      apiCurrencies: '/api/yobit/currencies',
-      apiMarkets: '',
-      apiMarket: '/api/yobit/market/{{id}}',
-      apiOrderBook: '/api/yobit/orderbook/{{coin}}_{{base}}',
-      apiTradeHistory: '',
-      webMarket: 'https://www.yobit.net/en/trade/{{coin}}/{{base}}'
-    }
-  ]
-}
-*/
 
 export const VOORDER: VOOrder = {
   uuid: '',
@@ -699,4 +610,13 @@ export interface VOResult {
   success: string;
   error: string;
   message: string;
+}
+
+export enum VOAlert{
+  UP='UP',
+  DOWN = 'DOWN',
+  DROPPING = 'DROPPING',
+  JAMPING = 'JUMPING',
+  WATERFALL='WATERFALL',
+  FOUNTAIN ='FOUNTAIN'
 }

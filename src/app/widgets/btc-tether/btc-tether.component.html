@@ -1,12 +1,12 @@
 <p class="mat-body">
     &nbsp;
-    <span>{{date}}</span>
+    <span>{{(btcMC$ | async).time}}</span>
     &nbsp;&nbsp;
   <small>BTC</small>
-    <span class="mat-body-2">{{btcMC.price_usd}}</span>
-    <span [myValueColor] = "btcMC.percent_change_1h"></span>
+    <span class="mat-body-2">{{(btcMC$ | async).price_usd | round}}</span>
+    <span [myValueColor] = "(btcMC$ | async).percent_change_1h"></span>
 
     <small>USDT</small>
-    <span [myValueColor] = "usdtMC.percent_change_1h"></span>
+    <span [myValueColor] = "(usdtMC$ | async).percent_change_1h"></span>
 
 </p>

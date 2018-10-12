@@ -9,6 +9,7 @@ import { MyDisplNumPipe } from './my-displ-num.pipe';
 import { CmcMarketPipe } from './cmc-market.pipe';
 import { ToTimePipe } from './to-time.pipe';
 import { MyUsPipe } from './my-us.pipe';
+import { RoundPipe } from './round.pipe';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { MyUsPipe } from './my-us.pipe';
     CmcPipe,
     MyDisplNumPipe,
     CmcMarketPipe,
-    MyUsPipe
+    MyUsPipe,
+    RoundPipe
   ],
   declarations: [
     Coin2usPipe,
@@ -33,7 +35,8 @@ import { MyUsPipe } from './my-us.pipe';
     MyDisplNumPipe,
     CmcMarketPipe,
     ToTimePipe,
-    MyUsPipe
+    MyUsPipe,
+    RoundPipe
   ]
 })
 export class PipesModule { }

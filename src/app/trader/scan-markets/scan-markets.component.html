@@ -8,7 +8,7 @@
     </div>
 
     <div>
-       <app-table-props [dataset]="currentData"></app-table-props>
+       <app-table-props [dataset]="currentData" (selected)="onDatasetClick($event)"></app-table-props>
     </div>
     <mat-checkbox #cmc> CMC</mat-checkbox>
     <div class="horizontal">

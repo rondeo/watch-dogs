@@ -15,6 +15,7 @@ import {SSCoinsAvailableComponent} from './shape-shift/ss-coins-available/ss-coi
 import {ConfirmResetPasswordComponent} from './login/confirm-reset-password/confirm-reset-password.component';
 
 import {CoinsExchangesComponent} from './market-cap/coins-exchanges/coins-exchanges.component';
+import {TestComponent} from './test/test.component';
 
 
 export const rootRouterConfig: Routes = [
@@ -25,7 +26,8 @@ export const rootRouterConfig: Routes = [
   { path: 'shape-shift-market-cap', component: SSCoinsAvailableComponent},
   { path: 'login/:topic', component: LoginComponent },
   { path: 'login-confirm/:session', component:ConfirmComponent },
-  { path: 'confirm-reset-password/:session', component:ConfirmResetPasswordComponent }
+  { path: 'confirm-reset-password/:session', component:ConfirmResetPasswordComponent },
+  { path: 'test', component:TestComponent }
 
 
 ];

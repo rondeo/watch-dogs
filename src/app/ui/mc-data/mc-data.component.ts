@@ -21,7 +21,7 @@ export class McDataComponent implements OnInit, OnChanges {
 
   ngOnChanges(evt) {
     if(!this.coin) this.coinMC = new VOMarketCap();
-    else this.marketcap.ticker$().subscribe(MC => this.coinMC = MC[this.coin]);
+    else this.marketcap.ticker$().subscribe(MC => this.coinMC = MC[this.coin] || new VOMarketCap() );
   }
 
 }

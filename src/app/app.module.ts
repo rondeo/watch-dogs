@@ -6,21 +6,14 @@ import {Router, RouterModule} from '@angular/router';
 import {rootRouterConfig} from './app.routes';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
-
-
-
 import {AppComponent} from './app.component';
-//import { TestComponent } from '../../arch/test/test.component';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
-//import 'rxjs/add/observable/throw';
-//import 'rxjs/operator/publishLast';
-//import 'rxjs/add/operator/shareReplay';
+
 import 'rxjs/add/operator/do';
 import "rxjs/add/operator/concat";
 
-//import {AuthHttp, AuthModule, provideAuth, AuthConfig} from './libs/angular2-jwt';
 
 import {MaterialAppModule} from './material/material-app.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -57,6 +50,7 @@ import {ShowExternalPageService} from './services/show-external-page.service';
 import {AppServicesModule} from './app-services/app-services.module';
 import {WidgetsModule} from './widgets/widgets.module';
 import { ValueColorDirective } from './directives/value-color.directive';
+import { TestComponent } from './test/test.component';
 
 
 
@@ -90,7 +84,8 @@ declare const Buffer: any;
   ],
   declarations: [
     AppComponent,
-    ExchangeSsComponent
+    ExchangeSsComponent,
+    TestComponent
   ],
   providers: [
     DatabaseService,

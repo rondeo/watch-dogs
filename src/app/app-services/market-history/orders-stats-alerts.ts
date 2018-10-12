@@ -13,6 +13,7 @@ export class OrdersStatsAlerts {
   voluumeUpPercent: number;
 
   private statsHistory: number[][] = [];
+
   constructor(private exchange: string, private market: string, private storage: StorageService){
 
   }
@@ -29,6 +30,7 @@ export class OrdersStatsAlerts {
     const prev = vols[vols.length -2] ;// _.sum(_.takeRight(vols, 10))/10;
 
     const diff = Math.round(100 * (last - prev)/prev);
+
     // console.log('diff ', diff, this.voluumeUpPercent);
 
     if(Math.abs(diff) > this.voluumeUpPercent) this.volumeAlertSub.next(diff);

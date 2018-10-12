@@ -13,6 +13,7 @@ import {ScanMarketsService} from '../../app-services/scanner/scan-markets.servic
 import {ScannerMarkets} from '../../app-services/scanner/scanner-markets';
 import {Subscription} from 'rxjs/Subscription';
 import {DialogInputComponent} from '../../material/dialog-input/dialog-input.component';
+import {CandlesStats} from '../../app-services/scanner/candles-stats';
 
 @Component({
   selector: 'app-scan-markets',
@@ -151,6 +152,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   volumes: number[];
 
+
+
+
+
+
   onDatasetClick(obj) {
     const item = obj.item;
     const prop = obj.prop;
@@ -181,7 +187,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
       this.scanner.getScanner(this.exchange).getCandles(market)
         .then(res => {
-          console.log(res);
+         //  console.log(res);
           if (!res) {
             console.error(' no candles for ' + market)
             return
@@ -205,12 +211,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   async analize(candles: VOCandle[], market: string) {
     const MC = (await this.marketCap.getTicker())[market.split('_')[1]];
 
-    const isNote = ScannerMarkets.analyze(candles, market, MC);
-
-    const data = ScannerMarkets.data;
+    const data = await CandlesStats.analyze(candles, market, MC);
     this.analysData = [data];
-    console.log(isNote, data);
-    const mydata = ScannerMarkets.analysData;
+    console.log(data);
+    const mydata = CandlesStats.analysData;
     console.log(mydata);
 
 

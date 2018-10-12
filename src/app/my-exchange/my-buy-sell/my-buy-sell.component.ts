@@ -236,6 +236,8 @@ export class MyBuySellComponent implements OnInit {
       if (coinAmount * priceCoin < 10) return;
       const data: { stopPrice: number, sellPrice: number } = await ref.afterClosed().toPromise();
       if (!data) return;
+
+      console.log(coinAmount, data.stopPrice, data.sellPrice);
       const res = await api.stopLoss(this.market, coinAmount, data.stopPrice, data.sellPrice);
 
     } catch (e) {
