@@ -84,7 +84,7 @@ export class V2DataComponent implements OnInit {
 
     const apis = [];
 
-    this.apisAll.downloadTickers(this.exchanges)
+  /*  this.apisAll.downloadTickers(this.exchanges)
       .subscribe((res: { [market: string]: VOMarket }[]) => {
       this.marketsResults = res;
       // console.log(res);
@@ -92,7 +92,7 @@ export class V2DataComponent implements OnInit {
       const MC = this.MC;
       this.tableHeaders = ['coin', 'base'].concat(this.exchanges);
       this.tableDataset = V2DataHelper.parseData(this.MC, this.bases, res);
-    })
+    })*/
   }
 
 

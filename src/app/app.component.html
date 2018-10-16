@@ -41,11 +41,10 @@
                <span class="fa fa-thumbs-o-down fa-flip-horizontal fa-2x btn yellow"></span>
 
            </a>
+            <app-scanner></app-scanner>
 
-            <a routerLink="/trader/scan-markets" class="fa fa-barcode fa-2x btn yellow">
-
-            </a>
             <app-btc-tether></app-btc-tether>
+            <app-open-orders [exchange]="'binance'"></app-open-orders>
 
 
         </div>

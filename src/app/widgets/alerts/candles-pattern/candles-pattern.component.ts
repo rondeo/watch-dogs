@@ -40,7 +40,8 @@ export class CandlesPatternComponent implements OnInit, OnChanges {
     this.unsubscribe();
     if (!this.exchange || !this.market) return;
 
-    const hist: CandlesHist = this.candlesService.getCandlesHist(this.exchange, this.market);
+
+   /* const hist: CandlesHist = this.candlesService.getCandlesHist(this.exchange, this.market);
 
    this.sub1 = hist.candles$().subscribe(candles => {
       if(!candles) return;
@@ -54,7 +55,7 @@ export class CandlesPatternComponent implements OnInit, OnChanges {
     this.sub2 = hist.volumeAlert$().subscribe((candle:VOCandleExt) =>{
       console.warn(candle);
     })
-
+*/
 
   }
 

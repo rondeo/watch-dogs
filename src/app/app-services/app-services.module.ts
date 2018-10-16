@@ -8,6 +8,7 @@ import {ScanMarketsService} from './scanner/scan-markets.service';
 import {BtcTetherComponent} from '../widgets/btc-tether/btc-tether.component';
 import {BtcUsdtService} from './alerts/btc-usdt.service';
 import {MarketAlertsService} from './alerts/market-alerts.service';
+import {OpenOrdersService} from '../apis/open-orders/open-orders.service';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {MarketAlertsService} from './alerts/market-alerts.service';
     CandlesService,
     ScanMarketsService,
     MarketAlertsService,
-    BtcUsdtService
+    BtcUsdtService,
+    OpenOrdersService
   ]
 })
 export class AppServicesModule {

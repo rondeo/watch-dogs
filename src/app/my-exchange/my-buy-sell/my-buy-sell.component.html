@@ -75,6 +75,10 @@
         ></app-books-all-exchanges>
     </section>
     <section>
+        <mat-checkbox #fishesCheck ><span class="fa fa-ship"></span></mat-checkbox>
+        <app-fishes  *ngIf="fishesCheck.checked" [exchange]="exchange" [market]="market"></app-fishes>
+    </section>
+    <section>
         <mat-checkbox #candlesCheck >Candles</mat-checkbox>
 
         <app-market-candles *ngIf="candlesCheck.checked" [market]="market" [exchange]="exchange"></app-market-candles>

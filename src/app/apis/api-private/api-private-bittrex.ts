@@ -63,7 +63,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
   }*/
 
-  getAllOpenOrders() :Observable<VOOrder[]>{
+  downloadAllOpenOrders() :Observable<VOOrder[]>{
     let url = 'https://bittrex.com/api/v1.1/market/getopenorders';
     return this.call(url, null).map(res =>{
       console.log(' allOpenOrders  ' , res);
@@ -214,7 +214,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     })
   }
 
-  buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+  async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder> {
     let market = base + '-' + coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
     let uri = 'https://bittrex.com/api/v1.1/market/buylimit';
@@ -226,7 +226,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
       console.log(' buyLimit market ' + market, res);
 
       return res.result;
-    });
+    }).toPromise();
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/

@@ -66,7 +66,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
    }*/
 
-  getAllOpenOrders(): Observable<VOOrder[]> {
+  downloadAllOpenOrders(): Observable<VOOrder[]> {
     //let url = 'https://poloniex.com/public?command=returnTradeHistory&{{base}}_{{coin}}';
     return this.call({
       command: 'returnOpenOrders',
@@ -266,7 +266,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     });
   }
 
-  buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+  async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder> {
     let market = base + '_' + coin;
     console.log(' buy market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
 
@@ -276,7 +276,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       rate: rate,
       amount: quantity
     }).map(res => {
-
 
       console.log(' buyLimit market ' + market, res);
 
@@ -289,7 +288,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         coin: coin,
         type: res.type
       };
-    });
+    }).toPromise();
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/

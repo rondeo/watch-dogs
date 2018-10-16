@@ -10,6 +10,7 @@ import {UTILS} from '../../com/utils';
 import {VOCandle} from '../../models/api-models';
 import {BehaviorSubject} from '../../../../node_modules/rxjs';
 import {SocketBase} from '../sockets/soket-base';
+import * as _ from 'lodash';
 
 export interface MarketDay {
   Ask: number[];
@@ -31,6 +32,7 @@ export abstract class ApiPublicAbstract {
   allCoins: { [coin: string]: { [base: string]: number } };
 
   protected socket: SocketBase;
+
   constructor(
     protected http: HttpClient,
     protected store: StorageService
@@ -48,9 +50,12 @@ export abstract class ApiPublicAbstract {
   private marketsData: { timestamp: number, markets: { [symbol: string]: VOMarket } };
 
   async getMarkets(): Promise<{ [symbol: string]: VOMarket }> {
-    const timeout = Date.now() - (5 * 60 * 1000);
+    const timeout = Date.now() - (50 * 60 * 1000);
+
     if (this.marketsData && this.marketsData.timestamp > timeout) return Promise.resolve(this.marketsData.markets);
-    const marketsData: { timestamp: number, markets: { [symbol: string]: VOMarket } } = await this.store.select(this.exchange + '-markets');
+
+    const marketsData:
+      { timestamp: number, markets: { [symbol: string]: VOMarket } } = await this.store.select(this.exchange + '-markets');
 
     if (marketsData && marketsData.timestamp && marketsData.timestamp > timeout) {
       this.marketsData = marketsData;
@@ -61,7 +66,7 @@ export abstract class ApiPublicAbstract {
     this.marketsData = {
       timestamp: Date.now(),
       markets: markets
-    }
+    };
     await this.store.upsert(this.exchange + '-markets', this.marketsData);
     return markets;
 
@@ -69,12 +74,12 @@ export abstract class ApiPublicAbstract {
 
   marketsTimestamp: number = 0;
 
-  getLastMinuteCandle(market: string):Promise<VOCandle>{
+  getLastMinuteCandle(market: string): Promise<VOCandle> {
     return this.downloadCandles(market, '1m', 1).then(res => res[0])
 
   }
 
-  downloadCandles(market:string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]>{
+  downloadCandles(market: string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]> {
 
     return null;
   }
@@ -83,38 +88,77 @@ export abstract class ApiPublicAbstract {
     return Promise.resolve([]);
   }
 
-  refreshBooks(market:string){
-    if(this.booksProgress) return;
+  refreshBooks(market: string) {
+    if (this.booksProgress) return;
     this.booksProgress = true;
     const ar = market.split('_');
     this.downloadBooks(ar[0], ar[1]).subscribe(res => {
       this.booksSub.next(res);
       this.booksProgress = false;
-    }, err =>{
+    }, err => {
       this.booksProgress = false;
     });
   }
+
   booksProgress = false;
   booksSub = new BehaviorSubject<VOBooks>(null);
-  books$(market: string){
+
+  books$(market: string) {
     const books = this.booksSub.getValue();
-    if(!books || books.market !== market) this.refreshBooks(market);
-    return  this.booksSub.asObservable();
+    if (!books || books.market !== market) this.refreshBooks(market);
+    return this.booksSub.asObservable();
   }
-  hasSocket(){
+
+  hasSocket() {
     return false;
   }
-  getTradesSocket(): SocketBase{
+
+  getTradesSocket(): SocketBase {
     return this.socket;
   }
+
   downloadBooks2(market: string) {
     const ar = market.split('_');
     return this.downloadBooks(ar[0], ar[1]);
   }
+
   downloadOrders(market) {
     const ar = market.split('_');
     return this.downloadMarketHistory(ar[0], ar[1]);
   }
+
+  isTicker;
+
+  startRefrshTicker() {
+    if (this.isTicker) return;
+    this.isTicker = true;
+    this.refreshTicker();
+    setInterval(() => this.refreshTicker(), 6e4)
+  }
+
+  async refreshTicker() {
+    const tickers = await this.downloadTicker().toPromise();
+    this.ticker5minSub.next(tickers);
+    return tickers;
+  }
+
+  private ticker5minSub: BehaviorSubject<{ [market: string]: VOMarket }> = new BehaviorSubject<{ [market: string]: VOMarket }>(null);
+
+  ticker5min$(market: string) {
+    return this.ticker5minSub.asObservable().map(function (o) {
+      if (o) return o[market];
+    })
+  }
+
+  async getMarketTicker(market: string) {
+    this.startRefrshTicker();
+    return new Promise((resolve, reject) => {
+      this.ticker5min$(market).subscribe(ticker => {
+        if (ticker) resolve(ticker);
+      })
+    })
+  }
+
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 
   abstract downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]>;
@@ -124,7 +168,7 @@ export abstract class ApiPublicAbstract {
 
   abstract getMarketUrl(base: string, coin: string): string;
 
-  getMarketURL(market:string): string{
+  getMarketURL(market: string): string {
     const ar = market.split('_');
     return this.getMarketUrl(ar[0], ar[1]);
   }

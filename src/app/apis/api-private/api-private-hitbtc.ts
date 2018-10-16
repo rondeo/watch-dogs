@@ -51,7 +51,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     });
   }
 
-  getAllOpenOrders(): Observable<VOOrder[]> {
+  downloadAllOpenOrders(): Observable<VOOrder[]> {
     const url = 'api/hitbtc/order'
     return this.call(url, null).map(res => {
       console.log('getAllOpenOrders', res);
@@ -151,7 +151,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   }
 
 
-  buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+ async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder> {
 
     if (base === 'USDT') base = 'USD';
 
@@ -161,7 +161,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       quantity: quantity,
       price: rate,
       symbol: coin + base
-    }
+    };
 
     return this.call(url, data)
       .map((res: any) => {
@@ -176,7 +176,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           rate: +res.price,
           status: res.status
         }
-      });
+      }).toPromise();
 
   }
 

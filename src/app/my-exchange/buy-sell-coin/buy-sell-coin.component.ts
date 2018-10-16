@@ -221,8 +221,9 @@ export class BuySellCoinComponent implements OnInit {
       'Fee: $' + feeUS;
 
     if (confirm(msg)) {
-      this.placeOrder(action, base, coin, rate, amountCoin)
+     /* this.placeOrder(action, base, coin, rate, amountCoin)
         .subscribe((order) => this.onResult(order), (err) => this.onError(err))
+        */
     }
   }
 
@@ -262,6 +263,7 @@ export class BuySellCoinComponent implements OnInit {
     this.snackBar.open('Error ' + msg, 'x', {extraClasses: 'alert-red'});
   }
 
+/*
   placeOrder(action: string, base: string, coin: string, rate: number, amountCoin: number): Observable<VOOrder> {
     let obs: Observable<VOOrder>;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
@@ -269,6 +271,7 @@ export class BuySellCoinComponent implements OnInit {
     else if (action === 'BUY') obs = api.buyLimit(base, coin, amountCoin, rate);
     return obs;
   }
+*/
 
   onAmountChanged(amount: number) {
     this.amountUS = amount;

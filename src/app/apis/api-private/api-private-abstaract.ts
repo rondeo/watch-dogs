@@ -104,7 +104,7 @@ export abstract class ApiPrivateAbstaract {
   refreshBalancesInterval;
 
   startRefreshBalances(delay?: number) {
-    if (!delay) delay = 10;
+    if (!delay) delay = 60;
     if (this.refreshBalancesInterval) return;
     this.refreshBalancesInterval = setInterval(() => this.refreshBalances(), delay * 1000);
   }
@@ -125,8 +125,11 @@ export abstract class ApiPrivateAbstaract {
     }
   }
 
+  getAllOpenOrders(): VOOrder[]{
+    return  this.openOrdersSub.getValue();
+  }
 
-  allOpenOrders$(){
+  allOpenOrders$(): Observable<VOOrder[]>{
     const orders = this.openOrdersSub.getValue();
     if(!orders) this.refreshAllOpenOrders();
     return this.openOrdersSub.asObservable();
@@ -162,16 +165,16 @@ export abstract class ApiPrivateAbstaract {
       console.warn(' refreshing ')
       return;
     }
+
     this.isRefershOpenOrders = true;
-    this.getAllOpenOrders().subscribe(res => {
+    this.downloadAllOpenOrders().subscribe(res => {
       this.isRefershOpenOrders = false;
       if (res.length) {
         clearTimeout(this.refreshOrdersTimeout);
         this.refreshOrdersTimeout = setTimeout(() => {
-         // console.log(' refreshAllOpenOrders by timeout  ');
+         //  console.log(' refreshAllOpenOrders by timeout  ');
           this.refreshAllOpenOrders();
-
-        }, 30000);
+        }, 60000);
       }
       else console.log(' stop refreshing open orders ');
       // const old: VOOrder[] = this.openOrdersSub.getValue();
@@ -204,6 +207,9 @@ export abstract class ApiPrivateAbstaract {
   }
 
 
+  balances$(){
+    return this.balancesSub.asObservable();
+  }
   balance$(symbol: string): Observable<VOBalance> {
     const sub: Subject<VOBalance> = new Subject<VOBalance>();
     this.balancesSub.asObservable().subscribe(balances => {
@@ -243,7 +249,7 @@ export abstract class ApiPrivateAbstaract {
   buyLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
     return new Promise((resolve, reject) => {
-      this.buyLimit(ar[0], ar[1], quantity, rate).subscribe(order => {
+      this.buyLimit(ar[0], ar[1], quantity, rate).then(order => {
         resolve(order);
         this.refreshAllOpenOrders();
         this.refreshBalances();
@@ -274,7 +280,7 @@ export abstract class ApiPrivateAbstaract {
 
   abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
 
-  abstract buyLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
+  abstract  async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder>
 
   resetCredetials() {
     this.credentials = null;
@@ -300,7 +306,7 @@ export abstract class ApiPrivateAbstaract {
     return null;
   }
 
-  getAllOpenOrders(): Observable<VOOrder[]> {
+  downloadAllOpenOrders(): Observable<VOOrder[]> {
     return null;
   }
 

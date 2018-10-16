@@ -3,6 +3,7 @@ import {ApisPrivateService} from '../../apis/apis-private.service';
 import {VOOrder} from '../../models/app-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import * as moment from 'moment';
+import {OpenOrdersService} from '../../apis/open-orders/open-orders.service';
 
 @Component({
   selector: 'app-open-orders',
@@ -25,6 +26,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private sub;
+  private sub2
 
   ngOnInit() {
   }
@@ -36,25 +38,26 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   timeout;
   lastCall = 0;
 
+  allOrders: VOOrder[];
 
-allOrders: VOOrder[];
-  subscribe(){
-    if(this.sub) this.sub.unsubscribe();
+  subscribe() {
+    if (this.sub) this.sub.unsubscribe();
     if (!this.exchange) return;
+
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    api.allOpenOrders$().subscribe(orders =>{
-      if(!orders) return;
+    api.allOpenOrders$().subscribe(orders => {
+      if (!orders) return;
       this.orders = orders;
     });
-
   }
+
   onCancelOrderClick(order: VOOrder) {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const id = order.uuid;
     if (id) {
       const msg = [order.action, order.coin, order.amountUS, order.priceUS].join(' ');
       if (confirm('You want to cancel order ' + msg)) {
-        api.cancelOrder2(id, order.base +'_'+ order.coin).then(res => {
+        api.cancelOrder2(id, order.base + '_' + order.coin).then(res => {
           this.orderCanceled.emit(order);
         })
       }
@@ -64,12 +67,13 @@ allOrders: VOOrder[];
   onOrderMarketClick(market: string) {
     this.externalPages.showMarket(this.exchange, market);
   }
-  ngOnDestroy(){
-    if(this.sub) this.sub.unsubscribe();
+
+  ngOnDestroy() {
+    if (this.sub) this.sub.unsubscribe();
 
   }
 
-  onRefreshClick(){
+  onRefreshClick() {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     api.refreshAllOpenOrders();
   }

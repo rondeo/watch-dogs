@@ -12,6 +12,7 @@ import {MarketCapService} from './market-cap/services/market-cap.service';
 
 import {LoginExchangeComponent} from './material/login-exchange/login-exchange.component';
 import {AppBotsService} from './app-services/app-bots-services/app-bots.service';
+import {OpenOrdersService} from './apis/open-orders/open-orders.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private botsService: AppBotsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private followOrders: OpenOrdersService
   ) {
   }
 
@@ -71,6 +73,8 @@ export class AppComponent implements OnInit {
       this.imageClass = res ? '' : 'glow-red';
       this.bgColor = res ? '' : 'bg-red';
     });
+
+    this.followOrders.follow('binance');
   }
 
   onDogClick() {

@@ -65,7 +65,7 @@ export class ApisPublicService {
 
   }
 
-  downloadTickers(exchanges: string[]) {
+ /* downloadTickers(exchanges: string[]) {
     const subs = [];
     exchanges.forEach(async (item) => {
       const api = this.getExchangeApi(item);
@@ -73,7 +73,7 @@ export class ApisPublicService {
     });
     return forkJoin(subs);
   }
-
+*/
 
   async downloadMarketHistory(exchanges: string[], base: string, coin: string): Promise<any> {
     return new Promise((resolve, reject) => {

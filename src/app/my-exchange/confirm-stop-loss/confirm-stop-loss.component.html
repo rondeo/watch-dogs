@@ -3,6 +3,15 @@
         {{msg}}
     </mat-card-title>
     <mat-card-content>
+        <mat-slider
+                [thumb-label]="true"
+                color="primary"
+                (change)="onSladerChange($event)"
+                [max]="3"
+                [min]="0.3"
+                [step]="0.3"
+                [value]="1.2"
+        ></mat-slider>
         <div>
             <mat-form-field class="w6">
                 <input matInput placeholder="Trigger Price"

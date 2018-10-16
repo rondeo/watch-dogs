@@ -10,7 +10,8 @@ export class ConfirmStopLossComponent implements OnInit {
 
   stopPrice: number;
   sellPrice: number;
-  msg:string
+  fromRate: number;
+  msg:string;
 
   constructor(
     private dialogRef: MatDialogRef<{ triggerPrice: string, setPrice: string}>,
@@ -18,10 +19,8 @@ export class ConfirmStopLossComponent implements OnInit {
   ) {
     this.msg = data.msg;
     let rate = data.rate;
-    const l = data.rate.toString().length;
-    rate = +(rate - (rate * 0.005)).toString().substr(0, l);
-    this.stopPrice = rate;
-    this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
+    this.fromRate = data.rate;
+    this.setRate(1.2);
   }
 
   ngOnInit() {
@@ -43,6 +42,19 @@ export class ConfirmStopLossComponent implements OnInit {
     const rate = this.stopPrice;
     const l = rate.toString().length;
     this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
+
+  }
+  setRate(percent: number){
+    percent = percent/100;
+    let rate = this.fromRate;
+    const l = rate.toString().length;
+    rate = +(rate - (rate * percent)).toString().substr(0, l);
+    this.stopPrice = rate;
+    this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
+  }
+
+  onSladerChange(evt){
+    this.setRate(evt.value);
 
   }
 }

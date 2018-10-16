@@ -15,14 +15,19 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
   exchange = 'binance';
 
+  static instance: ApiPublicBinance
+
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
+    ApiPublicBinance.instance = this;
   }
 
   hasSocket(){
     this.socket = new BinanceTradesSocket();
     return true;
   }
+
+
   getMarketUrl(base:string, coin: string): string{
     return 'https://www.binance.com/trade.html?symbol={{coin}}_{{base}}'
       .replace('{{base}}', base).replace('{{coin}}', coin);
@@ -38,7 +43,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     };
     if(endTime) params.endTime = endTime;
     const url = '/api/proxy/https://api.binance.com/api/v1/klines';
-    console.log(url);
+   // console.log(url);
    return await this.http.get(url, {params}).map((res: any[]) => {
      //  console.log(res);
       return res.map(function (item) {
@@ -185,7 +190,6 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       }
     }, console.error).do(res =>{
       const orders = res.sell;
-      UTILS.setDecimals(this.exchange, base, coin, orders);
     });
   }
 
@@ -258,5 +262,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       stamps
     }
   }
+
+
 
 }

@@ -81,7 +81,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   subscribe() {
     const ar = this.market.split('_');
 
-    const hist = this.candleService.getCandlesHist(this.exchange, this.market);
+    /*const hist = this.candleService.getCandlesHist(this.exchange, this.market);
     hist.candles$().subscribe(candles=>{
       if(!candles) return;
       //console.log(' NEW CANDLES ', _.last(candles));
@@ -93,7 +93,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       });
       this.drawSignals();
     });
-
+*/
 
 
     const ctr = this.marketsHistory.getOrdersHistory(this.exchange, this.market);

@@ -154,7 +154,7 @@ export class MyBuySellComponent implements OnInit {
     if (!await this.confirm(msg)) return;
     try {
 
-      const order = await api.buyLimit2(this.market, amount, rateBuy)
+      const order = await api.buyLimit2(this.market, amount, rateBuy);
       const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
@@ -228,7 +228,7 @@ export class MyBuySellComponent implements OnInit {
 
       const percent = MATH.percent(rate, this.bookSell);
 
-      let msg;
+      let msg= 'STOP LOSS';
 
       if (coinAmount * priceCoin < 10) msg = 'Not enough amount';
 

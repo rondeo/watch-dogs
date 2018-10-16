@@ -85,7 +85,7 @@ export class AnalyzeCoinComponent implements OnInit {
         this.coinPriceMC = MC[coin].price_usd;
         this.coinMC = MC[coin];
         this.baseMC = MC['BTC'];
-        this.allMarkets = res;
+        this.subscribedMarkets = res;
       })
     })*/
 

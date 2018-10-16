@@ -10,7 +10,6 @@ import * as moment from 'moment';
 import {StorageService} from '../../services/app-storage.service';
 import {Router} from '@angular/router';
 import {ScanMarketsService} from '../../app-services/scanner/scan-markets.service';
-import {ScannerMarkets} from '../../app-services/scanner/scanner-markets';
 import {Subscription} from 'rxjs/Subscription';
 import {DialogInputComponent} from '../../material/dialog-input/dialog-input.component';
 import {CandlesStats} from '../../app-services/scanner/candles-stats';
@@ -43,6 +42,13 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private router: Router,
     private scanner: ScanMarketsService
   ) {
+
+
+   /* this.apisPublic.getExchangeApi('binance').startRefrshTicker();
+
+    this.apisPublic.getExchangeApi('binance').ticker5min$('BTC_KMD').subscribe(ticker =>{
+      console.log(ticker);
+    })*/
   }
 
   sub1: Subscription;
@@ -53,16 +59,48 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
    this.initAsync();
   }
 
-  async initAsync(){
+  onExcludeClick(evt){
+    console.log(evt);
+    const market = evt.item.market
 
-    await this.subscribe();
-    if(!this.isRunning) this.onStartClick();
-    else {
-      const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
-     this.setAvaliableCoins(scanner.markets)
+    if(evt.prop === 'market'){
+      this.showMarket(market);
+    } else if(evt.prop ==='x') {
+      this.scanner.removeExclude(this.exchange, market).then(()=>{
+        this.showExcludes();
+      })
     }
 
+  }
+  onExcludesClick(){
+    if(!this.excludes) this.showExcludes();
+    else this.hideExcludes();
+  }
+  excludes: any[];
 
+  async showExcludes(){
+   this.excludes = ((await this.scanner.getExcludes(this.exchange)) || [])
+     .map(function (o) {
+     return {
+       market:o.market,
+       reason: o.reason,
+       postpone:moment(o.postpone).format('DD HH:mm'),
+       x:'X'
+     }
+   })
+  }
+  hideExcludes(){
+    this.excludes = null;
+  }
+  async initAsync(){
+    const sub = await this.scanner.notifications$();
+    this.sub1 = sub.subscribe(notes => {
+      this.notifications = notes;
+    });
+    this.sub2 = this.scanner.currentResult$().subscribe(curr =>{
+
+      this.currentData = [curr];
+    })
   }
 
   ngOnDestroy() {
@@ -86,7 +124,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       return MC[o] || new VOMarketCap({symbol: o});
     })
   }
-
+/*
   async subscribe() {
     this.unsubscribe();
     const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
@@ -108,7 +146,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         this.isRunning = run;
       })
 
-  }
+  }*/
 
   analizeMarket: string;
   analizeTime: string;
@@ -165,15 +203,15 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.selectedCoin = ar[1];
     this.selectedMarket = market;
 
-    const scanner: ScannerMarkets = this.scanner.getScanner('binance');
+
     if (prop === 'x') {
 
       const ref = this.dialog.open(DialogInputComponent, {data:{message:'Suspend market for hours', userInput: '3'}});
       ref.afterClosed().subscribe(res =>{
         if(res){
           const suspend = +res.userInput;
-          if(isNaN(suspend)) scanner.deleteMarket(market);
-          else scanner.addExclude(market, 'user ' + suspend + 'h', suspend);
+          if(isNaN(suspend)) this.scanner.deleteNotification(this.exchange, market);
+          else this.scanner.addExclude(this.exchange, market, 'user ' + suspend + 'h', suspend);
         }
       })
 
@@ -182,30 +220,36 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + this.market);
     }
     if (prop === 'market') {
+      this.showMarket(market);
       // console.log(candles);
       // console.log(market);
 
-      this.scanner.getScanner(this.exchange).getCandles(market)
-        .then(res => {
-         //  console.log(res);
-          if (!res) {
-            console.error(' no candles for ' + market)
-            return
-          }
-
-          res = _.clone(res);
-
-          // const api = this.apisPublic.getExchangeApi(this.exchange)
-          // api.downloadCandles(market, scanner.interval, 200).then(res => {
-          //  console.log(res);
-          this.candles = res;
-          this.volumes = res.map(function (o) {
-            return o.open > o.close ? -o.Volume : o.Volume;
-          })
-          this.analize(this.candles, market)
-        });
-      this.openMarket(this.exchange, market);
     }
+  }
+
+  showMarket(market: string) {
+
+
+    this.scanner.getCandles(this.exchange, market)
+      .then(res => {
+        //  console.log(res);
+        if (!res) {
+           console.log(' no candles for ' + market);
+          this.candles = null;
+          this.volumes = null;
+          return
+        }
+        res = _.clone(res);
+        // const api = this.apisPublic.getExchangeApi(this.exchange)
+        // api.downloadCandles(market, scanner.interval, 200).then(res => {
+        //  console.log(res);
+        this.candles = res;
+        this.volumes = res.map(function (o) {
+          return o.open > o.close ? -o.Volume : o.Volume;
+        })
+        this.analize(this.candles, market)
+      });
+    this.openMarket(this.exchange, market);
   }
 
   async analize(candles: VOCandle[], market: string) {
@@ -231,21 +275,21 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   onClearMemoryClick() {
-    if (confirm('Remove all data? ')) this.scanner.getScanner(this.exchange)
-      .clearMemory()
+    if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
       .then(res => {
+        this.scanner.notifications(this.exchange)
         this.snackBar.open('Memory cleared', 'x', {duration: 3000});
       })
 
   }
 
   onStartClick() {
-    const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
+   /* const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
     if (this.isRunning) scanner.stopScan();
     else scanner.start(['BTC'])
       .then(markets => {
         //  console.log(markets);
         this.setAvaliableCoins(markets);
-      });
+      });*/
   }
 }

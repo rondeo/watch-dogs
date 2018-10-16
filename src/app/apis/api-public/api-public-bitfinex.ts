@@ -28,9 +28,9 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
   downloadCandles(market:string, interval: string, limit: number, to: number): Promise<VOCandle[]>{
     market = market.replace('USDT','USD').split('_').reverse().join('');
 
-    const url = 'api/proxy-1min/https://api.bitfinex.com/v2/candles/trade:'+interval+':t'+
+    const url = 'api/proxy/https://api.bitfinex.com/v2/candles/trade:'+interval+':t'+
       market+'/hist';
-    console.log(url);
+   // console.log(url);
     const params:any = {
      limit:String(limit)
     };
@@ -62,7 +62,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     if(!to) delete params.end;
     if(base === 'USDT') base = 'USD';
 
-    const url = 'api/proxy-1min/https://api.bitfinex.com/v2/candles/trade:5m:t'
+    const url = 'api/proxy/https://api.bitfinex.com/v2/candles/trade:5m:t'
       +coin+base+'/hist?limit='+limit+'?'+UTILS.toURLparams(params);
     console.log(url);
     return this.http.get(url).map((res: any[]) => {

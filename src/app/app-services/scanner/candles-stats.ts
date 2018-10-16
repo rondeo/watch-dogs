@@ -28,7 +28,7 @@ export class CandlesStats {
 
     const prelast = candles[n - 2];
 
-    if ((last.to - last.from) !== (prelast.to - prelast.from)) console.error(' not full last ', last, prelast)
+    // if ((last.to - last.from) !== (prelast.to - prelast.from)) console.error(' not full last ', last, prelast)
 
 
     const vols = candles.map(function (o) {
@@ -38,11 +38,14 @@ export class CandlesStats {
     const closes = candles.map(function (o) {
       return o.close;
     });
+/*
+    const tradesNums = candles.map(function (o) {
+      return o.Trades;
+    });
 
+    const tradesNumsMed = MATH.median(tradesNums)*/;
 
     const minClose = _.min(closes);
-
-
 
 
 
@@ -60,7 +63,7 @@ export class CandlesStats {
 
     // const price20 = _.mean(closes.slice(-20).slice(0, 10));
     // const avg10 = _.mean(closes.slice(-10));
-    // const medV = MATH.median(vols);
+   //  const medV = MATH.median(vols);
 
     const meanV = Math.round(_.mean(vols));
 
@@ -70,9 +73,24 @@ export class CandlesStats {
 
     // const PD1h = MATH.percent(avg10, price20);  // MATH.percent(LH, maxPrice);
     // console.log(market, avg10, medPrice)
+    const maxVolumeCandle =  _.first(sortedVol);
+
+    //const tempSup = maxVolumeCandle.low;
+   // const tempRes = maxVolumeCandle.high;
+
+
+    //const BtempSup = MATH.percent(last.close, tempSup);
+   // const BtempRes = MATH.percent(last.close, tempRes);
+
+     const maxVperc = MATH.percent(maxVolumeCandle.Volume, meanV);
+    //if(BtempSup < 0 || BtempRes > 0)
+     // console.log(market + ' ' + maxVperc, maxVolumeCandle);
+    const P = last.high;
+
     const PDmed = MATH.percent(last.high, medPrice);
+
     const PDprev = MATH.percent(last.close, prev.close);
-    const PDall = MATH.percent(last.close, first.close)
+    const PDall = MATH.percent(last.close, first.close);
 
     const V3 = Math.round(_.sum(_.takeRight(vols, 3))/3);
 
@@ -104,7 +122,7 @@ export class CandlesStats {
 
     const AMPL = MATH.percent(last.close, minClose);
 
-    const data = {time, ts, market, rank, BrRes, PDprev, PDmed, PDall, AMPL, VD3, VI, S, x};
+    const data = {time, ts, market, rank, BrRes, PDprev, PDmed, PDall, AMPL, VD3, VI, S,P, x};
 
 
     const myData = {

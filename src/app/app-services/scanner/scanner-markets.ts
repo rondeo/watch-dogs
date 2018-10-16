@@ -13,13 +13,14 @@ import {VOMarketCap} from '../../models/app-models';
 import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 import {CandlesStats} from './candles-stats';
 
-export class ScannerMarkets {
+export class ScannerMarketsOld {
   runningSub = new BehaviorSubject(false);
   exchange: string;
   //  notifications: any[];
   markets: string[];
   interval: string = '5m';
-  userExclude: string[] = ['BTC_DENT'];
+
+  userExclude: string[] = ['BTC_BCN','BTC_STORM','BTC_GRS','BTC_SC','BTC_DENT','BTC_NPXS', 'BTC_NCASH', 'BTC_EOS','BTC_ETH','BTC_PAX', 'BTC_XMR', 'BTC_BCH', 'BTC_BCC'];
   MC: VOMCObj;
   candles: { [index: string]: VOCandle[] };
   _coinsAvailable: string[] = [];
@@ -56,17 +57,17 @@ export class ScannerMarkets {
     this.storage.remove('candles-' + this.exchange + market + this.interval);
   }
 
-  async nextMarket(market: string):Promise<any> {
+  async nextMarket(market: string): Promise<any> {
     console.log(moment().format('HH:mm') + market);
     localStorage.setItem('last-market' + this.exchange, market);
     const candles = await this.getCandles(market);
     this.ctr(candles, market);
     const nextMarket = await this.getMarketAfter(market);
-    this.timeout = setTimeout(()=>{
+    this.timeout = setTimeout(() => {
       this.nextMarket(nextMarket)
     }, 15000);
 
-   return null;
+    return null;
   }
 
   async getCandles(market: string) {
@@ -75,8 +76,10 @@ export class ScannerMarkets {
     const now: number = Date.now();
     if (candles) {
       //if(!candles[0].time)
-        candles.forEach(function (o) { o.time = moment(o.to).format('DD HH:mm'); });
-      let newcandels: VOCandle[] = await this.api.downloadCandles(market, this.interval, 5);
+      candles.forEach(function (o) {
+        o.time = moment(o.to).format('DD HH:mm');
+      });
+      let newcandels: VOCandle[] = await this.api.downloadCandles(market, this.interval, 10);
       newcandels.forEach(function (o) {
         o.time = moment(o.to).format('HH:mm');
       });
@@ -88,6 +91,9 @@ export class ScannerMarkets {
       candles = _.takeRight(candles.concat(newcandels), 200);
     } else {
       candles = await this.api.downloadCandles(market, this.interval, 200);
+      candles.forEach(function (o) {
+        o.time = moment(o.to).format('HH:mm');
+      })
     }
 
     await this.storage.upsert('candles-' + this.exchange + market + this.interval, candles);
@@ -97,15 +103,15 @@ export class ScannerMarkets {
   async ctr(candles: VOCandle[], market: string) {
     const MC = this.MC[market.split('_')[1]];
 
-    const data =  await CandlesStats.analyze(candles, market, MC);
+    const data = await CandlesStats.analyze(candles, market, MC);
 
     this.currentMarketSub.next(data);
     //const BR = data.BrRes;
-    if(data.AMPL > 10) {
+    if (data.AMPL > 10) {
       this.addExclude(market, 'AMPL ' + data.AMPL, 24);
-    }else if (data.BrRes < -5) {
+    } else if (data.BrRes < -5) {
       this.addExclude(market, 'BR ' + data.BrRes, 3);
-    }else if (data.BrRes > 0 &&  data.PDprev > 0) {
+    } else if (data.BrRes > 0) {
       this.notify(data);
       // console.log(lastHigh, lastV);
       // console.log(maxPrice, medV, meanV);
@@ -134,11 +140,16 @@ export class ScannerMarkets {
   }*/
 
 
-
-
   timeout;
 
- async addExclude(market: string, reason: string, hours: number) {
+
+  async removeExclude(market: string) {
+    let excludes = (await this.getExcludes()) || [];
+    excludes = _.reject(excludes, {market});
+   await this.saveExcludes(excludes)
+  }
+
+  async addExclude(market: string, reason: string, hours: number) {
     console.log('ADD EXCLUDE ', market, reason, hours);
     const postpone = moment().add(hours, 'hours').valueOf();
 
@@ -183,7 +194,7 @@ export class ScannerMarkets {
       return o.postpone > now;
     });
 
-    if(excludes1.length !==excludes.length) this.saveExcludes(excludes);
+    if (excludes1.length !== excludes.length) this.saveExcludes(excludes);
 
     const exls = excludes.map(function (o) {
       return o.market;
@@ -194,7 +205,7 @@ export class ScannerMarkets {
 
 
     let ind = available.indexOf(market);
-    if(ind === -1 || ind === available.length -1) ind = 0;
+    if (ind === -1 || ind === available.length - 1) ind = 0;
     else ind++;
     console.log('available ' + available.length);
     return available[ind];
@@ -225,14 +236,14 @@ export class ScannerMarkets {
   }*/
 
 
-
+/*
   async start(includeBase: string[]): Promise<string[]> {
     if (this.runningSub.getValue()) return Promise.resolve(this.markets);
     this.excludeMarkets = (await this.storage.select('exclude-markets-' + this.exchange)) || [];
 
     const data = await this.api.getMarkets();
-    const allMarkets = Object.keys(data);
-    this.markets = allMarkets.filter(function (o) {
+    const subscribedMarkets = Object.keys(data);
+    this.markets = subscribedMarkets.filter(function (o) {
       return includeBase.indexOf(o.split('_')[0]) !== -1;
     });
 
@@ -240,12 +251,13 @@ export class ScannerMarkets {
     await this.notifications();
 
     let market = localStorage.getItem('last-market' + this.exchange);
-    if(!market) market = this.markets[0];
-   this.nextMarket(market);
+    if (!market) market = this.markets[0];
+    this.nextMarket(market);
     // this.downloadNext(i);
     this.runningSub.next(true);
     return this.markets;
   }
+*/
 
   current$() {
     return this.currentMarketSub.asObservable();
@@ -284,5 +296,10 @@ export class ScannerMarkets {
 
   async getExcludes() {
     return this.storage.select('exclude-markets-' + this.exchange);
+  }
+
+  onCandles(data: { exchange: string; market: string; candles: VOCandle[] }) {
+
+
   }
 }

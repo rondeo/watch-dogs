@@ -31,6 +31,9 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
   startTime: string;
   endTime: string;
+  timeDiff: string;
+
+
 
   fishes:VOOrder[];
   constructor(
@@ -67,6 +70,11 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
    // this.downloadHistory();
   }
+
+  download(){
+
+  }
+
 
   isProgress = false;
   timeout;
@@ -107,8 +115,10 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     let priceBaseUS = 1;
     const from = ordersHistory[0].timestamp;
     const to = ordersHistory[ordersHistory.length -1].timestamp;
+
     this.endTime = moment(to).format('HH:mm');
     this.startTime = moment(from).format('HH:mm');
+    this.timeDiff = moment.duration(moment(to).diff(moment(from))).asMinutes().toFixed(2);
 
     if(base !=='USDT') priceBaseUS = MC[base].price_usd;
     let bought = 0;

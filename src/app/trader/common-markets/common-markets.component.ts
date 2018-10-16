@@ -45,7 +45,7 @@ export class CommonMarketsComponent implements OnInit {
 
   async initAsync() {
     const allMarkets = await this.apiPublic.getAllMarkets();
-    // console.log(allMarkets);
+    // console.log(subscribedMarkets);
 
     const indexed = {};
     allMarkets.forEach(function (item) {
@@ -64,8 +64,8 @@ export class CommonMarketsComponent implements OnInit {
     })
 
     this.onExchnageChange(null);
-    /*this.allMarkets = allMarkets;
-    const marketsNames = allMarkets.map(function (item) {
+    /*this.subscribedMarkets = subscribedMarkets;
+    const marketsNames = subscribedMarkets.map(function (item) {
       return Object.keys(item);
     })*/
 
@@ -113,7 +113,7 @@ export class CommonMarketsComponent implements OnInit {
     })
 
 
-    /* const selectedExchanges = this.allMarkets.filter(function (item) {
+    /* const selectedExchanges = this.subscribedMarkets.filter(function (item) {
        return item
      })*/
 

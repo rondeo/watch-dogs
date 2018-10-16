@@ -16,29 +16,35 @@ export class UTILS {
     }, {obj: obj}).join('&');
   }
 
-  static setDecimals(exchange: string, base: string, coin: string, orders: { amountCoin: string, rate: string }[]) {
-    if (!UTILS.decimals[exchange + base + coin]) {
-      let maxRate = 0;
-      let maxAmount = 0;
-      // console.log(orders);
-      orders.forEach(function (item) {
-        let ar = String(item.rate).split('.');
-        if (ar.length === 2) {
-          const decRate = ar[1].length;
-          if (decRate > maxRate) maxRate = decRate;
-        }
-        ar = String(item.amountCoin).split('.');
-        if (ar.length === 2) {
-          const decAm = ar[1].length;
-          if (decAm > maxAmount) maxAmount = decAm;
-        }
-      })
+  static getDecimals (market: string) {
 
-      const val = {
-        rateDecimals: maxRate,
-        amountDecimals: maxAmount
+  }
+
+  static parseDecimals(data:{ amountCoin: string, rate: string }[]) {
+    let maxRate = 0;
+    let maxAmount = 0;
+    // console.log(orders);
+    data.forEach(function (item) {
+      let ar = String(item.rate).split('.');
+      if (ar.length === 2) {
+        const decRate = ar[1].length;
+        if (decRate > maxRate) maxRate = decRate;
       }
-      UTILS.decimals[exchange + base + coin] = val;
+      ar = String(item.amountCoin).split('.');
+      if (ar.length === 2) {
+        const decAm = ar[1].length;
+        if (decAm > maxAmount) maxAmount = decAm;
+      }
+    });
+
+    return {
+      rateDecimals: maxRate,
+      amountDecimals: maxAmount
+    };
+  }
+  static setDecimals(exchange: string, market: string, orders: { amountCoin: string, rate: string }[]) {
+    if (!UTILS.decimals[exchange + market]) {
+      UTILS.decimals[exchange + market] = UTILS.parseDecimals(orders)
       // console.log('setting decimals ' + exchange + base + coin, val);
     }
   }
@@ -55,14 +61,19 @@ export class UTILS {
     data.rate = +data.rate.toFixed(val.rateDecimals);
   }
 
-  static formatDecimals(exchange: string, base: string, coin: string, data: { amountCoin: number, rate: number }) {
-    if (!UTILS.decimals[exchange + base + coin]) {
-      throw new Error(' no formatter for ' + exchange + base + coin);
+  static  formatDecimals(exchange: string, market, data: { amountCoin: number, rate: number }) {
+    if (!UTILS.decimals[exchange + market]) {
+
+      throw new Error(' no formatter for ' + exchange + market);
     }
-    const val = UTILS.decimals[exchange + base + coin];
+
+    const val = UTILS.decimals[exchange + market];
     const amountDecimals = val.amountDecimals;
     data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
     data.rate = +data.rate.toFixed(val.rateDecimals);
+    return {
+
+    };
   }
 
 
