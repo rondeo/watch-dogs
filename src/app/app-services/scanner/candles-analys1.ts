@@ -5,13 +5,15 @@ import {MATH} from '../../com/math';
 import * as moment from 'moment';
 import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 
-export class CandlesStats {
+export class CandlesAnalys1 {
   static analysData;
   static data;
 
-  static async analyze(candles: VOCandle[], market: string, MC: VOMarketCap) {
+  static async analyze(data: { exchange: string, market: string, candles: VOCandle[] }, coinMC: VOMarketCap, addExclude, notify) {
+    const exchange = data.exchange;
+    const market = data.market;
+    const candles = data.candles;
     const n = candles.length;
-    const coin = market.split('_')[1];
     let last = _.last(candles);
     let first = _.first(candles);
 
@@ -22,7 +24,7 @@ export class CandlesStats {
 
     const sortedPrice = _.orderBy(candles, 'close').reverse();
 
-    const VI = sortedVol.indexOf(prev);
+   // const VI = sortedVol.indexOf(prev);
 
 
 
@@ -85,44 +87,50 @@ export class CandlesStats {
      const maxVperc = MATH.percent(maxVolumeCandle.Volume, meanV);
     //if(BtempSup < 0 || BtempRes > 0)
      // console.log(market + ' ' + maxVperc, maxVolumeCandle);
-    const P = last.high;
 
-    const PDmed = MATH.percent(last.high, medPrice);
 
-    const PDprev = MATH.percent(last.close, prev.close);
-    const PDall = MATH.percent(last.close, first.close);
+    const Pmed = MATH.percent(last.high, medPrice);
+
+    const Pprev = MATH.percent(last.close, prev.close);
+    const Pall = MATH.percent(last.close, first.close);
 
     const V3 = Math.round(_.sum(_.takeRight(vols, 3))/3);
 
-    const VD3 = MATH.percent(V3, meanV);// MATH.percent(lastV, meanV);
+    const PV3 = MATH.percent(V3, meanV);// MATH.percent(lastV, meanV);
     // const VMD = MATH.percent(lastV, medV);
 
     const time = moment().format('HH:mm');
     const ts = moment(last.to).format('HH:mm');
     const x = 'x';
-    const rank = MC ? MC.rank : -1;
+    const rank = coinMC ? coinMC.rank : -1;
     const resSup: ResistanceSupport = new ResistanceSupport(candles);
 
     let resistance:VOCandle[] =  await resSup.getResistance(candles.slice(0,-1));
+
     resistance = _.take(_.orderBy(resistance, 'high').reverse(), 3);
 
    let resist= _.map(resistance,'high');
 
-   const RS = resistance.map(function (o) {
+   /*const RS = resistance.map(function (o) {
      return o.high + ' ' + o.time;
    })
+*/
 
+    const resAvg = _.last(resist);//_.mean(resist);
+    const resFirst = _.first(resist);
 
-    const resAvg = _.mean(resist);
 
     const BrRes =  MATH.percent(last.high, resAvg);
 
+    const FstRes = MATH.percent(last.high, resFirst);
+
+    const P = last.high;
 
     // console.log(last.high, resAvg, BR);
 
     const AMPL = MATH.percent(last.close, minClose);
 
-    const data = {time, ts, market, rank, BrRes, PDprev, PDmed, PDall, AMPL, VD3, VI, S,P, x};
+    const out = {time, ts, market, rank, BrRes,FstRes, Pprev, Pmed, Pall, AMPL, PV3, S,P, x};
 
 
     const myData = {
@@ -136,9 +144,28 @@ export class CandlesStats {
       closes
     }
 
-    CandlesStats.data = data;
-    CandlesStats.analysData = myData;
-    return data
+    if(addExclude){
+      if (out.AMPL > 10) {
+        addExclude(exchange, market, 'AMPL ' + out.AMPL, 4);
+      } else if (out.AMPL > 5) {
+        addExclude(exchange, market, 'AMPL ' + out.AMPL, 4);
+      } else if (out.BrRes < -10) {
+        addExclude(exchange, market, 'BR ' + out.BrRes, 5);
+      } else if (out.BrRes < -5) {
+        addExclude(exchange, market, 'BR ' + out.BrRes, 2);
+      } else if (out.BrRes < -2) {
+        addExclude(exchange, market, 'BR ' + out.BrRes, 1);
+      } else if (out.BrRes > 0) {
+        notify(out);
+        // console.log(lastHigh, lastV);
+        // console.log(maxPrice, medV, meanV);
+      }
+    }
+
+
+    CandlesAnalys1.data = data;
+    CandlesAnalys1.analysData = myData;
+    return out
 
     // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
   }

@@ -5,16 +5,18 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {CandlesService} from '../candles/candles.service';
 import {Subscription} from 'rxjs/Subscription';
 import {VOCandle} from '../../models/api-models';
-import {CandlesStats} from './candles-stats';
+import {CandlesAnalys1} from './candles-analys1';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs/Subject';
+import {CandlesAnalys2} from './candles-analys2';
 
 @Injectable()
 export class ScanMarketsService {
-  exchange = 'binance';
+  // exchange = 'binance';
   scanInterval;
+  statsSub: Subject<string> = new Subject<string>();
 
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
@@ -23,6 +25,13 @@ export class ScanMarketsService {
     private marketCap: ApiMarketCapService,
     private candlesService: CandlesService
   ) {
+    candlesService.candlesInterval = '5m';
+    candlesService.canlesLength = 200;
+    candlesService.overlap = 10;
+
+    candlesService.statsSub.subscribe(stats => {
+      this.statsSub.next(stats);
+    })
   }
 
   /* getScanner(exchange: string): ScannerMarkets {
@@ -33,24 +42,33 @@ export class ScanMarketsService {
    }
  */
 
-  stop(){
+  stop() {
+    this.candlesService.stop();
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
   }
+
   async start() {
+    if (this.scanInterval) {
+      throw new Error(' scan is running ');
+    }
+
     this.scanInterval = setInterval(async () => {
-      let excludes1: any[] = (await this.getExcludes(this.exchange)) || [];
+      let excludes1: any[] = (await this.getExcludes('binance')) || [];
 
       const now = Date.now();
       const excludes = excludes1.filter(function (o) {
         return o.postpone > now;
       });
-      if (excludes1.length !== excludes.length) this.saveExcludes(this.exchange, excludes);
+      if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
 
 
     }, 60000);
     await this.candlesService.subscribeForAll();
+
     const subs = this.candlesService.getAllSubscriptions();
+
+
     subs.forEach((sub) => {
       sub.subscribe(data => {
         //  console.log(data);
@@ -63,32 +81,26 @@ export class ScanMarketsService {
     return this.currentResultSub.asObservable();
   }
 
-  currentResultSub: Subject<any> = new Subject()
+  currentResultSub: Subject<any> = new Subject();
 
   async onCandles(data: { exchange: string, market: string, candles: VOCandle[] }) {
-    const market = data.market;
-    const exchange = data.exchange;
     const MC = await this.marketCap.getTicker();
-    const candles = data.candles;
-    const mc = MC[market.split('_')[1]];
-    const res = await CandlesStats.analyze(candles, market, mc);
+    const mc = MC[data.market.split('_')[1]];
+
+    const res = await CandlesAnalys2.analyze(data, mc, null, this.notify.bind(this));
     this.currentResultSub.next(res);
-    if (res.AMPL > 10) {
-      this.addExclude(exchange, market, 'AMPL ' + res.AMPL, 24);
-    } else if (res.AMPL > 5) {
-      this.addExclude(exchange, market, 'AMPL ' + res.AMPL, 4);
-    } else if (res.BrRes < -10) {
-      this.addExclude(exchange, market, 'BR ' + res.BrRes, 5);
-    } else if (res.BrRes < -5) {
-      this.addExclude(exchange, market, 'BR ' + res.BrRes, 2);
-    } else if (res.BrRes < -2) {
-      this.addExclude(exchange, market, 'BR ' + res.BrRes, 1);
-    } else if (res.BrRes > 0) {
-      this.notify(exchange, res);
-      // console.log(lastHigh, lastV);
-      // console.log(maxPrice, medV, meanV);
-    }
   }
+
+  /* async algorithm1(data: { exchange: string, market: string, candles: VOCandle[] }) {
+     const market = data.market;
+     const exchange = data.exchange;
+     const MC = await this.marketCap.getTicker();
+     const candles = data.candles;
+     const mc = MC[market.split('_')[1]];
+     const res = await CandlesAnalys1.analyze(candles, market, mc, this.addExclude, this.notify);
+     this.currentResultSub.next(res);
+
+   }*/
 
   async removeExclude(exchange: string, market: string) {
     let excludes = (await this.getExcludes(exchange)) || [];
@@ -99,7 +111,6 @@ export class ScanMarketsService {
   async addExclude(exchange: string, market: string, reason: string, hours: number) {
     console.log('ADD EXCLUDE ', market, reason, hours);
     const postpone = moment().add(hours, 'hours').valueOf();
-
     let excludes = (await this.getExcludes(exchange)) || [];
 
     const exists = excludes.find(function (o) {
@@ -117,30 +128,31 @@ export class ScanMarketsService {
     this.saveExcludes(exchange, excludes);
   }
 
-  async notify(exchange: string, data: any) {
-    let notifications = await this.notifications(exchange);
+  async notify(data: any) {
+
+    let notifications = await this.notifications();
     if (!notifications) return
     notifications.unshift(data);
     notifications = notifications.slice(0, 10);
-    this.dispatch(exchange, notifications);
+    this.dispatch(notifications);
   }
 
-  dispatch(exchange: string, notifications: any[],) {
+  dispatch(notifications: any[],) {
     this.notificationsSub.next(notifications);
-    this.storage.upsert('scanner-markets-' + exchange, notifications);
+    this.storage.upsert('scanner-markets-notifications', notifications);
   }
 
   private notificationsSub: BehaviorSubject<any[]>;
 
   async notifications$() {
-    await this.notifications(this.exchange);
+    await this.notifications();
     return this.notificationsSub.asObservable();
   }
 
-  async notifications(exchange: string): Promise<any[]> {
+  async notifications(): Promise<any[]> {
     if (this.notificationsSub) return Promise.resolve(this.notificationsSub.getValue());
     this.notificationsSub = new BehaviorSubject<any[]>(
-      (await this.storage.select('scanner-markets-' + exchange)) || []
+      (await this.storage.select('scanner-markets-notifications')) || []
     );
     return this.notificationsSub.getValue();
   }
@@ -164,9 +176,9 @@ export class ScanMarketsService {
   }
 
   async deleteNotification(exchange: string, market: string) {
-    let notes: { market: string }[] = await this.notifications(exchange);
+    let notes: { market: string }[] = await this.notifications();
     notes = _.reject(notes, {market: market});
-    this.dispatch(exchange, notes);
+    this.dispatch(notes);
   }
 
   getCandles(exchange: string, market: string) {
