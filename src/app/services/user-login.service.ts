@@ -2,11 +2,10 @@ import {Injectable} from '@angular/core';
 import {DatabaseService} from './database.service';
 import {StorageService} from './app-storage.service';
 import {Subject} from 'rxjs/Subject';
-import {reject} from 'q';
 import * as CryptoJS from 'crypto-js';
 import {MatDialog} from '@angular/material';
 import {LoginFormComponent} from '../material/login-form/login-form.component';
-import {c} from '../../../node_modules/@angular/core/src/render3';
+
 import {LoginExchangeComponent} from '../material/login-exchange/login-exchange.component';
 
 export enum LoginStatus {

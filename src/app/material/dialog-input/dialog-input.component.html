@@ -10,6 +10,9 @@
             <mat-hint>not number just delete value</mat-hint>
         </mat-form-field>
         <br/>
+        <mat-form-field>
+            <input matInput placeholder="Reason" [(ngModel)]="msg"/>
+        </mat-form-field>
         <br/>
         <button mat-button (click)="onOkClick()">OK</button>
         &nbsp; &nbsp; &nbsp; &nbsp;

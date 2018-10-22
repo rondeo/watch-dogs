@@ -55,7 +55,29 @@ export class ApiCryptoCompareService {
 
   }
 
-  getSocialStats(symbol: string) {
+
+  getSocialStats(coin: string) {
+    const params = {
+      coin
+    };
+    const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
+    // console.warn(url);
+    return this.http.get(url, {params}).map((res: any)=>{
+      // console.log(res);
+      if(!res.from) return null;
+      const fr = res.from.data?res.from.data:res.from;
+      const to = res.to;
+
+      const fromPoints = fr.CodeRepository.Points + fr.CryptoCompare.Points + fr.Facebook.Points + fr.Twitter.Points + fr.Reddit.Points;
+      const toPoints = to.CodeRepository.Points + to.CryptoCompare.Points + to.Facebook.Points + to.Twitter.Points + to.Reddit.Points;
+
+      return {coin, fromPoints, toPoints};
+    }).toPromise()
+  }
+
+
+  getSocialStats0(symbol: string) {
+
     return this.getCoinLists().switchMap(coins => {
       if(!coins[symbol]){
         console.warn(symbol, coins);
@@ -71,7 +93,7 @@ export class ApiCryptoCompareService {
   }
 
   getTweeterAccount(symbol:string):Observable<VOTweeterAccount> {
-    return this.getSocialStats(symbol).map(res =>{
+    return this.getSocialStats0(symbol).map(res =>{
       return res.Twitter;
     })
   }

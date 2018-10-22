@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {VOCandle} from '../../models/api-models';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {MatSnackBar} from '@angular/material';
 import {VOOrder, VOOrderExt} from '../../models/app-models';
 import {EnumOverlay} from '../../ui/candlesticks/candlesticks.component';

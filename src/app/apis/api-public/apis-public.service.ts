@@ -1,23 +1,23 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {ApiPublicCryptopia} from './api-public/api-public-cryptopia';
-import {ApiPublicPoloniex} from './api-public/api-public-poloniex';
-import {ApiPublicHitbtc} from './api-public/api-public-hitbtc';
-import {ApiPublicBinance} from './api-public/api-public-binance';
-import {ApiPublicBittrex} from './api-public/api-public-bittrex';
-import {ApiPublicBitfinex} from './api-public/api-public-bitfinex';
-import {ApiPublicAbstract} from './api-public/api-public-abstract';
+import {ApiPublicCryptopia} from './api-public-cryptopia';
+import {ApiPublicPoloniex} from './api-public-poloniex';
+import {ApiPublicHitbtc} from './api-public-hitbtc';
+import {ApiPublicBinance} from './api-public-binance';
+import {ApiPublicBittrex} from './api-public-bittrex';
+import {ApiPublicBitfinex} from './api-public-bitfinex';
+import {ApiPublicAbstract} from './api-public-abstract';
 import {Observable} from 'rxjs/Observable';
 import {forkJoin} from 'rxjs/observable/forkJoin';
-import {StorageService} from '../services/app-storage.service';
+import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
-import {VOCandle} from '../models/api-models';
-import {ApiPublicOkex} from './api-public/api-public-okex';
-import {ApiPublicHuobi} from './api-public/api-public-huobi';
-import {VOMarket} from '../models/app-models';
-import {validate} from 'codelyzer/walkerFactory/walkerFn';
+import {VOCandle} from '../../models/api-models';
+import {ApiPublicOkex} from './api-public-okex';
+import {ApiPublicHuobi} from './api-public-huobi';
+import {VOMarket} from '../../models/app-models';
+
 
 
 @Injectable()

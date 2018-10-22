@@ -11,7 +11,12 @@ export class CandlesData {
   exchange: string;
   private i: number = -1;
 
+  interval
   subscribedMarkets: string[] = [];
+  statsSub: Subject<string> = new Subject();
+
+
+  candlesSub: Subject<any> = new Subject()
 
   collection: { [id: string]: Subject<{ exchange: string, market: string, candles: VOCandle[] }> } = {};
 
@@ -24,7 +29,7 @@ export class CandlesData {
     ) {
 
     this.exchange = api.exchange;
-    setInterval(() => this.next(), 6000);
+   this.interval =  setInterval(() => this.next(), 10000);
   }
 
   getExcludes(){
@@ -54,8 +59,8 @@ export class CandlesData {
   }
 
 
-  unsubscribe(market: string, interval: string) {
-    const id = 'candles-' + this.exchange + '-' + market + '-' + interval;
+  unsubscribe(market: string) {
+    const id = 'candles-' + this.exchange + '-' + market + '-' + this.candlesInterval;
     this.storage.remove(id);
     delete this.collection[id];
   }
@@ -90,7 +95,6 @@ export class CandlesData {
         return o.to < first.to
       });
       this.lastOverlap = oldCandels.length - candles.length;
-      console.log('overlap '+ this.lastOverlap);
       candles = _.takeRight(candles.concat(newCandles), this.candlesLength);
     }
 
@@ -103,9 +107,12 @@ export class CandlesData {
     if (ind === -1 || ind === available.length - 1) ind = 0;
     else ind++;
     const nextMarket = available[ind];
-    console.log(moment().format('HH:mm')+ ' ' + market + ' next ' + nextMarket + ' of ' + available.length);
+
+    this.statsSub.next(this.exchange + ' '+ market +' OverLap: '+ this.lastOverlap + ' Avail: ' +  available.length);
+   //  console.log(moment().format('HH:mm')+ ' ' + market + ' next ' + nextMarket + ' of ' + available.length);
 
     localStorage.setItem('next-market' + this.exchange, nextMarket);
+    this.candlesSub.next({exchange, market, candles});
 
     sub.next({exchange, market, candles});
     this.storage.upsert(id, candles);
@@ -124,5 +131,17 @@ export class CandlesData {
   async getCandles(market: string) {
     const id = 'candles-' + this.exchange + '-' + market + '-' + this.candlesInterval;
     return this.storage.select(id);
+  }
+
+  stop() {
+    clearInterval(this.interval);
+    this.interval = 0;
+
+  }
+
+  destroy() {
+    this.stop();
+    this.removeAllCandles();
+
   }
 }

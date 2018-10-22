@@ -8,7 +8,7 @@ import {ApiBase, IApiPublic} from "../../src/app/my-exchange/services/apis/api-b
 import {UtilsOrder} from "../../src/app/com/utils-order";
 
 import {VOMarket} from "../../src/app/models/app-models";
-import {ApisPublicService} from "../../src/app/apis/apis-public.service";
+import {ApisPublicService} from "../../src/app/apis/api-public/apis-public.service";
 import {ApiMarketCapService} from "../../src/app/apis/api-market-cap.service";
 import {ApiPublicAbstract} from "../../src/app/apis/api-public/api-public-abstract";
 import {Result1, UtilsBot} from "../../src/app/com/utils-bot";

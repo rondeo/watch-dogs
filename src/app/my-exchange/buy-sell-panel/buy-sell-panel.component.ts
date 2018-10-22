@@ -2,9 +2,9 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {VOBalance, VOBooks, VOOrder, VOOrderExt} from '../../models/app-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
 import * as moment from 'moment';

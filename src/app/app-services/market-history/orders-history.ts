@@ -37,14 +37,20 @@ export class OrdersHistory {
 
   start() {
     console.log('Orders history START '+ this.exchange);
-    this.getOrders();
+    this.refreshOrders();
   }
 
-  lastTimestamp = 0;
-  getOrders() {
+  stop(){
+    clearTimeout(this.timeout);
+  }
 
+  timeout;
+  lastTimestamp = 0;
+  refreshOrders() {
+    clearTimeout(this.timeout);
     this.api.downloadOrders(this.market).subscribe(res => {
-      setTimeout(() => this.getOrders(), 30000);
+      if(!this.ordersSub.observers.length) return;
+     this.timeout =  setTimeout(() => this.refreshOrders(), 30000);
       res = _.orderBy(res, 'timestamp');
       res.forEach(function (o) {
         o.amountUS = Math.round(o.amountCoin * this.p);
@@ -57,6 +63,8 @@ export class OrdersHistory {
       this.lastTimestamp = res[res.length - 1].timestamp;
 
       if(this.statsAlerts) this.statsAlerts.next(res, overlap);
+
+      // this.ordersSub.
 
       this.ordersSub.next(res);
       let newOrders = res.filter(function (item) {
@@ -72,7 +80,8 @@ export class OrdersHistory {
       localStorage.setItem('orders-history-lastTimestamp', String(this.lastTimestamp))
     }, err =>{
       console.error(err);
-      setTimeout(() => this.getOrders(), 10000);
+      clearTimeout(this.timeout);
+     this.timeout =  setTimeout(() => this.refreshOrders(), 10000);
     })
   }
 

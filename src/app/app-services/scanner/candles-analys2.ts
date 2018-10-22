@@ -19,8 +19,7 @@ export class CandlesAnalys2 {
     const sortedPrice = _.orderBy(candles, 'close').reverse();
     const sortedLows =  _.orderBy(candles, 'low')
 
-
-
+    const low3 = _.mean([sortedLows[0].low,sortedLows[1].low, sortedLows[3].low]);
 
     const prelast = candles[n - 2];
 
@@ -52,10 +51,6 @@ export class CandlesAnalys2 {
 
 
     const maxVolumeCandle =  _.first(sortedVol);
-
-
-
-
 
     const maxVperc = MATH.percent(maxVolumeCandle.Volume, meanV);
     //if(BtempSup < 0 || BtempRes > 0)
@@ -99,13 +94,16 @@ export class CandlesAnalys2 {
 
     const AMPL = MATH.percent(last.close, minClose);
 
-    const LowI = sortedLows.indexOf(prelast);
 
-    const out = {time, ts, market, rank, LowI, Pprev, Pmed, Pall, AMPL, PV3, S,P, x};
+    const LowP = MATH.percent(prelast.low, low3);
+
+
+
+    const out = {time, ts, market, rank, LowP, Pprev, Pmed, Pall, AMPL, PV3, S,P, x};
 
 
     if(notify){
-      if(LowI< 10) notify(out);
+      if(LowP < 1) notify(out);
     }
 
 

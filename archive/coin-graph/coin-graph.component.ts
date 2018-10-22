@@ -5,7 +5,7 @@ import {VOGraphs} from "../../src/app/ui/line-chart/line-chart.component";
 import * as moment from "moment";
 import * as _ from 'lodash';
 import {VOMarketCap} from "../../src/app/models/app-models";
-import {ApisPublicService} from "../../src/app/apis/apis-public.service";
+import {ApisPublicService} from "../../src/app/apis/api-public/apis-public.service";
 import {ApiPublicAbstract} from "../../src/app/apis/api-public/api-public-abstract";
 import {ApisBooksService} from "../../src/app/apis/apis-books.service";
 import {UtilsBooks} from "../../src/app/com/utils-books";
@@ -13,7 +13,7 @@ import {MongoService} from "../../src/app/apis/mongo.service";
 import {UtilsBot} from "../../src/app/com/utils-bot";
 import {GRAPHS} from "../../src/app/com/grpahs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {VOMCAgregated} from '../../src/app/models/api-models';
+
 
 @Component({
   selector: 'app-coin-graph',
@@ -73,7 +73,7 @@ export class CoinGraphComponent implements OnInit {
 
   async buildMongoGraph() {
 
-    const history: VOMCAgregated[] = await this.mongo.downloadCoinHistory(this.to, this.from, this.coin, 300);
+   /* const history: VOMCAgregated[] = await this.mongo.downloadCoinHistory(this.to, this.from, this.coin, 300);
     console.log(history[0])
     const anl = GRAPHS.mcAggregatedToGraphs(history);
     // console.log(anl);
@@ -82,7 +82,7 @@ export class CoinGraphComponent implements OnInit {
       ys: anl.price_btc,
       color: '#885a6a',
       label: 'price_btc'
-    });
+    });*/
 
 
     /*
@@ -105,11 +105,11 @@ export class CoinGraphComponent implements OnInit {
         });
     */
 
-    this.myGraps = {
+   /* this.myGraps = {
       xs: anl.labels,
       graphs: graphs
     }
-
+*/
   }
 
 

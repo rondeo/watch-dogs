@@ -238,10 +238,10 @@ export abstract class ApiPrivateAbstaract {
   sellLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
     return new Promise((resolve, reject) => {
-      this.sellLimit(ar[0], ar[1], quantity, rate).subscribe(order => {
+      this.sellLimit(ar[0], ar[1], quantity, rate).then(order => {
         resolve(order);
-        this.refreshAllOpenOrders();
-        this.refreshBalances();
+       // this.refreshAllOpenOrders();
+        //this.refreshBalances();
       }, reject);
     })
   }
@@ -251,18 +251,14 @@ export abstract class ApiPrivateAbstaract {
     return new Promise((resolve, reject) => {
       this.buyLimit(ar[0], ar[1], quantity, rate).then(order => {
         resolve(order);
-        this.refreshAllOpenOrders();
-        this.refreshBalances();
+       // this.refreshAllOpenOrders();
+       // this.refreshBalances();
       }, reject);
     })
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
-    return this._stopLoss(market, quantity, stopPrice, sellPrice).then(res =>{
-      this.refreshAllOpenOrders();
-      this.refreshBalances();
-      return res;
-    })
+    return this._stopLoss(market, quantity, stopPrice, sellPrice);
 
   }
 
@@ -278,7 +274,7 @@ export abstract class ApiPrivateAbstaract {
   abstract downloadBalances(): Observable<VOBalance[]>;
 
 
-  abstract sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder>
+  abstract async sellLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder>
 
   abstract  async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder>
 

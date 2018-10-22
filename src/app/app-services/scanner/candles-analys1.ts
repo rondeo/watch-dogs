@@ -144,6 +144,10 @@ export class CandlesAnalys1 {
       closes
     }
 
+    if (notify && out.BrRes >= 0) {
+      notify(out);
+    }
+
     if(addExclude){
       if (out.AMPL > 10) {
         addExclude(exchange, market, 'AMPL ' + out.AMPL, 4);
@@ -155,10 +159,6 @@ export class CandlesAnalys1 {
         addExclude(exchange, market, 'BR ' + out.BrRes, 2);
       } else if (out.BrRes < -2) {
         addExclude(exchange, market, 'BR ' + out.BrRes, 1);
-      } else if (out.BrRes > 0) {
-        notify(out);
-        // console.log(lastHigh, lastV);
-        // console.log(maxPrice, medV, meanV);
       }
     }
 

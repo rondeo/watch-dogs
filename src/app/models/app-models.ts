@@ -82,6 +82,7 @@ export interface VOOrder {
   coin?: string;
   local?: string;
   minutes?: string;
+  lastStatus?: string;
 }
 
 export interface VOOrderExt extends VOOrder {

@@ -2,6 +2,11 @@ import * as _ from 'lodash';
 
 export class MATH {
 
+  static formatDecimals(value: number, decimals: number) {
+    const k = Math.pow(10, decimals);
+   return Math.floor(value * k)/k;
+
+  }
   static toString(value: number, length = 4) {
     return (value * 1e8).toString().substr(0, length);
   }
@@ -73,6 +78,20 @@ export class MATH {
 
   static percent(val1: number, val2: number): number {
     return Math.round(1009 * (val1 - val2) / val2) / 10;
+  }
+
+  static addDecimal(rate: number, number: number) {
+    const ar1 = rate.toString().split('.');
+    console.log(ar1);
+    if(ar1.length == 2){
+      let out:string = ar1[0];
+      const l = ar1[1].length;
+      const k =  Math.pow(10,l);
+      let val1 = Math.round(rate * k);
+      val1+=number;
+      return +(ar1[0]+'.'+String(val1).padStart(l,'0'));
+    } else rate+=number;
+    return rate;
   }
 }
 

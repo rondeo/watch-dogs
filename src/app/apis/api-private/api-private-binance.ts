@@ -16,6 +16,7 @@ import {WatchDog} from '../../models/watch-dog';
 import * as moment from 'moment';
 import {UTILS} from '../../com/utils';
 import {ApiPublicBinance} from '../api-public/api-public-binance';
+import {MATH} from '../../com/math';
 
 enum RequestType {
   GET,
@@ -293,12 +294,15 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     }
 
     const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
-    const quantity = amountCoin.toFixed(decimals.amountDecimals);
+
+    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals) ;// Math.ceil(amountCoin * Math.pow(10, decimals.amountDecimals))/Math.pow(10, decimals.amountDecimals);
     const stopPrice = stopPriceN.toFixed(decimals.rateDecimals);
     const price = sellPriceN.toFixed(decimals.rateDecimals);
+
   //  const amountDecimals = val.amountDecimals;
    // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
    // data.rate = +data.rate.toFixed(val.rateDecimals);
+    console.log('!!! STOP LOSS ',market,quantity,stopPrice, price);
 
     let url = '/api/proxy/https://api.binance.com/api/v3/order';
     let data = {
@@ -311,7 +315,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       timeInForce: 'GTC'
     };
 
-    console.log(url);
+
     return this.call(url, data, RequestType.POST).map(res => {
       console.log('result STOP_LOSS market ' + market, res);
       return {
@@ -341,7 +345,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     }
 
     const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
-    const quantity = amountCoin.toFixed(decimals.amountDecimals);
+    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals);
     const price = rate.toFixed(decimals.rateDecimals);
 
 
@@ -375,21 +379,21 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
 
-  sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+  async sellLimit(base: string, coin: string, amountCoin: number, rate: number): Promise<VOOrder> {
     let market = base + '_' + coin;
-    console.log(' sell market ' + market + '  quantity: ' + quantity + ' rate:' + rate);
+    console.log(' sell market ' + market + '  quantity: ' + amountCoin + ' rate:' + rate);
     let url = '/api/proxy/https://api.binance.com/api/v3/order';
 
-    const val = {amountCoin: +quantity, rate: +rate};
-
-    UTILS.formatDecimals(this.exchange, market, val);
+    const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
+    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals);
+    const price = rate.toFixed(decimals.rateDecimals);
 
     let data = {
       symbol: coin + base,
       side: 'SELL',
       type: 'LIMIT',
-      quantity: val.amountCoin,
-      price: val.rate,
+      quantity,
+      price,
       timeInForce: 'GTC'
     };
 
@@ -407,7 +411,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         amountCoin: +res.origQty,
         fee: -1
       }
-    });
+    }).toPromise();
   }
 
   private call(URL: string, data: any, type: RequestType): Observable<any> {

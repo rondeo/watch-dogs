@@ -1,20 +1,24 @@
 <div>
-    <div>{{coin}}
-            <a (click)="onCurrentMarketClick()" class="btn">
-                <small>{{exchange}} {{market}}</small>
-            </a>
-        <button mat-button="" (click)="onStartClick()">{{isRunning?'Stop':'Start'}}</button>
-        <button mat-button="" (click)="onExcludesClick()">Excludes</button>
+    <div>
+        <small>{{exchange}}</small>
+        <button mat-button="" (click)="onStartClick()">{{scanner.scanInterval?'Stop':'Scan'}}</button>
+        <mat-checkbox (change)="onExcludesChange($event)">Excludes</mat-checkbox>
+        <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
         <button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>
     </div>
+    <small>{{scanner.statsSub | async}}</small>
 
     <div class="scrollY600" *ngIf="excludes">
         <app-table-props [dataset]="excludes" (selected)="onExcludeClick($event)"></app-table-props>
+    </div>
+    <div class="scrollY600" *ngIf="favorites">
+        <app-table-props [dataset]="favorites" (selected)="onFavoritesClick($event)"></app-table-props>
     </div>
     <div>
        <app-table-props [dataset]="currentData" (selected)="onDatasetClick($event)"></app-table-props>
     </div>
     <mat-checkbox #cmc> CMC</mat-checkbox>
+    <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteClick()"></span>
     <div class="horizontal">
         <div *ngIf="cmc.checked">
             <div class="scrollY600">
@@ -32,17 +36,19 @@
             </button>
 
         </div>
-        <div>
+        <div class="scrollY300">
             <app-table-props [dataset]="notifications" (selected)="onDatasetClick($event)"></app-table-props>
 
         </div>
     </div>
 
-
     <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}" >{{exchange}} {{selectedMarket}}</a>
+    <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
+
+    <small>Media {{mediaPercent}}% ({{mediaPointsTo}})</small>
 
 
-    <app-mc-data [coin]="selectedCoin"></app-mc-data>
+    <app-mc-data  [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
 
     <div>
         <app-table-props [dataset]="analysData"  (selected)="onDatasetClick($event)"></app-table-props>

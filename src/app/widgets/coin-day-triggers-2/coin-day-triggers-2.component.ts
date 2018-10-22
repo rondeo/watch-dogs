@@ -7,7 +7,7 @@ import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {Moment} from 'moment';
 import {VOGraphs} from '../../ui/line-chart/line-chart.component';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 @Component({

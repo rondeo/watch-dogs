@@ -6,7 +6,7 @@ import {RunScript} from "../../com/run-script";
 import {StorageService} from "../../services/app-storage.service";
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApisPrivateService} from "../../apis/apis-private.service";
+import {ApisPrivateService} from "../../apis/api-private/apis-private.service";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/mergeMap';

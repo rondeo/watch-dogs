@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {VOBooks, VOMarket, VOMarketCap} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';

@@ -3,7 +3,7 @@ import {ConnectorApiService} from '../../my-exchange/services/connector-api.serv
 import {ChannelEvents, Channels, IChannel} from '../../my-exchange/services/apis/socket-models';
 import * as _ from 'lodash';
 import {VOOrder} from '../../models/app-models';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {SocketBase} from '../../apis/sockets/soket-base';
 import {SocketChannel} from '../../apis/sockets/socket-channel';
 

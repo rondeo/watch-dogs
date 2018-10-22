@@ -14,7 +14,7 @@ import {AnalizeData} from "./analize-data";
 import {BuySellCoins} from "./buy-sell-coins";
 import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
 import {CoinAnalytics, NewGainers} from "./new-gainers";
-import {ApisPublicService} from "../../src/app/apis/apis-public.service";
+import {ApisPublicService} from "../../src/app/apis/api-public/apis-public.service";
 import {ApiMarketCapService} from "../../src/app/apis/api-market-cap.service";
 import {ActivatedRoute, Router} from "@angular/router";
 

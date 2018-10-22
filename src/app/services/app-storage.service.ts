@@ -7,7 +7,6 @@ import {Observable} from 'rxjs/Observable';
 import * as localforage from 'localforage';
 import * as _ from 'lodash';
 import {Subject} from '../../../node_modules/rxjs';
-import {promise} from 'selenium-webdriver';
 import {UserLoginService} from './user-login.service';
 
 

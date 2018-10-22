@@ -4,7 +4,7 @@ import {VOMarketCap, VOMCDisplay} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 
 import {MovingAverage} from '../../com/moving-average';

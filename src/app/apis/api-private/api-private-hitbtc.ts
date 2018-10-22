@@ -180,7 +180,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   }
 
-  sellLimit(base: string, coin: string, quantity: number, rate: number): Observable<VOOrder> {
+  async sellLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder> {
 
     if (base === 'USDT') base = 'USD';
 
@@ -207,7 +207,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           status: res.status
 
         }
-      });
+      }).toPromise();
   }
 
   private call(URL: string, post: any): Observable<any> {

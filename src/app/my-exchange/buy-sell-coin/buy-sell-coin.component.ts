@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import {ApiBase} from '../services/apis/api-base';
 import {MatSnackBar} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';

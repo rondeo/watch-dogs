@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {VOBalance} from '../../models/app-models';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 @Component({

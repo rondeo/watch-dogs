@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 
 import {forkJoin} from "rxjs/observable/forkJoin";
 import {MongoService} from "../../apis/mongo.service";
-import {ApisPrivateService} from "../../apis/apis-private.service";
+import {ApisPrivateService} from "../../apis/api-private/apis-private.service";
 import {ActivatedRoute} from "@angular/router";
 import {StorageService} from "../../services/app-storage.service";
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";

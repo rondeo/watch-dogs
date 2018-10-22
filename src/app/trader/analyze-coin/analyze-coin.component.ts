@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';

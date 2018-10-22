@@ -44,6 +44,7 @@ export class ApiMarketCapService {
     const out = {};
 
     data.forEach(function (item) {
+      if(item.symbol === 'ETHOS')item.symbol = 'BQX';
 
       if (!out[item.symbol]) out[item.symbol] = {
         id: item.id,

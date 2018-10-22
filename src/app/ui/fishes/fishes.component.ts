@@ -3,7 +3,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
 import {Subscription} from 'rxjs/Subscription';
@@ -48,6 +48,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(){
     if(this.sub1) this.sub1.unsubscribe();
     if(this.sub2) this.sub2.unsubscribe();
+
   }
 
   sub1:Subscription;
@@ -58,8 +59,9 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     if(!this.market || ! this.exchange) return;
 
     const ctr:OrdersHistory = this.marketsHistoryService.getOrdersHistory(this.exchange, this.market);
+
     this.sub1 = ctr.orders$().subscribe(newOrders =>{
-      // console.log(newOrders);
+      //  console.log(newOrders);
       this.ordersHistory = newOrders;
       this.showFishes();;
     });
@@ -132,7 +134,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     this.sumSell = sold ;
     const speed = 60 * (bought + sold) / (to - from);
     this.volPerMinute = 'V: '+ speed.toPrecision(3) + 'k/min';
-    this.tradesPerMinute = 'T: ' + (60000 * ordersHistory.length /(to - from)).toPrecision(4)+ '/min';
+    this.tradesPerMinute = '#: ' + (60000 * ordersHistory.length /(to - from)).toPrecision(4)+ '/min';
     this.filterResults();
   }
 
@@ -141,6 +143,8 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onRefreshClick(){
+    const ctr:OrdersHistory = this.marketsHistoryService.getOrdersHistory(this.exchange, this.market);
+    ctr.refreshOrders();
     // this.downloadHistory();
   }
 

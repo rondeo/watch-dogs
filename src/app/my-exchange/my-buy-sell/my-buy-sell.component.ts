@@ -8,14 +8,15 @@ import {Observable} from 'rxjs/Observable';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UtilsOrder} from '../../com/utils-order';
 import {placeOrder} from './place-order';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {MATH} from '../../com/math';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
+import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 
 @Component({
   selector: 'app-my-buy-sell',
@@ -27,7 +28,7 @@ export class MyBuySellComponent implements OnInit {
 
 
   markets: string[];
-  selectedMarket:string;
+  selectedMarket: string;
   ordersRefresh: number;
 
 
@@ -71,11 +72,15 @@ export class MyBuySellComponent implements OnInit {
     private apisPublic: ApisPublicService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private followOrders: FollowOrdersService
   ) {
 
   }
 
+  onStopFollowClick() {
+    this.followOrders.stopFollow(this.exchange, this.market);
+  }
 
   onUserPriceChanged(rate) {
 
@@ -138,7 +143,12 @@ export class MyBuySellComponent implements OnInit {
   }
 
   async buyCoin(amount: number) {
-    const rateBuy = this.rateBuy;
+    let rateBuy = MATH.addDecimal(this.rateBuy, 1);
+    if (rateBuy === this.rateSell) {
+      console.warn(' rate buy === rate sell');
+      rateBuy = this.rateBuy;
+    }
+    const precision = rateBuy.toString();
     console.log('buy coin ' + amount + ' rate ' + rateBuy);
     if (isNaN(this.rateBuy)) return;
 
@@ -188,9 +198,10 @@ export class MyBuySellComponent implements OnInit {
   }
 
   async sellCoin(amount: number) {
-    const rateSell = this.rateSell;
+    if (isNaN(this.rateSell)) return;
+    const rateSell = MATH.addDecimal(this.rateSell, -1);
     console.log('sell coin ' + amount + ' rate ' + rateSell);
-    if (isNaN(rateSell)) return;
+
     const ar = this.market.split('_');
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
@@ -228,7 +239,7 @@ export class MyBuySellComponent implements OnInit {
 
       const percent = MATH.percent(rate, this.bookSell);
 
-      let msg= 'STOP LOSS';
+      let msg = 'STOP LOSS';
 
       if (coinAmount * priceCoin < 10) msg = 'Not enough amount';
 
@@ -269,6 +280,7 @@ export class MyBuySellComponent implements OnInit {
   private sub3: Subscription;
 
   ngOnDestroy() {
+    if (this.sub1) this.sub1.unsubscribe();
     this.unsubscribe();
   }
 
@@ -280,7 +292,7 @@ export class MyBuySellComponent implements OnInit {
 
 
   unsubscribe() {
-    if (this.sub1) this.sub1.unsubscribe();
+
     if (this.sub2) this.sub2.unsubscribe();
     if (this.sub3) this.sub3.unsubscribe();
   }
@@ -296,7 +308,7 @@ export class MyBuySellComponent implements OnInit {
       const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
 
       api.balance$(ar[0]).subscribe(balance => {
-       // if (ar[0] === 'USDT') MC[ar[0]].price_usd = 1;
+        // if (ar[0] === 'USDT') MC[ar[0]].price_usd = 1;
         this.balanceBase = balance;
         //this.balanceBaseUS = +(balance.available + MC[ar[0]].price_usd).toPrecision(0);
       });
@@ -320,6 +332,7 @@ export class MyBuySellComponent implements OnInit {
         this.markets = Object.keys(M).sort();
         if (this.market && !this.selectedMarket) this.selectedMarket = this.market
       });
+
       this.subscribe();
     });
 

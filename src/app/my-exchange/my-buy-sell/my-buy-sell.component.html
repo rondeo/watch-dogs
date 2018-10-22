@@ -13,6 +13,10 @@
                 (click)="stopLossClick()"
         >Stop Loss
         </button>
+        <button mat-raised-button
+                (click)="onStopFollowClick()"
+        >Stop Follow
+        </button>
         <app-amount-coin [amount]="amountUS" (amountChanged)="onAmountChanged($event)"></app-amount-coin>
             <app-balance-market [exchange]="exchange" [market]="market"></app-balance-market>
     </section>

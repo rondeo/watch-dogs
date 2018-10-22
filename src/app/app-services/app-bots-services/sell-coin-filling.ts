@@ -4,8 +4,8 @@ import {OrderType, VOBalance, VOOrder} from '../../models/app-models';
 import {UtilsBooks} from '../../com/utils-books';
 import {Subject} from 'rxjs/Subject';
 import {reject} from 'q';
-import {ApisPrivateService} from '../../apis/apis-private.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMovingAvg} from '../../com/moving-average';
 import * as moment from 'moment';
@@ -66,7 +66,7 @@ export class SellCoinFilling {
 
       this.watchDog.log('downloaded books rate: ' + rate);
 
-      return this.apiPrivate.sellLimit(base, coin, balanceCoin, rate).subscribe(order => {
+      return this.apiPrivate.sellLimit(base, coin, balanceCoin, rate).then(order => {
         console.log(order);
         this.watchDog.log('order result : ' + JSON.stringify(order));
         this.oredr = order;

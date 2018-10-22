@@ -151,7 +151,7 @@ export abstract class ApiPublicAbstract {
   }
 
   async getMarketTicker(market: string) {
-    this.startRefrshTicker();
+     // this.startRefrshTicker();
     return new Promise((resolve, reject) => {
       this.ticker5min$(market).subscribe(ticker => {
         if (ticker) resolve(ticker);

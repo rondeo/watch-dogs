@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {VOMarketCap} from '../../models/app-models';
 import {VOCandle, VOMCObj} from '../../models/api-models';
 import {MATH} from '../../com/math';
@@ -12,7 +12,10 @@ import {Router} from '@angular/router';
 import {ScanMarketsService} from '../../app-services/scanner/scan-markets.service';
 import {Subscription} from 'rxjs/Subscription';
 import {DialogInputComponent} from '../../material/dialog-input/dialog-input.component';
-import {CandlesStats} from '../../app-services/scanner/candles-stats';
+import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
+import {Subject} from 'rxjs/Subject';
+import {CandlesAnalys2} from '../../app-services/scanner/candles-analys2';
+import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 
 @Component({
   selector: 'app-scan-markets',
@@ -23,24 +26,28 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   coin: string;
   exchange: string = 'binance';
-  market: string;
+  // market: string;
   currentData: any[];
   analysData: any[];
   MC: VOMCObj;
   notifications: any[];
   coinsAvailable: VOMarketCap[];
 
-  private selectedCoin: string;
+
+  scannerSatatsSub: Subject<string> = new Subject();
+
+  // private selectedCoin: string;
   private selectedMarket: string;
 
   constructor(
     private marketCap: ApiMarketCapService,
     private apisPublic: ApisPublicService,
+    private apiCryptoCompare: ApiCryptoCompareService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private storage: StorageService,
     private router: Router,
-    private scanner: ScanMarketsService
+    public scanner: ScanMarketsService
   ) {
 
 
@@ -60,9 +67,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   onExcludeClick(evt){
-    console.log(evt);
-    const market = evt.item.market
-
+    const market = evt.item.market;
     if(evt.prop === 'market'){
       this.showMarket(market);
     } else if(evt.prop ==='x') {
@@ -70,10 +75,55 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         this.showExcludes();
       })
     }
+  }
+
+
+  onStarClick(){
+    const market = this.selectedMarket;
+    const ref = this.dialog.open(DialogInputComponent, {data:{message:market, userInput: '3'}});
+   const sub =  ref.afterClosed().toPromise().then(res =>{
+      if(res){
+        const msg = res.msg;
+        this.scanner.addFavorite(market, msg);
+      }
+    })
+
+
+    // this.scanner.addFavorite()
+  }
+  onFavoritesClick(obj) {
+  //   console.log(obj);
+
+    const item = obj.item;
+    const prop = obj.prop;
+    const market = item.market;
+    const ar = market.split('_');
+    if (prop === 'x') {
+      if(confirm('remove from favorites ' + market +'?')) this.scanner.removeFavorite(market);
+    }if(prop=='market') this.showMarket(market);
 
   }
-  onExcludesClick(){
-    if(!this.excludes) this.showExcludes();
+  favorites:any[];
+  onFavoriteChange(evt){
+    if(evt.checked){
+      this.scanner.favoritesSub.subscribe(favs=>{
+        if(!favs) return;
+        this.favorites = favs.map(function(o){
+          return{
+            stamp:moment(o.stamp).format('DD HH:mm'),
+            market:o.market,
+            message:o.message,
+            x:'X'
+          }
+        });
+      })
+    }else {
+      this.favorites = null;
+    }
+  }
+
+  onExcludesChange(evt){
+    if(evt.checked)this.showExcludes();
     else this.hideExcludes();
   }
   excludes: any[];
@@ -84,6 +134,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
      return {
        market:o.market,
        reason: o.reason,
+       stamp:moment(o.stamp).format('DD HH:mm'),
        postpone:moment(o.postpone).format('DD HH:mm'),
        x:'X'
      }
@@ -150,9 +201,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   analizeMarket: string;
   analizeTime: string;
-  analizeInterval = '30m';
+ //  analizeInterval = '30m';
 
-  onAnaliseCandlesClick() {
+ /* onAnaliseCandlesClick() {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     //  const to = moment('2018-10-08T04:30:00').valueOf()
     api.downloadCandles(this.analizeMarket, this.analizeInterval, 200, moment(this.analizeTime).valueOf())
@@ -162,7 +213,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
           return o.Volume;
         })
       })
-  }
+  }*/
 
   onCoinSelected(coin: VOMarketCap) {
     const symbol = coin.symbol;
@@ -179,7 +230,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onCurrentMarketClick() {
 
-    this.openMarket(this.exchange, this.market);
+    this.openMarket(this.exchange, this.selectedMarket);
   }
 
   save() {
@@ -190,35 +241,28 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   volumes: number[];
 
-
-
-
-
-
   onDatasetClick(obj) {
     const item = obj.item;
     const prop = obj.prop;
     const market = item.market;
     const ar = market.split('_');
-    this.selectedCoin = ar[1];
-    this.selectedMarket = market;
 
 
     if (prop === 'x') {
-
       const ref = this.dialog.open(DialogInputComponent, {data:{message:'Suspend market for hours', userInput: '3'}});
       ref.afterClosed().subscribe(res =>{
         if(res){
           const suspend = +res.userInput;
+          const msg = res.msg;
           if(isNaN(suspend)) this.scanner.deleteNotification(this.exchange, market);
-          else this.scanner.addExclude(this.exchange, market, 'user ' + suspend + 'h', suspend);
+          else this.scanner.addExclude(this.exchange, market,  msg+ ' ' + suspend + 'h', suspend);
         }
       })
 
     }
-    if (prop === 'LH') {
-      this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + this.market);
-    }
+   /* if (prop === 'LH') {
+      this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market);
+    }*/
     if (prop === 'market') {
       this.showMarket(market);
       // console.log(candles);
@@ -227,12 +271,31 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
   }
 
+  mediaPointsFrom:number;
+  mediaPointsTo:number;
+  mediaPercent: number
   showMarket(market: string) {
 
+    this.selectedMarket = market;
+    this.apiCryptoCompare.getSocialStats(market.split('_')[1]).then(stats=>{
+     // console.log(stats);
+      if(!stats) {
+        this.mediaPointsFrom = -1;
+        this.mediaPointsTo = -1;
+        this.mediaPercent = 0;
+        return;
+      }
+      this.mediaPointsFrom = stats.fromPoints;
+      this.mediaPointsTo = stats.toPoints;
+      this.mediaPercent = MATH.percent(stats.toPoints, stats.fromPoints);
+    }).catch(err=>{
+      this.mediaPointsFrom = -1;
+      this.mediaPointsTo = -1;
+    })
 
     this.scanner.getCandles(this.exchange, market)
       .then(res => {
-        //  console.log(res);
+         //  console.log(res);
         if (!res) {
            console.log(' no candles for ' + market);
           this.candles = null;
@@ -254,12 +317,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async analize(candles: VOCandle[], market: string) {
     const MC = (await this.marketCap.getTicker())[market.split('_')[1]];
-
-    const data = await CandlesStats.analyze(candles, market, MC);
+    const exchange = this.exchange;
+    const data = await CandlesAnalys2.analyze({exchange,candles, market}, MC, null, null);
     this.analysData = [data];
-    console.log(data);
-    const mydata = CandlesStats.analysData;
-    console.log(mydata);
+   // console.log(data);
+   // const mydata = CandlesStats.analysData;
+   // console.log(mydata);
 
 
     // const maxVolume: VOCandle = _.first(sortedVol);
@@ -277,19 +340,20 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   onClearMemoryClick() {
     if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
       .then(res => {
-        this.scanner.notifications(this.exchange)
+        this.scanner.notifications()
         this.snackBar.open('Memory cleared', 'x', {duration: 3000});
       })
 
   }
 
   onStartClick() {
-   /* const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
-    if (this.isRunning) scanner.stopScan();
-    else scanner.start(['BTC'])
-      .then(markets => {
-        //  console.log(markets);
-        this.setAvaliableCoins(markets);
-      });*/
+    if(this.scanner.scanInterval) this.scanner.stop();
+    else this.scanner.start();
+  }
+
+  onDeleteClick(){
+    if(confirm('Delete All')) {
+      this.scanner.deleteNotifications()
+    }
   }
 }

@@ -3,8 +3,8 @@ import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-
 import {MarketCapService} from "../../src/app/market-cap/services/market-cap.service";
 import {HttpClient} from "@angular/common/http";
 import {VOBalance, VOMarket, VOMarketCap, VOWatchdog} from "../../src/app/models/app-models";
-import {ApisPublicService} from "../../src/app/apis/apis-public.service";
-import {ApisPrivateService} from "../../src/app/apis/apis-private.service";
+import {ApisPublicService} from "../../src/app/apis/api-public/apis-public.service";
+import {ApisPrivateService} from "../../src/app/apis/api-private/apis-private.service";
 import * as moment from "moment";
 import {StorageService} from "../../src/app/services/app-storage.service";
 import {Subject} from "rxjs/Subject";

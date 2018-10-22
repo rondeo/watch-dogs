@@ -130,6 +130,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
       const indexed = {};
       const allCoins = {}
+      if(!Array.isArray(res)) return null;
       res.forEach(function (item) {
 
         const market = ApiPublicBinance.parseSymbol(item.symbol);
@@ -190,6 +191,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       }
     }, console.error).do(res =>{
       const orders = res.sell;
+
     });
   }
 

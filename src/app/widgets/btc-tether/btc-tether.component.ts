@@ -3,7 +3,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOAlert, VOMarketCap, VOOrder} from '../../models/app-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {Subject} from 'rxjs/Subject';
 import {StorageService} from '../../services/app-storage.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';

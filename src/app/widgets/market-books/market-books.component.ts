@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output, OnChanges, OnInit} from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 
 import {UtilsBooks} from '../../com/utils-books';
 import * as _ from 'lodash';

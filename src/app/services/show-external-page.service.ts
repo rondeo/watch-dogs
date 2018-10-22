@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
-import {ApisPublicService} from '../apis/apis-public.service';
+import {ApisPublicService} from '../apis/api-public/apis-public.service';
 
 @Injectable()
 export class ShowExternalPageService {

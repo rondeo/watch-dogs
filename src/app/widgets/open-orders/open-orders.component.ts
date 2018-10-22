@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {VOOrder} from '../../models/app-models';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import * as moment from 'moment';
-import {OpenOrdersService} from '../../apis/open-orders/open-orders.service';
+import * as _ from 'lodash';
+import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 
 @Component({
   selector: 'app-open-orders',
@@ -47,7 +48,11 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     api.allOpenOrders$().subscribe(orders => {
       if (!orders) return;
-      this.orders = orders;
+      const current = _.keyBy(this.orders, 'uuid');
+      orders.forEach(function (o) {
+        o.lastStatus = current[o.uuid]?current[o.uuid].lastStatus:'';
+      })
+       this.orders = orders;
     });
   }
 

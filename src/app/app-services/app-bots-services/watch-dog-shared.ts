@@ -1,7 +1,7 @@
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {VOMarketCap, VOWatchdog} from '../../models/app-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';

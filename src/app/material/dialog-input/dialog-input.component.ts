@@ -10,6 +10,7 @@ import {DilaogData} from '../dialog-simple/dialog-simple.component';
 export class DialogInputComponent implements OnInit {
 
   userInput: string;
+  msg: string;
   message: string;
   constructor(
     private dialogRef: MatDialogRef<{ userInput: string }>,
@@ -25,7 +26,8 @@ export class DialogInputComponent implements OnInit {
 
   onOkClick() {
     const userInput = this.userInput;
-    this.dialogRef.close({userInput});
+    const msg = this.msg;
+    this.dialogRef.close({userInput, msg});
   }
 
   onCancelClick(){

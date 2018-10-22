@@ -12,7 +12,7 @@ import {MarketCapService} from './market-cap/services/market-cap.service';
 
 import {LoginExchangeComponent} from './material/login-exchange/login-exchange.component';
 import {AppBotsService} from './app-services/app-bots-services/app-bots.service';
-import {OpenOrdersService} from './apis/open-orders/open-orders.service';
+import {FollowOrdersService} from './apis/open-orders/follow-orders.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private botsService: AppBotsService,
     private snackBar: MatSnackBar,
-    private followOrders: OpenOrdersService
+    private followOrders: FollowOrdersService
   ) {
   }
 

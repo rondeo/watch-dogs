@@ -7,15 +7,12 @@ import {ScanMarketsService} from '../../app-services/scanner/scan-markets.servic
   styleUrls: ['./scanner.component.css']
 })
 export class ScannerComponent implements OnInit {
-
-
-
   constructor(
-    private scanMarkets: ScanMarketsService
+    public scanMarkets: ScanMarketsService
   ) { }
 
   ngOnInit() {
-    this.scanMarkets.start();
+    //this.scanMarkets.start();
   }
 
 }

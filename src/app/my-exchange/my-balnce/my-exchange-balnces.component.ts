@@ -5,8 +5,8 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSelectChange, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
-import {ApisPrivateService} from '../../apis/apis-private.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {E} from '@angular/core/src/render3';
 
 import {MyExchangeService} from '../services/my-exchange.service';

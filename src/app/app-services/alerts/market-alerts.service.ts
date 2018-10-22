@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 
 @Injectable()

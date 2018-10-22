@@ -1,4 +1,4 @@
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {Subject} from 'rxjs/Subject';

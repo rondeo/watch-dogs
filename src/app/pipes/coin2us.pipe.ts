@@ -10,7 +10,6 @@ export class Coin2usPipe implements PipeTransform {
   constructor(
     private marketCap: ApiMarketCapService
   ){
-    console.log('constarctor')
   }
 
   async transform(value: number, symbol: string): Promise<number> {

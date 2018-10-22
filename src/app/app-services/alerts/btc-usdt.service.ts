@@ -6,7 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {VOAlert, VOMarketCap, VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/Subject';
 import {MATH} from '../../com/math';
@@ -64,7 +64,7 @@ export class BtcUsdtService {
   async oneMinuteCandles$(): Promise<Observable<VOCandle[]>> {
     if (this.oneMinuteCandlesSub) return this.oneMinuteCandlesSub;
     const candles = await this.apisPublic
-      .getExchangeApi('bitfinex').downloadCandles('USDT_BTC', '1m', 200);//, moment().valueOf());
+      .getExchangeApi('bitfinex').downloadCandles('USDT_BTC', '1m', 100);//, moment().valueOf());
     this.oneMinuteCandlesSub = new BehaviorSubject(candles);
     return this.oneMinuteCandlesSub;
   }
@@ -90,8 +90,12 @@ export class BtcUsdtService {
     const endPrice = last3[2].close;
     const PD3 = MATH.percent(endPrice, startPrice);
 
-    if (PD3 < -0.3) this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3);
-    else if(PV3 > 10000) this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3);
+    if (PD3 < -0.3) {
+      this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3 +'% ' + await this.getTopTrades());
+    }
+    else if(PV3 > 1000) {
+      this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3+'% ' + await this.getTopTrades());
+    }
 
     this.candlesStats.push({PV3,PD3});
     if(this.candlesStats.length > 200)this.candlesStats.shift();
@@ -107,6 +111,13 @@ export class BtcUsdtService {
     //console.log(trades, candles);
   }
 
+  async getTopTrades(){
+    const trades:VOOrder[] =  await this.downlaodTrades();
+    const sorted = _.orderBy(trades, 'amountCoin').reverse();
+    return _.take(sorted, 5).map(function (o) {
+      return o.action + ':'+Math.round(o.amountCoin)
+    }).join(', ');
+  }
   async downlaodTrades() {
     const trades: VOOrder[] = await this.apisPublic.getExchangeApi('bitfinex')
       .downloadMarketHistory('USDT', 'BTC').toPromise();
@@ -126,7 +137,7 @@ export class BtcUsdtService {
     this.count++;
     let oldcandles: VOCandle[] = await this.getMinuteCandles();
     const newcandles: VOCandle[] = await this.apisPublic.getExchangeApi('bitfinex')
-      .downloadCandles('USDT_BTC', '1m', 2);//, moment(this.startTime).add(this.count, 'minutes').valueOf());
+      .downloadCandles('USDT_BTC', '1m', 5);//, moment(this.startTime).add(this.count, 'minutes').valueOf());
 
     //console.log(newcandles);
     newcandles.forEach(function (o) {
@@ -139,7 +150,7 @@ export class BtcUsdtService {
     });
     //  console.log(oldcandles.length);
 
-    const candles = _.takeRight(oldcandles.concat(newcandles), 200);
+    const candles = _.takeRight(oldcandles.concat(newcandles), 100);
     // console.log(candles.length);
     this.oneMinuteCandlesSub.next(candles);
     return candles;

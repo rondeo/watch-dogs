@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
 import {VOBalance, VOMarket} from '../../models/app-models';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import * as _ from 'lodash';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 
 @Injectable()

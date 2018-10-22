@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {StorageService} from '../services/app-storage.service';
-import {ApiPrivateAbstaract} from './api-private/api-private-abstaract';
-import {ApiPrivateBittrex} from './api-private/api-private-bittrex';
-import {ApiPrivatePoloniex} from './api-private/api-private-poloniex';
-import {ApiPrivateHitbtc} from './api-private/api-private-hitbtc';
-import {UserLoginService} from '../services/user-login.service';
-import {ApiPrivateBinance} from './api-private/api-private-binance';
+import {StorageService} from '../../services/app-storage.service';
+import {ApiPrivateAbstaract} from './api-private-abstaract';
+import {ApiPrivateBittrex} from './api-private-bittrex';
+import {ApiPrivatePoloniex} from './api-private-poloniex';
+import {ApiPrivateHitbtc} from './api-private-hitbtc';
+import {UserLoginService} from '../../services/user-login.service';
+import {ApiPrivateBinance} from './api-private-binance';
 
 
 @Injectable()

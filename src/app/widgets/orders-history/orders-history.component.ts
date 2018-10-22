@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {VOOrder} from '../../models/app-models';
-import {ApisPrivateService} from '../../apis/apis-private.service';
+import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
 import * as moment from 'moment';

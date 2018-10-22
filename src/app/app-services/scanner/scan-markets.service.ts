@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {CandlesService} from '../candles/candles.service';
@@ -18,6 +18,7 @@ export class ScanMarketsService {
   scanInterval;
   statsSub: Subject<string> = new Subject<string>();
 
+
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
     private apisPublic: ApisPublicService,
@@ -31,6 +32,10 @@ export class ScanMarketsService {
 
     candlesService.statsSub.subscribe(stats => {
       this.statsSub.next(stats);
+    });
+
+    this.storage.select('favorite-markets').then(prefs =>{
+      this.favoritesSub.next(prefs);
     })
   }
 
@@ -48,10 +53,27 @@ export class ScanMarketsService {
     this.scanInterval = 0;
   }
 
+  favoritesSub:BehaviorSubject<any> = new BehaviorSubject(null);
+  addFavorite(market: string, message: string){
+    const prefs: any[]= this.favoritesSub.getValue() || [];
+    prefs.push({
+      stamp: Date.now(),
+      market,
+      message
+    });
+    this.storage.upsert('favorite-markets', prefs);
+    this.favoritesSub.next(prefs);
+  }
+  removeFavorite(market: string) {
+    let prefs: any[]= _.reject(this.favoritesSub.getValue(), {market:market});
+    this.storage.upsert('favorite-markets', prefs);
+    this.favoritesSub.next(prefs);
+  }
   async start() {
     if (this.scanInterval) {
       throw new Error(' scan is running ');
     }
+
 
     this.scanInterval = setInterval(async () => {
       let excludes1: any[] = (await this.getExcludes('binance')) || [];
@@ -64,17 +86,34 @@ export class ScanMarketsService {
 
 
     }, 60000);
-    await this.candlesService.subscribeForAll();
-
-    const subs = this.candlesService.getAllSubscriptions();
 
 
-    subs.forEach((sub) => {
-      sub.subscribe(data => {
-        //  console.log(data);
-        this.onCandles(data);
-      })
-    })
+    const sub = await this.candlesService.scanOnce('1m', 120);
+
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      this.candles[exchange + market] = data.candles;
+      const MC = await this.marketCap.getTicker();
+      const mc = MC[data.market.split('_')[1]];
+      const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+      this.currentResultSub.next(res);
+    },err=>{
+
+    }, this.stop.bind(this));
+
+
+    /* await this.candlesService.subscribeForAll();
+
+     const subs = this.candlesService.getAllSubscriptions();
+
+
+     subs.forEach((sub) => {
+       sub.subscribe(data => {
+         //  console.log(data);
+         this.onCandles(data);
+       })
+     })*/
   }
 
   currentResult$() {
@@ -83,13 +122,16 @@ export class ScanMarketsService {
 
   currentResultSub: Subject<any> = new Subject();
 
-  async onCandles(data: { exchange: string, market: string, candles: VOCandle[] }) {
-    const MC = await this.marketCap.getTicker();
-    const mc = MC[data.market.split('_')[1]];
+  /* async onCandles(data: { exchange: string, market: string, candles: VOCandle[] }) {
+     const exchange = data.exchange;
+     const market = data.market;
+     this.candles[exchange+market]
+     const MC = await this.marketCap.getTicker();
+     const mc = MC[data.market.split('_')[1]];
 
-    const res = await CandlesAnalys2.analyze(data, mc, null, this.notify.bind(this));
-    this.currentResultSub.next(res);
-  }
+     const res = await CandlesAnalys2.analyze(data, mc, null, this.notify.bind(this));
+     this.currentResultSub.next(res);
+   }*/
 
   /* async algorithm1(data: { exchange: string, market: string, candles: VOCandle[] }) {
      const market = data.market;
@@ -119,6 +161,7 @@ export class ScanMarketsService {
 
     if (exists) exists.postpone = postpone;
     else excludes.push({
+      stamp: Date.now(),
       market,
       postpone,
       reason
@@ -133,7 +176,7 @@ export class ScanMarketsService {
     let notifications = await this.notifications();
     if (!notifications) return
     notifications.unshift(data);
-    notifications = notifications.slice(0, 10);
+    notifications = notifications.slice(0, 30);
     this.dispatch(notifications);
   }
 
@@ -181,7 +224,14 @@ export class ScanMarketsService {
     this.dispatch(notes);
   }
 
-  getCandles(exchange: string, market: string) {
+  candles: any = {};
+  async getCandles(exchange: string, market: string) {
+    if (this.candles[exchange + market]) return Promise.resolve(this.candles[exchange + market]);
     return this.candlesService.getCandles(exchange, market);
+  }
+
+  deleteNotifications() {
+    this.storage.remove('scanner-markets-notifications');
+    this.notificationsSub.next([]);;
   }
 }

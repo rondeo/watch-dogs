@@ -11,7 +11,7 @@ import {ApiCryptoCompareService, VOHistHour} from '../../apis/api-crypto-compare
 import {P} from '@angular/core/src/render3';
 
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {VOLineGraph} from '../../ui/line-graph/line-graph.component';
 import {MovingAverage} from '../../com/moving-average';
 import {VOMarketCap} from '../../models/app-models';

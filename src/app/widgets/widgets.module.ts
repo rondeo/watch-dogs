@@ -28,6 +28,7 @@ import { SharksListComponent } from './alerts/sharks-list/sharks-list.component'
 import { CandlesPatternComponent } from './alerts/candles-pattern/candles-pattern.component';
 import { MarketCandlesComponent } from './candles-market/market-candles.component';
 import { ScannerComponent } from './scanner/scanner.component';
+import { FollowOrderListComponent } from './follow-order-list/follow-order-list.component';
 
 
 
@@ -61,7 +62,8 @@ import { ScannerComponent } from './scanner/scanner.component';
     SharksListComponent,
     CandlesPatternComponent,
     MarketCandlesComponent,
-    ScannerComponent
+    ScannerComponent,
+    FollowOrderListComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -83,7 +85,8 @@ import { ScannerComponent } from './scanner/scanner.component';
     SharksListComponent,
     CandlesPatternComponent,
     MarketCandlesComponent,
-    ScannerComponent
+    ScannerComponent,
+    FollowOrderListComponent
   ]
 })
 export class WidgetsModule { }

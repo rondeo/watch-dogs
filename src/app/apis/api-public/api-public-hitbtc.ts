@@ -1,19 +1,53 @@
-import {VOBooks, VOMarket, VOOrder, VOTrade} from "../../models/app-models";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {ApiPublicAbstract} from "./api-public-abstract";
-import {StorageService} from "../../services/app-storage.service";
+import {VOBooks, VOMarket, VOOrder, VOTrade} from '../../models/app-models';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import {ApiPublicAbstract} from './api-public-abstract';
+import {StorageService} from '../../services/app-storage.service';
+import {VOCandle} from '../../models/api-models';
+import * as moment from 'moment';
 
-export class ApiPublicHitbtc extends ApiPublicAbstract{
+export class ApiPublicHitbtc extends ApiPublicAbstract {
   exchange = 'hitbtc';
   private marketsAr: VOMarket[];
 
-  constructor(http: HttpClient, storage:StorageService) {
+  constructor(http: HttpClient, storage: StorageService) {
     super(http, storage);
   }
 
-  getMarketUrl(base:string, coin: string): string{
-    return  'https://hitbtc.com/{{coin}}-to-{{base}}'
+
+  async downloadCandles(market: string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]> {
+    /*  const markets = await this.getMarkets();
+      if(!markets[market]) return Promise.resolve([]);*/
+    market = market.split('_').reverse().join('-to-');
+    const params: any = {
+      symbol: market.split('_').reverse().join(''),
+      period: interval,
+      limit: String(limit)
+    };
+    if (endTime) params.endTime = endTime;
+    const url = '/api/proxy/https://api.hitbtc.com/api/2/public/candles/';
+    // console.log(url);
+    return await this.http.get(url, {params}).map((res: any[]) => {
+      //  console.log(res);
+      return res.map(function (item) {
+        return {
+          from: -1,
+          to: moment(item.timestamp).valueOf(),
+          open: +item.open,
+          high: +item.max,
+          low: +item.min,
+          close: +item.close,
+          Trades: -1,
+          Volume: +item.volume
+        }
+      })
+    }).toPromise();
+
+  }
+
+
+  getMarketUrl(base: string, coin: string): string {
+    return 'https://hitbtc.com/{{coin}}-to-{{base}}'
       .replace('{{base}}', base).replace('{{coin}}', coin);
   }
 
@@ -24,7 +58,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
     console.log(url);
     return this.http.get(url).map((res: any) => {
 
-      if(!res.bid){
+      if (!res.bid) {
         console.log(res);
         throw new Error(this.exchange + ' wromg data ');
       }
@@ -43,7 +77,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
       });
 
       return {
-        market: base +'_'+coin,
+        market: base + '_' + coin,
         exchange: 'hitbtc',
         buy: buy,
         sell: sell
@@ -70,7 +104,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
   }
 */
 
-  downloadTicker():Observable<{[market:string]:VOMarket}> {
+  downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     let url = '/api/proxy-5min/https://api.hitbtc.com/api/2/public/ticker';
     console.log(url);
 
@@ -82,7 +116,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
       const marketsAr = [];
       const bases = [];
       const allCoins = {}
-    //   console.log(ar);
+      //   console.log(ar);
       ar.forEach(function (item) {
         let market: VOMarket = new VOMarket();
         market.base = item.symbol.slice(-3);
@@ -99,12 +133,12 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
         market.Bid = +item.bid;
         market.BaseVolume = +item.volume * +item.last;
         indexed[market.pair] = market;
-        if(item.open)marketsAr.push(market);
+        if (item.open) marketsAr.push(market);
 
-        if(!allCoins[market.coin])allCoins[market.coin] = {};
-        allCoins[market.coin][market.base] =  market.Last;
+        if (!allCoins[market.coin]) allCoins[market.coin] = {};
+        allCoins[market.coin][market.base] = market.Last;
       });
-     // console.log(marketsAr);
+      // console.log(marketsAr);
       this.allCoins = allCoins;
       return indexed;
     });
@@ -138,9 +172,9 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
     });
   }
 
-  mapCoinDay(res){
+  mapCoinDay(res) {
 
-   // console.log(res);
+    // console.log(res);
     let ar: any[] = res.data;
 
     let Ask = [];
@@ -169,7 +203,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract{
       Last.push(+item.last);
       Low.push(+item.low2);
 
-      percentChange.push(100*(+item.last - +item.open)+item.open);
+      percentChange.push(100 * (+item.last - +item.open) + item.open);
 
       Volume.push(+item.volume);
 

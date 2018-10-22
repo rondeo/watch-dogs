@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange,
 import {BooksDisplay} from '../market-books/market-books.component';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/apis-public.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {VOMarketCap} from '../../models/app-models';
 
 @Component({
