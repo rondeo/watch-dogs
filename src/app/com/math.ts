@@ -2,11 +2,20 @@ import * as _ from 'lodash';
 
 export class MATH {
 
+  static isFall(numbers: number[]){
+    const first = numbers.shift();
+    return numbers.every(function (o) {
+      const prev = this.v;
+      this.v = o;
+      return o < prev;
+    },{v:first});
+  }
+
   static formatDecimals(value: number, decimals: number) {
     const k = Math.pow(10, decimals);
    return Math.floor(value * k)/k;
-
   }
+
   static toString(value: number, length = 4) {
     return (value * 1e8).toString().substr(0, length);
   }
@@ -59,6 +68,9 @@ export class MATH {
     });
   }
 
+  static mean(vals: number[]){
+    return _.mean(vals)
+  }
   static median(numbers: number[]) {
     numbers = numbers.slice(0);
     var median = 0, numsLen = numbers.length;
@@ -76,8 +88,11 @@ export class MATH {
     return _.mean(numbers);
   }
 
+  static percent2(val1: number, val2: number): number {
+    return Math.round(10000 * (val1 - val2) / val2) / 100;
+  }
   static percent(val1: number, val2: number): number {
-    return Math.round(1009 * (val1 - val2) / val2) / 10;
+    return Math.round(1000 * (val1 - val2) / val2) / 10;
   }
 
   static addDecimal(rate: number, number: number) {

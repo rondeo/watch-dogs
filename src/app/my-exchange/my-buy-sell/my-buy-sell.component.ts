@@ -15,6 +15,7 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {MATH} from '../../com/math';
+import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 
@@ -62,8 +63,9 @@ export class MyBuySellComponent implements OnInit {
   balanceBase: VOBalance;
   balanceCoin: VOBalance;
 
-  // marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
 
+  // marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
+  selectedMarketExchange = {exchange:null, market:null};
 
   constructor(
     private route: ActivatedRoute,
@@ -78,6 +80,10 @@ export class MyBuySellComponent implements OnInit {
 
   }
 
+  onMarketExchangeChange(evt) {
+    this.selectedMarketExchange = evt;
+  }
+
   onStopFollowClick() {
     this.followOrders.stopFollow(this.exchange, this.market);
   }
@@ -85,6 +91,7 @@ export class MyBuySellComponent implements OnInit {
   onUserPriceChanged(rate) {
 
   }
+
 
   async downloadBooks() {
     if (!this.market || !this.exchange) return;
@@ -292,19 +299,25 @@ export class MyBuySellComponent implements OnInit {
 
 
   unsubscribe() {
-
     if (this.sub2) this.sub2.unsubscribe();
     if (this.sub3) this.sub3.unsubscribe();
   }
 
-  subscribe() {
+  async subscribe() {
     this.unsubscribe();
     if (!this.exchange || !this.market) return;
     const ar = this.market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
+    const MC = this.marketCap.getTicker();
+   this.sub2 =  this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances =>{
+      this.balanceBase = _.find(balances, {symbol:this.base});
+     this.balanceCoin = _.find(balances, {symbol:this.coin});
 
-    this.marketCap.getTicker().then(MC => {
+    });
+
+ /*   this.marketCap.getTicker().then(MC => {
+
       const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
 
       api.balance$(ar[0]).subscribe(balance => {
@@ -317,7 +330,7 @@ export class MyBuySellComponent implements OnInit {
         //this.balanceCoinUS = +(balance.available + MC[ar[1]].price_usd).toPrecision(0);
 
       });
-    });
+    });*/
     this.downloadBooks();
   }
 

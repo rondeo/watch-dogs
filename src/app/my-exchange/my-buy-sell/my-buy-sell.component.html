@@ -76,11 +76,13 @@
                 *ngIf="booksCheck.checked"
                 [coin]="null"
                 [market]="market"
+                (marketExchange)="onMarketExchangeChange($event)"
         ></app-books-all-exchanges>
     </section>
     <section>
         <mat-checkbox #fishesCheck ><span class="fa fa-ship"></span></mat-checkbox>
-        <app-fishes  *ngIf="fishesCheck.checked" [exchange]="exchange" [market]="market"></app-fishes>
+
+        <app-fishes  *ngIf="fishesCheck.checked" [exchange]="selectedMarketExchange.exchange" [market]="selectedMarketExchange.market"></app-fishes>
     </section>
     <section>
         <mat-checkbox #candlesCheck >Candles</mat-checkbox>

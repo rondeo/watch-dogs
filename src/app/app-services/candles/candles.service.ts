@@ -16,8 +16,11 @@ export class CandlesService {
   candlesInterval = '1m';
   canlesLength = 240;
   overlap = 20;
-  first20coins = 'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
-  userExclude = 'BCN,STORM,GRS,SC,DENT,NPXS,NCASH,PAX,BCC,FUN,TUSD,HOT,AMB,TRIG';
+  first20coins = 'BTC,ETH,TUSD';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  deadMarkets = 'VEN,BCN,HSR';
+
+  candlesDatas:CandlesData[];
+  // userExclude = 'BCN,STORM,GRS,SC,DENT,NPXS,NCASH,PAX,BCC,FUN,TUSD,HOT,AMB,TRIG';
 
   candlesSub: Subject<{exchange: string, market: string, candles: VOCandle[]}> = new Subject<{exchange: string, market: string, candles: VOCandle[]}>()
 
@@ -26,6 +29,42 @@ export class CandlesService {
     private apisPublic: ApisPublicService,
     private storage: StorageService
   ) {
+  }
+
+
+  async init(){
+
+    const subscribed = (await this.storage.select('subscribed-candles')) || [];
+   this.candlesDatas =  subscribed.map((item:{exchange: string, markets: string[], interval: string})=>{
+      const ctr = new CandlesData(
+        this.apisPublic.getExchangeApi(item.exchange),
+        this.storage,
+        item.interval
+      );
+      ctr.candlesSub.subscribe(data =>{
+        this.candlesSub.next(data);
+      });
+      item.markets.forEach(function (market) {
+        ctr.subscribe(market);
+      })
+     return ctr;
+    })
+  }
+
+  timeout;
+  saveSubscribed(){
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(()=>{
+      const data = this.candlesDatas.map(function(item){
+        return {
+          exchange: item.exchange,
+          markets: item.subscribedMarkets,
+          interval: item.candlesInterval
+        }
+      })
+
+      this.storage.upsert('subscribed-candles', data);
+    }, 5000)
   }
 
   async downloadCandles(exchange: string, markets: string[] , i, candlesInterval:string, canlesLength: number, sub: Subject<any>) {
@@ -41,12 +80,14 @@ export class CandlesService {
     setTimeout(()=>this.downloadCandles(exchange, markets, i, candlesInterval, canlesLength, sub), 1000);
   }
 
-  async scanOnce(candlesInterval: string, canlesLength: number){
+
+  scanOnce(candlesInterval: string, canlesLength: number){
     const exchange = 'binance';
-    const markets =  await this.getValidMarkets(exchange);
-    const i = -1;
     const sub: Subject<any> = new Subject<any>();
-    this.downloadCandles(exchange,markets,i,candlesInterval, canlesLength, sub);
+    this.getValidMarkets(exchange).then(markets =>{
+      const i = -1;
+      this.downloadCandles(exchange, markets,i,candlesInterval, canlesLength, sub);
+    });
     return sub;
   }
   removeAllCandles() {
@@ -68,7 +109,7 @@ export class CandlesService {
      return o.indexOf('BTC') === 0;
    });
 
-   const userExclude = (this.userExclude + ',' + this.first20coins).split(',').map(function (o) {
+   const userExclude = (this.deadMarkets + ',' + this.first20coins).split(',').map(function (o) {
      return 'BTC_' + o;
    });
 
@@ -86,7 +127,7 @@ export class CandlesService {
    return markets;
 
  }
-  async subscribeForAll() {
+  /*async subscribeForAll() {
     const exchange= 'binance';
    const markets = await this.getValidMarkets(exchange);
     const res = markets.map((o) => {
@@ -94,7 +135,7 @@ export class CandlesService {
     });
     return Promise.all(res);
   }
-
+*/
   statsSub: Subject<string> = new Subject();
 
   getAllSubscriptions(): Observable<{ exchange: string, market: string, candles: VOCandle[] }>[] {
@@ -107,25 +148,22 @@ export class CandlesService {
     return out;
   }
 
-  async subscribe(exchange: string, market: string): Promise<Observable<{ exchange: string, market: string, candles: VOCandle[] }>> {
-    let ctr: CandlesData = this.collection[exchange];
-    if (!ctr) {
-      ctr = new CandlesData(
+  subscribe(exchange: string, market: string, candlesInterval: string): Observable<{ exchange: string, market: string, candles: VOCandle[] }> {
+    let cdata: CandlesData = _.find(this.candlesDatas, {exchange:exchange, candlesInterval:candlesInterval});
+    if(cdata) cdata.subscribe(market);
+    else {
+      cdata =  new CandlesData(
         this.apisPublic.getExchangeApi(exchange),
         this.storage,
-        this.candlesInterval,
-        this.canlesLength,
-        this.overlap
+        candlesInterval
       );
-
-       ctr.statsSub.subscribe(stats => {
-        this.statsSub.next(stats);
+      cdata.subscribe(market);
+      cdata.candlesSub.subscribe(data =>{
+        this.candlesSub.next(data);
       })
-      this.collection[exchange] = ctr;
     }
 
-
-    return ctr.subscribe(market);
+   return this.candlesSub.asObservable();
   }
 
   unsubscribe(exchange: string, market: string, interval: string) {
@@ -133,12 +171,13 @@ export class CandlesService {
     ctr.subscribe(market);
   }
 
-  async getCandles(exchange: string, market: string) {
-    let ctr: CandlesData = this.collection[exchange];
+  async getCandles(exchange: string, market: string, candelsInterval: string) {
+
+    /*let ctr: CandlesData = this.collection[exchange];
     if (!ctr) return null;
     const data = ctr.getCandles(market);
     if (!data) return this.apisPublic.getExchangeApi(exchange).downloadCandles(market, this.candlesInterval, this.canlesLength);
-    return data;
+    return data;*/
   }
 
   stop() {

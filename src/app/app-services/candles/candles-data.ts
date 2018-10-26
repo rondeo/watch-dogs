@@ -14,22 +14,17 @@ export class CandlesData {
   interval
   subscribedMarkets: string[] = [];
   statsSub: Subject<string> = new Subject();
-
-
-  candlesSub: Subject<any> = new Subject()
-
-  collection: { [id: string]: Subject<{ exchange: string, market: string, candles: VOCandle[] }> } = {};
-
+  candlesSub: Subject<any> = new Subject();
+  private subscriptions: { [id: string]: Subject<{ exchange: string, market: string, candles: VOCandle[] }> } = {};
+  private candlesLength = 120;
   constructor(
     private api: ApiPublicAbstract,
     private storage: StorageService,
-    private candlesInterval: string,
-    private candlesLength: number,
-    private overlap: number
+    public candlesInterval: string
     ) {
 
     this.exchange = api.exchange;
-   this.interval =  setInterval(() => this.next(), 10000);
+   this.interval =  setInterval(() => this.step(), 10000);
   }
 
   getExcludes(){
@@ -37,46 +32,54 @@ export class CandlesData {
   }
 
   getAllSubscriptions(): Observable<{ exchange: string, market: string, candles: VOCandle[] }>[] {
-    return Object.values(this.collection).map(function (o) {
+    return Object.values(this.subscriptions).map(function (o) {
       return o.asObservable();
     })
   }
 
-  async subscribe(market: string): Promise<Observable<{ exchange: string, market: string, candles: VOCandle[] }>> {
+  subscribe(market: string): Observable<{ exchange: string, market: string, candles: VOCandle[] }>{
     const id = 'candles-' + this.exchange + '-' + market + '-' + this.candlesInterval;
-    this.subscribedMarkets.push(market);
-
-    if (!this.collection[id]) {
-      let data: VOCandle[] = await this.storage.select(id);
-      //if(!data) {
-      // data = await this.api.downloadCandles(market, interval, 200)
-      // }
-
+    if(this.subscribedMarkets.indexOf(market) === -1) this.subscribedMarkets.push(market);
+    if (!this.subscriptions[id]) {
       const sub = new Subject<{ exchange: string, market: string, candles: VOCandle[] }>();
-      this.collection[id] = sub;
+      /*this.storage.select(id).then(candles=>{
+
+      }) */
+      this.subscriptions[id] = sub;
     }
-    return this.collection[id].asObservable();
+    return this.subscriptions[id].asObservable();
   }
 
 
+  getInterval(): number{
+    const units = this.candlesInterval.slice(-1);
+    const num = +this.candlesInterval.slice(0,-1);
+    if(isNaN(num)) throw new Error('candlesInterval '+  num);
+    const mult = units ==='m'?60e3:360e3;
+    return num * mult;
+  }
+
   unsubscribe(market: string) {
     const id = 'candles-' + this.exchange + '-' + market + '-' + this.candlesInterval;
+    this.subscribedMarkets = _.reject( this.subscribedMarkets, market);
     this.storage.remove(id);
-    delete this.collection[id];
+    delete this.subscriptions[id];
   }
 
   lastOverlap=0;
 
-  private async next() {
-
+  private async step() {
     let market = localStorage.getItem('next-market' + this.exchange);
+
     if(!market) market = this.subscribedMarkets[0];
+
     const id = 'candles-' + this.exchange + '-' + market + '-' + this.candlesInterval;
     const exchange = this.exchange;
+    const sub = this.subscriptions[id];
 
-    const sub = this.collection[id];
-    let oldCandels = await this.storage.select(id);
+    let oldCandels: VOCandle[] = await this.storage.select(id);
     let candles;
+
     if (!oldCandels) {
       candles = await this.api.downloadCandles(market, this.candlesInterval, this.candlesLength);
       candles.forEach(function (o) {
@@ -84,12 +87,21 @@ export class CandlesData {
       });
     }
     else {
-      const overlap = this.overlap;
-      let newCandles: VOCandle[] = await this.api.downloadCandles(market, this.candlesInterval, overlap);
+      const diff: number = Date.now() - _.last(oldCandels).to;
+
+      const interval = this.getInterval();
+      let req = Math.ceil(diff/interval/1000);
+      if(req < 1) {
+        console.log(' dont need ' + diff +'  '+  this.candlesInterval);
+        return;
+      }
+      if(req > this.candlesLength) req = this.candlesLength;
+      console.log(market, req);
+
+      let newCandles: VOCandle[] = await this.api.downloadCandles(market, this.candlesInterval, req);
       newCandles.forEach(function (o) {
         o.time = moment(o.to).format('HH:mm');
       });
-
       const first = _.first(newCandles);
       candles = oldCandels.filter(function (o) {
         return o.to < first.to
@@ -98,22 +110,18 @@ export class CandlesData {
       candles = _.takeRight(candles.concat(newCandles), this.candlesLength);
     }
 
-    const excluded: string[] = ((await this.getExcludes()) || []).map(function (o) {
-      return o.market;
-    });
 
-    let available = _.difference(this.subscribedMarkets, excluded);
+    let available = this.subscribedMarkets
     let ind = available.indexOf(market);
     if (ind === -1 || ind === available.length - 1) ind = 0;
     else ind++;
     const nextMarket = available[ind];
 
-    this.statsSub.next(this.exchange + ' '+ market +' OverLap: '+ this.lastOverlap + ' Avail: ' +  available.length);
+   //  this.statsSub.next(this.exchange + ' '+ market +' OverLap: '+ this.lastOverlap + ' Avail: ' +  available.length);
    //  console.log(moment().format('HH:mm')+ ' ' + market + ' next ' + nextMarket + ' of ' + available.length);
 
     localStorage.setItem('next-market' + this.exchange, nextMarket);
     this.candlesSub.next({exchange, market, candles});
-
     sub.next({exchange, market, candles});
     this.storage.upsert(id, candles);
   }

@@ -40,7 +40,6 @@ import {SlackService} from "./services/slack.service";
 import {HttpClientModule} from "@angular/common/http";
 import {WebsocketService} from "./shared/websocket-service";
 import {MyExchangeModule} from "./my-exchange/my-exchange.module";
-import {MyBotModule} from "./my-bot/my-bot.module";
 import {DatabaseService} from "./services/database.service";
 import {TraderModule} from "./trader/trader.module";
 import {AllInOneModule} from "./all-in-one/all-in-one.module";
@@ -73,7 +72,6 @@ declare const Buffer: any;
     LoginModule,
     ShapeShiftModule,
     MyExchangeModule,
-    MyBotModule,
     TraderModule,
     AllInOneModule,
     UiModule,

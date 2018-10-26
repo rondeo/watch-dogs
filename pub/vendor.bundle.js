@@ -872,13 +872,13 @@ function toComment(sourceMap) {
 
   /**
    * The base implementation of methods like `_.findKey` and `_.findLastKey`,
-   * without support for iteratee shorthands, which iterates over `collection`
+   * without support for iteratee shorthands, which iterates over `subscriptions`
    * using `eachFunc`.
    *
    * @private
-   * @param {Array|Object} collection The collection to inspect.
+   * @param {Array|Object} collection The subscriptions to inspect.
    * @param {Function} predicate The function invoked per iteration.
-   * @param {Function} eachFunc The function to iterate over `collection`.
+   * @param {Function} eachFunc The function to iterate over `subscriptions`.
    * @returns {*} Returns the found element or its key, else `undefined`.
    */
   function baseFindKey(collection, predicate, eachFunc) {
@@ -1005,15 +1005,15 @@ function toComment(sourceMap) {
 
   /**
    * The base implementation of `_.reduce` and `_.reduceRight`, without support
-   * for iteratee shorthands, which iterates over `collection` using `eachFunc`.
+   * for iteratee shorthands, which iterates over `subscriptions` using `eachFunc`.
    *
    * @private
-   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Array|Object} collection The subscriptions to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} accumulator The initial value.
    * @param {boolean} initAccum Specify using the first or last element of
-   *  `collection` as the initial value.
-   * @param {Function} eachFunc The function to iterate over `collection`.
+   *  `subscriptions` as the initial value.
+   * @param {Function} eachFunc The function to iterate over `subscriptions`.
    * @returns {*} Returns the accumulated value.
    */
   function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
@@ -2604,11 +2604,11 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Aggregates elements of `collection` on `accumulator` with keys transformed
+     * Aggregates elements of `subscriptions` on `accumulator` with keys transformed
      * by `iteratee` and values set by `setter`.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} setter The function to set `accumulator` values.
      * @param {Function} iteratee The iteratee to transform keys.
      * @param {Object} accumulator The initial aggregated object.
@@ -2909,9 +2909,9 @@ function toComment(sourceMap) {
      * The base implementation of `_.forEach` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} iteratee The function invoked per iteration.
-     * @returns {Array|Object} Returns `collection`.
+     * @returns {Array|Object} Returns `subscriptions`.
      */
     var baseEach = createBaseEach(baseForOwn);
 
@@ -2919,9 +2919,9 @@ function toComment(sourceMap) {
      * The base implementation of `_.forEachRight` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} iteratee The function invoked per iteration.
-     * @returns {Array|Object} Returns `collection`.
+     * @returns {Array|Object} Returns `subscriptions`.
      */
     var baseEachRight = createBaseEach(baseForOwnRight, true);
 
@@ -2929,7 +2929,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.every` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} predicate The function invoked per iteration.
      * @returns {boolean} Returns `true` if all elements pass the predicate check,
      *  else `false`
@@ -3004,7 +3004,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.filter` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} predicate The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
      */
@@ -3630,7 +3630,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.map` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} iteratee The function invoked per iteration.
      * @returns {Array} Returns the new mapped array.
      */
@@ -3812,7 +3812,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.orderBy` without param guards.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function[]|Object[]|string[]} iteratees The iteratees to sort by.
      * @param {string[]} orders The sort orders of `iteratees`.
      * @returns {Array} Returns the new sorted array.
@@ -4031,7 +4031,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.sample`.
      *
      * @private
-     * @param {Array|Object} collection The collection to sample.
+     * @param {Array|Object} collection The subscriptions to sample.
      * @returns {*} Returns the random element.
      */
     function baseSample(collection) {
@@ -4042,7 +4042,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.sampleSize` without param guards.
      *
      * @private
-     * @param {Array|Object} collection The collection to sample.
+     * @param {Array|Object} collection The subscriptions to sample.
      * @param {number} n The number of elements to sample.
      * @returns {Array} Returns the random elements.
      */
@@ -4125,7 +4125,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.shuffle`.
      *
      * @private
-     * @param {Array|Object} collection The collection to shuffle.
+     * @param {Array|Object} collection The subscriptions to shuffle.
      * @returns {Array} Returns the new shuffled array.
      */
     function baseShuffle(collection) {
@@ -4166,7 +4166,7 @@ function toComment(sourceMap) {
      * The base implementation of `_.some` without support for iteratee shorthands.
      *
      * @private
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} predicate The function invoked per iteration.
      * @returns {boolean} Returns `true` if any element passes the predicate check,
      *  else `false`.
@@ -4988,7 +4988,7 @@ function toComment(sourceMap) {
      * Creates a `baseEach` or `baseEachRight` function.
      *
      * @private
-     * @param {Function} eachFunc The function to iterate over a collection.
+     * @param {Function} eachFunc The function to iterate over a subscriptions.
      * @param {boolean} [fromRight] Specify iterating from right to left.
      * @returns {Function} Returns the new base function.
      */
@@ -5172,7 +5172,7 @@ function toComment(sourceMap) {
      * Creates a `_.find` or `_.findLast` function.
      *
      * @private
-     * @param {Function} findIndexFunc The function to find the collection index.
+     * @param {Function} findIndexFunc The function to find the subscriptions index.
      * @returns {Function} Returns the new find function.
      */
     function createFind(findIndexFunc) {
@@ -6728,7 +6728,7 @@ function toComment(sourceMap) {
      *
      * **Note:** If this function becomes hot, i.e. is invoked a lot in a short
      * period of time, it will trip its breaker and transition to an identity
-     * function to avoid garbage collection pauses in V8. See
+     * function to avoid garbage subscriptions pauses in V8. See
      * [V8 issue 2070](https://bugs.chromium.org/p/v8/issues/detail?id=2070)
      * for more details.
      *
@@ -7365,7 +7365,7 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.findIndex` except that it iterates over elements
-     * of `collection` from right to left.
+     * of `subscriptions` from right to left.
      *
      * @static
      * @memberOf _
@@ -9159,7 +9159,7 @@ function toComment(sourceMap) {
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The corresponding value of
+     * each element of `subscriptions` thru `iteratee`. The corresponding value of
      * each key is the number of times the key was returned by `iteratee`. The
      * iteratee is invoked with one argument: (value).
      *
@@ -9167,7 +9167,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.5.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
@@ -9188,9 +9188,9 @@ function toComment(sourceMap) {
     });
 
     /**
-     * Checks if `predicate` returns truthy for **all** elements of `collection`.
+     * Checks if `predicate` returns truthy for **all** elements of `subscriptions`.
      * Iteration is stopped once `predicate` returns falsey. The predicate is
-     * invoked with three arguments: (value, index|key, collection).
+     * invoked with three arguments: (value, index|key, subscriptions).
      *
      * **Note:** This method returns `true` for
      * [empty collections](https://en.wikipedia.org/wiki/Empty_set) because
@@ -9201,7 +9201,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
      * @returns {boolean} Returns `true` if all elements pass the predicate check,
@@ -9237,9 +9237,9 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Iterates over elements of `collection`, returning an array of all elements
+     * Iterates over elements of `subscriptions`, returning an array of all elements
      * `predicate` returns truthy for. The predicate is invoked with three
-     * arguments: (value, index|key, collection).
+     * arguments: (value, index|key, subscriptions).
      *
      * **Note:** Unlike `_.remove`, this method returns a new array.
      *
@@ -9247,7 +9247,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
      * @see _.reject
@@ -9279,15 +9279,15 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Iterates over elements of `collection`, returning the first element
+     * Iterates over elements of `subscriptions`, returning the first element
      * `predicate` returns truthy for. The predicate is invoked with three
-     * arguments: (value, index|key, collection).
+     * arguments: (value, index|key, subscriptions).
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to inspect.
+     * @param {Array|Object} subscriptions The subscriptions to inspect.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @param {number} [fromIndex=0] The index to search from.
      * @returns {*} Returns the matched element, else `undefined`.
@@ -9318,15 +9318,15 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.find` except that it iterates over elements of
-     * `collection` from right to left.
+     * `subscriptions` from right to left.
      *
      * @static
      * @memberOf _
      * @since 2.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to inspect.
+     * @param {Array|Object} subscriptions The subscriptions to inspect.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
-     * @param {number} [fromIndex=collection.length-1] The index to search from.
+     * @param {number} [fromIndex=subscriptions.length-1] The index to search from.
      * @returns {*} Returns the matched element, else `undefined`.
      * @example
      *
@@ -9338,15 +9338,15 @@ function toComment(sourceMap) {
     var findLast = createFind(findLastIndex);
 
     /**
-     * Creates a flattened array of values by running each element in `collection`
+     * Creates a flattened array of values by running each element in `subscriptions`
      * thru `iteratee` and flattening the mapped results. The iteratee is invoked
-     * with three arguments: (value, index|key, collection).
+     * with three arguments: (value, index|key, subscriptions).
      *
      * @static
      * @memberOf _
      * @since 4.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new flattened array.
      * @example
@@ -9370,7 +9370,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 4.7.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new flattened array.
      * @example
@@ -9394,7 +9394,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 4.7.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {number} [depth=1] The maximum recursion depth.
      * @returns {Array} Returns the new flattened array.
@@ -9413,8 +9413,8 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Iterates over elements of `collection` and invokes `iteratee` for each element.
-     * The iteratee is invoked with three arguments: (value, index|key, collection).
+     * Iterates over elements of `subscriptions` and invokes `iteratee` for each element.
+     * The iteratee is invoked with three arguments: (value, index|key, subscriptions).
      * Iteratee functions may exit iteration early by explicitly returning `false`.
      *
      * **Note:** As with other "Collections" methods, objects with a "length"
@@ -9426,9 +9426,9 @@ function toComment(sourceMap) {
      * @since 0.1.0
      * @alias each
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-     * @returns {Array|Object} Returns `collection`.
+     * @returns {Array|Object} Returns `subscriptions`.
      * @see _.forEachRight
      * @example
      *
@@ -9449,16 +9449,16 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.forEach` except that it iterates over elements of
-     * `collection` from right to left.
+     * `subscriptions` from right to left.
      *
      * @static
      * @memberOf _
      * @since 2.0.0
      * @alias eachRight
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-     * @returns {Array|Object} Returns `collection`.
+     * @returns {Array|Object} Returns `subscriptions`.
      * @see _.forEach
      * @example
      *
@@ -9474,8 +9474,8 @@ function toComment(sourceMap) {
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The order of grouped values
-     * is determined by the order they occur in `collection`. The corresponding
+     * each element of `subscriptions` thru `iteratee`. The order of grouped values
+     * is determined by the order they occur in `subscriptions`. The corresponding
      * value of each key is an array of elements responsible for generating the
      * key. The iteratee is invoked with one argument: (value).
      *
@@ -9483,7 +9483,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
@@ -9504,17 +9504,17 @@ function toComment(sourceMap) {
     });
 
     /**
-     * Checks if `value` is in `collection`. If `collection` is a string, it's
+     * Checks if `value` is in `subscriptions`. If `subscriptions` is a string, it's
      * checked for a substring of `value`, otherwise
      * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
      * is used for equality comparisons. If `fromIndex` is negative, it's used as
-     * the offset from the end of `collection`.
+     * the offset from the end of `subscriptions`.
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object|string} collection The collection to inspect.
+     * @param {Array|Object|string} collection The subscriptions to inspect.
      * @param {*} value The value to search for.
      * @param {number} [fromIndex=0] The index to search from.
      * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
@@ -9547,16 +9547,16 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Invokes the method at `path` of each element in `collection`, returning
+     * Invokes the method at `path` of each element in `subscriptions`, returning
      * an array of the results of each invoked method. Any additional arguments
      * are provided to each invoked method. If `path` is a function, it's invoked
-     * for, and `this` bound to, each element in `collection`.
+     * for, and `this` bound to, each element in `subscriptions`.
      *
      * @static
      * @memberOf _
      * @since 4.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Array|Function|string} path The path of the method to invoke or
      *  the function invoked per iteration.
      * @param {...*} [args] The arguments to invoke each method with.
@@ -9582,7 +9582,7 @@ function toComment(sourceMap) {
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The corresponding value of
+     * each element of `subscriptions` thru `iteratee`. The corresponding value of
      * each key is the last element responsible for generating the key. The
      * iteratee is invoked with one argument: (value).
      *
@@ -9590,7 +9590,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 4.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
@@ -9613,9 +9613,9 @@ function toComment(sourceMap) {
     });
 
     /**
-     * Creates an array of values by running each element in `collection` thru
+     * Creates an array of values by running each element in `subscriptions` thru
      * `iteratee`. The iteratee is invoked with three arguments:
-     * (value, index|key, collection).
+     * (value, index|key, subscriptions).
      *
      * Many lodash methods are guarded to work as iteratees for methods like
      * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
@@ -9630,7 +9630,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new mapped array.
      * @example
@@ -9669,7 +9669,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 4.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Array[]|Function[]|Object[]|string[]} [iteratees=[_.identity]]
      *  The iteratees to sort by.
      * @param {string[]} [orders] The sort orders of `iteratees`.
@@ -9712,7 +9712,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 3.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the array of grouped elements.
      * @example
@@ -9743,12 +9743,12 @@ function toComment(sourceMap) {
     }, function() { return [[], []]; });
 
     /**
-     * Reduces `collection` to a value which is the accumulated reports of running
-     * each element in `collection` thru `iteratee`, where each successive
+     * Reduces `subscriptions` to a value which is the accumulated reports of running
+     * each element in `subscriptions` thru `iteratee`, where each successive
      * invocation is supplied the return value of the previous. If `accumulator`
-     * is not given, the first element of `collection` is used as the initial
+     * is not given, the first element of `subscriptions` is used as the initial
      * value. The iteratee is invoked with four arguments:
-     * (accumulator, value, index|key, collection).
+     * (accumulator, value, index|key, subscriptions).
      *
      * Many lodash methods are guarded to work as iteratees for methods like
      * `_.reduce`, `_.reduceRight`, and `_.transform`.
@@ -9761,7 +9761,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
@@ -9788,13 +9788,13 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.reduce` except that it iterates over elements of
-     * `collection` from right to left.
+     * `subscriptions` from right to left.
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
@@ -9816,14 +9816,14 @@ function toComment(sourceMap) {
     }
 
     /**
-     * The opposite of `_.filter`; this method returns the elements of `collection`
+     * The opposite of `_.filter`; this method returns the elements of `subscriptions`
      * that `predicate` does **not** return truthy for.
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
      * @see _.filter
@@ -9855,13 +9855,13 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Gets a random element from `collection`.
+     * Gets a random element from `subscriptions`.
      *
      * @static
      * @memberOf _
      * @since 2.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to sample.
+     * @param {Array|Object} collection The subscriptions to sample.
      * @returns {*} Returns the random element.
      * @example
      *
@@ -9874,14 +9874,14 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Gets `n` random elements at unique keys from `collection` up to the
-     * size of `collection`.
+     * Gets `n` random elements at unique keys from `subscriptions` up to the
+     * size of `subscriptions`.
      *
      * @static
      * @memberOf _
      * @since 4.0.0
      * @category Collection
-     * @param {Array|Object} collection The collection to sample.
+     * @param {Array|Object} collection The subscriptions to sample.
      * @param {number} [n=1] The number of elements to sample.
      * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
      * @returns {Array} Returns the random elements.
@@ -9911,7 +9911,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to shuffle.
+     * @param {Array|Object} collection The subscriptions to shuffle.
      * @returns {Array} Returns the new shuffled array.
      * @example
      *
@@ -9924,15 +9924,15 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Gets the size of `collection` by returning its length for array-like
+     * Gets the size of `subscriptions` by returning its length for array-like
      * values or the number of own enumerable string keyed properties for objects.
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object|string} collection The collection to inspect.
-     * @returns {number} Returns the collection size.
+     * @param {Array|Object|string} collection The subscriptions to inspect.
+     * @returns {number} Returns the subscriptions size.
      * @example
      *
      * _.size([1, 2, 3]);
@@ -9959,15 +9959,15 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Checks if `predicate` returns truthy for **any** element of `collection`.
+     * Checks if `predicate` returns truthy for **any** element of `subscriptions`.
      * Iteration is stopped once `predicate` returns truthy. The predicate is
-     * invoked with three arguments: (value, index|key, collection).
+     * invoked with three arguments: (value, index|key, subscriptions).
      *
      * @static
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} collection The subscriptions to iterate over.
      * @param {Function} [predicate=_.identity] The function invoked per iteration.
      * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
      * @returns {boolean} Returns `true` if any element passes the predicate check,
@@ -10004,7 +10004,7 @@ function toComment(sourceMap) {
 
     /**
      * Creates an array of elements, sorted in ascending order by the results of
-     * running each element in a collection thru each iteratee. This method
+     * running each element in a subscriptions thru each iteratee. This method
      * performs a stable sort, that is, it preserves the original sort order of
      * equal elements. The iteratees are invoked with one argument: (value).
      *
@@ -10012,7 +10012,7 @@ function toComment(sourceMap) {
      * @memberOf _
      * @since 0.1.0
      * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Array|Object} subscriptions The subscriptions to iterate over.
      * @param {...(Function|Function[])} [iteratees=[_.identity]]
      *  The iteratees to sort by.
      * @returns {Array} Returns the new sorted array.
@@ -11546,7 +11546,7 @@ function toComment(sourceMap) {
     }
 
     /**
-     * Checks if `value` is an empty object, collection, map, or set.
+     * Checks if `value` is an empty object, subscriptions, map, or set.
      *
      * Objects are considered empty if they have no own enumerable string keyed
      * properties.
@@ -12955,7 +12955,7 @@ function toComment(sourceMap) {
 
     /**
      * This method is like `_.findKey` except that it iterates over elements of
-     * a collection in the opposite order.
+     * a subscriptions in the opposite order.
      *
      * @static
      * @memberOf _
@@ -24130,7 +24130,7 @@ function state(name, styles) {
  * Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
- * `keyframes` specifies a collection of {\@link style style} entries each optionally characterized
+ * `keyframes` specifies a subscriptions of {\@link style style} entries each optionally characterized
  * by an `offset` value.
  *
  * ### Usage
@@ -27588,7 +27588,7 @@ NgTemplateOutlet.propDecorators = {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * A collection of Angular directives that are likely to be used in each and every Angular
+ * A subscriptions of Angular directives that are likely to be used in each and every Angular
  * application.
  */
 var COMMON_DIRECTIVES = [
@@ -27605,7 +27605,7 @@ var COMMON_DIRECTIVES = [
     NgPluralCase,
 ];
 /**
- * A collection of deprecated directives that are no longer part of the core module.
+ * A subscriptions of deprecated directives that are no longer part of the core module.
  */
 /**
  * @license
@@ -28832,7 +28832,7 @@ SlicePipe.ctorParameters = function () { return []; };
  * This module provides a set of common Pipes.
  */
 /**
- * A collection of Angular pipes that are likely to be used in each and every application.
+ * A subscriptions of Angular pipes that are likely to be used in each and every application.
  */
 var COMMON_PIPES = [
     AsyncPipe,
@@ -63938,8 +63938,8 @@ var DefaultIterableDiffer = (function () {
      *
      * - `record` is the record which we saw at this position last time. If null then it is a new
      *   item.
-     * - `item` is the current item in the collection
-     * - `index` is the position of the item in the collection
+     * - `item` is the current item in the subscriptions
+     * - `index` is the position of the item in the subscriptions
      *
      * \@internal
      * @param {?} record
@@ -63956,13 +63956,13 @@ var DefaultIterableDiffer = (function () {
         }
         else {
             previousRecord = ((record._prev));
-            // Remove the record from the collection since we know it does not match the item.
+            // Remove the record from the subscriptions since we know it does not match the item.
             this._remove(record);
         }
         // Attempt to see if we have seen the item before.
         record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
         if (record !== null) {
-            // We have seen this before, we need to move it forward in the collection.
+            // We have seen this before, we need to move it forward in the subscriptions.
             // But first we need to check if identity changed, so we can update in view if necessary
             if (!looseIdentical(record.item, item))
                 this._addIdentityChange(record, item);
@@ -64030,7 +64030,7 @@ var DefaultIterableDiffer = (function () {
         return record;
     };
     /**
-     * Get rid of any excess {\@link IterableChangeRecord_}s from the previous collection
+     * Get rid of any excess {\@link IterableChangeRecord_}s from the previous subscriptions
      *
      * - `record` The first excess {\@link IterableChangeRecord_}.
      *
@@ -64283,7 +64283,7 @@ var DefaultIterableDiffer = (function () {
         this.forEachRemovedItem(function (record) { return removals.push(record); });
         var /** @type {?} */ identityChanges = [];
         this.forEachIdentityChange(function (record) { return identityChanges.push(record); });
-        return 'collection: ' + list.join(', ') + '\n' +
+        return 'subscriptions: ' + list.join(', ') + '\n' +
             'previous: ' + previous.join(', ') + '\n' +
             'additions: ' + additions.join(', ') + '\n' +
             'moves: ' + moves.join(', ') + '\n' +
@@ -71125,7 +71125,7 @@ function state$1(name, styles) {
  * Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
- * `keyframes` specifies a collection of {\@link style style} entries each optionally characterized
+ * `keyframes` specifies a subscriptions of {\@link style style} entries each optionally characterized
  * by an `offset` value.
  *
  * ### Usage
@@ -72061,7 +72061,7 @@ var EMAIL_REGEXP = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.
 /**
  * Provides a set of validators used by form controls.
  *
- * A validator is a function that processes a {\@link FormControl} or collection of
+ * A validator is a function that processes a {\@link FormControl} or subscriptions of
  * controls and returns a map of errors. A null map means that validation has passed.
  *
  * ### Example
@@ -74902,7 +74902,7 @@ var FormControl = (function (_super) {
  *
  * \@howToUse
  *
- * When instantiating a {\@link FormGroup}, pass in a collection of child controls as the first
+ * When instantiating a {\@link FormGroup}, pass in a subscriptions of child controls as the first
  * argument. The key for each child will be the name under which it is registered.
  *
  * ### Example
@@ -81726,7 +81726,7 @@ MdRipple.propDecorators = {
 };
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
- * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
+ * ScrollDispatcher service to include itself as part of its subscriptions of scrolling events that it
  * can be listened to through the service.
  */
 var Scrollable = /*@__PURE__*/(function () {

@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs/Subject';
 import {CandlesAnalys2} from './candles-analys2';
+import {MATH} from '../../com/math';
 
 @Injectable()
 export class ScanMarketsService {
@@ -69,6 +70,70 @@ export class ScanMarketsService {
     this.storage.upsert('favorite-markets', prefs);
     this.favoritesSub.next(prefs);
   }
+
+  scanForVolumeJump(){
+
+    const sub = this.candlesService.scanOnce('1m', 120);
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      const candles = data.candles;
+      this.candles[exchange + market] = candles;
+      const res = await CandlesAnalys1.volumeJump(candles);
+      console.log(market, res)
+      // this.currentResultSub.next(res);
+    },err=>{
+
+    }, this.stop.bind(this));
+  }
+  scanForGoingUp(){
+    const sub = this.candlesService.scanOnce('1m', 120);
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      this.candles[exchange + market] = data.candles;
+      const MC = await this.marketCap.getTicker();
+      const mc = MC[data.market.split('_')[1]];
+      const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+      this.currentResultSub.next(res);
+    },err=>{
+
+    }, this.stop.bind(this));
+
+  }
+
+  excludeResentlyUp(){
+
+  }
+
+
+
+  scanForPumpedUp(){
+    const sub = this.candlesService.scanOnce('6h', 4);
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      const candles: VOCandle[] = data.candles;
+      const first = _.first(candles);
+      const last =  _.last(candles);
+      const percent = MATH.percent(last.high, first.low);
+      console.log(market, percent);
+      if(percent > 8) {
+        this.addExclude(exchange, market, 'day change ' + percent, 24);
+      }
+     //  this.candles[exchange + market] = data.candles;
+      // const MC = await this.marketCap.getTicker();
+      // const mc = MC[data.market.split('_')[1]];
+
+     //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+      // this.currentResultSub.next(res);
+    },err=>{
+
+    }, this.stop.bind(this));
+
+  }
+
+
   async start() {
     if (this.scanInterval) {
       throw new Error(' scan is running ');
@@ -84,24 +149,11 @@ export class ScanMarketsService {
       });
       if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
 
-
     }, 60000);
 
-
-    const sub = await this.candlesService.scanOnce('1m', 120);
-
-    sub.subscribe(async (data) => {
-      const exchange = data.exchange;
-      const market = data.market;
-      this.candles[exchange + market] = data.candles;
-      const MC = await this.marketCap.getTicker();
-      const mc = MC[data.market.split('_')[1]];
-      const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
-      this.currentResultSub.next(res);
-    },err=>{
-
-    }, this.stop.bind(this));
-
+    // this.excludeDaysLoosers();
+     // this.scanForPumpedUp();
+    this.scanForGoingUp();
 
     /* await this.candlesService.subscribeForAll();
 
@@ -115,6 +167,10 @@ export class ScanMarketsService {
        })
      })*/
   }
+
+
+
+
 
   currentResult$() {
     return this.currentResultSub.asObservable();
@@ -144,6 +200,11 @@ export class ScanMarketsService {
 
    }*/
 
+  removeExcludes(){
+    const exchange = 'binance';
+    this.saveExcludes(exchange, []);
+  }
+
   async removeExclude(exchange: string, market: string) {
     let excludes = (await this.getExcludes(exchange)) || [];
     excludes = _.reject(excludes, {market});
@@ -167,7 +228,6 @@ export class ScanMarketsService {
       reason
     });
 
-    this.removeCandles(exchange, market);
     this.saveExcludes(exchange, excludes);
   }
 
@@ -210,11 +270,17 @@ export class ScanMarketsService {
     this.candlesService.removeCandles(exchange, market);
   }
 
+  excludesSub: BehaviorSubject< any> = new BehaviorSubject(null);
   async getExcludes(exchange: string) {
-    return this.storage.select('exclude-markets-' + exchange);
+    let v = this.excludesSub.getValue();
+    if(!v){
+      this.excludesSub.next( await this.storage.select('exclude-markets-' + exchange));
+    }
+    return this.excludesSub.getValue();
   }
 
   saveExcludes(exchange: string, excludes: any[]) {
+    this.excludesSub.next(excludes);
     this.storage.upsert('exclude-markets-' + exchange, excludes);
   }
 
@@ -225,13 +291,41 @@ export class ScanMarketsService {
   }
 
   candles: any = {};
-  async getCandles(exchange: string, market: string) {
+ /* async getCandles(exchange: string, market: string) {
     if (this.candles[exchange + market]) return Promise.resolve(this.candles[exchange + market]);
     return this.candlesService.getCandles(exchange, market);
-  }
+  }*/
 
   deleteNotifications() {
     this.storage.remove('scanner-markets-notifications');
     this.notificationsSub.next([]);;
+  }
+
+  excludeDownTrend() {
+      const sub = this.candlesService.scanOnce('1d', 11);
+      sub.subscribe(async (data) => {
+        const exchange = data.exchange;
+        const market = data.market;
+        const candles: VOCandle[] = data.candles;
+        candles.pop();
+        const closes: number[] = CandlesAnalys1.closes(candles);
+        const mean = MATH.median(closes);
+        //const first = _.first(candles);
+        const last =  _.last(closes);
+        const percent = MATH.percent(last, mean);
+        console.log(market, percent);
+        if(Math.abs(percent) > 5) {
+           this.addExclude(exchange, market, '11 days change ' + percent, 24);
+        }
+        //  this.candles[exchange + market] = data.candles;
+        // const MC = await this.marketCap.getTicker();
+        // const mc = MC[data.market.split('_')[1]];
+
+        //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+        // this.currentResultSub.next(res);
+      },err=>{
+
+      }, this.stop.bind(this));
+
   }
 }

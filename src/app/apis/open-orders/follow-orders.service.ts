@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
 
-  excludes:string[] = ['BTC','BNT','POLY'];
+  excludes:string[] = ['BTC'];
 
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
@@ -64,7 +64,7 @@ export class FollowOrdersService {
             if ((o.pending + o.available) * price > 10) {
               const market = 'BTC_' + o.symbol;
               if (!_.find(ar, {market: market})) {
-                const follow = new FollowOpenOrder(exchange, market, -2, this.apisPrivate, this.apisPublic, this.marketCap, this.canlesService);
+                const follow = new FollowOpenOrder(exchange, market, -2, this.apisPrivate, this.apisPublic, this.marketCap, this.storage);
                 follow.onNoBalance = () => {
                   const ar2: FollowOpenOrder[]  = _.reject(this.followingOrdersSub.getValue(), {market: follow.market});
                   this.followingOrdersSub.next(ar2);

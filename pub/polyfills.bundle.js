@@ -544,7 +544,7 @@ module.exports = {
   getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
     var C = wrapper(function(that, iterable){
       anInstance(that, C, NAME, '_i');
-      that._i = id++;      // collection id
+      that._i = id++;      // subscriptions id
       that._l = undefined; // leak store for uncaught frozen objects
       if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
     });
@@ -619,7 +619,7 @@ module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
   if(typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function(){
     new C().entries().next();
   }))){
-    // create collection constructor
+    // create subscriptions constructor
     C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
     redefineAll(C.prototype, methods);
     meta.NEED = true;

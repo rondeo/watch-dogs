@@ -58,6 +58,14 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     if(this.sub2) this.sub2.unsubscribe();
     if(!this.market || ! this.exchange) return;
 
+    console.log(this.market,  this.exchange);
+    const ar = this.market.split('_');
+
+    this.apisPublic.getExchangeApi(this.exchange).downloadMarketHistory(ar[0], ar[1]).toPromise().then(orders =>{
+      this.ordersHistory = _.orderBy(orders, 'timestamp');
+      this.showFishes();
+    })
+  /*  return;
     const ctr:OrdersHistory = this.marketsHistoryService.getOrdersHistory(this.exchange, this.market);
 
     this.sub1 = ctr.orders$().subscribe(newOrders =>{
@@ -68,7 +76,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
     this.sub2 = ctr.ordersStats$().subscribe(stats =>{
 
-    })
+    })*/
 
    // this.downloadHistory();
   }

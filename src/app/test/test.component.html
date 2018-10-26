@@ -1,5 +1,5 @@
 <p>
   test works!
-    <button (click)="onStopClick()">Stop</button>
+    <button (click)="onStopClick()">{{interval?'Stop':'Start'}}</button>
     <app-candlesticks [candles]="candles"></app-candlesticks>
 </p>

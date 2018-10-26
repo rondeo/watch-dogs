@@ -10,7 +10,7 @@ import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {GRAPHS} from '../../com/grpahs';
-import { VOMCObj} from '../../models/api-models';
+import {VOMCObj} from '../../models/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {WatchDog} from '../../models/watch-dog';
 import {SellCoinFilling} from './sell-coin-filling';
@@ -18,20 +18,22 @@ import {MovingAverage} from '../../com/moving-average';
 import {clearInterval} from 'timers';
 import {Subject} from 'rxjs/Subject';
 import {WatchDogStatus} from './watch-dog-status';
+import {MarketBot} from './market-bot';
 
 
 @Injectable()
 export class AppBotsService {
 
   private allWatchDogsSub: BehaviorSubjectMy<WatchDog[]> = new BehaviorSubjectMy();
+  private botsSub: BehaviorSubject<MarketBot[]> = new BehaviorSubject(null);
   //  private sellCoinsCtr: AppSellCoin;
-  id= 'AppBotsService';
+  id = 'AppBotsService';
   private _isSellRunningSub: BehaviorSubject<boolean>;
   private _isBuyRunningSub: BehaviorSubject<boolean>;
   private sellInterval;
   private buyInterval;
   private MC: VOMCObj;
-  private _history:any[];
+  private _history: any[];
 
   // private selling: SellCoinFilling[] = [];
 
@@ -55,24 +57,81 @@ export class AppBotsService {
 
     this.storage.getWatchDogs().then(wd => this.allWatchDogsSub.next(wd.map(o => new WatchDog(o))));
     // this.sellCoinsCtr = new AppSellCoin(storage, apiPrivates, apiPublics, this.allWatchDogsSub, marketCap);
-    this.addListeners();
-    this.start();
+    // this.addListeners();
+    // this.start();
   }
 
+  async init() {
+    const botsIds: any[] = await this.storage.select('my-bots') || [];
+    const bots = botsIds.map((o) => {
+      return new MarketBot(
+        o.exchange,
+        o.market,
+        o.history,
+        100,
+        this.storage,
+        this.apiPrivates.getExchangeApi(o.exchange),
+        this.apiPublics.getExchangeApi(o.exchange),
+        this.marketCap
+      )
+    })
+    this.botsSub.next(bots);
+    setInterval(()=>this.saveBots(), 6e4);
+  }
+
+  addBot(exchange: string, market: string):MarketBot {
+    const bots: MarketBot[] = this.botsSub.getValue();
+    const excists = _.find(bots, {exchnge: exchange, market: market});
+    if (excists) {
+      console.warn(excists);
+      return null;
+    }
+    const bot =  new MarketBot(
+      exchange,
+      market,
+      '',
+      100,
+      this.storage,
+      this.apiPrivates.getExchangeApi(exchange),
+      this.apiPublics.getExchangeApi(exchange),
+      this.marketCap
+    )
+    bots.push(bot);
+    this.botsSub.next(bots);
+    this.saveBots();
+    return bot;
+  }
+
+  saveBots() {
+    const bots: MarketBot[] = this.botsSub.getValue();
+    const botsIds = bots.map(function (o) {
+      return {
+        exchange: o.exchange,
+        market: o.market,
+        history: o.history
+    }
+    });
+    this.storage.upsert('my-bots', botsIds)
+  }
+
+
+
+
   async getHistory() {
-    if(this._history) return Promise.resolve(this._history);
-    return StorageService.instance.select(this.id+'-history').then(res => {
-      if(!Array.isArray(res)) res = [];
+    if (this._history) return Promise.resolve(this._history);
+    return StorageService.instance.select(this.id + '-history').then(res => {
+      if (!Array.isArray(res)) res = [];
       this._history = res;
       return this._history;
     })
   }
-  async saveHistory(h?:any[]){
-    if(h) this._history = h;
-     StorageService.instance.upsert(this.id+'-history', this._history);
+
+  async saveHistory(h?: any[]) {
+    if (h) this._history = h;
+    StorageService.instance.upsert(this.id + '-history', this._history);
   }
 
-  async addHistoryMessage(msg:string){
+  async addHistoryMessage(msg: string) {
     const h = await this.getHistory();
     h.push({
       time: moment().format('HH:mm'),
@@ -81,11 +140,12 @@ export class AppBotsService {
     })
     await this.saveHistory();
   }
+
   statusChangesTimeout;
 
   private addListeners() {
     WatchDog.statusChanges$().subscribe(watchDog => {
-      const msg = moment().format('HH:mm') + ' status changed ' +  watchDog.wdId + '  ' + watchDog.status;
+      const msg = moment().format('HH:mm') + ' status changed ' + watchDog.wdId + '  ' + watchDog.status;
       console.warn(msg);
       clearTimeout(this.statusChangesTimeout);
 
@@ -97,7 +157,7 @@ export class AppBotsService {
   }
 
   private dispatchChange(wds?: WatchDog[]) {
-    if(!wds) wds = this.allWatchDogsSub.getValue();
+    if (!wds) wds = this.allWatchDogsSub.getValue();
     this.allWatchDogsSub.next(wds);
   }
 
@@ -106,17 +166,17 @@ export class AppBotsService {
     wds.forEach(function (item) {
       item.status = WatchDogStatus.WAITING;
     })
-   this.dispatchChange();
+    this.dispatchChange();
   }
 
   async dryRun(action: string) {
     if (action === 'SELL') {
       WatchDog.isTest = true;
       const wds = this.getAllSellBots();
-     /* const coinsDay = await this.marketCap.getCoinsDay();
-      const promises = wds.map(function (item: WatchDog) {
-        return item.run2(coinsDay);
-      });*/
+      /* const coinsDay = await this.marketCap.getCoinsDay();
+       const promises = wds.map(function (item: WatchDog) {
+         return item.run2(coinsDay);
+       });*/
 
       WatchDog.isTest = false;
     }
@@ -137,10 +197,10 @@ export class AppBotsService {
   }
 
   deleteWatchDogById(id: string) {
-    let allDogs =  this.getAllBots();
-    const wd = _.find(allDogs, {id:id});
-    if(wd) wd.destroy();
-    allDogs = _.reject(allDogs, {id:id});
+    let allDogs = this.getAllBots();
+    const wd = _.find(allDogs, {id: id});
+    if (wd) wd.destroy();
+    allDogs = _.reject(allDogs, {id: id});
     this.dispatchChange(allDogs);
     this.save();
   }
@@ -192,64 +252,64 @@ export class AppBotsService {
 
   removeById(id: string) {
     const all = _.reject(this.getAllBots(), {id: id});
-   this.allWatchDogsSub.next(all);
+    this.allWatchDogsSub.next(all);
   }
 
   //TODO make one sell per exchange at the time
 
- /* checkStatusSelling() {
-    const selleing = this.selling.filter(function (item) {
-      return item.watchDog.status === WatchDogStatus.TO_SELL;
-    });
+  /* checkStatusSelling() {
+     const selleing = this.selling.filter(function (item) {
+       return item.watchDog.status === WatchDogStatus.TO_SELL;
+     });
 
-    selleing.forEach((item) => {
-      item.sell().then(status => {
-        if (status === WatchDogStatus.SOLD && WatchDogStatus.SOLD_OUT)
-          this.removeFromSellingById(item.id);
-      })
-    });
-    console.log('TO_SELL', selleing);
-  }
-*/
+     selleing.forEach((item) => {
+       item.sell().then(status => {
+         if (status === WatchDogStatus.SOLD && WatchDogStatus.SOLD_OUT)
+           this.removeFromSellingById(item.id);
+       })
+     });
+     console.log('TO_SELL', selleing);
+   }
+ */
 
   //////////////// start stop bots ////////////////////////
   async runBots() {
-    const wds =   this.allWatchDogsSub.getValue();
+    const wds = this.allWatchDogsSub.getValue();
     console.log(' ALL ', wds);
-   //  const MC = await this.marketCap.getTicker();
+    //  const MC = await this.marketCap.getTicker();
 
-   // const coinsDay = await this.marketCap.getCoinsDay();
+    // const coinsDay = await this.marketCap.getCoinsDay();
 
-/*
-    const promises = wds.map(function (item: WatchDog) {
-      return item.run2(coinsDay);
-    });
+    /*
+        const promises = wds.map(function (item: WatchDog) {
+          return item.run2(coinsDay);
+        });
 
-  /!*  const promises = wds.map(function (item: WatchDog) {
-      return item.run(MC[item.coin], MC[item.base]);
-    });*!/
-   const results = await Promise.all(promises);*/
-  // console.log(results);
+      /!*  const promises = wds.map(function (item: WatchDog) {
+          return item.run(MC[item.coin], MC[item.base]);
+        });*!/
+       const results = await Promise.all(promises);*/
+    // console.log(results);
   }
 
 
- /* private addBotsToSell(wds: WatchDog[]) {
-    const selling = this.selling;
+  /* private addBotsToSell(wds: WatchDog[]) {
+     const selling = this.selling;
 
-    const exists = _.intersectionBy(selling, wds, 'id');
+     const exists = _.intersectionBy(selling, wds, 'id');
 
-    if (exists.length) {
-      console.warn(' camt sell wds', exists);
-      wds = _.pullAllBy(wds, selling, 'id');
-    }
+     if (exists.length) {
+       console.warn(' camt sell wds', exists);
+       wds = _.pullAllBy(wds, selling, 'id');
+     }
 
-    const newSelling = wds.map((item) => {
-      return new SellCoinFilling(item, this.apiPrivates, this.apiPublics);
-    });
+     const newSelling = wds.map((item) => {
+       return new SellCoinFilling(item, this.apiPrivates, this.apiPublics);
+     });
 
-    this.selling = this.selling.concat(newSelling);
-    this.dispatchChange();
-  }*/
+     this.selling = this.selling.concat(newSelling);
+     this.dispatchChange();
+   }*/
 
   private seconds = 30;
   private seconsLeftSub: BehaviorSubject<number> = new BehaviorSubject<number>(30);

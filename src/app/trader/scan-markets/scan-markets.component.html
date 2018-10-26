@@ -8,10 +8,12 @@
     </div>
     <small>{{scanner.statsSub | async}}</small>
 
-    <div class="scrollY600" *ngIf="excludes">
+    <div class="scrollY300" *ngIf="excludes">
+        <button mat-button="" (click)="onExcludeDownTrendClick()">Down Trend</button>
+        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteExcludesClick()"></span>
         <app-table-props [dataset]="excludes" (selected)="onExcludeClick($event)"></app-table-props>
     </div>
-    <div class="scrollY600" *ngIf="favorites">
+    <div class="scrollY300" *ngIf="favorites">
         <app-table-props [dataset]="favorites" (selected)="onFavoritesClick($event)"></app-table-props>
     </div>
     <div>
@@ -46,7 +48,20 @@
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
 
     <small>Media {{mediaPercent}}% ({{mediaPointsTo}})</small>
-
+    <mat-form-field class="w6">
+        <input matInput placeholder="Market"
+               [(ngModel)]="userMarket"
+              (keyup)="onMarketInput($event)"
+        >
+    </mat-form-field>
+    <mat-form-field class="w3">
+        <mat-select [(ngModel)]="candlesInterval" (change)="onCandlesIntrvalChange()">
+            <mat-option value="1m">1m</mat-option>
+            <mat-option value="5m" >5m</mat-option>
+            <mat-option value="1h" >1h</mat-option>
+            <mat-option value="6h" >6h</mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <app-mc-data  [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
 

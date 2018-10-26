@@ -87,7 +87,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     })
   }
 
-  getAllOrderes(base: string, coin: string) :Observable<VOOrder[]>{
+  getAllOrders(base: string, coin: string, from: number, to: number) :Observable<VOOrder[]>{
     let market = base+'-'+coin;
     let url = 'https://bittrex.com/api/v1.1/account/getorderhistory';
     return this.call(url, {market: market}).map(res =>{
