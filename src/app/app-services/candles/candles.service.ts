@@ -17,7 +17,7 @@ export class CandlesService {
   canlesLength = 240;
   overlap = 20;
   first20coins = 'BTC,ETH,TUSD';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
-  deadMarkets = 'VEN,BCN,HSR';
+  deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
 
   candlesDatas:CandlesData[];
   // userExclude = 'BCN,STORM,GRS,SC,DENT,NPXS,NCASH,PAX,BCC,FUN,TUSD,HOT,AMB,TRIG';
@@ -31,9 +31,7 @@ export class CandlesService {
   ) {
   }
 
-
   async init(){
-
     const subscribed = (await this.storage.select('subscribed-candles')) || [];
    this.candlesDatas =  subscribed.map((item:{exchange: string, markets: string[], interval: string})=>{
       const ctr = new CandlesData(

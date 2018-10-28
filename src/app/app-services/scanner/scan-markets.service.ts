@@ -35,7 +35,7 @@ export class ScanMarketsService {
       this.statsSub.next(stats);
     });
 
-    this.storage.select('favorite-markets').then(prefs =>{
+    this.storage.select('favorite-markets').then(prefs => {
       this.favoritesSub.next(prefs);
     })
   }
@@ -48,32 +48,32 @@ export class ScanMarketsService {
    }
  */
 
-  stop() {
-    this.candlesService.stop();
-    clearInterval(this.scanInterval);
-    this.scanInterval = 0;
-  }
 
-  favoritesSub:BehaviorSubject<any> = new BehaviorSubject(null);
-  addFavorite(market: string, message: string){
-    const prefs: any[]= this.favoritesSub.getValue() || [];
-    prefs.push({
+  favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+
+  addFavorite(market: string, message: string) {
+    let favour: any[] = this.favoritesSub.getValue() || [];
+     // @ts-ignore
+    favour = _.reject(favour, {market:market});
+
+    favour.push({
       stamp: Date.now(),
       market,
       message
     });
-    this.storage.upsert('favorite-markets', prefs);
-    this.favoritesSub.next(prefs);
+    this.storage.upsert('favorite-markets', favour);
+    this.favoritesSub.next(favour);
   }
+
   removeFavorite(market: string) {
-    let prefs: any[]= _.reject(this.favoritesSub.getValue(), {market:market});
+    let prefs: any[] = _.reject(this.favoritesSub.getValue(), {market: market});
     this.storage.upsert('favorite-markets', prefs);
     this.favoritesSub.next(prefs);
   }
 
-  scanForVolumeJump(){
-
-    const sub = this.candlesService.scanOnce('1m', 120);
+ /* scanForVolumeJump() {
+    this.statsSub.next('START scanForVolumeJump')
+    const sub = this.candlesService.scanOnce('5m', 120);
     sub.subscribe(async (data) => {
       const exchange = data.exchange;
       const market = data.market;
@@ -82,11 +82,175 @@ export class ScanMarketsService {
       const res = await CandlesAnalys1.volumeJump(candles);
       console.log(market, res)
       // this.currentResultSub.next(res);
-    },err=>{
+    }, err => {
 
-    }, this.stop.bind(this));
+    }, () => {
+      this.statsSub.next('END scanForVolumeJump')
+    });
+  }*/
+
+  isFall(numbers: number[]): string {
+    numbers = _.takeRight(numbers, 4);
+    const speeds = MATH.speeds(numbers);
+    const isFall = MATH.isFall(speeds);
+    const per = MATH.percent(_.last(numbers), _.first(numbers));
+    return isFall ? 'FALL ' + per : null;
   }
-  scanForGoingUp(){
+
+
+  scanForFall() {
+    this.statsSub.next('SCANNING scanForFall');
+
+
+    const sub = this.candlesService.scanOnce('5m', 120);
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      const candles: VOCandle[] = data.candles;
+
+      const last3 = _.takeRight(candles, 3);
+      const meds = CandlesAnalys1.meds(last3);
+
+
+      const volumes = CandlesAnalys1.volumes(candles);
+      const volumeMean = _.mean(volumes);
+      const preiceChanges = MATH.percent(meds[2], meds[0]);
+      const volume2 = last3[1].Volume;
+      const volume2Change = MATH.percent(volume2, volumeMean);
+      const volumes3 = _.sum(CandlesAnalys1.volumes(last3));
+
+    //  const sorted: VOCandle[] = _.orderBy(candles, 'Volume').reverse();
+
+     // const maxCandle = sorted[0];
+      //const maxVolume = maxCandle.Volume;
+    //  const maxIndex = candles.indexOf(maxCandle);
+     // const last6 = _.takeRight(volumes, 6);
+     // const max = _.max(last6);
+
+      const D = MATH.percent(volumes3, volumeMean);
+
+      // const sum = _.sum(last5);
+     //  const LastMax = MATH.percent(max, mean);
+     // console.log(market,D, maxIndex);
+      if(D > 1000){
+        console.log(market, D, volume2Change, preiceChanges);
+
+        this.notify({
+          market,
+          message: 'V '+D + ' V2 ' + volume2Change + ' PD '+ preiceChanges
+        })
+      }/*else if( LastS > 3000){
+        this.notify({
+          market,
+          message: 'V '+D + ' DS '+  LastS
+        })
+      }*/
+
+     // const meds = CandlesAnalys1.meds(candles);
+     // const volsJump = CandlesAnalys1.volumeJump(_.takeRight(candles, 30));
+
+  /*    if (volsJump[0].p > 3000) {
+        this.notify({
+          market,
+          message: volsJump.map(function (item) {
+            return JSON.stringify(item);
+          }).join(',')
+        })
+      }
+      // const lasts =  _.takeRight(candles,1)
+
+      // console.log(isFall,market, perc, speeds.toString());
+      let message = this.isFall(meds);
+
+      if (message) {
+        this.notify({
+          market,
+          message,
+          date: moment().format('HH:mm')
+        })
+      } else {
+
+        const last10 = _.takeRight(meds, 10);
+
+        const max = _.max(last10);
+        const min = _.min(last10);
+        const last = _.last(last10);
+        const ampl = MATH.percent(max, min);
+        const diff = MATH.percent(last, (min + max) / 2);
+        message = ' ampl  ' + ampl + ' diff ' + diff;
+        if (ampl > 1 && diff < -ampl / 3) {
+          this.notify({
+            market,
+            message,
+
+            x: 'X'
+          })
+        } else {
+          if (ampl > 1 && diff > 0) {
+            this.notify({
+              market,
+              message,
+              a: 1,
+
+            })
+          }
+
+        }
+
+
+        //  console.log(market + ' ampl  '+ ampl + ' diff ' + diff);
+
+        //const lastprice = CandlesAnalys1.lastPrice(meds);
+        //const volumesJump = CandlesAnalys1.volumeJump(candles);
+
+        /!*const allBuy = volumesJump.every(function (item) {
+          return item.a === 'BUY'
+        });*!/
+
+        /!* if (allBuy) {
+           let message = lastprice + '  V BUY ' + volumesJump.map(function (item) {
+             return JSON.stringify(item);
+           }).join('  ').replace(/[{}"]/g, ' ');
+           this.notify({
+             market,
+             message,
+             data: moment().format('HH:mm'),
+             x: 'X'
+           })
+         }*!/
+
+      }*/
+    }, err => {
+    }, () => {
+      this.statsSub.next('ENDED scanForFall')
+    });
+
+  }
+
+  scanGoingDown() {
+    const sub = this.candlesService.scanOnce('5m', 120);
+    sub.subscribe(async (data) => {
+        const exchange = data.exchange;
+        const market = data.market;
+        const candles = data.candles;
+        const closes = CandlesAnalys1.closes(candles);
+        const last3 = _.mean(_.takeRight(closes, 3));
+        const mean = _.mean(closes);
+        const res = MATH.percent(last3, mean);
+        console.log(market, res);
+
+      }, err => {
+
+      }, () => {
+        this.statsSub.next('STOP scanGoingDown')
+      }
+    );
+
+  }
+
+
+  scanForGoingUp() {
+    this.statsSub.next('START scanForGoingUp')
     const sub = this.candlesService.scanOnce('1m', 120);
     sub.subscribe(async (data) => {
       const exchange = data.exchange;
@@ -96,40 +260,11 @@ export class ScanMarketsService {
       const mc = MC[data.market.split('_')[1]];
       const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
       this.currentResultSub.next(res);
-    },err=>{
+    }, err => {
 
-    }, this.stop.bind(this));
-
-  }
-
-  excludeResentlyUp(){
-
-  }
-
-
-
-  scanForPumpedUp(){
-    const sub = this.candlesService.scanOnce('6h', 4);
-    sub.subscribe(async (data) => {
-      const exchange = data.exchange;
-      const market = data.market;
-      const candles: VOCandle[] = data.candles;
-      const first = _.first(candles);
-      const last =  _.last(candles);
-      const percent = MATH.percent(last.high, first.low);
-      console.log(market, percent);
-      if(percent > 8) {
-        this.addExclude(exchange, market, 'day change ' + percent, 24);
-      }
-     //  this.candles[exchange + market] = data.candles;
-      // const MC = await this.marketCap.getTicker();
-      // const mc = MC[data.market.split('_')[1]];
-
-     //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
-      // this.currentResultSub.next(res);
-    },err=>{
-
-    }, this.stop.bind(this));
+    }, () => {
+      this.statsSub.next('STOP scanForGoingUp')
+    });
 
   }
 
@@ -152,7 +287,7 @@ export class ScanMarketsService {
     }, 60000);
 
     // this.excludeDaysLoosers();
-     // this.scanForPumpedUp();
+    // this.scanForPumpedUp();
     this.scanForGoingUp();
 
     /* await this.candlesService.subscribeForAll();
@@ -169,38 +304,14 @@ export class ScanMarketsService {
   }
 
 
-
-
-
   currentResult$() {
     return this.currentResultSub.asObservable();
   }
 
   currentResultSub: Subject<any> = new Subject();
 
-  /* async onCandles(data: { exchange: string, market: string, candles: VOCandle[] }) {
-     const exchange = data.exchange;
-     const market = data.market;
-     this.candles[exchange+market]
-     const MC = await this.marketCap.getTicker();
-     const mc = MC[data.market.split('_')[1]];
 
-     const res = await CandlesAnalys2.analyze(data, mc, null, this.notify.bind(this));
-     this.currentResultSub.next(res);
-   }*/
-
-  /* async algorithm1(data: { exchange: string, market: string, candles: VOCandle[] }) {
-     const market = data.market;
-     const exchange = data.exchange;
-     const MC = await this.marketCap.getTicker();
-     const candles = data.candles;
-     const mc = MC[market.split('_')[1]];
-     const res = await CandlesAnalys1.analyze(candles, market, mc, this.addExclude, this.notify);
-     this.currentResultSub.next(res);
-
-   }*/
-
-  removeExcludes(){
+  removeExcludes() {
     const exchange = 'binance';
     this.saveExcludes(exchange, []);
   }
@@ -232,11 +343,21 @@ export class ScanMarketsService {
   }
 
   async notify(data: any) {
-
+    data.x = 'X';
     let notifications = await this.notifications();
-    if (!notifications) return
-    notifications.unshift(data);
-    notifications = notifications.slice(0, 30);
+    if (!notifications) return;
+
+    let exists = _.find(notifications, {market: data.market});
+    if (exists) {
+      exists.N++;
+      exists.history[String(exists.N)] = moment().format('HH:mm') + ' ' + data.message;
+    } else {
+      data.date = moment().format('HH:mm');
+      data.N = 0;
+      data.history = {};
+      notifications.unshift(data);
+      notifications = notifications.slice(0, 30);
+    }
     this.dispatch(notifications);
   }
 
@@ -270,11 +391,12 @@ export class ScanMarketsService {
     this.candlesService.removeCandles(exchange, market);
   }
 
-  excludesSub: BehaviorSubject< any> = new BehaviorSubject(null);
+  excludesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+
   async getExcludes(exchange: string) {
     let v = this.excludesSub.getValue();
-    if(!v){
-      this.excludesSub.next( await this.storage.select('exclude-markets-' + exchange));
+    if (!v) {
+      this.excludesSub.next(await this.storage.select('exclude-markets-' + exchange));
     }
     return this.excludesSub.getValue();
   }
@@ -291,41 +413,46 @@ export class ScanMarketsService {
   }
 
   candles: any = {};
- /* async getCandles(exchange: string, market: string) {
-    if (this.candles[exchange + market]) return Promise.resolve(this.candles[exchange + market]);
-    return this.candlesService.getCandles(exchange, market);
-  }*/
+
+  /* async getCandles(exchange: string, market: string) {
+     if (this.candles[exchange + market]) return Promise.resolve(this.candles[exchange + market]);
+     return this.candlesService.getCandles(exchange, market);
+   }*/
 
   deleteNotifications() {
     this.storage.remove('scanner-markets-notifications');
-    this.notificationsSub.next([]);;
+    this.notificationsSub.next([]);
+    ;
   }
 
   excludeDownTrend() {
-      const sub = this.candlesService.scanOnce('1d', 11);
-      sub.subscribe(async (data) => {
-        const exchange = data.exchange;
-        const market = data.market;
-        const candles: VOCandle[] = data.candles;
-        candles.pop();
-        const closes: number[] = CandlesAnalys1.closes(candles);
-        const mean = MATH.median(closes);
-        //const first = _.first(candles);
-        const last =  _.last(closes);
-        const percent = MATH.percent(last, mean);
-        console.log(market, percent);
-        if(Math.abs(percent) > 5) {
-           this.addExclude(exchange, market, '11 days change ' + percent, 24);
-        }
-        //  this.candles[exchange + market] = data.candles;
-        // const MC = await this.marketCap.getTicker();
-        // const mc = MC[data.market.split('_')[1]];
+    this.statsSub.next('START excludeDownTrend')
+    const sub = this.candlesService.scanOnce('1d', 11);
+    sub.subscribe(async (data) => {
+      const exchange = data.exchange;
+      const market = data.market;
+      const candles: VOCandle[] = data.candles;
+      candles.pop();
+      const closes: number[] = CandlesAnalys1.closes(candles);
+      const mean = MATH.median(closes);
+      //const first = _.first(candles);
+      const last = _.last(closes);
+      const percent = MATH.percent(last, mean);
+      console.log(market, percent);
+      if (Math.abs(percent) > 5) {
+        this.addExclude(exchange, market, '11 days change ' + percent, 24);
+      }
+      //  this.candles[exchange + market] = data.candles;
+      // const MC = await this.marketCap.getTicker();
+      // const mc = MC[data.market.split('_')[1]];
 
-        //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
-        // this.currentResultSub.next(res);
-      },err=>{
+      //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+      // this.currentResultSub.next(res);
+    }, err => {
 
-      }, this.stop.bind(this));
+    }, () => {
+      this.statsSub.next('STOP excludeDownTrend')
+    });
 
   }
 }

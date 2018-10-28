@@ -19,6 +19,7 @@ import {DirectivesModule} from '../directives/directives.module';
 import {PipesModule} from '../pipes/pipes.module';
 import { ScanMarketsComponent } from './scan-markets/scan-markets.component';
 import { MarketDetailsComponent } from './market-details/market-details.component';
+import { NotesHistoryComponent } from './notes-history/notes-history.component';
 
 const routes: Routes = [
   {
@@ -57,11 +58,13 @@ const routes: Routes = [
     CommonMarketsComponent,
     LiveTraderComponent,
     ScanMarketsComponent,
-    MarketDetailsComponent
+    MarketDetailsComponent,
+    NotesHistoryComponent
   ],
   providers: [SoketConnectorService],
   entryComponents:[
-    MarketDetailsComponent
+    MarketDetailsComponent,
+    NotesHistoryComponent
   ]
 })
 export class TraderModule {

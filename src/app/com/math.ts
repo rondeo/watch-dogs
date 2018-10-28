@@ -2,13 +2,32 @@ import * as _ from 'lodash';
 
 export class MATH {
 
+  static speeds(numbers: number[]) {
+    const speeds = numbers.map(function (o) {
+      const speed = Math.round((o - this.last) / this.last * 1e4) / 100;
+      this.last = o;
+      return speed;
+    }, {last: numbers[0]});
+    return speeds
+  }
+
+  static isFallLog(numbers: number[]){
+    const first = numbers.shift();
+    return numbers.every(function (o) {
+      const res =  o < this.prev;
+      console.log(o, this.prev);
+      this.prev = o;
+      return res;
+    },{prev:first});
+  }
+
   static isFall(numbers: number[]){
     const first = numbers.shift();
     return numbers.every(function (o) {
-      const prev = this.v;
-      this.v = o;
-      return o < prev;
-    },{v:first});
+      const res =  o < this.prev;
+      this.prev = o;
+      return res;
+    },{prev:first});
   }
 
   static formatDecimals(value: number, decimals: number) {

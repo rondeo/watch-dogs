@@ -1,7 +1,10 @@
 <div>
     <div>
+        <h4>{{scanner.statsSub | async}}</h4>
         <small>{{exchange}}</small>
         <button mat-button="" (click)="onStartClick()">{{scanner.scanInterval?'Stop':'Scan'}}</button>
+        <button mat-button="" (click)="onDownClick()">DOWN</button>
+        <button mat-button="" (click)="onFallClick()">{{falIntrval?'Scanning':'Scan'}} FALL</button>
         <mat-checkbox (change)="onExcludesChange($event)">Excludes</mat-checkbox>
         <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
         <button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>
@@ -22,20 +25,8 @@
     <mat-checkbox #cmc> CMC</mat-checkbox>
     <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteClick()"></span>
     <div class="horizontal">
-        <div *ngIf="cmc.checked">
-            <div class="scrollY600">
-                <app-sortable-table
-                        [consAvailable]="coinsAvailable"
-                        (selectedSymbol)="onCoinSelected($event)"></app-sortable-table>
-            </div>
-
-            <mat-form-field class="w6">
-                <input matInput placeholder="Date" [(ngModel)]="analizeTime">
-            </mat-form-field>
-            <button mat-button
-                    (click)="onAnaliseCandlesClick()"
-            >Get
-            </button>
+        <div class="scrollY300">
+            <app-table-props [dataset]="notifications2" (selected)="onDatasetClick($event)"></app-table-props>
 
         </div>
         <div class="scrollY300">

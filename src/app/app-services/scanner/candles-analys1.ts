@@ -8,6 +8,16 @@ import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 
 export class CandlesAnalys1 {
 
+  static isFall(numbers: number[]){
+    const speeds = MATH.speeds(numbers);
+    return MATH.isFall(speeds);
+  }
+
+
+  static volumes(candles: VOCandle[]) {
+    return _.map(candles, 'Volume');
+  }
+
   static makeValues(max, median, candles: VOCandle[]) {
     const ind = candles.indexOf(max);
     let prev: VOCandle;
@@ -29,36 +39,39 @@ export class CandlesAnalys1 {
 
     const t = moment(max.to).format('HH:mm');
     const p = MATH.percent(max.Volume, median);
-    const a = max.close > max.open?'BUY':'SELL';
-    // const d = MATH.percent(max.close, max.open);
     const d = MATH.percent(nextPrice, pricePrev);
-    return {t,p,a,d};
+    const a = d > -0.2?'BUY':'SELL';
+    // const d = MATH.percent(max.close, max.open);
+
+    const m = [pricePrev,nextPrice]
+    return {t,p,a,d,m};
   }
 
-  static MALats(candles: VOCandle[]) {
-    const closes: number[] = CandlesAnalys1.closes(candles);
-    const mean = _.mean(closes);
-    const last =  _.last(closes);
+
+
+
+  static lastPrice(prices: number[]) {
+    const mean = MATH.median(prices);
+    const last =  _.last(prices);
     return MATH.percent(last, mean);
   }
 
 
-  static volumeJump(candles: VOCandle[]) {
+  static volumeJump(candles: VOCandle[]):{t:string, p:number, a:string, d:number}[] {
     const vols = _.orderBy(_.filter(candles, 'Volume'), 'Volume').reverse();
-
-
     const median = vols[Math.round(vols.length/2)].Volume;
     return vols.slice(0,3).map(function (o) {
       return CandlesAnalys1.makeValues(o, median, candles);
     });
   }
 
-  static pumpedUp(candles: VOCandle[]) {
+  static pumpedUp(candles: VOCandle[]){
     candles = _.takeRight(candles, 4);
     const first = _.first(candles);
     const last = _.last(candles);
     return MATH.percent(last.high, first.low);
   }
+
 
   static meds(candles: VOCandle[]): number[] {
     return candles.map(function (o) {
@@ -75,15 +88,6 @@ export class CandlesAnalys1 {
   static analysData;
   static data;
 
-  static speeds(candles: VOCandle[]) {
-    const values: number[] = CandlesAnalys1.meds(candles);
-    const speeds = values.map(function (o) {
-      const speed = Math.round((o - this.last) / this.last * 1e4) / 100;
-      this.last = o;
-      return speed;
-    }, {last: values[0]});
-    return speeds
-  }
 
 
   static lastVolume(candles: VOCandle[]) {
@@ -107,8 +111,8 @@ export class CandlesAnalys1 {
     return MATH.percent2(priceL, priceF);
   }
 
-  static MA3(candles: VOCandle[]) {
-    const prices = CandlesAnalys1.meds(candles);
+
+  static MA3(prices: number[]) {
     const n = prices.length;
     //  console.log(prices.slice(n-3));
     const last3 = _.mean(prices.slice(n - 3));
@@ -133,7 +137,6 @@ export class CandlesAnalys1 {
     const prelast = candles[candles.length - 2];
     const lastmed = (last.high + last.low) / 2;
     const prelastmed = (prelast.high + prelast.low) / 2;
-
 
   }
 

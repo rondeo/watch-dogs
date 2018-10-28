@@ -264,7 +264,7 @@ export class FollowOpenOrder {
     const candles =  await this.getCandles();
     const progress = CandlesAnalys1.progress(candles);
     const goingUp = CandlesAnalys1.goingUp(candles);
-    const  MA3 = CandlesAnalys1.MA3(candles);
+    // const  MA3 = CandlesAnalys1.MA3(candles);
    /* const openOrders = this.apisPrivate.getExchangeApi(this.exchange).getAllOpenOrders();
     if (!openOrders) {
       this.lastMessage = ' NO OPEN ORDERS ';
@@ -287,7 +287,7 @@ export class FollowOpenOrder {
     console.log(currentPrice, this.stopLossOrder.stopPrice);
     const diff = MATH.percent(this.stopLossOrder.stopPrice, currentPrice);
 
-    this.lastMessage = this.market + '  ' + diff + '  progress ' + progress + ' goingUp ' + goingUp + ' MA3 ' + MA3;
+    this.lastMessage = this.market + '  ' + diff + '  progress ' + progress + ' goingUp ' + goingUp;
     FollowOpenOrder.status.next(this.lastMessage);
     this.stopLossOrder.lastStatus = moment().format('HH:mm') + '  ' + diff;
     if (diff < (this.percentStopLoss - 1)) {

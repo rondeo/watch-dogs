@@ -16,6 +16,7 @@ import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
 import {Subject} from 'rxjs/Subject';
 import {CandlesAnalys2} from '../../app-services/scanner/candles-analys2';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 
 @Component({
   selector: 'app-scan-markets',
@@ -31,6 +32,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   analysData: any[];
   MC: VOMCObj;
   notifications: any[];
+  notifications2: any[];
   coinsAvailable: VOMarketCap[];
 
 
@@ -57,6 +59,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
      this.apisPublic.getExchangeApi('binance').ticker5min$('BTC_KMD').subscribe(ticker =>{
        console.log(ticker);
      })*/
+    window['MATH'] = MATH;
   }
 
   userMarket: string;
@@ -67,7 +70,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
   onMarketInput(evt) {
     if (evt.code === 'Enter') this.showCandles(this.userMarket);
-    console.log(evt, this.userMarket);
+   //  console.log(evt, this.userMarket);
   }
 
   onCandlesIntrvalChange(){
@@ -108,7 +111,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       }
     })
 
-
     // this.scanner.addFavorite()
   }
 
@@ -127,7 +129,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   favorites: any[];
-
   onFavoriteChange(evt) {
     if (evt.checked) {
       this.scanner.favoritesSub.subscribe(favs => {
@@ -173,7 +174,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   async initAsync() {
     const sub = await this.scanner.notifications$();
     this.sub1 = sub.subscribe(notes => {
-      this.notifications = notes;
+      this.notifications = _.filter(notes, 'a');
+      this.notifications2 = _.reject(notes, 'a');
     });
     this.sub2 = this.scanner.currentResult$().subscribe(curr => {
 
@@ -293,10 +295,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
      }*/
     if (prop === 'market') {
       this.showMarket(market);
-      // console.log(candles);
-      // console.log(market);
-
+    }else if(prop === 'message') {
+      this.dialog.open( NotesHistoryComponent,{data:item} )
     }
+
   }
 
   mediaPointsFrom: number;
@@ -338,7 +340,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
     // console.log(market + ' pumpedUp ' +CandlesAnalys1.pumpedUp(candles));
     console.log(market + ' volume jump ', CandlesAnalys1.volumeJump(candles));
-    console.log(market + ' trend ', CandlesAnalys1.MALats(_.takeRight(candles, 20)));
+   //  console.log(market + ' trend ', CandlesAnalys1.MALats(_.takeRight(candles, 20)));
 
     const  c1 = candles.slice(candles.length-6, candles.length -2);
 
@@ -391,9 +393,25 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }
 
+  onDownClick(){
+    this.scanner.scanGoingDown();
+  }
+falIntrval
+  onFallClick(){
+
+    if(this.falIntrval){
+      clearInterval(this.falIntrval);
+      this.falIntrval = 0;
+      return
+    }
+    this.scanner.scanForFall();
+   this.falIntrval =  setInterval(()=>{
+      this.scanner.scanForFall();
+    }, 5*60*1e3);
+  }
   onStartClick() {
-    if (this.scanner.scanInterval) this.scanner.stop();
-    else this.scanner.start();
+   // i/*f (this.scanner.scanInterval) this.scanner.stop();
+   //  else this.scanner.start();*/
   }
 
   onDeleteClick() {

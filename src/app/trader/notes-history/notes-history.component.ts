@@ -1,0 +1,25 @@
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material';
+import {DilaogData} from '../../material/dialog-simple/dialog-simple.component';
+
+@Component({
+  selector: 'app-notes-history',
+  templateUrl: './notes-history.component.html',
+  styleUrls: ['./notes-history.component.css']
+})
+export class NotesHistoryComponent implements OnInit {
+
+  history: string[];
+  market: string;
+  startMessage: string;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+   this.market = data.market;
+   this.startMessage =data.date + '  ' +data.message;
+   this.history = Object.values(data.history);
+
+  }
+
+  ngOnInit() {
+  }
+
+}

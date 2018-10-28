@@ -54,7 +54,7 @@ export class TestComponent implements OnInit {
    const candles =  await this.apisPublic.getExchangeApi('binance')
       .downloadCandles('BTC_AST','5m', 24, this.currentTime.valueOf());
   //   console.log(candles);
-   const last10 = _.takeRight(CandlesAnalys1.speeds(candles), 10);
+   /*const last10 = _.takeRight(.speeds(candles), 10);
    console.log(last10);
    const last4 = _.takeRight(last10, 4);
    const flast4 = last4.shift();
@@ -66,7 +66,7 @@ export class TestComponent implements OnInit {
    },{v:flast4});
 
    console.log(flast4, last4, isFall);
-
+*/
     this.candles = candles;
 
   }
