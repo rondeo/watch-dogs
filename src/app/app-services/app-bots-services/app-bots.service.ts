@@ -19,6 +19,7 @@ import {clearInterval} from 'timers';
 import {Subject} from 'rxjs/Subject';
 import {WatchDogStatus} from './watch-dog-status';
 import {MarketBot} from './market-bot';
+import {CandlesService} from '../candles/candles.service';
 
 
 @Injectable()
@@ -41,7 +42,8 @@ export class AppBotsService {
     private storage: StorageService,
     private apiPrivates: ApisPrivateService,
     private apiPublics: ApisPublicService,
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private candlesService: CandlesService
   ) {
     const isRunning = !!JSON.parse(localStorage.getItem('isSellRunning'));
     this._isSellRunningSub = new BehaviorSubject<boolean>(isRunning);
@@ -72,10 +74,15 @@ export class AppBotsService {
         this.storage,
         this.apiPrivates.getExchangeApi(o.exchange),
         this.apiPublics.getExchangeApi(o.exchange),
-        this.marketCap
+        this.marketCap,
+        this.candlesService
       )
     })
+
     this.botsSub.next(bots);
+    bots.forEach(function (item) {
+      item.start();
+    });
     setInterval(()=>this.saveBots(), 6e4);
   }
 
@@ -94,7 +101,8 @@ export class AppBotsService {
       this.storage,
       this.apiPrivates.getExchangeApi(exchange),
       this.apiPublics.getExchangeApi(exchange),
-      this.marketCap
+      this.marketCap,
+      this.candlesService
     )
     bots.push(bot);
     this.botsSub.next(bots);

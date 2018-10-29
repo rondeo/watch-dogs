@@ -34,11 +34,9 @@ export class TestComponent implements OnInit {
     clearInterval(this.interval);
     this.interval = 0;
   }
-  interval
 
+  interval;
   async initAsync() {
-
-
   /*
     (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
 

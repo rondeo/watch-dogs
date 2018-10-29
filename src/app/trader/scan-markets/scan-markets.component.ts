@@ -17,6 +17,7 @@ import {Subject} from 'rxjs/Subject';
 import {CandlesAnalys2} from '../../app-services/scanner/candles-analys2';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
+import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 
 @Component({
   selector: 'app-scan-markets',
@@ -50,7 +51,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private storage: StorageService,
     private router: Router,
-    public scanner: ScanMarketsService
+    public scanner: ScanMarketsService,
+    private botsService: AppBotsService
   ) {
 
 
@@ -82,8 +84,20 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.initAsync();
+    this.botsService.init();
   }
 
+  onAddBotClick(){
+    if(!this.selectedMarket) return;
+    if(confirm('add bot')){
+      this.addBot(this.selectedMarket);
+    }
+  }
+  addBot(market: string) {
+    const bot = this.botsService.addBot('binance', market);
+    console.log(bot);
+    bot.start();
+  }
   onDeleteExcludesClick(){
     if(confirm('empty ecludes? ')) {
       this.scanner.removeExcludes()

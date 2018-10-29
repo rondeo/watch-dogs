@@ -71,7 +71,6 @@ export class FollowOpenOrder {
       this.balanceBase = _.find(balances, {symbol: this.base});
       const balanceCoin = _.find(balances, {symbol: this.coin});
 
-
       if (this.balanceCoin && this.balanceCoin.available !== balanceCoin.available) {
         console.log(balanceCoin);
         this.lastMessage = ' balance changed  ' + balanceCoin.symbol + ' ' + this.balanceCoin.available + ' to ' + balanceCoin.available;

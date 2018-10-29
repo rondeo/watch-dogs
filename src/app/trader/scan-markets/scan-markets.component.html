@@ -31,12 +31,12 @@
         </div>
         <div class="scrollY300">
             <app-table-props [dataset]="notifications" (selected)="onDatasetClick($event)"></app-table-props>
-
         </div>
     </div>
 
     <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}" >{{exchange}} {{selectedMarket}}</a>
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
+    <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>
 
     <small>Media {{mediaPercent}}% ({{mediaPointsTo}})</small>
     <mat-form-field class="w6">

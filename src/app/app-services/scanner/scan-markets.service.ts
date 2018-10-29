@@ -103,13 +103,11 @@ export class ScanMarketsService {
   scanForFall() {
     this.statsSub.next('SCANNING scanForFall');
 
-
-    const sub = this.candlesService.scanOnce('5m', 120);
+    const sub = this.candlesService.scanOnce('5m', 24);
     sub.subscribe(async (data) => {
       const exchange = data.exchange;
       const market = data.market;
       const candles: VOCandle[] = data.candles;
-
       const last3 = _.takeRight(candles, 3);
 
     /*  const times = last3.map(function (item) {
@@ -297,7 +295,12 @@ export class ScanMarketsService {
       });
       if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
 
-      this.scanForFall();
+      try{
+        this.scanForFall();
+      } catch (e) {
+        console.error(e);
+      }
+
     }, 4.5 * 60000);
     this.scanForFall();
 
