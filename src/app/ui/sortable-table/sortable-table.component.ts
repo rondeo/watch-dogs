@@ -17,6 +17,8 @@ export class SortableTableComponent implements OnInit, OnChanges {
 
   @Input() consAvailable: VOMarketCap[];
   @Output() selectedSymbol:EventEmitter<string> = new EventEmitter();
+  @Output() rankClick:EventEmitter<string> = new EventEmitter();
+  @Output() priceClick:EventEmitter<string> = new EventEmitter();
   constructor(
   ) { }
 
@@ -30,6 +32,14 @@ export class SortableTableComponent implements OnInit, OnChanges {
   private sortData(){
     if(!this.consAvailable) return;
     this.consAvailable = _.orderBy(this.consAvailable, this.sortCriteria, this.asc_desc);
+  }
+
+  onRankClick(evt){
+    this.rankClick.emit(evt);
+  }
+
+  onPriceClick(evt){
+    this.priceClick.emit(evt);
   }
 
   onSymbolClick(event){

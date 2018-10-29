@@ -11,10 +11,10 @@ export class NotesHistoryComponent implements OnInit {
 
   history: string[];
   market: string;
-  startMessage: string;
+  result: string;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
    this.market = data.market;
-   this.startMessage =data.date + '  ' +data.message;
+   this.result =data.date + '  ' +data.result;
    this.history = Object.values(data.history);
 
   }

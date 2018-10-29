@@ -4,7 +4,7 @@
         <small>{{exchange}}</small>
         <button mat-button="" (click)="onStartClick()">{{scanner.scanInterval?'Stop':'Scan'}}</button>
         <button mat-button="" (click)="onDownClick()">DOWN</button>
-        <button mat-button="" (click)="onFallClick()">{{falIntrval?'Scanning':'Scan'}} FALL</button>
+       <!-- <button mat-button="" (click)="onFallClick()">{{falIntrval?'Scanning':'Scan'}} FALL</button>-->
         <mat-checkbox (change)="onExcludesChange($event)">Excludes</mat-checkbox>
         <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
         <button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>

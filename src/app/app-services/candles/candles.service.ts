@@ -16,7 +16,7 @@ export class CandlesService {
   candlesInterval = '1m';
   canlesLength = 240;
   overlap = 20;
-  first20coins = 'BTC,ETH,TUSD';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  first20coins = 'BTC,ETH,TUSD,PAX';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
 
   candlesDatas:CandlesData[];

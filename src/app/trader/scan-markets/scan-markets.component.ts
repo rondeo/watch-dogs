@@ -295,7 +295,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
      }*/
     if (prop === 'market') {
       this.showMarket(market);
-    }else if(prop === 'message') {
+    }else if(prop === 'result') {
       this.dialog.open( NotesHistoryComponent,{data:item} )
     }
 
@@ -396,7 +396,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   onDownClick(){
     this.scanner.scanGoingDown();
   }
-falIntrval
+/*falIntrval
   onFallClick(){
 
     if(this.falIntrval){
@@ -408,10 +408,10 @@ falIntrval
    this.falIntrval =  setInterval(()=>{
       this.scanner.scanForFall();
     }, 5*60*1e3);
-  }
+  }*/
   onStartClick() {
-   // i/*f (this.scanner.scanInterval) this.scanner.stop();
-   //  else this.scanner.start();*/
+   if (this.scanner.scanInterval) this.scanner.stop();
+     else this.scanner.start();
   }
 
   onDeleteClick() {

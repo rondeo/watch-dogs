@@ -18,7 +18,8 @@ export class ScanMarketsService {
   // exchange = 'binance';
   scanInterval;
   statsSub: Subject<string> = new Subject<string>();
-
+  favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+  currentResultSub: Subject<any> = new Subject();
 
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
@@ -49,7 +50,7 @@ export class ScanMarketsService {
  */
 
 
-  favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+
 
   addFavorite(market: string, message: string) {
     let favour: any[] = this.favoritesSub.getValue() || [];
@@ -98,6 +99,7 @@ export class ScanMarketsService {
   }
 
 
+
   scanForFall() {
     this.statsSub.next('SCANNING scanForFall');
 
@@ -109,8 +111,12 @@ export class ScanMarketsService {
       const candles: VOCandle[] = data.candles;
 
       const last3 = _.takeRight(candles, 3);
-      const meds = CandlesAnalys1.meds(last3);
 
+    /*  const times = last3.map(function (item) {
+        return moment(item.to).format('HH:mm')
+      }).join(',');
+      console.log(times);*/
+      const meds = CandlesAnalys1.meds(last3);
 
       const volumes = CandlesAnalys1.volumes(candles);
       const volumeMean = _.mean(volumes);
@@ -128,7 +134,14 @@ export class ScanMarketsService {
      // const max = _.max(last6);
 
       const D = MATH.percent(volumes3, volumeMean);
+      const result =  'V '+D + ' V2 ' + volume2Change + ' PD '+ preiceChanges + ' T2 '+ moment(last3[1].to).format('HH:mm');
+      const date = moment().format('HH:mm');
 
+      this.currentResultSub.next({
+        date,
+        market,
+        result
+      });
       // const sum = _.sum(last5);
      //  const LastMax = MATH.percent(max, mean);
      // console.log(market,D, maxIndex);
@@ -137,7 +150,7 @@ export class ScanMarketsService {
 
         this.notify({
           market,
-          message: 'V '+D + ' V2 ' + volume2Change + ' PD '+ preiceChanges
+          result
         })
       }/*else if( LastS > 3000){
         this.notify({
@@ -249,7 +262,7 @@ export class ScanMarketsService {
   }
 
 
-  scanForGoingUp() {
+ /* scanForGoingUp() {
     this.statsSub.next('START scanForGoingUp')
     const sub = this.candlesService.scanOnce('1m', 120);
     sub.subscribe(async (data) => {
@@ -266,7 +279,7 @@ export class ScanMarketsService {
       this.statsSub.next('STOP scanForGoingUp')
     });
 
-  }
+  }*/
 
 
   async start() {
@@ -284,11 +297,15 @@ export class ScanMarketsService {
       });
       if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
 
-    }, 60000);
+      this.scanForFall();
+    }, 4.5 * 60000);
+    this.scanForFall();
+
+
 
     // this.excludeDaysLoosers();
     // this.scanForPumpedUp();
-    this.scanForGoingUp();
+    // this.scanForGoingUp();
 
     /* await this.candlesService.subscribeForAll();
 
@@ -304,11 +321,15 @@ export class ScanMarketsService {
   }
 
 
+  stop(){
+    clearInterval(this.scanInterval);
+    this.scanInterval = 0;
+  }
   currentResult$() {
     return this.currentResultSub.asObservable();
   }
 
-  currentResultSub: Subject<any> = new Subject();
+
 
 
   removeExcludes() {
@@ -343,14 +364,16 @@ export class ScanMarketsService {
   }
 
   async notify(data: any) {
+
     data.x = 'X';
     let notifications = await this.notifications();
     if (!notifications) return;
 
+    // @ts-ignore
     let exists = _.find(notifications, {market: data.market});
     if (exists) {
       exists.N++;
-      exists.history[String(exists.N)] = moment().format('HH:mm') + ' ' + data.message;
+      exists.history[String(exists.N)] = moment().format('HH:mm') + ' ' + data.result;
     } else {
       data.date = moment().format('HH:mm');
       data.N = 0;

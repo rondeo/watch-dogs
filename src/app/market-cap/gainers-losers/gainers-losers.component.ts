@@ -9,7 +9,7 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 
 import {MovingAverage} from '../../com/moving-average';
 import {MatCheckboxChange} from '@angular/material';
-import {VOMarketCapSelected} from '../../models/api-models';
+import {VOMarketCapSelected, VOMCObj} from '../../models/api-models';
 import * as  moment from 'moment';
 import {MATH} from '../../com/math';
 import {NewsService} from '../../apis/news/news.service';
@@ -27,17 +27,9 @@ export class GainersLosersComponent implements OnInit {
   asc_desc = 'desc';
   top: string = 'top300';
   exchange: string;
-
-
-  btcMC: any = new VOMCDisplay();
-  allCoins: VOMCDisplay[];
-  allCoinsOrig: VOMCDisplay[];
-  sorted: VOMCDisplay[];
-  sortedAndFiltered: VOMCDisplay[];
-
-
+  MC: VOMCObj;
+  coinsAvailable:VOMarketCap[];
   sortBy: string = 'percent_change_24h';
-
 
   isToBTC: boolean;
 
@@ -59,6 +51,11 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
+
+  onItemClick(evt){
+    console.log(evt);
+  }
+
   onSymbolClick(mc: VOMarketCap) {
     this.router.navigateByUrl('/market-cap/coin-exchanges/' + mc.id);
   }
@@ -66,10 +63,10 @@ export class GainersLosersComponent implements OnInit {
   private missingImages: string[] = [];
   private misingImagesTimeout;
 
-
+/*
   private setOut(ar: VOMCDisplay[]) {
     this.sortedAndFiltered = _.take(ar, 50);
-  }
+  }*/
 
   saveState() {
     const state = {
@@ -82,7 +79,6 @@ export class GainersLosersComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.isToBTC = localStorage.getItem('isToBtc') === 'true';
     this.exchanges = this.apiPublic.allExhanges;
 
@@ -169,84 +165,34 @@ export class GainersLosersComponent implements OnInit {
 
   async ctrDownlaodCoinsDay() {
 
-    let ago10ds, ago30hs, MC30Mins, nowMC
+    //let ago10ds, ago30hs, MC30Mins, nowMC
+    const MC = await this.apiMarketCap.getTicker();
+    console.log(MC);
+    this.MC = MC;
+    // this.btcMC = MC['BTC'];
 
+    if (this.exchange) this.loadExchange();
+    else this.sortData();
     try{
-      ago10ds = _.first(await this.apiMarketCap.getTicker5HoursFrom(moment().subtract('10', 'd').format()).toPromise());
-      ago30hs = _.first(await this.apiMarketCap.getTicker30MinFrom(moment().subtract('30', 'h').format()).toPromise());
-      MC30Mins = await this.apiMarketCap.getTickers30Min(2).toPromise();
-      nowMC = await this.apiMarketCap.getTicker();
+     // ago10ds = _.first(await this.apiMarketCap.getTicker5HoursFrom(moment().subtract('10', 'd').format()).toPromise());
+     // ago30hs = _.first(await this.apiMarketCap.getTicker30MinFrom(moment().subtract('30', 'h').format()).toPromise());
+     // MC30Mins = await this.apiMarketCap.getTickers30Min(2).toPromise();
+     //  nowMC = await this.apiMarketCap.getTicker();
 
     } catch (e) {
       console.error(e);
     }
 
 
-    const ago30mins = _.first(MC30Mins);
-    const ago1hs = _.last(MC30Mins);
-
-    // console.log(ago30mins);
-    // console.log(ago1hs);
-    // console.log(ago10ds);
-   // const MCHours = await this.apiMarketCap.getTickers5Hours(1).toPromise();
-
-   // const MCHoursFirst = _.first(MCHours);
-
-    //const MCHoursLast = _.last(MCHours);
-   // const MC30MinLast = _.last(MC30Mins);
-
-    //const hours = moment.duration(moment((<any>MCHoursFirst).timestamp).diff(moment((<any>MCHoursLast).timestamp))).asHours();
-
-    const out = [];
-    this.btcMC = nowMC['BTC'];
-
-    for (let coin in nowMC) {
-
-     // const f = MCHoursLast[coin];
-      //const last = MC30MinLast[coin];
-
-
-      const ago10d: VOMarketCap = ago10ds[coin];
-      const ago30h: VOMarketCap = ago30hs[coin];
-      const ago30min: VOMarketCap = ago30mins[coin];
-      const ago1h: VOMarketCap = ago1hs[coin];
-      const now: VOMarketCap = nowMC[coin];
-
-      if (ago30min && ago1h) {
-        out.push(
-          Object.assign(now, {
-            rankD: MATH.percent(ago1h.rank, ago30min.rank),
-            rank30h:ago30h? MATH.percent(ago30h.rank, ago30min.rank):'-',
-            // price_btcD: MATH.percent(last.price_btc, f.price_btc),
-            btc_change1h: (ago30min && ago1h) ? MATH.percent(ago30min.price_btc, ago1h.price_btc) : '-',
-            btc_change30h: ago30h ? MATH.percent(ago30min.price_btc, ago30h.price_btc) : '-',
-            btc_change10d: ago10d ? MATH.percent(ago30min.price_btc, ago10d.price_btc) : '-'
-          })
-        )
-      } else {
-
-
-      }
-
-    }
-
-    this.news.addNews(out).subscribe(res => {
-      console.log(' NEWS done');
-      this.showData(out);
-    });
-
-    this.showData(out);
-
-    //  console.log(out);
   }
 
   showData(out) {
-    this.allCoinsOrig = out;
+   // this.allCoinsOrig = out;
     //if (this.isToBTC) this.allCoins = this.convertToBTC(out);
-    this.allCoins = JSON.parse(JSON.stringify(out));
+    //this.allCoins = JSON.parse(JSON.stringify(out));
 
-    if (this.exchange) this.loadExchange();
-    else this.sortData();
+    //if (this.exchange) this.loadExchange();
+   // else this.sortData();
   }
 
 /*
@@ -270,10 +216,10 @@ export class GainersLosersComponent implements OnInit {
 
   sortData() {
 
-    if (!this.allCoins) return;
+    if (!this.MC) return;
     // console.log('sort');
 
-    var allCoins = this.allCoins;
+    var allCoins = Object.values(this.MC);
 
     switch (this.top) {
       case 'top100':
@@ -309,7 +255,7 @@ export class GainersLosersComponent implements OnInit {
 
     // console.log(sorted);
 
-    this.sorted = sorted;
+    this.coinsAvailable = sorted;
     //  this.sortedAndFiltered = this.sorted;
     this.filterselectedExchanges();
   }
@@ -379,7 +325,7 @@ export class GainersLosersComponent implements OnInit {
     const apisPublic: ApiPublicAbstract[] = this.selectedExchanges.map((exchange) => {
       return this.apiPublic.getExchangeApi(exchange);
     });
-    let sorted = this.sorted;
+    let sorted = [];//this.sorted;
     //   console.log(sorted);
     Promise.all(apisPublic.map((api: ApiPublicAbstract) => {
       return api.getAllCoins();
@@ -390,7 +336,7 @@ export class GainersLosersComponent implements OnInit {
           return coins.indexOf(item.symbol) !== -1;
         })
       }
-      this.setOut(sorted);
+     // this.setOut(sorted);
     })
   }
 

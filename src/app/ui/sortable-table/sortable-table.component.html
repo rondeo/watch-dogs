@@ -10,12 +10,13 @@
                 <th  class="btn" (click)="onClickHeader('price_usd')">$US</th>
                 <th  class="btn" (click)="onClickHeader('rank')"><small>Rank</small></th>
             </tr>
-
             <tr *ngFor="let item of consAvailable">
-                <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn fa fa-line-chart"></a></td>
+                <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn fa fa-line-chart yellow"></a></td>
                 <td><a  title="{{item.name}}" class="btn" (click)="onSymbolClick(item)">{{item.symbol}}</a></td>
                 <td>
-                    <span [ngClass]="item.percent_change_1h>0?'dgreen':'dred'">{{item.percent_change_1h}}</span>
+                    <span
+                            [ngClass]="item.percent_change_1h>0?'dgreen':'dred'"
+                    >{{item.percent_change_1h}}</span>
                 </td>
                 <td>
                     <span [ngClass]="item.percent_change_24h>0?'dgreen':'dred'">{{item.percent_change_24h}}</span>
@@ -25,8 +26,8 @@
                     <span [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">{{item.percent_change_7d}}</span>
                 </td>
 
-                <td class="small ">{{item.price_usd | myDisplNum}}</td>
-                <td>{{item.rank}}</td>
+                <td class="small "  (click)="onPriceClick(item)">{{item.price_usd | myDisplNum}}</td>
+                <td  (click)="onRankClick(item)">{{item.rank}}</td>
 
             </tr>
             </tbody>

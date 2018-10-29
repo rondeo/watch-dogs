@@ -133,8 +133,6 @@ export class ApiMarketCapService {
     return this.downloadTicker().toPromise();
   }
 
-
-
   // uplight.ca API //////////////////////////////////////////////////////////////////
   getCoinLongHistory(coin: string) {
     const now = moment().toISOString();

@@ -1,4 +1,7 @@
 <div>
+    <br/>
+    <app-mc-data [coin]="'BTC'"></app-mc-data>
+    <br/>
 
     <mat-form-field class="w6">
         <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
@@ -9,7 +12,6 @@
             <mat-option value="200_300">200-300</mat-option>
             <mat-option value="after200"> > 200</mat-option>
             <mat-option value="after100"> > 100</mat-option>
-
         </mat-select>
     </mat-form-field>
 
@@ -25,8 +27,6 @@
         of
         <span> {{exchangeCoins.length}} </span>
     </small>
-
-
     <button mat-button [matMenuTriggerFor]="menu"><span class="large">&</span></button>
     <mat-menu #menu="matMenu">
         <div *ngFor="let exchange of exchanges">
@@ -39,99 +39,7 @@
     </div>
 
 
-    <section>
-       <!-- <mat-checkbox [(ngModel)]="isToBTC" (ngModelChange)="onToBtcChange($event)" >To BTC</mat-checkbox>-->
-        <span class="fa fa-refresh fa-2x dgreen right btn" (click)="onRefreshClick()"></span>
-
-        <table class="mat-body">
-            <tbody>
-            <tr class="small">
-                <th>Symbol</th>
-
-                <th class="btn" (click)="onClickHeader('rank')">Rank</th>
-                <th class="btn" (click)="onClickHeader('rankD')">R 1h</th>
-                <th class="btn" (click)="onClickHeader('rank30h')">R 30h</th>
+    <app-sortable-table [consAvailable]="coinsAvailable" (selectedSymbol)="onItemClick($event)" ></app-sortable-table>
 
 
-
-
-                <th class="btn" (click)="onClickHeader('btc_change1h')">1h%</th>
-             <!--   <th class="btn" (click)="onClickHeader('percent_change_24h')">24h%</th>-->
-                <th class="btn" (click)="onClickHeader('btc_change30h')">30h%</th>
-               <!-- <th class="btn" (click)="onClickHeader('percent_change_7d')">7d%</th>-->
-                <th class="btn" (click)="onClickHeader('btc_change10d')">10d%</th>
-                <th>news</th>
-            </tr>
-            <tr>
-                <td>
-                    <span>BTC</span>
-                </td>
-                <td colspan="2">
-                    <small>$</small>{{btcMC.price_usd}}
-                </td>
-
-                <td><span [myValueColor]="btcMC.percent_change_1h"></span></td>
-                <td><span [myValueColor]="btcMC.percent_change_24h"></span></td>
-                <td><span [myValueColor]="btcMC.percent_change_7d"></span></td>
-
-            </tr>
-
-            <tr *ngFor="let item of sortedAndFiltered">
-                <td>
-                    <img class="w1 icon" src="assets/icons/{{item.id}}.png" title="{{item.id}}"/>
-                    <a class="btn small"
-                       routerLink="/trader/analyze-coin/{{item.symbol}}/{{exchange}}"
-                       title="{{item.name}}"
-                    >
-                        {{item.symbol}}
-                    </a>
-                </td>
-
-                <td>
-                    {{item.rank}}
-                </td>
-
-                <td  [ngClass]="item.rankD>0?'dgreen':'dred'">
-                    <span
-                            (mouseover)="onMouseOver(item)"
-                            matTooltip="{{tooltipMessage}}"
-                            class="btn"
-                    >
-                         {{item.rankD}}
-                    </span>
-                </td>
-
-                <td>
-                    <span [myValueColor]="item.rank30h"></span>
-                </td>
-
-
-
-                <td>
-                    <span class="w50" [myValueColor]="item.btc_change1h"></span>
-                </td>
-               <!-- <td>
-                    <span class="w50" [myValueColor]="item.percent_change_24h"></span>
-                </td>-->
-                <td>
-                    <a class="btn" (click)="openBTCMarketClick(item)">
-                        <span [myValueColor]="item.btc_change30h"></span>
-                    </a>
-
-                </td>
-
-               <!-- <td class="w50" [ngClass]="item.percent_change_7d>0?'dgreen':'dred'">
-                    {{item.percent_change_7d}}
-                </td>-->
-                <td>
-                    <span [myValueColor]="item.btc_change10d"></span>
-                </td>
-                <td>
-                    <small class="btn" (click)="onNewsClick(item, 1)">{{item.news1}}</small>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <!-- <app-sortable-table [consAvailable]="gainersAr" (selectedSymbol)="onSymbolSelected($event)"></app-sortable-table>-->
-    </section>
 </div>

@@ -233,6 +233,11 @@ export class FollowOpenOrder {
       }, 5e3);
 
     } catch (e) {
+      if(e.error.msg.indexOf('immediately') !== -1) {
+        this.percentStopLoss *=2;
+        //const sellPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
+      //  this.sellCoin(100, sellPrice);
+      }
       console.error(e);
       if (e.toString().indexOf('no formatter') !== -1) {
         const books: VOBooks = await this.apisPublic.getExchangeApi(this.exchange).downloadBooks(this.base, this.coin).toPromise();
@@ -243,7 +248,7 @@ export class FollowOpenOrder {
 
   lastCheck: number;
   private async main() {
-    console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
+   //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
     const now = Date.now();
     if (now - this.lastCheck < 5e4) {
       console.log(' TOO FAST ctr ' + this.market);
@@ -263,6 +268,7 @@ export class FollowOpenOrder {
 
     const candles =  await this.getCandles();
     const progress = CandlesAnalys1.progress(candles);
+
     const goingUp = CandlesAnalys1.goingUp(candles);
     // const  MA3 = CandlesAnalys1.MA3(candles);
    /* const openOrders = this.apisPrivate.getExchangeApi(this.exchange).getAllOpenOrders();
@@ -284,7 +290,7 @@ export class FollowOpenOrder {
       return;
     }
 
-    console.log(currentPrice, this.stopLossOrder.stopPrice);
+    // console.log(currentPrice, this.stopLossOrder.stopPrice);
     const diff = MATH.percent(this.stopLossOrder.stopPrice, currentPrice);
 
     this.lastMessage = this.market + '  ' + diff + '  progress ' + progress + ' goingUp ' + goingUp;
