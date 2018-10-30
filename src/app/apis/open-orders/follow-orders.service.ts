@@ -64,7 +64,16 @@ export class FollowOrdersService {
             if ((o.pending + o.available) * price > 10) {
               const market = 'BTC_' + o.symbol;
               if (!_.find(ar, {market: market})) {
-                const follow = new FollowOpenOrder(exchange, market, -2, this.apisPrivate, this.apisPublic, this.marketCap, this.storage);
+                const follow = new FollowOpenOrder(
+                  exchange,
+                  market,
+                  -2,
+                  this.apisPrivate,
+                  this.apisPublic,
+                  this.marketCap,
+                  this.storage,
+                  this.canlesService
+                );
                 follow.onNoBalance = () => {
                   const ar2: FollowOpenOrder[]  = _.reject(this.followingOrdersSub.getValue(), {market: follow.market});
                   this.followingOrdersSub.next(ar2);

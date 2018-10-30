@@ -6,6 +6,7 @@ import {ApisPublicService} from '../apis/api-public/apis-public.service';
 import * as moment from 'moment';
 import {CandlesAnalys1} from '../app-services/scanner/candles-analys1';
 import {MATH} from '../com/math';
+import {StorageService} from '../services/app-storage.service';
 
 @Component({
   selector: 'app-test',
@@ -15,15 +16,45 @@ import {MATH} from '../com/math';
 export class TestComponent implements OnInit {
 
   candles: VOCandle[];
+
+  orders: any[]
+
   constructor(
     private alerts: BtcUsdtService,
-    private apisPublic: ApisPublicService
+    private apisPublic: ApisPublicService,
+    private storage: StorageService
   ) {
 
   }
 
   ngOnInit() {
-   this.initAsync();
+   // this.initAsync();
+   this.tradeHistory();
+
+  }
+
+  async tradeHistory(){
+    const keys =  await this.storage.keys();
+    console.log(keys);
+    const initOrders: string[] = keys.filter(function (item) {
+      return item.indexOf('init-order') ===0
+    });
+
+    Promise.all(initOrders.map( (item) => {
+      const market = item.substr(17);
+
+      return this.storage.select(item).then(res =>{
+        return {
+          market,
+          date:moment(res.timestamp).format('MM-DD HH:mm'),
+          rate: res.rate
+        }
+      });
+    })).then(data =>{
+      this.orders = data;
+    })
+
+
   }
 
   start(){

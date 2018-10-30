@@ -40,6 +40,8 @@ export class StorageService {
   }
 
 
+
+
   /*isLoggedIn():boolean{
     return  this.isLogedInSub.getValue();
   }*/
@@ -131,6 +133,9 @@ export class StorageService {
     else throw new Error('no watchdogs to save');
   }
 
+  keys(){
+    return localforage.keys();
+  }
   async upsert(index: string, item: any): Promise<any> {
     return localforage.setItem(index, item);
   }

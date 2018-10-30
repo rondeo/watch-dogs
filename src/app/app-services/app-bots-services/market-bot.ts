@@ -32,6 +32,7 @@ export class MarketBot {
     const ar = this.market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
+
     const MC = await this.marketCap.getTicker();
 
     this.priceBaseUS = MC[this.base].price_usd;
@@ -53,8 +54,11 @@ export class MarketBot {
    const candles = await this.candlesService.getCandles(this.exchange, this.market, this.candlesInterval);
    if(!candles) throw new Error(' no candles ' + this.exchange+this.market + this.candlesInterval);
   //  console.log(candles);
+
     const last3 = _.takeRight(candles, 3);
-   console.log(last3);
+    const last = _.last(candles);
+   console.log(this.market, last3);
+
 
   }
 

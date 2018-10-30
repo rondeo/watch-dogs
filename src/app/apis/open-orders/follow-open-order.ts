@@ -33,7 +33,8 @@ export class FollowOpenOrder {
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
     private marketCap: ApiMarketCapService,
-    private storage: StorageService
+    private storage: StorageService,
+    private candlesService: CandlesService
   ) {
 
     const ar = market.split('_');
@@ -52,8 +53,13 @@ export class FollowOpenOrder {
    if(!this.initOrder) this.findInitOrder();
   }
 
-  onNoBalance() {
-    throw new Error('no balance');
+  async onNoBalance() {
+    this.lastMessage = ' NO BALANCE ' + this.market;
+    FollowOpenOrder.status.next(this.lastMessage);
+    const last: any = _.last(this.candles) || {};
+    last.timestamp = Date.now();
+    return this.storage.upsert('no-balance'+  this.exchange + this.market, last);
+    // throw new Error('no balance');
   }
 
   sub1: Subscription;
@@ -76,12 +82,13 @@ export class FollowOpenOrder {
         this.lastMessage = ' balance changed  ' + balanceCoin.symbol + ' ' + this.balanceCoin.available + ' to ' + balanceCoin.available;
         FollowOpenOrder.status.next(this.lastMessage);
       }
+
       this.balanceCoin = balanceCoin;
       if ((this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS < 10) {
-        this.lastMessage = ' NO BALANCE ' + this.balanceCoin.symbol;
-        FollowOpenOrder.status.next(this.lastMessage);
-        this.onNoBalance();
-        this.destroy();
+
+        this.onNoBalance().then(()=>{
+          this.destroy();
+        })
       } else if (this.balanceCoin.available * this.priceCounUS > 10) this.setStopLoss();
       else this.start();
     });
@@ -123,7 +130,9 @@ export class FollowOpenOrder {
         amountCoin += o.amountCoin;
       });
       rate = rate/buyOrders.length;
+      const market = this.market;
       const initOrder = {
+        market,
         rate,
         fees,
         amountCoin,
@@ -178,8 +187,11 @@ export class FollowOpenOrder {
 
 
   async getCandles() {
-    const apiPublic = this.apisPublic.getExchangeApi(this.exchange);
-    let candles = await apiPublic.downloadCandles(this.market, '5m', 24);
+    let candles: VOCandle[] = await this.candlesService.getCandles(this.exchange, this.market,'5m');
+    if(!candles) throw new Error(' no candles ' + this.exchange +  this.market + '5m' );
+
+    //const apiPublic = this.apisPublic.getExchangeApi(this.exchange);
+   // let candles = await apiPublic.downloadCandles(this.market, '5m', 24);
     this.candles = candles;
     // console.log(candles);
     return candles
@@ -210,13 +222,12 @@ export class FollowOpenOrder {
     }
 
     const currentPrice = await this.getPrice();
-
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const market = this.market;
     const qty = this.balanceCoin.available;
     const stopPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
     const sellPrice = stopPrice + (stopPrice * -0.001);
-    this.lastMessage = 'SETTING new Order ' + this.market + ' ' + stopPrice;
+    this.lastMessage = 'SETTING new Order ' + this.market + ' ' + stopPrice + '  '+ qty;
     FollowOpenOrder.status.next(this.lastMessage);
 
     // console.log(' SET STOP LOSS ' + market, currentPrice,  stopPrice, sellPrice);
@@ -293,6 +304,7 @@ export class FollowOpenOrder {
     const diff = MATH.percent(this.stopLossOrder.stopPrice, currentPrice);
 
     this.lastMessage = this.market + '  ' + diff + '  progress ' + progress + ' goingUp ' + goingUp;
+
     FollowOpenOrder.status.next(this.lastMessage);
     this.stopLossOrder.lastStatus = moment().format('HH:mm') + '  ' + diff;
     if (diff < (this.percentStopLoss - 1)) {

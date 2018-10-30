@@ -202,9 +202,18 @@ export class CandlesService {
     ctr.subscribe(market);
   }
 
-  async getCandles(exchange: string, market: string, candlesInterval: string) {
+  async getCandles(exchange: string, market: string, candlesInterval: string): Promise<VOCandle[]> {
     const id = exchange + market + candlesInterval;
     let candles = await this.storage.select(id);
+    const last:VOCandle = _.last(candles);
+    const now = Date.now();
+    const diff = now - last.to;
+    if(diff > 10 * 60 * 1000){
+      console.log(' NO CANDLES FOR ' + market);
+      const api = this.apisPublic.getExchangeApi(exchange);
+      candles = await api.downloadCandles(market, candlesInterval, 120);
+      await this.storage.upsert(id, candles);
+    }
     return candles;
     /* if(candles) {
        return candles;

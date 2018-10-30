@@ -301,7 +301,7 @@ export class ScanMarketsService {
         console.error(e);
       }
 
-    }, 4.5 * 60000);
+    }, 7 * 60000);
     this.scanForFall();
 
 
@@ -327,6 +327,7 @@ export class ScanMarketsService {
   stop(){
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
+    this.candlesService.stop();
   }
   currentResult$() {
     return this.currentResultSub.asObservable();

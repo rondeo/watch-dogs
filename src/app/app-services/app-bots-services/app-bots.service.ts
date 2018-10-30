@@ -122,9 +122,6 @@ export class AppBotsService {
     this.storage.upsert('my-bots', botsIds)
   }
 
-
-
-
   async getHistory() {
     if (this._history) return Promise.resolve(this._history);
     return StorageService.instance.select(this.id + '-history').then(res => {
@@ -151,7 +148,7 @@ export class AppBotsService {
 
   statusChangesTimeout;
 
-  private addListeners() {
+ /* private addListeners() {
     WatchDog.statusChanges$().subscribe(watchDog => {
       const msg = moment().format('HH:mm') + ' status changed ' + watchDog.wdId + '  ' + watchDog.status;
       console.warn(msg);
@@ -162,7 +159,7 @@ export class AppBotsService {
         this.save();
       }, 1000);
     });
-  }
+  }*/
 
   private dispatchChange(wds?: WatchDog[]) {
     if (!wds) wds = this.allWatchDogsSub.getValue();

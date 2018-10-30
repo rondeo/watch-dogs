@@ -18,6 +18,7 @@ import {CandlesAnalys2} from '../../app-services/scanner/candles-analys2';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
+import {CandlesService} from '../../app-services/candles/candles.service';
 
 @Component({
   selector: 'app-scan-markets',
@@ -36,10 +37,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   notifications2: any[];
   coinsAvailable: VOMarketCap[];
 
-
+  candlesInterval = '5m';
   scannerSatatsSub: Subject<string> = new Subject();
-
-  userExclude = 'NPXS';
   // private selectedCoin: string;
   private selectedMarket: string;
 
@@ -52,7 +51,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private router: Router,
     public scanner: ScanMarketsService,
-    private botsService: AppBotsService
+    private candlesService: CandlesService
+   //  private botsService: AppBotsService
   ) {
 
 
@@ -84,19 +84,19 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.initAsync();
-    this.botsService.init();
+   //  this.botsService.init();
   }
 
   onAddBotClick(){
     if(!this.selectedMarket) return;
-    if(confirm('add bot')){
+    if(confirm('add bot ' + this.selectedMarket)){
       this.addBot(this.selectedMarket);
     }
   }
   addBot(market: string) {
-    const bot = this.botsService.addBot('binance', market);
-    console.log(bot);
-    bot.start();
+   // const bot = this.botsService.addBot('binance', market);
+   // console.log(bot);
+   // bot.start();
   }
   onDeleteExcludesClick(){
     if(confirm('empty ecludes? ')) {
@@ -308,7 +308,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
        this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market);
      }*/
     if (prop === 'market') {
-      this.showMarket(market);
+      this.showMarket(market, false);
     }else if(prop === 'result') {
       this.dialog.open( NotesHistoryComponent,{data:item} )
     }
@@ -345,7 +345,14 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async showCandles(market: string) {
     this.selectedMarket = market;
-    const candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
+    let candles;
+    if(this.candlesInterval === '5m'){
+      candles = await  this.candlesService.getCandles(this.exchange, market, '5m');
+    } else {
+      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 120);
+    }
+
+    //
     if (!candles) {
       this.candles = null;
       this.volumes = null;
@@ -353,12 +360,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
 
     // console.log(market + ' pumpedUp ' +CandlesAnalys1.pumpedUp(candles));
-    console.log(market + ' volume jump ', CandlesAnalys1.volumeJump(candles));
+   // console.log(market + ' volume jump ', CandlesAnalys1.volumeJump(candles));
    //  console.log(market + ' trend ', CandlesAnalys1.MALats(_.takeRight(candles, 20)));
 
-    const  c1 = candles.slice(candles.length-6, candles.length -2);
+   // const  c1 = candles.slice(candles.length-6, candles.length -2);
 
-    console.log(market + ' is fall ', MATH.isFall(CandlesAnalys1.meds(c1)));
+    //console.log(market + ' is fall ', MATH.isFall(CandlesAnalys1.meds(c1)));
 
   //  console.log(market + ' progress ' +CandlesAnalys1.progress(candles, 24));
    // console.log(market + ' goingUp ' + CandlesAnalys1.goingUp(candles));
@@ -372,9 +379,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
     this.analize(this.candles, market);
   }
-
-  candlesInterval = '1m';
-
 
   async analize(candles: VOCandle[], market: string) {
     const MC = (await this.marketCap.getTicker())[market.split('_')[1]];

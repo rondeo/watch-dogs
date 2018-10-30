@@ -108,7 +108,9 @@ export class GainersLosersComponent implements OnInit {
 
     });
 
-    this.ctrDownlaodCoinsDay();
+    this.subscribe();
+
+  //  this.ctrDownlaodCoinsDay();
   }
 
   allMarkets;
@@ -163,6 +165,12 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
+  subscribe(){
+    this.apiMarketCap.ticker$().subscribe(MC=>{
+      this.MC = MC;
+      this.sortData();
+    })
+  }
   async ctrDownlaodCoinsDay() {
 
     //let ago10ds, ago30hs, MC30Mins, nowMC
@@ -257,7 +265,7 @@ export class GainersLosersComponent implements OnInit {
 
     this.coinsAvailable = sorted;
     //  this.sortedAndFiltered = this.sorted;
-    this.filterselectedExchanges();
+   //  this.filterselectedExchanges();
   }
 
   onClickHeader(criteria: string): void {
