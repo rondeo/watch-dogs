@@ -40,17 +40,17 @@ export class FollowOpenOrder {
     const ar = market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
-
-    this.subscribeForBalances();
-
     this.init();
-    console.log(this);
+    // console.log(this);
 
     // this.percentStopLoss = -1;
   }
+
   async init(){
    this.initOrder =   await this.storage.select('init-order' + this.exchange + this.market);
-   if(!this.initOrder) this.findInitOrder();
+   if(!this.initOrder) await this.findInitOrder();
+   await  this.subscribeForBalances();
+    this.start();
   }
 
   async onNoBalance() {
@@ -82,15 +82,7 @@ export class FollowOpenOrder {
         this.lastMessage = ' balance changed  ' + balanceCoin.symbol + ' ' + this.balanceCoin.available + ' to ' + balanceCoin.available;
         FollowOpenOrder.status.next(this.lastMessage);
       }
-
       this.balanceCoin = balanceCoin;
-      if ((this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS < 10) {
-
-        this.onNoBalance().then(()=>{
-          this.destroy();
-        })
-      } else if (this.balanceCoin.available * this.priceCounUS > 10) this.setStopLoss();
-      else this.start();
     });
 
 
@@ -164,23 +156,23 @@ export class FollowOpenOrder {
 
   async cancelOrder(order: VOOrder) {
     const uuid = order.uuid;
-    console.log(' canceling order ' + order.coin);
+    console.log(' canceling order ', order);
     const apiPrivate = this.apisPrivate.getExchangeApi(this.exchange);
     let result;
     try {
       result = await apiPrivate.cancelOrder(uuid, this.base, this.coin).toPromise();
     } catch (e) {
+      console.log(this);
       console.error(e);
     }
   }
 
-  async getPrice(){
-    const candles =  await this.getCandles();
-    const closes = _.takeRight(candles, 5).map(function (o) {
-      return o.close
+  getPrice(candles:VOCandle[]){
+    const closes = _.takeRight(candles, 18).map(function (o) {
+      return o.close;
     });
 
-    const price = _.mean(closes);
+    const price = MATH.median(closes);
     if(isNaN(price)) throw new Error(this.market + closes.toString());
     return price;
   }
@@ -221,7 +213,11 @@ export class FollowOpenOrder {
       }
     }
 
-    const currentPrice = await this.getPrice();
+    const candles = await this.getCandles();
+    const last = _.last(candles);
+    const currentPrice =  last.close;//    this.getPrice(candles);
+
+
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const market = this.market;
     const qty = this.balanceCoin.available;
@@ -257,12 +253,29 @@ export class FollowOpenOrder {
   }
 
   lastCheck: number;
-  private async main() {
+  private async tick() {
+    if(!this.balanceCoin){
+      console.log('no balance coin ' + this.market);
+      return
+    }
+
+    if ((this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS < 10) {
+      this.onNoBalance().then(()=>{
+        this.destroy();
+        this.onEnd();
+      })
+      return;
+    }
    //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
     const now = Date.now();
     if (now - this.lastCheck < 5e4) {
       console.log(' TOO FAST ctr ' + this.market);
       return
+    }
+
+    if (this.balanceCoin.available * this.priceCounUS > 10) {
+      this.setStopLoss();
+      return;
     }
     this.lastCheck = now;
     const coin = this.coin;
@@ -277,6 +290,7 @@ export class FollowOpenOrder {
     }
 
     const candles =  await this.getCandles();
+
     const progress = CandlesAnalys1.progress(candles);
 
     const goingUp = CandlesAnalys1.goingUp(candles);
@@ -294,7 +308,7 @@ export class FollowOpenOrder {
       FollowOpenOrder.status.next(this.lastMessage);
       return
     }*/
-    const currentPrice = await this.getPrice();
+    const currentPrice =  this.getPrice(candles);
     if(isNaN(this.stopLossOrder.stopPrice)) {
       console.log(this);
       return;
@@ -310,8 +324,14 @@ export class FollowOpenOrder {
     if (diff < (this.percentStopLoss - 1)) {
       this.lastMessage = 'CANCELLING ORDER ' + this.lastMessage + ' stop price: ' + this.stopLossOrder.stopPrice;
       FollowOpenOrder.status.next(this.lastMessage);
-      this.cancelOrder(this.stopLossOrder);
-      this.stopLossOrder = null;
+
+      if(this.stopLossOrder) {
+        this.cancelOrder(this.stopLossOrder);
+        this.stopLossOrder = null;
+      }
+      else this.setStopLoss();
+
+
     }
   }
 
@@ -322,13 +342,16 @@ export class FollowOpenOrder {
 
   }
 
+  onEnd(){
+
+  }
   checkInterval;
 
   start() {
     if (this.checkInterval) return;
     this.lastMessage = ' Start following ' + this.balanceCoin.symbol
     FollowOpenOrder.status.next(this.lastMessage);
-    this.checkInterval = setInterval(() => this.main(), moment.duration(3, 'minutes'));
+    this.checkInterval = setInterval(() => this.tick(), moment.duration(3, 'minutes'));
   }
 
   stop() {

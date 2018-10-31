@@ -35,7 +35,7 @@ export class FollowOrdersService {
     const following:  FollowOpenOrder[] = this.followingOrdersSub.getValue();
     const my = _.find(following, {exchange: exchange, market:market});
     if(!my) throw new Error(exchange+market);
-    my.destroy();
+     my.destroy();
     const newFollowing = _.reject(following, {exchange: exchange, market:market});
     if(following.length === newFollowing.length) throw new Error(exchange+market);
     this.followingOrdersSub.next(newFollowing);
@@ -74,7 +74,7 @@ export class FollowOrdersService {
                   this.storage,
                   this.canlesService
                 );
-                follow.onNoBalance = () => {
+                follow.onEnd = () => {
                   const ar2: FollowOpenOrder[]  = _.reject(this.followingOrdersSub.getValue(), {market: follow.market});
                   this.followingOrdersSub.next(ar2);
                   follow.destroy();

@@ -17,7 +17,7 @@ export class CandlesService {
   candlesInterval = '1m';
   canlesLength = 240;
   overlap = 20;
-  first20coins = 'BTC,ETH,TUSD,PAX';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  first20coins = 'BTC,ETH,TUSD,PAX,HOT';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
   candlesDatas: CandlesData[];
 
@@ -67,7 +67,7 @@ export class CandlesService {
     }, 5000)
   }
 
-  async downloadCandles(exchange: string, markets: string[], i, candlesInterval: string, canlesLength: number, sub: Subject<any>) {
+  async downloadCandles(exchange: string, markets: string[], i, candlesInterval: string, sub: Subject<any>) {
     i++;
     if (i >= markets.length) {
       this.currentTimeout = 0;
@@ -76,36 +76,44 @@ export class CandlesService {
     }
     const market = markets[i];
     const api = this.apisPublic.getExchangeApi(exchange);
-    let candles = await api.downloadCandles(market, candlesInterval, canlesLength);
+    const id = 'candles-'+exchange + market + candlesInterval;
+    let oldCandels: VOCandle[] = await this.storage.select(id);
+    let limit = 120;
+    if (oldCandels) {
+      const lastOld = _.last(oldCandels);
+      const diff = moment().diff(lastOld.to,'minutes');
+      // console.log(diff);
+      if(diff < 5) {
+        this.currentTimeout = setTimeout(() => this.downloadCandles(exchange, markets, i, candlesInterval, sub), 500);
+        return;
+      }
+
+      if(diff < 20) limit = 5;
+      else if(diff < 60) limit = 12;
+      else if( diff < 120) limit = 24;
+    }
+
+    let candles = await api.downloadCandles(market, candlesInterval, limit);
+
     candles.forEach(function (item) {
       item.time = moment(item.to).format('HH:mm');
     });
-    candles = await this.saveNewCandles(exchange, market, candlesInterval, candles);
-    sub.next({exchange, market, candles});
-    this.currentTimeout = setTimeout(() => this.downloadCandles(exchange, markets, i, candlesInterval, canlesLength, sub), 2000);
-
-  }
-
-  async saveNewCandles(exchange: string, market: string, candlesInterval: string, newCandles: VOCandle[]) {
-    const id = exchange + market + candlesInterval;
-
-    let oldCandels: VOCandle[] = await this.storage.select(id);
-    let candles;
     if (oldCandels) {
-      const first = _.first(newCandles);
+      const first = _.first(candles);
       oldCandels = oldCandels.filter(function (o) {
         return o.to < first.to
       });
-      candles = oldCandels.concat(newCandles);
-      candles = _.takeRight(candles, 120);
-    } else candles = newCandles;
-
+      candles = oldCandels.concat(candles);
+    }
     await this.storage.upsert(id, candles);
-    return candles;
+
+    sub.next({exchange, market, candles});
+    this.currentTimeout = setTimeout(() => this.downloadCandles(exchange, markets, i, candlesInterval, sub), 2000);
+
   }
 
   currentTimeout;
-  scanOnce(candlesInterval: string, canlesLength: number) {
+  scanOnce(candlesInterval: string) {
     const exchange = 'binance';
     console.log(moment().format('HH:mm') + ' scan');
     if (this.currentTimeout) throw new Error('scan in process');
@@ -114,7 +122,7 @@ export class CandlesService {
     const sub: Subject<any> = new Subject<any>();
     this.getValidMarkets(exchange).then(markets => {
       const i = -1;
-      this.downloadCandles(exchange, markets, i, candlesInterval, canlesLength, sub);
+      this.downloadCandles(exchange, markets, i, candlesInterval, sub);
     });
 
     return sub;
@@ -125,15 +133,30 @@ export class CandlesService {
       o.removeAllCandles();
     })
   }
-
+/*
   async removeCandles(exchange: string, market: string) {
     let ctr: CandlesData = this.collection[exchange];
     console.log(ctr);
     if (!!ctr) return ctr.removeCandles(market);
+  }*/
+
+  async getAvailableMarkets(exchange: string){
+    const data = await this.apisPublic.getExchangeApi(exchange).getMarkets();
+    let markets = Object.keys(data);
+    markets = markets.filter(function (o) {
+      return o.indexOf('BTC') === 0;
+    });
+    const exclude = (this.deadMarkets + ',' + this.first20coins).split(',').map(function (o) {
+      return 'BTC_' + o;
+    });
+    return  _.difference(markets, exclude);
   }
 
-  async getValidMarkets(exchange) {
-    const data = await this.apisPublic.getExchangeApi(exchange).getMarkets();
+
+
+  async getValidMarkets(exchange: string) {
+    let markets = await this.getAvailableMarkets(exchange);
+    /*const data = await this.apisPublic.getExchangeApi(exchange).getMarkets();
     let markets = Object.keys(data);
     markets = markets.filter(function (o) {
       return o.indexOf('BTC') === 0;
@@ -143,10 +166,16 @@ export class CandlesService {
       return 'BTC_' + o;
     });
 
-    const runtimeExclude = await this.storage.select('exclude-markets-' + exchange);
-    markets = _.difference(markets, userExclude);
 
-    markets = _.difference(markets, _.map(runtimeExclude, 'market'));
+    markets = _.difference(markets, userExclude);
+*/
+
+    const runtimeExclude = await this.storage.select('exclude-markets-' + exchange);
+    const trendDown = await this.storage.select('markets-trend-down');
+//'markets-trend-down'
+    markets = _.difference(markets, _.map(trendDown,'market'));
+
+   return  _.difference(markets, _.map(runtimeExclude, 'market'));
 
     /* const preference =  ((await this.storage.select('markets-favorite')) || []).map(function (o) {
        return o.market;
@@ -154,7 +183,7 @@ export class CandlesService {
 
      markets = preference.concat(markets);
      markets = _.uniq(markets);*/
-    return markets;
+   // return markets
 
   }
 
@@ -203,13 +232,13 @@ export class CandlesService {
   }
 
   async getCandles(exchange: string, market: string, candlesInterval: string): Promise<VOCandle[]> {
-    const id = exchange + market + candlesInterval;
+    const id = 'candles-'+exchange + market + candlesInterval;
     let candles = await this.storage.select(id);
-    const last:VOCandle = _.last(candles);
-    const now = Date.now();
-    const diff = now - last.to;
-    if(diff > 10 * 60 * 1000){
-      console.log(' NO CANDLES FOR ' + market);
+    const last:any = _.last(candles) || {to:0};
+    const diff = moment().diff(last.to,'minutes');
+
+    if(diff > 10){
+      console.log(' NO CANDLES FOR ' + market + ' ' + diff);
       const api = this.apisPublic.getExchangeApi(exchange);
       candles = await api.downloadCandles(market, candlesInterval, 120);
       await this.storage.upsert(id, candles);

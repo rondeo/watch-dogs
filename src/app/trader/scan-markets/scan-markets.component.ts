@@ -37,6 +37,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   notifications2: any[];
   coinsAvailable: VOMarketCap[];
 
+
+
+
   candlesInterval = '5m';
   scannerSatatsSub: Subject<string> = new Subject();
   // private selectedCoin: string;
@@ -320,10 +323,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   mediaPercent: number;
 
 
-  showMarket(market: string, open = true) {
+  showMarket(market: string, open = false) {
     this.userMarket = market;
     this.selectedMarket = market;
-    this.apiCryptoCompare.getSocialStats(market.split('_')[1]).then(stats => {
+   //  console.log(market);
+   /* this.apiCryptoCompare.getSocialStats(market.split('_')[1]).then(stats => {
       // console.log(stats);
       if (!stats) {
         this.mediaPointsFrom = -1;
@@ -338,7 +342,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.mediaPointsFrom = -1;
       this.mediaPointsTo = -1;
     })
-
+*/
     this.showCandles(market);
     if (open) this.openMarket(this.exchange, market);
   }
@@ -349,7 +353,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if(this.candlesInterval === '5m'){
       candles = await  this.candlesService.getCandles(this.exchange, market, '5m');
     } else {
-      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 120);
+      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
     }
 
     //
@@ -436,5 +440,18 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if (confirm('Delete All')) {
       this.scanner.deleteNotifications()
     }
+  }
+
+  onDeleteTrendDownClick(){
+    if(confirm('Empty trend down? ')) {
+      this.scanner.emtyTrendDown();
+    }
+
+  }
+
+  onTrendDownClick(evt){
+    const market = evt.item;
+    // console.log(evt);
+    this.showMarket(market, false);
   }
 }

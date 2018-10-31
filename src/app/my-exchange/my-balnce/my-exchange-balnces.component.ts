@@ -64,21 +64,46 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
         this.balancesAll = [];
         this.balancesAr = [];
       }
+
       this.exchange = params.exchange;
-      this.dowloadAllBalances();
+      if(!this.MC)  this.initAsync();
+      this.subscribe();
+      // this.dowloadAllBalances();
     })
+
   }
 
   async initAsync(){
-
+    this.MC = await this.marketCap.getTicker();
+    this.refreshBalances();
   }
 
+  subscribe(){
+    if(this.sub1) this.sub1.unsubscribe();
+   this.sub1 = this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances =>{
+     if(!balances) return;
+     const MC = this.MC;
+     // console.log(this.balancesAll);
+     // console.log(this.balancesAll);
+     this.balancesAll = balances;
+     this.balancesAll.forEach(function (item) {
+       const coinMC = MC[item.symbol];
+       if (coinMC) {
+         item.id = coinMC.id;
+         item.balanceUS = Math.round(item.balance * coinMC.price_usd);
+       } else item.balanceUS = 0;
+     });
 
-  async dowloadAllBalances() {
+     this.render();
+   })
+  }
+
+  /*async dowloadAllBalances() {
     if(!this.exchange) return;
     this.isBalancesLoading = true;
     this.MC = await this.marketCap.getTicker();
    // console.log(this.exchange);
+
     this.balancesAll = await  this.privateService.getBalancesAll(this.exchange, true);
     const MC = this.MC;
     // console.log(this.balancesAll);
@@ -93,7 +118,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     this.isBalancesLoading = false;
     this.render();
   }
-
+*/
   isShowAll: boolean;
 
   private render() {
@@ -140,7 +165,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 
   refreshBalances() {
-    this.dowloadAllBalances();
+    this.apisPrivate.getExchangeApi(this.exchange).refreshBalances();
   }
 
   sortBy: string;
