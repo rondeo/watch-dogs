@@ -1,28 +1,31 @@
-import {FollowOpenOrder} from '../../apis/open-orders/follow-open-order';
 import {VOBooks, VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import {VOCandle} from '../../models/api-models';
 import {MATH} from '../../com/math';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 
 export class StopLossOrder {
   order: VOOrder;
-  market: string;
 
-  constructor(private main: FollowOpenOrder) {
 
-    this.market = main.market;
-    this.log = main.log;
+  constructor(
+    private market: string,
+    private percentStopLoss:number,
+    private apiPrivate: ApiPrivateAbstaract
+  ) {
     this.subscribe();
   }
 
-  log(message: string, save = true) {
-    this.main.log(message, save);
+  log(message: string) {
+    console.log(message)
   }
 
   subscribe() {
-    const coin = this.main.coin;
-    this.main.apiPrivate.openOrdersSub.subscribe(orders => {
+    const coin = this.market.split('_')[1];
+
+    this.apiPrivate.openOrdersSub.subscribe(orders => {
       if (!Array.isArray(orders)) return;
 
       // @ts-ignore
@@ -48,7 +51,8 @@ export class StopLossOrder {
 
     let result;
     try {
-      result = await this.main.apiPrivate.cancelOrder(uuid, this.main.base, this.main.coin).toPromise();
+      const ar = this.market.split('_')
+      result = await this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
     } catch (e) {
       //console.log(this);
       console.error(e);
@@ -59,16 +63,15 @@ export class StopLossOrder {
   }
 
 
-  async resetStopLoss() {
+  async resetStopLoss(candles: VOCandle[], qty: number) {
     await this.cancelOrder();
     this.order = null;
-    this.setStopLoss();
+    this.setStopLoss(candles, qty);
   }
 
 
-  checkStopLossPrice() {
+  checkStopLossPrice(candles: VOCandle[], qty: number) {
 
-    const candles: VOCandle[] = this.main.candles;
     const closes = _.takeRight(candles, 18).map(function (o) {
       return o.close;
     });
@@ -79,17 +82,18 @@ export class StopLossOrder {
     const message = ' stop loss diff ' + diff;
     this.log(message);
 
-    if (diff < (this.main.percentStopLoss - 1)) {
-      this.resetStopLoss();
+    if (diff < (this.percentStopLoss - 1)) {
+      this.resetStopLoss(candles, qty);
     }
   }
 
-  async setStopLoss() {
+  async setStopLoss(candles: VOCandle[], qty: number) {
     this.log(' setStopLoss ');
-    const openOrders = this.main.apiPrivate.getAllOpenOrders();
+    const openOrders = this.apiPrivate.getAllOpenOrders();
+    const ar = this.market.split('_');
 
     if (openOrders) {
-      const myOrder = _.find(openOrders, {coin: this.main.coin});
+      const myOrder = _.find(openOrders, {coin: ar[1]});
       if (myOrder) {
         if (myOrder.action === 'BUY') {
 
@@ -102,20 +106,17 @@ export class StopLossOrder {
       }
     }
 
-
-    const candles = this.main.candles;
     const last = _.last(candles);
     const currentPrice = last.close;
 
     const market = this.market;
-    const qty = this.main.balanceCoin.available;
 
-    const stopPrice = currentPrice + (currentPrice * this.main.percentStopLoss / 100);
+    const stopPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
     const sellPrice = stopPrice + (stopPrice * -0.001);
-    this.log(' SETTING new Order ' + this.main.market + ' ' + stopPrice + '  ' + qty);
+    this.log(' SETTING new Order ' + this.market + ' ' + stopPrice + '  ' + qty);
 
 
-    const api = this.main.apiPrivate;
+    const api = this.apiPrivate;
     // console.log(' SET STOP LOSS ' + market, currentPrice,  stopPrice, sellPrice);
 
     try {
@@ -131,7 +132,7 @@ export class StopLossOrder {
     } catch (e) {
       this.log('ERROR ' + e.toString());
       if (e.error.msg.indexOf('immediately') !== -1) {
-        this.main.percentStopLoss *= 2;
+        this.percentStopLoss *= 2;
         //const sellPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
         //  this.sellCoin(100, sellPrice);
       }

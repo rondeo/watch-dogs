@@ -30,7 +30,7 @@ export class FollowOpenOrder {
   apiPublic: ApiPublicAbstract;
 
   private sellOnJump:SellOnJump;
-  private stopLossOrder: StopLossOrder
+  private stopLossOrder: StopLossOrder;
 
   priceCounUS: number;
   candles: VOCandle[];
@@ -88,12 +88,12 @@ export class FollowOpenOrder {
     //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
 
     if (this.balanceCoin.available * this.priceCounUS > 10) {
-      this.stopLossOrder.setStopLoss();
+      this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
       return;
     }
 
     if(!this.stopLossOrder.order) {
-      this.stopLossOrder.setStopLoss();
+      this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
       return;
     }
 
@@ -114,12 +114,10 @@ export class FollowOpenOrder {
     const progress = CandlesAnalys1.progress(candles);
     const goingUp = CandlesAnalys1.goingUp(candles);
 
-
-
     if(this.sellOnJump.isJump(candles)) {
       return;
     }
-    await this.stopLossOrder.checkStopLossPrice();
+    await this.stopLossOrder.checkStopLossPrice(this.candles, this.balanceCoin.available);
   }
 
   async sellCoin(){
@@ -157,8 +155,19 @@ export class FollowOpenOrder {
    if(!this.initOrder) await this.findInitOrder();
    await  this.subscribeForBalances();
 
-   this.sellOnJump = new SellOnJump(this);
-   this.stopLossOrder = new StopLossOrder(this);
+   this.sellOnJump = new SellOnJump(this.market);
+    this.sellOnJump.log = msg =>{
+      this.log(msg, true);
+    }
+    this.sellOnJump.sellCoin = ()=>{
+      this.log(' SELL COIN by sellOnJump');
+      this.sellCoin();
+    }
+
+   this.stopLossOrder = new StopLossOrder(this.market, this.percentStopLoss,this.apiPrivate);
+    this.stopLossOrder.log = (msg) =>{
+      this.log(msg + ' stopLossOrder');
+    }
     this.start();
   }
 

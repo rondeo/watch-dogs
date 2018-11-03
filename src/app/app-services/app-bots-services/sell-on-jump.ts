@@ -1,4 +1,3 @@
-import {FollowOpenOrder} from '../../apis/open-orders/follow-open-order';
 import {VOCandle} from '../../models/api-models';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import * as _ from 'lodash';
@@ -7,13 +6,17 @@ import * as moment from 'moment';
 
 export class SellOnJump {
   private timeJump;
-  private market: string
-  private log: Function;
 
-  constructor(private main: FollowOpenOrder) {
+  constructor(private market: string) {
 
-    this.market = main.market;
-    this.log = main.log;
+  }
+
+  log(message: string){
+    console.log(message);
+  }
+
+  sellCoin(){
+
   }
 
   isJump(candles: VOCandle[]): boolean {
@@ -21,7 +24,6 @@ export class SellOnJump {
 
     const lastPrice = _.last(closes);
     const last = _.last(candles);
-
     // const medianPrice = MATH.median(_.takeRight(closes, 7));
     const ma7 = _.mean(_.takeRight(closes, 7));
     // const prevPrice = _.mean(closes.slice(closes.length -4, closes.length -2));
@@ -29,7 +31,7 @@ export class SellOnJump {
     const ma7D = MATH.percent(lastPrice, ma7);
 
     let change = ma7D;
-     this.main.log('jump MA7D ' + change);
+     this.log('jump MA7D ' + change);
     if (change > 5) {
       this.timeJump = moment(last.to).valueOf();
     }
@@ -37,7 +39,7 @@ export class SellOnJump {
     if (!this.timeJump) return false;
 
     const dur = moment(last.to).diff(this.timeJump, 'minutes');
-    FollowOpenOrder.status.next(' was Jump   ' + dur + ' min ago');
+   this.log(' was Jump   ' + dur + ' min ago');
     if (dur > 30) {
       this.timeJump = 0;
       return false;
@@ -52,10 +54,10 @@ export class SellOnJump {
     const change = MATH.percent(lastRange, avg);*/
 
     if (change < 0) {
-      this.main.log(' jump DOWN => SELL ' + change);
-      this.main.sellCoin();
+      this.log(' jump DOWN => SELL ' + change);
+      this.sellCoin();
     } else {
-      this.main.log(' jump continue ' + change);
+      this.log(' jump continue ' + change);
     }
 
     return true;
