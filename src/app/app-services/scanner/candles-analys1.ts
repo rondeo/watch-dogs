@@ -8,10 +8,65 @@ import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 
 export class CandlesAnalys1 {
 
+
+ static  isTrendUp(market: string, candles: VOCandle[]){
+    const closes = CandlesAnalys1.closes(candles);
+    const meds = CandlesAnalys1.meds(candles);
+
+    const ma99 = _.mean(closes);
+    const ma7 =  _.mean(_.takeRight(closes, 7));
+    const ma25 = _.mean(_.takeRight(closes, 25));
+
+
+    const lastHours: number[] = _.takeRight(closes, 12);
+
+    const priceLast24 = _.mean(lastHours);
+
+    // const priceFirst24 = _.mean(_.take(closes, 24));
+
+    const progress1 = MATH.percent(ma25, ma99);
+
+    const progress2 = MATH.percent(ma7, ma25);
+
+    //  const last3 = _.mean(_.takeRight(closes, 3));
+
+    const last = _.last(lastHours);
+
+    const meanlastHours = _.mean(lastHours);
+
+    const max = _.max(lastHours);
+    const min = _.min(lastHours);
+
+    const percent = MATH.percent(last, meanlastHours);
+
+    const maxD = MATH.percent( last, max);
+    const minD = MATH.percent( last, min);
+
+    const result = ' p: '+ percent + ' max: ' + maxD + ' min: ' + minD + ' pr: ' + progress1 +' pr: ' + progress2;
+
+    if (progress1 + progress2 > 0) {
+      return {
+        market,
+        result,
+        OK:true
+      }
+    }
+   return {
+     market,
+     result,
+     OK:false
+   }
+  }
+
+
+
   static isFall(numbers: number[]){
     const speeds = MATH.speeds(numbers);
     return MATH.isFall(speeds);
   }
+
+
+
 
 
   static volumes(candles: VOCandle[]) {

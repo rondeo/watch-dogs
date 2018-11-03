@@ -12,7 +12,7 @@ export class StopLossOrder {
 
   constructor(
     private market: string,
-    private percentStopLoss:number,
+    private percentStopLoss: number,
     private apiPrivate: ApiPrivateAbstaract
   ) {
     this.subscribe();
@@ -30,7 +30,7 @@ export class StopLossOrder {
 
       // @ts-ignore
       const myOrder = _.find(orders, {coin: coin});
-      if (myOrder.action === 'SELL' && myOrder.stopPrice) this.order = myOrder;
+      if (myOrder && myOrder.action === 'SELL' && myOrder.stopPrice) this.order = myOrder;
       else this.order = null;
       // this.log(this.market + ' STOP_LOSS ' +(this.order?this.order.stopPrice : ' no stop order'), false)
     })
@@ -77,9 +77,8 @@ export class StopLossOrder {
     });
 
     const price = MATH.median(closes);
-
     const diff = MATH.percent(this.getSopLossRate(), price);
-    const message = ' stop loss diff ' + diff;
+    const message = 'stop loss ' + this.percentStopLoss + ' diff ' + diff;
     this.log(message);
 
     if (diff < (this.percentStopLoss - 1)) {

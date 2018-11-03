@@ -52,16 +52,16 @@ export class OrderReportsComponent implements OnInit {
       case 'key':
         this.selectedKey = evt.item.key;
         this.storage.select(this.selectedKey).then(results =>{
-         console.log(results);
+        //  console.log(results);
 
          if(Array.isArray(results))
           this.ordersData = results.map(function (item) {
             return {
               record:item,
             }
-          })
+          });
          else this.ordersData = [results]
-        })
+        });
 
         return
     }

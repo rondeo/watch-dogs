@@ -68,10 +68,9 @@ export class FollowOpenOrder {
     return false;
   }
 
-
   async tick() {
-
     if(this.isTooFast()) return;
+    await this.saveLogs();
     this.candles = await this.getCandles();
     if(!this.balanceCoin){
       this.log('tick no balance coin ');
@@ -136,15 +135,18 @@ export class FollowOpenOrder {
 
   }
 
-  async log(message:string, save = true){
-    message = moment().format('DD HH:mm') + ' ' + this.market + '  ' +message;
-    FollowOpenOrder.status.next(message);
-    if(save) {
-      const logs = (await this.storage.select('follow-order-log' + this.market)) || [];
-      logs.push(message);
-      await this.storage.upsert('follow-order-log'+ this.market , _.takeRight(logs, 500));
-    }
+  logs:string[];
+  async saveLogs(){
+    let logs = (await this.storage.select('follow-order-log' + this.market)) || [];
+    logs  = logs.concat(this.logs);
+    this.logs = [];
+    await this.storage.upsert('follow-order-log'+ this.market , _.takeRight(logs, 500));
+  }
 
+  log(message:string, save = true){
+    message = moment().format('DD-HH:mm') + ' ' + this.market + '  ' +message;
+    FollowOpenOrder.status.next(message);
+   if(save)this.logs.push(message);
   }
 
   async init(){
@@ -157,17 +159,18 @@ export class FollowOpenOrder {
 
    this.sellOnJump = new SellOnJump(this.market);
     this.sellOnJump.log = msg =>{
+      console.log(msg);
       this.log(msg, true);
-    }
+    };
     this.sellOnJump.sellCoin = ()=>{
-      this.log(' SELL COIN by sellOnJump');
+      this.log(' SELL COIN by sellOnJump', true);
       this.sellCoin();
-    }
+    };
 
    this.stopLossOrder = new StopLossOrder(this.market, this.percentStopLoss,this.apiPrivate);
     this.stopLossOrder.log = (msg) =>{
-      this.log(msg + ' stopLossOrder');
-    }
+      this.log(msg , true);
+    };
     this.start();
   }
 
@@ -220,6 +223,7 @@ export class FollowOpenOrder {
   }
 
   async findInitOrder() {
+    const market = this.market;
     const allOrders = await this.apisPrivate.getExchangeApi(this.exchange).getAllOrders(
       this.base, this.coin,
       moment().subtract(23, 'hours').valueOf(),
@@ -239,7 +243,7 @@ export class FollowOpenOrder {
         amountCoin += o.amountCoin;
       });
       rate = rate/buyOrders.length;
-      const market = this.market;
+
       const initOrder = {
         market,
         rate,
@@ -250,25 +254,14 @@ export class FollowOpenOrder {
 
       this.initOrder = initOrder;
 
-    } else this.initOrder = {rate: 0, fees:0, amountCoin: 0, timestamp:0 }
+    } else this.initOrder = {rate: 0, fees:0, amountCoin: 0, timestamp:0 };
 
-    this.storage.upsert('init-order' + this.exchange + this.market, this.initOrder);
-    console.warn(buyOrders);
-    console.log(this.initOrder)
+    this.storage.upsert('init-order' + this.exchange + market, this.initOrder);
+    //console.warn(buyOrders);
+    console.log(this.initOrder);
   }
 
-  /*getPrice(candles:VOCandle[]){
-    const closes = _.takeRight(candles, 18).map(function (o) {
-      return o.close;
-    });
-
-    const price = MATH.median(closes);
-    if(isNaN(price)) throw new Error(this.market + closes.toString());
-    return price;
-  }
-*/
-
-  lastQuery: number = 0;
+  // lastQuery: number = 0;
   lastCheck: number;
   destroy() {
     this.log('DESTROY FOLLOW');

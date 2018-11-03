@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
 
-  excludes:string[] = ['BTC'];
+  excludes:string[] = ['BTC','USDT'];
 
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
@@ -53,21 +53,26 @@ export class FollowOrdersService {
     this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
       if (!balances) return;
 
+     /// console.log('balances.length   ' + balances.length);
       this.marketCap.getTicker().then(MC => {
         const ar = this.followingOrdersSub.getValue();
         const excludes = this.excludes;
 
         balances.forEach((o) => {
-          if (o.symbol !== 'BTC' && o.symbol !== 'USDT' && excludes.indexOf(o.symbol) === -1) {
+          if (excludes.indexOf(o.symbol) === -1) {
             const price = MC[o.symbol] ? MC[o.symbol].price_usd : 0.1;
 
-            if ((o.pending + o.available) * price > 10) {
+            const balance = (o.pending + o.available);
+            //if(balance) console.log(o.symbol + ' ' +balance + ' '+ price);
+
+            if (balance * price > 10) {
               const market = 'BTC_' + o.symbol;
+
               if (!_.find(ar, {market: market})) {
                 const follow = new FollowOpenOrder(
                   exchange,
                   market,
-                  -4,
+                  -3,
                   this.apisPrivate,
                   this.apisPublic,
                   this.marketCap,
@@ -77,7 +82,7 @@ export class FollowOrdersService {
                 follow.onEnd = () => {
                   const ar2: FollowOpenOrder[]  = _.reject(this.followingOrdersSub.getValue(), {market: follow.market});
                   this.followingOrdersSub.next(ar2);
-                  follow.destroy();
+                 //  follow.destroy();
                 }
                 ar.push(follow);
               }

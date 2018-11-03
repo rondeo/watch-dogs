@@ -11,11 +11,11 @@ export class SellOnJump {
 
   }
 
-  log(message: string){
+  log(message: string) {
     console.log(message);
   }
 
-  sellCoin(){
+  sellCoin() {
 
   }
 
@@ -27,11 +27,11 @@ export class SellOnJump {
     // const medianPrice = MATH.median(_.takeRight(closes, 7));
     const ma7 = _.mean(_.takeRight(closes, 7));
     // const prevPrice = _.mean(closes.slice(closes.length -4, closes.length -2));
-   //  const priceChange = MATH.percent(lastPrice, medianPrice);
+    //  const priceChange = MATH.percent(lastPrice, medianPrice);
     const ma7D = MATH.percent(lastPrice, ma7);
 
     let change = ma7D;
-     this.log('jump MA7D ' + change);
+    if(Math.abs(change)>2) this.log('jump MA7D ' + change);
     if (change > 5) {
       this.timeJump = moment(last.to).valueOf();
     }
@@ -39,7 +39,7 @@ export class SellOnJump {
     if (!this.timeJump) return false;
 
     const dur = moment(last.to).diff(this.timeJump, 'minutes');
-   this.log(' was Jump   ' + dur + ' min ago');
+    this.log(' was Jump   ' + dur + ' min ago');
     if (dur > 30) {
       this.timeJump = 0;
       return false;

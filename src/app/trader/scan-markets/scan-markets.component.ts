@@ -149,15 +149,23 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onVolumeClick(evt) {
     const market = evt.item.market;
-    if (evt.prop === 'market') this.showMarket(market);
-    else if (evt.prop === 'x') {
-      if (confirm(' DELETE ' + market)) {
-        this.scanner.deleteVolume(market).then(res => {
-          this.volumesResults = res;
-        })
+    switch (evt.prop) {
+      case 'market':
+        this.showMarket(market);
+        return;
+      case 'x':
+        if (confirm(' DELETE ' + market)) {
+          this.scanner.deleteVolume(market).then(res => {
+            this.volumesResults = res;
+          });
+        }
+        return;
+      case 'result':
+        this.dialog.open( NotesHistoryComponent,{data:evt.item} );
+        return
 
-      }
     }
+
   }
 
   /////////////////////////////////////////VOLUME END ///////////////////////////////////////////////////////
@@ -402,6 +410,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.volumes = null;
       return;
     }
+
+    const resultsUp = CandlesAnalys1.isTrendUp(market, candles);
+
+    this.scanner.currentMarket = market;
+    this.scanner.progressSub.next([resultsUp.OK, resultsUp.result].join(' '));
+
     this.candles = candles;
     this.volumes = candles.map(function (o) {
       return o.open > o.close ? -o.Volume : o.Volume;

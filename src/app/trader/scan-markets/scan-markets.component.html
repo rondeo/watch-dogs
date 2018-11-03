@@ -45,8 +45,8 @@
 -->
     <div class="scrollY300" *ngIf="volumeCheck.checked">
         <h4>Volume</h4>
-        <mat-checkbox  [(ngModel)]="scanVolumeOnlyUP" >UP Only</mat-checkbox>
-        <button mat-button="" (click)="onVolumeStartClick()">Scan</button>
+        <mat-checkbox  [(ngModel)]="scanVolumeOnlyUP" [checked]="true" >UP Only</mat-checkbox>
+        <button mat-button="" (click)="onVolumeStartClick()">{{scanner.scanVolumeTimer?'Stop':'Scan'}}</button>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteVolumesClick()"></span>
         <app-table-props [dataset]="volumesResults" (selected)="onVolumeClick($event)"></app-table-props>
 

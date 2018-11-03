@@ -11,7 +11,7 @@ export class ForceIndexInput extends IndicatorInput {
 
 export class ForceIndex extends Indicator {
   result : number[]
-  generator:IterableIterator<number | undefined>;;
+  generator:IterableIterator<number | undefined>;
   constructor(input:ForceIndexInput) {
     super(input);
     var closes = input.close;
