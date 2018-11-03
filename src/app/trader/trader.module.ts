@@ -20,6 +20,7 @@ import {PipesModule} from '../pipes/pipes.module';
 import { ScanMarketsComponent } from './scan-markets/scan-markets.component';
 import { MarketDetailsComponent } from './market-details/market-details.component';
 import { NotesHistoryComponent } from './notes-history/notes-history.component';
+import { OrderReportsComponent } from './order-reports/order-reports.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
       {path: 'analyze-coin/:coin', component: AnalyzeCoinComponent},
       {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
       {path: 'common-markets', component: CommonMarketsComponent},
-      {path: 'scan-markets', component: ScanMarketsComponent}
+      {path: 'scan-markets', component: ScanMarketsComponent},
+      {path: 'order-reports', component: OrderReportsComponent}
     ]
   }
 ];
@@ -59,7 +61,8 @@ const routes: Routes = [
     LiveTraderComponent,
     ScanMarketsComponent,
     MarketDetailsComponent,
-    NotesHistoryComponent
+    NotesHistoryComponent,
+    OrderReportsComponent
   ],
   providers: [SoketConnectorService],
   entryComponents:[

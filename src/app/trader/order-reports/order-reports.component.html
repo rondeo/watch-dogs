@@ -1,0 +1,12 @@
+<div>
+    order-reports works!
+    <div class="scrollY300">
+        <app-table-props [dataset]="ordersRecords" (selected)="onOrdersRecordsClick($event)"></app-table-props>
+    </div>
+
+    <h4>{{selectedKey}}</h4>
+    <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
+    <div class="scrollY300">
+        <app-table-props [dataset]="ordersData" (selected)="onOrdersDataClick($event)"></app-table-props>
+    </div>
+</div>

@@ -1,7 +1,8 @@
 <p>
   test works!
+    <button (click)="onStartClick()">{{interval?'Stop':'Start'}}</button>
     <app-table-props [dataset]="orders"></app-table-props>
-    <button (click)="onStopClick()">{{interval?'Stop':'Start'}}</button>
+
     <app-candlesticks [candles]="candles"></app-candlesticks>
 
 </p>

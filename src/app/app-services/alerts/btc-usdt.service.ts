@@ -202,7 +202,7 @@ export class BtcUsdtService {
     console.log('balanceUS, availableUS', balanceUS, availableUS);
 
     if (availableUS < 20) {
-      console.warn(' nothing to stop LOSS ' + availableUS)
+      console.log(' nothing to stop LOSS ' + availableUS)
       return;
     }
 

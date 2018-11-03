@@ -2,6 +2,12 @@ import * as _ from 'lodash';
 
 export class MATH {
 
+  static priceChnage(closes: number[]){
+    const lasts = _.mean(_.takeRight(closes, 3));
+    const last10 = _.min(_.takeRight(closes, 10));
+    return MATH.percent(lasts, last10);
+  }
+
   static speeds(numbers: number[]) {
     const speeds = numbers.map(function (o) {
       const speed = Math.round((o - this.last) / this.last * 1e4) / 100;

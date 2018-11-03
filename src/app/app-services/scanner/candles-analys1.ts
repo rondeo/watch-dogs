@@ -78,6 +78,11 @@ export class CandlesAnalys1 {
       return (o.high + o.low) / 2;
     });
   }
+  static oc(candles: VOCandle[]): number[] {
+    return candles.map(function (o) {
+      return (o.open + o.close) / 2;
+    });
+  }
 
   static closes(candles: VOCandle[]): number[] {
     return candles.map(function (o) {

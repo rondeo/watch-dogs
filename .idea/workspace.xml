@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="bot stated">
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="btc service">
+      <change afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/app-storage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/services/app-storage.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/math.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/math.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/test/test.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/test.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/test/test.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/test.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/trader.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/trader.module.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -57,41 +66,41 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="186" />
-          <entry key="HTML" value="9421" />
+          <entry key="HTML" value="9932" />
           <entry key="JSON" value="5" />
           <entry key="JavaScript" value="1" />
-          <entry key="PLAIN_TEXT" value="1305" />
-          <entry key="TypeScript" value="149414" />
+          <entry key="PLAIN_TEXT" value="1406" />
+          <entry key="TypeScript" value="165440" />
           <entry key="tsconfig" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="186" />
-          <entry key="html" value="9421" />
+          <entry key="html" value="9932" />
           <entry key="js" value="1" />
           <entry key="json" value="15" />
-          <entry key="ts" value="149414" />
-          <entry key="txt" value="1305" />
+          <entry key="ts" value="165440" />
+          <entry key="txt" value="1406" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="15" />
-          <entry key="HTML" value="242" />
+          <entry key="HTML" value="247" />
           <entry key="JSON" value="5" />
           <entry key="JavaScript" value="15" />
-          <entry key="TypeScript" value="1013" />
+          <entry key="TypeScript" value="1036" />
           <entry key="tsconfig" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="15" />
-          <entry key="html" value="242" />
+          <entry key="html" value="247" />
           <entry key="js" value="15" />
           <entry key="json" value="6" />
-          <entry key="ts" value="1013" />
+          <entry key="ts" value="1036" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
@@ -102,14 +111,14 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5199052">
+    <splitter split-orientation="horizontal" split-proportion="0.43391758">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="66">
-                  <caret line="287" column="23" lean-forward="true" selection-start-line="287" selection-start-column="23" selection-end-line="287" selection-end-column="23" />
+                <state relative-caret-position="1146">
+                  <caret line="153" column="41" selection-start-line="153" selection-start-column="41" selection-end-line="153" selection-end-column="41" />
                   <folding>
                     <element signature="e#0#59#0" expanded="true" />
                   </folding>
@@ -118,40 +127,13 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/test/test.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
-                  <caret line="45" column="51" lean-forward="true" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/test/test.component.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="15">
-                  <caret line="1" column="13" lean-forward="true" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="321">
-                  <caret line="329" column="31" selection-start-line="329" selection-start-column="31" selection-end-line="329" selection-end-column="31" />
+                <state relative-caret-position="51">
+                  <caret line="383" column="51" selection-start-line="383" selection-start-column="51" selection-end-line="383" selection-end-column="51" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="529">
-                  <caret line="48" column="48" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="48" />
                 </state>
               </provider>
             </entry>
@@ -159,29 +141,59 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1123">
-                  <caret line="59" column="32" lean-forward="true" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
+                <state relative-caret-position="120">
+                  <caret line="8" column="36" lean-forward="true" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/services/app-storage.service.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/test/test.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="201">
-                  <caret line="134" lean-forward="true" selection-start-line="134" selection-end-line="134" />
+                <state relative-caret-position="375">
+                  <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="425">
+                  <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
                   <folding>
-                    <element signature="e#0#41#0" expanded="true" />
+                    <element signature="e#0#50#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="726">
-                  <caret line="68" column="25" lean-forward="true" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
+                <state relative-caret-position="105">
+                  <caret line="7" column="74" selection-start-line="7" selection-start-column="54" selection-end-line="7" selection-end-column="74" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="290">
+                  <caret line="34" column="54" lean-forward="true" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
+                  <folding>
+                    <element signature="e#0#39#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/test/test.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="30">
+                  <caret line="2" column="33" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="33" />
                 </state>
               </provider>
             </entry>
@@ -189,20 +201,11 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2500">
-                  <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+                <state relative-caret-position="679">
+                  <caret line="200" column="37" selection-start-line="200" selection-start-column="23" selection-end-line="200" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="125">
-                  <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
                 </state>
               </provider>
             </entry>
@@ -212,28 +215,61 @@
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-bittrex.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1140">
-                  <caret line="90" column="31" selection-start-line="90" selection-start-column="31" selection-end-line="90" selection-end-column="31" />
+                <state relative-caret-position="441">
+                  <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
+                  <folding>
+                    <element signature="e#0#73#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/com/math.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+                <state relative-caret-position="321">
+                  <caret line="128" column="27" selection-start-line="128" selection-start-column="12" selection-end-line="128" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="465">
+                  <caret line="31" column="20" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#73#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="285">
+                  <caret line="19" column="89" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="89" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="615">
+                  <caret line="41" column="39" lean-forward="true" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="461">
-                  <caret line="128" column="15" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="15" />
+                <state relative-caret-position="351">
+                  <caret line="57" selection-start-line="57" selection-end-line="57" />
                   <folding>
                     <element signature="e#0#49#0" expanded="true" />
                   </folding>
@@ -255,36 +291,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>stopLossOrder</find>
-      <find>getAllOrders</find>
-      <find>next</find>
-      <find>userExclude</find>
-      <find>showMarket</find>
-      <find>marketExchange</find>
-      <find>excl</find>
-      <find>subscribedMarkets</find>
-      <find>spee</find>
-      <find>scanner</find>
-      <find>makeValues</find>
-      <find>not</find>
-      <find>isFa</find>
-      <find>notify</find>
-      <find>dialog.open</find>
-      <find>favori</find>
-      <find>statsSub</find>
-      <find>Subject</find>
-      <find>progr</find>
-      <find>start</find>
-      <find>exchangeCoins</find>
-      <find>notifi</find>
-      <find>collection</find>
-      <find>star</find>
-      <find>subsc</find>
-      <find>select</find>
-      <find>init-</find>
       <find>candlesInterval</find>
-      <find>scanForFall</find>
+      <find>markets-trend-down</find>
+      <find>star</find>
+      <find>cancelOrder</find>
       <find>getCan</find>
+      <find>id</find>
+      <find>stopFollow</find>
+      <find>getPri</find>
+      <find>cance</find>
+      <find>getPrice</find>
+      <find>setS</find>
+      <find>downloadNewCandles</find>
+      <find>next</find>
+      <find>getC</find>
+      <find>media</find>
+      <find>noth</find>
+      <find>showM</find>
+      <find>getAvailableMarkets</find>
+      <find>currentTimeout</find>
+      <find>tick</find>
+      <find>storage</find>
+      <find>volumes</find>
+      <find>sell</find>
+      <find>sellC</find>
+      <find>start</find>
+      <find>init</find>
+      <find>deleteCoingUpMarket</find>
+      <find>init()</find>
+      <find>log(</find>
+      <find>ngM</find>
     </findStrings>
     <replaceStrings>
       <replace>myValueColor</replace>
@@ -304,12 +340,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/app-services/market-history/markets-history.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/pipes/coin2us.pipe.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-stats.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/open-orders/open-orders.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/app.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/follow-order-list/follow-order-list.component.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-services.module.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" />
@@ -319,42 +349,48 @@
         <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys2.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/scanner/scanner.component.ts" />
         <option value="$PROJECT_DIR$/src/styles.css" />
-        <option value="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" />
         <option value="$PROJECT_DIR$/src/app/material/dialog-input/dialog-input.component.html" />
         <option value="$PROJECT_DIR$/src/app/material/dialog-input/dialog-input.component.ts" />
         <option value="$PROJECT_DIR$/archive/coin-graph/coin-graph.component.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/apis.module.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-public/apis-public.service.ts" />
         <option value="$PROJECT_DIR$/src/app/services/user-login.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-bittrex.ts" />
         <option value="$PROJECT_DIR$/src/app/app.module.ts" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.html" />
         <option value="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/candles/candles-data.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/com/math.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/trader.module.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/table-props/table-props.component.html" />
         <option value="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.html" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
         <option value="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.html" />
         <option value="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html" />
-        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" />
         <option value="$PROJECT_DIR$/src/app/services/app-storage.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/test/test.component.html" />
-        <option value="$PROJECT_DIR$/src/app/test/test.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" />
+        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/com/math.ts" />
+        <option value="$PROJECT_DIR$/src/app/test/test.component.html" />
+        <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" />
+        <option value="$PROJECT_DIR$/src/app/test/test.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/trader.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html" />
+        <option value="$PROJECT_DIR$/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts" />
       </list>
     </option>
   </component>
@@ -381,9 +417,9 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="57" />
+    <option name="x" value="56" />
     <option name="y" value="4" />
-    <option name="width" value="2514" />
+    <option name="width" value="2515" />
     <option name="height" value="1455" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -416,7 +452,21 @@
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="app-services" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="trader" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -426,7 +476,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="foll&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;follow&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;scan-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;test.c&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/test/test.component.ts&#10;cand&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;candles&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/candles-analys1.ts&#10;bot&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/bot-follow-coin/bot-follow-coin.component.html&#10;compar&#9;null&#9;null&#10;follo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-orders.service.ts&#10;scan-ma&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;btc&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;scan&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;sca&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;fish&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/ui/fishes/fishes.component.html&#10;open-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/open-orders.service.ts&#10;orders-hi&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/orders-history&#10;btc-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;candles-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles-data.ts&#10;app-op&#9;null&#9;null&#10;open&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/open-orders/open-orders.component.ts&#10;btc-usd&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;sell-coin&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/app-bots-services/sell-coin-filling.ts&#10;app-bots&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/app-bots-services/app-bots.service.ts&#10;fol&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;candles-d&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles-data.ts&#10;buy-sell&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts&#10;v2-da&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/all-in-one/v2-data/v2-data.component.ts&#10;candl&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;follow-o&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;candle&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;scan-mar&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;btc-t&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;scan-m&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;pattern&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/alerts/candles-pattern&#10;BTC&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;bt&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;alert&#9;null&#9;null&#10;trader-so&#9;null&#9;null&#10;sharks&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/alerts/sharks-list/sharks-list.component.ts&#10;shark&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/market-history/sharks-alert.ts&#10;coin-day.c&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;api-server.service&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/api-server.service.ts&#10;mongo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/mongo.service.ts&#10;coin-day.&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;mc-da&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/ui/mc-data/mc-data.component.ts&#10;api-ma&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-market-cap.service.ts&#10;api-pr&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-private/api-private-abstaract.ts&#10;books-all&#9;null&#9;null&#10;coin-day&#9;null&#9;null&#10;util&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="can&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;btc-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;btc&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;foll&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;follow&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;scan-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;test.c&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/test/test.component.ts&#10;cand&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;candles&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/candles-analys1.ts&#10;bot&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/bot-follow-coin/bot-follow-coin.component.html&#10;compar&#9;null&#9;null&#10;follo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-orders.service.ts&#10;scan-ma&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;scan&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/trader/scan-markets/scan-markets.component.ts&#10;sca&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;fish&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/ui/fishes/fishes.component.html&#10;open-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/open-orders.service.ts&#10;orders-hi&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/orders-history&#10;candles-&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles-data.ts&#10;app-op&#9;null&#9;null&#10;open&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/open-orders/open-orders.component.ts&#10;btc-usd&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/alerts/btc-usdt.service.ts&#10;sell-coin&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/app-bots-services/sell-coin-filling.ts&#10;app-bots&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/app-bots-services/app-bots.service.ts&#10;fol&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;candles-d&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles-data.ts&#10;buy-sell&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts&#10;v2-da&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/all-in-one/v2-data/v2-data.component.ts&#10;candl&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;follow-o&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/open-orders/follow-open-order.ts&#10;candle&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/candles/candles.service.ts&#10;scan-mar&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;btc-t&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;scan-m&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/scanner/scan-markets.service.ts&#10;pattern&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/alerts/candles-pattern&#10;BTC&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;bt&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/btc-tether/btc-tether.component.ts&#10;alert&#9;null&#9;null&#10;trader-so&#9;null&#9;null&#10;sharks&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/widgets/alerts/sharks-list/sharks-list.component.ts&#10;shark&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/app-services/market-history/sharks-alert.ts&#10;coin-day.c&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;api-server.service&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/api-server.service.ts&#10;mongo&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/mongo.service.ts&#10;coin-day.&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/archive/coin-day/coin-day.component.ts&#10;mc-da&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/ui/mc-data/mc-data.component.ts&#10;api-ma&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-market-cap.service.ts&#10;api-pr&#9;FILE&#9;file://D:/Projects/Bitcoin/watch-dogs/src/app/apis/api-private/api-private-abstaract.ts&#10;books-all&#9;null&#9;null&#10;coin-day&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/node_modules/technicalindicators/declarations/index.d.ts" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../technicalindicators" />
@@ -638,28 +688,7 @@
       <workItem from="1539964134185" duration="110695000" />
       <workItem from="1540502663220" duration="8000" />
       <workItem from="1540502693571" duration="26015000" />
-      <workItem from="1540587248344" duration="67479000" />
-    </task>
-    <task id="LOCAL-00039" summary="houbi public">
-      <created>1531577484047</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1531577484047</updated>
-    </task>
-    <task id="LOCAL-00040" summary="all markets">
-      <created>1531663921027</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1531663921027</updated>
-    </task>
-    <task id="LOCAL-00041" summary="exterior page">
-      <created>1531835041650</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1531835041650</updated>
+      <workItem from="1540587248344" duration="180379000" />
     </task>
     <task id="LOCAL-00042" summary="markets snapshots">
       <created>1531838693449</created>
@@ -983,11 +1012,32 @@
       <option name="project" value="LOCAL" />
       <updated>1540846350308</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="candles service">
+      <created>1540907013180</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1540907013180</updated>
+    </task>
+    <task id="LOCAL-00089" summary="btc service">
+      <created>1541023851714</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1541023851714</updated>
+    </task>
+    <task id="LOCAL-00090" summary="sell on jump">
+      <created>1541205405502</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1541205405502</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2179160000" />
+    <option name="totallyTimeSpent" value="2292060000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -999,18 +1049,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="57" y="4" width="2514" height="1455" extended-state="0" />
-    <editor active="true" />
+    <frame x="56" y="4" width="2515" height="1455" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.79162073" visible="true" weight="0.1401793" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7902893" visible="true" weight="0.1401222" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.20837927" side_tool="true" visible="true" weight="0.1401793" />
+      <window_info id="npm" order="2" sideWeight="0.20971075" side_tool="true" visible="true" weight="0.1401222" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="DB Browser" order="4" sideWeight="0.49730563" weight="0.25577927" />
       <window_info anchor="bottom" id="Messages" order="0" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" sideWeight="0.49837002" visible="true" weight="0.30123267" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4979625" weight="0.2542373" />
+      <window_info anchor="bottom" id="Find" order="2" sideWeight="0.49837002" weight="0.30123267" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4979625" visible="true" weight="0.2542373" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -1168,9 +1217,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="icons" />
-    <MESSAGE value="socket" />
-    <MESSAGE value="publish" />
     <MESSAGE value="move to proxy" />
     <MESSAGE value="canglesticks" />
     <MESSAGE value="RSI" />
@@ -1193,7 +1239,10 @@
     <MESSAGE value="history notes" />
     <MESSAGE value="gainers - losers" />
     <MESSAGE value="bot stated" />
-    <option name="LAST_COMMIT_MESSAGE" value="bot stated" />
+    <MESSAGE value="candles service" />
+    <MESSAGE value="btc service" />
+    <MESSAGE value="sell on jump" />
+    <option name="LAST_COMMIT_MESSAGE" value="sell on jump" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1221,83 +1270,10 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/apis/http-delay.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="74" column="63" lean-forward="true" selection-start-line="74" selection-start-column="63" selection-end-line="74" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/archive/bot-follow-coin/bot-follow-coin.component.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-bot/sell-coin/sell-coin.component.ts" />
-    <entry file="file://$PROJECT_DIR$/src/app/app.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="17" lean-forward="true" selection-start-line="6" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/watch-dog-shared.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="19" column="11" selection-start-line="18" selection-start-column="1" selection-end-line="19" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="298" lean-forward="true" selection-start-line="298" selection-end-line="298" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="63" column="25" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/apis-public.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="166" column="2" selection-start-line="166" selection-start-column="2" selection-end-line="166" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="100" column="23" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-services/market-history/markets-history.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="67" column="56" lean-forward="true" selection-start-line="67" selection-start-column="56" selection-end-line="67" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -1329,13 +1305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/math.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/@types/lodash/common/common.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
@@ -1347,16 +1316,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="344">
           <caret line="2185" column="29" selection-start-line="2185" selection-start-column="29" selection-end-line="2185" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="770">
-          <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1378,16 +1337,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="60" lean-forward="true" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="128" column="15" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1443,13 +1392,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="134" lean-forward="true" selection-start-line="134" selection-end-line="134" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trader/libs/techind/candlestick/Bearish.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1496,13 +1438,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="48" column="48" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
@@ -1520,13 +1455,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="68" column="25" lean-forward="true" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/services/app-storage.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -1537,31 +1465,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/test/test.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="45" column="51" lean-forward="true" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
+        <state relative-caret-position="219">
+          <caret line="65" column="23" lean-forward="true" selection-start-line="65" selection-start-column="23" selection-end-line="65" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1123">
-          <caret line="59" column="32" lean-forward="true" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
+        <state relative-caret-position="270">
+          <caret line="86" column="23" lean-forward="true" selection-start-line="86" selection-start-column="23" selection-end-line="86" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/test/test.component.html">
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/services/my-exchange.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="13" lean-forward="true" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+        <state relative-caret-position="575">
+          <caret line="66" column="21" lean-forward="true" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="81" column="2" selection-start-line="81" selection-start-column="2" selection-end-line="81" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="69" column="21" lean-forward="true" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/rxjs/src/Observable.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="76" column="2" selection-start-line="76" selection-start-column="2" selection-end-line="76" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="287" column="23" lean-forward="true" selection-start-line="287" selection-start-column="23" selection-end-line="287" selection-end-column="23" />
+        <state relative-caret-position="1146">
+          <caret line="153" column="41" selection-start-line="153" selection-start-column="41" selection-end-line="153" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="541">
+          <caret line="68" column="69" lean-forward="true" selection-start-line="68" selection-start-column="69" selection-end-line="68" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="76" column="21" lean-forward="true" selection-start-line="76" selection-start-column="21" selection-end-line="76" selection-end-column="21" />
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -1570,20 +1543,126 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2500">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="679">
+          <caret line="200" column="37" selection-start-line="200" selection-start-column="23" selection-end-line="200" selection-end-column="37" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/com/math.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="39" lean-forward="true" selection-start-line="5" selection-start-column="3" selection-end-line="7" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/test/test.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="33" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="329" column="31" selection-start-line="329" selection-start-column="31" selection-end-line="329" selection-end-column="31" />
+        <state relative-caret-position="51">
+          <caret line="383" column="51" selection-start-line="383" selection-start-column="51" selection-end-line="383" selection-end-column="51" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="128" column="27" selection-start-line="128" selection-start-column="12" selection-end-line="128" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="20" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/test/test.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="34" column="54" lean-forward="true" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="74" selection-start-line="7" selection-start-column="54" selection-end-line="7" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="89" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="41" column="39" lean-forward="true" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="36" lean-forward="true" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>

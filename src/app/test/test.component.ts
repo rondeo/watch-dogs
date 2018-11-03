@@ -7,6 +7,11 @@ import * as moment from 'moment';
 import {CandlesAnalys1} from '../app-services/scanner/candles-analys1';
 import {MATH} from '../com/math';
 import {StorageService} from '../services/app-storage.service';
+import {FollowOpenOrder} from '../apis/open-orders/follow-open-order';
+import {ApisPrivateService} from '../apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../apis/api-market-cap.service';
+import {CandlesService} from '../app-services/candles/candles.service';
+import {VOBalance} from '../models/app-models';
 
 @Component({
   selector: 'app-test',
@@ -22,44 +27,53 @@ export class TestComponent implements OnInit {
   constructor(
     private alerts: BtcUsdtService,
     private apisPublic: ApisPublicService,
-    private storage: StorageService
+    private apisPrivate: ApisPrivateService,
+    private storage: StorageService,
+    private marketCap: ApiMarketCapService,
+    private candlesService: CandlesService
   ) {
 
   }
 
+  followOrder:FollowOpenOrder;
   ngOnInit() {
+    this.followOrder = new FollowOpenOrder(
+      'binance',
+      'BTC_LRC',
+      -4,
+      this.apisPrivate,
+      this.apisPublic,
+      this.marketCap,
+      this.storage,
+      this.candlesService
+    )
    // this.initAsync();
-   this.tradeHistory();
+   // this.tradeHistory();
+
+    this.followOrder.getCandles = this.getCandles.bind(this);
+    this.followOrder.isTooFast = ()=>{ return false};
+    this.followOrder.start = ()=>{
+      console.log('SATRT called')
+    }
+
+   // this.followOrder.balanceCoin = new VOBalance()
+    //this.followOrder.balanceCoin.available = 0;
+   // this.followOrder.balanceCoin.pending = 1000;
+    this.apisPrivate.getExchangeApi('binance').refreshBalances();
 
   }
 
-  async tradeHistory(){
-    const keys =  await this.storage.keys();
-    console.log(keys);
-    const initOrders: string[] = keys.filter(function (item) {
-      return item.indexOf('init-order') ===0
-    });
 
-    Promise.all(initOrders.map( (item) => {
-      const market = item.substr(17);
-
-      return this.storage.select(item).then(res =>{
-        return {
-          market,
-          date:moment(res.timestamp).format('MM-DD HH:mm'),
-          rate: res.rate
-        }
-      });
-    })).then(data =>{
-      this.orders = data;
-    })
-
-
+  currentTime = moment('2018-11-02T11:17');
+ async getCandles(){
+   this.currentTime.add(5, 'minutes')
+   const candles =  await this.apisPublic.getExchangeApi('binance')
+     .downloadCandles('BTC_CDT','5m', 120, this.currentTime.valueOf());
+   return candles;
   }
 
   start(){
-    this.interval = setInterval(()=>this.main(), 10000);
-    this.main();
+    this.interval = setInterval(()=>this.tick(), 1000);
   }
   stop(){
     clearInterval(this.interval);
@@ -76,30 +90,49 @@ export class TestComponent implements OnInit {
  // this.start();
   }
 
-  currentTime = moment('2018-10-23T16:15');
+  /*
+  * '2018-10-23T16:15'
+  *
+  * 'BTC_AST'
+  *
+  * 6% down
+  *
+  *
+  *
+  * '2018-11-02T04:40'
+  *
+  * FUEL_BTC
+  *
+  * 2 jumps
+  *
+  *
+  *'2018-11-02T11:17'
+  *
+  *
+  * BTC_CDT
+  *
+  *
+  * '2018-11-02T20:45'
+  *
+  * BTC_FUEL
+  *
+  *
+  * */
 
- async  main(){
-    this.currentTime.add(5, 'minutes')
+
+
+ async  tick(){
+
+   this.followOrder.tick();
+  /*  this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles('BTC_AST','5m', 24, this.currentTime.valueOf());
-  //   console.log(candles);
-   /*const last10 = _.takeRight(.speeds(candles), 10);
-   console.log(last10);
-   const last4 = _.takeRight(last10, 4);
-   const flast4 = last4.shift();
-
-   const isFall = last4.every(function (o) {
-     const prev = this.v;
-     this.v = o;
-     return o < prev;
-   },{v:flast4});
-
-   console.log(flast4, last4, isFall);
+      .downloadCandles('BTC_CDT','5m', 120, this.currentTime.valueOf());
 */
-    this.candles = candles;
+
+    this.candles = this.followOrder.candles;
 
   }
-  onStopClick() {
+  onStartClick() {
    if(!this.interval) this.start();
    else this.stop();
 

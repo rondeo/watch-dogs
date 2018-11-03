@@ -44,7 +44,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     private myService: MyExchangeService,
     private externalPage: ShowExternalPageService,
     private userLogin: UserLoginService
-
   ) {
   }
 
@@ -60,42 +59,46 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.exchangesPrivate = this.privateService.getMyPivateExchanges()
     this.route.params.subscribe(params => {
-      if(this.exchange !== params.exchange) {
+      if (this.exchange !== params.exchange) {
         this.balancesAll = [];
         this.balancesAr = [];
       }
 
       this.exchange = params.exchange;
-      if(!this.MC)  this.initAsync();
-      this.subscribe();
+      if (!this.MC) this.initAsync();
+      else this.subscribe();
       // this.dowloadAllBalances();
     })
 
   }
 
-  async initAsync(){
+  async initAsync() {
     this.MC = await this.marketCap.getTicker();
-    this.refreshBalances();
+    this.subscribe();
+
   }
 
-  subscribe(){
-    if(this.sub1) this.sub1.unsubscribe();
-   this.sub1 = this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances =>{
-     if(!balances) return;
-     const MC = this.MC;
-     // console.log(this.balancesAll);
-     // console.log(this.balancesAll);
-     this.balancesAll = balances;
-     this.balancesAll.forEach(function (item) {
-       const coinMC = MC[item.symbol];
-       if (coinMC) {
-         item.id = coinMC.id;
-         item.balanceUS = Math.round(item.balance * coinMC.price_usd);
-       } else item.balanceUS = 0;
-     });
+  subscribe() {
+    if(!this.exchange) return;
+    if (this.sub1) this.sub1.unsubscribe();
+    this.sub1 = this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances => {
 
-     this.render();
-   })
+      if (!balances) return;
+      const MC = this.MC;
+      // console.log(this.balancesAll);
+      // console.log(this.balancesAll);
+      this.balancesAll = balances;
+      this.balancesAll.forEach(function (item) {
+        const coinMC = MC[item.symbol];
+        if (coinMC) {
+          item.id = coinMC.id;
+          item.balanceUS = Math.round(item.balance * coinMC.price_usd);
+        } else item.balanceUS = 0;
+      });
+
+      this.render();
+    })
+    this.refreshBalances();
   }
 
   /*async dowloadAllBalances() {
@@ -160,7 +163,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   async onBalanceClick(balance: VOBalance) {
     const symbol = balance.symbol;
     this.router.navigateByUrl('/my-exchange/buy-sell/' + this.exchange + '/BTC_' + symbol)
-   //  console.log(balance)
+    //  console.log(balance)
 
   }
 
@@ -172,7 +175,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   asc_desc = 'desc';
 
   onSortClick(criteria: string): void {
-   // console.log(criteria);
+    // console.log(criteria);
     if (this.sortBy === criteria) {
       this.asc_desc = (this.asc_desc === 'asc') ? 'desc' : 'asc';
     }
@@ -186,6 +189,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     this.balancesAr = _.orderBy(this.balancesAr, this.sortBy, this.asc_desc);
 
   }
+
   onSymbolClick(balance) {
     this.router.navigateByUrl('/trader/analyze-coin/' + balance.symbol + '/' + this.exchange);
   }
@@ -195,18 +199,18 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     this.externalPage.showCoinOnMarketCap(balance.symbol);
   }
 
-  onEchangeChanged(evt: MatSelectChange){
+  onEchangeChanged(evt: MatSelectChange) {
     //console.log(exch);
-    this.router.navigateByUrl('/my-exchange/balances/' + evt.value, {replaceUrl:true});
+    this.router.navigateByUrl('/my-exchange/balances/' + evt.value, {replaceUrl: true});
   }
 
-  onKeyClick(){
-    if(this.exchange) {
-      this.userLogin.setExchnageCredentials(this.exchange).then(res =>{
+  onKeyClick() {
+    if (this.exchange) {
+      this.userLogin.setExchnageCredentials(this.exchange).then(res => {
         this.apisPrivate.getExchangeApi(this.exchange).createLogin();
       })
 
-     // this.apisPrivate.getExchangeApi(this.exchange).resetCredetials();
+      // this.apisPrivate.getExchangeApi(this.exchange).resetCredetials();
       //this.apisPrivate.getExchangeApi(this.exchange).createLogin();
     }
 

@@ -38,8 +38,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   coinsAvailable: VOMarketCap[];
 
 
-
-
   candlesInterval = '5m';
   scannerSatatsSub: Subject<string> = new Subject();
   // private selectedCoin: string;
@@ -55,69 +53,138 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private router: Router,
     public scanner: ScanMarketsService,
     private candlesService: CandlesService
-   //  private botsService: AppBotsService
+    //  private botsService: AppBotsService
   ) {
 
-
-    /* this.apisPublic.getExchangeApi('binance').startRefrshTicker();
-
-     this.apisPublic.getExchangeApi('binance').ticker5min$('BTC_KMD').subscribe(ticker =>{
-       console.log(ticker);
-     })*/
-    window['MATH'] = MATH;
   }
+
+
+  onProgressClick() {
+    this.showMarket(this.scanner.currentMarket);
+
+  }
+
+  ////////////////////////////////////////////////// TREND UP ///////////////////////////////////////////////////////
+  onTrendUpOpen(evt) {
+    if (evt.checked) this.scanner.getGoingUP().then(res => {
+      this.trandUps = res;
+    })
+  }
+
+  trandUps: any[] = [];
+  sub5;
+
+  async onTrandUPStart() {
+    this.trandUps = [];
+    const sub = await this.scanner.scanGoingUP(2);
+    this.sub5 = sub.subscribe(market => {
+      let item = Object.assign(market, {x: 'X'});
+      this.trandUps.push(item);
+    })
+  }
+
+  onTrendUPClick(evt) {
+    const market = evt.item.market;
+    if (evt.prop === 'market') this.showMarket(market)
+    else if (evt.prop === 'x') {
+      if (confirm(' DELETE ' + market)) {
+
+        this.scanner.deleteCoingUpMarket(market).then(res => {
+          this.trandUps = res;
+        })
+
+      }
+    }
+  }
+
+
+  onDeleteTrandUPClick() {
+    if (confirm('Selete trand UP?')) {
+      this.trandUps = [];
+      this.scanner.deleteGoingUP();
+    }
+  }
+
+  /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
+
+  //////////////////////////////////////////VOLUME START /////////////////////////////////////////////////
+
+  scanVolumeOnlyUP: boolean;
+  volumesResults: any[];
+
+  async onVolumeChange(evt) {
+    if (evt.checked) {
+      this.volumesResults = await this.scanner.getVolumes();
+
+    } else this.volumesResults = null
+  }
+
+
+
+  async onVolumeStartClick() {
+    if(this.scanner.scanVolumeTimer) {
+      this.scanner.stopVolumeScan();
+      return;
+    }
+
+    const markets = this.scanVolumeOnlyUP ?
+      _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
+    ;
+
+    console.log(markets);
+    const sub = await this.scanner.scanForVolume(markets);
+    sub.subscribe(vols => {
+      this.volumesResults = vols.map(function (item) {
+        return Object.assign(item, {x:'X'});
+      });
+    });
+  }
+
+  onDeleteVolumesClick() {
+    if (confirm('Delete Volumes?')) {
+      this.volumesResults = null;
+      this.scanner.deleteVolumes();
+    }
+  }
+
+  onVolumeClick(evt) {
+    const market = evt.item.market;
+    if (evt.prop === 'market') this.showMarket(market);
+    else if (evt.prop === 'x') {
+      if (confirm(' DELETE ' + market)) {
+        this.scanner.deleteVolume(market).then(res => {
+          this.volumesResults = res;
+        })
+
+      }
+    }
+  }
+
+  /////////////////////////////////////////VOLUME END ///////////////////////////////////////////////////////
+
 
   userMarket: string;
 
-
-  onExcludeDownTrendClick(){
-    this.scanner.excludeDownTrend();
-  }
   onMarketInput(evt) {
     if (evt.code === 'Enter') this.showCandles(this.userMarket);
-   //  console.log(evt, this.userMarket);
+    //  console.log(evt, this.userMarket);
   }
 
-  onCandlesIntrvalChange(){
+  onCandlesIntrvalChange() {
     this.showCandles(this.userMarket);
   }
+
   sub1: Subscription;
   sub2: Subscription;
   sub3: Subscription;
 
   async ngOnInit() {
     this.initAsync();
-   //  this.botsService.init();
-  }
-
-  onAddBotClick(){
-    if(!this.selectedMarket) return;
-    if(confirm('add bot ' + this.selectedMarket)){
-      this.addBot(this.selectedMarket);
-    }
-  }
-  addBot(market: string) {
-   // const bot = this.botsService.addBot('binance', market);
-   // console.log(bot);
-   // bot.start();
-  }
-  onDeleteExcludesClick(){
-    if(confirm('empty ecludes? ')) {
-      this.scanner.removeExcludes()
-    }
-  }
-  onExcludeClick(evt) {
-    const market = evt.item.market;
-    if (evt.prop === 'market') {
-      this.showMarket(market);
-    } else if (evt.prop === 'x') {
-      this.scanner.removeExclude(this.exchange, market).then(() => {
-        this.showExcludes();
-      })
-    }
+    //  this.botsService.init();
   }
 
 
+  /////////////////////////////////////////// FAVORITE START //////////////////////////////////////////////
   onStarClick() {
     const market = this.selectedMarket;
     const ref = this.dialog.open(DialogInputComponent, {data: {message: market, userInput: '3'}});
@@ -146,6 +213,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   favorites: any[];
+
   onFavoriteChange(evt) {
     if (evt.checked) {
       this.scanner.favoritesSub.subscribe(favs => {
@@ -164,40 +232,61 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onExcludesChange(evt) {
-    if (evt.checked) this.showExcludes();
-    else this.hideExcludes();
-  }
+  ///////////////////////////////// FAVORITE END /////////////////////////////////////////////////////
 
-  excludes: any[];
+  /*
+    onDeleteExcludesClick(){
+      if(confirm('empty ecludes? ')) {
+        this.scanner.removeExcludes()
+      }
+    }
 
-  async showExcludes() {
-    this.excludes = ((await this.scanner.getExcludes(this.exchange)) || [])
-      .map(function (o) {
-        return {
-          market: o.market,
-          reason: o.reason,
-          stamp: moment(o.stamp).format('DD HH:mm'),
-          postpone: moment(o.postpone).format('DD HH:mm'),
-          x: 'X'
-        }
-      })
-  }
+    onExcludeClick(evt) {
+      const market = evt.item.market;
+      if (evt.prop === 'market') {
+        this.showMarket(market);
+      } else if (evt.prop === 'x') {
+        this.scanner.removeExclude(this.exchange, market).then(() => {
+          this.showExcludes();
+        })
+      }
+    }
 
-  hideExcludes() {
-    this.excludes = null;
-  }
+    onExcludesChange(evt) {
+      if (evt.checked) this.showExcludes();
+      else this.hideExcludes();
+    }
+
+    excludes: any[];
+
+    async showExcludes() {
+      this.excludes = ((await this.scanner.getExcludes(this.exchange)) || [])
+        .map(function (o) {
+          return {
+            market: o.market,
+            reason: o.reason,
+            stamp: moment(o.stamp).format('DD HH:mm'),
+            postpone: moment(o.postpone).format('DD HH:mm'),
+            x: 'X'
+          }
+        })
+    }
+
+    hideExcludes() {
+      this.excludes = null;
+    }*/
 
   async initAsync() {
-    const sub = await this.scanner.notifications$();
-    this.sub1 = sub.subscribe(notes => {
-      this.notifications = _.filter(notes, 'a');
-      this.notifications2 = _.reject(notes, 'a');
-    });
-    this.sub2 = this.scanner.currentResult$().subscribe(curr => {
 
-      this.currentData = [curr];
-    })
+    /* const sub = await this.scanner.notifications$();
+     this.sub1 = sub.subscribe(notes => {
+       this.notifications = _.filter(notes, 'a');
+       this.notifications2 = _.reject(notes, 'a');
+     });
+     this.sub2 = this.scanner.currentResult$().subscribe(curr => {
+
+       this.currentData = [curr];
+     })*/
   }
 
   ngOnDestroy() {
@@ -210,17 +299,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if (this.sub3) this.sub3.unsubscribe();
   }
 
-  isRunning;
-
-  async setAvaliableCoins(markets: string[]) {
-    const coins: string[] = markets.map(function (o) {
-      return o.split('_')[1]
-    });
-    const MC = await this.marketCap.getTicker();
-    this.coinsAvailable = coins.map(function (o) {
-      return MC[o] || new VOMarketCap({symbol: o});
-    })
-  }
 
   /*
     async subscribe() {
@@ -246,8 +324,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
     }*/
 
-  analizeMarket: string;
-  analizeTime: string;
+  // analizeMarket: string;
+  // analizeTime: string;
   //  analizeInterval = '30m';
 
   /* onAnaliseCandlesClick() {
@@ -262,33 +340,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
        })
    }*/
 
-  onCoinSelected(coin: VOMarketCap) {
-    const symbol = coin.symbol;
-    this.coin = symbol;
-    let market = 'BTC_' + symbol;
-
-    this.openMarket(this.exchange, market);
-
-    this.analizeMarket = market;
-
-
-    // this.downloadCandles(this.market);
-  }
-
-  onCurrentMarketClick() {
-
-    this.openMarket(this.exchange, this.selectedMarket);
-  }
-
-  save() {
-    this.storage.upsert('scan-notifications', this.notifications);
-  }
 
   candles: VOCandle[];
-
   volumes: number[];
 
-  onDatasetClick(obj) {
+  /*onDatasetClick(obj) {
     const item = obj.item;
     const prop = obj.prop;
     const market = item.market;
@@ -307,51 +363,35 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       })
 
     }
-    /* if (prop === 'LH') {
+    /!* if (prop === 'LH') {
        this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market);
-     }*/
+     }*!/
     if (prop === 'market') {
-      this.showMarket(market, false);
+      this.showMarket(market);
     }else if(prop === 'result') {
       this.dialog.open( NotesHistoryComponent,{data:item} )
     }
 
-  }
+  }*/
 
   mediaPointsFrom: number;
   mediaPointsTo: number;
   mediaPercent: number;
 
+  inBrowser: boolean;
 
-  showMarket(market: string, open = false) {
+  showMarket(market: string) {
     this.userMarket = market;
     this.selectedMarket = market;
-   //  console.log(market);
-   /* this.apiCryptoCompare.getSocialStats(market.split('_')[1]).then(stats => {
-      // console.log(stats);
-      if (!stats) {
-        this.mediaPointsFrom = -1;
-        this.mediaPointsTo = -1;
-        this.mediaPercent = 0;
-        return;
-      }
-      this.mediaPointsFrom = stats.fromPoints;
-      this.mediaPointsTo = stats.toPoints;
-      this.mediaPercent = MATH.percent(stats.toPoints, stats.fromPoints);
-    }).catch(err => {
-      this.mediaPointsFrom = -1;
-      this.mediaPointsTo = -1;
-    })
-*/
     this.showCandles(market);
-    if (open) this.openMarket(this.exchange, market);
+    if (this.inBrowser) this.openMarket(this.exchange, market);
   }
 
   async showCandles(market: string) {
     this.selectedMarket = market;
     let candles;
-    if(this.candlesInterval === '5m'){
-      candles = await  this.candlesService.getCandles(this.exchange, market, '5m');
+    if (this.candlesInterval === '5m') {
+      candles = await this.candlesService.getCandles(this.exchange, market, '5m');
     } else {
       candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
     }
@@ -362,42 +402,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.volumes = null;
       return;
     }
-
-    // console.log(market + ' pumpedUp ' +CandlesAnalys1.pumpedUp(candles));
-   // console.log(market + ' volume jump ', CandlesAnalys1.volumeJump(candles));
-   //  console.log(market + ' trend ', CandlesAnalys1.MALats(_.takeRight(candles, 20)));
-
-   // const  c1 = candles.slice(candles.length-6, candles.length -2);
-
-    //console.log(market + ' is fall ', MATH.isFall(CandlesAnalys1.meds(c1)));
-
-  //  console.log(market + ' progress ' +CandlesAnalys1.progress(candles, 24));
-   // console.log(market + ' goingUp ' + CandlesAnalys1.goingUp(candles));
-   //  console.log(market + ' lastVolume  ' + CandlesAnalys1.lastVolume(candles));
-   // console.log(market + ' MA  ' + CandlesAnalys1.MA3(candles));
-
     this.candles = candles;
     this.volumes = candles.map(function (o) {
       return o.open > o.close ? -o.Volume : o.Volume;
     });
-
-    this.analize(this.candles, market);
   }
 
-  async analize(candles: VOCandle[], market: string) {
-    const MC = (await this.marketCap.getTicker())[market.split('_')[1]];
-    const exchange = this.exchange;
-    const data = await CandlesAnalys2.analyze({exchange, candles, market}, MC, null, null);
-    this.analysData = [data];
-    // console.log(data);
-    // const mydata = CandlesStats.analysData;
-    // console.log(mydata);
-
-
-    // const maxVolume: VOCandle = _.first(sortedVol);
-    // const percentMaxVolume = MATH.percent(maxVolume.high, maxVolume.low);
-    //console.log('percentMaxVolume  ' + percentMaxVolume);
-  }
 
   openMarket(exchange: string, market: string) {
     const api = this.apisPublic.getExchangeApi(exchange);
@@ -409,49 +419,51 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   onClearMemoryClick() {
     if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
       .then(res => {
-        this.scanner.notifications()
+
         this.snackBar.open('Memory cleared', 'x', {duration: 3000});
       })
 
   }
 
-  onDownClick(){
-    this.scanner.scanGoingDown();
-  }
-/*falIntrval
-  onFallClick(){
+  /* onDownClick(){
+     this.scanner.scanGoingDown();
+   }*/
+  /*falIntrval
+    onFallClick(){
 
-    if(this.falIntrval){
-      clearInterval(this.falIntrval);
-      this.falIntrval = 0;
-      return
-    }
-    this.scanner.scanForFall();
-   this.falIntrval =  setInterval(()=>{
+      if(this.falIntrval){
+        clearInterval(this.falIntrval);
+        this.falIntrval = 0;
+        return
+      }
       this.scanner.scanForFall();
-    }, 5*60*1e3);
-  }*/
-  onStartClick() {
-   if (this.scanner.scanInterval) this.scanner.stop();
-     else this.scanner.start();
-  }
+     this.falIntrval =  setInterval(()=>{
+        this.scanner.scanForFall();
+      }, 5*60*1e3);
+    }*/
 
-  onDeleteClick() {
-    if (confirm('Delete All')) {
-      this.scanner.deleteNotifications()
-    }
-  }
 
-  onDeleteTrendDownClick(){
-    if(confirm('Empty trend down? ')) {
-      this.scanner.emtyTrendDown();
-    }
+  /* onStartClick() {
+    if (this.scanner.scanInterval) this.scanner.stop();
+      else this.scanner.start();
+   }
 
-  }
+   onDeleteClick() {
+     if (confirm('Delete All')) {
+       this.scanner.deleteNotifications()
+     }
+   }
 
-  onTrendDownClick(evt){
-    const market = evt.item;
-    // console.log(evt);
-    this.showMarket(market, false);
-  }
+   onDeleteTrendDownClick(){
+     if(confirm('Empty trend down? ')) {
+       this.scanner.emtyTrendDown();
+     }
+
+   }
+
+   onTrendDownClick(evt){
+     const market = evt.item;
+     // console.log(evt);
+     this.showMarket(market);
+   }*/
 }

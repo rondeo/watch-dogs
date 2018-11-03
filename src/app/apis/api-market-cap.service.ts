@@ -43,6 +43,12 @@ export class ApiMarketCapService {
   static mapDataMC(data: any[]) {
     const out = {};
 
+    const BTC = data.shift();
+    if(BTC.symbol !== 'BTC') throw new Error(' first not BTC');
+    const btc1h = BTC.percent_change_1h;
+    const btc24h = BTC.percent_change_24h;
+    const btc7d = BTC.percent_change_7d;
+
     data.forEach(function (item) {
       if(item.symbol === 'ETHOS')item.symbol = 'BQX';
 
@@ -58,13 +64,14 @@ export class ApiMarketCapService {
         available_supply: +item.available_supply,
         total_supply: +item.total_supply,
         max_supply: +item.max_supply,
-        percent_change_1h: +item.percent_change_1h,
-        percent_change_24h: +item.percent_change_24h,
-        percent_change_7d: +item.percent_change_7d,
+        percent_change_1h: +(item.percent_change_1h - btc1h).toFixed(2),
+        percent_change_24h: +(item.percent_change_24h - btc24h).toFixed(2),
+        percent_change_7d: +(item.percent_change_7d - btc7d).toFixed(2),
         last_updated: item.last_updated,
         stamp: item.stamp
       }
     });
+    out['BTC'] = BTC;
     return out;
   }
 

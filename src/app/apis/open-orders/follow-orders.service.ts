@@ -67,7 +67,7 @@ export class FollowOrdersService {
                 const follow = new FollowOpenOrder(
                   exchange,
                   market,
-                  -2,
+                  -4,
                   this.apisPrivate,
                   this.apisPublic,
                   this.marketCap,
