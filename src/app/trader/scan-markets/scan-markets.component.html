@@ -1,35 +1,32 @@
 <div>
     <div>
-
-       <!-- <h4>{{scanner.statsSub | async}}</h4>-->
         <small>{{exchange}}</small>
-        <mat-spinner *ngIf="scanner.isScanning" [diameter]="24" class="mat-progress-spinner"  ></mat-spinner>
-       <!-- <button mat-button="" (click)="onStartClick()">{{scanner.scanInterval?'Stop':'Scan'}}</button>
--->
-       <!-- <button mat-button="" (click)="onFallClick()">{{falIntrval?'Scanning':'Scan'}} FALL</button>-->
-       <!-- <mat-checkbox (change)="onExcludesChange($event)">Excludes</mat-checkbox>-->
+        <mat-spinner *ngIf="scanner.isScanning" [diameter]="24" class="mat-progress-spinner"></mat-spinner>
         <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
-       <!-- <mat-checkbox #trendDownCheck >Trend Down</mat-checkbox>-->
-        <mat-checkbox #trendUPCheck (change)="onTrendUpOpen($event)" >Trend UP</mat-checkbox>
+        <mat-checkbox #trendUPCheck (change)="onTrendUpOpen($event)">Trend UP</mat-checkbox>
 
-        <mat-checkbox #volumeCheck (change)="onVolumeChange($event)" >Volume</mat-checkbox>
-        <mat-checkbox #mfiCheck (change)="onMFIChange($event)" >MFI</mat-checkbox>
+        <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
+        <mat-checkbox #mfiCheck (change)="onMFIChange($event)">MFI</mat-checkbox>
         <!--<button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>-->
     </div>
 
     <small (click)="onProgressClick()">{{scanner.currentMarket}} {{scanner.progressSub | async}}</small>
 
-    <div class="scrollY300" *ngIf="trendUPCheck.checked">
+    <div *ngIf="trendUPCheck.checked">
+        <h3>Trend UP</h3>
         <button mat-button="" (click)="onTrandUPStart()">Scan</button>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteTrandUPClick()"></span>
-        <app-table-props [dataset]="trandUps" (selected)="onTrendUPClick($event)"></app-table-props>
+        <div class="scrollY300">
+            <app-table-props [dataset]="trandUps" (selected)="onTrendUPClick($event)"></app-table-props>
+        </div>
+
     </div>
 
-   <!-- <div class="scrollY300" *ngIf="trendDownCheck.checked">
-        <button mat-button="" (click)="onDownClick()">DOWN</button>
-        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteTrendDownClick()"></span>
-        <app-table-props [dataset]="scanner.marketsTrendDown | async" (selected)="onTrendDownClick($event)"></app-table-props>
-    </div>-->
+    <!-- <div class="scrollY300" *ngIf="trendDownCheck.checked">
+         <button mat-button="" (click)="onDownClick()">DOWN</button>
+         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteTrendDownClick()"></span>
+         <app-table-props [dataset]="scanner.marketsTrendDown | async" (selected)="onTrendDownClick($event)"></app-table-props>
+     </div>-->
 
     <!--<div class="scrollY300" *ngIf="excludes">
         <button mat-button="" (click)="onExcludeDownTrendClick()">Down Trend</button>
@@ -37,9 +34,11 @@
         <app-table-props [dataset]="excludes" (selected)="onExcludeClick($event)"></app-table-props>
     </div>-->
 
-    <div class="scrollY300" *ngIf="favorites">
-        <div>Favorites</div>
-        <app-table-props [dataset]="favorites" (selected)="onFavoritesClick($event)"></app-table-props>
+    <div *ngIf="favorites">
+        <h4>Favorites</h4>
+        <div class="scrollY300">
+            <app-table-props [dataset]="favorites" (selected)="onFavoritesClick($event)"></app-table-props>
+        </div>
     </div>
 
 
@@ -49,67 +48,72 @@
 -->
 
 
-    <div class="scrollY300" *ngIf="mfiCheck.checked">
-        <h4>Volume</h4>
-
+    <div *ngIf="mfiCheck.checked">
+        <h4>MFI</h4>
+        <mat-checkbox [(ngModel)]="scanOnlyUP">UP Only</mat-checkbox>
+        <mat-form-field class="w3">
+            <mat-select [(ngModel)]="mfiCandlesInterval">
+                <mat-option value="5m">5m</mat-option>
+                <mat-option value="15m">15m</mat-option>
+                <mat-option value="30m">30m</mat-option>
+                <mat-option value="1h">1h</mat-option>
+                <mat-option value="6h">6h</mat-option>
+                <mat-option value="1d">1D</mat-option>
+            </mat-select>
+        </mat-form-field>
         <button mat-button="" (click)="onMFIStartClick()">
             {{scanner.scanMFITimer?'Stop':'Scan'}}
         </button>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteMFIsClick()"></span>
-        <app-table-props [dataset]="MFIResults" (selected)="onMFIClick($event)"></app-table-props>
-
+        <div class="scrollY300">
+            <app-table-props [dataset]="MFIResults" (selected)="onMFIClick($event)"
+                             class="scrollY300"></app-table-props>
+        </div>
     </div>
 
 
-    <div class="scrollY300" *ngIf="volumeCheck.checked">
+    <div *ngIf="volumeCheck.checked">
         <h4>Volume</h4>
-        <mat-checkbox  [(ngModel)]="scanVolumeOnlyUP" >UP Only</mat-checkbox>
+        <mat-checkbox [(ngModel)]="scanOnlyUP">UP Only</mat-checkbox>
 
         <button mat-button="" (click)="onVolumeStartClick()">
             {{scanner.scanVolumeTimer?'Stop':'Scan'}}
         </button>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteVolumesClick()"></span>
-        <app-table-props [dataset]="volumesResults" (selected)="onVolumeClick($event)"></app-table-props>
+        <div class="scrollY300">
+            <app-table-props [dataset]="volumesResults" (selected)="onVolumeClick($event)"></app-table-props>
+        </div>
 
     </div>
-       <!-- <div class="scrollY300">
-            <app-table-props [dataset]="notifications" (selected)="onDatasetClick($event)"></app-table-props>
-        </div>-->
 
 
-
-
-    <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}" >{{exchange}} {{selectedMarket}}</a>
+    <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">{{exchange}}
+        {{selectedMarket}}</a>
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
-   <!-- <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>-->
+    <!-- <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>-->
 
     <mat-form-field class="w6">
         <input matInput placeholder="Market"
                [(ngModel)]="userMarket"
-              (keyup)="onMarketInput($event)"
+               (keyup)="onMarketInput($event)"
         >
     </mat-form-field>
     <mat-form-field class="w3">
         <mat-select [(ngModel)]="candlesInterval" (change)="onCandlesIntrvalChange()">
             <mat-option value="1m">1m</mat-option>
-            <mat-option value="5m" >5m</mat-option>
-            <mat-option value="15m" >15m</mat-option>
-            <mat-option value="30m" >30m</mat-option>
-            <mat-option value="1h" >1h</mat-option>
-            <mat-option value="6h" >6h</mat-option>
+            <mat-option value="5m">5m</mat-option>
+            <mat-option value="15m">15m</mat-option>
+            <mat-option value="30m">30m</mat-option>
+            <mat-option value="1h">1h</mat-option>
+            <mat-option value="6h">6h</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)] ="inBrowser">Browser</mat-checkbox>
-    <app-mc-data  [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
-
-    <div>
-        <app-table-props [dataset]="analysData"  (selected)="onDatasetClick($event)"></app-table-props>
-    </div>
-
-   <app-candlesticks [candles]="candles"></app-candlesticks>
+    <mat-checkbox [(ngModel)]="inBrowser">Browser</mat-checkbox>
+    <app-mc-data [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
+    <app-candlesticks [candles]="candles"></app-candlesticks>
     <app-volume-hist [values]="volumes"></app-volume-hist>
     <app-macd-indicator [candles]="candles"></app-macd-indicator>
-    <app-mfi-indicator  [candles]="candles"></app-mfi-indicator>
+    <app-mfi-indicator [candles]="candles"></app-mfi-indicator>
 
 </div>

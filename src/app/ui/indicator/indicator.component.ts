@@ -80,7 +80,6 @@ export class IndicatorComponent implements OnInit {
   }
 
   drawTitle() {
-    console.log(this.myTitle);
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
     ctx.font = '12px Arial';

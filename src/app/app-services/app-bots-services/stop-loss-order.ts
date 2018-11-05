@@ -47,14 +47,13 @@ export class StopLossOrder {
     return this.order.stopPrice
   }
 
-  async cancelOrder() {
-    const order = this.order;
+  async cancelOrder(order: VOOrder) {
     if (!order) {
-      this.log(' NO OPEN ORDES ');
-      return;
+      this.log(' NO OPEN ORDER ');
+      return Promise.resolve(null);
     }
     const uuid = order.uuid;
-    this.log(' CANCELING STOP LOSS ' + order.type + ' stopPrice ' + order.stopPrice + ' rate ' + order.rate);
+    this.log(' CANCELING ORDER ' + order.type + ' stopPrice ' + order.stopPrice + ' rate ' + order.rate);
     let result;
     try {
       const ar = this.market.split('_')
@@ -72,7 +71,7 @@ export class StopLossOrder {
 
   async resetStopLoss(candles: VOCandle[], qty: number) {
     this.log(' RESET STOP LOSS ')
-    await this.cancelOrder();
+    await this.cancelOrder(this.order);
     this.order = null;
     this.setStopLoss(candles, qty);
   }
@@ -107,7 +106,16 @@ export class StopLossOrder {
         if (myOrder.action === 'BUY') {
 
         } else if (myOrder.action === 'SELL') {
+
+
           if (myOrder.stopPrice) this.order = myOrder;
+          else {
+            const last = _.last(candles).close;
+            console.log(last, myOrder);
+            if(myOrder.rate > last){
+              this.cancelOrder(myOrder);;
+            }
+          }
         }
 
         this.log(' ORDER IN PROGRESS ' + myOrder.action + JSON.stringify(myOrder));

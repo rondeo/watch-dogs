@@ -39,7 +39,7 @@ export class TestComponent implements OnInit {
   ngOnInit() {
     this.followOrder = new FollowOpenOrder(
       'binance',
-      'BTC_DATA',
+      'BTC_ARDR',
       -4,
       this.apisPrivate,
       this.apisPublic,
@@ -72,11 +72,11 @@ export class TestComponent implements OnInit {
   }
 
 
-  currentTime = moment('2018-11-03T22:00');
+  currentTime = moment('2018-11-05T12:30');
  async getCandles(){
    this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
-     .downloadCandles('BTC_DATA','5m', 100, this.currentTime.valueOf());
+     .downloadCandles('BTC_ARDR','5m', 100, this.currentTime.valueOf());
    return candles;
   }
 

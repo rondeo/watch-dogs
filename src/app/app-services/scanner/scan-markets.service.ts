@@ -527,7 +527,7 @@ export class ScanMarketsService {
     this.scanMFITimer = 0;
   }
 
-  nextMarketMFI(markets: string[], i: number) {
+  nextMarketMFI(markets: string[], i: number, candelsInterval: string) {
 
     i++;
     if (i >= markets.length) {
@@ -535,8 +535,9 @@ export class ScanMarketsService {
       return
     }
     this.isScanning = true;
-    const market = markets[i]
-    this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 120).then(candles => {
+    const market = markets[i];
+    this.currentMarket = market;
+    this.apisPublic.getExchangeApi('binance').downloadCandles(market, candelsInterval, 120).then(candles => {
       const input = {close: [], open: [], high: [], low: [], volume: [], period: 14};
       candles.forEach(function (item) {
         this.close.push(item.close);
@@ -547,29 +548,34 @@ export class ScanMarketsService {
       }, input);
 
       const mfi = new MFI(input);
-      const result = mfi.getResult();
-      const last = _.last(result);
+      const mfiResults = mfi.getResult();
+
+      const last10 = _.takeRight(mfiResults, 10);
+      const myValue = _.min(last10);
       const time = moment(_.last(candles).to).format('HH:mm');
-      const message = time + ' ' + market + ' ' + last;
+      let message = time + ' ' + market + ' ' + myValue;
       this.progressSub.next(message);
-      if (last < 20) {
+      if (myValue < 20) {
+        const ind = 10 - last10.indexOf(myValue);
+        message+= ' ' + ind + 'h ago';
         let results = this.mfiSub.getValue() || [];
         // @ts-ignore
         results = _.reject(results, {market: market});
-        results.push({time, market, last});
+        results.push({time, market, message});
         this.saveMFIs(results);
       }
 
-      this.scanMFITimer = setTimeout(() => this.nextMarketMFI(markets, i), 2000);
+      this.scanMFITimer = setTimeout(() => this.nextMarketMFI(markets, i, candelsInterval), 2000);
 
     })
   }
 
-  scanForMFI(markets: string[]) {
-    this.nextMarketMFI(markets, -1);
+  scanForMFI(markets: string[], candelsInterval) {
+    this.nextMarketMFI(markets, -1, candelsInterval);
   }
 
   deleteMFIs() {
+    this.saveMFIs([]);
 
   }
 

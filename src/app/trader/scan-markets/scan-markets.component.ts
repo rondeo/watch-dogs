@@ -31,7 +31,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   exchange: string = 'binance';
   // market: string;
   currentData: any[];
-  analysData: any[];
+
   MC: VOMCObj;
   notifications: any[];
   notifications2: any[];
@@ -111,7 +111,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   ////////////////////////////////////////////// MFI START ///////////////////////////////////////
 
-  MFIResults
+  mfiCandlesInterval = '1h';
+  MFIResults;
   mfySub: Subscription;
   onMFIChange(evt){
     if (evt.checked) {
@@ -136,16 +137,14 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const markets =  await this.scanner.getAvailableMarkets('binance');
-    ;
-
+    const markets = this.scanOnlyUP ?
+      _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
     // console.log(markets);
-    this.scanner.scanForMFI(markets);
+    this.scanner.scanForMFI(markets, this.mfiCandlesInterval);
   }
 
   onDeleteMFIsClick(){
     if (confirm('Delete Volumes?')) {
-      this.MFIResults = null;
       this.scanner.deleteMFIs();
     }
 
@@ -173,7 +172,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   //////////////////////////////////////////VOLUME START /////////////////////////////////////////////////
 
-  scanVolumeOnlyUP = false;
+  scanOnlyUP = true;
   volumesResults: any[];
 
   async onVolumeChange(evt) {
@@ -191,7 +190,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const markets = this.scanVolumeOnlyUP ?
+    const markets = this.scanOnlyUP ?
       _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
     ;
 

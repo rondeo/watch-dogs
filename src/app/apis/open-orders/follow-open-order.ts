@@ -88,13 +88,13 @@ export class FollowOpenOrder {
     //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
 
     if (this.balanceCoin.available * this.priceCounUS > 10) {
-      this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
-      return;
+       this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
+     return;
     }
 
     if (!this.stopLossOrder.order) {
       this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
-      return;
+     return;
     }
 
     const coin = this.coin;
@@ -123,7 +123,8 @@ export class FollowOpenOrder {
 
 
   async sellCoin(rate:number) {
-    const result1 = await this.stopLossOrder.cancelOrder();
+    const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
+    this.log(' CANCEL ORDER RESULT '+ JSON.stringify(result1));
     const qty = this.balanceCoin.available;
     if (qty * this.priceCounUS < 20) {
       this.log(' nothing to sell ');
@@ -170,7 +171,7 @@ export class FollowOpenOrder {
     };
     this.sellOnJump.sellCoin = (rate) => {
       this.log(' SELL COIN by sellOnJump', true);
-      this.sellCoin(rate);
+     //  this.sellCoin(rate);
     };
 
     this.stopLossOrder = new StopLossOrder(this.market, this.percentStopLoss, this.apiPrivate);
