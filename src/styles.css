@@ -132,7 +132,7 @@ nav>a{
 .mat-progress-spinner {
     width: 30px;
     height: 30px;
-    display: inline-block;
+    display: inline-block !important;
 }
 
 .inline-block {

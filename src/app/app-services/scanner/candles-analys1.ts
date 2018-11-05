@@ -18,9 +18,9 @@ export class CandlesAnalys1 {
     const ma25 = _.mean(_.takeRight(closes, 25));
 
 
-    const lastHours: number[] = _.takeRight(closes, 12);
+   // const lastHours: number[] = _.takeRight(closes, 12);
 
-    const priceLast24 = _.mean(lastHours);
+  //  const priceLast24 = _.mean(lastHours);
 
     // const priceFirst24 = _.mean(_.take(closes, 24));
 
@@ -30,19 +30,20 @@ export class CandlesAnalys1 {
 
     //  const last3 = _.mean(_.takeRight(closes, 3));
 
-    const last = _.last(lastHours);
+   // const last = _.last(lastHours);
 
-    const meanlastHours = _.mean(lastHours);
+    //const meanlastHours = _.mean(lastHours);
 
-    const max = _.max(lastHours);
-    const min = _.min(lastHours);
+   // const max = _.max(lastHours);
+   // const min = _.min(lastHours);
 
-    const percent = MATH.percent(last, meanlastHours);
+  //  const percent = MATH.percent(last, meanlastHours);
 
-    const maxD = MATH.percent( last, max);
-    const minD = MATH.percent( last, min);
+   // const maxD = MATH.percent( last, max);
+   // const minD = MATH.percent( last, min);
 
-    const result = ' p: '+ percent + ' max: ' + maxD + ' min: ' + minD + ' pr: ' + progress1 +' pr: ' + progress2;
+   // const result = ' p: '+ percent + ' max: ' + maxD + ' min: ' + minD + ' pr: ' + progress1 +' pr: ' + progress2;
+   const result = '  pr1: ' + progress1 +' pr2: ' + progress2;
 
     if (progress1 + progress2 > 0) {
       return {

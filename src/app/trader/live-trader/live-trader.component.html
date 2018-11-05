@@ -13,7 +13,7 @@
 
 <app-rsi-indicator *ngIf="checkRSI.checked" [closes]="closes"></app-rsi-indicator>
 
-<app-macd-indicator *ngIf="checkMACD.checked" [lasts]="closes"></app-macd-indicator>
+<app-macd-indicator *ngIf="checkMACD.checked" [closes]="closes"></app-macd-indicator>
 
 <app-stoch *ngIf="checkStoch.checked" [closes]="closes" [highs]="highs" [lows]="lows"></app-stoch>
 

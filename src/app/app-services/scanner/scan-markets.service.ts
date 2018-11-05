@@ -13,6 +13,7 @@ import {Subject} from 'rxjs/Subject';
 import {CandlesAnalys2} from './candles-analys2';
 import {MATH} from '../../com/math';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {MFI} from '../../trader/libs/techind';
 
 @Injectable()
 export class ScanMarketsService {
@@ -24,6 +25,7 @@ export class ScanMarketsService {
     = new BehaviorSubject<{ market: string, percent: number, x: string }[]>(null);
 
   currentMarket: string;
+
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
     private apisPublic: ApisPublicService,
@@ -42,7 +44,6 @@ export class ScanMarketsService {
       this.marketsTrendDown.next(data);
     })*/
   }
-
 
 
   addFavorite(market: string, message: string) {
@@ -74,8 +75,8 @@ export class ScanMarketsService {
     const per = MATH.percent(_.last(numbers), _.first(numbers));
     return isFall ? 'FALL ' + per : null;
   }
-
-  private async _scanGoingUP(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, result: string }>, compare: number) {
+///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
+  private async _scanGoingUP(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, result: string }>) {
     i++;
     if (i >= markets.length) {
       sub.complete();
@@ -84,41 +85,39 @@ export class ScanMarketsService {
     const market = markets[i];
     const MC = await this.marketCap.getTicker();
     const coinMC = MC[market.split('_')[1]];
-    api.downloadCandles(market, '1h', 100).then((candles) => {
-
-
+    api.downloadCandles(market, '15m', 100).then((candles) => {
       this.currentMarket = market;
       const result = CandlesAnalys1.isTrendUp(market, candles);
 
-      if(coinMC) {
-        result.result =' r: '+ coinMC.rank + ' h: ' + coinMC.percent_change_1h +' d: ' + coinMC.percent_change_1h +' w: '
-          + coinMC.percent_change_7d +  result.result;
+      if (coinMC) {
+        result.result = ' r: ' + coinMC.rank + ' h: ' + coinMC.percent_change_1h + ' d: ' + coinMC.percent_change_1h + ' w: '
+          + coinMC.percent_change_7d + result.result;
       }
-      this.progressSub.next(result.result)
-      if(result.OK)  sub.next(result);
-    setTimeout(() => {
-        this._scanGoingUP(markets, i, api, sub, compare);
+      this.progressSub.next(result.result);
+      if (result.OK) sub.next(result);
+      setTimeout(() => {
+        this._scanGoingUP(markets, i, api, sub);
       }, 2000)
 
     })
   }
 
 
-  async scanGoingUP(percent: number): Promise<Subject<{ market: string, result: string }>> {
+  async scanGoingUP(markets: string[]): Promise<Subject<{ market: string, result: string }>> {
     this.progressSub.next('SCAN UP STARED');
     const api = this.apisPublic.getExchangeApi('binance');
-    const markets = await this.getAvailableMarkets('binance');
-    let downs: { market: string, result: string }[] = [];
+
+    let results: { market: string, result: string }[] = [];
     const sub = new Subject<{ market: string, result: string }>();
     sub.subscribe(market => {
-      downs.push(market);
+      results.push(market);
     }, console.error, () => {
-      downs = _.orderBy(downs, 'market');
+      results = _.orderBy(results, 'market');
       this.progressSub.next('SCAN UP DONE');
-      this.storage.upsert('markets-trend-UP', downs);
+      this.storage.upsert('markets-trend-UP', results);
     })
 
-    this._scanGoingUP(markets, -1, api, sub, percent);
+    this._scanGoingUP(markets, -1, api, sub);
     return sub;
   }
 
@@ -126,42 +125,43 @@ export class ScanMarketsService {
     return this.storage.select('markets-trend-UP');
   }
 
- async deleteCoingUpMarket(market: string){
+  async deleteCoingUpMarket(market: string) {
     let markets: any[] = await this.getGoingUP();
     // @ts-ignore
-   markets = _.reject(markets, {market:market});
-   await this.storage.upsert('markets-trend-UP', markets);
-   return markets
+    markets = _.reject(markets, {market: market});
+    await this.storage.upsert('markets-trend-UP', markets);
+    return markets
   }
 
   async deleteGoingUP() {
     return this.storage.remove('markets-trend-UP');
   }
-/*
 
-  private _scanGoingDown(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, percent: number }>) {
-    i++;
-    if (i >= markets.length) {
-      sub.complete();
-      return;
+  /*
+
+    private _scanGoingDown(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, percent: number }>) {
+      i++;
+      if (i >= markets.length) {
+        sub.complete();
+        return;
+      }
+      const market = markets[i];
+      api.downloadCandles(market, '6h', 120).then(candles => {
+
+        const closes = CandlesAnalys1.closes(candles);
+        const last3 = _.mean(_.takeRight(closes, 3));
+        const mean = _.mean(closes);
+        const percent = MATH.percent(last3, mean);
+        console.log(market, percent);
+        if (percent < -2) sub.next({market, percent});
+
+        setTimeout(() => {
+          this._scanGoingDown(markets, i, api, sub);
+        }, 2000)
+
+      })
     }
-    const market = markets[i];
-    api.downloadCandles(market, '6h', 120).then(candles => {
-
-      const closes = CandlesAnalys1.closes(candles);
-      const last3 = _.mean(_.takeRight(closes, 3));
-      const mean = _.mean(closes);
-      const percent = MATH.percent(last3, mean);
-      console.log(market, percent);
-      if (percent < -2) sub.next({market, percent});
-
-      setTimeout(() => {
-        this._scanGoingDown(markets, i, api, sub);
-      }, 2000)
-
-    })
-  }
-*/
+  */
 
 
   /*async scanGoingDown() {
@@ -188,29 +188,29 @@ export class ScanMarketsService {
   }
 */
   async start() {
-   /* if (this.scanInterval) {
-      throw new Error(' scan is running ');
-    }
+    /* if (this.scanInterval) {
+       throw new Error(' scan is running ');
+     }
 
 
-    this.scanInterval = setInterval(async () => {
-      let excludes1: any[] = (await this.getExcludes('binance')) || [];
+     this.scanInterval = setInterval(async () => {
+       let excludes1: any[] = (await this.getExcludes('binance')) || [];
 
-      const now = Date.now();
-      const excludes = excludes1.filter(function (o) {
-        return o.postpone > now;
-      });
-      if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
+       const now = Date.now();
+       const excludes = excludes1.filter(function (o) {
+         return o.postpone > now;
+       });
+       if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
 
-      try {
-        this.scanForFall();
-      } catch (e) {
-        console.error(e);
-      }
+       try {
+         this.scanForFall();
+       } catch (e) {
+         console.error(e);
+       }
 
-    }, 7 * 60000);
-    this.scanForFall();
-*/
+     }, 7 * 60000);
+     this.scanForFall();
+ */
 
     // this.excludeDaysLoosers();
     // this.scanForPumpedUp();
@@ -247,33 +247,33 @@ export class ScanMarketsService {
     await this.saveExcludes(exchange, excludes)
   }*/
 
- /* async addExclude(exchange: string, market: string, reason: string, hours: number) {
-    console.log('ADD EXCLUDE ', market, reason, hours);
-    const postpone = moment().add(hours, 'hours').valueOf();
-    let excludes = (await this.getExcludes(exchange)) || [];
+  /* async addExclude(exchange: string, market: string, reason: string, hours: number) {
+     console.log('ADD EXCLUDE ', market, reason, hours);
+     const postpone = moment().add(hours, 'hours').valueOf();
+     let excludes = (await this.getExcludes(exchange)) || [];
 
-    const exists = excludes.find(function (o) {
-      return o.market === market;
-    });
+     const exists = excludes.find(function (o) {
+       return o.market === market;
+     });
 
-    if (exists) exists.postpone = postpone;
-    else excludes.push({
-      stamp: Date.now(),
-      market,
-      postpone,
-      reason
-    });
+     if (exists) exists.postpone = postpone;
+     else excludes.push({
+       stamp: Date.now(),
+       market,
+       postpone,
+       reason
+     });
 
-    this.saveExcludes(exchange, excludes);
-  }
-*/
+     this.saveExcludes(exchange, excludes);
+   }
+ */
   async clearMemory(exchange: string) {
     await this.storage.remove('scanner-markets-' + exchange);
     await this.storage.remove('exclude-markets-' + exchange);
     this.candlesService.removeAllCandles();
   }
 
- //  excludesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+  //  excludesSub: BehaviorSubject<any> = new BehaviorSubject(null);
 
   /*async getExcludes(exchange: string) {
     let v = this.excludesSub.getValue();
@@ -288,36 +288,36 @@ export class ScanMarketsService {
     this.storage.upsert('exclude-markets-' + exchange, excludes);
   }*/
 
- /* excludeDownTrend() {
-    this.progressSub.next('START excludeDownTrend')
-    const sub = this.candlesService.scanOnce('1d');
-    sub.subscribe(async (data) => {
-      const exchange = data.exchange;
-      const market = data.market;
-      const candles: VOCandle[] = data.candles;
-      candles.pop();
-      const closes: number[] = CandlesAnalys1.closes(candles);
-      const mean = MATH.median(closes);
-      //const first = _.first(candles);
-      const last = _.last(closes);
-      const percent = MATH.percent(last, mean);
-      console.log(market, percent);
-      if (Math.abs(percent) > 5) {
-        this.addExclude(exchange, market, '11 days change ' + percent, 24);
-      }
-      //  this.candles[exchange + market] = data.candles;
-      // const MC = await this.marketCap.getTicker();
-      // const mc = MC[data.market.split('_')[1]];
+  /* excludeDownTrend() {
+     this.progressSub.next('START excludeDownTrend')
+     const sub = this.candlesService.scanOnce('1d');
+     sub.subscribe(async (data) => {
+       const exchange = data.exchange;
+       const market = data.market;
+       const candles: VOCandle[] = data.candles;
+       candles.pop();
+       const closes: number[] = CandlesAnalys1.closes(candles);
+       const mean = MATH.median(closes);
+       //const first = _.first(candles);
+       const last = _.last(closes);
+       const percent = MATH.percent(last, mean);
+       console.log(market, percent);
+       if (Math.abs(percent) > 5) {
+         this.addExclude(exchange, market, '11 days change ' + percent, 24);
+       }
+       //  this.candles[exchange + market] = data.candles;
+       // const MC = await this.marketCap.getTicker();
+       // const mc = MC[data.market.split('_')[1]];
 
-      //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
-      // this.currentResultSub.next(res);
-    }, err => {
+       //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
+       // this.currentResultSub.next(res);
+     }, err => {
 
-    }, () => {
-      this.progressSub.next('STOP excludeDownTrend')
-    });
+     }, () => {
+       this.progressSub.next('STOP excludeDownTrend')
+     });
 
-  }*/
+   }*/
 
   /*emtyTrendDown() {
     this.storage.upsert('markets-trend-down', []);
@@ -326,9 +326,10 @@ export class ScanMarketsService {
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////
-  async getVolumes(){
-     return (await this.storage.select('scan-volumes')) || [];
+  async getVolumes() {
+    return (await this.storage.select('scan-volumes')) || [];
   }
+
   deleteVolumes() {
     this.storage.remove('scan-volumes');
   }
@@ -336,15 +337,19 @@ export class ScanMarketsService {
   async deleteVolume(market: string) {
     let results: any[] = await this.getVolumes();
     // @ts-ignore
-    results = _.reject(results, {market:market});
+    results = _.reject(results, {market: market});
     await this.storage.upsert('scan-volumes', results);
     return results;
   }
+
   subVol: Subject<any[]> = new Subject();
   scanVolumeTimer;
 
+  isScanning = false;
+
   async scanForVolume(markets: string[]) {
 
+    this.isScanning = true;
     this.scanVolumeTimer = 1;
 
 
@@ -355,23 +360,26 @@ export class ScanMarketsService {
     const sub = this.candlesService.scanOnce(markets);
 
     sub.subscribe(async (data) => {
+
       const exchange = data.exchange;
       const market = data.market;
 
       const candles: VOCandle[] = _.takeRight(data.candles, 50);
       const last3 = _.takeRight(candles, 3);
+      const last = _.last(candles);
 
       const sorted3 = _.orderBy(last3, 'Volume');
       const maxVol3 = _.last(sorted3);
       const indexMax3 = candles.indexOf(maxVol3);
       let prevPrice = (candles[indexMax3 - 1].low + candles[indexMax3 - 1].high) / 2;
       let nextPrice = maxVol3.close;
+      let close = maxVol3.close;
+      let low = maxVol3.low;
       if (indexMax3 !== candles.length - 1) {
         nextPrice = (candles[indexMax3 + 1].low + candles[indexMax3 + 1].high) / 2
       }
 
       const meds = CandlesAnalys1.meds(last3);
-
       let volumes = CandlesAnalys1.volumes(candles);
       /* volumes = volumes.filter(function (item) {
          return item;
@@ -386,24 +394,41 @@ export class ScanMarketsService {
 
       const D = Math.round(MATH.percent(volumes3, volumeMean));
 
-      const result = ' v3: ' + D + ' max: ' + volume2Change + ' price: ' + preiceChanges + '  ' + moment(maxVol3.to).format('HH:mm');
-      const date = moment().format('HH:mm');
+      const timestamp = maxVol3.to;
+      const time = moment(maxVol3.to).format('HH:mm');
+      let result = time + ' v3: ' + D + '  preiceChanges ' + preiceChanges;
 
       this.currentMarket = market;
       this.progressSub.next(result);
-      console.log(market, result);
+
+      const results: any[] = await this.getVolumes();
+      const exists: any = _.find(results, {market: market});
+      if (exists) {
+        const minutes = moment(last.to).diff(exists.timestamp, 'minutes');
+        const candlesAfter = candles.filter(function (item) {
+          item.to > exists.timestamp;
+        });
+
+        const wasClose = exists.close;
+        const progressAfter = MATH.percent(last.close, wasClose);
+        result = time + ' after: ' + minutes + '  ' + progressAfter;
+        if (minutes > 30 && progressAfter < 0) {
+          exists.result = time + ' REMOVE after  ' + minutes + ' ' + progressAfter;
+        }
+        exists.history[time] = result;
+        await this.storage.upsert('scan-volumes', results);
+        return;
+      }
+
+
+      //  console.log(market, result);
       // const sum = _.sum(last5);
       //  const LastMax = MATH.percent(max, mean);
       // console.log(market,D, maxIndex);
       if (D > 600) {
         console.log(market, D, volume2Change, preiceChanges);
-
-        const results: any[] = await this.getVolumes();
-       const exists:any = _.find(results, {market:market});
-       if(exists){
-         if(!exists.history) exists.history={};
-         exists.history[date] = result;
-       }else results.unshift({date, market, result});
+        const history = {time: result};
+        results.unshift({timestamp, market, result, close, low, history});
 
         await this.storage.upsert('scan-volumes', results);
         this.subVol.next(results);
@@ -411,15 +436,16 @@ export class ScanMarketsService {
 
     }, err => {
     }, () => {
+      this.isScanning = false;
       this.currentMarket = null;
       this.progressSub.next(' END scan Volume');
-     this.scanVolumeTimer =  setTimeout(()=>this.scanForVolume(markets), 5* 60 *1000);
+      this.scanVolumeTimer = setTimeout(() => this.scanForVolume(markets), 5 * 60 * 1000);
     });
 
     return this.subVol;
   }
 
-  stopVolumeScan(){
+  stopVolumeScan() {
     clearTimeout(this.scanVolumeTimer);
     this.candlesService.stop();
     this.scanVolumeTimer = 0
@@ -459,7 +485,7 @@ export class ScanMarketsService {
 
   }*/
 
-  async getAvailableMarkets(exchange: string){
+  async getAvailableMarkets(exchange: string) {
     const data = await this.apisPublic.getExchangeApi(exchange).getMarkets();
     let markets = Object.keys(data);
     markets = markets.filter(function (o) {
@@ -468,10 +494,90 @@ export class ScanMarketsService {
     const exclude = (this.deadMarkets + ',' + this.first20coins).split(',').map(function (o) {
       return 'BTC_' + o;
     });
-    return  _.difference(markets, exclude);
+    return _.difference(markets, exclude);
   }
 
   first20coins = 'BTC,ETH,TUSD,PAX,HOT';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  //////////////////////////// MFI start
+  scanMFITimer: any;
+  mfiSub: BehaviorSubject<any[]> = new BehaviorSubject(null);
+
+  async getMFIs() {
+    let results = this.mfiSub.getValue();
+    if (Array.isArray(results)) return Promise.resolve(results);
+    else {
+      results = (await this.storage.select('mfi-results')) || [];
+      this.mfiSub.next(results);
+    }
+    return results
+  }
+
+  async saveMFIs(results: any[]) {
+    this.mfiSub.next(results);
+    return this.storage.upsert('mfi-results', results);
+  }
+
+  stopMFIScan() {
+    this.isScanning = false;
+    clearTimeout(this.scanMFITimer);
+    this.scanMFITimer = 0;
+  }
+
+  nextMarketMFI(markets: string[], i: number) {
+
+    i++;
+    if (i >= markets.length) {
+      this.stopMFIScan();
+      return
+    }
+    this.isScanning = true;
+    const market = markets[i]
+    this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 120).then(candles => {
+      const input = {close: [], open: [], high: [], low: [], volume: [], period: 14};
+      candles.forEach(function (item) {
+        this.close.push(item.close);
+        this.high.push(item.high);
+        this.low.push(item.low);
+        this.open.push(item.open);
+        this.volume.push(item.Volume);
+      }, input);
+
+      const mfi = new MFI(input);
+      const result = mfi.getResult();
+      const last = _.last(result);
+      const time = moment(_.last(candles).to).format('HH:mm');
+      const message = time + ' ' + market + ' ' + last;
+      this.progressSub.next(message);
+      if (last < 20) {
+        let results = this.mfiSub.getValue() || [];
+        // @ts-ignore
+        results = _.reject(results, {market: market});
+        results.push({time, market, last});
+        this.saveMFIs(results);
+      }
+
+      this.scanMFITimer = setTimeout(() => this.nextMarketMFI(markets, i), 2000);
+
+    })
+  }
+
+  scanForMFI(markets: string[]) {
+    this.nextMarketMFI(markets, -1);
+  }
+
+  deleteMFIs() {
+
+  }
+
+  deleteMFI(market: any) {
+    let results: any[] = this.mfiSub.getValue();
+    results = _.reject(results, {market: market});
+    return this.saveMFIs(results);
+
+
+  }
 }

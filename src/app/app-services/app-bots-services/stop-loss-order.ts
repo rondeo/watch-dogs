@@ -5,6 +5,7 @@ import {MATH} from '../../com/math';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import * as moment from 'moment';
 
 export class StopLossOrder {
   order: VOOrder;
@@ -30,10 +31,16 @@ export class StopLossOrder {
 
       // @ts-ignore
       const myOrder = _.find(orders, {coin: coin});
-      if (myOrder && myOrder.action === 'SELL' && myOrder.stopPrice) this.order = myOrder;
+      if (myOrder && myOrder.action === 'SELL' && myOrder.stopPrice) {
+        if (!this.order)
+          this.log('STOP LOSS ' + myOrder.stopPrice + ' ' + myOrder.rate + ' ' + moment(myOrder.timestamp).format('DD HH:mm'));
+        this.order = myOrder;
+      }
       else this.order = null;
       // this.log(this.market + ' STOP_LOSS ' +(this.order?this.order.stopPrice : ' no stop order'), false)
     })
+
+    // this.percentStopLoss = 2;
   }
 
   getSopLossRate() {
@@ -47,16 +54,16 @@ export class StopLossOrder {
       return;
     }
     const uuid = order.uuid;
-    this.log(' canceling order ' + order.action);
-
+    this.log(' CANCELING STOP LOSS ' + order.type + ' stopPrice ' + order.stopPrice + ' rate ' + order.rate);
     let result;
     try {
       const ar = this.market.split('_')
       result = await this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
+      this.log(' CANCEL Result ' + JSON.stringify(result));
     } catch (e) {
       //console.log(this);
       console.error(e);
-      this.log(e.toString())
+      this.log('ERROR CANCEL ORDER ' + e.toString())
     }
 
     return result;
@@ -64,22 +71,25 @@ export class StopLossOrder {
 
 
   async resetStopLoss(candles: VOCandle[], qty: number) {
+    this.log(' RESET STOP LOSS ')
     await this.cancelOrder();
     this.order = null;
     this.setStopLoss(candles, qty);
   }
 
 
+  prevValue: number
+
   checkStopLossPrice(candles: VOCandle[], qty: number) {
 
-    const closes = _.takeRight(candles, 18).map(function (o) {
-      return o.close;
-    });
+    const closes = CandlesAnalys1.oc(candles);
+    const price = _.mean(_.takeRight(closes, 7));
 
-    const price = MATH.median(closes);
     const diff = MATH.percent(this.getSopLossRate(), price);
     const message = 'stop loss ' + this.percentStopLoss + ' diff ' + diff;
-    this.log(message);
+    if (diff !== this.prevValue) this.log(message);
+    this.prevValue = diff;
+
 
     if (diff < (this.percentStopLoss - 1)) {
       this.resetStopLoss(candles, qty);
@@ -112,7 +122,8 @@ export class StopLossOrder {
 
     const stopPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
     const sellPrice = stopPrice + (stopPrice * -0.001);
-    this.log(' SETTING new Order ' + this.market + ' ' + stopPrice + '  ' + qty);
+
+    this.log('NEW STOP_LOSS stopPrice: ' + stopPrice + ' sellPrice: ' + sellPrice + ' qty: ' + qty);
 
 
     const api = this.apiPrivate;
@@ -120,7 +131,8 @@ export class StopLossOrder {
 
     try {
       const order = await api.stopLoss(market, qty, stopPrice, sellPrice);
-      this.log('STOP LOSS order' + JSON.stringify(order));
+      this.order = null;
+      this.log('STOP LOSS result: ' + JSON.stringify(order));
       if (order && order.uuid) setTimeout(() => {
         api.refreshBalances();
         api.refreshAllOpenOrders();

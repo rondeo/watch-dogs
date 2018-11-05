@@ -65,6 +65,20 @@ export class CandlesService {
       this.storage.upsert('subscribed-candles', data);
     }, 5000)
   }
+  async getNewCandles(exchange: string, market: string, candlesInterval: string){
+    const id = 'candles-'+exchange + market + candlesInterval;
+    let oldCandels: VOCandle[] = await this.storage.select(id);
+    if (oldCandels && oldCandels.length > 100) {
+      const lastOld = _.last(oldCandels);
+      const diff = moment().diff(lastOld.to, 'minutes');
+      //  console.log(market + ' diff  min:' + diff ) ;
+      if (diff < 5) {
+        // console.log(oldCandels.length);
+        return null;
+      }
+    }
+    return this.getCandles(exchange, market, candlesInterval);
+  }
 
   async getCandles(exchange: string, market: string, candlesInterval: string){
     const api = this.apisPublic.getExchangeApi(exchange);
@@ -115,9 +129,12 @@ export class CandlesService {
       return;
     }
     const market = markets[i];
-    const candles = await this.getCandles(exchange, market, candlesInterval);
-    sub.next({exchange, market, candles});
-    this.currentTimeout = setTimeout(() => this.updateNext(exchange, markets, i, candlesInterval, sub), 2000);
+    const candles = await this.getNewCandles(exchange, market, candlesInterval);
+    if(candles){
+      sub.next({exchange, market, candles});
+      this.currentTimeout = setTimeout(() => this.updateNext(exchange, markets, i, candlesInterval, sub), 2000);
+    } else  this.currentTimeout = setTimeout(() => this.updateNext(exchange, markets, i, candlesInterval, sub), 200);
+
   }
 
   currentTimeout;

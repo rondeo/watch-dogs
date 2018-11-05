@@ -75,8 +75,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   sub5;
 
   async onTrandUPStart() {
+    const markets = await this.scanner.getAvailableMarkets('binance');
     this.trandUps = [];
-    const sub = await this.scanner.scanGoingUP(2);
+    const sub = await this.scanner.scanGoingUP(markets);
     this.sub5 = sub.subscribe(market => {
       let item = Object.assign(market, {x: 'X'});
       this.trandUps.push(item);
@@ -85,7 +86,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onTrendUPClick(evt) {
     const market = evt.item.market;
-    if (evt.prop === 'market') this.showMarket(market)
+    if (evt.prop === 'market') this.showMarket(market);
     else if (evt.prop === 'x') {
       if (confirm(' DELETE ' + market)) {
 
@@ -107,14 +108,77 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
 
+
+  ////////////////////////////////////////////// MFI START ///////////////////////////////////////
+
+  MFIResults
+  mfySub: Subscription;
+  onMFIChange(evt){
+    if (evt.checked) {
+      if(!this.mfySub) {
+        this.mfySub = this.scanner.mfiSub.subscribe(this.setMFIs.bind(this))
+        this.scanner.getMFIs();
+      }
+
+    } else this.volumesResults = null
+  }
+
+  setMFIs(results: any[]){
+   if(!results) return;
+    this.MFIResults = results.map(function (item) {
+      return Object.assign(item, {x:'X'});
+    });
+  }
+
+  async onMFIStartClick(){
+    if(this.scanner.scanMFITimer) {
+      this.scanner.stopMFIScan();
+      return;
+    }
+
+    const markets =  await this.scanner.getAvailableMarkets('binance');
+    ;
+
+    // console.log(markets);
+    this.scanner.scanForMFI(markets);
+  }
+
+  onDeleteMFIsClick(){
+    if (confirm('Delete Volumes?')) {
+      this.MFIResults = null;
+      this.scanner.deleteMFIs();
+    }
+
+  }
+  onMFIClick(evt) {
+    const market = evt.item.market;
+    switch (evt.prop) {
+      case 'market':
+        this.showMarket(market);
+        return;
+      case 'x':
+        if (confirm(' DELETE ' + market)) {
+          this.scanner.deleteMFI(market)
+            .then(this.setMFIs.bind(this))
+        }
+        return;
+      case 'result':
+        this.dialog.open( NotesHistoryComponent,{data:evt.item} );
+        return
+
+    }
+
+  }
+  ////////////////////////////////////////////////// MFI END ///////////////////////////////////////////////
+
   //////////////////////////////////////////VOLUME START /////////////////////////////////////////////////
 
-  scanVolumeOnlyUP: boolean;
+  scanVolumeOnlyUP = false;
   volumesResults: any[];
 
   async onVolumeChange(evt) {
     if (evt.checked) {
-      this.volumesResults = await this.scanner.getVolumes();
+      this.setVolumes(await this.scanner.getVolumes());
 
     } else this.volumesResults = null
   }
@@ -131,15 +195,16 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
     ;
 
-    console.log(markets);
+    // console.log(markets);
     const sub = await this.scanner.scanForVolume(markets);
-    sub.subscribe(vols => {
-      this.volumesResults = vols.map(function (item) {
-        return Object.assign(item, {x:'X'});
-      });
-    });
+    sub.subscribe(this.setVolumes.bind(this));
   }
 
+  setVolumes(results){
+    this.volumesResults = results.map(function (item) {
+      return Object.assign(item, {x:'X'});
+    });
+  }
   onDeleteVolumesClick() {
     if (confirm('Delete Volumes?')) {
       this.volumesResults = null;
@@ -155,9 +220,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         return;
       case 'x':
         if (confirm(' DELETE ' + market)) {
-          this.scanner.deleteVolume(market).then(res => {
-            this.volumesResults = res;
-          });
+          this.scanner.deleteVolume(market)
+            .then(this.setVolumes.bind(this))
         }
         return;
       case 'result':
@@ -426,7 +490,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   openMarket(exchange: string, market: string) {
     const api = this.apisPublic.getExchangeApi(exchange);
     const ar = market.split('_');
-    const url = api.getMarketUrl(ar[0], ar[1]);
+    const url =  'https://www.binance.com/en/trade/pro/'+market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
     window.open(url, exchange);
   }
 

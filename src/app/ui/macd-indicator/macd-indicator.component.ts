@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 
 import {VOGraphs} from '../line-chart/line-chart.component';
 import {MACD} from '../../trader/libs/techind';
-
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-macd-indicator',
@@ -11,7 +11,8 @@ import {MACD} from '../../trader/libs/techind';
 })
 export class MacdIndicatorComponent implements OnInit, OnChanges {
 
-  @Input() lasts: number[];
+  @Input() closes: number[];
+  @Input() candles: number[];
 
   fastPeriod = 12;
   slowPeriod = 26;
@@ -33,9 +34,13 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
   }
 
   draw() {
-    if (!this.lasts) return;
+
+    if (!this.closes && !this.candles) return;
+    const closes = this.candles? _.map(this.candles, 'close'):this.closes;
+
+
     var macdInput = {
-      values: this.lasts,
+      values: closes,
       fastPeriod: this.fastPeriod,
       slowPeriod: this.slowPeriod,
       signalPeriod: this.signalPeriod,
@@ -65,7 +70,7 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
       if (minHist > item.histogram) minHist = item.histogram;
       histogram.push(item.histogram);
     });
-    const length = this.lasts.length;
+    const length = closes.length;
     while (macdV.length < length) macdV.unshift(0);
     while (signals.length < length) signals.unshift(0);
     while (histogram.length < length) histogram.unshift(0);

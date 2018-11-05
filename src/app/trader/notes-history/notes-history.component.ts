@@ -14,7 +14,7 @@ export class NotesHistoryComponent implements OnInit {
   result: string;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
    this.market = data.market;
-   this.result =data.date + '  ' +data.result;
+   this.result = data.result;
    this.history = Object.values(data.history);
 
   }

@@ -20,6 +20,7 @@ import { FishesComponent } from './fishes/fishes.component';
 import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
 import {MaterialAppModule} from '../material/material-app.module';
 import { TablePropsComponent } from './table-props/table-props.component';
+import { MfiIndicatorComponent } from './mfi-indicator/mfi-indicator.component';
 
 
 
@@ -40,7 +41,8 @@ import { TablePropsComponent } from './table-props/table-props.component';
     VolumeHistComponent,
     FishesComponent,
     StochRsiComponent,
-    TablePropsComponent
+    TablePropsComponent,
+    MfiIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,8 @@ import { TablePropsComponent } from './table-props/table-props.component';
     VolumeHistComponent,
     FishesComponent,
     StochRsiComponent,
-    TablePropsComponent
+    TablePropsComponent,
+    MfiIndicatorComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

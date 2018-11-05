@@ -39,7 +39,7 @@ export class TestComponent implements OnInit {
   ngOnInit() {
     this.followOrder = new FollowOpenOrder(
       'binance',
-      'BTC_LRC',
+      'BTC_DATA',
       -4,
       this.apisPrivate,
       this.apisPublic,
@@ -61,19 +61,27 @@ export class TestComponent implements OnInit {
    // this.followOrder.balanceCoin.pending = 1000;
     this.apisPrivate.getExchangeApi('binance').refreshBalances();
 
+    setTimeout(()=>{
+      this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
+
+        console.log('check');
+      }
+    }, 1000)
+
+
   }
 
 
-  currentTime = moment('2018-11-02T11:17');
+  currentTime = moment('2018-11-03T22:00');
  async getCandles(){
    this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
-     .downloadCandles('BTC_CDT','5m', 120, this.currentTime.valueOf());
+     .downloadCandles('BTC_DATA','5m', 100, this.currentTime.valueOf());
    return candles;
   }
 
   start(){
-    this.interval = setInterval(()=>this.tick(), 1000);
+    this.interval = setInterval(()=>this.tick(), 2000);
   }
   stop(){
     clearInterval(this.interval);
@@ -123,13 +131,14 @@ export class TestComponent implements OnInit {
 
  async  tick(){
 
-   this.followOrder.tick();
+   await this.followOrder.tick();
+   this.candles = this.followOrder.candles;
   /*  this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
       .downloadCandles('BTC_CDT','5m', 120, this.currentTime.valueOf());
 */
 
-    this.candles = this.followOrder.candles;
+
 
   }
   onStartClick() {
