@@ -13,7 +13,6 @@ import 'rxjs/add/operator/filter';
   styleUrls: ['./bots-running.component.css']
 })
 export class BotsRunningComponent implements OnInit {
-
   activeSell: number;
   activeBuy: number;
 

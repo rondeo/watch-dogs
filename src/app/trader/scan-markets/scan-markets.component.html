@@ -14,6 +14,17 @@
 
     <div *ngIf="trendUPCheck.checked">
         <h3>Trend UP</h3>
+        <mat-form-field class="w3">
+            <mat-select [(ngModel)]="trendUpCandlesInterval">
+                <mat-option value="1m">1m</mat-option>
+                <mat-option value="5m">5m</mat-option>
+                <mat-option value="15m">15m</mat-option>
+                <mat-option value="30m">30m</mat-option>
+                <mat-option value="1h">1h</mat-option>
+                <mat-option value="6h">6h</mat-option>
+                <mat-option value="1d">1D</mat-option>
+            </mat-select>
+        </mat-form-field>
         <button mat-button="" (click)="onTrandUPStart()">Scan</button>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteTrandUPClick()"></span>
         <div class="scrollY300">
@@ -106,6 +117,7 @@
             <mat-option value="30m">30m</mat-option>
             <mat-option value="1h">1h</mat-option>
             <mat-option value="6h">6h</mat-option>
+            <mat-option value="1d">1D</mat-option>
         </mat-select>
     </mat-form-field>
 
@@ -115,5 +127,6 @@
     <app-volume-hist [values]="volumes"></app-volume-hist>
     <app-macd-indicator [candles]="candles"></app-macd-indicator>
     <app-mfi-indicator [candles]="candles"></app-mfi-indicator>
+    <app-vwmacd-indicator  [candles]="candles" ></app-vwmacd-indicator>
 
 </div>

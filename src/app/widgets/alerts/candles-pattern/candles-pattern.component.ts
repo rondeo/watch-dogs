@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {CandlesService} from '../../../app-services/candles/candles.service';
-import {CandlesHist} from '../../../app-services/candles/candles-hist';
+
 import {VOCandle, VOCandleExt} from '../../../models/api-models';
 import * as _ from 'lodash';
 

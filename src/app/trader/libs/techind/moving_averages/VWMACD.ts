@@ -5,14 +5,14 @@ import {Indicator, IndicatorInput} from '../indicator/indicator';
 import {SMA} from './SMA';
 import {EMA} from './EMA';
 
-export class MACDInput extends IndicatorInput {
+export class VWMACDInput extends IndicatorInput {
   SimpleMAOscillator: boolean = true;
   SimpleMASignal: boolean = true;
   fastPeriod: number;
   slowPeriod: number;
   signalPeriod: number;
 
-  constructor(public values: number[]) {
+  constructor(public values: number[][]) {
     super();
   }
 }
@@ -23,14 +23,28 @@ export class MACDOutput {
   histogram?: number;
 }
 
-export class MACD extends Indicator {
+export class VWMACD extends Indicator {
   result: MACDOutput[];
   generator: IterableIterator<MACDOutput | undefined>;
 
-  constructor(input: MACDInput) {
+  constructor(input: VWMACDInput) {
     super(input);
     var oscillatorMAtype = input.SimpleMAOscillator ? SMA : EMA;
     var signalMAtype = input.SimpleMASignal ? SMA : EMA;
+
+
+    var fastMAVolimeProducer = new oscillatorMAtype({
+      period: input.fastPeriod, values: [], format: (v) => {
+        return v
+      }
+    });
+    var slowMAVolumeProducer = new oscillatorMAtype({
+      period: input.slowPeriod, values: [], format: (v) => {
+        return v
+      }
+    });
+
+
     var fastMAProducer = new oscillatorMAtype({
       period: input.fastPeriod, values: [], format: (v) => {
         return v
@@ -51,14 +65,16 @@ export class MACD extends Indicator {
 
     this.generator = (function* () {
       var index = 0;
-      var tick;
+      var tick = [];
       var MACD: number | undefined, signal: number | undefined, histogram: number | undefined, fast: number | undefined,
         slow: number | undefined;
       while (true) {
+
+
         if (index < input.slowPeriod) {
           tick = yield;
-          fast = fastMAProducer.nextValue(tick);
-          slow = slowMAProducer.nextValue(tick);
+          fast = fastMAProducer.nextValue(tick[0] * tick[1])/fastMAVolimeProducer.nextValue(tick[1]);
+          slow = slowMAProducer.nextValue(tick[0] * tick[1])/slowMAVolumeProducer.nextValue(tick[1]);
           index++;
           continue;
         }
@@ -66,7 +82,6 @@ export class MACD extends Indicator {
           MACD = fast - slow;
           signal = signalMAProducer.nextValue(MACD);
         }
-
         histogram = MACD - signal;
         tick = yield({
           //fast : fast,
@@ -74,10 +89,9 @@ export class MACD extends Indicator {
           MACD: format(MACD),
           signal: signal ? format(signal) : undefined,
           histogram: isNaN(histogram) ? undefined : format(histogram)
-        })
-
-        fast = fastMAProducer.nextValue(tick);
-        slow = slowMAProducer.nextValue(tick);
+        });
+        fast = fastMAProducer.nextValue(tick[0] * tick[1])/fastMAVolimeProducer.nextValue(tick[1]);
+        slow = slowMAProducer.nextValue(tick[0] * tick[1])/slowMAVolumeProducer.nextValue(tick[1]);
       }
     })();
 
@@ -85,6 +99,7 @@ export class MACD extends Indicator {
     this.generator.next();
 
     input.values.forEach((tick) => {
+
       var result = this.generator.next(tick);
       if (result.value != undefined) {
         this.result.push(result.value);
@@ -100,9 +115,9 @@ export class MACD extends Indicator {
   };
 }
 
-export function macd(input: MACDInput): MACDOutput[] {
+export function macd(input: VWMACDInput): MACDOutput[] {
   Indicator.reverseInputs(input);
-  var result = new MACD(input).result;
+  var result = new VWMACD(input).result;
   if (input.reversedInput) {
     result.reverse();
   }

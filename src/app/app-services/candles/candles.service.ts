@@ -3,7 +3,6 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {OrdersHistory} from '../market-history/orders-history';
-import {CandlesHist} from './candles-hist';
 import {CandlesData} from './candles-data';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
@@ -83,14 +82,14 @@ export class CandlesService {
   async getCandles(exchange: string, market: string, candlesInterval: string){
     const api = this.apisPublic.getExchangeApi(exchange);
     const id = 'candles-'+exchange + market + candlesInterval;
-    let oldCandels: VOCandle[] = await this.storage.select(id);
+    let oldCandels: VOCandle[] =  (await this.storage.select(id))
     let limit = 120;
 
     if (oldCandels && oldCandels.length > 100) {
       const lastOld = _.last(oldCandels);
       const diff = moment().diff(lastOld.to,'minutes');
       //  console.log(market + ' diff  min:' + diff ) ;
-      if(diff < 5) {
+      if(diff < -2) {
        // console.log(oldCandels.length);
         return oldCandels;
       }
@@ -114,14 +113,15 @@ export class CandlesService {
       });
 
       oldCandels = _.takeRight(oldCandels.concat(candles), 120);
-      await this.storage.upsert(id, oldCandels);
-    }
+
+    } else oldCandels = candles;
+    await this.storage.upsert(id, oldCandels);
 
 
     return oldCandels;
   }
 
-  async updateNext(exchange: string, markets: string[], i, candlesInterval: string, sub: Subject<any>) {
+  /*async updateNext(exchange: string, markets: string[], i, candlesInterval: string, sub: Subject<any>) {
     i++;
     if (i >= markets.length) {
       this.currentTimeout = 0;
@@ -154,7 +154,7 @@ export class CandlesService {
     Object.values(this.collection).forEach(function (o) {
       o.removeAllCandles();
     })
-  }
+  }*/
 
 /*
   async removeCandles(exchange: string, market: string) {
@@ -214,12 +214,12 @@ export class CandlesService {
   }
 
 
-  stop() {
+ /* stop() {
     clearInterval(this.currentTimeout);
     this.currentTimeout = 0;
-    /* Object.values(this.collection).forEach(function (o) {
+    /!* Object.values(this.collection).forEach(function (o) {
        o.destroy();
      });
-     this.collection= {};*/
-  }
+     this.collection= {};*!/
+  }*/
 }

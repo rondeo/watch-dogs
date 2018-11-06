@@ -11,6 +11,8 @@ export class CandlesAnalys1 {
 
  static  isTrendUp(market: string, candles: VOCandle[]){
     const closes = CandlesAnalys1.closes(candles);
+    const last = _.last(candles);
+    const time = moment(last.to).format('HH:mm');
     const meds = CandlesAnalys1.meds(candles);
 
     const ma99 = _.mean(closes);
@@ -47,12 +49,14 @@ export class CandlesAnalys1 {
 
     if (progress1 + progress2 > 0) {
       return {
+        time,
         market,
         result,
         OK:true
       }
     }
    return {
+     time,
      market,
      result,
      OK:false
@@ -359,5 +363,20 @@ export class CandlesAnalys1 {
     return out
 
     // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
+  }
+
+  static decode(candle: VOCandle) {
+    const body = Math.abs(candle.open - candle.close);
+    const isUp = candle.open < candle.close;
+    const wick = candle.high - (isUp?candle.close :candle.open);
+    const tail = (isUp?candle.open:candle.close) - candle.low;
+    const range = candle.high - candle.low;
+    return {
+      body,
+      wick,
+      tail,
+      range
+    }
+
   }
 }

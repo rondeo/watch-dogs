@@ -75,8 +75,15 @@ export class ScanMarketsService {
     const per = MATH.percent(_.last(numbers), _.first(numbers));
     return isFall ? 'FALL ' + per : null;
   }
+
 ///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
-  private async _scanGoingUP(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, result: string }>) {
+  private async _scanGoingUP(
+    markets: string[],
+    i,
+    api: ApiPublicAbstract,
+    sub: Subject<{ market: string, result: string }>,
+    candlesInterval: string
+  ) {
     i++;
     if (i >= markets.length) {
       sub.complete();
@@ -85,7 +92,7 @@ export class ScanMarketsService {
     const market = markets[i];
     const MC = await this.marketCap.getTicker();
     const coinMC = MC[market.split('_')[1]];
-    api.downloadCandles(market, '15m', 100).then((candles) => {
+    api.downloadCandles(market, candlesInterval, 100).then((candles) => {
       this.currentMarket = market;
       const result = CandlesAnalys1.isTrendUp(market, candles);
 
@@ -96,14 +103,14 @@ export class ScanMarketsService {
       this.progressSub.next(result.result);
       if (result.OK) sub.next(result);
       setTimeout(() => {
-        this._scanGoingUP(markets, i, api, sub);
+        this._scanGoingUP(markets, i, api, sub, candlesInterval);
       }, 2000)
 
     })
   }
 
 
-  async scanGoingUP(markets: string[]): Promise<Subject<{ market: string, result: string }>> {
+  async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, result: string }>> {
     this.progressSub.next('SCAN UP STARED');
     const api = this.apisPublic.getExchangeApi('binance');
 
@@ -117,7 +124,7 @@ export class ScanMarketsService {
       this.storage.upsert('markets-trend-UP', results);
     })
 
-    this._scanGoingUP(markets, -1, api, sub);
+    this._scanGoingUP(markets, -1, api, sub, candlesInterval);
     return sub;
   }
 
@@ -233,7 +240,6 @@ export class ScanMarketsService {
   stop() {
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
-    this.candlesService.stop();
   }
 
   /*removeExcludes() {
@@ -267,11 +273,10 @@ export class ScanMarketsService {
      this.saveExcludes(exchange, excludes);
    }
  */
-  async clearMemory(exchange: string) {
+/*  async clearMemory(exchange: string) {
     await this.storage.remove('scanner-markets-' + exchange);
     await this.storage.remove('exclude-markets-' + exchange);
-    this.candlesService.removeAllCandles();
-  }
+  }*/
 
   //  excludesSub: BehaviorSubject<any> = new BehaviorSubject(null);
 
@@ -347,12 +352,61 @@ export class ScanMarketsService {
 
   isScanning = false;
 
+
+  volumeSub: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  volumeResults$(){
+    const results = this.volumeSub.getValue();
+    if(!results) {
+      this.storage.select('scan-volumes').then(results =>{
+        this.volumeSub.next(results);
+
+      })
+    }
+    return this.volumeSub.asObservable();
+  }
+  async volumeNext(markets: string[], i:number){
+    i++;
+    if(i>=markets.length) {
+     this.stopVolumeScan();
+      return;
+    }
+
+    const market = markets[i];
+
+    const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 10);
+    const byVolume = _.orderBy(candles, 'Volume');
+
+    const max: VOCandle = byVolume.pop();
+
+    const decoded = CandlesAnalys1.decode(max);
+    const tailD =Math.round( 100 * decoded.tail/ decoded.range);
+    const wickD = Math.round(100 * decoded.wick/decoded.range);
+    let message = ' tailD ' + tailD + ' wickD ' + wickD;
+   //  console.log(market , tailD);
+    if(tailD > 50 && wickD < 10){
+      const results = this.volumeSub.getValue() || [];
+      const time = moment(max.to).format('HH:mm');
+      results.push({time, market, message});
+      this.saveVolumes(results);
+    }
+
+    this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i), 2000);
+
+  }
+
+  async saveVolumes(results:any[]){
+    this.volumeSub.next(results);
+    return  await this.storage.upsert('scan-volumes', results);
+  }
   async scanForVolume(markets: string[]) {
 
     this.isScanning = true;
     this.scanVolumeTimer = 1;
 
+    this.volumeNext(markets, -1);
 
+/*
     this.progressSub.next('SCANNING Volume');
 
     const out = [];
@@ -381,9 +435,9 @@ export class ScanMarketsService {
 
       const meds = CandlesAnalys1.meds(last3);
       let volumes = CandlesAnalys1.volumes(candles);
-      /* volumes = volumes.filter(function (item) {
+      /!* volumes = volumes.filter(function (item) {
          return item;
-       })*/
+       })*!/
       const volumeMean = _.mean(volumes);
 
       const preiceChanges = MATH.percent(nextPrice, prevPrice);
@@ -440,14 +494,14 @@ export class ScanMarketsService {
       this.currentMarket = null;
       this.progressSub.next(' END scan Volume');
       this.scanVolumeTimer = setTimeout(() => this.scanForVolume(markets), 5 * 60 * 1000);
-    });
+    });*/
 
-    return this.subVol;
+    // return this.subVol;
   }
 
   stopVolumeScan() {
     clearTimeout(this.scanVolumeTimer);
-    this.candlesService.stop();
+    this.isScanning = false;
     this.scanVolumeTimer = 0
   }
 
@@ -497,7 +551,7 @@ export class ScanMarketsService {
     return _.difference(markets, exclude);
   }
 
-  first20coins = 'BTC,ETH,TUSD,PAX,HOT';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  first20coins = 'BTC,TUSD,PAX,HOT';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -557,11 +611,19 @@ export class ScanMarketsService {
       this.progressSub.next(message);
       if (myValue < 20) {
         const ind = 10 - last10.indexOf(myValue);
-        message+= ' ' + ind + 'h ago';
+
+        message += ' ' + ind + ' ago';
         let results = this.mfiSub.getValue() || [];
         // @ts-ignore
-        results = _.reject(results, {market: market});
-        results.push({time, market, message});
+        const excist = _.find(results, {market: market});
+        if (excist) {
+          excist.intervals.push(candelsInterval)
+        } else {
+          const intervals = [candelsInterval]
+          results.push({time, market, message, intervals})
+        }
+
+        ;
         this.saveMFIs(results);
       }
 

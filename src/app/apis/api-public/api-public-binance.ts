@@ -34,8 +34,8 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   }
 
   async downloadCandles(market:string, interval:string, limit: number, endTime =0): Promise<VOCandle[]>{
-    const markets = await this.getMarkets();
-    if(!markets[market]) return Promise.resolve([]);
+   // const markets = await this.getMarkets();
+   // if(!markets[market]) return Promise.resolve([]);
     const params: any = {
       symbol:market.split('_').reverse().join(''),
       interval:interval,

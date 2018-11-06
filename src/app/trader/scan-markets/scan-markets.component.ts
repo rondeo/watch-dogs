@@ -73,11 +73,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   trandUps: any[] = [];
   sub5;
-
+  trendUpCandlesInterval = '15m';
   async onTrandUPStart() {
     const markets = await this.scanner.getAvailableMarkets('binance');
     this.trandUps = [];
-    const sub = await this.scanner.scanGoingUP(markets);
+    const sub = await this.scanner.scanGoingUP(markets, this.trendUpCandlesInterval);
     this.sub5 = sub.subscribe(market => {
       let item = Object.assign(market, {x: 'X'});
       this.trandUps.push(item);
@@ -175,6 +175,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   scanOnlyUP = true;
   volumesResults: any[];
 
+  volumeSub: Subscription;
   async onVolumeChange(evt) {
     if (evt.checked) {
       this.setVolumes(await this.scanner.getVolumes());
@@ -185,6 +186,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
 
   async onVolumeStartClick() {
+    if(!this.volumeSub) this.volumeSub = this.scanner.volumeResults$().subscribe(results =>{
+      if(!results) return;
+      this.volumesResults = results;
+    });
+
     if(this.scanner.scanVolumeTimer) {
       this.scanner.stopVolumeScan();
       return;
@@ -194,9 +200,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
     ;
 
+    this.scanner.scanForVolume(markets)
     // console.log(markets);
-    const sub = await this.scanner.scanForVolume(markets);
-    sub.subscribe(this.setVolumes.bind(this));
+   // const sub = await this.scanner.scanForVolume(markets);
+   // sub.subscribe(this.setVolumes.bind(this));
   }
 
   setVolumes(results){

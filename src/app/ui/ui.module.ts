@@ -21,6 +21,7 @@ import { StochRsiComponent } from './stoch-rsi/stoch-rsi.component';
 import {MaterialAppModule} from '../material/material-app.module';
 import { TablePropsComponent } from './table-props/table-props.component';
 import { MfiIndicatorComponent } from './mfi-indicator/mfi-indicator.component';
+import { VwmacdIndicatorComponent } from './vwmacd-indicator/vwmacd-indicator.component';
 
 
 
@@ -42,7 +43,8 @@ import { MfiIndicatorComponent } from './mfi-indicator/mfi-indicator.component';
     FishesComponent,
     StochRsiComponent,
     TablePropsComponent,
-    MfiIndicatorComponent
+    MfiIndicatorComponent,
+    VwmacdIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -68,7 +70,8 @@ import { MfiIndicatorComponent } from './mfi-indicator/mfi-indicator.component';
     FishesComponent,
     StochRsiComponent,
     TablePropsComponent,
-    MfiIndicatorComponent
+    MfiIndicatorComponent,
+    VwmacdIndicatorComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
