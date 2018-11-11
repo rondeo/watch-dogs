@@ -88,12 +88,13 @@ export class CandlesService {
     if (oldCandels && oldCandels.length > 100) {
       const lastOld = _.last(oldCandels);
       const diff = moment().diff(lastOld.to,'minutes');
-      //  console.log(market + ' diff  min:' + diff ) ;
-      if(diff < -2) {
+
+      if(diff < 3) {
        // console.log(oldCandels.length);
         return oldCandels;
       }
 
+      console.log('download new candles ' +  diff);
       if(diff < 20) limit = 5;
       else if(diff < 60) limit = 12;
       else if( diff < 120) limit = 24;

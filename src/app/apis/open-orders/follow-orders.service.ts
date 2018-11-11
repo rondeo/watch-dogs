@@ -9,6 +9,7 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {ApiMarketCapService} from '../api-market-cap.service';
 import {ApisPublicService} from '../api-public/apis-public.service';
 import * as _ from 'lodash';
+import {MarketBot} from '../../app-services/app-bots-services/market-bot';
 
 @Injectable()
 export class FollowOrdersService {
@@ -16,6 +17,8 @@ export class FollowOrdersService {
 
   excludes:string[] = ['BTC','USDT'];
 
+
+  botsSub : BehaviorSubject< MarketBot[] > = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
 
@@ -42,21 +45,75 @@ export class FollowOrdersService {
     this.excludes.push(market.split('_')[1]);
   }
 
+  deleteBot(market: string){
+    let bots = this.botsSub.getValue();
+    bots = _.reject(bots, {market:market});
+    this.saveBots(bots);
+  }
+ async saveBots(bots){
+    this.botsSub.next(bots);
+    bots = bots.map(function (item) {
+      return {
+        market:item.market,
+        amountCoin: item.amountCoin,
+        history: item.history
+      }
+    })
+   return this.storage.upsert('bots', bots);
+  }
+
+  async createBot(market:string, amountCoin:number){
+    const bots = this.botsSub.getValue();
+    const excist = _.find(bots, {market:market});
+    if(excist) throw new Error(' market bot exist');
+    bots.push(
+      new MarketBot(
+        'binance',
+        market,
+        amountCoin,
+        this.storage,
+        this.apisPrivate.getExchangeApi('binance'),
+        this.apisPublic.getExchangeApi('binance'),
+        this.canlesService
+      )
+    );
+    return this.saveBots(bots);
+  }
+  async initBots(){
+    const bots = ((await this.storage.select('bots')) || []).map((item)=>{
+      return new MarketBot(
+        'binance',
+        item.market,
+        item.amountCoin,
+        this.storage,
+        this.apisPrivate.getExchangeApi('binance'),
+        this.apisPublic.getExchangeApi('binance'),
+        this.canlesService
+      )
+    });
+    this.botsSub.next(bots);
+  }
+
+
   follow(exchange: string) {
+
+
     // this.apisPrivate.getExchangeApi(exchange).refreshBalances();
     FollowOpenOrder.status.subscribe(status =>{
       console.log('%c ' +status, 'color:green');
     });
+
 
     this.apisPrivate.getExchangeApi(exchange).startRefreshBalances();
     this.apisPrivate.getExchangeApi(exchange).refreshAllOpenOrders();
     this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
       if (!balances) return;
 
+      const botsMarkets = _.map(this.botsSub.getValue(), 'market');
      /// console.log('balances.length   ' + balances.length);
       this.marketCap.getTicker().then(MC => {
         const ar = this.followingOrdersSub.getValue();
-        const excludes = this.excludes;
+        const excludes = this.excludes.concat(botsMarkets);
 
         balances.forEach((o) => {
           if (excludes.indexOf(o.symbol) === -1) {
@@ -72,7 +129,7 @@ export class FollowOrdersService {
                 const follow = new FollowOpenOrder(
                   exchange,
                   market,
-                  -3,
+                  -2,
                   this.apisPrivate,
                   this.apisPublic,
                   this.marketCap,

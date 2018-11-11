@@ -16,6 +16,7 @@ import {SellOnJump} from '../../app-services/app-bots-services/sell-on-jump';
 import {StopLossOrder} from '../../app-services/app-bots-services/stop-loss-order';
 import {ApiPrivateAbstaract} from '../api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../api-public/api-public-abstract';
+import {UtilsBooks} from '../../com/utils-books';
 
 export class FollowOpenOrder {
   static status: Subject<string> = new Subject<string>();
@@ -62,7 +63,7 @@ export class FollowOpenOrder {
   isTooFast() {
     const now = Date.now();
     if (now - this.lastCheck < 5e4) {
-      console.log(' TOO FAST ctr ' + this.market);
+      console.log(' TOO FAST ' + this.market);
       return true
     }
     this.lastCheck = now;
@@ -74,28 +75,31 @@ export class FollowOpenOrder {
     setTimeout(() => this.saveLogs(), 5000);
     this.candles = await this.getCandles();
     if (!this.balanceCoin) {
-      this.log('tick no balance coin ');
+      this.log('NO COIN BALANCE ');
       return;
     }
 
     if ((this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS < 10) {
       this.onNoBalance().then(() => {
-        this.destroy();
         this.onEnd();
+        this.destroy();
       });
       return;
     }
     //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
 
-    if (this.balanceCoin.available * this.priceCounUS > 10) {
-       this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
-     return;
+    await this.stopLossOrder.checkStopLoss(this.candles, (this.balanceCoin.available + this.balanceCoin.pending));
+
+   /* if (this.balanceCoin.available * this.priceCounUS > 10) {
+      if(this.stopLossOrder.order)  this.stopLossOrder.resetStopLoss(this.candles, this.balanceCoin.available);
+      else this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
+      return;
     }
 
     if (!this.stopLossOrder.order) {
       this.stopLossOrder.setStopLoss(this.candles, this.balanceCoin.available);
-     return;
-    }
+      return;
+    }*/
 
     const coin = this.coin;
 
@@ -117,14 +121,31 @@ export class FollowOpenOrder {
     if (this.sellOnJump.isJump(candles)) {
       return;
     }
-    await this.stopLossOrder.checkStopLossPrice(this.candles, this.balanceCoin.available);
+
   }
 
 
-
-  async sellCoin(rate:number) {
+  async sellCoinInstant() {
+    this.log(' SELL INSTANT ');
     const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
-    this.log(' CANCEL ORDER RESULT '+ JSON.stringify(result1));
+    this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
+   setTimeout(()=>{
+     this.log(' Downloading books ');
+     this.apisPublic.getExchangeApi(this.exchange).downloadBooks2(this.market).toPromise().then(books => {
+       const qty =  this.balanceCoin.available + this.balanceCoin.pending;
+       const rate = UtilsBooks.getRateForAmountCoin(books.buy, this.balanceCoin.available);
+       this.log(' SELL COIN by biooks price ' + qty + ' rate ' + rate);
+       const result2 = this.apiPrivate.sellLimit2(this.market, qty, rate);
+       this.log(' SELL COIN RESULT ' + JSON.stringify(result2));
+     })
+   }, 2000)
+
+
+  }
+
+  async sellCoin(rate: number) {
+    const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
+    this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
     const qty = this.balanceCoin.available;
     if (qty * this.priceCounUS < 20) {
       this.log(' nothing to sell ');
@@ -132,12 +153,13 @@ export class FollowOpenOrder {
       setTimeout(() => this.sellCoin(rate), 10000);
       return;
     }
-    if(!rate) {
+    if (!rate) {
       const last = _.last(this.candles);
-      rate = last.close;    }
+      rate = last.close;
+    }
 
     this.log(' SELL COIN ' + qty + ' rate ' + rate);
-    const result2 = this.apiPrivate.sellLimit2(this.market, qty, rate );
+    const result2 = this.apiPrivate.sellLimit2(this.market, qty, rate);
 
   }
 
@@ -160,21 +182,24 @@ export class FollowOpenOrder {
     this.apiPrivate = this.apisPrivate.getExchangeApi(this.exchange);
     this.apiPublic = this.apisPublic.getExchangeApi(this.exchange);
 
-    this.initOrder = await this.storage.select('init-order' + this.exchange + this.market);
-    if (!this.initOrder) await this.findInitOrder();
     await this.subscribeForBalances();
 
-    this.sellOnJump = new SellOnJump(this.market);
+    this.sellOnJump = new SellOnJump(this.market, this.apiPublic);
     this.sellOnJump.log = msg => {
-      console.log(msg);
+     //  console.log(msg);
       this.log(msg, true);
     };
+
     this.sellOnJump.sellCoin = (rate) => {
-      this.log(' SELL COIN by sellOnJump', true);
-     //  this.sellCoin(rate);
+      this.log(' SELL COIN by sellOnJump ' + rate, true);
+      setTimeout(()=>{
+        this.sellCoinInstant();
+      }, 2000);
+
+      // this.sellCoin(rate);
     };
 
-    this.stopLossOrder = new StopLossOrder(this.market, this.percentStopLoss, this.apiPrivate);
+    this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
     this.stopLossOrder.log = (msg) => {
       this.log(msg, true);
     };
@@ -271,12 +296,12 @@ export class FollowOpenOrder {
   // lastQuery: number = 0;
   lastCheck: number;
 
-  destroy() {
+  async destroy() {
     this.log('DESTROY FOLLOW');
+    await this.saveLogs();
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
-    this.storage.remove('init-order' + this.exchange + this.market);
-    this.saveLogs();
+
   }
 
   onEnd() {
@@ -285,10 +310,17 @@ export class FollowOpenOrder {
 
   checkInterval;
 
-  start() {
+  async start() {
     if (this.checkInterval) return;
+    this.initOrder = await this.storage.select('init-order' + this.exchange + this.market);
+    if (!this.initOrder) {
+      await this.findInitOrder();
+      this.log(' FIRST START no init order');
+      this.tick();
+    }
     FollowOpenOrder.status.next(' Start following ' + this.market);
-    this.checkInterval = setInterval(() => this.tick(), moment.duration(3, 'minutes'));
+    this.checkInterval = setInterval(() => this.tick(), moment.duration(1, 'minutes'));
+
   }
 
   stop() {

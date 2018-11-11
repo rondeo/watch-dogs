@@ -36,9 +36,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   notifications: any[];
   notifications2: any[];
   coinsAvailable: VOMarketCap[];
-
-
-  candlesInterval = '5m';
+  candlesInterval = '15m';
   scannerSatatsSub: Subject<string> = new Subject();
   // private selectedCoin: string;
   private selectedMarket: string;
@@ -64,23 +62,83 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }
 
-  ////////////////////////////////////////////////// TREND UP ///////////////////////////////////////////////////////
-  onTrendUpOpen(evt) {
-    if (evt.checked) this.scanner.getGoingUP().then(res => {
-      this.trandUps = res;
+
+  ///////////////////////////////SELECTED////////////////////////////
+
+  onDeleteSelectedClick(){
+    if(confirm('Delete all Selected? ')){
+      this.scanner.saveSelected([]).then(this.populateSelected.bind(this));
+    }
+  }
+
+  addToSeleted(ar: {time: string, message: string, market: string}[], criteria: string) {
+    return this.scanner.addToSelected(ar, criteria);
+  }
+
+  selectedMarkets: any[];
+  populateSelected() {
+    this.scanner.getSelected().then(res => {
+      this.selectedMarkets = res.map(function (item) {
+        return Object.assign(item, {x: 'X'});
+      })
     })
   }
 
-  trandUps: any[] = [];
+  onSelectedChange(evt) {
+    if (evt.checked) this.populateSelected();
+    else this.selectedMarkets = [];
+  }
+
+  onSelectedClick(evt) {
+    const market = evt.item.market;
+    switch (evt.prop) {
+      case 'market':
+        this.showMarket(market);
+        return;
+      case 'x':
+        if (confirm(' DELETE ' + market)) {
+          this.scanner.removeSelected(market)
+            .then(this.populateSelected.bind(this))
+        }
+        return;
+      case 'message':
+        this.dialog.open(NotesHistoryComponent, {data: evt.item});
+        return
+
+    }
+  }
+
+
+  ////////////////////////////////////////////////// TREND UP ///////////////////////////////////////////////////////
+
+  onTrendsAddToSelected(){
+    const ar = this.trendUps.map(function (item) {
+      return {
+        market:item.market,
+        message: item.message,
+        time:item.time
+
+      }
+    })
+    if(confirm(' ADD all ' + ar.length)){
+      this.addToSeleted(ar, this.candlesInterval);
+    }
+  }
+  trendUps: any[] = [];
   sub5;
   trendUpCandlesInterval = '15m';
-  async onTrandUPStart() {
+
+  async onTrendUPStart() {
+    if (this.scanner.trendUPTimer) {
+      this.scanner.stopTrendUp();
+      return;
+    }
     const markets = await this.scanner.getAvailableMarkets('binance');
-    this.trandUps = [];
+    this.trendUps = [];
     const sub = await this.scanner.scanGoingUP(markets, this.trendUpCandlesInterval);
     this.sub5 = sub.subscribe(market => {
       let item = Object.assign(market, {x: 'X'});
-      this.trandUps.push(item);
+      this.trendUps.push(item);
     })
   }
 
@@ -89,22 +147,11 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if (evt.prop === 'market') this.showMarket(market);
     else if (evt.prop === 'x') {
       if (confirm(' DELETE ' + market)) {
-
-        this.scanner.deleteCoingUpMarket(market).then(res => {
-          this.trandUps = res;
-        })
-
+        this.trendUps = _.reject(this.trendUps, {market:market});
       }
     }
   }
 
-
-  onDeleteTrandUPClick() {
-    if (confirm('Selete trand UP?')) {
-      this.trandUps = [];
-      this.scanner.deleteGoingUP();
-    }
-  }
 
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
 
@@ -114,9 +161,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   mfiCandlesInterval = '1h';
   MFIResults;
   mfySub: Subscription;
-  onMFIChange(evt){
+
+  onMFIChange(evt) {
     if (evt.checked) {
-      if(!this.mfySub) {
+      if (!this.mfySub) {
         this.mfySub = this.scanner.mfiSub.subscribe(this.setMFIs.bind(this))
         this.scanner.getMFIs();
       }
@@ -124,31 +172,32 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     } else this.volumesResults = null
   }
 
-  setMFIs(results: any[]){
-   if(!results) return;
+  setMFIs(results: any[]) {
+    if (!results) return;
     this.MFIResults = results.map(function (item) {
-      return Object.assign(item, {x:'X'});
+      return Object.assign(item, {x: 'X'});
     });
   }
 
-  async onMFIStartClick(){
-    if(this.scanner.scanMFITimer) {
+  async onMFIStartClick() {
+    if (this.scanner.scanMFITimer) {
       this.scanner.stopMFIScan();
       return;
     }
 
     const markets = this.scanOnlyUP ?
-      _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
+      _.map(await this.scanner.getSelected(), 'market') : await this.scanner.getAvailableMarkets('binance');
     // console.log(markets);
     this.scanner.scanForMFI(markets, this.mfiCandlesInterval);
   }
 
-  onDeleteMFIsClick(){
+  onDeleteMFIsClick() {
     if (confirm('Delete Volumes?')) {
       this.scanner.deleteMFIs();
     }
 
   }
+
   onMFIClick(evt) {
     const market = evt.item.market;
     switch (evt.prop) {
@@ -162,12 +211,13 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         }
         return;
       case 'result':
-        this.dialog.open( NotesHistoryComponent,{data:evt.item} );
+        this.dialog.open(NotesHistoryComponent, {data: evt.item});
         return
 
     }
 
   }
+
   ////////////////////////////////////////////////// MFI END ///////////////////////////////////////////////
 
   //////////////////////////////////////////VOLUME START /////////////////////////////////////////////////
@@ -176,6 +226,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   volumesResults: any[];
 
   volumeSub: Subscription;
+
   async onVolumeChange(evt) {
     if (evt.checked) {
       this.setVolumes(await this.scanner.getVolumes());
@@ -184,37 +235,43 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-
   async onVolumeStartClick() {
-    if(!this.volumeSub) this.volumeSub = this.scanner.volumeResults$().subscribe(results =>{
-      if(!results) return;
-      this.volumesResults = results;
+    if (!this.volumeSub) this.volumeSub = this.scanner.volumeResults$().subscribe(results => {
+
+      if (!Array.isArray(results)) return;
+      this.volumesResults = results.map(function (item) {
+        return Object.assign(item, {x: 'X'})
+      });
     });
 
-    if(this.scanner.scanVolumeTimer) {
+    if (this.scanner.scanVolumeTimer) {
       this.scanner.stopVolumeScan();
       return;
     }
 
     const markets = this.scanOnlyUP ?
-      _.map(await this.scanner.getGoingUP(), 'market') : await this.scanner.getAvailableMarkets('binance');
+      _.map(await this.scanner.getSelected(), 'market') : await this.scanner.getAvailableMarkets('binance');
     ;
 
     this.scanner.scanForVolume(markets)
     // console.log(markets);
-   // const sub = await this.scanner.scanForVolume(markets);
-   // sub.subscribe(this.setVolumes.bind(this));
+    // const sub = await this.scanner.scanForVolume(markets);
+    // sub.subscribe(this.setVolumes.bind(this));
   }
 
-  setVolumes(results){
+  setVolumes(results) {
     this.volumesResults = results.map(function (item) {
-      return Object.assign(item, {x:'X'});
+      return Object.assign(item, {x: 'X'});
     });
   }
+
   onDeleteVolumesClick() {
     if (confirm('Delete Volumes?')) {
-      this.volumesResults = null;
-      this.scanner.deleteVolumes();
+      setTimeout(async () => {
+        await this.scanner.deleteVolumes();
+        this.setVolumes(await this.scanner.getVolumes());
+
+      }, 500);
     }
   }
 
@@ -231,7 +288,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         }
         return;
       case 'result':
-        this.dialog.open( NotesHistoryComponent,{data:evt.item} );
+        this.dialog.open(NotesHistoryComponent, {data: evt.item});
         return
 
     }
@@ -262,7 +319,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-  /////////////////////////////////////////// FAVORITE START //////////////////////////////////////////////
+  /////////////////////////////////////////// FAVORITES START //////////////////////////////////////////////
   onStarClick() {
     const market = this.selectedMarket;
     const ref = this.dialog.open(DialogInputComponent, {data: {message: market, userInput: '3'}});
@@ -291,26 +348,89 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   favorites: any[];
+  favoriteSub: Subscription;
 
   onFavoriteChange(evt) {
     if (evt.checked) {
-      this.scanner.favoritesSub.subscribe(favs => {
-        if (!favs) return;
-        this.favorites = favs.map(function (o) {
-          return {
-            stamp: moment(o.stamp).format('DD HH:mm'),
-            market: o.market,
-            message: o.message,
-            x: 'X'
-          }
-        });
+      this.scanner.favorites$().then(sub => {
+        this.favoriteSub = sub.subscribe(data => {
+          this.favorites = data.map(function (o) {
+            return {
+              stamp: moment(o.stamp).format('DD HH:mm'),
+              market: o.market,
+              message: o.message,
+              x: 'X'
+            }
+          });
+        })
       })
     } else {
+      this.favoriteSub.unsubscribe();
       this.favorites = null;
     }
   }
 
   ///////////////////////////////// FAVORITE END /////////////////////////////////////////////////////
+
+
+  ///////////////////////////////Following//////////////////////////
+
+  following: any[];
+
+  onFollowingClick(evt) {
+    const item = evt.item;
+    const prop = evt.prop;
+    const market = item.market;
+    //  console.log(evt);
+    switch (prop) {
+      case 'market':
+        this.showMarket(market);
+        break;
+      case 'x':
+        if (confirm('Remove ' + market + '?')) {
+          this.storage.keys().then(keys => {
+            this.storage.remove('follow-order-log' + market).then(() => {
+              this.storage.remove('init-orderbinance' + market).then(() => {
+                this.populateFollowing();
+              })
+            })
+          })
+          // console.log(keys);
+
+        }
+        break;
+    }
+
+  }
+
+
+  private async populateFollowing() {
+    const keys: string[] = await this.storage.keys()
+    // console.log(keys);
+    const key = 'follow-order-log';
+    const orders = keys.filter(function (item) {
+      return item.indexOf(key) !== -1
+    })
+
+    this.following = orders.map(function (item) {
+      return {
+        market: item.substr(key.length),
+        x: 'X'
+      }
+    });
+  }
+
+  async onFollowingChange(evt) {
+
+    if (evt.checked) {
+      this.populateFollowing();
+    } else {
+      this.following = [];
+    }
+
+  }
+
+  //////////////////////////////////////////
 
   /*
     onDeleteExcludesClick(){
@@ -467,24 +587,15 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async showCandles(market: string) {
     this.selectedMarket = market;
-    let candles;
-    if (this.candlesInterval === '5m') {
-      candles = await this.candlesService.getCandles(this.exchange, market, '5m');
-    } else {
-      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
-    }
-
-    //
+    let candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
     if (!candles) {
       this.candles = null;
       this.volumes = null;
       return;
     }
 
-    const resultsUp = CandlesAnalys1.isTrendUp(market, candles);
 
     this.scanner.currentMarket = market;
-    this.scanner.progressSub.next([resultsUp.OK, resultsUp.result].join(' '));
 
     this.candles = candles;
     this.volumes = candles.map(function (o) {
@@ -496,18 +607,19 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   openMarket(exchange: string, market: string) {
     const api = this.apisPublic.getExchangeApi(exchange);
     const ar = market.split('_');
-    const url =  'https://www.binance.com/en/trade/pro/'+market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
+    const url = 'https://www.binance.com/en/trade/pro/' + market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
     window.open(url, exchange);
   }
 
-  onClearMemoryClick() {
-    if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
-      .then(res => {
+  /*
+    onClearMemoryClick() {
+      if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
+        .then(res => {
 
-        this.snackBar.open('Memory cleared', 'x', {duration: 3000});
-      })
+          this.snackBar.open('Memory cleared', 'x', {duration: 3000});
+        })
 
-  }
+    }*/
 
   /* onDownClick(){
      this.scanner.scanGoingDown();

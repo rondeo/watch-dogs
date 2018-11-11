@@ -8,70 +8,47 @@ import {ResistanceSupport} from '../../trader/libs/levels/resistance-support';
 
 export class CandlesAnalys1 {
 
-
- static  isTrendUp(market: string, candles: VOCandle[]){
+  static isTrendDownUp(candles: VOCandle[]) {
     const closes = CandlesAnalys1.closes(candles);
     const last = _.last(candles);
     const time = moment(last.to).format('HH:mm');
-    const meds = CandlesAnalys1.meds(candles);
+    const breakPoint = 25;
+   // const before = closes.slice(0, - breakPoint);
+   // const after = closes.slice(breakPoint);
 
-    const ma99 = _.mean(closes);
-    const ma7 =  _.mean(_.takeRight(closes, 7));
+    const ma99 = _.mean(_.takeRight(closes, 99));
+    const ma7 = _.mean(_.takeRight(closes, 7));
     const ma25 = _.mean(_.takeRight(closes, 25));
-
-
-   // const lastHours: number[] = _.takeRight(closes, 12);
-
-  //  const priceLast24 = _.mean(lastHours);
-
-    // const priceFirst24 = _.mean(_.take(closes, 24));
-
-    const progress1 = MATH.percent(ma25, ma99);
-
-    const progress2 = MATH.percent(ma7, ma25);
-
-    //  const last3 = _.mean(_.takeRight(closes, 3));
-
-   // const last = _.last(lastHours);
-
-    //const meanlastHours = _.mean(lastHours);
-
-   // const max = _.max(lastHours);
-   // const min = _.min(lastHours);
-
-  //  const percent = MATH.percent(last, meanlastHours);
-
-   // const maxD = MATH.percent( last, max);
-   // const minD = MATH.percent( last, min);
-
-   // const result = ' p: '+ percent + ' max: ' + maxD + ' min: ' + minD + ' pr: ' + progress1 +' pr: ' + progress2;
-   const result = '  pr1: ' + progress1 +' pr2: ' + progress2;
-
-    if (progress1 + progress2 > 0) {
+   // const ma25_99 = MATH.percent(ma25, ma99);
+   // const ma7_25 = MATH.percent(ma7, ma25);
       return {
         time,
-        market,
-        result,
-        OK:true
+        ma7,
+        ma25,
+        ma99
       }
-    }
-   return {
-     time,
-     market,
-     result,
-     OK:false
-   }
   }
 
 
+  static mas(candles: VOCandle[]) {
+    const closes = CandlesAnalys1.closes(candles);
+    const meds = CandlesAnalys1.meds(candles);
+    const ma99 = _.mean(_.takeRight(closes, 99));
+    const ma7 = _.mean(_.takeRight(closes, 7));
+    const ma25 = _.mean(_.takeRight(closes, 25));
 
-  static isFall(numbers: number[]){
+      return {
+        ma7,
+        ma25,
+        ma99
+      }
+  }
+
+
+  static isFall(numbers: number[]) {
     const speeds = MATH.speeds(numbers);
     return MATH.isFall(speeds);
   }
-
-
-
 
 
   static volumes(candles: VOCandle[]) {
@@ -81,51 +58,49 @@ export class CandlesAnalys1 {
   static makeValues(max, median, candles: VOCandle[]) {
     const ind = candles.indexOf(max);
     let prev: VOCandle;
-    let next:VOCandle;
-    if(ind === candles.length - 1){
-            prev = candles[ind-1];
-            next = candles[ind];
-    }else if(ind ===0){
+    let next: VOCandle;
+    if (ind === candles.length - 1) {
+      prev = candles[ind - 1];
+      next = candles[ind];
+    } else if (ind === 0) {
       prev = candles[ind];
-      next = candles[ind +1];
-    }else{
-      prev = candles[ind-1];
-      next = candles[ind +1];
+      next = candles[ind + 1];
+    } else {
+      prev = candles[ind - 1];
+      next = candles[ind + 1];
     }
 
-    const pricePrev = (prev.high + prev.low)/2;
-    const nextPrice = (next.high + next.low)/2;
+    const pricePrev = (prev.high + prev.low) / 2;
+    const nextPrice = (next.high + next.low) / 2;
 
 
     const t = moment(max.to).format('HH:mm');
     const p = MATH.percent(max.Volume, median);
     const d = MATH.percent(nextPrice, pricePrev);
-    const a = d > -0.2?'BUY':'SELL';
+    const a = d > -0.2 ? 'BUY' : 'SELL';
     // const d = MATH.percent(max.close, max.open);
 
-    const m = [pricePrev,nextPrice]
-    return {t,p,a,d,m};
+    const m = [pricePrev, nextPrice]
+    return {t, p, a, d, m};
   }
-
-
 
 
   static lastPrice(prices: number[]) {
     const mean = MATH.median(prices);
-    const last =  _.last(prices);
+    const last = _.last(prices);
     return MATH.percent(last, mean);
   }
 
 
-  static volumeJump(candles: VOCandle[]):{t:string, p:number, a:string, d:number}[] {
+  static volumeJump(candles: VOCandle[]): { t: string, p: number, a: string, d: number }[] {
     const vols = _.orderBy(_.filter(candles, 'Volume'), 'Volume').reverse();
-    const median = vols[Math.round(vols.length/2)].Volume;
-    return vols.slice(0,3).map(function (o) {
+    const median = vols[Math.round(vols.length / 2)].Volume;
+    return vols.slice(0, 3).map(function (o) {
       return CandlesAnalys1.makeValues(o, median, candles);
     });
   }
 
-  static pumpedUp(candles: VOCandle[]){
+  static pumpedUp(candles: VOCandle[]) {
     candles = _.takeRight(candles, 4);
     const first = _.first(candles);
     const last = _.last(candles);
@@ -138,6 +113,7 @@ export class CandlesAnalys1 {
       return (o.high + o.low) / 2;
     });
   }
+
   static oc(candles: VOCandle[]): number[] {
     return candles.map(function (o) {
       return (o.open + o.close) / 2;
@@ -152,7 +128,6 @@ export class CandlesAnalys1 {
 
   static analysData;
   static data;
-
 
 
   static lastVolume(candles: VOCandle[]) {
@@ -365,11 +340,25 @@ export class CandlesAnalys1 {
     // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
   }
 
+  static analyseVolume(candles: VOCandle[]) {
+    const last = _.last(candles);
+    const closes = CandlesAnalys1.closes(candles);
+    const ma25 = _.mean(_.takeRight(closes, 25));
+
+    const byVolume = _.orderBy(candles, 'Volume');
+    const max: VOCandle = byVolume.pop();
+    const volumePrice = (max.high - max.low) / 2;
+    const ind = candles.indexOf(max);
+
+    const change = MATH.percent(last.close, volumePrice)
+    return change;
+  }
+
   static decode(candle: VOCandle) {
     const body = Math.abs(candle.open - candle.close);
     const isUp = candle.open < candle.close;
-    const wick = candle.high - (isUp?candle.close :candle.open);
-    const tail = (isUp?candle.open:candle.close) - candle.low;
+    const wick = candle.high - (isUp ? candle.close : candle.open);
+    const tail = (isUp ? candle.open : candle.close) - candle.low;
     const range = candle.high - candle.low;
     return {
       body,

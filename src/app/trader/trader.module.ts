@@ -21,6 +21,8 @@ import { ScanMarketsComponent } from './scan-markets/scan-markets.component';
 import { MarketDetailsComponent } from './market-details/market-details.component';
 import { NotesHistoryComponent } from './notes-history/notes-history.component';
 import { OrderReportsComponent } from './order-reports/order-reports.component';
+import { FollowMarketComponent } from './follow-market/follow-market.component';
+import {TestModule} from '../test/test.module';
 
 const routes: Routes = [
   {
@@ -32,7 +34,8 @@ const routes: Routes = [
       {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
       {path: 'common-markets', component: CommonMarketsComponent},
       {path: 'scan-markets', component: ScanMarketsComponent},
-      {path: 'order-reports', component: OrderReportsComponent}
+      {path: 'order-reports', component: OrderReportsComponent},
+      {path: 'follow-market', component: FollowMarketComponent}
     ]
   }
 ];
@@ -51,7 +54,8 @@ const routes: Routes = [
     WidgetsModule,
     DirectivesModule,
     PipesModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    TestModule
   ],
   declarations: [
     TraderOutletComponent,
@@ -62,7 +66,8 @@ const routes: Routes = [
     ScanMarketsComponent,
     MarketDetailsComponent,
     NotesHistoryComponent,
-    OrderReportsComponent
+    OrderReportsComponent,
+    FollowMarketComponent
   ],
   providers: [SoketConnectorService],
   entryComponents:[

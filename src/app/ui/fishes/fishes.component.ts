@@ -82,7 +82,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
     let bought = 0;
     let sold = 0;
     ordersHistory.forEach(function (o) {
-      o.amountUS = Math.round(o.amountCoin * o.rate * priceBaseUS)
+      o.amountUS = Math.round(o.amountCoin * o.rate * priceBaseUS);
       o.action ==='BUY'? bought+=o.amountUS: sold+= o.amountUS;
     });
 

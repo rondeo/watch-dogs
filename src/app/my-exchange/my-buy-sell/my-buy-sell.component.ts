@@ -63,7 +63,7 @@ export class MyBuySellComponent implements OnInit {
   balanceBase: VOBalance;
   balanceCoin: VOBalance;
 
-  isInstant: boolean = false;
+  isInstant: boolean = true;
 
 
   // marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
@@ -95,14 +95,17 @@ export class MyBuySellComponent implements OnInit {
   }
 
 
+  books: VOBooks;
+
+
   async downloadBooks() {
     if (!this.market || !this.exchange) return;
     const ar = this.market.split('_');
     const api: ApiPublicAbstract = this.apisPublic.getExchangeApi(this.exchange);
     const books: VOBooks = await api.downloadBooks2(this.market).toPromise();
-
     this.bookBuy = books.buy[0].rate;
     this.bookSell = books.sell[0].rate;
+    this.books = books;
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
     const amountCoin1000 = 1000 / priceCoin;
@@ -136,9 +139,7 @@ export class MyBuySellComponent implements OnInit {
   async onBuyClick() {
     let action = 'BUY';
     await this.downloadBooks();
-    if(this.isInstant){
-      this.rateBuy = this.rateSell;
-    }
+
     if (isNaN(this.rateBuy)) return;
     const MC = await this.marketCap.getTicker();
     let amountUS = this.amountUS;
@@ -155,14 +156,21 @@ export class MyBuySellComponent implements OnInit {
   }
 
   async buyCoin(amount: number) {
-    let rateBuy = this.rateBuy;
+    let rateBuy = +this.rateBuy;
+    if(this.isInstant){
+      rateBuy = UtilsBooks.getRateForAmountCoin(this.books.sell, amount);
+      this.rateBuy = rateBuy;
+    }
    /* if (rateBuy === this.rateSell) {
       console.warn(' rate buy === rate sell');
       rateBuy = this.rateBuy;
     }*/
     const precision = rateBuy.toString();
     console.log('buy coin ' + amount + ' rate ' + rateBuy);
-    if (isNaN(this.rateBuy)) return;
+    if (isNaN(rateBuy)) {
+      console.warn(' rateBuy ' + rateBuy)
+      return;
+    }
 
     /*if (amount * this.rateBuy > this.balanceBase.available) {
       amount = this.balanceBase.available / rateBuy;
@@ -177,6 +185,7 @@ export class MyBuySellComponent implements OnInit {
     try {
 
       const order = await api.buyLimit2(this.market, amount, rateBuy);
+
       const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
@@ -193,15 +202,13 @@ export class MyBuySellComponent implements OnInit {
 
   async onSellClick() {
     await this.downloadBooks();
-    if(this.isInstant){
-      this.rateSell = this.rateBuy;
-    }
+
     if (isNaN(this.rateSell)) return;
     let amountUS = this.amountUS;
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[this.coin].price_usd;
     let amountCoin = amountUS / priceCoin;
-    if (amountCoin > this.balanceCoin.available) amountCoin = this.balanceCoin.available;
+    if (amountCoin + (amountCoin/10) > this.balanceCoin.available) amountCoin = this.balanceCoin.available;
 
     if (amountCoin * priceCoin < 9) {
       const msg = 'Minimum trading amount $10 got ' + (amountCoin * priceCoin).toFixed(2);
@@ -213,8 +220,13 @@ export class MyBuySellComponent implements OnInit {
   }
 
   async sellCoin(amount: number) {
+    let rateSell = this.rateSell;
+    if(this.isInstant){
+      rateSell = UtilsBooks.getRateForAmountCoin(this.books.buy, amount);
+      this.rateSell = rateSell;
+    }
     if (isNaN(this.rateSell)) return;
-    const rateSell = MATH.addDecimal(this.rateSell, -1);
+    // rateSell = MATH.addDecimal(this.rateSell, -1);
     console.log('sell coin ' + amount + ' rate ' + rateSell);
 
     const ar = this.market.split('_');

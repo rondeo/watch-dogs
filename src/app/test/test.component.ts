@@ -52,9 +52,9 @@ export class TestComponent implements OnInit {
 
     this.followOrder.getCandles = this.getCandles.bind(this);
     this.followOrder.isTooFast = ()=>{ return false};
-    this.followOrder.start = ()=>{
+   /* this.followOrder.start = ()=>{
       console.log('SATRT called')
-    }
+    }*/
 
    // this.followOrder.balanceCoin = new VOBalance()
     //this.followOrder.balanceCoin.available = 0;
@@ -62,10 +62,11 @@ export class TestComponent implements OnInit {
     this.apisPrivate.getExchangeApi('binance').refreshBalances();
 
     setTimeout(()=>{
-      this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
+     /* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
 
         console.log('check');
       }
+      */
     }, 1000)
 
 

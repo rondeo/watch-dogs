@@ -69,12 +69,10 @@ export class AppBotsService {
       return new MarketBot(
         o.exchange,
         o.market,
-        o.history,
         100,
         this.storage,
         this.apiPrivates.getExchangeApi(o.exchange),
         this.apiPublics.getExchangeApi(o.exchange),
-        this.marketCap,
         this.candlesService
       )
     })
@@ -96,12 +94,10 @@ export class AppBotsService {
     const bot =  new MarketBot(
       exchange,
       market,
-      '',
       100,
       this.storage,
       this.apiPrivates.getExchangeApi(exchange),
       this.apiPublics.getExchangeApi(exchange),
-      this.marketCap,
       this.candlesService
     )
     bots.push(bot);
@@ -115,8 +111,7 @@ export class AppBotsService {
     const botsIds = bots.map(function (o) {
       return {
         exchange: o.exchange,
-        market: o.market,
-        history: o.history
+        market: o.market
     }
     });
     this.storage.upsert('my-bots', botsIds)

@@ -14,7 +14,7 @@ import {BinanceTradesSocket} from '../sockets/binance-trade-socket';
 export class ApiPublicBinance extends ApiPublicAbstract {
 
   exchange = 'binance';
-
+  private prefix = '/api/proxy/';
   static instance: ApiPublicBinance
 
   constructor(http: HttpClient, storage:StorageService) {
@@ -42,7 +42,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       limit:String(limit)
     };
     if(endTime) params.endTime = endTime;
-    const url = '/api/proxy/https://api.binance.com/api/v1/klines';
+    const url = this.prefix + 'https://api.binance.com/api/v1/klines';
    // console.log(url);
    return await this.http.get(url, {params}).map((res: any[]) => {
      //  console.log(res);
@@ -76,7 +76,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     if(!from) delete params.startTime;
     if(!to) delete params.endTime;
 
-    const url = '/api/proxy/https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
+    const url =  this.prefix + 'https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
       return res.map(function (item) {
@@ -124,7 +124,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
-    const url = '/api/proxy-5min/https://api.binance.com/api/v1/ticker/24hr';
+    const url =  this.prefix +'https://api.binance.com/api/v1/ticker/24hr';
     console.log(url);
     return this.http.get(url).map((res: any[]) => {
 
@@ -171,7 +171,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
-    let url = '/api/proxy/https://api.binance.com/api/v1/depth?symbol={{coin}}{{base}}&limit=100'
+    let url =  this.prefix +'https://api.binance.com/api/v1/depth?symbol={{coin}}{{base}}&limit=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any) => {
@@ -196,7 +196,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
-    let url = '/api/proxy/https://api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=200'
+    let url =  this.prefix +'https://api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=200'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
     return this.http.get(url).map((res: any[]) => {

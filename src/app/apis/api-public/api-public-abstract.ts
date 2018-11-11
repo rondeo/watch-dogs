@@ -159,6 +159,11 @@ export abstract class ApiPublicAbstract {
     })
   }
 
+  async downloadHistory(market: string){
+    const ar = market.split('_');
+    return this.downloadMarketHistory(ar[0], ar[1]).toPromise();
+  }
+
   abstract downloadBooks(base: string, coin: string): Observable<VOBooks>;
 
   abstract downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]>;

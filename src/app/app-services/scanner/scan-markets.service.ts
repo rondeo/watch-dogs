@@ -15,12 +15,18 @@ import {MATH} from '../../com/math';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MFI} from '../../trader/libs/techind';
 
+export interface VOMessage {
+  time: string;
+  market: string;
+  message: string;
+}
+
 @Injectable()
 export class ScanMarketsService {
   // exchange = 'binance';
   scanInterval;
   progressSub: Subject<string> = new Subject<string>();
-  favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+  // favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
   marketsTrendDown: BehaviorSubject<{ market: string, percent: number, x: string }[]>
     = new BehaviorSubject<{ market: string, percent: number, x: string }[]>(null);
 
@@ -33,9 +39,7 @@ export class ScanMarketsService {
     private marketCap: ApiMarketCapService,
     private candlesService: CandlesService
   ) {
-    this.storage.select('favorite-markets').then(prefs => {
-      this.favoritesSub.next(prefs);
-    })
+
 
     /*this.storage.select('markets-trend-down').then(data => {
       if (data) data = data.map(function (item) {
@@ -46,288 +50,170 @@ export class ScanMarketsService {
   }
 
 
-  addFavorite(market: string, message: string) {
-    let favour: any[] = this.favoritesSub.getValue() || [];
+  //////////////////////FAVORITES////////////////////////////////
+
+  private favoriteSub$: BehaviorSubject<any[]>;
+  async favorites$() {
+    if (this.favoriteSub$) return Promise.resolve(this.favoriteSub$);
+    this.favoriteSub$ = new BehaviorSubject((await this.storage.select('favorite-markets')) || []);
+    return this.favoriteSub$
+  }
+
+
+  async addFavorite(market: string, message: string) {
+    this.favorites$().then(sub =>{
+      let favour = sub.getValue();
+      // @ts-ignore
+      favour = _.reject(favour, {market: market});
+      favour.push({
+        stamp: Date.now(),
+        market,
+        message
+      });
+      this.saveFavorites(favour)
+    })
     // @ts-ignore
-    favour = _.reject(favour, {market: market});
 
-    favour.push({
-      stamp: Date.now(),
-      market,
-      message
-    });
-    this.storage.upsert('favorite-markets', favour);
-    this.favoritesSub.next(favour);
+
+
   }
 
-  removeFavorite(market: string) {
-    let prefs: any[] = _.reject(this.favoritesSub.getValue(), {market: market});
-    this.storage.upsert('favorite-markets', prefs);
-    this.favoritesSub.next(prefs);
-    return prefs;
+  async saveFavorites(ar: any[]) {
+    this.favoriteSub$.next(ar);
+    return this.storage.upsert('favorite-markets', ar);
+  }
+
+  async removeFavorite(market: string) {
+    this.favorites$().then(sub =>{
+      let favour = sub.getValue();
+      // @ts-ignore
+      favour = _.reject(favour, {market: market});
+      this.saveFavorites(favour)
+    })
   }
 
 
-  isFall(numbers: number[]): string {
-    numbers = _.takeRight(numbers, 4);
-    const speeds = MATH.speeds(numbers);
-    const isFall = MATH.isFall(speeds);
-    const per = MATH.percent(_.last(numbers), _.first(numbers));
-    return isFall ? 'FALL ' + per : null;
+  /////////////////////////selected ////////////////////////////////
+
+  async addToSelected(ar:{market:string, message: string, time:string}[], creteria: string){
+    const selected:any[] = await this.getSelected();
+
+    ar.forEach(function (item) {
+      const exist = selected.find(function (item2) {
+        return item2.market === item.market;
+      });
+      if(exist) {
+        if(!exist.history) exist.history = {};
+        exist.history[creteria] = item.time + '  ' +item.message;
+      }else {
+        item.message = creteria + item.message;
+        selected.push(item)
+      }
+    })
+
+    return this.saveSelected(selected);
   }
 
+  async removeSelected(market: string){
+    let selected:any[] = await this.getSelected();
+    // @ts-ignore
+    selected = _.reject(selected, {market:market});
+    this.saveSelected(selected);
+  }
+
+  saveSelected(ar:any[]){
+    return this.storage.upsert('selected-markets', ar);
+  }
+
+ async getSelected(){
+   return (await this.storage.select('selected-markets')) || [];
+  }
+  /* isFall(numbers: number[]): string {
+     numbers = _.takeRight(numbers, 4);
+     const speeds = MATH.speeds(numbers);
+     const isFall = MATH.isFall(speeds);
+     const per = MATH.percent(_.last(numbers), _.first(numbers));
+     return isFall ? 'FALL ' + per : null;
+   }
+ */
 ///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
+
+
+  trendUPTimer;
+
   private async _scanGoingUP(
     markets: string[],
     i,
     api: ApiPublicAbstract,
-    sub: Subject<{ market: string, result: string }>,
+    sub: Subject<VOMessage>,
     candlesInterval: string
   ) {
     i++;
     if (i >= markets.length) {
       sub.complete();
+      this.stopTrendUp();
       return;
     }
     const market = markets[i];
-    const MC = await this.marketCap.getTicker();
-    const coinMC = MC[market.split('_')[1]];
-    api.downloadCandles(market, candlesInterval, 100).then((candles) => {
-      this.currentMarket = market;
-      const result = CandlesAnalys1.isTrendUp(market, candles);
+    const candles1 = await api.downloadCandles(market, candlesInterval, 100);
+    const time = moment().format('HH:mm');
+    const result1 = CandlesAnalys1.mas(candles1);
 
-      if (coinMC) {
-        result.result = ' r: ' + coinMC.rank + ' h: ' + coinMC.percent_change_1h + ' d: ' + coinMC.percent_change_1h + ' w: '
-          + coinMC.percent_change_7d + result.result;
-      }
-      this.progressSub.next(result.result);
-      if (result.OK) sub.next(result);
-      setTimeout(() => {
-        this._scanGoingUP(markets, i, api, sub, candlesInterval);
-      }, 2000)
 
-    })
+    let onesec = new Promise((resolve, reject) => {
+      setTimeout(() => resolve('1 sec'), 2000)
+    });
+
+    let ma25_99 = MATH.percent(result1.ma25, result1.ma99);
+    const ma7_25 = MATH.percent(result1.ma7, result1.ma25);
+    let message = ' ma25-99 ' + ma25_99 + ' ma7-25 ' + ma7_25;
+
+
+    this.progressSub.next(message);
+    this.currentMarket = market;
+    if (result1.ma25 > result1.ma99 && result1.ma7 > result1.ma25)
+      sub.next({
+        time,
+        market,
+        message
+      });
+    this.trendUPTimer = setTimeout(() => {
+      this._scanGoingUP(markets, i, api, sub, candlesInterval);
+    }, 2000)
+
   }
 
-
-  async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, result: string }>> {
+  async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, message: string }>> {
+    this.isScanning = true;
     this.progressSub.next('SCAN UP STARED');
     const api = this.apisPublic.getExchangeApi('binance');
 
-    let results: { market: string, result: string }[] = [];
-    const sub = new Subject<{ market: string, result: string }>();
+    let results: VOMessage[] = [];
+    const sub = new Subject<VOMessage>();
     sub.subscribe(market => {
       results.push(market);
     }, console.error, () => {
       results = _.orderBy(results, 'market');
       this.progressSub.next('SCAN UP DONE');
-      this.storage.upsert('markets-trend-UP', results);
-    })
+      this.isScanning = false;
+    });
 
     this._scanGoingUP(markets, -1, api, sub, candlesInterval);
     return sub;
   }
 
-  async getGoingUP() {
-    return this.storage.select('markets-trend-UP');
+  stopTrendUp() {
+    clearTimeout(this.trendUPTimer);
+    this.trendUPTimer = 0;
+    this.isScanning = false;
   }
-
-  async deleteCoingUpMarket(market: string) {
-    let markets: any[] = await this.getGoingUP();
-    // @ts-ignore
-    markets = _.reject(markets, {market: market});
-    await this.storage.upsert('markets-trend-UP', markets);
-    return markets
-  }
-
-  async deleteGoingUP() {
-    return this.storage.remove('markets-trend-UP');
-  }
-
-  /*
-
-    private _scanGoingDown(markets: string[], i, api: ApiPublicAbstract, sub: Subject<{ market: string, percent: number }>) {
-      i++;
-      if (i >= markets.length) {
-        sub.complete();
-        return;
-      }
-      const market = markets[i];
-      api.downloadCandles(market, '6h', 120).then(candles => {
-
-        const closes = CandlesAnalys1.closes(candles);
-        const last3 = _.mean(_.takeRight(closes, 3));
-        const mean = _.mean(closes);
-        const percent = MATH.percent(last3, mean);
-        console.log(market, percent);
-        if (percent < -2) sub.next({market, percent});
-
-        setTimeout(() => {
-          this._scanGoingDown(markets, i, api, sub);
-        }, 2000)
-
-      })
-    }
-  */
-
-
-  /*async scanGoingDown() {
-
-    const api = this.apisPublic.getExchangeApi('binance');
-    const markets = await this.candlesService.getAvailableMarkets('binance');
-    let downs: { market: string, percent: number }[] = [];
-    const sub = new Subject<{ market: string, percent: number }>();
-
-    sub.subscribe(market => {
-
-      downs.push(market);
-    }, console.error, () => {
-      downs = downs.sort();
-      this.storage.upsert('markets-trend-down', downs);
-
-      this.marketsTrendDown.next(downs.map(function (item) {
-        return Object.assign(item, {x: 'X'});
-      }))
-    })
-
-    this._scanGoingDown(markets, -1, api, sub);
-
-  }
-*/
-  async start() {
-    /* if (this.scanInterval) {
-       throw new Error(' scan is running ');
-     }
-
-
-     this.scanInterval = setInterval(async () => {
-       let excludes1: any[] = (await this.getExcludes('binance')) || [];
-
-       const now = Date.now();
-       const excludes = excludes1.filter(function (o) {
-         return o.postpone > now;
-       });
-       if (excludes1.length !== excludes.length) this.saveExcludes('binance', excludes);
-
-       try {
-         this.scanForFall();
-       } catch (e) {
-         console.error(e);
-       }
-
-     }, 7 * 60000);
-     this.scanForFall();
- */
-
-    // this.excludeDaysLoosers();
-    // this.scanForPumpedUp();
-    // this.scanForGoingUp();
-
-    /* await this.candlesService.subscribeForAll();
-
-     const subs = this.candlesService.getAllSubscriptions();
-
-
-     subs.forEach((sub) => {
-       sub.subscribe(data => {
-         //  console.log(data);
-         this.onCandles(data);
-       })
-     })*/
-  }
-
 
   stop() {
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
   }
 
-  /*removeExcludes() {
-    const exchange = 'binance';
-    this.saveExcludes(exchange, []);
-  }
 
-  async removeExclude(exchange: string, market: string) {
-    let excludes = (await this.getExcludes(exchange)) || [];
-    excludes = _.reject(excludes, {market});
-    await this.saveExcludes(exchange, excludes)
-  }*/
-
-  /* async addExclude(exchange: string, market: string, reason: string, hours: number) {
-     console.log('ADD EXCLUDE ', market, reason, hours);
-     const postpone = moment().add(hours, 'hours').valueOf();
-     let excludes = (await this.getExcludes(exchange)) || [];
-
-     const exists = excludes.find(function (o) {
-       return o.market === market;
-     });
-
-     if (exists) exists.postpone = postpone;
-     else excludes.push({
-       stamp: Date.now(),
-       market,
-       postpone,
-       reason
-     });
-
-     this.saveExcludes(exchange, excludes);
-   }
- */
-/*  async clearMemory(exchange: string) {
-    await this.storage.remove('scanner-markets-' + exchange);
-    await this.storage.remove('exclude-markets-' + exchange);
-  }*/
-
-  //  excludesSub: BehaviorSubject<any> = new BehaviorSubject(null);
-
-  /*async getExcludes(exchange: string) {
-    let v = this.excludesSub.getValue();
-    if (!v) {
-      this.excludesSub.next(await this.storage.select('exclude-markets-' + exchange));
-    }
-    return this.excludesSub.getValue();
-  }
-
-  saveExcludes(exchange: string, excludes: any[]) {
-    this.excludesSub.next(excludes);
-    this.storage.upsert('exclude-markets-' + exchange, excludes);
-  }*/
-
-  /* excludeDownTrend() {
-     this.progressSub.next('START excludeDownTrend')
-     const sub = this.candlesService.scanOnce('1d');
-     sub.subscribe(async (data) => {
-       const exchange = data.exchange;
-       const market = data.market;
-       const candles: VOCandle[] = data.candles;
-       candles.pop();
-       const closes: number[] = CandlesAnalys1.closes(candles);
-       const mean = MATH.median(closes);
-       //const first = _.first(candles);
-       const last = _.last(closes);
-       const percent = MATH.percent(last, mean);
-       console.log(market, percent);
-       if (Math.abs(percent) > 5) {
-         this.addExclude(exchange, market, '11 days change ' + percent, 24);
-       }
-       //  this.candles[exchange + market] = data.candles;
-       // const MC = await this.marketCap.getTicker();
-       // const mc = MC[data.market.split('_')[1]];
-
-       //  const res = await CandlesAnalys1.analyze(data, mc, null, this.notify.bind(this));
-       // this.currentResultSub.next(res);
-     }, err => {
-
-     }, () => {
-       this.progressSub.next('STOP excludeDownTrend')
-     });
-
-   }*/
-
-  /*emtyTrendDown() {
-    this.storage.upsert('markets-trend-down', []);
-    this.marketsTrendDown.next([]);
-  }*/
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////
@@ -336,14 +222,15 @@ export class ScanMarketsService {
   }
 
   deleteVolumes() {
-    this.storage.remove('scan-volumes');
+    this.saveVolumes([]);
+
   }
 
   async deleteVolume(market: string) {
     let results: any[] = await this.getVolumes();
     // @ts-ignore
     results = _.reject(results, {market: market});
-    await this.storage.upsert('scan-volumes', results);
+    this.saveVolumes(results)
     return results;
   }
 
@@ -355,38 +242,67 @@ export class ScanMarketsService {
 
   volumeSub: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  volumeResults$(){
+  volumeResults$() {
     const results = this.volumeSub.getValue();
-    if(!results) {
-      this.storage.select('scan-volumes').then(results =>{
+    if (!results) {
+      this.storage.select('scan-volumes').then(results => {
         this.volumeSub.next(results);
 
       })
     }
     return this.volumeSub.asObservable();
   }
-  async volumeNext(markets: string[], i:number){
+
+  async volumeNext(markets: string[], i: number) {
     i++;
-    if(i>=markets.length) {
-     this.stopVolumeScan();
+    if (i >= markets.length) {
+      this.stopVolumeScan();
       return;
     }
 
     const market = markets[i];
 
-    const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 10);
-    const byVolume = _.orderBy(candles, 'Volume');
+    const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '5m', 120);
 
-    const max: VOCandle = byVolume.pop();
 
-    const decoded = CandlesAnalys1.decode(max);
-    const tailD =Math.round( 100 * decoded.tail/ decoded.range);
-    const wickD = Math.round(100 * decoded.wick/decoded.range);
-    let message = ' tailD ' + tailD + ' wickD ' + wickD;
-   //  console.log(market , tailD);
-    if(tailD > 50 && wickD < 10){
+    const closes = CandlesAnalys1.closes(candles);
+    const last: VOCandle = _.last(candles);
+    const time = moment(last.to).format('HH:mm');
+    const volumes = _.map(candles, 'Volume');
+
+    const before = volumes.slice(0, -10);
+    const after = volumes.slice(-10);
+    const avgBefore = _.mean(before);
+    const avgAfter = _.mean(after);
+
+
+    const priceBefore = _.mean(closes.slice(50, -10));
+    const priceAfter = _.mean(closes.slice(-10));
+
+    const volumeCnahge = MATH.percent(avgAfter, avgBefore);
+    const priceChange = MATH.percent(priceAfter, priceBefore);
+
+    const message = ' V: ' + volumeCnahge + ' P ' + priceChange
+
+    this.currentMarket = market;
+
+    console.log(market + message);
+    this.progressSub.next(message);
+
+    // const closes = CandlesAnalys1.closes(candles);
+    // const ma25 = _.mean(_.takeRight(closes, 25));
+
+    //  const decoded = CandlesAnalys1.decode(max);
+
+    /* const tailD =Math.round( 100 * decoded.tail/ decoded.range);
+     const wickD = Math.round(100 * decoded.wick/decoded.range);
+     let message = ' tailD ' + tailD + ' wickD ' + wickD;*!/*/
+    //  console.log(market , tailD);
+
+// && Math.abs(amplUP) < 2 && Math.abs(amplDOWN) < 2
+    if (volumeCnahge > 500) {
       const results = this.volumeSub.getValue() || [];
-      const time = moment(max.to).format('HH:mm');
+
       results.push({time, market, message});
       this.saveVolumes(results);
     }
@@ -395,106 +311,108 @@ export class ScanMarketsService {
 
   }
 
-  async saveVolumes(results:any[]){
+  async saveVolumes(results: any[]) {
     this.volumeSub.next(results);
-    return  await this.storage.upsert('scan-volumes', results);
+    return await this.storage.upsert('scan-volumes', results);
   }
+
   async scanForVolume(markets: string[]) {
 
     this.isScanning = true;
     this.scanVolumeTimer = 1;
+    this.saveVolumes([]);
 
     this.volumeNext(markets, -1);
 
-/*
-    this.progressSub.next('SCANNING Volume');
+    /*
+        this.progressSub.next('SCANNING Volume');
 
-    const out = [];
+        const out = [];
 
-    const sub = this.candlesService.scanOnce(markets);
+        const sub = this.candlesService.scanOnce(markets);
 
-    sub.subscribe(async (data) => {
+        sub.subscribe(async (data) => {
 
-      const exchange = data.exchange;
-      const market = data.market;
+          const exchange = data.exchange;
+          const market = data.market;
 
-      const candles: VOCandle[] = _.takeRight(data.candles, 50);
-      const last3 = _.takeRight(candles, 3);
-      const last = _.last(candles);
+          const candles: VOCandle[] = _.takeRight(data.candles, 50);
+          const last3 = _.takeRight(candles, 3);
+          const last = _.last(candles);
 
-      const sorted3 = _.orderBy(last3, 'Volume');
-      const maxVol3 = _.last(sorted3);
-      const indexMax3 = candles.indexOf(maxVol3);
-      let prevPrice = (candles[indexMax3 - 1].low + candles[indexMax3 - 1].high) / 2;
-      let nextPrice = maxVol3.close;
-      let close = maxVol3.close;
-      let low = maxVol3.low;
-      if (indexMax3 !== candles.length - 1) {
-        nextPrice = (candles[indexMax3 + 1].low + candles[indexMax3 + 1].high) / 2
-      }
+          const sorted3 = _.orderBy(last3, 'Volume');
+          const maxVol3 = _.last(sorted3);
+          const indexMax3 = candles.indexOf(maxVol3);
+          let prevPrice = (candles[indexMax3 - 1].low + candles[indexMax3 - 1].high) / 2;
+          let nextPrice = maxVol3.close;
+          let close = maxVol3.close;
+          let low = maxVol3.low;
+          if (indexMax3 !== candles.length - 1) {
+            nextPrice = (candles[indexMax3 + 1].low + candles[indexMax3 + 1].high) / 2
+          }
 
-      const meds = CandlesAnalys1.meds(last3);
-      let volumes = CandlesAnalys1.volumes(candles);
-      /!* volumes = volumes.filter(function (item) {
-         return item;
-       })*!/
-      const volumeMean = _.mean(volumes);
+          const meds = CandlesAnalys1.meds(last3);
+          let volumes = CandlesAnalys1.volumes(candles);
+          /!* volumes = volumes.filter(function (item) {
+             return item;
+           })*!/
+          const volumeMean = _.mean(volumes);
 
-      const preiceChanges = MATH.percent(nextPrice, prevPrice);
-      const volume2 = maxVol3.Volume;
-      const volume2Change = Math.round(MATH.percent(volume2, volumeMean));
+          const preiceChanges = MATH.percent(nextPrice, prevPrice);
+          const volume2 = maxVol3.Volume;
+          const volume2Change = Math.round(MATH.percent(volume2, volumeMean));
 
-      const volumes3 = _.sum(CandlesAnalys1.volumes(last3));
+          const volumes3 = _.sum(CandlesAnalys1.volumes(last3));
 
-      const D = Math.round(MATH.percent(volumes3, volumeMean));
+          const D = Math.round(MATH.percent(volumes3, volumeMean));
 
-      const timestamp = maxVol3.to;
-      const time = moment(maxVol3.to).format('HH:mm');
-      let result = time + ' v3: ' + D + '  preiceChanges ' + preiceChanges;
+          const timestamp = maxVol3.to;
+          const time = moment(maxVol3.to).format('HH:mm');
+          let result = time + ' v3: ' + D + '  preiceChanges ' + preiceChanges;
 
-      this.currentMarket = market;
-      this.progressSub.next(result);
+          this.currentMarket = market;
+          this.progressSub.next(result);
 
-      const results: any[] = await this.getVolumes();
-      const exists: any = _.find(results, {market: market});
-      if (exists) {
-        const minutes = moment(last.to).diff(exists.timestamp, 'minutes');
-        const candlesAfter = candles.filter(function (item) {
-          item.to > exists.timestamp;
-        });
+          const results: any[] = await this.getVolumes();
+          const exists: any = _.find(results, {market: market});
+          if (exists) {
+            const minutes = moment(last.to).diff(exists.timestamp, 'minutes');
+            const candlesAfter = candles.filter(function (item) {
+              item.to > exists.timestamp;
+            });
 
-        const wasClose = exists.close;
-        const progressAfter = MATH.percent(last.close, wasClose);
-        result = time + ' after: ' + minutes + '  ' + progressAfter;
-        if (minutes > 30 && progressAfter < 0) {
-          exists.result = time + ' REMOVE after  ' + minutes + ' ' + progressAfter;
-        }
-        exists.history[time] = result;
-        await this.storage.upsert('scan-volumes', results);
-        return;
-      }
+            const wasClose = exists.close;
+            const progressAfter = MATH.percent(last.close, wasClose);
+            result = time + ' after: ' + minutes + '  ' + progressAfter;
+            if (minutes > 30 && progressAfter < 0) {
+              exists.result = time + ' REMOVE after  ' + minutes + ' ' + progressAfter;
+            }
+            exists.history[time] = result;
+            await this.storage.upsert('scan-volumes', results);
+            return;
+          }
 
 
-      //  console.log(market, result);
-      // const sum = _.sum(last5);
-      //  const LastMax = MATH.percent(max, mean);
-      // console.log(market,D, maxIndex);
-      if (D > 600) {
-        console.log(market, D, volume2Change, preiceChanges);
-        const history = {time: result};
-        results.unshift({timestamp, market, result, close, low, history});
+          //  console.log(market, result);
+          // const sum = _.sum(last5);
+          //  const LastMax = MATH.percent(max, mean);
+          // console.log(market,D, maxIndex);
+          if (D > 600) {
+            console.log(market, D, volume2Change, preiceChanges);
+            const history = {time: result};
+            results.unshift({timestamp, market, result, close, low, history});
 
-        await this.storage.upsert('scan-volumes', results);
-        this.subVol.next(results);
-      }
+            await this.storage.upsert('scan-volumes', results);
+            this.subVol.next(results);
+          }
 
-    }, err => {
-    }, () => {
-      this.isScanning = false;
-      this.currentMarket = null;
-      this.progressSub.next(' END scan Volume');
-      this.scanVolumeTimer = setTimeout(() => this.scanForVolume(markets), 5 * 60 * 1000);
-    });*/
+        }, err => {
+        }, () => {
+          this.isScanning = false;
+          this.currentMarket = null;
+          this.progressSub.next(' END scan Volume');
+          this.scanVolumeTimer = setTimeout(() => this.scanForVolume(markets), 5 * 60 * 1000);
+        });*/
 
     // return this.subVol;
   }

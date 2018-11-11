@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
 
 
   }
+
   onLogout() {
 
   }
@@ -73,8 +74,9 @@ export class AppComponent implements OnInit {
       this.imageClass = res ? '' : 'glow-red';
       this.bgColor = res ? '' : 'bg-red';
     });
-
-    this.followOrders.follow('binance');
+    this.followOrders.initBots().then(() => {
+      this.followOrders.follow('binance');
+    });
   }
 
   onDogClick() {

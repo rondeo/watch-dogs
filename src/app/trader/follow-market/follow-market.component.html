@@ -1,0 +1,8 @@
+<div>
+    <button mat-button (click)="onStartClick()">Start</button>
+  <app-table-props [dataset]="bots" (selected)="onMarketSelected($event)"></app-table-props>
+
+    <app-candlesticks [candles]="candles"></app-candlesticks>
+    <app-volume-hist [values]="volumes"></app-volume-hist>
+</div>
+

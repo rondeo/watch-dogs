@@ -10,10 +10,10 @@ import * as moment from 'moment';
 export class StopLossOrder {
   order: VOOrder;
 
+  percentStopLoss = -3;
 
   constructor(
     private market: string,
-    private percentStopLoss: number,
     private apiPrivate: ApiPrivateAbstaract
   ) {
     this.subscribe();
@@ -31,13 +31,8 @@ export class StopLossOrder {
 
       // @ts-ignore
       const myOrder = _.find(orders, {coin: coin});
-      if (myOrder && myOrder.action === 'SELL' && myOrder.stopPrice) {
-        if (!this.order)
-          this.log('STOP LOSS ' + myOrder.stopPrice + ' ' + myOrder.rate + ' ' + moment(myOrder.timestamp).format('DD HH:mm'));
-        this.order = myOrder;
-      }
-      else this.order = null;
-      // this.log(this.market + ' STOP_LOSS ' +(this.order?this.order.stopPrice : ' no stop order'), false)
+      if (myOrder && myOrder.action === 'SELL' && myOrder.stopPrice) this.order = myOrder;
+
     })
 
     // this.percentStopLoss = 2;
@@ -45,6 +40,11 @@ export class StopLossOrder {
 
   getSopLossRate() {
     return this.order.stopPrice
+  }
+
+  calculatePrice(candles: VOCandle[]): number {
+    const closes = CandlesAnalys1.closes(candles);
+    return _.mean(_.takeRight(closes, 35));
   }
 
   async cancelOrder(order: VOOrder) {
@@ -69,77 +69,77 @@ export class StopLossOrder {
   }
 
 
-  async resetStopLoss(candles: VOCandle[], qty: number) {
-    this.log(' RESET STOP LOSS ')
+
+  async resetStopLoss(currentPrice: number, qty: number) {
+    this.log(' RESET STOP LOSS ');
+    if (!this.order) {
+      this.log('ERROR SET ORDER to reset it');
+      return;
+    }
     await this.cancelOrder(this.order);
     this.order = null;
-    this.setStopLoss(candles, qty);
+    setTimeout(() => {
+      this.apiPrivate.refreshAllOpenOrders().then(() => {
+        this.setStopLoss(currentPrice, qty);
+      });
+    }, 2000);
+
   }
 
+  prevValue: number;
 
-  prevValue: number
+  checkStopLoss(candles: VOCandle[], qty: number) {
+    const ma = _.mean(CandlesAnalys1.closes(_.takeRight(candles, 99)));
 
-  checkStopLossPrice(candles: VOCandle[], qty: number) {
+    if (!this.order) {
+        this.setStopLoss(ma, qty);
+        return;
+    }
 
-    const closes = CandlesAnalys1.oc(candles);
-    const price = _.mean(_.takeRight(closes, 7));
+    const diff = MATH.percent(this.order.stopPrice, ma);
 
-    const diff = MATH.percent(this.getSopLossRate(), price);
     const message = 'stop loss ' + this.percentStopLoss + ' diff ' + diff;
     if (diff !== this.prevValue) this.log(message);
     this.prevValue = diff;
 
-
     if (diff < (this.percentStopLoss - 1)) {
-      this.resetStopLoss(candles, qty);
+      this.resetStopLoss(ma, qty);
     }
   }
 
-  async setStopLoss(candles: VOCandle[], qty: number) {
-    this.log(' setStopLoss ');
+  async setStopLoss(currentPrice: number, qty: number) {
+    if(this.order) {
+      this.log('ERROR REMOVE ORDER FIRST '+ JSON.stringify(this.order));
+      return;
+    }
     const openOrders = this.apiPrivate.getAllOpenOrders();
-    const ar = this.market.split('_');
-
-    if (openOrders) {
-      const myOrder = _.find(openOrders, {coin: ar[1]});
-      if (myOrder) {
-        if (myOrder.action === 'BUY') {
-
-        } else if (myOrder.action === 'SELL') {
-
-
-          if (myOrder.stopPrice) this.order = myOrder;
-          else {
-            const last = _.last(candles).close;
-            console.log(last, myOrder);
-            if(myOrder.rate > last){
-              this.cancelOrder(myOrder);;
-            }
-          }
-        }
-
-        this.log(' ORDER IN PROGRESS ' + myOrder.action + JSON.stringify(myOrder));
-        return;
-      }
+    if(!Array.isArray(openOrders)) {
+      this.log('ERROR open orders is null' );
+      return;
     }
 
-    const last = _.last(candles);
-    const currentPrice = last.close;
+    const coin: string = this.market.split('_')[1];
+    const myOrder: VOOrder = _.find(openOrders, {coin: coin});
+    if (myOrder) {
+      if (myOrder.stopPrice) {
+        this.order = myOrder;
+        console.log(this.market, this.order);
+        return;
+      } else {
+        this.log('ANOTHER ORDER IN PROGRESS ' + JSON.stringify(myOrder));
+      }
+      return;
+    }
 
-    const market = this.market;
-
-    const stopPrice = currentPrice + (currentPrice * this.percentStopLoss / 100);
-    const sellPrice = stopPrice + (stopPrice * -0.001);
-
-    this.log('NEW STOP_LOSS stopPrice: ' + stopPrice + ' sellPrice: ' + sellPrice + ' qty: ' + qty);
-
-
+    const newStopLoss: number = currentPrice + (currentPrice * this.percentStopLoss/ 100);
+    this.log(' setStopLoss ' + newStopLoss + ' qty: ' + qty);
+    const ar = this.market.split('_');
+    const sellPrice = newStopLoss + (newStopLoss * -0.01);
     const api = this.apiPrivate;
     // console.log(' SET STOP LOSS ' + market, currentPrice,  stopPrice, sellPrice);
 
     try {
-      const order = await api.stopLoss(market, qty, stopPrice, sellPrice);
-      this.order = null;
+      const order =  await api.stopLoss(this.market, qty, newStopLoss, sellPrice);
       this.log('STOP LOSS result: ' + JSON.stringify(order));
       if (order && order.uuid) setTimeout(() => {
         api.refreshBalances();

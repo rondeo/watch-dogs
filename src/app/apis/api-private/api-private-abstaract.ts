@@ -159,32 +159,47 @@ export abstract class ApiPrivateAbstaract {
   refreshOrdersTimeout;
   isRefershOpenOrders;
 
-  refreshAllOpenOrders() {
-   //  console.log(' refreshAllOpenOrders  ' + this.isRefershOpenOrders);
-    if (this.isRefershOpenOrders) {
-      console.warn(' refreshing ')
-      return;
-    }
+  lastOpenOrdersRefresh = 0;
+  async refreshAllOpenOrders() {
 
-    this.isRefershOpenOrders = true;
-    this.downloadAllOpenOrders().subscribe(res => {
-      this.isRefershOpenOrders = false;
-      if (res.length) {
+    return new Promise((resolve, reject) =>{
+      if (this.isRefershOpenOrders) {
+        return;
+      }
+      this.isRefershOpenOrders = true;
+      const now = Date.now();
+      if((now - this.lastOpenOrdersRefresh) < 10000){
         clearTimeout(this.refreshOrdersTimeout);
         this.refreshOrdersTimeout = setTimeout(() => {
-         //  console.log(' refreshAllOpenOrders by timeout  ');
+          //  console.log(' refreshAllOpenOrders by timeout  ');
           this.refreshAllOpenOrders();
-        }, 60000);
+        }, 5000);
       }
-      else console.log(' stop refreshing open orders ');
-      // const old: VOOrder[] = this.openOrdersSub.getValue();
-      //if(!old  || old.length !== res.length) this.ref
-      const old: VOOrder[] = this.openOrdersSub.getValue();
-      if(old && old.length !== res.length) this.refreshBalances();
-      this.openOrdersSub.next(res);
-    }, err => {
-      this.isRefershOpenOrders = false;
-    });
+
+      this.lastOpenOrdersRefresh = now;
+      this.downloadAllOpenOrders().subscribe(res => {
+        this.isRefershOpenOrders = false;
+        resolve(res);
+        if (res.length) {
+          clearTimeout(this.refreshOrdersTimeout);
+          this.refreshOrdersTimeout = setTimeout(() => {
+            //  console.log(' refreshAllOpenOrders by timeout  ');
+            this.refreshAllOpenOrders();
+          }, 60000);
+        }
+        else console.log(' stop refreshing open orders ');
+        // const old: VOOrder[] = this.openOrdersSub.getValue();
+        //if(!old  || old.length !== res.length) this.ref
+        const old: VOOrder[] = this.openOrdersSub.getValue();
+        if(old && old.length !== res.length) this.refreshBalances();
+        this.openOrdersSub.next(res);
+      }, err => {
+        reject(err);
+        this.isRefershOpenOrders = false;
+      });
+    })
+   //  console.log(' refreshAllOpenOrders  ' + this.isRefershOpenOrders);
+
   }
 
   allOrdersSub = new BehaviorSubject(null);
