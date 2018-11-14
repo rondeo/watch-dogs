@@ -8,10 +8,18 @@
         <mat-checkbox #trendUPCheck >Trend UP</mat-checkbox>
         <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
         <mat-checkbox #followingCheck (change)="onFollowingChange($event)">Following</mat-checkbox>
+        <mat-checkbox #botsCheck (change)="onBotsChange($event)">Bots</mat-checkbox>
         <!--<button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>-->
     </div>
 
     <small (click)="onProgressClick()">{{scanner.currentMarket}} {{scanner.progressSub | async}}</small>
+
+    <div *ngIf="botsCheck.checked">
+        <h3>Bots</h3>
+        <div class="scrollY300">
+            <app-table-props [dataset]="bots" (selected)="onBotsClick($event)"></app-table-props>
+        </div>
+    </div>
 
     <div *ngIf="selectedCheck.checked">
         <h3>Selected</h3>
@@ -72,10 +80,21 @@
 
     </div>
 
+    <small>
+        Media {{mediaFrom}} to {{mediaTo}}  %:
+
+           Tw {{twitterPoints}} Rd {{redditPoints}} Fb {{facebookPoints}}
+    </small>
+
+    <br/>
 
     <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">{{exchange}}
         {{selectedMarket}}</a>
+    &nbsp;&nbsp;
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
+    &nbsp;&nbsp;
+    <a class="fa fa-anchor fa-2x dgreen"  routerLink="/trader/follow-market/{{userMarket}}"></a>
+    &nbsp;&nbsp;
     <!-- <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>-->
 
     <mat-form-field class="w6">

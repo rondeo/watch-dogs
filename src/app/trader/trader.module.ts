@@ -35,7 +35,8 @@ const routes: Routes = [
       {path: 'common-markets', component: CommonMarketsComponent},
       {path: 'scan-markets', component: ScanMarketsComponent},
       {path: 'order-reports', component: OrderReportsComponent},
-      {path: 'follow-market', component: FollowMarketComponent}
+      {path: 'follow-market', component: FollowMarketComponent},
+      {path: 'follow-market/:market', component: FollowMarketComponent}
     ]
   }
 ];

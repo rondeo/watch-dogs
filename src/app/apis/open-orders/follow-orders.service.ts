@@ -45,10 +45,16 @@ export class FollowOrdersService {
     this.excludes.push(market.split('_')[1]);
   }
 
-  deleteBot(market: string){
+  async getBots(){
+    return Promise.resolve(this.botsSub.getValue());
+  }
+  async deleteBot(market: string){
     let bots = this.botsSub.getValue();
+    const exist = _.find(bots, {market:market});
+    if(!exist)  return;
+      exist.destroy();
     bots = _.reject(bots, {market:market});
-    this.saveBots(bots);
+    return this.saveBots(bots);
   }
  async saveBots(bots){
     this.botsSub.next(bots);

@@ -57,7 +57,7 @@ export class FollowOpenOrder {
   }
 
   getCandles() {
-    return this.candlesService.getCandles(this.exchange, this.market, '5m')
+    return this.candlesService.getCandles(this.market)
   }
 
   isTooFast() {
@@ -124,7 +124,6 @@ export class FollowOpenOrder {
 
   }
 
-
   async sellCoinInstant() {
     this.log(' SELL INSTANT ');
     const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
@@ -190,8 +189,8 @@ export class FollowOpenOrder {
       this.log(msg, true);
     };
 
-    this.sellOnJump.sellCoin = (rate) => {
-      this.log(' SELL COIN by sellOnJump ' + rate, true);
+    this.sellOnJump.sellCoin = () => {
+      this.log(' SELL COIN by sellOnJump ', true);
       setTimeout(()=>{
         this.sellCoinInstant();
       }, 2000);

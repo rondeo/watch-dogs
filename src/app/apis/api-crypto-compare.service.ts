@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
+import {MATH} from '../com/math';
 
 
 export interface VOTweeterAccount{
@@ -63,15 +64,33 @@ export class ApiCryptoCompareService {
     const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
     // console.warn(url);
     return this.http.get(url, {params}).map((res: any)=>{
-      console.log(res);
-      if(!res.from) return null;
-      const fr = res.from.data?res.from.data:res.from;
+       console.log(res);
+      if(!res.from || !res.from.Twitter) return null;
+      const from = res.from;
       const to = res.to;
+      const timeFrom = moment(from.time).format('MM-DD HH');
+      const timeTo = moment(to.time).format('MM-DD HH');
+      let TwPoints = '';
+      let RdPoints = '';
+      let FbPoints = '';
+      if (to.Twitter.Points) {
+        TwPoints = '' + MATH.percent(to.Twitter.Points, from.Twitter.Points);
+      }
+      if (to.Reddit.Points) {
+        RdPoints = '' + MATH.percent(to.Reddit.Points, from.Reddit.Points);
+      }
+      if (to.Facebook.Points) {
+        FbPoints = '' + MATH.percent(to.Facebook.Points, from.Facebook.Points);
+      }
 
-      const fromPoints = fr.CodeRepository.Points + fr.CryptoCompare.Points + fr.Facebook.Points + fr.Twitter.Points + fr.Reddit.Points;
-      const toPoints = to.CodeRepository.Points + to.CryptoCompare.Points + to.Facebook.Points + to.Twitter.Points + to.Reddit.Points;
-
-      return {coin, fromPoints, toPoints};
+      return {
+        coin,
+        timeFrom,
+        timeTo,
+        TwPoints,
+        RdPoints,
+        FbPoints
+      };
     }).toPromise()
   }
 

@@ -19,6 +19,7 @@ import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
 import {CandlesService} from '../../app-services/candles/candles.service';
+import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 
 @Component({
   selector: 'app-scan-markets',
@@ -50,8 +51,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private router: Router,
     public scanner: ScanMarketsService,
-    private candlesService: CandlesService
-    //  private botsService: AppBotsService
+    private candlesService: CandlesService,
+    private cryptoCompare: ApiCryptoCompareService,
+    private followOrder: FollowOrdersService
   ) {
 
   }
@@ -63,21 +65,63 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
+  //////////////////////////BOTS ///////////////////////
+
+  bots: any[];
+  onBotsChange(evt) {
+    if(evt.checked) this.populateBots();
+    else this.bots = null
+  }
+
+  populateBots() {
+    this.followOrder.getBots().then(res=>{
+      if(!res) return;
+      this.bots = res.map(function (item) {
+        return{
+          market: item.market,
+          x:'X'
+        }
+      })
+    })
+
+  }
+
+  onBotsClick(evt) {
+    const market = evt.item.market;
+    switch (evt.prop) {
+      case 'market':
+        this.showMarket(market);
+        return;
+      case 'x':
+        if (confirm(' DELETE ' + market)) {
+          this.followOrder.deleteBot(market)
+            .then(this.populateBots.bind(this))
+        }
+        return;
+      case 'message':
+        this.dialog.open(NotesHistoryComponent, {data: evt.item});
+        return
+
+    }
+  }
+
   ///////////////////////////////SELECTED////////////////////////////
 
-  onDeleteSelectedClick(){
-    if(confirm('Delete all Selected? ')){
+  onDeleteSelectedClick() {
+    if (confirm('Delete all Selected? ')) {
       this.scanner.saveSelected([]).then(this.populateSelected.bind(this));
     }
   }
 
-  addToSeleted(ar: {time: string, message: string, market: string}[], criteria: string) {
+  addToSeleted(ar: { time: string, message: string, market: string }[], criteria: string) {
     return this.scanner.addToSelected(ar, criteria);
   }
 
   selectedMarkets: any[];
+
   populateSelected() {
     this.scanner.getSelected().then(res => {
+      res = _.orderBy(res, 'market');
       this.selectedMarkets = res.map(function (item) {
         return Object.assign(item, {x: 'X'});
       })
@@ -111,19 +155,20 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   ////////////////////////////////////////////////// TREND UP ///////////////////////////////////////////////////////
 
-  onTrendsAddToSelected(){
+  onTrendsAddToSelected() {
     const ar = this.trendUps.map(function (item) {
       return {
-        market:item.market,
+        market: item.market,
         message: item.message,
-        time:item.time
+        time: item.time
 
       }
     })
-    if(confirm(' ADD all ' + ar.length)){
-      this.addToSeleted(ar, this.candlesInterval);
+    if (confirm(' ADD all ' + ar.length)) {
+      this.addToSeleted(ar, this.trendUpCandlesInterval);
     }
   }
+
   trendUps: any[] = [];
   sub5;
   trendUpCandlesInterval = '15m';
@@ -147,7 +192,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if (evt.prop === 'market') this.showMarket(market);
     else if (evt.prop === 'x') {
       if (confirm(' DELETE ' + market)) {
-        this.trendUps = _.reject(this.trendUps, {market:market});
+        this.trendUps = _.reject(this.trendUps, {market: market});
       }
     }
   }
@@ -572,17 +617,42 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }*/
 
-  mediaPointsFrom: number;
-  mediaPointsTo: number;
-  mediaPercent: number;
+  mediaFrom: string;
+  mediaTo: string;
+
+  twitterPoints: string;
+  redditPoints: string;
+  facebookPoints: string;
 
   inBrowser: boolean;
+
+  showMedia(market: string) {
+    this.cryptoCompare.getSocialStats(market.split('_')[1]).then(res => {
+      if(!res){
+        this.mediaFrom = '';
+        this.mediaTo = '';
+        this.twitterPoints = '';
+        this.redditPoints = '';
+        this.facebookPoints = '';
+        return;
+      }
+      this.mediaFrom = res.timeFrom;
+      this.mediaTo = res.timeTo;
+      this.twitterPoints = res.TwPoints;
+      this.redditPoints = res.RdPoints;
+      this.facebookPoints = res.FbPoints;
+
+    })
+  }
 
   showMarket(market: string) {
     this.userMarket = market;
     this.selectedMarket = market;
     this.showCandles(market);
     if (this.inBrowser) this.openMarket(this.exchange, market);
+    this.showMedia(market);
+
+
   }
 
   async showCandles(market: string) {

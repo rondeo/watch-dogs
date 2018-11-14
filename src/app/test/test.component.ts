@@ -12,6 +12,7 @@ import {ApisPrivateService} from '../apis/api-private/apis-private.service';
 import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {CandlesService} from '../app-services/candles/candles.service';
 import {VOBalance} from '../models/app-models';
+import {SellOnJump} from '../app-services/app-bots-services/sell-on-jump';
 
 @Component({
   selector: 'app-test',
@@ -37,8 +38,8 @@ export class TestComponent implements OnInit {
 
   followOrder:FollowOpenOrder;
   ngOnInit() {
-    this.followOrder = new FollowOpenOrder(
-      'binance',
+   // this.followOrder = new FollowOpenOrder(
+   /*   'binance',
       'BTC_ARDR',
       -4,
       this.apisPrivate,
@@ -52,9 +53,9 @@ export class TestComponent implements OnInit {
 
     this.followOrder.getCandles = this.getCandles.bind(this);
     this.followOrder.isTooFast = ()=>{ return false};
-   /* this.followOrder.start = ()=>{
+   /!* this.followOrder.start = ()=>{
       console.log('SATRT called')
-    }*/
+    }*!/
 
    // this.followOrder.balanceCoin = new VOBalance()
     //this.followOrder.balanceCoin.available = 0;
@@ -62,18 +63,18 @@ export class TestComponent implements OnInit {
     this.apisPrivate.getExchangeApi('binance').refreshBalances();
 
     setTimeout(()=>{
-     /* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
+     /!* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
 
         console.log('check');
       }
-      */
-    }, 1000)
+      *!/
+    }, 1000)*/
 
 
   }
 
 
-  currentTime = moment('2018-11-05T12:30');
+
  async getCandles(){
    this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
@@ -81,15 +82,7 @@ export class TestComponent implements OnInit {
    return candles;
   }
 
-  start(){
-    this.interval = setInterval(()=>this.tick(), 2000);
-  }
-  stop(){
-    clearInterval(this.interval);
-    this.interval = 0;
-  }
 
-  interval;
   async initAsync() {
   /*
     (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
@@ -110,7 +103,7 @@ export class TestComponent implements OnInit {
   *
   * '2018-11-02T04:40'
   *
-  * FUEL_BTC
+  * BTC_FUEL
   *
   * 2 jumps
   *
@@ -122,25 +115,36 @@ export class TestComponent implements OnInit {
   *
   *
   * '2018-11-02T20:45'
+  *going down
   *
-  * BTC_FUEL
   *
+  *
+  *
+  * BTC_VIB
+  * dont sell
+  *
+  * 2018-11-11T11:15'
   *
   * */
 
 
 
+  currentTime = moment('2018-11-11T11:15');
+  currentMarket = 'BTC_VIB';
+  lastStamp:number;
  async  tick(){
-
-   await this.followOrder.tick();
-   this.candles = this.followOrder.candles;
-  /*  this.currentTime.add(5, 'minutes')
+   this.currentTime.add(3, 'minutes');
+  //  await this.followOrder.tick();
+    this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles('BTC_CDT','5m', 120, this.currentTime.valueOf());
-*/
+      .downloadCandles(this.currentMarket,'5m', 100, this.currentTime.valueOf());
 
+    const last = _.last(candles);
+    if(this.lastStamp === last.to) return;
+    this.lastStamp = last.to;
 
-
+   this.candles = candles;
+    SellOnJump.isJumpEnd(candles);
   }
   onStartClick() {
    if(!this.interval) this.start();
@@ -148,4 +152,14 @@ export class TestComponent implements OnInit {
 
     // this.alerts.stop();
   }
+
+  start(){
+    this.interval = setInterval(()=>this.tick(), 2000);
+  }
+  stop(){
+    clearInterval(this.interval);
+    this.interval = 0;
+  }
+
+  interval;
 }

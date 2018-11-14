@@ -40,7 +40,6 @@ export class ScanMarketsService {
     private candlesService: CandlesService
   ) {
 
-
     /*this.storage.select('markets-trend-down').then(data => {
       if (data) data = data.map(function (item) {
         return Object.assign(item, {x: 'X'});
@@ -53,6 +52,7 @@ export class ScanMarketsService {
   //////////////////////FAVORITES////////////////////////////////
 
   private favoriteSub$: BehaviorSubject<any[]>;
+
   async favorites$() {
     if (this.favoriteSub$) return Promise.resolve(this.favoriteSub$);
     this.favoriteSub$ = new BehaviorSubject((await this.storage.select('favorite-markets')) || []);
@@ -61,7 +61,8 @@ export class ScanMarketsService {
 
 
   async addFavorite(market: string, message: string) {
-    this.favorites$().then(sub =>{
+    if(!market) return;
+    this.favorites$().then(sub => {
       let favour = sub.getValue();
       // @ts-ignore
       favour = _.reject(favour, {market: market});
@@ -75,16 +76,18 @@ export class ScanMarketsService {
     // @ts-ignore
 
 
-
   }
 
   async saveFavorites(ar: any[]) {
+    ar = ar.filter(function (item) {
+      return !!item.market;
+    });
     this.favoriteSub$.next(ar);
     return this.storage.upsert('favorite-markets', ar);
   }
 
   async removeFavorite(market: string) {
-    this.favorites$().then(sub =>{
+    this.favorites$().then(sub => {
       let favour = sub.getValue();
       // @ts-ignore
       favour = _.reject(favour, {market: market});
@@ -95,17 +98,17 @@ export class ScanMarketsService {
 
   /////////////////////////selected ////////////////////////////////
 
-  async addToSelected(ar:{market:string, message: string, time:string}[], creteria: string){
-    const selected:any[] = await this.getSelected();
+  async addToSelected(ar: { market: string, message: string, time: string }[], creteria: string) {
+    const selected: any[] = await this.getSelected();
 
     ar.forEach(function (item) {
       const exist = selected.find(function (item2) {
         return item2.market === item.market;
       });
-      if(exist) {
-        if(!exist.history) exist.history = {};
-        exist.history[creteria] = item.time + '  ' +item.message;
-      }else {
+      if (exist) {
+        if (!exist.history) exist.history = {};
+        exist.history[creteria] = item.time + '  ' + item.message;
+      } else {
         item.message = creteria + item.message;
         selected.push(item)
       }
@@ -114,20 +117,21 @@ export class ScanMarketsService {
     return this.saveSelected(selected);
   }
 
-  async removeSelected(market: string){
-    let selected:any[] = await this.getSelected();
+  async removeSelected(market: string) {
+    let selected: any[] = await this.getSelected();
     // @ts-ignore
-    selected = _.reject(selected, {market:market});
+    selected = _.reject(selected, {market: market});
     this.saveSelected(selected);
   }
 
-  saveSelected(ar:any[]){
+  saveSelected(ar: any[]) {
     return this.storage.upsert('selected-markets', ar);
   }
 
- async getSelected(){
-   return (await this.storage.select('selected-markets')) || [];
+  async getSelected() {
+    return (await this.storage.select('selected-markets')) || [];
   }
+
   /* isFall(numbers: number[]): string {
      numbers = _.takeRight(numbers, 4);
      const speeds = MATH.speeds(numbers);
@@ -161,17 +165,18 @@ export class ScanMarketsService {
 
 
     let onesec = new Promise((resolve, reject) => {
-      setTimeout(() => resolve('1 sec'), 2000)
+      setTimeout(() => resolve('1 sec'), 1000);
     });
 
     let ma25_99 = MATH.percent(result1.ma25, result1.ma99);
     const ma7_25 = MATH.percent(result1.ma7, result1.ma25);
+    const ma7_99 = MATH.percent(result1.ma7, result1.ma99);
     let message = ' ma25-99 ' + ma25_99 + ' ma7-25 ' + ma7_25;
 
 
     this.progressSub.next(message);
     this.currentMarket = market;
-    if (result1.ma25 > result1.ma99 && result1.ma7 > result1.ma25)
+    if (ma25_99 > 1 && ma7_99 > 0)
       sub.next({
         time,
         market,
@@ -179,13 +184,13 @@ export class ScanMarketsService {
       });
     this.trendUPTimer = setTimeout(() => {
       this._scanGoingUP(markets, i, api, sub, candlesInterval);
-    }, 2000)
+    }, 1000)
 
   }
 
   async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, message: string }>> {
     this.isScanning = true;
-    this.progressSub.next('SCAN UP STARED');
+    this.progressSub.next('SCAN UP STARED '+  candlesInterval);
     const api = this.apisPublic.getExchangeApi('binance');
 
     let results: VOMessage[] = [];
@@ -194,11 +199,14 @@ export class ScanMarketsService {
       results.push(market);
     }, console.error, () => {
       results = _.orderBy(results, 'market');
-      this.progressSub.next('SCAN UP DONE');
+      this.progressSub.next('SCAN UP DONE ' + candlesInterval);
       this.isScanning = false;
     });
 
-    this._scanGoingUP(markets, -1, api, sub, candlesInterval);
+    this.trendUPTimer = setTimeout(()=>{
+      this._scanGoingUP(markets, -1, api, sub, candlesInterval);
+    }, 5000)
+
     return sub;
   }
 
@@ -212,8 +220,6 @@ export class ScanMarketsService {
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
   }
-
-
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////

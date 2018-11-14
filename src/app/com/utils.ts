@@ -4,6 +4,11 @@ import {ApiPublicBinance} from '../apis/api-public/api-public-binance';
 export class UTILS {
 
 
+ static  async  wait(seconds: number){
+    return new Promise(function (resolve, reject) {
+      setTimeout(resolve,seconds * 1000 );
+    });
+  }
 
   static floorTo = function (number, n) {
     var k = Math.pow(10, n);

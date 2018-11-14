@@ -7,6 +7,7 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {VOCandle} from '../../models/api-models';
 import * as _ from 'lodash';
 import {TestCandlesService} from '../../test/test-candles.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-follow-market',
@@ -18,9 +19,12 @@ export class FollowMarketComponent implements OnInit {
   candles: VOCandle[];
   volumes: number[];
 
+  market:string;
+
   testbot: MarketBot;
   constructor(
 
+    private rote:ActivatedRoute,
     private apisPublic: ApisPublicService,
     private followOrder: FollowOrdersService,
     private marketCap: ApiMarketCapService,
@@ -30,38 +34,29 @@ export class FollowMarketComponent implements OnInit {
 
 
 
-  onStartClick(){
+ async onCreateClick(){
+    const MC = await this.marketCap.getTicker();
+    const coniMC= MC[this.market.split('_')[1]];
+    if(!coniMC) return;
+    this.followOrder.createBot(this.market, Math.round(100/ coniMC.price_usd));
 
-    if(this.testCandles.interval)this.testCandles.stop();
-    else this.testCandles.start();
   }
 
-
-
   ngOnInit() {
-
-    this.testCandles.candlesSub.subscribe(candles=>{
-      this.candles = candles;
-      this.volumes = _.map(candles,'Volume');
-      this.testbot.tick(candles);
-
+    this.rote.params.subscribe(params=>{
+      if(params.market) this.market = params.market;
     })
     this.followOrder.botsSub.subscribe(bots =>{
       if(!bots) return;
-      this.testbot = _.find(bots, {market:'BTC_BLZ'});
-      setTimeout(()=>this.testbot.stop(), 1000);
 
       this.bots = bots.map(function (item) {
         return {
           market: item.market,
-          amountCoin: item.amountCoin
+          amountCoin: item.amountCoin,
+          x:'X'
         }
       });
     });
-
-    setTimeout(()=>{
-     //  this.createBot('BTC_BLZ', 100);
-    }, 2000)
 
   }
 
@@ -78,12 +73,17 @@ export class FollowMarketComponent implements OnInit {
     switch (evt.prop) {
       case 'market':
         this.showMarket(market);
+        break;
+      case 'x':
+        if(confirm('DELETE ' + market)){
+          this.followOrder.deleteBot(market);
+        }
         break
     }
   }
 
   async  showMarket(market: string) {
-   const candles =  await this.candelsService.getCandles('binance', market, '5m');
+   const candles =  await this.candelsService.getCandles( market);
    this.volumes = _.map(candles,'Volume');
     this.candles = candles;
   }

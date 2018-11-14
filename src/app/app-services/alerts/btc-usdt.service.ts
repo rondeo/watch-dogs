@@ -159,7 +159,7 @@ export class BtcUsdtService {
   }
 
   async getCandles() {
-    return this.candlesService.getCandles(this.exchange, this.market, '5m');
+    return this.candlesService.getCandles(this.market);
   }
 
   lastQuery;

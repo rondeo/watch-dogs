@@ -13,9 +13,10 @@ import * as moment from 'moment';
 @Injectable()
 export class CandlesService {
   collection: { [id: string]: CandlesData } = {};
-  //candlesInterval = '1m';
+  candlesInterval = '5m';
   //canlesLength = 240;
   //overlap = 20;
+  exchange= 'binance';
 
   candlesDatas: CandlesData[];
 
@@ -76,32 +77,32 @@ export class CandlesService {
         return null;
       }
     }
-    return this.getCandles(exchange, market, candlesInterval);
+    return this.getCandles( market);
   }
 
-  async getCandles(exchange: string, market: string, candlesInterval: string){
-    const api = this.apisPublic.getExchangeApi(exchange);
-    const id = 'candles-'+exchange + market + candlesInterval;
+  async getCandles(market: string){
+    const api = this.apisPublic.getExchangeApi(this.exchange);
+    const id = 'candles-' + market;
     let oldCandels: VOCandle[] =  (await this.storage.select(id))
     let limit = 120;
 
     if (oldCandels && oldCandels.length > 100) {
       const lastOld = _.last(oldCandels);
       const diff = moment().diff(lastOld.to,'minutes');
-
-      if(diff < 3) {
+      if(diff < 2) {
        // console.log(oldCandels.length);
         return oldCandels;
       }
 
-      console.log('download new candles ' +  diff);
-      if(diff < 20) limit = 5;
+      if(diff < 5) limit = 2;
+      else if(diff < 10) limit = 5;
       else if(diff < 60) limit = 12;
       else if( diff < 120) limit = 24;
     }
 
+    // console.log(market + ' download new candles ' + limit);
      // console.log(' updating candles ' + market + limit);
-    let candles = await api.downloadCandles(market, candlesInterval, limit);
+    let candles = await api.downloadCandles(market, this.candlesInterval, limit);
 
     candles.forEach(function (item) {
       item.time = moment(item.to).format('HH:mm');
