@@ -204,7 +204,7 @@ export class MarketBot {
     this.log(' ' + minRange + 'min   move ' + move + ' PD ' +  priceChange + ' ma3_7 ' + ma3_7 +  ' VD ' + speedD + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
 
     if(this.prevMove + move > 60){
-      console.log('%c !!! ATTENTION ' + this.market)
+      console.log('%c !!! ATTENTION ' + this.market, 'color:red');
     }
     this.prevMove = move;
     if (move > 60) {

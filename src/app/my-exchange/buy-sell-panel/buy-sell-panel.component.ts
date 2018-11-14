@@ -78,13 +78,18 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   }
 
 
-  onSladerSellChange(evt){
+  onMarketChange(evt) {
+    console.log(evt);
+
+  }
+
+  onSladerSellChange(evt) {
     const val = evt.value / 100;
     this.focusSell = null;
     this.rateSell = +(this.bookSell + (this.bookSell * val)).toPrecision(5);
   }
 
-  onSladerBuyChange(evt){
+  onSladerBuyChange(evt) {
     const val = evt.value / 100;
     this.focusBuy = null;
     this.rateBuy = +(this.bookBuy + (this.bookBuy * val)).toPrecision(5);
@@ -144,7 +149,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     this.buyCoin(amountCoin);
   }
 
-  async setStopLoss(){
+  async setStopLoss() {
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     const openOrders: VOOrder[] = api.openOrdersSub.getValue();
     console.log(openOrders);
@@ -152,7 +157,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const rate = this.rateBuy;
     if (isNaN(rate)) return;
     //if(!openOrders.length) {
-    try{
+    try {
       const MC = await this.marketCap.getTicker();
       const priceCoin = MC[this.coin].price_usd;
       const coinAmount = (this.balanceCoinAvailable - (this.balanceCoinAvailable * 0.002));
@@ -161,24 +166,24 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
       let msg;
 
-      if(coinAmount * priceCoin < 10)msg =  'Not enough amount';
+      if (coinAmount * priceCoin < 10) msg = 'Not enough amount';
 
-      const ref = this.dialog.open(ConfirmStopLossComponent, {data:{rate, msg}});
-      if(coinAmount * priceCoin < 10) return;
-      const data: {stopPrice:number, sellPrice: number} = await ref.afterClosed().toPromise();
-      if(!data) return;
-      const res = await api.stopLoss(this.market, coinAmount , data.stopPrice, data.sellPrice);
+      const ref = this.dialog.open(ConfirmStopLossComponent, {data: {rate, msg}});
+      if (coinAmount * priceCoin < 10) return;
+      const data: { stopPrice: number, sellPrice: number } = await ref.afterClosed().toPromise();
+      if (!data) return;
+      const res = await api.stopLoss(this.market, coinAmount, data.stopPrice, data.sellPrice);
 
     } catch (e) {
       console.warn(e);
-      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses:'error'});
+      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
     }
 
-   // }
+    // }
   }
 
 
-  stopLossClick(){
+  stopLossClick() {
     this.setStopLoss();
   }
 
@@ -277,6 +282,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       }, 100);
     })
   }
+
   private sub1: Subscription;
   private sub2: Subscription;
   private sub3: Subscription;
@@ -286,16 +292,16 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     if (!this.exchange || !this.market) return;
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
-    if(this.sub4) this.sub4.unsubscribe();
+    if (this.sub4) this.sub4.unsubscribe();
     const base = this.base;
     const coin = this.coin;
 
- /*   const history = this.marketsHistory.getOrdersHistory('bitfinex', 'USDT_BTC');
-    history.signalBuySell$().subscribe(signal =>{
-      console.warn(moment().format('HH:mm'), signal);
-      this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
-    });
-*/
+    /*   const history = this.marketsHistory.getOrdersHistory('bitfinex', 'USDT_BTC');
+       history.signalBuySell$().subscribe(signal =>{
+         console.warn(moment().format('HH:mm'), signal);
+         this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
+       });
+   */
     this.marketCap.getTicker().then(MC => {
 
       const priceBase = base === 'USDT' ? 1 : MC[base].price_usd;
@@ -448,8 +454,9 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   }
 
   onSignal(signal) {
-    this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
+    this.snackBar.open(moment().format('HH:mm') + ' ' + signal.type + ' ' + signal.rate);
   }
+
   ordersHistoryAfter: number;
   /*
 

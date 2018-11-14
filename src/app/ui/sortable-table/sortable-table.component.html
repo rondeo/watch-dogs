@@ -11,7 +11,7 @@
                 <th  class="btn" (click)="onClickHeader('rank')"><small>Rank</small></th>
             </tr>
             <tr *ngFor="let item of consAvailable">
-                <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn fa fa-line-chart yellow"></a></td>
+                <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn"> <img class="w1 icon" src="assets/icons/{{item.id}}.png"/> </a></td>
                 <td><a  title="{{item.name}}" class="btn" (click)="onSymbolClick(item)">{{item.symbol}}</a></td>
                 <td>
                     <span

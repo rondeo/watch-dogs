@@ -40,7 +40,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   candlesInterval = '15m';
   scannerSatatsSub: Subject<string> = new Subject();
   // private selectedCoin: string;
-  private selectedMarket: string;
+  selectedMarket: string;
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -63,7 +63,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.showMarket(this.scanner.currentMarket);
 
   }
-
 
   //////////////////////////BOTS ///////////////////////
 

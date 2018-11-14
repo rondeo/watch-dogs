@@ -22,8 +22,7 @@
 
             <span class="fa fa-ship"></span> &nbsp;&nbsp;
             <mat-form-field class="w4">
-                <input matInput placeholder="Results" [(ngModel)]="resultsLength"
-                       (ngModelChange)="onResultsLengthChanged($event)">
+                <input matInput placeholder="Results" [(ngModel)]="resultsLength">
             </mat-form-field>
             &nbsp;&nbsp;
             <span class="fa fa-refresh fa-2x btn dgreen" [ngClass]="isProgress?'scale05':''"

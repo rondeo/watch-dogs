@@ -41,9 +41,36 @@
         <app-sortable-table [consAvailable]="coinsAvailable"
                             (selectedSymbol)="onItemClick($event)"></app-sortable-table>
     </div>
+    <br/>
 
     <div>
+        <small>
+            Media {{mediaFrom}} to {{mediaTo}}  %:
 
+            Tw {{twitterPoints}} Rd {{redditPoints}} Fb {{facebookPoints}}
+        </small>
+    </div>
+<br/>
+    <div>
+        <mat-checkbox [(ngModel)]="inBrowser">Browser</mat-checkbox>
+        <mat-form-field class="w6">
+            <input matInput placeholder="Market"
+                   [(ngModel)]="market"
+                   (keyup)="onMarketInput($event)"
+            >
+        </mat-form-field>
+        <mat-form-field class="w3">
+            <mat-select [(ngModel)]="candlesInterval" (change)="onCandlesIntrvalChange()">
+                <mat-option value="5m">5m</mat-option>
+                <mat-option value="1h">1h</mat-option>
+                <mat-option value="6h">6h</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <app-mc-data [coin]="coin"></app-mc-data>
+        <app-candlesticks [candles]="candles"></app-candlesticks>
+        <app-volume-hist [values]="volumes"></app-volume-hist>
     </div>
 
 </div>
