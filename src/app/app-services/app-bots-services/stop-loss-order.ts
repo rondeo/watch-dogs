@@ -70,7 +70,7 @@ export class StopLossOrder {
 
 
 
-  async resetStopLoss(currentPrice: number, qty: number) {
+  async resetStopLoss(closes:number[], qty: number) {
     this.log(' RESET STOP LOSS ');
     if (!this.order) {
       this.log('ERROR SET ORDER to reset it');
@@ -80,7 +80,7 @@ export class StopLossOrder {
     this.order = null;
     setTimeout(() => {
       this.apiPrivate.refreshAllOpenOrders().then(() => {
-        this.setStopLoss(currentPrice, qty);
+        this.setStopLoss(closes, qty);
       });
     }, 2000);
 
@@ -89,25 +89,39 @@ export class StopLossOrder {
   prevValue: number;
 
   checkStopLoss(candles: VOCandle[], qty: number) {
-    const ma = _.mean(CandlesAnalys1.closes(_.takeRight(candles, 99)));
+    const closes = CandlesAnalys1.closes(_.takeRight(candles, 99));
+    let ma99 = _.mean(closes);
+
+    const lastPrice = _.last(closes);
+
 
     if (!this.order) {
-        this.setStopLoss(ma, qty);
+        this.setStopLoss(closes, qty);
         return;
     }
 
-    const diff = MATH.percent(this.order.stopPrice, ma);
+    const last_ma99 =  MATH.percent(lastPrice, ma99);
+    if(lastPrice < ma99) {
+      this.log(' LAST price LOW ' + last_ma99);
+      return;
+    }
+
+      const diff = MATH.percent(this.order.stopPrice, ma99);
+
 
     const message = 'stop loss ' + this.percentStopLoss + ' diff ' + diff;
     if (diff !== this.prevValue) this.log(message);
     this.prevValue = diff;
 
     if (diff < (this.percentStopLoss - 1)) {
-      this.resetStopLoss(ma, qty);
+
+      this.resetStopLoss(closes, qty);
     }
   }
 
-  async setStopLoss(currentPrice: number, qty: number) {
+  async setStopLoss(closes: number[], qty: number) {
+
+
     if(this.order) {
       this.log('ERROR REMOVE ORDER FIRST '+ JSON.stringify(this.order));
       return;
@@ -131,7 +145,11 @@ export class StopLossOrder {
       return;
     }
 
-    const newStopLoss: number = currentPrice + (currentPrice * this.percentStopLoss/ 100);
+    let price = _.mean(_.takeRight(closes, 99));
+    const lastPrice = _.last(closes);
+    if(lastPrice < price)  price = lastPrice;
+
+    const newStopLoss: number = price + (price * this.percentStopLoss/ 100);
     this.log(' setStopLoss ' + newStopLoss + ' qty: ' + qty);
     const ar = this.market.split('_');
     const sellPrice = newStopLoss + (newStopLoss * -0.01);

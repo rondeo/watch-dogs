@@ -58,8 +58,11 @@ export class SellOnJump {
     });
 
     sum = sum / fishes.length;
-    const boughtD = MATH.percent(bought, sum);
-    const soldD = MATH.percent(sold, sum);
+    bought = bought/fishes.length;
+    sold = sold/fishes.length;
+
+    const boughtD = +(100 * bought / sum).toFixed(2);
+    const soldD = +(100 * sold / sum).toFixed(2);
 
     let volD = -1;
     if (this.prevSum) {
@@ -84,9 +87,9 @@ export class SellOnJump {
   }
 
   start() {
-    if (this.interval) return;
-    this.log('starting tick')
-    this.interval = setInterval(() => this.tick(), 30 * 1000);
+  //  if (this.interval) return;
+  //  this.log('starting tick')
+  //  this.interval = setInterval(() => this.tick(), 30 * 1000);
   }
 
   analiseCandles(candles: VOCandle[]) {

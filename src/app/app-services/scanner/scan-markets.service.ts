@@ -14,6 +14,7 @@ import {CandlesAnalys2} from './candles-analys2';
 import {MATH} from '../../com/math';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MFI} from '../../trader/libs/techind';
+import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 
 export interface VOMessage {
   time: string;
@@ -37,7 +38,8 @@ export class ScanMarketsService {
     private apisPublic: ApisPublicService,
     private storage: StorageService,
     private marketCap: ApiMarketCapService,
-    private candlesService: CandlesService
+    private candlesService: CandlesService,
+    private apiCryptoCompare: ApiCryptoCompareService
   ) {
 
     /*this.storage.select('markets-trend-down').then(data => {
@@ -148,7 +150,7 @@ export class ScanMarketsService {
   private async _scanGoingUP(
     markets: string[],
     i,
-    api: ApiPublicAbstract,
+    api: ApiCryptoCompareService,
     sub: Subject<VOMessage>,
     candlesInterval: string
   ) {
@@ -159,6 +161,7 @@ export class ScanMarketsService {
       return;
     }
     const market = markets[i];
+
     const candles1 = await api.downloadCandles(market, candlesInterval, 100);
     const time = moment().format('HH:mm');
     const result1 = CandlesAnalys1.mas(candles1);
@@ -191,7 +194,7 @@ export class ScanMarketsService {
   async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, message: string }>> {
     this.isScanning = true;
     this.progressSub.next('SCAN UP STARED '+  candlesInterval);
-    const api = this.apisPublic.getExchangeApi('binance');
+   //  const api = this.apisPublic.getExchangeApi('binance');
 
     let results: VOMessage[] = [];
     const sub = new Subject<VOMessage>();
@@ -204,7 +207,7 @@ export class ScanMarketsService {
     });
 
     this.trendUPTimer = setTimeout(()=>{
-      this._scanGoingUP(markets, -1, api, sub, candlesInterval);
+      this._scanGoingUP(markets, -1, this.apiCryptoCompare, sub, candlesInterval);
     }, 5000)
 
     return sub;
@@ -475,7 +478,7 @@ export class ScanMarketsService {
     return _.difference(markets, exclude);
   }
 
-  first20coins = 'BTC,TUSD,PAX,HOT';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  first20coins = 'BTC,TUSD';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
 

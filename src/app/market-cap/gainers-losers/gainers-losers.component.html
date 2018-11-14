@@ -2,7 +2,6 @@
     <br/>
     <app-mc-data [coin]="'BTC'"></app-mc-data>
     <br/>
-
     <mat-form-field class="w6">
         <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
             <mat-option value="all">All</mat-option>
@@ -38,8 +37,13 @@
         <span *ngFor="let exchange2 of selectedExchanges"> & {{exchange2}} </span>
     </div>
 
+    <div class="scrollY300">
+        <app-sortable-table [consAvailable]="coinsAvailable"
+                            (selectedSymbol)="onItemClick($event)"></app-sortable-table>
+    </div>
 
-    <app-sortable-table [consAvailable]="coinsAvailable" (selectedSymbol)="onItemClick($event)" ></app-sortable-table>
+    <div>
 
+    </div>
 
 </div>

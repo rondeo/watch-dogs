@@ -9,7 +9,7 @@ export class MyUsPipe implements PipeTransform {
     if(isNaN(value)) return '';
     let dec = 2;
     if(value>1000) dec = 0;
-    else if(value < 1) dec =3
+    else if(value < 1) dec =3;
     return value.toFixed(dec);
   }
 

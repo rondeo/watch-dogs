@@ -43,12 +43,13 @@ export class ApiMarketCapService {
   static mapDataMC(data: any[]) {
     const out = {};
 
-    const BTC = data.shift();
+    const BTC:VOMarketCap = data.shift();
     if(BTC.symbol !== 'BTC') throw new Error(' first not BTC');
-    const btc1h = BTC.percent_change_1h;
-    const btc24h = BTC.percent_change_24h;
-    const btc7d = BTC.percent_change_7d;
-
+    const btc1h = +BTC.percent_change_1h;
+    const btc24h = +BTC.percent_change_24h;
+    const btc7d = +BTC.percent_change_7d;
+    BTC.price_usd = +BTC.price_usd;
+    BTC.price_btc = +BTC.price_btc;
     data.forEach(function (item) {
       if(item.symbol === 'ETHOS')item.symbol = 'BQX';
 

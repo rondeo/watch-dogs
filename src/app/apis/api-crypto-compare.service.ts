@@ -3,15 +3,16 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
 import {MATH} from '../com/math';
+import {VOCandle} from '../models/api-models';
 
 
-export interface VOTweeterAccount{
-  Points:number
+export interface VOTweeterAccount {
+  Points: number
   account_creation: string;
   favourites: string;
   followers: number;
   following: string;
-  link: "https://twitter.com/enjincs"
+  link: 'https://twitter.com/enjincs'
   lists: number
   name: string;
   statuses: number;
@@ -63,9 +64,9 @@ export class ApiCryptoCompareService {
     };
     const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
     // console.warn(url);
-    return this.http.get(url, {params}).map((res: any)=>{
-       console.log(res);
-      if(!res.from || !res.from.Twitter) return null;
+    return this.http.get(url, {params}).map((res: any) => {
+      console.log(res);
+      if (!res.from || !res.from.Twitter) return null;
       const from = res.from;
       const to = res.to;
       const timeFrom = moment(from.time).format('MM-DD HH');
@@ -98,7 +99,7 @@ export class ApiCryptoCompareService {
   getSocialStats0(symbol: string) {
 
     return this.getCoinLists().switchMap(coins => {
-      if(!coins[symbol]){
+      if (!coins[symbol]) {
         console.warn(symbol, coins);
         return Observable.of({});
       }
@@ -108,12 +109,6 @@ export class ApiCryptoCompareService {
         console.log(res.Data);
         return res.Data || {};
       })
-    })
-  }
-
-  getTweeterAccount(symbol:string):Observable<VOTweeterAccount> {
-    return this.getSocialStats0(symbol).map(res =>{
-      return res.Twitter;
     })
   }
 
@@ -135,41 +130,74 @@ export class ApiCryptoCompareService {
     })
   }
 
-  getHistoHour(base: string, coin: string, limit = 25): Observable<VOHistHour[]> {
-    const url = 'api/proxy-5min/https://min-api.cryptocompare.com/data/histohour?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG'
-      .replace('{{coin}}', coin).replace('{{base}}', base).replace('{{limit}}', String(limit));
-    return this.http.get(url).map((res: any) => {
-      return res.Data.map(function (item) {
-        return {
-          date: moment(item.time * 1000).format(),
-          timestamp: item.time * 1000,
-          last: item.close,
-          avg: (item.open + item.close) / 2,
-          volumefrom: item.volumefrom,
-          volumeto: item.volumeto
 
-        }
-      })
-    })
+  async downloadCandles(market: string, candlesInterval: string, limit: number = 120) {
 
+    const units = candlesInterval.substr(-1);
+    const val = candlesInterval.substr(0, candlesInterval.length - 1);
+    if (isNaN(+val)) throw new Error(val + ' wrong val ');
+    let candles: VOCandle[];
+    if (units === 'm') {
+      return this.getHistoMinute(market, val +'', String(limit))
+    } else {
+      return this.getHistoHour(market, val+'', String(limit))
+    }
   }
 
-  getHistoMinute(base: string, coin: string, limit = 240): Observable<VOHistHour[]> {
-    const url = 'api/proxy-5min/https://min-api.cryptocompare.com/data/histominute?fsym={{coin}}&tsym={{base}}&limit={{limit}}&e=CCCAGG&&aggregate=6'
-      .replace('{{coin}}', coin).replace('{{base}}', base).replace('{{limit}}', String(limit));
-    return this.http.get(url).map((res: any) => {
+  private getHistoHour(market: string, aggregate: string, limit: string): Promise<VOCandle[]> {
+    const ar = market.split('_');
+    const tsym = ar[0], fsym = ar[1];
+    const params = {
+      fsym,
+      tsym,
+      limit,
+      aggregate,
+      e: 'CCCAGG'
+    };
+
+    const url = 'https://min-api.cryptocompare.com/data/histohour';
+
+    return this.http.get(url, {params}).map((res: any) => {
+      console.log(res.Data.length)
       return res.Data.map(function (item) {
         return {
-          date: moment(item.time * 1000).format(),
-          timestamp: item.time * 1000,
-          last: item.close,
-          avg: (item.open + item.close) / 2,
-          volumefrom: item.volumefrom,
-          volumeto: item.volumeto
+          to: item.time * 1000,
+          close: +item.close,
+          open: +item.open,
+          high: +item.high,
+          low: +item.low,
+          Volume: item.volumefrom
+        }
+      })
+    }).toPromise();
+  }
+
+  private getHistoMinute(market: string, aggregate: string, limit = '120'): Promise<VOCandle[]> {
+    const ar = market.split('_');
+    const tsym = ar[0], fsym = ar[1];
+    const params = {
+      fsym,
+      tsym,
+      limit,
+      aggregate,
+      e: 'CCCAGG'
+    };
+
+    const url = 'https://min-api.cryptocompare.com/data/histominute';
+    return this.http.get(url, {params}).map((res: any) => {
+      console.log('results ' + res.Data.length);
+      return res.Data.map(function (item) {
+        return {
+          to: item.time * 1000,
+          close: +item.close,
+          open: +item.open,
+          high: +item.high,
+          low: +item.low,
+          Volume: item.volumefrom
 
         }
       })
-    })
+    }).toPromise();
 
   }
 

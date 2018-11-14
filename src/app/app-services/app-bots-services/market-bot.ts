@@ -103,6 +103,7 @@ export class MarketBot {
   volD: number;
   prevPrice: number;
 
+  prevMove:number;
   async tick() {
     const candles = await this.candlesService.getCandles(this.market);
    //  const vols = CandlesAnalys1.volumes(candles);
@@ -196,13 +197,17 @@ export class MarketBot {
       speedD = MATH.percent(speed, this.prevSpeed);
     }
 
+
     this.prevSpeed = speed;
     this.boughtD = boughtD;
     this.volD = speedD;
-    this.log(' ' + minRange + 'min   move ' + move +  ' ma3_7 ' + ma3_7 + ' PD ' +
-      priceChange + ' VD ' + speedD + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
+    this.log(' ' + minRange + 'min   move ' + move + ' PD ' +  priceChange + ' ma3_7 ' + ma3_7 +  ' VD ' + speedD + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
 
-    if (move > 70) {
+    if(this.prevMove + move > 60){
+      console.log('%c !!! ATTENTION ' + this.market)
+    }
+    this.prevMove = move;
+    if (move > 60) {
       this.buyCoinInstant();
     } else if (move < -70) {
       this.sellCoinInstant();

@@ -365,9 +365,6 @@ export class GainersLosersComponent implements OnInit {
       console.log(res);
     });
 
-    this.cryptoCompare.getTweeterAccount(coin.symbol).subscribe(res =>{
-      console.log('Tweeter account ', res);
-    });
 
   }
 

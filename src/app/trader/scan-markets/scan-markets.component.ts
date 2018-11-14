@@ -179,6 +179,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       return;
     }
     const markets = await this.scanner.getAvailableMarkets('binance');
+
     this.trendUps = [];
     const sub = await this.scanner.scanGoingUP(markets, this.trendUpCandlesInterval);
     this.sub5 = sub.subscribe(market => {
@@ -657,13 +658,14 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   async showCandles(market: string) {
     this.selectedMarket = market;
-    let candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, this.candlesInterval, 200);
+    const api = this.apisPublic.getExchangeApi('binance');
+
+     let candles = await api.downloadCandles(market, this.candlesInterval, 200);
     if (!candles) {
       this.candles = null;
       this.volumes = null;
       return;
     }
-
 
     this.scanner.currentMarket = market;
 
