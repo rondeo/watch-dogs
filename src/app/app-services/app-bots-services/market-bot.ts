@@ -103,13 +103,13 @@ export class MarketBot {
   volD: number;
   prevPrice: number;
 
-  prevMove:number;
+  prevMove = 0;
   async tick() {
     const candles = await this.candlesService.getCandles(this.market);
    //  const vols = CandlesAnalys1.volumes(candles);
     const closes = CandlesAnalys1.closes(candles);
     const last = _.last(candles);
-    const lastTime =moment(last.to).format('HH:mm');
+    const lastTime = moment(last.to).format('HH:mm');
 
     const LCD = MATH.percent(last.close, last.open)
 
@@ -172,7 +172,7 @@ export class MarketBot {
       sum += item.amountCoin;
     });
 
-    const avgRates = _.mean(rates);
+    const avgRates = MATH.median(rates);
     let priceChange = 0;
     if (this.prevPrice) {
       priceChange = MATH.percent(avgRates, this.prevPrice);
@@ -201,11 +201,15 @@ export class MarketBot {
     this.prevSpeed = speed;
     this.boughtD = boughtD;
     this.volD = speedD;
-    this.log(' ' + minRange + 'min   move ' + move + ' PD ' +  priceChange + ' ma3_7 ' + ma3_7 +  ' VD ' + speedD + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
 
-    if(this.prevMove + move > 60){
-      console.log('%c !!! ATTENTION ' + this.market, 'color:red');
+    const diff =  move - this.prevMove;
+
+    this.log(' ' + minRange + 'min   move ' + move + ' PD ' +  priceChange +  ' VD ' + speedD + ' ma3_7 ' + ma3_7 + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
+
+    if( diff > 60 || diff < -60){
+      console.log('%c !!! ATTENTION ' + this.market +  ' diff ' + diff + ' now ' + move +' prev ' + this.prevMove , 'color:red');
     }
+
     this.prevMove = move;
     if (move > 60) {
       this.buyCoinInstant();

@@ -43,6 +43,8 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   y0: number;
   x0: number;
 
+  font = '9px Arial';
+
   /*static convertToScale(item: VOCandleMin, scale: number, min: number): VOCandleMin {
     return {
       h: Math.round((item.h - min) * scale),
@@ -111,10 +113,8 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const dateFrom = moment(_.first(ar).to).format('MM/DD HH:mm');
     const dateTo = moment(_.last(ar).to).format('MM/DD HH:mm');
     const percentRange = (100 * range / min).toFixed(2);
-    ctx.font = '11px Arial';
-    ctx.fillText(percentRange + '% '+ dateFrom + ' - ' + dateTo, this.widthG / 2, 22);
-
-
+    ctx.font = this.font;
+    ctx.fillText(percentRange + '% ' + dateFrom + ' - ' + dateTo, this.widthG / 2, 22);
 
 
     const scaleY = height / (range || 1);
@@ -166,7 +166,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     out.push(MATH.toString(max));
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
-    ctx.font = '11px Arial';
+    ctx.font = this.font;
     const x = this.widthG + this.paddingLeft + 5;
     let y = this.height - this.paddingBottom;
     const lastY = y - height;
@@ -204,6 +204,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     const ctx = this.ctx;
     this.width = Math.round(this.container.nativeElement.offsetWidth - 20);
     this.height = Math.round(this.width / this.ratio);
+    this.font = this.width > 600 ? '12px Arial' : '8px Arial';
     this.widthG = this.width - this.paddingRight - this.paddingLeft;
 
     this.heightG = this.height - this.paddingBottom - this.paddingTop;
@@ -239,11 +240,11 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     let ctx = this.ctx;
     const ar = this.createLabels();
     let step = (this.widthG + (this.widthG / 12)) / ar.length;
-    let y = this.height;
+    let y = this.height - 5;
     let x0 = this.paddingLeft - 10;
 
     ctx.fillStyle = '#000000';
-    ctx.font = '12px Arial';
+    ctx.font = this.font;
     ar.forEach(function (item, i) {
       ctx.fillText(item, x0 + (i * step), y);
     });
@@ -292,7 +293,11 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
   startPoint: { x: number, y: number };
 
+  isMouseMove = false;
+
   onMouseMove(evt) {
+    if (!this.startPoint) return;
+
     const g0 = this.gY0 / this.gScaleY;
 
     // const height = Math.round(this.heightG - offsetY);
@@ -302,8 +307,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     const start = g0 - (startPos.y / this.gScaleY);
 
-    const diff = distY / this.gScaleY
-
+    const diff = distY / this.gScaleY;
     const curValue = (start - diff);
 
 
@@ -320,7 +324,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     ctx.fillText(start.toFixed(precision), 150, 20);
     ctx.fillText(curValue.toFixed(precision), 50, 20);
     ctx.fillStyle = '#000000';
-    ctx.font = '12px Arial';
+    ctx.font = this.font;
 
 
     //const pos2 = this.getMousePos(el, evt)
@@ -336,10 +340,18 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     };
   };
 
-  moveElement
+  moveElement;
   onMouseMoveHandler: EventListenerOrEventListenerObject = this.onMouseMove.bind(this);
 
+  private clicks = 0;
   onMouseDown(el, evt) {
+    //console.log(this.startPoint, this.isMouseMove);
+    this.clicks ++;
+    if(this.clicks >= 3){
+      this.overlayCTX.clearRect(0, 0, this.width, this.height);
+      this.clicks = 0;
+      return;
+    }
     var pos = this.getMousePos(el, evt);
     this.moveElement = el;
     if (!this.startPoint) {
@@ -350,18 +362,34 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
       ctx.stroke();
       el.addEventListener('mousemove', this.onMouseMoveHandler);
     } else {
-      //  console.log('removing');
-      this.overlayCTX.clearRect(0, 0, this.width, this.height);
+      // console.log(' clear data');;
+
       el.removeEventListener('mousemove', this.onMouseMoveHandler);
       this.startPoint = null;
     }
   }
+
+  /*
+    onTouchEnd(el, evt){
+      var pos = this.getMousePos(el, evt);
+      if (!this.startPoint) {
+        this.startPoint = pos;
+        const ctx = this.overlayCTX;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+        ctx.stroke();
+      }else {
+
+      }
+
+    }*/
 
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
     el = this.overlayView.nativeElement
     this.overlayCTX = el.getContext('2d');
+    // el.addEventListener("touchend",(evt)=>this.onTouchEnd(el, evt), false);
     el.addEventListener('mousedown', (evt) => this.onMouseDown(el, evt));
     this.linesOverlay = new LinesOverlay(this.overlayCTX);
     // if (this.graphs) this.drawData();

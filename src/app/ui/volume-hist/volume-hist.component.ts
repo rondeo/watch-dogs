@@ -69,7 +69,7 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
     out.push(Math.round(maxV));
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
-    ctx.font = '11px Arial';
+    ctx.font = this.font;
     const x = this.widthG + this.paddingLeft + 5;
     let y = this.height - this.paddingBottom;
 

@@ -26,6 +26,7 @@ export class DrawBase {
 
   private resize;
 
+  font = '12px Arial';
   constructor(){
 
   }
@@ -73,6 +74,7 @@ export class DrawBase {
     this.height = Math.round(this.width / this.ratio);
     this.widthG = this.width - this.paddingRight - this.paddingLeft;
 
+    this.font = this.width > 600 ? '12px Arial' : '8px Arial';
     this.heightG = this.height - this.paddingBottom - this.paddingTop;
     this.x0 = this.paddingLeft;
     this.y0 = this.paddingTop + this.heightG;
