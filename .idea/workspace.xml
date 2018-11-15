@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="gainers losers">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html" afterDir="false" />
-    </list>
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="gainers losers" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -121,8 +118,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
-                  <caret line="28" column="88" selection-start-line="28" selection-start-column="88" selection-end-line="28" selection-end-column="88" />
+                <state relative-caret-position="240">
+                  <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
                 </state>
               </provider>
             </entry>
@@ -338,11 +335,6 @@
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
-              <item name="dist" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
@@ -572,14 +564,7 @@
       <workItem from="1540502693571" duration="26015000" />
       <workItem from="1540587248344" duration="425633000" />
       <workItem from="1542161957041" duration="8113000" />
-      <workItem from="1542193504016" duration="24222000" />
-    </task>
-    <task id="LOCAL-00053" summary="update">
-      <created>1536081885350</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1536081885350</updated>
+      <workItem from="1542193504016" duration="24857000" />
     </task>
     <task id="LOCAL-00054" summary="rate buy sell">
       <created>1536177578060</created>
@@ -917,11 +902,18 @@
       <option name="project" value="LOCAL" />
       <updated>1542310324605</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="gainers losers">
+      <created>1542314008834</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1542314008834</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2569649000" />
+    <option name="totallyTimeSpent" value="2570284000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1547,8 +1539,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="88" selection-start-line="28" selection-start-column="88" selection-end-line="28" selection-end-column="88" />
+        <state relative-caret-position="240">
+          <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
         </state>
       </provider>
     </entry>
