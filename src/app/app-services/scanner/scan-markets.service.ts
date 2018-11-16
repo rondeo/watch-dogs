@@ -63,7 +63,7 @@ export class ScanMarketsService {
 
 
   async addFavorite(market: string, message: string) {
-    if(!market) return;
+    if (!market) return;
     this.favorites$().then(sub => {
       let favour = sub.getValue();
       // @ts-ignore
@@ -75,7 +75,6 @@ export class ScanMarketsService {
       });
       this.saveFavorites(favour)
     })
-    // @ts-ignore
 
 
   }
@@ -193,8 +192,8 @@ export class ScanMarketsService {
 
   async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, message: string }>> {
     this.isScanning = true;
-    this.progressSub.next('SCAN UP STARED '+  candlesInterval);
-   //  const api = this.apisPublic.getExchangeApi('binance');
+    this.progressSub.next('SCAN UP STARED ' + candlesInterval);
+    //  const api = this.apisPublic.getExchangeApi('binance');
 
     let results: VOMessage[] = [];
     const sub = new Subject<VOMessage>();
@@ -206,7 +205,7 @@ export class ScanMarketsService {
       this.isScanning = false;
     });
 
-    this.trendUPTimer = setTimeout(()=>{
+    this.trendUPTimer = setTimeout(() => {
       this._scanGoingUP(markets, -1, this.apiCryptoCompare, sub, candlesInterval);
     }, 5000)
 
@@ -270,18 +269,32 @@ export class ScanMarketsService {
     }
 
     const market = markets[i];
+    let candles
 
-    const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '5m', 120);
+    try {
+      candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '5m', 120);
+    } catch (e) {
+      console.warn(e)
+    }
 
+
+    if (!candles) {
+      this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i), 10000);
+      return;
+    }
 
     const closes = CandlesAnalys1.closes(candles);
     const last: VOCandle = _.last(candles);
     const time = moment(last.to).format('HH:mm');
     const volumes = _.map(candles, 'Volume');
 
-    const before = volumes.slice(0, -10);
+    let before = volumes.slice(0, -10);
+    before = before.filter(function (item) {
+      return !!item;
+    });
+
     const after = volumes.slice(-10);
-    const avgBefore = _.mean(before);
+    const avgBefore = MATH.median(before);
     const avgAfter = _.mean(after);
 
 

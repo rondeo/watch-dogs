@@ -25,6 +25,8 @@ export class MarketBot {
   balanceBase: VOBalance;
   balanceCoin: VOBalance;
   candlesInterval = '5m';
+
+  id: string;
   private stopLossOrder: StopLossOrder;
 
 
@@ -37,6 +39,7 @@ export class MarketBot {
     private apiPublic: ApiPublicAbstract,
     private candlesService: CandlesService
   ) {
+    this.id = 'bot-' + market;
     // this.buyOnDown = new BuyOnDown(market, this.apiPrivate);
     // this.buyOnDown.buySignal = (price) => {
     // this.buySignal(price);
@@ -48,6 +51,7 @@ export class MarketBot {
     this.init().then(() => {
       this.start();
     });
+    setInterval(() => this.save(), 5 * 50 * 1000);
     this.stopLossOrder = new StopLossOrder(market, apiPrivate);
   }
 
@@ -76,8 +80,6 @@ export class MarketBot {
   async buyCoinInstant() {
     this.log('BUY COIN ');
     console.log('%c !!!!! BUY COIN ' + this.market, 'color:red');
-    console.log(this.balanceCoin);
-    console.log(this.balanceBase);
     if (!this.balanceBase) return;
     if ((this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
       this.log(' BALANCE exists ');
@@ -94,59 +96,50 @@ export class MarketBot {
   }
 
   log(message: string) {
-    console.log(moment().format('HH:mm') + ' ' + this.market + message);
+    message = moment().format('HH:mm') + ' ' + this.market + message;
+    console.log(message);
+    this.history.push(message);
     // this.history.push(message);
   }
 
-  prevSpeed: number;
+  volMinute: number;
   boughtD: number;
-  volD: number;
+  // volD: number;
   prevPrice: number;
-
   prevMove = 0;
+
+
+
   async tick() {
-    const candles = await this.candlesService.getCandles(this.market);
-   //  const vols = CandlesAnalys1.volumes(candles);
-    const closes = CandlesAnalys1.closes(candles);
-    const last = _.last(candles);
-    const lastTime = moment(last.to).format('HH:mm');
 
-    const LCD = MATH.percent(last.close, last.open)
+    const now = Date.now();
+    const minAgo = moment().subtract(5, 'minutes').valueOf();
+    const minVal = this.amountCoin * 0.5;
 
-    const ma3 = _.mean(_.takeRight(closes, 3));
-    const ma7 = _.mean(_.takeRight(closes, 7));
-    let ma3_7 = MATH.percent(ma3, ma7);
-
-   /// const vloM = MATH.median(vols);
-   /// const last3Max = _.max(_.takeRight(vols, 3));
-   // const volAmpl = MATH.percent(last3Max, vloM);
-    await UTILS.wait(10);
-    const minVal = this.amountCoin * 0.1;
     let trades1: VOOrder[] = await this.apiPublic.downloadHistory(this.market);
+    // trades1 =  _.orderBy(trades1, 'timestamp');
+    let minRange: number = +((_.first(trades1).timestamp - _.last(trades1).timestamp) / 60000).toFixed(2);
+
+    if (minRange < 0.5 ) minRange = 2;
+    else if (minRange > 20) minRange = 20;
+    this.timeout = setTimeout(() => this.tick(), (minRange * 30 * 1000));
 
     let trades = trades1.filter(function (item) {
-      return item.amountCoin > minVal;
+      return item.amountCoin > minVal && item.timestamp > minAgo;
     });
+
+
+
 
     if (trades.length < 3) {
 
+        this.log(minRange + ' min NO VOLUME  in trades ' + minVal);
       return;
     }
 
-    trades = _.orderBy(trades, 'timestamp');
 
-    const minRange: number = +((_.last(trades).timestamp - _.first(trades).timestamp) / 60000).toFixed(2);
 
-    this.timeout = setTimeout(() => this.tick(), (minRange > 0.5 ? minRange : 1) * 30 * 1000);
 
-    /* if (!this.lastStamp) this.lastStamp = moment().subtract(5, 'minutes').valueOf();
-     const lastStamp = this.lastStamp;
-     trades = trades.filter(function (item) {
-       return item.timestamp > lastStamp;
-     });*/
-
-    // const first = _.first(trades);
-    // const last = _.last(trades);
 
     const fishes = trades;//_.takeRight(_.orderBy(trades, 'amountCoin'), 20);
 
@@ -172,14 +165,15 @@ export class MarketBot {
       sum += item.amountCoin;
     });
 
+
+
     const avgRates = MATH.median(rates);
     let priceChange = 0;
     if (this.prevPrice) {
       priceChange = MATH.percent(avgRates, this.prevPrice);
     }
+
     this.prevPrice = avgRates;
-
-
     const l = fishes.length;
     sum = sum / l;
     bought = bought / l;
@@ -191,31 +185,52 @@ export class MarketBot {
 
     const BUYD = MATH.percent(boughtD, soldD);
 
-    let speedD = -1;
-    const speed = sum / minRange;
-    if (this.prevSpeed) {
-      speedD = MATH.percent(speed, this.prevSpeed);
+    let volD = -1;
+    const volMin = sum / minRange;
+
+
+    if (this.volMinute) {
+      volD = MATH.percent(volMin, this.volMinute);
     }
 
-
-    this.prevSpeed = speed;
+    this.volMinute = volMin;
     this.boughtD = boughtD;
-    this.volD = speedD;
 
-    const diff =  move - this.prevMove;
-
-    this.log(' ' + minRange + 'min   move ' + move + ' PD ' +  priceChange +  ' VD ' + speedD + ' ma3_7 ' + ma3_7 + ' LCD '  + LCD + ' close ' + last.close + ' T ' + lastTime);
-
-    if( diff > 60 || diff < -60){
-      console.log('%c !!! ATTENTION ' + this.market +  ' diff ' + diff + ' now ' + move +' prev ' + this.prevMove , 'color:red');
+   //  this.volD = speedD;
+    const diff = move - this.prevMove;
+    if (bought < this.amountCoin * 10) {
+      this.log(' BOUGHT LOW ' + Math.round(sum));
+      return
     }
+
+
+    await UTILS.wait(10);
+
+    const candles = await this.candlesService.getCandles(this.market);
+    //  const vols = CandlesAnalys1.volumes(candles);
+    const closes = CandlesAnalys1.closes(candles);
+    const last = _.last(candles);
+    const lastTime = moment(last.to).format('HH:mm');
+    const COD = MATH.percent(last.close, last.open);
+    const ma3 = _.mean(_.takeRight(closes, 3));
+    const ma7 = _.mean(_.takeRight(closes, 7));
+    let ma3_7 = MATH.percent(ma3, ma7);
+
+    const message = ' diff ' + diff + '  move ' + move + ' PD ' + priceChange + ' VD ' + volD + ' m3_7 ' + ma3_7 + ' COD '+ COD;
+    this.log(message);
+
+   /* if (diff > 60 || diff < -60) {
+      console.log('%c !!! ATTENTION ' + this.market + ' diff ' + diff + ' now ' + move + ' prev ' + this.prevMove, 'color:red');
+    }*/
 
     this.prevMove = move;
     if (move > 60) {
       this.buyCoinInstant();
     } else if (move < -70) {
+
       this.sellCoinInstant();
     }
+
 
     // this.log(' sellPrices ' + sellPrices.toString() + ' buyPrices ' + buyPrices.toString())
     // if(soldD > 90) this.sellCoin(last.rate);
@@ -261,8 +276,17 @@ export class MarketBot {
     })
   }
 
+  async save() {
+    if (!this.history.length) return;
+    let history: string[] = (await this.storage.select(this.id)) || [];
+    history = history.concat(this.history);
+    this.history = [];
+    this.storage.upsert(this.id, history);
+  }
+
   destroy() {
     this.log('destroy');
+    this.storage.remove(this.id);
     this.stop();
     this.sub1.unsubscribe();
     this.sub2.unsubscribe();

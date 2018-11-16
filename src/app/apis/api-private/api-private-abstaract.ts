@@ -168,13 +168,14 @@ export abstract class ApiPrivateAbstaract {
       }
       this.isRefershOpenOrders = true;
       const now = Date.now();
+     /*
       if((now - this.lastOpenOrdersRefresh) < 10000){
         clearTimeout(this.refreshOrdersTimeout);
         this.refreshOrdersTimeout = setTimeout(() => {
           //  console.log(' refreshAllOpenOrders by timeout  ');
           this.refreshAllOpenOrders();
         }, 5000);
-      }
+      }*/
 
       this.lastOpenOrdersRefresh = now;
       this.downloadAllOpenOrders().subscribe(res => {
@@ -187,7 +188,10 @@ export abstract class ApiPrivateAbstaract {
             this.refreshAllOpenOrders();
           }, 60000);
         }
-        else console.log(' stop refreshing open orders ');
+        else {
+          clearTimeout(this.refreshOrdersTimeout);
+          console.log(' stop refreshing open orders ');
+        }
         // const old: VOOrder[] = this.openOrdersSub.getValue();
         //if(!old  || old.length !== res.length) this.ref
         const old: VOOrder[] = this.openOrdersSub.getValue();
