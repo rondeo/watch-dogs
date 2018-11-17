@@ -132,7 +132,6 @@ export class MarketBot {
 
 
     if (trades.length < 3) {
-
         this.log(minRange + ' min NO VOLUME  in trades ' + minVal);
       return;
     }
@@ -195,13 +194,8 @@ export class MarketBot {
 
     this.volMinute = volMin;
     this.boughtD = boughtD;
-
    //  this.volD = speedD;
     const diff = move - this.prevMove;
-    if (bought < this.amountCoin * 10) {
-      this.log(' BOUGHT LOW ' + Math.round(sum));
-      return
-    }
 
 
     await UTILS.wait(10);
@@ -216,7 +210,7 @@ export class MarketBot {
     const ma7 = _.mean(_.takeRight(closes, 7));
     let ma3_7 = MATH.percent(ma3, ma7);
 
-    const message = ' diff ' + diff + '  move ' + move + ' PD ' + priceChange + ' VD ' + volD + ' m3_7 ' + ma3_7 + ' COD '+ COD;
+    const message = ' diff ' + diff + '  move ' + move + ' PD ' + priceChange + ' VD ' + volD + ' n '+trades.length+' m3_7 ' + ma3_7 + ' COD '+ COD;
     this.log(message);
 
    /* if (diff > 60 || diff < -60) {
@@ -281,6 +275,7 @@ export class MarketBot {
     let history: string[] = (await this.storage.select(this.id)) || [];
     history = history.concat(this.history);
     this.history = [];
+    history = _.takeRight(history, 500);
     this.storage.upsert(this.id, history);
   }
 

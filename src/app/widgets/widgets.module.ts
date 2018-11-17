@@ -29,6 +29,7 @@ import { CandlesPatternComponent } from './alerts/candles-pattern/candles-patter
 import { MarketCandlesComponent } from './candles-market/market-candles.component';
 import { ScannerComponent } from './scanner/scanner.component';
 import { FollowOrderListComponent } from './follow-order-list/follow-order-list.component';
+import { MediaComponent } from './media/media.component';
 
 
 
@@ -63,7 +64,8 @@ import { FollowOrderListComponent } from './follow-order-list/follow-order-list.
     CandlesPatternComponent,
     MarketCandlesComponent,
     ScannerComponent,
-    FollowOrderListComponent
+    FollowOrderListComponent,
+    MediaComponent
   ],
   declarations:[
     CoinDayComponent,
@@ -86,7 +88,8 @@ import { FollowOrderListComponent } from './follow-order-list/follow-order-list.
     CandlesPatternComponent,
     MarketCandlesComponent,
     ScannerComponent,
-    FollowOrderListComponent
+    FollowOrderListComponent,
+    MediaComponent
   ]
 })
 export class WidgetsModule { }

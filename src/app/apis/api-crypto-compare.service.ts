@@ -65,7 +65,7 @@ export class ApiCryptoCompareService {
     const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
     // console.warn(url);
     return this.http.get(url, {params}).map((res: any) => {
-      console.log(res);
+    //  console.log(res);
       if (!res.from || !res.from.Twitter) return null;
       const from = res.from;
       const to = res.to;
@@ -74,11 +74,16 @@ export class ApiCryptoCompareService {
       let TwPoints = '';
       let RdPoints = '';
       let FbPoints = '';
+      let TwFollow = '';
+      let RdFollow = '';
+
       if (to.Twitter.Points) {
         TwPoints = '' + MATH.percent(to.Twitter.Points, from.Twitter.Points);
+        TwFollow = '' + MATH.percent(to.Twitter.followers, from.Twitter.followers);
       }
       if (to.Reddit.Points) {
         RdPoints = '' + MATH.percent(to.Reddit.Points, from.Reddit.Points);
+        RdFollow = '' + MATH.percent(to.Reddit.subscribers, from.Reddit.subscribers);
       }
       if (to.Facebook.Points) {
         FbPoints = '' + MATH.percent(to.Facebook.Points, from.Facebook.Points);
@@ -89,7 +94,9 @@ export class ApiCryptoCompareService {
         timeFrom,
         timeTo,
         TwPoints,
+        TwFollow,
         RdPoints,
+        RdFollow,
         FbPoints
       };
     }).toPromise()
@@ -185,7 +192,7 @@ export class ApiCryptoCompareService {
 
     const url = 'https://min-api.cryptocompare.com/data/histominute';
     return this.http.get(url, {params}).map((res: any) => {
-      console.log('results ' + res.Data.length);
+    //   console.log('results ' + res.Data.length);
       return res.Data.map(function (item) {
         return {
           to: item.time * 1000,

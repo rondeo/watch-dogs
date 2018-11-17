@@ -64,32 +64,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
 
-  mediaFrom: string;
-  mediaTo: string;
 
-  twitterPoints: string;
-  redditPoints: string;
-  facebookPoints: string;
-
-  showMedia() {
-    if(!this.coin) return;
-    this.cryptoCompare.getSocialStats(this.coin).then(res => {
-      if(!res){
-        this.mediaFrom = '';
-        this.mediaTo = '';
-        this.twitterPoints = '';
-        this.redditPoints = '';
-        this.facebookPoints = '';
-        return;
-      }
-      this.mediaFrom = res.timeFrom;
-      this.mediaTo = res.timeTo;
-      this.twitterPoints = res.TwPoints;
-      this.redditPoints = res.RdPoints;
-      this.facebookPoints = res.FbPoints;
-
-    })
-  }
 
   candlesInterval = '1h';
   inBrowser = false;
@@ -100,12 +75,11 @@ export class GainersLosersComponent implements OnInit {
   candles: VOCandle[];
   volumes:number[];
   onItemClick(evt){
-    console.log(evt);
+   //  console.log(evt);
     this.coin = evt.symbol;
     this.market = this.base+ '_'+ this.coin;
     this.showCandles();
     if (this.inBrowser) this.openMarket();
-    this.showMedia();
   }
 
 

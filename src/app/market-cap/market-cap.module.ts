@@ -17,6 +17,7 @@ import {MarketCapMainComponent} from './market-cap-main/market-cap-main.componen
 
 import {UiModule} from '../ui/ui.module';
 import {DirectivesModule} from '../directives/directives.module';
+import {WidgetsModule} from '../widgets/widgets.module';
 
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
     UiModule,
     FormsModule,
     DirectivesModule,
+    WidgetsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

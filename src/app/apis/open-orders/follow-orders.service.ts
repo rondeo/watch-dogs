@@ -113,8 +113,7 @@ export class FollowOrdersService {
     this.apisPrivate.getExchangeApi(exchange).startRefreshBalances();
     this.apisPrivate.getExchangeApi(exchange).refreshAllOpenOrders();
     this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
-      // if (!balances)
-        return;
+       if (!balances)  return;
 
       const botsMarkets = _.map(this.botsSub.getValue(), 'market');
      /// console.log('balances.length   ' + balances.length);

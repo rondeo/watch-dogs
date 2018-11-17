@@ -80,12 +80,7 @@
 
     </div>
 
-    <small>
-        Media {{mediaFrom}} to {{mediaTo}}  %:
-
-           Tw {{twitterPoints}} Rd {{redditPoints}} Fb {{facebookPoints}}
-    </small>
-
+   <app-media [coin]="coin"></app-media>
     <br/>
 
     <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">{{exchange}}

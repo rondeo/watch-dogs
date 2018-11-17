@@ -645,8 +645,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     })
   }
 
+
   showMarket(market: string) {
     this.userMarket = market;
+    this.coin = market.split('_')[1];
     this.selectedMarket = market;
     this.showCandles(market);
     if (this.inBrowser) this.openMarket(this.exchange, market);
