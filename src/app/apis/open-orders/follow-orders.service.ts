@@ -14,9 +14,7 @@ import {MarketBot} from '../../app-services/app-bots-services/market-bot';
 @Injectable()
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
-
   excludes:string[] = ['BTC','USDT'];
-
 
   botsSub : BehaviorSubject< MarketBot[] > = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
@@ -126,6 +124,7 @@ export class FollowOrdersService {
             const price = MC[o.symbol] ? MC[o.symbol].price_usd : 0.1;
 
             const balance = (o.pending + o.available);
+
             //if(balance) console.log(o.symbol + ' ' +balance + ' '+ price);
 
             if (balance * price > 10) {
@@ -135,6 +134,7 @@ export class FollowOrdersService {
                 const follow = new FollowOpenOrder(
                   exchange,
                   market,
+                  balance,
                   -2,
                   this.apisPrivate,
                   this.apisPublic,

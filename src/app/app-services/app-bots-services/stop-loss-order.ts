@@ -1,4 +1,4 @@
-import {VOBooks, VOOrder} from '../../models/app-models';
+import {VOBalance, VOBooks, VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import {VOCandle} from '../../models/api-models';
 import {MATH} from '../../com/math';
@@ -14,6 +14,7 @@ export class StopLossOrder {
 
   constructor(
     private market: string,
+    private amountCoin: number,
     private apiPrivate: ApiPrivateAbstaract
   ) {
     this.subscribe();
@@ -88,7 +89,10 @@ export class StopLossOrder {
 
   prevValue: number;
 
-  checkStopLoss(candles: VOCandle[], qty: number) {
+  checkStopLoss(candles: VOCandle[], balanceCoin: VOBalance) {
+
+    const qty = balanceCoin.available + balanceCoin.pending;
+
     const closes = CandlesAnalys1.closes(_.takeRight(candles, 99));
     let ma99 = _.mean(closes);
 

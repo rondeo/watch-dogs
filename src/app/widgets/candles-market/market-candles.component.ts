@@ -11,9 +11,9 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
-  myCandles: VOCandle[];
+  candles: VOCandle[];
   volumes: number[];
-  interval = '30m';
+  candlesInterval = '1m';
 
   constructor(
     private apisPublic: ApisPublicService
@@ -28,16 +28,23 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
   downloadCandles(){
     if(!this.exchange || ! this.market) return;
-    this.apisPublic.getExchangeApi(this.exchange).downloadCandles(this.market, this.interval, 200)
-      .then(res=>{
-      this.myCandles = res;
-      this.volumes = res.map(function (o) {
-        return o.open > o.close?-o.Volume:o.Volume;
-      })
+
+    this.apisPublic.getExchangeApi(this.exchange).downloadCandles(this.market, this.candlesInterval, 200)
+      .then(candles=>{
+        if(!candles){
+          this.candles = null;
+          this.volumes = null;
+          return;
+        }
+      this.candles = candles;
+        this.volumes = candles.map(function (o) {
+          return o.open > o.close ? -o.Volume : o.Volume;
+        });
     })
   }
 
-  onGoClick(){
+  onCandlesIntrvalChange() {
     this.downloadCandles();
   }
+
 }

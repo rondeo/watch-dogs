@@ -52,7 +52,7 @@ export class MarketBot {
       this.start();
     });
     setInterval(() => this.save(), 5 * 50 * 1000);
-    this.stopLossOrder = new StopLossOrder(market, apiPrivate);
+   //  this.stopLossOrder = new StopLossOrder(market, apiPrivate);
   }
 
   async sellCoinInstant() {
@@ -121,7 +121,7 @@ export class MarketBot {
     let minRange: number = +((_.first(trades1).timestamp - _.last(trades1).timestamp) / 60000).toFixed(2);
 
     if (minRange < 0.5 ) minRange = 2;
-    else if (minRange > 20) minRange = 20;
+    else if (minRange > 5) minRange = 5;
     this.timeout = setTimeout(() => this.tick(), (minRange * 30 * 1000));
 
     let trades = trades1.filter(function (item) {
