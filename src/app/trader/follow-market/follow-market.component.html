@@ -8,7 +8,6 @@
     <button mat-button (click)="onCreateClick()">Create</button>
     <app-table-props [dataset]="bots" (selected)="onMarketSelected($event)"></app-table-props>
 
-    <app-candlesticks [candles]="candles"></app-candlesticks>
-    <app-volume-hist [values]="volumes"></app-volume-hist>
+   <app-market-candles [market]="market" [exchange]="'binance'"></app-market-candles>
 </div>
 

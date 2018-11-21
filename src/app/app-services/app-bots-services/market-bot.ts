@@ -51,18 +51,31 @@ export class MarketBot {
     this.init().then(() => {
       this.start();
     });
-    setInterval(() => this.save(), 5 * 50 * 1000);
-   //  this.stopLossOrder = new StopLossOrder(market, apiPrivate);
+
+    //  this.stopLossOrder = new StopLossOrder(market, apiPrivate);
   }
 
   async sellCoinInstant() {
     console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
     console.log(this.balanceCoin);
-    if (!this.balanceCoin) return;
-    if ((this.balanceCoin.pending + this.balanceCoin.available) < (this.amountCoin + (this.amountCoin * 0.1))) {
-      this.log(' NO BALANCE ');
+    if (!this.balanceCoin || this.balanceCoin.available ===0 ) {
+      this.log('SELL no Balance');
       return;
     }
+
+
+    const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
+    const qty = this.amountCoin;
+    const rate = UtilsBooks.getRateForAmountCoin(books.buy, this.balanceCoin.available);
+    const action = 'SELL';
+    this.log({action, rate});
+    this.balanceCoin.available = 0;
+   /* if ((this.balanceCoin.pending + this.balanceCoin.available) < (this.amountCoin + (this.amountCoin * 0.1))) {
+      this.log(' NO BALANCE ');
+      return;
+    }*/
+
+
     /* const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
      this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
      setTimeout(() => {
@@ -77,42 +90,119 @@ export class MarketBot {
      }, 2000)*/
   }
 
+  getBalanceCoin(){
+
+  }
+
+  getBalanceBase(){
+
+  }
   async buyCoinInstant() {
     this.log('BUY COIN ');
     console.log('%c !!!!! BUY COIN ' + this.market, 'color:red');
     if (!this.balanceBase) return;
-    if ((this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
+    if (this.balanceCoin && (this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
       this.log(' BALANCE exists ');
       return;
     }
 
+    const action = 'BUY';
+    const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
+    const qty = this.amountCoin;
+    const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
+    this.log({action, rate});
+
+    this.balanceCoin = new VOBalance();
+    this.balanceCoin.available = this.amountCoin;
+
     /* this.apiPublic.downloadBooks2(this.market).toPromise().then(books => {
-       const qty = this.amountCoin;
-       const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
+
        this.log(' BUY COIN by books price ' + qty + ' rate ' + rate);
        const result2 = this.apiPrivate.buyLimit2(this.market, qty, rate);
        this.log(' BUY COIN RESULT ' + JSON.stringify(result2));
      })*/
   }
 
-  log(message: string) {
-    message = moment().format('HH:mm') + ' ' + this.market + message;
-    console.log(message);
-    this.history.push(message);
+  async saveCurrentAction(action: string){
+
+    const actionValues = (await this.storage.select('action-values')) || [];
+    const exists = UTILS.find(this.currentValues, actionValues);
+
+    if(exists) {
+      console.log(exists);
+      return;
+    }
+    this.currentValues.action = action;
+    actionValues.push(this.currentValues);
+    return this.storage.upsert('action-values', actionValues);
+    this.storage.upsert('action-values', this.currentValues)
+  }
+
+  log(message: string | Object) {
+    let out: string;
+    if (typeof message !== 'string') out = UTILS.toString(message);
+    else out = message;
+    out = moment().format('HH:mm') + ' ' + this.market + out;
+    console.log(out);
+    this.history.push(out);
     // this.history.push(message);
   }
 
   volMinute: number;
   boughtD: number;
   // volD: number;
-  prevPrice: number;
+  prevPrice = 1;
+ // prevVolume = 1;
   prevMove = 0;
-
-
-
+  currentValues:any;
   async tick() {
+    setTimeout(() => this.save(), 5000);
+    const candles = await this.candlesService.getCandles(this.market);
+    const lastCandle = _.last(candles);
 
-    const now = Date.now();
+    if (this.prevPrice === lastCandle.close) return;
+    this.prevPrice = lastCandle.close;
+
+    const closes = CandlesAnalys1.closes(candles);
+    const volumes = CandlesAnalys1.volumes(candles);
+
+    const lastPrice = _.mean(_.takeRight(closes, 3));
+    const lastVolume = _.mean(_.takeRight(volumes, 3));
+
+    const preLastVolume = _.mean(_.take(_.takeRight(volumes, 6),3));
+
+    const preLastPrice =  _.mean(_.take(_.takeRight(closes, 6),3));
+
+    const PD = MATH.percent(lastPrice, preLastPrice);
+
+     const VD = MATH.percent(lastVolume, preLastVolume);
+
+    const mas = CandlesAnalys1.mas(candles);
+    const vols = CandlesAnalys1.vols(candles);
+
+    const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
+    const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
+    const v3_25 = MATH.percent(vols.v3, vols.v25);
+    const v3_med = MATH.percent(vols.v3, vols.vmed);
+
+    const actionValues = await this.storage.select('action-values');
+
+    this.currentValues = {PD, ma3_25, ma25_99, VD, v3_25, v3_med};
+
+    this.log(this.currentValues);
+
+    if(!actionValues) return;
+    const result = UTILS.find(this.currentValues, actionValues);
+
+    if(result) this.log(result);
+
+
+
+
+    const minPrice = _.min(closes);
+
+
+    /*const now = Date.now();
     const minAgo = moment().subtract(5, 'minutes').valueOf();
     const minVal = this.amountCoin * 0.5;
 
@@ -213,9 +303,9 @@ export class MarketBot {
     const message = ' diff ' + diff + '  move ' + move + ' PD ' + priceChange + ' VD ' + volD + ' n '+trades.length+' m3_7 ' + ma3_7 + ' COD '+ COD;
     this.log(message);
 
-   /* if (diff > 60 || diff < -60) {
+   /!* if (diff > 60 || diff < -60) {
       console.log('%c !!! ATTENTION ' + this.market + ' diff ' + diff + ' now ' + move + ' prev ' + this.prevMove, 'color:red');
-    }*/
+    }*!/
 
     this.prevMove = move;
     if (move > 60) {
@@ -224,23 +314,25 @@ export class MarketBot {
 
       this.sellCoinInstant();
     }
-
+*/
 
     // this.log(' sellPrices ' + sellPrices.toString() + ' buyPrices ' + buyPrices.toString())
     // if(soldD > 90) this.sellCoin(last.rate);
   }
 
   stop() {
-    if (!this.timeout) return;
-    clearTimeout(this.timeout);
-    this.timeout = 0;
+    if (!this.interval) return;
+    clearInterval(this.interval);
+    this.interval = 0;
     this.log('ending tick')
   }
 
+  interval
+
   start() {
-    if (this.timeout) return;
+    if (this.interval) return;
     this.log(' starting tick');
-    this.timeout = setTimeout(() => this.tick(), 30 * 1000);
+    this.interval = setInterval(() => this.tick(), 60 * 1000);
   }
 
   sub1;
@@ -252,8 +344,10 @@ export class MarketBot {
     const ar = this.market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
+    this.balanceBase = new VOBalance();
+    this.balanceCoin;
 
-    this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
+   /* this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
       if (!balances) return;
       const bb = _.find(balances, {symbol: this.base});
       const bc = _.find(balances, {symbol: this.coin});
@@ -267,7 +361,7 @@ export class MarketBot {
       const myOrder: VOOrder = <VOOrder>_.find(orders, {coin: this.coin});
       //  console.log(this.market + ' my order ', myOrder);
       this.activeOrder = myOrder;
-    })
+    })*/
   }
 
   async save() {

@@ -268,13 +268,12 @@ export class FollowOpenOrder {
 
   // lastQuery: number = 0;
   lastCheck: number;
-
   async destroy() {
    console.log('%c destroy '+ this.market, 'color:red');
     this.storage.remove(this.id);
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
-
+    this.onEnd();
   }
 
   onEnd() {

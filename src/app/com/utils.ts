@@ -4,9 +4,16 @@ import {ApiPublicBinance} from '../apis/api-public/api-public-binance';
 export class UTILS {
 
 
- static  async  wait(seconds: number){
+  static toString(obj: any) {
+    let out = ' ';
+    for (let str in obj) out +=  str + ' ' + obj[str] + '; ';
+    return out;
+  }
+
+
+  static async wait(seconds: number) {
     return new Promise(function (resolve, reject) {
-      setTimeout(resolve,seconds * 1000 );
+      setTimeout(resolve, seconds * 1000);
     });
   }
 
@@ -21,11 +28,11 @@ export class UTILS {
     }, {obj: obj}).join('&');
   }
 
-  static getDecimals (market: string) {
+  static getDecimals(market: string) {
 
   }
 
-  static parseDecimals(data:{ amountCoin: string, rate: string }[]) {
+  static parseDecimals(data: { amountCoin: string, rate: string }[]) {
     let maxRate = 0;
     let maxAmount = 0;
     // console.log(orders);
@@ -47,6 +54,7 @@ export class UTILS {
       amountDecimals: maxAmount
     };
   }
+
   static setDecimals(exchange: string, market: string, orders: { amountCoin: string, rate: string }[]) {
     if (!UTILS.decimals[exchange + market]) {
       UTILS.decimals[exchange + market] = UTILS.parseDecimals(orders)
@@ -66,7 +74,7 @@ export class UTILS {
     data.rate = +data.rate.toFixed(val.rateDecimals);
   }
 
-  static  formatDecimals(exchange: string, market, data: { amountCoin: number, rate: number }) {
+  static formatDecimals(exchange: string, market, data: { amountCoin: number, rate: number }) {
     if (!UTILS.decimals[exchange + market]) {
 
       throw new Error(' no formatter for ' + exchange + market);
@@ -76,12 +84,17 @@ export class UTILS {
     const amountDecimals = val.amountDecimals;
     data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
     data.rate = +data.rate.toFixed(val.rateDecimals);
-    return {
-
-    };
+    return {};
   }
 
+  static find(currentValues: any, actionValues: any[]): any {
+   return actionValues.find(function (item) {
+     for(let str in item ) if(currentValues[str] !== item[str]) return false;
+     return true;
+    })
 
+
+  }
 }
 
 export function applyMixins(derivedCtor: any, baseCtors: any[]) {

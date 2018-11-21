@@ -7,7 +7,7 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {VOCandle} from '../../models/api-models';
 import * as _ from 'lodash';
 import {TestCandlesService} from '../../test/test-candles.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-follow-market',
@@ -16,8 +16,6 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class FollowMarketComponent implements OnInit {
   bots: any[];
-  candles: VOCandle[];
-  volumes: number[];
 
   market:string;
 
@@ -25,6 +23,7 @@ export class FollowMarketComponent implements OnInit {
   constructor(
 
     private rote:ActivatedRoute,
+    private router:Router,
     private apisPublic: ApisPublicService,
     private followOrder: FollowOrdersService,
     private marketCap: ApiMarketCapService,
@@ -72,7 +71,7 @@ export class FollowMarketComponent implements OnInit {
     const market: string = evt.item.market;
     switch (evt.prop) {
       case 'market':
-        this.showMarket(market);
+        this.router.navigate(['/trader/follow-market', {market}]);
         break;
       case 'x':
         if(confirm('DELETE ' + market)){
@@ -82,9 +81,5 @@ export class FollowMarketComponent implements OnInit {
     }
   }
 
-  async  showMarket(market: string) {
-   const candles =  await this.candelsService.getCandles( market);
-   this.volumes = _.map(candles,'Volume');
-    this.candles = candles;
-  }
+
 }

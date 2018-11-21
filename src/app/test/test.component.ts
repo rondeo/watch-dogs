@@ -13,6 +13,7 @@ import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {CandlesService} from '../app-services/candles/candles.service';
 import {VOBalance} from '../models/app-models';
 import {SellOnJump} from '../app-services/app-bots-services/sell-on-jump';
+import {UTILS} from '../com/utils';
 
 @Component({
   selector: 'app-test',
@@ -35,6 +36,23 @@ export class TestComponent implements OnInit {
   ) {
 
   }
+
+  currentValues:any;
+  async saveCurrentAction(action: string){
+
+    const actionValues = (await this.storage.select('action-values')) || [];
+    const exists = UTILS.find(this.currentValues, actionValues);
+
+    if(exists) {
+      console.log(exists);
+      return;
+    }
+    this.currentValues.action = action;
+    actionValues.push(this.currentValues);
+    return this.storage.upsert('action-values', actionValues);
+    this.storage.upsert('action-values', this.currentValues)
+  }
+
 
   followOrder:FollowOpenOrder;
   ngOnInit() {
@@ -81,6 +99,18 @@ export class TestComponent implements OnInit {
      .downloadCandles('BTC_ARDR','5m', 100, this.currentTime.valueOf());
    return candles;
   }
+
+  prevPrice;
+
+  async tickBot(candles:VOCandle[]){
+    const lastCandle = _.last(candles);
+    if (this.prevPrice === lastCandle.close) return;
+    this.prevPrice = lastCandle.close;
+   const result =  await CandlesAnalys1.analyze(this.candles, this.storage);
+   console.log(result);
+
+  }
+
 
 
   async initAsync() {
@@ -133,18 +163,16 @@ export class TestComponent implements OnInit {
   currentMarket = 'BTC_VIB';
   lastStamp:number;
  async  tick(){
-   this.currentTime.add(3, 'minutes');
+   this.currentTime.add(1, 'minutes');
   //  await this.followOrder.tick();
-    this.currentTime.add(5, 'minutes')
+    // this.currentTime.add(5, 'minutes')
    const candles =  await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles(this.currentMarket,'5m', 100, this.currentTime.valueOf());
-
-    const last = _.last(candles);
-    if(this.lastStamp === last.to) return;
-    this.lastStamp = last.to;
+      .downloadCandles(this.currentMarket,'1m', 100, this.currentTime.valueOf());
 
    this.candles = candles;
-    SellOnJump.isJumpEnd(candles);
+
+   this.tickBot(candles);
+
   }
   onStartClick() {
    if(!this.interval) this.start();
@@ -154,6 +182,7 @@ export class TestComponent implements OnInit {
   }
 
   start(){
+   if(this.interval) return;
     this.interval = setInterval(()=>this.tick(), 2000);
   }
   stop(){

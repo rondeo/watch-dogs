@@ -101,7 +101,6 @@ export class FollowOrdersService {
 
   follow(exchange: string) {
 
-
     // this.apisPrivate.getExchangeApi(exchange).refreshBalances();
     FollowOpenOrder.status.subscribe(status =>{
       console.log('%c ' +status, 'color:green');

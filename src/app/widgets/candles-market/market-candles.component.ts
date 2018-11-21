@@ -15,6 +15,7 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   volumes: number[];
   candlesInterval = '1m';
 
+  inBrowser = false;
   constructor(
     private apisPublic: ApisPublicService
   ) { }
@@ -41,6 +42,12 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
           return o.open > o.close ? -o.Volume : o.Volume;
         });
     })
+
+
+    if(this.inBrowser) {
+      const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
+      window.open(url, this.exchange);
+    }
   }
 
   onCandlesIntrvalChange() {

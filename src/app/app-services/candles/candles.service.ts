@@ -13,7 +13,7 @@ import * as moment from 'moment';
 @Injectable()
 export class CandlesService {
   collection: { [id: string]: CandlesData } = {};
-  candlesInterval = '5m';
+  candlesInterval = '1m';
   //canlesLength = 240;
   //overlap = 20;
   exchange= 'binance';
@@ -65,7 +65,7 @@ export class CandlesService {
       this.storage.upsert('subscribed-candles', data);
     }, 5000)
   }
-  async getNewCandles(exchange: string, market: string, candlesInterval: string){
+ /* async getNewCandles(exchange: string, market: string, candlesInterval: string){
     const id = 'candles-'+exchange + market + candlesInterval;
     let oldCandels: VOCandle[] = await this.storage.select(id);
     if (oldCandels && oldCandels.length > 100) {
@@ -79,28 +79,27 @@ export class CandlesService {
     }
     return this.getCandles( market);
   }
-
+*/
   async getCandles(market: string){
     const api = this.apisPublic.getExchangeApi(this.exchange);
     const id = 'candles-' + market;
     let oldCandels: VOCandle[] =  (await this.storage.select(id))
-    let limit = 120;
+    let limit = 240;
 
     if (oldCandels && oldCandels.length > 100) {
       const lastOld = _.last(oldCandels);
       const diff = moment().diff(lastOld.to,'minutes');
-      if(diff < 2) {
+      if(diff < 1) {
        // console.log(oldCandels.length);
         return oldCandels;
       }
 
-      if(diff < 5) limit = 2;
-      else if(diff < 10) limit = 5;
-      else if(diff < 60) limit = 12;
-      else if( diff < 120) limit = 24;
+      if(diff < 2) limit = 3;
+      else if(diff < 10) limit = 10;
+      else if(diff < 20) limit = 20;
     }
 
-    // console.log(market + ' download new candles ' + limit);
+    console.log('%c ' + moment().format('HH:mm') + ' ' +market + ' download new candles ' + limit, 'color:brown');
      // console.log(' updating candles ' + market + limit);
     let candles = await api.downloadCandles(market, this.candlesInterval, limit);
 
@@ -114,12 +113,10 @@ export class CandlesService {
         return o.to < first.to
       });
 
-      oldCandels = _.takeRight(oldCandels.concat(candles), 120);
+      oldCandels = _.takeRight(oldCandels.concat(candles), 480);
 
     } else oldCandels = candles;
     await this.storage.upsert(id, oldCandels);
-
-
     return oldCandels;
   }
 

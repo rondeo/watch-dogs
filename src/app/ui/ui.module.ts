@@ -22,6 +22,7 @@ import {MaterialAppModule} from '../material/material-app.module';
 import { TablePropsComponent } from './table-props/table-props.component';
 import { MfiIndicatorComponent } from './mfi-indicator/mfi-indicator.component';
 import { VwmacdIndicatorComponent } from './vwmacd-indicator/vwmacd-indicator.component';
+import { CandlesVolumesComponent } from './candles-volumes/candles-volumes.component';
 
 
 
@@ -44,7 +45,8 @@ import { VwmacdIndicatorComponent } from './vwmacd-indicator/vwmacd-indicator.co
     StochRsiComponent,
     TablePropsComponent,
     MfiIndicatorComponent,
-    VwmacdIndicatorComponent
+    VwmacdIndicatorComponent,
+    CandlesVolumesComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +73,8 @@ import { VwmacdIndicatorComponent } from './vwmacd-indicator/vwmacd-indicator.co
     StochRsiComponent,
     TablePropsComponent,
     MfiIndicatorComponent,
-    VwmacdIndicatorComponent
+    VwmacdIndicatorComponent,
+    CandlesVolumesComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

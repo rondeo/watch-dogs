@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-order-reports',
@@ -14,11 +15,18 @@ export class OrderReportsComponent implements OnInit {
   ordersData: any[];
   selectedKey: string;
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private storage:StorageService,
     private followOrder: FollowOrdersService
   ) { }
 
   ngOnInit() {
+    this.route.params.subscribe(params=>{
+      this.market = params.market;
+      this.showBotHistory();
+
+    });
     this.initAsync();
   }
   async initAsync(){
@@ -66,7 +74,7 @@ export class OrderReportsComponent implements OnInit {
     const market = evt.item.market;
     switch (evt.prop) {
       case 'market':
-        this.showBotHistory(market);
+        this.router.navigate(['trader/order-reports', {market}]);
         return;
       case 'x':
         if (confirm(' DELETE ' + market)) {
@@ -79,10 +87,13 @@ export class OrderReportsComponent implements OnInit {
   }
 
   market: string;
-  async showBotHistory(market: string){
-    this.market = market;
+  async showBotHistory(){
+    if(!this.market){
+      this.ordersData = null;
+      return;
+    }
 
-    this.ordersData = ((await this.storage.select('bot-'+market)) || []).map(function (item) {
+    this.ordersData = ((await this.storage.select('bot-'+this.market)) || []).map(function (item) {
       return {
         record:item
       }
@@ -105,7 +116,7 @@ export class OrderReportsComponent implements OnInit {
     console.log(evt);
   }
 
-  onOrdersRecordsClick(evt){
+ /* onOrdersRecordsClick(evt){
     console.log(evt)
     switch (evt.prop) {
       case 'key':
@@ -125,6 +136,6 @@ export class OrderReportsComponent implements OnInit {
         return
     }
 
-  }
+  }*/
 
 }
