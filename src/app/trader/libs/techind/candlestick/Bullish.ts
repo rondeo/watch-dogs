@@ -38,14 +38,14 @@ export default class BullishPatterns extends CandlestickFinder {
         this.name = 'Bullish Candlesticks';
     }
 
-    hasPattern (data:StockData) {
+    hasPattern (data: StockData) {
         return bullishPatterns.reduce(function(state, pattern) {
             let result = pattern.hasPattern(data);
             return state || result;
-        }, false)
+        }, false);
     }
 }
 
-export function bullish(data:StockData) {
+export function bullish(data: StockData) {
   return new BullishPatterns().hasPattern(data);
 }

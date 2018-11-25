@@ -1,17 +1,17 @@
-import {VOMarketCap} from "../models/app-models";
+import {VOMarketCap} from '../models/app-models';
 
 
 
 export class RunScript {
-  static runScriptSell (newValue:any, script:string){
-    let results:string[] =[];
+  static runScriptSell (newValue: any, script: string) {
+    let results: string[] = [];
 
     let SELL = function (text) {
       results.push(text);
     };
 
-    let old_percent_change_1h:number, old_percent_change_24h:number, old_percent_change_7d:number, old_price_usd:number,
-      percent_change_1h:number, percent_change_24h:number, percent_change_7d:number, price_usd:number;
+    let old_percent_change_1h: number, old_percent_change_24h: number, old_percent_change_7d: number, old_price_usd: number,
+      percent_change_1h: number, percent_change_24h: number, percent_change_7d: number, price_usd: number;
 
 
    /* old_percent_change_1h = oldValue.percent_change_1h;
@@ -25,7 +25,7 @@ export class RunScript {
     price_usd = newValue.price_usd;
 
 
-    eval(script);
+   //  eval(script);
     return results;
   }
 }

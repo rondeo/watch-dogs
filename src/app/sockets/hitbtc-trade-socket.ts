@@ -1,29 +1,32 @@
-
+/*
 import * as pako from 'pako';
-import * as gzip from 'gzip';
-import {IChannel, SocketBase} from "./soket-base";
+import * as gzip from 'gzip';*/
+import {IChannel, SocketBase} from './soket-base';
 
 
 export class HitbtcTradesSocket extends SocketBase {
-
-  exchange = 'hitbtc';
-  socketUrl = 'wss://api.hitbtc.com/api/2/ws';
 
 
   constructor() {
     super();
   }
 
+  exchange = 'hitbtc';
+  socketUrl = 'wss://api.hitbtc.com/api/2/ws';
+
   marketids: any = {};
+
+
+  subscriptions: any = {};
 
   onMessage(m) {
 
     let dataM: any = JSON.parse(m.data);
     let channel = dataM.method;
-    if(!channel){
-      if(dataM.id && dataM.result){
-        console.log('subscribed for id ' + dataM.id)
-        return
+    if (!channel) {
+      if (dataM.id && dataM.result) {
+        console.log('subscribed for id ' + dataM.id);
+        return;
       }
       console.warn(this.exchange + ' no method  ', dataM);
       return;
@@ -46,7 +49,7 @@ export class HitbtcTradesSocket extends SocketBase {
           };
 
           this.dispatch(id, data);
-        })
+        });
 
         break;
       case 'updateOrderbook':
@@ -54,14 +57,14 @@ export class HitbtcTradesSocket extends SocketBase {
           return {
             rate: +item.price,
             amountCoin: +item.size
-          }
-        })
+          };
+        });
 
         const bid = dataM.params.bid.map(function (item) {
           return {
             rate: +item.price,
             amountCoin: +item.size
-          }
+          };
         });
         this.dispatch(id, {ask, bid}, 'books');
         break;
@@ -72,21 +75,18 @@ export class HitbtcTradesSocket extends SocketBase {
         console.log(this.exchange + 'snapshotTrades');
         break;
       default:
-        console.warn(dataM)
+        console.warn(dataM);
     }
 
 
   }
-
-
-  subscriptions :any ={};
 
   async createChannelId(channel, market): Promise<string> {
     console.log('createChannelId', channel, market);
 
     const id = Date.now();
     this.subscriptions[id] = 'trades';
-    this.subscriptions[id+1] = 'books';
+    this.subscriptions[id + 1] = 'books';
 
     const marketId = market.replace('USDT', 'USD').split('_').reverse().join('');
 
@@ -94,7 +94,7 @@ export class HitbtcTradesSocket extends SocketBase {
     switch (channel) {
       case 'trades':
         let params = {
-          method: "subscribeTrades",
+          method: 'subscribeTrades',
           params: {
             symbol: marketId
           },

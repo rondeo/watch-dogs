@@ -1,25 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {ConnectorApiService} from "../../../../archive/services/connector-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ChannelEvents, Channels} from "../../../../archive/services/apis/socket-models";
+
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
-  selector: 'all-main-coins',
+  selector: 'app-all-main-coins',
   templateUrl: './all-main-coins.component.html',
   styleUrls: ['./all-main-coins.component.css']
 })
 export class AllMainCoinsComponent implements OnInit {
 
-
   constructor(
-    private connector:ConnectorApiService,
-    private route:ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params=>{
+    this.route.params.subscribe(params => {
       console.log(params);
     });
 

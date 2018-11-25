@@ -1,18 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MyExchangeService} from '../../../../archive/services/my-exchange.service';
 import {VOBalance, VOMarket, VOOrder} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 import * as _ from 'lodash';
-import {ApiBase} from '../../../../archive/services/apis/api-base';
 import {MatSnackBar} from '@angular/material';
-import {Observable} from 'rxjs/Observable';
+
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
-import {Subscription} from '../../../../node_modules/rxjs';
 import {MATH} from '../../com/math';
 
 @Component({
@@ -25,7 +22,6 @@ export class BuySellCoinComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private myService: MyExchangeService,
     private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar,
     private apisPrivate: ApisPrivateService
@@ -71,7 +67,7 @@ export class BuySellCoinComponent implements OnInit {
         this.coin = ar[0];
         this.getMarkets();
       } else {
-        this.coin = ar[1]
+        this.coin = ar[1];
         this.getMarkets(ar[0] + '_' + ar[1]);
       }
     });
@@ -83,7 +79,7 @@ export class BuySellCoinComponent implements OnInit {
     if (!this.market || this.market.split('_')[0] !== base) {
       this.marketCap.getTicker().then(MC => {
         this.basePriceUS = MC[base].price_usd;
-      })
+      });
     }
     this.market = market;
 
@@ -91,10 +87,10 @@ export class BuySellCoinComponent implements OnInit {
 
   async getMarkets(marketSymbol?: string) {
     //  if (!this.MC) this.MC = await this.marketCap.getTicker();
-    const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
+   /* const markets = await this.myService.getMarketsForCoin(this.exchange, this.coin);
     if (markets.length === 0) {
-      console.log(await this.myService.getAllMarkets(this.exchange));
-      this.snackBar.open(' No Markets for ' + this.coin + ' on ' + this.exchange, 'x', {duration: 3000, extraClasses: 'bg-red'});
+      console.log(await this.myService.getAllMarkets());
+      this.snackBar.open(' No Markets for ' + this.coin + ' on ' + this.exchange, 'x', {duration: 3000, panelClass: 'bg-red'});
     }
     this.marketsAvailable = markets;
     if (marketSymbol) {
@@ -105,9 +101,9 @@ export class BuySellCoinComponent implements OnInit {
       else this.currentMarket = new VOMarket();
     } else if (markets.length === 1) {
       this.currentMarket = markets[0];
-      this.onMarketChanged(null)
+      this.onMarketChanged(null);
     }
-
+*/
 
   }
 
@@ -168,8 +164,8 @@ export class BuySellCoinComponent implements OnInit {
     if ((amountBase * basePriceUS) < 1) {
       this.snackBar.open(
         'Amount ' + base + ' too low $' + (amountBase * basePriceUS).toFixed(4),
-        'x', {extraClasses: 'alert-red', duration: 5000});
-      return
+        'x', {panelClass: 'alert-red', duration: 5000});
+      return;
     }
 
     const amountCoin = +(amountBase / rate).toFixed(8);
@@ -201,10 +197,11 @@ export class BuySellCoinComponent implements OnInit {
 
   confirmOrder(base: string, coin: string, action: string, rate: number, amountCoin: number, priceBaseUS: number, isMax: boolean) {
     //  console.log(arguments);
+    let msg;
     if (isNaN(rate) || isNaN(amountCoin) || isNaN(priceBaseUS)) {
-      const msg = ' rate: ' + rate + ' amountCoin: ' + amountCoin + ' priceBaseUS: ' + priceBaseUS
-      this.snackBar.open(msg, 'x', {extraClasses: 'alert-red'});
-      return
+      msg = ' rate: ' + rate + ' amountCoin: ' + amountCoin + ' priceBaseUS: ' + priceBaseUS;
+      this.snackBar.open(msg, 'x', {panelClass: 'alert-red'});
+      return;
     }
 
     action = action.toUpperCase();
@@ -214,8 +211,7 @@ export class BuySellCoinComponent implements OnInit {
     let amountUS = (amountCoin * rate * priceBaseUS).toFixed(0);
     let feeUS = (+amountUS * 0.0025).toFixed(2);
     console.log(action + ' ' + base + '_' + coin + ' amountCoin ' + amountCoin + ' rate ' + rate + ' baseUS ' + priceBaseUS);
-
-    const msg = action + '  ' + coin + ' \n' +
+    msg = action + '  ' + coin + ' \n' +
       'Price: $' + rateUS + ' \n' +
       'Amount: $' + amountUS + (isMax ? ' (max)' : '') + '\n' +
       'Fee: $' + feeUS;
@@ -242,7 +238,7 @@ export class BuySellCoinComponent implements OnInit {
           msg += ' CLOSED';
         }
       }
-      this.snackBar.open(msg, 'x', {extraClasses: 'alert-green', duration: 2000});
+      this.snackBar.open(msg, 'x', {panelClass: 'alert-green', duration: 2000});
       setTimeout(() => {
         this.refreshData(res.base, res.coin);
       }, 3000);
@@ -257,10 +253,10 @@ export class BuySellCoinComponent implements OnInit {
     let msg;
     if (error.error) {
       if (error.error.msg) msg = error.error.msg;
-      else msg = JSON.stringify(error.error)
+      else msg = JSON.stringify(error.error);
     } else msg = error.message;
 
-    this.snackBar.open('Error ' + msg, 'x', {extraClasses: 'alert-red'});
+    this.snackBar.open('Error ' + msg, 'x', {panelClass: 'alert-red'});
   }
 
 /*

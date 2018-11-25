@@ -8,11 +8,17 @@ import {reject} from 'q';
 export interface ISocketData {
   data: any;
   exchange: string;
-  market: string
-  channel: string
+  market: string;
+  channel: string;
 }
 
 export abstract class SocketBase {
+
+  // sub: Subject<ISocketData> = new Subject<ISocketData>();
+
+  constructor() {
+
+  }
   ws: WebSocket;
   abstract socketUrl: string;
   hb: number;
@@ -24,13 +30,9 @@ export abstract class SocketBase {
   HB: string;
   marketsMap: { [marketId: string]: string } = {};
 
-  //sub: Subject<ISocketData> = new Subject<ISocketData>();
-
-  constructor() {
-
-  }
-
   private intevalHB;
+  channels = {};
+  serverChannels = {};
 
   /*startHB() {
     clearInterval(this.intevalHB);
@@ -41,7 +43,7 @@ export abstract class SocketBase {
 
   onOpen(evt, resolve, reject) {
     const ws: WebSocket = <WebSocket>evt.currentTarget;
-    console.log('%c ' + this.exchange + ' OPEN '+ ws.url, 'color:green');
+    console.log('%c ' + this.exchange + ' OPEN ' + ws.url, 'color:green');
     if (ws.readyState === ws.OPEN) {
       resolve(ws);
     } else reject();
@@ -79,12 +81,9 @@ export abstract class SocketBase {
   }
 
 
-  abstract async subscribeForChannel(chanel: SocketChannel): Promise<any>
+  abstract async subscribeForChannel(chanel: SocketChannel): Promise<any>;
 
-  abstract onMessage(m: MessageEvent): void;
-  channels = {};
-  serverChannels = {};
-
+  abstract onMessage(m: any): void;
   getChannel(channel: string, market: string): SocketChannel {
     const id = channel + '=' + market;
     if (this.channels[id]) return this.channels[id];
@@ -100,7 +99,7 @@ export abstract class SocketBase {
     return ch;
   }
 
-  subscribe(chanel: string, market: string): SocketChannel{
+  subscribe(chanel: string, market: string): SocketChannel {
     return this.getChannel(chanel, market);
   }
 
@@ -118,20 +117,20 @@ export abstract class SocketBase {
   }
 
   subscribeForBooks(market: string) {
-    return this.subscribe('books', market)
+    return this.subscribe('books', market);
   }
 
   subscribeForKline(market: string) {
-    return this.subscribe('kline_5m', market)
+    return this.subscribe('kline_5m', market);
   }
 
-  dispatch(channelID, market, data): boolean{
+  dispatch(channelID, market, data): boolean {
     const channel: SocketChannel = this.channels[channelID + '=' + market];
-    if(channel && channel.hasSubscribers()) {
+    if (channel && channel.hasSubscribers()) {
       channel.dispatch(data);
       return true;
     }
-    if(channel)  delete this.channels[channel.id];
+    if (channel)  delete this.channels[channel.id];
     return false;
   }
   //  isQ: boolean;

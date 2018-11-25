@@ -12,7 +12,7 @@ export interface VOCoinsDayData {
 }
 
 export class VOMCData {
-  price_btc: number
+  price_btc: number;
   price_usd: number;
   volume_24h: number;
   market_cap_usd: number;
@@ -37,7 +37,7 @@ export interface MCdata {
   n: string;
   data: number[];
   price_btcs: number[];
-  prev?
+  prev?: any;
 }
 
 
@@ -115,11 +115,11 @@ export interface VOMC extends VOMCAgregated {
   selected: boolean;
 }*/
 
-export class  VOMarketCapSelected extends VOMarketCap{
+export class  VOMarketCapSelected extends VOMarketCap {
   selected: boolean;
 }
 
-export type VOMCObj = { [symbol: string]: VOMarketCap }
+export interface VOMCObj { [symbol: string]: VOMarketCap; }
 
 
 export interface VOCandle {
@@ -132,10 +132,10 @@ export interface VOCandle {
   Trades?: number;
   Volume: number;
   isClosed?: boolean;
-  time?:string;
+  time?: string;
 }
 
-export interface VOCandleExt extends VOCandle{
+export interface VOCandleExt extends VOCandle {
   rsi: any;
   index: number;
 }

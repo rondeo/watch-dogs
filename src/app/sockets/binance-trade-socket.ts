@@ -1,25 +1,25 @@
 
-import {SocketBase} from "./soket-base";
+import {SocketBase} from './soket-base';
 
 
 export class BinanceTradesSocket extends SocketBase {
   exchange = 'binance';
   socketUrl = 'wss://stream.binance.com:9443/ws/';
-  //HB = '.';
+  // HB = '.';
 
   constructor() {
     super();
   }
 
-  marketsIds:any ={};
-  sockets:WebSocket[];
-  createSocket(channel, market):WebSocket {
+  marketsIds: any = {};
+  sockets: WebSocket[];
+  createSocket(channel, market): WebSocket {
 
     const marketId = market.split('_').reverse().join('').toLocaleLowerCase();
 
     this.marketsIds[marketId] = market;
 
-    const suffix = marketId + '@' + channel.slice(0,-1);
+    const suffix = marketId + '@' + channel.slice(0, -1);
     const ws = new WebSocket(this.socketUrl + suffix);
     ws.addEventListener('message', (msg) => this.onMessage(msg));
     ws.addEventListener('open', (evt) => this.onOpen(evt));
@@ -28,16 +28,16 @@ export class BinanceTradesSocket extends SocketBase {
     return ws;
   }
 
-  async createChannelId(channel, market):Promise<string>{
+  async createChannelId(channel, market): Promise<string> {
     console.log('createChannelId', channel, market);
 
     const id = Date.now();
 
-    return Promise.resolve(this.exchange+channel+market);
+    return Promise.resolve(this.exchange + channel + market);
   }
 
 
-  onMessage(m: MessageEvent) {
+  onMessage(m: any) {
 
     let dataM: any = JSON.parse(m.data);
 
@@ -51,11 +51,11 @@ export class BinanceTradesSocket extends SocketBase {
       channel = 'trades';
 
       const data = {
-        amountCoin:dataM.m? -dataM.q:+dataM.q,
+        amountCoin: dataM.m ? -dataM.q : +dataM.q,
         rate: +dataM.p,
-        timestamp:+dataM.T,
+        timestamp: +dataM.T,
         uuid: +dataM.b
-      }
+      };
       const id = this.exchange + channel + market;
       this.dispatch(id, data);
     }

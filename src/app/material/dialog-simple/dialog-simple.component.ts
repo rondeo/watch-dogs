@@ -7,13 +7,13 @@ import {MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./dialog-simple.component.css']
 })
 export class DialogSimpleComponent implements OnInit {
-  buttons:string[] = ['OK'];
-  title:string = 'Alert';
-  message:string = 'Message';
+  buttons: string[] = ['OK'];
+  title = 'Alert';
+  message = 'Message';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DilaogData) {
-    if(data.buttons) this.buttons = data.buttons;
-    if(data.title) this.title = data.title;
+    if (data.buttons) this.buttons = data.buttons;
+    if (data.title) this.title = data.title;
     this.message = data.message;
   }
 
@@ -24,8 +24,8 @@ export class DialogSimpleComponent implements OnInit {
 }
 
 
-export interface DilaogData{
-  title:string;
-  message:string;
-  buttons?:string[];
+export interface DilaogData {
+  title: string;
+  message: string;
+  buttons?: string[];
 }

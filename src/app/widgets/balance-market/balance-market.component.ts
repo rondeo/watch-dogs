@@ -11,6 +11,11 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 })
 export class BalanceMarketComponent implements OnInit, OnChanges {
 
+  constructor(
+    private apiPrivate: ApisPrivateService
+  ) {
+  }
+
   @Input() exchange: string;
   @Input() market: string;
   @Input() timestamp: number;
@@ -27,16 +32,11 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
 
   isLoadingBalances = false;
 
-  constructor(
-    private apiPrivate: ApisPrivateService
-  ) {
-  }
+  private sub1;
+  private sub2;
 
   ngOnInit() {
   }
-
-  private sub1;
-  private sub2;
 
   ngOnChanges() {
 
@@ -54,7 +54,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
     this.sub1 = api.balance$(ar[0]).subscribe(bal => {
      //  console.log(bal);
       this.base = bal.symbol;
-      if(this.balanceBase !== bal.available || this.pendingBase !== bal.pending){
+      if (this.balanceBase !== bal.available || this.pendingBase !== bal.pending) {
         this.balanceBaseChange.emit(bal);
       }
       this.balanceBase = bal.available;
@@ -63,7 +63,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
     });
     this.sub2 = api.balance$(ar[1]).subscribe(bal => {
      //  console.log(bal);
-      if(this.balanceCoin !== bal.available || this.pendingCoin !== bal.pending){
+      if (this.balanceCoin !== bal.available || this.pendingCoin !== bal.pending) {
         this.balanceCoinChange.emit(bal);
       }
       this.coin = bal.symbol;
@@ -77,7 +77,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
   onRefreshBalancesClick() {
     this.isLoadingBalances = true;
     const api = this.apiPrivate.getExchangeApi(this.exchange);
-    api.refreshBalances()
+    api.refreshBalances();
   }
 
 

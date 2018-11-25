@@ -7,7 +7,7 @@ export default class BearishInvertedHammerStick extends CandlestickFinder {
         this.name = 'BearishInvertedHammerStick';
         this.requiredCount  = 1;
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let daysOpen  = data.open[0];
         let daysClose = data.close[0];
         let daysHigh  = data.high[0];
@@ -21,6 +21,6 @@ export default class BearishInvertedHammerStick extends CandlestickFinder {
     }
 }
 
-export function bearishinvertedhammerstick(data:StockData) {
+export function bearishinvertedhammerstick(data: StockData) {
   return new BearishInvertedHammerStick().hasPattern(data);
 }

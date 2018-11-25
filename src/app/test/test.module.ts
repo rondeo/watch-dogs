@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import {TestCandlesService} from './test-candles.service';
 
 @NgModule({
-  exports:[
+  exports: [
   ],
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers:[
+  providers: [
     TestCandlesService
   ]
 })

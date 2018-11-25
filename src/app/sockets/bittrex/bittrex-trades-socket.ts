@@ -1,7 +1,7 @@
 
 
-import * as  signalR from 'signalr-client';
-import {SocketBase} from "../soket-base";
+
+import {SocketBase} from '../soket-base';
 
 
 export class BittrexTradesSocket extends SocketBase {
@@ -31,7 +31,7 @@ export class BittrexTradesSocket extends SocketBase {
     //  console.log(dataM);
     const nonce = dataM.Nounce;
     const exchange = this.exchange;
-    const channel = 'trades'
+    const channel = 'trades';
 //
    //   console.log(dataM.Fills)
 
@@ -45,7 +45,7 @@ export class BittrexTradesSocket extends SocketBase {
           timestamp: new Date(item.TimeStamp + 'Z').getTime()
         }, 'trades');
 
-      })
+      });
 
 
     }

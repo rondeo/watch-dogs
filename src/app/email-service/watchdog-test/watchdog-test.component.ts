@@ -30,8 +30,8 @@ export class WatchdogTestComponent implements OnInit {
   watchDog: WatchDog = new WatchDog(new VOWatchdog({}));
   MC: VOMarketCap;
   scripts: string[];
-  exchange:string;
-  market:string;
+  exchange: string;
+  market: string;
   isExchanges: boolean;
   numberTo = moment().valueOf();
 
@@ -45,7 +45,7 @@ export class WatchdogTestComponent implements OnInit {
     private marketCap: ApiMarketCapService,
     private snackBar: MatSnackBar,
     private botsService: AppBotsService,
-    private showExternalPageService:ShowExternalPageService
+    private showExternalPageService: ShowExternalPageService
   ) {
   }
 
@@ -53,7 +53,7 @@ export class WatchdogTestComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.uid = params.uid;
       this.initAsync();
-    })
+    });
   }
 
   async initAsync() {
@@ -79,27 +79,27 @@ export class WatchdogTestComponent implements OnInit {
     const mas = MovingAverage.movingAverageGraphFromCoinWeek(coindatas);
     console.log(moment(_.first(mas).timestamp).format());
     console.log(moment(_.last(mas).timestamp).format());
-    let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
+    let triggers: { timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
 
    //  while(triggers.length < length) triggers.unshift(1);
    // console.log(triggers);
     const values = _.map(triggers, 'trigger');
     this.triggers = [{
-      ys:values,
-      color:'#4c9561',
-      label:null
+      ys: values,
+      color: '#4c9561',
+      label: null
     }];
   }
 
 
-  onLineChartClick(){
-    if(this.exchange && this.market) {
-      const ar = this.market.split('_')
+  onLineChartClick() {
+    if (this.exchange && this.market) {
+      const ar = this.market.split('_');
       this.showExternalPageService.showMarket(this.exchange, ar[0], ar[1]);
     }
   }
 
-  showExchanges(){
+  showExchanges() {
 
   }
 

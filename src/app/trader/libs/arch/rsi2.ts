@@ -1,12 +1,12 @@
 
-declare var SMMA: any
+declare var SMMA: any;
 
 export class Rsi2 {
     input = 'candle';
     lastClose = null;
     weight: number;
-    avgU//: SMMA;
-    avgD//: SMMA;
+    avgU; // : SMMA;
+    avgD; // : SMMA;
     u = 0;
     d = 0;
     rs = 0;
@@ -20,7 +20,7 @@ export class Rsi2 {
   }
 
   update(candle: {close: number}) {
-    var currentClose = candle.close;
+    let currentClose = candle.close;
 
     if (this.lastClose === null) {
       // Set initial price to prevent invalid change calculation

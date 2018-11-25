@@ -6,14 +6,13 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
 import {ApiPublicHitbtc} from '../api-public/api-public-hitbtc';
 import {UtilsBooks} from '../../com/utils-books';
-import {PrivateCalls} from '../../../../archive/services/apis/api-base';
 import {UserLoginService} from '../../services/user-login.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {Subject} from 'rxjs/internal/Subject';
 
 export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
-  apiPublic: ApiPublicHitbtc
+  apiPublic: ApiPublicHitbtc;
   exchange = 'hitbtc';
 
   static parseOrder(item) {
@@ -35,7 +34,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       date: item.createdAt,
       timestamp: new Date(item.createdAt).getTime(),
       status: item.status
-    }
+    };
   }
 
   constructor(
@@ -54,7 +53,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   }
 
   downloadAllOpenOrders(): Observable<VOOrder[]> {
-    const url = 'api/hitbtc/order'
+    const url = 'api/hitbtc/order';
     return this.call(url, null).pipe(map(res => {
       console.log('getAllOpenOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
@@ -62,7 +61,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   }
 
   getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
-    const url = 'api/hitbtc/history/order'
+    const url = 'api/hitbtc/history/order';
     return this.call(url, null).pipe(map(res => {
       console.log('getAllOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
@@ -89,8 +88,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
             date: item.createdAt,
             timestamp: new Date(item.createdAt).getTime(),
             status: item.status
-          }
-        }).find(function (item) {
+          };
+        }).find(function (item: VOOrder) {
           return item.uuid === orderId;
         }) || {
           uuid: orderId,
@@ -113,7 +112,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           amountCoin: +res.quantity,
           date: res.createdAt,
           timestamp: new Date(res.createdAt).getTime()
-        }
+        };
       }));
   }
 
@@ -148,7 +147,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
         symbol: item.currency,
         balance: +item.available + (+item.reserved),
         available: +item.available
-      }
+      };
     })));
   }
 
@@ -177,7 +176,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           amountCoin: +res.quantity,
           rate: +res.price,
           status: res.status
-        }
+        };
       })).toPromise();
 
   }
@@ -192,7 +191,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       quantity: quantity,
       price: rate,
       symbol: coin + base
-    }
+    };
 
     return this.call(url, data)
       .pipe(map((res: any) => {
@@ -208,7 +207,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           rate: +res.price,
           status: res.status
 
-        }
+        };
       })).toPromise();
   }
 
@@ -220,7 +219,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       this.createLogin().then(cred => {
         this.call(URL, post)
           .subscribe(res => sub.next(res), err => sub.error(err));
-      })
+      });
       return sub.asObservable();
     }
 

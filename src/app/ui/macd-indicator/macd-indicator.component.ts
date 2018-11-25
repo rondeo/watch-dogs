@@ -37,10 +37,10 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
   draw() {
 
     if (!this.closes && !this.candles) return;
-    const closes = this.candles? _.map(this.candles, 'close'):this.closes;
+    const closes = this.candles ? _.map(this.candles, 'close') : this.closes;
 
 
-    var macdInput = {
+    let macdInput = {
       values: closes,
       fastPeriod: this.fastPeriod,
       slowPeriod: this.slowPeriod,
@@ -48,7 +48,7 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
       SimpleMAOscillator: true,
       SimpleMASignal: false
     };
-    var macd = new MACD(macdInput);
+    let macd = new MACD(macdInput);
     const result: any[] = macd.getResult();
     this.allData = result;
     //  console.log(result);
@@ -61,10 +61,10 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
     let min = 1e12;
     let max = -1e12;
     result.forEach(function (item) {
-      if(min > item.MACD) min = item.MACD;
-      if(max < item.MACD) max = item.MACD;
-      if(min > item.signal) min = item.signal;
-      if(max < item.signal) max = item.signal;
+      if (min > item.MACD) min = item.MACD;
+      if (max < item.MACD) max = item.MACD;
+      if (min > item.signal) min = item.signal;
+      if (max < item.signal) max = item.signal;
       macdV.push(item.MACD);
       signals.push(item.signal);
       if (maxHist < item.histogram) maxHist = item.histogram;
@@ -79,10 +79,10 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
    // console.warn(min);
     const ampl = (max - min);
 
-    const mid = (max - min) /2;
-    //console.warn(mid);
+    const mid = (max - min) / 2;
+    // console.warn(mid);
 
-    const rel = (ampl - mid)/ ampl;
+    const rel = (ampl - mid) / ampl;
    // console.log(rel);
 
     const offsetY = (2 * maxHist) * rel;
@@ -116,7 +116,7 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
           offsetY : offsetY
         }
       ]
-    }
+    };
     this.myGraphs = graphs;
   }
 

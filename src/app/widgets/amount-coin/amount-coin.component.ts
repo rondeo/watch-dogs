@@ -9,22 +9,22 @@ export class AmountCoinComponent implements OnInit, OnChanges {
 
   constructor() { }
 
-  @Input() amount:number;
+  @Input() amount: number;
   @Output() amountChanged: EventEmitter<number> = new EventEmitter();
 
-  amountUS:number = 100;
+  amountUS = 100;
 
   ngOnInit() {
   }
 
-  ngOnChanges(evt: SimpleChanges){
-    if(evt.amount){
+  ngOnChanges(evt: SimpleChanges) {
+    if (evt.amount) {
       const newAmount = evt.amount.currentValue;
-      if(newAmount !== this.amountUS) this.amountUS = newAmount;
+      if (newAmount !== this.amountUS) this.amountUS = newAmount;
     }
   }
 
-  onAmountChanged(amount: number){
+  onAmountChanged(amount: number) {
     this.amountChanged.emit(amount);
   }
 

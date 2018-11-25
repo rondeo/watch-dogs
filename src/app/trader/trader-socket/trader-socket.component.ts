@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {IVOTrade, SoketConnectorService} from '../../sockets/soket-connector.service';
 import {DatabaseService} from '../../services/database.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
@@ -8,13 +8,21 @@ import * as moment from 'moment';
   templateUrl: './trader-socket.component.html',
   styleUrls: ['./trader-socket.component.css']
 })
-export class TraderSocketComponent implements OnInit, OnChanges {
+export class TraderSocketComponent implements OnInit, OnChanges, OnDestroy {
+
+
+  constructor(
+    private sockets: SoketConnectorService,
+    private marketCap: ApiMarketCapService
+    //  private database: DatabaseService
+  ) {
+  }
 
   private allTrades: IVOTrade[] = [];
   private lastTrades: IVOTrade[] = [];
 
   lastBuy: string;
-  time:string;
+  time: string;
   newTradesLength: number;
   /* lastSell: string;
 
@@ -43,13 +51,10 @@ export class TraderSocketComponent implements OnInit, OnChanges {
   @Input() market: string;
   @Input() exchange: string;
 
+  private sub1;
+  private interval;
 
-  constructor(
-    private sockets: SoketConnectorService,
-    private marketCap: ApiMarketCapService
-    //  private database: DatabaseService
-  ) {
-  }
+  coinPrice: number;
 
 
   /* saveInDB(data:any){
@@ -63,15 +68,10 @@ export class TraderSocketComponent implements OnInit, OnChanges {
 
   }
 
-  private sub1;
-  private interval;
-
   ngOnInit() {
     this.interval = setInterval(() => this.myTick(), 1000);
     this.subscribeForChannel();
   }
-
-  coinPrice: number;
 
   subscribeForChannel() {
 
@@ -85,11 +85,11 @@ export class TraderSocketComponent implements OnInit, OnChanges {
     const ar = market.split('_');
     this.marketCap.getTicker().then(MC => {
       this.coinPrice = MC[ar[1]].price_usd;
-    })
+    });
 
 
     this.sub1 = this.sockets.getSubscription(exchange, channel, market).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.channel === 'inittrades') {
         this.allTrades = res.data;
         return;
@@ -101,8 +101,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
 
       if (res.data.uuid) {
         this.lastTrades.push(res.data);
-      }
-      else console.warn(res.data)
+      } else console.warn(res.data);
       // }
     });
   }
@@ -139,7 +138,7 @@ export class TraderSocketComponent implements OnInit, OnChanges {
       return o.timestamp > ago1Min;
     });
 
-    //console.log(trades1Min);
+    // console.log(trades1Min);
     let totalBuy = 0;
     let totalSell = 0;
     trades1Min.forEach(function (o) {

@@ -6,8 +6,9 @@ import * as moment from 'moment';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
-import {Subscription} from 'rxjs/Subscription';
+
 import {OrdersHistory} from '../../app-services/market-history/orders-history';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-fishes',
@@ -15,6 +16,11 @@ import {OrdersHistory} from '../../app-services/market-history/orders-history';
   styleUrls: ['./fishes.component.css']
 })
 export class FishesComponent implements OnInit, OnChanges, OnDestroy {
+  constructor(
+    private marketCap: ApiMarketCapService,
+    private apisPublic: ApisPublicService,
+    private marketsHistoryService: MarketsHistoryService
+  ) { }
 
   @Input() exchange: string;
   @Input() market: string;
@@ -22,7 +28,7 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
   sumSell: number;
   sumBuy: number;
-  resultsLength: number = 7;
+  resultsLength = 7;
 
   volPerMinute: string;
   tradesPerMinute: string;
@@ -33,83 +39,78 @@ export class FishesComponent implements OnInit, OnChanges, OnDestroy {
 
 
 
-  fishes:VOOrder[];
-  constructor(
-    private marketCap: ApiMarketCapService,
-    private apisPublic: ApisPublicService,
-    private marketsHistoryService: MarketsHistoryService
-  ) { }
+  fishes: VOOrder[];
 
-  ngOnInit() {
-    this.sortOn = localStorage.getItem('FishesComponent-sortOn');
-  }
-  ngOnDestroy(){
-    if(this.sub1) this.sub1.unsubscribe();
-    if(this.sub2) this.sub2.unsubscribe();
-
-  }
-
-  sub1:Subscription;
-  sub2:Subscription;
-  ngOnChanges(){
-    if(this.sub1) this.sub1.unsubscribe();
-    if(this.sub2) this.sub2.unsubscribe();
-   this.showFishes();
-  }
+  sub1: Subscription;
+  sub2: Subscription;
 
   isProgress = false;
   timeout;
 
-  async showFishes(){
-    if(!this.market || ! this.exchange) return;
+  sortOn = 'timestamp';
+  isDesc = true;
+
+  ngOnInit() {
+    this.sortOn = localStorage.getItem('FishesComponent-sortOn');
+  }
+  ngOnDestroy() {
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
+
+  }
+  ngOnChanges() {
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
+   this.showFishes();
+  }
+
+  async showFishes() {
+    if (!this.market || ! this.exchange) return;
     this.isProgress = true;
     const ar = this.market.split('_');
     let orders = await this.apisPublic.getExchangeApi(this.exchange).downloadMarketHistory(ar[0], ar[1]).toPromise();
-    setTimeout(()=>{this.isProgress = false}, 500);
+    setTimeout(() => {this.isProgress = false; }, 500);
     const ordersHistory = _.orderBy(orders, 'timestamp');
     const MC = await this.marketCap.getTicker();
     let base  = ordersHistory[0].base;
     let coin = ordersHistory[0].coin;
     let priceBaseUS = 1;
     const from = ordersHistory[0].timestamp;
-    const to = ordersHistory[ordersHistory.length -1].timestamp;
+    const to = ordersHistory[ordersHistory.length - 1].timestamp;
 
     this.endTime = moment(to).format('HH:mm');
     this.startTime = moment(from).format('HH:mm');
     this.timeDiff = moment.duration(moment(to).diff(moment(from))).asMinutes().toFixed(2);
 
-    if(base !=='USDT') priceBaseUS = MC[base].price_usd;
+    if (base !== 'USDT') priceBaseUS = MC[base].price_usd;
     let bought = 0;
     let sold = 0;
     ordersHistory.forEach(function (o) {
       o.amountUS = Math.round(o.amountCoin * o.rate * priceBaseUS);
-      o.action ==='BUY'? bought+=o.amountUS: sold+= o.amountUS;
+      o.action === 'BUY' ? bought += o.amountUS : sold += o.amountUS;
     });
 
     this.sumBuy = bought;
     this.sumSell = sold ;
     const speed = 60 * (bought + sold) / (to - from);
-    this.volPerMinute = 'V: '+ speed.toPrecision(3) + 'k/min';
-    this.tradesPerMinute = '#: ' + (60000 * ordersHistory.length /(to - from)).toPrecision(4)+ '/min';
+    this.volPerMinute = 'V: ' + speed.toPrecision(3) + 'k/min';
+    this.tradesPerMinute = '#: ' + (60000 * ordersHistory.length / (to - from)).toPrecision(4) + '/min';
 
     this.fishes =  ordersHistory.sort(function (a, b) {
       return b.amountCoin - a.amountCoin;
-    }).slice(0,this.resultsLength);
+    }).slice(0, this.resultsLength);
   this.sort();
   }
 
-  sort(){
-    this.fishes = _.orderBy(this.fishes, this.sortOn, this.isDesc?'desc':'asc');
+  sort() {
+    this.fishes = _.orderBy(this.fishes, this.sortOn, this.isDesc ? 'desc' : 'asc');
   }
 
-  onRefreshClick(){
+  onRefreshClick() {
     this.showFishes();
   }
-
-  sortOn = 'timestamp';
-  isDesc = true;
-  sortOnClick(sort: string){
-    if(this.sortOn === sort) this.isDesc = !this.isDesc;
+  sortOnClick(sort: string) {
+    if (this.sortOn === sort) this.isDesc = !this.isDesc;
     localStorage.setItem('FishesComponent-sortOn', sort);
     this.sortOn = sort;
     this.sort();

@@ -20,15 +20,15 @@ import {Router} from '@angular/router';
 
 
 export class AllCoinsTableComponent implements OnInit {
-  allCoinsData:any[];
-  average1h:number;
-  average24h:number;
-  average7d:number;
-  creteria:string;
-  asc_desc='asc';
+  allCoinsData: any[];
+  average1h: number;
+  average24h: number;
+  average7d: number;
+  creteria: string;
+  asc_desc: 'asc' | 'desc' = 'asc';
   constructor(
-    private marketCap:ApiMarketCapService,
-    private storage:StorageService,
+    private marketCap: ApiMarketCapService,
+    private storage: StorageService,
     private router: Router
   ) { }
 
@@ -36,26 +36,26 @@ export class AllCoinsTableComponent implements OnInit {
     this.iniiAsync();
   }
 
-  async iniiAsync(){
+  async iniiAsync() {
     this.allCoinsData = await this.marketCap.getCoinsArWithSelected();
 
   }
 
-  calculateAvarage(){
+  calculateAvarage() {
     let ar  = this.allCoinsData;
-    if(!ar || !ar.length ) return;
+    if (!ar || !ar.length ) return;
     let length = ar.length;
 
-    this.average1h = +(_.sumBy(ar, 'percent_change_1h')/length).toFixed(2);
-    this.average24h = +(_.sumBy(ar, 'percent_change_24h')/length).toFixed(2);
-    this.average7d = +(_.sumBy(ar, 'percent_change_7d')/length).toFixed(2);
+    this.average1h = +(_.sumBy(ar, 'percent_change_1h') / length).toFixed(2);
+    this.average24h = +(_.sumBy(ar, 'percent_change_24h') / length).toFixed(2);
+    this.average7d = +(_.sumBy(ar, 'percent_change_7d') / length).toFixed(2);
   }
 
 
-  onCoinSelected(event, coin:VOMarketCap):void {
+  onCoinSelected(event, coin: VOMarketCap): void {
    // console.log(event.target.checked, coin);
     let symbol = coin.symbol;
-    if(event.target.checked) this.storage.addMCSelected(symbol);
+    if (event.target.checked) this.storage.addMCSelected(symbol);
     else this.storage.deleteSelectedMC(symbol);
   }
 
@@ -64,12 +64,12 @@ export class AllCoinsTableComponent implements OnInit {
     this.router.navigateByUrl('/trader/analyze-coin/' + symbol);
   }
 
-  onClickHeader(creteria:string):void{
+  onClickHeader(creteria: string): void {
     // console.log(creteria);
-    if(this.creteria === creteria){
-      if(this.asc_desc === 'asc') this.asc_desc ='desc';
-      else  this.asc_desc='asc';
-    }else this.asc_desc = 'asc';
+    if (this.creteria === creteria) {
+      if (this.asc_desc === 'asc') this.asc_desc = 'desc';
+      else  this.asc_desc = 'asc';
+    } else this.asc_desc = 'asc';
    //  console.log(this.asc_desc);
 
     this.allCoinsData = _.orderBy(this.allCoinsData, creteria, this.asc_desc);

@@ -17,16 +17,6 @@ import {WatchDog} from '../../models/watch-dog';
 })
 export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  counter: number = 0;
-  watchDogs: WatchDog[] = [];
-  isRunning: boolean;
-  progress: number;
-  seconds: number;
-  refreshSeconds = 60 * 60;
-  interval: any;
-
-  start_stop: string = 'Start Refresh Timer';
-
 
   constructor(
     private marketCap: MarketCapService,
@@ -37,11 +27,23 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
   }
 
+  counter = 0;
+  watchDogs: WatchDog[] = [];
+  isRunning: boolean;
+  progress: number;
+  seconds: number;
+  refreshSeconds = 60 * 60;
+  interval: any;
+
+  start_stop = 'Start Refresh Timer';
+
 
   newData: any;
 
   private sub1;
   private sub2;
+
+  private errors: string[] = [];
 
   ngOnInit() {
 
@@ -119,7 +121,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
          }
        }//else console.warn(script ,oldValue, newValue);
  */
-    })
+    });
 
 
     console.log('results ', subjects);
@@ -176,7 +178,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.seconds = 0;
    // this.loadData();
     this.interval = setInterval(() => {
-      this.seconds++
+      this.seconds++;
       this.progress = 5 + (this.seconds / this.refreshSeconds) * 100;
       if (this.seconds > this.refreshSeconds) {
         this.seconds = 0;
@@ -189,8 +191,6 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isRunning) this.startTimer();
     else this.stopTimer();
   }
-
-  private errors: string[] = [];
 
   saveError(error: string) {
     this.errors.push(error);
@@ -240,7 +240,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
        //this.watchDogs  = _.orderBy(ar, this.sortCriteria, this.asc_desc);
      }*/
-  //}
+  // }
 
 
 }

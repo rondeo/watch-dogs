@@ -22,9 +22,16 @@ import {MatSnackBar} from '@angular/material';
 })
 export class CommonMarketsComponent implements OnInit {
 
-  id = 'CommonMarketsComponent'
+  constructor(
+    private apiPublic: ApisPublicService,
+    private marketCap: ApiMarketCapService,
+    private snackBar: MatSnackBar
+  ) {
+  }
+
+  id = 'CommonMarketsComponent';
   exchanges: { exchange: string, selected: boolean }[];
-  private allMarkets: { [exchange: string]: { [symbol: string]: VOMarket }[] }
+  private allMarkets: { [exchange: string]: { [symbol: string]: VOMarket }[] };
 
   // allMarketNames: string[][];
   selectedExchanges: string[];
@@ -32,12 +39,7 @@ export class CommonMarketsComponent implements OnInit {
 
   dataset: MarketDisplay [];
 
-  constructor(
-    private apiPublic: ApisPublicService,
-    private marketCap: ApiMarketCapService,
-    private snackBar: MatSnackBar
-  ) {
-  }
+  selected: MarketDisplay;
 
   ngOnInit() {
     this.initAsync();
@@ -50,7 +52,7 @@ export class CommonMarketsComponent implements OnInit {
     const indexed = {};
     allMarkets.forEach(function (item) {
       indexed[Object.values(item)[0].exchange] = item;
-    })
+    });
 
     this.allMarkets = indexed;
 
@@ -60,8 +62,8 @@ export class CommonMarketsComponent implements OnInit {
       return {
         exchange: item,
         selected: selected.indexOf(item) !== -1
-      }
-    })
+      };
+    });
 
     this.onExchnageChange(null);
     /*this.subscribedMarkets = subscribedMarkets;
@@ -79,8 +81,8 @@ export class CommonMarketsComponent implements OnInit {
     const allMarkets = this.allMarkets;
     return this.selectedExchanges.map(function (exchange) {
       const value = allMarkets[exchange][market];
-      return value ? value.Last : 0
-    })
+      return value ? value.Last : 0;
+    });
   }
 
   showCommon(selected: string[]) {
@@ -91,7 +93,7 @@ export class CommonMarketsComponent implements OnInit {
 
     const marketsNames = markets.map(function (item) {
       return Object.keys(item);
-    })
+    });
 
     this.commonMarketNames = _.intersection(...marketsNames);
 
@@ -109,8 +111,8 @@ export class CommonMarketsComponent implements OnInit {
         values: values,
         change: MATH.percent(last, first),
         selected: false
-      }
-    })
+      };
+    });
 
 
     /* const selectedExchanges = this.subscribedMarkets.filter(function (item) {
@@ -150,8 +152,8 @@ export class CommonMarketsComponent implements OnInit {
         buy: UtilsBooks.getRateForAmountCoin(item.buy, amountCoin),
         sell: UtilsBooks.getRateForAmountCoin(item.sell, amountCoin),
         amountCoin: amountCoin
-      }
-    })
+      };
+    });
 
     return booksResults;
   }
@@ -160,7 +162,7 @@ export class CommonMarketsComponent implements OnInit {
     exchange: string,
     market: string,
     buy: number,
-    sell:number,
+    sell: number,
     amountCoin: number
   }[] ) {
 
@@ -168,19 +170,19 @@ export class CommonMarketsComponent implements OnInit {
     let maxBuy = 0;
     let minSell = 100000;
     booksResults.forEach(function (item) {
-      if(item.buy > maxBuy) maxBuy = item.buy;
-      if(item.sell < minSell) minSell = item.sell;
+      if (item.buy > maxBuy) maxBuy = item.buy;
+      if (item.sell < minSell) minSell = item.sell;
 
-      results += ' ' +item.exchange +' ' + MATH.percent(item.sell, item.buy) + '%';
-    })
+      results += ' ' + item.exchange + ' ' + MATH.percent(item.sell, item.buy) + '%';
+    });
 
     let color = '';
-    if(maxBuy > minSell) {
-      color ='bd-red';
+    if (maxBuy > minSell) {
+      color = 'bd-red';
     }
 
     console.log(color);
-    this.snackBar.open(results, 'x', {duration: 15000, extraClasses:color});
+    this.snackBar.open(results, 'x', {duration: 15000, panelClass: color});
     console.log(booksResults);
     console.log(maxBuy, minSell);
 
@@ -198,7 +200,7 @@ export class CommonMarketsComponent implements OnInit {
 
     Promise.all(prs).then(res => {
       // console.log(res);
-      this.marketCap.getCoin(ar[1]).then(mc =>{
+      this.marketCap.getCoin(ar[1]).then(mc => {
         const price: number = mc.price_usd;
         const amountCoin = 1000 / price;
        const result =  this.analizeBooks(res, amountCoin);
@@ -209,28 +211,26 @@ export class CommonMarketsComponent implements OnInit {
 
         });*/
 
-      })
+      });
 
-    })
+    });
 
       // console.log(market);
   }
 
 
   selectMarket(market: MarketDisplay) {
-    if(this.selected) this.selected.selected = false;
+    if (this.selected) this.selected.selected = false;
     this.selected = market;
     market.selected = true;
   }
-
-  selected: MarketDisplay;
-  onValueClick(i:number, j:number) {
+  onValueClick(i: number, j: number) {
 
     const market = this.dataset[i];
     this.selectMarket(market);
 
     const exchange = this.selectedExchanges[j];
-    const ar= market.market.split('_');
+    const ar = market.market.split('_');
     const url = this.apiPublic.getExchangeApi(exchange).getMarketUrl(ar[0], ar[1]);
     window.open(url, exchange);
 
@@ -241,23 +241,23 @@ export class CommonMarketsComponent implements OnInit {
     exchange: string,
     market: string,
     buy: number,
-    sell:number,
+    sell: number,
     amountCoin: number
   }[]) {
     const market = this.selected;
 
-    if(market.market !== booksResults[0].market)
-      throw new Error(' ERROR markets not match ' + market.market  +' '+ booksResults[0].market);
+    if (market.market !== booksResults[0].market)
+      throw new Error(' ERROR markets not match ' + market.market  + ' ' + booksResults[0].market);
 
     const indexed = _.keyBy(booksResults, 'exchange');
     console.log(indexed);
     const values = [];
     this.selectedExchanges.forEach(function (item) {
       const books = indexed[item];
-      const value = (books.buy + books.sell) /2;
+      const value = (books.buy + books.sell) / 2;
       values.push(value);
 
-    })
+    });
     const oldValues = this.selected.values;
     console.log(oldValues, values);
     this.selected.values = values;

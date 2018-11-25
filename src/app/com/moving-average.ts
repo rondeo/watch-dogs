@@ -36,7 +36,7 @@ export class MovingAverage {
       timestamp: data.timestamp,
       rank: data.rank,
       rankD: +(100 * (data.rankPrev - data.rank) / data.rank).toFixed(4)
-    }
+    };
   }
 
   static isMovingDown(ma: VOMovingAvg): boolean {
@@ -153,7 +153,7 @@ export class MovingAverage {
 
     const prices_btcs: number[] = coindatas.map(function (item) {
       return item.price_btc;
-    })
+    });
 
     for (let i = 0, n = prices_btcs.length; i < n; i++) {
       const cur = prices_btcs[i];
@@ -167,14 +167,14 @@ export class MovingAverage {
       price_2h.push(sum(l_20) / l_20.length);
 
       const l_10 = prices_btcs.slice(i - 10, i);
-      price_1h.push(sum(l_10) / l_10.length)
+      price_1h.push(sum(l_10) / l_10.length);
     }
 
     return {
       prices_btcs,
       price_1h,
       price_2h
-    }
+    };
   }
 
 
@@ -190,7 +190,7 @@ export class MovingAverage {
 
     const prices_btcs: number[] = coindatas.map(function (item) {
       return item.price_btc;
-    })
+    });
 
     for (let i = 0, n = prices_btcs.length; i < n; i++) {
       const cur = prices_btcs[i];
@@ -226,7 +226,7 @@ export class MovingAverage {
       med_2hs,
       med_1hOs,
       med_2hOs
-    }
+    };
   }
 
   static movingAverageGraphFromCoinWeek(coindatas: any[]) {
@@ -314,7 +314,7 @@ export class MovingAverage {
         rank,
         price_btc,
         timestamp
-      })
+      });
     }
 
 
@@ -382,7 +382,7 @@ export class MovingAverage {
 
     const rank1 = +(sumBy(first10, 'rank') / first10.length);
     const rank2 = +(sumBy(last10, 'rank') / last10.length);
-    const rank24hD = +(100 * (rank1 - rank2) / rank1)
+    const rank24hD = +(100 * (rank1 - rank2) / rank1);
 
     const rank = cur.rank;
     const price_btc = cur.price_btc;
@@ -394,7 +394,7 @@ export class MovingAverage {
       price4hD,
       price24hD,
       rank24hD
-    }
+    };
   }
 
   static async movingAverageSnapFromCoinDays(coinDay: VOCoinsDayData) {
@@ -422,7 +422,7 @@ export class MovingAverage {
 
       }
       resolve(out);
-    })
+    });
   }
 }
 

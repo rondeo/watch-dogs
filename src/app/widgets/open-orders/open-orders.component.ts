@@ -13,6 +13,12 @@ import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service'
 })
 export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
 
+  constructor(
+    private apisPrivate: ApisPrivateService,
+    private externalPages: ShowExternalPageService
+  ) {
+  }
+
   @Input() exchange: string;
   @Input() market: string;
   @Input() refresh: number;
@@ -20,14 +26,14 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   @Output() orderCanceled: EventEmitter<VOOrder> = new EventEmitter();
   orders: VOOrder[] = [];
 
-  constructor(
-    private apisPrivate: ApisPrivateService,
-    private externalPages: ShowExternalPageService
-  ) {
-  }
-
   private sub;
-  private sub2
+  private sub2;
+
+
+  timeout;
+  lastCall = 0;
+
+  allOrders: VOOrder[];
 
   ngOnInit() {
   }
@@ -35,11 +41,6 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {
     this.subscribe();
   }
-
-  timeout;
-  lastCall = 0;
-
-  allOrders: VOOrder[];
 
   subscribe() {
     if (this.sub) this.sub.unsubscribe();
@@ -50,9 +51,9 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
       if (!orders) return;
       const current = _.keyBy(this.orders, 'uuid');
       orders.forEach(function (o) {
-        o.lastStatus = current[o.uuid]?current[o.uuid].lastStatus:'';
-      })
-       this.orders = orders;
+        o.lastStatus = current[o.uuid] ? current[o.uuid].lastStatus : '';
+      });
+      this.orders = orders;
     });
   }
 
@@ -64,7 +65,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
       if (confirm('You want to cancel order ' + msg)) {
         api.cancelOrder2(id, order.base + '_' + order.coin).then(res => {
           this.orderCanceled.emit(order);
-        })
+        });
       }
     }
   }

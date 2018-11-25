@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {FollowOpenOrder} from '../../apis/open-orders/follow-open-order';
 
@@ -10,14 +10,16 @@ import {FollowOpenOrder} from '../../apis/open-orders/follow-open-order';
 export class FollowOrderListComponent implements OnInit {
 
   follows: FollowOpenOrder[];
+
   constructor(
     private openOrders: FollowOrdersService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.openOrders.followingOrdersSub.subscribe(following =>{
+    this.openOrders.followingOrdersSub.subscribe(following => {
       this.follows = following;
-    })
+    });
   }
 
 }

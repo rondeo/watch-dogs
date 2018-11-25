@@ -19,11 +19,11 @@ export class Parsers {
       total_supply: item[12],
       max_supply: item[13],
       last_updated: item[14]
-    }
+    };
   }
 
   static mapAgrigated(item: MCdata, symbol: string): any {
-    const price_btcs = item.price_btcs || item.prev
+    const price_btcs = item.price_btcs || item.prev;
     const price_btc = item.btc,
       prev = price_btcs[0],
       last5 = price_btcs[1],
@@ -31,12 +31,12 @@ export class Parsers {
       last20 = price_btcs[3],
       ago2h = price_btcs[4],
       last30 = price_btcs[5],
-      ago3h = price_btcs[6]
+      ago3h = price_btcs[6];
 
 
     return {
       date: '',
-      name:item.id,
+      name: item.id,
       symbol: symbol,
       id: item.id,
       price_usd: item.usd,
@@ -47,7 +47,7 @@ export class Parsers {
       tobtc_change_2h: +(100 * (last10 - last30) / last30).toFixed(2),
       tobtc_change_3h: +(100 * (last10 - ago3h) / ago3h).toFixed(2),
 
-      total_supply:item.data[4],
+      total_supply: item.data[4],
 
       percent_change_1h: item.h1,
       percent_change_24h: item.data[0],
@@ -66,11 +66,11 @@ export class Parsers {
       ago2h,
       last30,
       ago3h
-    }
+    };
   }
 
   static mapDataCharts(res: any) {
-    let ar: any[] = res.data
+    let ar: any[] = res.data;
     let volume_usd_24h = [];
     let available_supply = [];
     let market_cap_usd = [];
@@ -114,7 +114,7 @@ export class Parsers {
 
       total_supply.push(+item.total_supply);
       stamps.push(item.stamp);
-      labels.push(' ')
+      labels.push(' ');
     });
 
     return {
@@ -133,7 +133,7 @@ export class Parsers {
       total_supply,
       labels,
       stamps
-    }
+    };
 
   }
 
@@ -162,13 +162,13 @@ export class Parsers {
          // tobtc_change_24h: +(+item.data[0] - percent_change_24h).toFixed(2),
          // tobtc_change_7d: +(+item.data[1] - percent_change_7d).toFixed(2),
          // volume_usd_24h: item.vol,
-          //volumePrev:item.volP,
+          // volumePrev:item.volP,
           market_cap_usd: item.data[2],
           available_supply: item.data[3],
           total_supply: item.data[4],
           max_supply: item.data[5],
           last_updated: item.t
-        }
+        };
       }
     }
     return MC;

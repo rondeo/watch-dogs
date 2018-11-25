@@ -7,7 +7,7 @@ import {AuthHttpService, VOUser} from '../services/auth-http.service';
 import {VOMarketCap} from '../models/app-models';
 import {StorageService} from '../services/app-storage.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
-import {ApiMarketCapService} from "../apis/api-market-cap.service";
+import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {WatchDog} from '../models/watch-dog';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Observable} from 'rxjs/internal/Observable';
@@ -20,16 +20,10 @@ import {map} from 'rxjs/operators';
 @Injectable()
 export class EmailServiceService {
 
-  private watchDogs:WatchDog[];
-  private watchDogsSub:BehaviorSubject<WatchDog[]>;
-  watchDogs$:Observable<WatchDog[]>;
-
-  currentWatchDog :WatchDog;
-
   constructor(
-    private http:AuthHttpService,
-    private storage:StorageService,
-    public marketCap:ApiMarketCapService
+    private http: AuthHttpService,
+    private storage: StorageService,
+    public marketCap: ApiMarketCapService
   ) {
 
     this.watchDogsSub = new BehaviorSubject(this.watchDogs);
@@ -45,7 +39,15 @@ export class EmailServiceService {
 
   }
 
-  getNewWatchDog():any{
+  private watchDogs: WatchDog[];
+  private watchDogsSub: BehaviorSubject<WatchDog[]>;
+  watchDogs$: Observable<WatchDog[]>;
+
+  currentWatchDog: WatchDog;
+
+  marketCapData: {[id: string]: VOMarketCap};
+
+  getNewWatchDog(): any {
   return {
     /*  uid: '',
       coinId: '',
@@ -63,9 +65,9 @@ export class EmailServiceService {
         price_btc:0,
       }
     }*/
+  };
   }
-  }
-  saveData(){
+  saveData() {
 
    /* let data = this.watchDogs.map(function (item) {
       let script = item.sellScripts.toString();
@@ -85,16 +87,14 @@ export class EmailServiceService {
     this.watchDogsSub.next(this.watchDogs);*/
   }
 
-  marketCapData:{[id:string]:VOMarketCap}
+  getWatchDogs(): WatchDog[] {
 
-  getWatchDogs():WatchDog[]{
-
-    if(!this.watchDogs){
+    if (!this.watchDogs) {
       let str = this.storage.getItem('watch-dogs');
 
       let ar = [];
 
-      if(str){
+      if (str) {
        /* try {
           ar = JSON.parse(str);
 
@@ -108,7 +108,7 @@ export class EmailServiceService {
       this.watchDogs = ar;
     }
     return this.watchDogs;
-    //console.log('getWatchDogs');
+    // console.log('getWatchDogs');
 
 
 
@@ -117,7 +117,7 @@ export class EmailServiceService {
   }
 
 
-  mapMarketCap(){
+  mapMarketCap() {
 
   /*  let data = this.marketCap.getAllCoinsById();
 
@@ -154,7 +154,7 @@ export class EmailServiceService {
   }*/
 
 
- addDog(dog:WatchDog){
+ addDog(dog: WatchDog) {
   /* dog.scriptIcon = dog.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
    dog.statusIcon = dog.isActive !=='isActive'?'fa fa-play':'fa fa-pause';
    dog.marketCap = this.marketCapData[dog.coinId];
@@ -183,17 +183,17 @@ export class EmailServiceService {
 
 
 
-  createUid(symbol:string):string{
-   let indexed = _.keyBy(this.watchDogs, 'uid')
-    let i=0;
-    while(indexed[symbol +'_'+ (++i)]);
-    return symbol +'_' + i;
+  createUid(symbol: string): string {
+   let indexed = _.keyBy(this.watchDogs, 'uid');
+    let i = 0;
+    while (indexed[symbol + '_' + (++i)]);
+    return symbol + '_' + i;
   }
 
 
   deleteDog(dog: WatchDog) {
-    this.watchDogs = _.filter(this.watchDogs,function (item) {
-      return item.id !==dog.id;
+    this.watchDogs = _.filter(this.watchDogs, function (item) {
+      return item.id !== dog.id;
     });
     this.saveData();
     this.watchDogsSub.next(this.watchDogs);
@@ -201,9 +201,9 @@ export class EmailServiceService {
   }
 
 
-  getDogByUid(uid: string):WatchDog {
+  getDogByUid(uid: string): WatchDog {
 
-    return this.getWatchDogs().find((item)=>{
+    return this.getWatchDogs().find((item) => {
           return item.id === uid;
       });
 
@@ -235,20 +235,20 @@ export class EmailServiceService {
   }
 
 
-  sendNotification(subject:string, message: string):Observable<any> {
+  sendNotification(subject: string, message: string): Observable<any> {
 
-    if(this.http.isLogedIn()){
-      let url ='/api/send-notification';
-      let payload ={
-        email:this.http.getUserEmail(),
-        subject:subject,
-        message:message
+    if (this.http.isLogedIn()) {
+      let url = '/api/send-notification';
+      let payload = {
+        email: this.http.getUserEmail(),
+        subject: subject,
+        message: message
       };
 
       console.log(' sendNotification ' + url, payload);
-      return this.http.post(url, payload).pipe(map(res=>res));
-    }else{
-      let sub:BehaviorSubject<any> = new BehaviorSubject({error:'login',message:'Please login into email service'})
+      return this.http.post(url, payload).pipe(map(res => res));
+    } else {
+      let sub: BehaviorSubject<any> = new BehaviorSubject({error: 'login', message: 'Please login into email service'});
       return sub.asObservable();
     }
   }

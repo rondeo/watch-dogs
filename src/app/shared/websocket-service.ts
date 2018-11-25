@@ -5,10 +5,10 @@ import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 
 
-export interface VOBuys{
-  Quantity:number;
-  Rate:number;
-  Type:number;
+export interface VOBuys {
+  Quantity: number;
+  Rate: number;
+  Type: number;
 }
 export interface VOFills {
   OrderType: string;
@@ -17,13 +17,13 @@ export interface VOFills {
   TimeStamp: string;
 }
 
-export interface VOMarketData{
-  MarketName:string;
-  ext:string;
-  Nonce:number;
-  Buys:VOBuys[];
-  Sells:VOBuys[];
-  Fills:VOFills[];
+export interface VOMarketData {
+  MarketName: string;
+  ext: string;
+  Nonce: number;
+  Buys: VOBuys[];
+  Sells: VOBuys[];
+  Fills: VOFills[];
 
 }
 
@@ -32,8 +32,8 @@ export interface Socket {
   emit(event: string, data: any);
 }
 
-declare var io : {
-  connect(url: string, options?:any): Socket;
+declare var io: {
+  connect(url: string, options?: any): Socket;
 };
 
 @Injectable()
@@ -41,23 +41,23 @@ export class WebsocketService {
 
   socket: Socket;
   observer: Observer<any>;
-  isConnected:Subject<boolean>;
-  connections:{[id:string]:any} = {};
-  marketsDataSub:Subject<VOMarketData>;
+  isConnected: Subject<boolean>;
+  connections: {[id: string]: any} = {};
+  marketsDataSub: Subject<VOMarketData>;
 
-  constructor(){
+  constructor() {
     this.isConnected = new Subject();
     this.marketsDataSub = new Subject();
   }
 
-  getQuotes() : Observable<number> {
+  getQuotes(): Observable<number> {
     this.socket = io.connect('/');
 
     this.socket.on('welcome', (res) => {
       console.log(res);
-      if(res.id){
+      if (res.id) {
         this.connections[res.id] = res;
-        this.isConnected.next(true)
+        this.isConnected.next(true);
       }
 
      // this.observer.next(res);
@@ -68,7 +68,7 @@ export class WebsocketService {
       this.observer.next(res);
     });
     this.socket.on('bittrex-data', (res) => {
-      //console.log(res);
+      // console.log(res);
       res.evt = 'bittrex-data';
       this.marketsDataSub.next(res);
      // this.observer.next(res);
@@ -81,16 +81,16 @@ export class WebsocketService {
     return this.createObservable();
   }
 
-  sendMessage(message:string[]){
+  sendMessage(message: string[]) {
     console.log('bittrex ', message);
 
     message = message.map(function (item) {
-      return item.replace('_', '-')
-    })
+      return item.replace('_', '-');
+    });
     this.socket.emit('bittrex', message);
   }
 
-  createObservable() : Observable<number> {
+  createObservable(): Observable<number> {
     return Observable.create((observer: Observer<any>) => {
       this.observer = observer;
     });

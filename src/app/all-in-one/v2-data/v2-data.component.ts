@@ -2,12 +2,12 @@ import {Component, OnInit} from '@angular/core';
 
 import {ActivatedRoute, Router} from '@angular/router';
 import {VOMarket, VOMarketCap} from '../../models/app-models';
-import {ApiMarketCapService} from "../../apis/api-market-cap.service";
-import {ApisPublicService} from "../../apis/api-public/apis-public.service";
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 
 import * as _ from 'lodash';
-import {V2DataHelper} from "./v2-data-helper";
-import {MatSnackBar} from "@angular/material";
+import {V2DataHelper} from './v2-data-helper';
+import {MatSnackBar} from '@angular/material';
 
 
 interface IDisplayCoins {

@@ -7,17 +7,17 @@ export default class PiercingLine extends CandlestickFinder {
         this.requiredCount  = 2;
         this.name = 'PiercingLine';
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let firstdaysOpen   = data.open[0];
         let firstdaysClose  = data.close[0];
         let firstdaysHigh   = data.high[0];
-        let firstdaysLow    = data.low[0]
+        let firstdaysLow    = data.low[0];
         let seconddaysOpen  = data.open[1];
         let seconddaysClose = data.close[1];
         let seconddaysHigh  = data.high[1];
-        let seconddaysLow   = data.low[1]
+        let seconddaysLow   = data.low[1];
 
-        let firstdaysMidpoint = ((firstdaysOpen+firstdaysClose)/2);
+        let firstdaysMidpoint = ((firstdaysOpen + firstdaysClose) / 2);
         let isDowntrend       = seconddaysLow < firstdaysLow;
         let isFirstBearish    = firstdaysClose < firstdaysOpen;
         let isSecondBullish   = seconddaysClose > seconddaysOpen;
@@ -30,6 +30,6 @@ export default class PiercingLine extends CandlestickFinder {
    }
 }
 
-export function piercingline(data:StockData) {
+export function piercingline(data: StockData) {
   return new PiercingLine().hasPattern(data);
 }

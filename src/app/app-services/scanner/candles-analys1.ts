@@ -10,6 +10,9 @@ import {StorageService} from '../../services/app-storage.service';
 
 export class CandlesAnalys1 {
 
+  static analysData;
+  static data;
+
   static isTrendDownUp(candles: VOCandle[]) {
     const closes = CandlesAnalys1.closes(candles);
     const last = _.last(candles);
@@ -28,7 +31,7 @@ export class CandlesAnalys1 {
       ma7,
       ma25,
       ma99
-    }
+    };
   }
 
   static vols(candles: VOCandle[]) {
@@ -43,7 +46,7 @@ export class CandlesAnalys1 {
       v7,
       v25,
       vmed
-    }
+    };
   }
 
   static mas(candles: VOCandle[]) {
@@ -59,7 +62,7 @@ export class CandlesAnalys1 {
       ma7,
       ma25,
       ma99
-    }
+    };
   }
 
 
@@ -98,7 +101,7 @@ export class CandlesAnalys1 {
     const a = d > -0.2 ? 'BUY' : 'SELL';
     // const d = MATH.percent(max.close, max.open);
 
-    const m = [pricePrev, nextPrice]
+    const m = [pricePrev, nextPrice];
     return {t, p, a, d, m};
   }
 
@@ -144,9 +147,6 @@ export class CandlesAnalys1 {
     });
   }
 
-  static analysData;
-  static data;
-
 
   static lastVolume(candles: VOCandle[]) {
     const vols = candles.map(function (o) {
@@ -190,26 +190,18 @@ export class CandlesAnalys1 {
     return MATH.percent2(last3, prelast3);
   }
 
-  isDive(candles: VOCandle[]) {
-    const last = _.last(candles);
-    const prelast = candles[candles.length - 2];
-    const lastmed = (last.high + last.low) / 2;
-    const prelastmed = (prelast.high + prelast.low) / 2;
 
-  }
-
-
-  static getVolumePrice(patterns: any[]){
+  static getVolumePrice(patterns: any[]) {
     const largeVolume = patterns.find(function (item) {
-      return item.state.indexOf('LARGE-VOLUME') !== -1 || item.state.indexOf('HUGE-VOLUME') !==-1;
+      return item.state.indexOf('LARGE-VOLUME') !== -1 || item.state.indexOf('HUGE-VOLUME') !== -1;
     });
 
     let price = 0;
-    if(largeVolume) price = largeVolume.P;
+    if (largeVolume) price = largeVolume.P;
     return price;
   }
 
-  static createAction(patterns: {state:string, t:string, stamp: number}[], lastOrder: {stamp: number, action: string, price:number}) {
+  static createAction(patterns: {state: string, t: string, stamp: number}[], lastOrder: {stamp: number, action: string, price: number}) {
     if (patterns.length < 3) return '';
     const last = _.first(patterns);
     console.log(last.t, last.state);
@@ -232,15 +224,15 @@ export class CandlesAnalys1 {
     if (last.state === 'DOWN_LARGE-VOLUME') return 'SELL';
 
   const drop = _.find(patterns, function (item) {
-    return item.state.indexOf('DROP') !==-1;
+    return item.state.indexOf('DROP') !== -1;
   });
 
 
 
-  if(drop){
+  if (drop) {
     const min = moment(last.stamp).diff(drop.stamp, 'minutes');
-    if(min < 30){
-      return 'WAIT-AFTER_DROP'
+    if (min < 30) {
+      return 'WAIT-AFTER_DROP';
      //  console.log(' WAS DROP ' + min + ' m ago');
     }
   }
@@ -248,7 +240,7 @@ export class CandlesAnalys1 {
 
 
 
-    if(last.state === 'UP_WITH-VOLUME') return 'BUY';
+    if (last.state === 'UP_WITH-VOLUME') return 'BUY';
 
 
 
@@ -338,7 +330,7 @@ export class CandlesAnalys1 {
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
 
 
-    //const actionValues = await storage.select('action-values');
+    // const actionValues = await storage.select('action-values');
     const curr = {v3_med, PD, ma3_25, ma25_99, VD, v3_25, P, t, stamp, state: ''};
 
     let volume = 'AVG-VOLUME';
@@ -372,7 +364,7 @@ export class CandlesAnalys1 {
     const volumePrice = (max.high - max.low) / 2;
     const ind = candles.indexOf(max);
 
-    const change = MATH.percent(last.close, volumePrice)
+    const change = MATH.percent(last.close, volumePrice);
     return change;
   }
 
@@ -387,7 +379,15 @@ export class CandlesAnalys1 {
       wick,
       tail,
       range
-    }
+    };
+
+  }
+
+  isDive(candles: VOCandle[]) {
+    const last = _.last(candles);
+    const prelast = candles[candles.length - 2];
+    const lastmed = (last.high + last.low) / 2;
+    const prelastmed = (prelast.high + prelast.low) / 2;
 
   }
 }

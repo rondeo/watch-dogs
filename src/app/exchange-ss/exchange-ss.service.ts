@@ -1,33 +1,30 @@
 import { Injectable } from '@angular/core';
 import {VOMarketCap} from '../models/app-models';
 
-
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import {Http} from '@angular/http';
 import {ApiServerService} from '../api-server.service';
+import {BehaviorSubject, Observable} from 'rxjs';
 @Injectable()
 export class ExchangeSsService {
 
-  private myWallets:any[];
-  private myWalletsSub:BehaviorSubject<any[]>;
-  myWallets$:Observable<any[]>
+  private myWallets: any[];
+  private myWalletsSub: BehaviorSubject<any[]>;
+  myWallets$: Observable<any[]>;
 
-  private myCoins:VOMarketCap[];
-  private myCoinsSub:BehaviorSubject<VOMarketCap[]>;
-  myCoins$:Observable<VOMarketCap[]>
+  private myCoins: VOMarketCap[];
+  private myCoinsSub: BehaviorSubject<VOMarketCap[]>;
+  myCoins$: Observable<VOMarketCap[]>;
 
-  myCoinsSymbols:string[];
-  allCoins:VOMarketCap[];
+  myCoinsSymbols: string[];
+  allCoins: VOMarketCap[];
 
 
   constructor(
    // private allWallets:WalletsAllService,
    // private allCoinsService:MarketCapSelectedService,
-    private api:ApiServerService
+    private api: ApiServerService
   ) {
 
-    this.myWalletsSub =  new BehaviorSubject<any[]>([])
+    this.myWalletsSub =  new BehaviorSubject<any[]>([]);
     this.myWallets$ = this.myWalletsSub.asObservable();
     /*allWallets.myWallets$.subscribe(res=>{
       this.myWallets = res;
@@ -40,8 +37,8 @@ export class ExchangeSsService {
     this.myCoinsSub = new BehaviorSubject([]);
     this.myCoins$ = this.myCoinsSub.asObservable();
 
-    //allWallets.loadConfig();
-    //allWallets.loadWallets()
+    // allWallets.loadConfig();
+    // allWallets.loadWallets()
 
  /*   allCoinsService.allCoins$.subscribe(res=>{
       this.allCoins = res;
@@ -54,38 +51,38 @@ export class ExchangeSsService {
   }
 
 
-  updateBalance(wallet:any){
+  updateBalance(wallet: any) {
 
-    this.api.getBalance(wallet.symbol, wallet.address).subscribe(res=>{
+    this.api.getBalance(wallet.symbol, wallet.address).subscribe(res => {
       console.log(res);
-    })
+    });
 
   }
 
 
-  populateCoins(){
-    let coins:VOMarketCap[] = this.allCoins;
-    if(!coins) return;
-    let ar:VOMarketCap[] = [];
-    let symbols:string[] = this.myCoinsSymbols;
+  populateCoins() {
+    let coins: VOMarketCap[] = this.allCoins;
+    if (!coins) return;
+    let ar: VOMarketCap[] = [];
+    let symbols: string[] = this.myCoinsSymbols;
     coins.forEach(function (coin) {
-      if(symbols.indexOf(coin.symbol) !==-1)ar.push(coin)
-    })
+      if (symbols.indexOf(coin.symbol) !== -1)ar.push(coin);
+    });
     this.myCoins = ar;
     this.myCoinsSub.next(this.myCoins);
   }
 
 
 
-  filterWalletsSymbolsUnique(wallets:any[]):string[]{
-    let ar:string[]=[]
+  filterWalletsSymbolsUnique(wallets: any[]): string[] {
+    let ar: string[] = [];
     wallets.forEach(function (wallet) {
-      if(ar.indexOf(wallet.symbol) ===-1) ar.push(wallet.symbol)
-    })
+      if (ar.indexOf(wallet.symbol) === -1) ar.push(wallet.symbol);
+    });
     return ar;
   }
 
-  init(){
+  init() {
 
 
 

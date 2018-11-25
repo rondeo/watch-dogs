@@ -15,9 +15,9 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 @Injectable()
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
-  excludes:string[] = ['BTC','USDT'];
+  excludes: string[] = ['BTC', 'USDT'];
 
-  botsSub : BehaviorSubject< MarketBot[] > = new BehaviorSubject<any[]>([]);
+  botsSub: BehaviorSubject< MarketBot[] > = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
 
@@ -35,42 +35,42 @@ export class FollowOrdersService {
   }
   stopFollow(exchange: string, market: string) {
     const following:  FollowOpenOrder[] = this.followingOrdersSub.getValue();
-    const my = _.find(following, {exchange: exchange, market:market});
-    if(!my) throw new Error(exchange+market);
+    const my = _.find(following, {exchange: exchange, market: market});
+    if (!my) throw new Error(exchange + market);
      my.destroy();
-    const newFollowing = _.reject(following, {exchange: exchange, market:market});
-    if(following.length === newFollowing.length) throw new Error(exchange+market);
+    const newFollowing = _.reject(following, {exchange: exchange, market: market});
+    if (following.length === newFollowing.length) throw new Error(exchange + market);
     this.followingOrdersSub.next(newFollowing);
     this.excludes.push(market.split('_')[1]);
   }
 
-  async getBots(){
+  async getBots() {
     return Promise.resolve(this.botsSub.getValue());
   }
-  async deleteBot(market: string){
+  async deleteBot(market: string) {
     let bots = this.botsSub.getValue();
-    const exist = _.find(bots, {market:market});
-    if(!exist)  return;
+    const exist = _.find(bots, {market: market});
+    if (!exist)  return;
       exist.destroy();
-    bots = _.reject(bots, {market:market});
+    bots = _.reject(bots, {market: market});
     return this.saveBots(bots);
   }
- async saveBots(bots){
+ async saveBots(bots) {
     this.botsSub.next(bots);
     bots = bots.map(function (item) {
       return {
-        market:item.market,
+        market: item.market,
         amountCoin: item.amountCoin,
         history: item.history
-      }
-    })
+      };
+    });
    return this.storage.upsert('bots', bots);
   }
 
-  async createBot(market:string, amountCoin:number){
+  async createBot(market: string, amountCoin: number) {
     const bots = this.botsSub.getValue();
-    const excist = _.find(bots, {market:market});
-    if(excist) throw new Error(' market bot exist');
+    const excist = _.find(bots, {market: market});
+    if (excist) throw new Error(' market bot exist');
     bots.push(
       new MarketBot(
         'binance',
@@ -84,8 +84,8 @@ export class FollowOrdersService {
     );
     return this.saveBots(bots);
   }
-  async initBots(){
-    const bots = ((await this.storage.select('bots')) || []).map((item)=>{
+  async initBots() {
+    const bots = ((await this.storage.select('bots')) || []).map((item) => {
       return new MarketBot(
         'binance',
         item.market,
@@ -94,7 +94,7 @@ export class FollowOrdersService {
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),
         this.canlesService
-      )
+      );
     });
     this.botsSub.next(bots);
   }
@@ -103,8 +103,8 @@ export class FollowOrdersService {
   follow(exchange: string) {
 
     // this.apisPrivate.getExchangeApi(exchange).refreshBalances();
-    FollowOpenOrder.status.subscribe(status =>{
-      console.log('%c ' +status, 'color:green');
+    FollowOpenOrder.status.subscribe(status => {
+      console.log('%c ' + status, 'color:green');
     });
 
 
@@ -125,7 +125,7 @@ export class FollowOrdersService {
 
             const balance = (o.pending + o.available);
 
-            //if(balance) console.log(o.symbol + ' ' +balance + ' '+ price);
+            // if(balance) console.log(o.symbol + ' ' +balance + ' '+ price);
 
             if (balance * price > 10) {
               const market = 'BTC_' + o.symbol;
@@ -146,7 +146,7 @@ export class FollowOrdersService {
                   const ar2: FollowOpenOrder[]  = _.reject(this.followingOrdersSub.getValue(), {market: follow.market});
                   this.followingOrdersSub.next(ar2);
                  //  follow.destroy();
-                }
+                };
                 ar.push(follow);
               }
             }
@@ -155,7 +155,7 @@ export class FollowOrdersService {
         this.followingOrdersSub.next(ar);
 
       });
-    })
+    });
   }
 
 }

@@ -5,34 +5,32 @@ import { CandleData, CandleList } from '../StockData';
 import { Indicator, IndicatorInput } from '../indicator/indicator';
 
 export class HeikinAshiInput extends IndicatorInput {
-    low? : number[]
-    open? : number[]
-    volume? : number[]
-    high? : number[]
-    close? : number[]
-    timestamp? : number[]
+    low?: number[];
+    open?: number[];
+    volume?: number[];
+    high?: number[];
+    close?: number[];
+    timestamp?: number[];
 }
 
-export class HeikinAshi extends Indicator{
-    result : CandleList;
-    generator:IterableIterator<CandleData | undefined>;
-    constructor(input:HeikinAshiInput) {
+export class HeikinAshi extends Indicator {
+    constructor(input: HeikinAshiInput) {
       super(input);
-      var format = this.format;
+      let format = this.format;
       this.result = new CandleList();
 
-      let lastOpen:number = null;
+      let lastOpen: number = null;
       let lastHigh = 0;
       let lastLow = Infinity;
       let lastClose = 0;
       let lastVolume = 0;
       let lastTimestamp = 0;
 
-      this.generator = (function* (){
+      this.generator = (function* () {
           let candleData = yield;
           let calculated = null;
           while (true) {
-            if(lastOpen === null) {
+            if (lastOpen === null) {
                 lastOpen = (candleData.close + candleData.open) / 2 ;
                 lastHigh = candleData.high;
                 lastLow = candleData.low;
@@ -48,8 +46,8 @@ export class HeikinAshi extends Indicator{
                     timestamp : (candleData.timestamp || 0)
                 };
             } else {
-                let newClose = (candleData.close + candleData.open + candleData.high + candleData.low) / 4
-                let newOpen = (lastOpen + lastClose)/ 2;
+                let newClose = (candleData.close + candleData.open + candleData.high + candleData.low) / 4;
+                let newOpen = (lastOpen + lastClose) / 2;
                 let newHigh = Math.max(newOpen, newClose, candleData.high);
                 let newLow = Math.min(candleData.low, newOpen, newClose);
                 calculated = <any>{
@@ -71,7 +69,7 @@ export class HeikinAshi extends Indicator{
 
       this.generator.next();
       input.low.forEach((tick, index) => {
-            var result = this.generator.next({ 
+            let result = this.generator.next({ 
                 open : input.open[index],
                 high : input.high[index],
                 low : input.low[index],
@@ -79,29 +77,31 @@ export class HeikinAshi extends Indicator{
                 volume : input.volume ? input.volume[index] : input.volume,
                 timestamp : input.timestamp ? input.timestamp[index] : input.timestamp
             });
-            if(result.value){
-                this.result.open.push(result.value.open)
-                this.result.high.push(result.value.high)
-                this.result.low.push(result.value.low)
-                this.result.close.push(result.value.close)
-                this.result.volume.push(result.value.volume)
-                this.result.timestamp.push(result.value.timestamp)
+            if (result.value) {
+                this.result.open.push(result.value.open);
+                this.result.high.push(result.value.high);
+                this.result.low.push(result.value.low);
+                this.result.close.push(result.value.close);
+                this.result.volume.push(result.value.volume);
+                this.result.timestamp.push(result.value.timestamp);
             }
       });
     }
 
-    static calculate=heikinashi;
 
-    nextValue(price:CandleData):CandleData | undefined {
-        var result = this.generator.next(price).value;
+    static calculate = heikinashi;
+    result: CandleList;
+    generator: IterableIterator<CandleData | undefined>;
+
+    nextValue(price: CandleData): CandleData | undefined {
+        let result = this.generator.next(price).value;
         return result;
-    };
-}
+    }}
 
-export function heikinashi(input:HeikinAshiInput):CandleList {
+export function heikinashi(input: HeikinAshiInput): CandleList {
        Indicator.reverseInputs(input);
-        var result = new HeikinAshi(input).result;
-        if(input.reversedInput) {
+        let result = new HeikinAshi(input).result;
+        if (input.reversedInput) {
             result.open.reverse();
             result.high.reverse();
             result.low.reverse();
@@ -111,4 +111,4 @@ export function heikinashi(input:HeikinAshiInput):CandleList {
         }
         Indicator.reverseInputs(input);
         return result;
-    };
+    }

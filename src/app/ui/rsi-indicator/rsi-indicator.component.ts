@@ -18,12 +18,12 @@ export class RsiIndicatorComponent implements OnInit, OnChanges {
 
   myTitle: string;
   area: number[];
-  period:number = 14;
+  period = 14;
   constructor() {
   }
 
   ngOnInit() {
-    this.myTitle = 'RSI('+ this.period + ')';
+    this.myTitle = 'RSI(' + this.period + ')';
   }
 
   ngOnChanges() {
@@ -33,20 +33,20 @@ export class RsiIndicatorComponent implements OnInit, OnChanges {
   ctr() {
 
         //  console.log(this.candles);
-    //if (!Array.isArray(this.candles)) return;
+    // if (!Array.isArray(this.candles)) return;
     if (!Array.isArray(this.closes)) return;
     const input = {
       period: this.period,
       values: this.closes
-    }
+    };
     const rsi = new RSI(input);
     const result = rsi.getResult();
     const out: number[] = result;
-    const length = this.closes.length
-    while(out.length < length) out.unshift(0);
+    const length = this.closes.length;
+    while (out.length < length) out.unshift(0);
     // console.log(result);
     // let mod = new Rsi1();
-    //mod.ctrModifier(this.candles);
+    // mod.ctrModifier(this.candles);
 
 
     // console.log(this.candles);
@@ -64,8 +64,8 @@ export class RsiIndicatorComponent implements OnInit, OnChanges {
           label: '',
           color: 'green',
           ys: out,
-          min:0,
-          max:100
+          min: 0,
+          max: 100
         }
       ]
     };

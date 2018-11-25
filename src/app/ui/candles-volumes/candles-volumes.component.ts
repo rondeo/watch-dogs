@@ -9,14 +9,14 @@ import {VOCandle} from '../../models/api-models';
 export class CandlesVolumesComponent implements OnInit, OnChanges {
 
   @Input() candles: VOCandle[];
-  volumes:number[];
+  volumes: number[];
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngOnChanges(){
-    if(this.candles){
+  ngOnChanges() {
+    if (this.candles) {
       this.volumes = this.candles.map(function (o) {
         return o.open > o.close ? -o.Volume : o.Volume;
       });

@@ -9,7 +9,7 @@ export class TablePropsComponent implements OnInit, OnChanges {
 
   @Input() dataset: any[];
 
-  @Output() selected: EventEmitter<{item:any, prop: string}> = new EventEmitter<{item: any, prop: string}>();
+  @Output() selected: EventEmitter<{item: any, prop: string}> = new EventEmitter<{item: any, prop: string}>();
 
   objectKeys = Object.keys;
   objectValues = Object.values;
@@ -18,14 +18,14 @@ export class TablePropsComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
 
   }
 
-  onValueClick(i:number, j:number){
+  onValueClick(i: number, j: number) {
     const item = this.dataset[i];
     const prop = Object.keys(item)[j];
-    this.selected.emit({item, prop})
+    this.selected.emit({item, prop});
 
   }
 

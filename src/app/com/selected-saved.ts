@@ -1,21 +1,21 @@
-import {StorageService} from "../services/app-storage.service";
+import {StorageService} from '../services/app-storage.service';
 
 export class SelectedSaved {
 
-  exchange:string;
-  storage:StorageService;
+  exchange: string;
+  storage: StorageService;
 
-  marketsSelected:string[];
+  marketsSelected: string[];
 
-  getMarketsSelected():string[]{
+  getMarketsSelected(): string[] {
     // if(!this.marketsSelected) this.marketsSelected = JSON.parse(this.storage.getItem(this.exchange+'-markets-selected') || '[]');
     return this.marketsSelected;
 
   }
 
-  saveMarketsSelected(){
+  saveMarketsSelected() {
     let ar = this.getMarketsSelected();
-    this.storage.setItem(this.exchange + '-markets-selected', JSON.stringify(ar))
+    this.storage.setItem(this.exchange + '-markets-selected', JSON.stringify(ar));
 
   }
 }

@@ -7,7 +7,7 @@ export default class GraveStoneDoji extends CandlestickFinder {
         this.requiredCount  = 1;
         this.name = 'GraveStoneDoji';
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let daysOpen   = data.open[0];
         let daysClose  = data.close[0];
         let daysHigh = data.high[0];
@@ -19,6 +19,6 @@ export default class GraveStoneDoji extends CandlestickFinder {
     }
 }
 
-export function gravestonedoji(data:StockData) {
+export function gravestonedoji(data: StockData) {
   return new GraveStoneDoji().hasPattern(data);
 }

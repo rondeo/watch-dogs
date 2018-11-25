@@ -26,7 +26,7 @@ export class LinesOverlay {
   async addResistance(candles: VOCandle[]) {
     const step = candles[1].to - candles[0].to;
     const resist = new ResistanceSupport(candles);
-    const data = await resist.getResult();
+    const data: any = await resist.getResult();
 
     const out = [];
     data.resistance.forEach(function (item) {
@@ -40,7 +40,7 @@ export class LinesOverlay {
           x: item.to + (10 * step),
           y: item.high
         },
-      })
+      });
     });
 
     data.support.forEach(function (item) {
@@ -54,7 +54,7 @@ export class LinesOverlay {
           x: item.to + (10 * step),
           y: item.low
         },
-      })
+      });
     });
     this.graphs = out;
   }
@@ -68,12 +68,12 @@ export class LinesOverlay {
       ctx.lineWidth = 1;
       ctx.setLineDash([5, 5]);
       ctx.beginPath();
-      const x1 = x0 + (item.from.x * scaleX)//((item.from.x - minX) * scaleX);
+      const x1 = x0 + (item.from.x * scaleX); // ((item.from.x - minX) * scaleX);
       const y1 = y0 - (item.from.y * gScaleY);
       ctx.moveTo(x1, y1);
-      ctx.lineTo(x0 + (item.to.x * scaleX),y0 - (item.to.y * gScaleY));
+      ctx.lineTo(x0 + (item.to.x * scaleX), y0 - (item.to.y * gScaleY));
       ctx.stroke();
-    })
+    });
 
     ctx.setLineDash([]);
   }

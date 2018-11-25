@@ -4,62 +4,61 @@ import FixedSizedLinkedList from './FixedSizeLinkedList';
 import { CandleData } from '../StockData';
 
 export class SumInput extends IndicatorInput {
-  values :number[]
-  period :number
+  values: number[];
+  period: number;
 }
 
 export class Sum extends Indicator {
-  generator:IterableIterator<number | undefined>;
-    constructor (input:SumInput) {
+    constructor (input: SumInput) {
       super(input);
-      var values     = input.values;
-      var period     = input.period;
+      let values     = input.values;
+      let period     = input.period;
 
       this.result = [];
 
-      var periodList = new FixedSizedLinkedList(period, false, false, true);
+      let periodList = new FixedSizedLinkedList(period, false, false, true);
 
-      this.generator = (function* (){
-        var result;
-        var tick;
-        var high;
+      this.generator = (function* () {
+        let result;
+        let tick;
+        let high;
         tick = yield;
-        while (true)
-        {
+        while (true) {
           periodList.push(tick);
-          if(periodList.totalPushed >= period) {
+          if (periodList.totalPushed >= period) {
             high = periodList.periodSum;
           }
-          tick = yield high
+          tick = yield high;
         }
       })();
 
       this.generator.next();
 
       values.forEach((value, index) => {
-        var result = this.generator.next(value);
-        if(result.value != undefined) {
+        let result = this.generator.next(value);
+        if (result.value !== undefined) {
           this.result.push(result.value);
         }
       });
-  };
+  }
+
 
   static calculate = sum;
+  generator: IterableIterator<number | undefined>;
 
-  nextValue(price:number):number | undefined {
-     var result =  this.generator.next(price);
-     if(result.value != undefined){
+  nextValue(price: number): number | undefined {
+     let result =  this.generator.next(price);
+     if (result.value !== undefined) {
         return result.value;
       }
-  };
-}
+  }}
 
-export function sum(input:SumInput):number[] {
+export function sum(input: SumInput): number[] {
       Indicator.reverseInputs(input);
-      var result = new Sum(input).result;
-      if(input.reversedInput) {
+      let result = new Sum(input).result;
+      if (input.reversedInput) {
           result.reverse();
       }
       Indicator.reverseInputs(input);
       return result;
-  };
+  }

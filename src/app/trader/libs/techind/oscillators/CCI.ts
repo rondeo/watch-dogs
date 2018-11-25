@@ -1,57 +1,55 @@
 import { CandleData } from '../StockData';
 import { Indicator, IndicatorInput } from '../indicator/indicator';
-import { SMA } from       '../moving_averages/SMA';
+import { SMA } from '../moving_averages/SMA';
 import LinkedList from '../Utils/FixedSizeLinkedList';
 
 export class CCIInput extends IndicatorInput {
-  high : number[];
-  low :number[];
-  close : number[];
-  period : number;
-};
+  high: number[];
+  low: number[];
+  close: number[];
+  period: number;
+}
 
 
 export class CCI extends Indicator {
-  result : number[]
-  generator:IterableIterator<number | undefined>;
-  constructor(input:CCIInput) {
+  constructor(input: CCIInput) {
     super(input);
-    var lows = input.low;
-    var highs = input.high;
-    var closes = input.close;
-    var period = input.period;
-    var format = this.format;
+    let lows = input.low;
+    let highs = input.high;
+    let closes = input.close;
+    let period = input.period;
+    let format = this.format;
     let constant = .015;
-    var currentTpSet = new LinkedList(period);;
+    let currentTpSet = new LinkedList(period);
     
-    var tpSMACalculator  = new SMA({period: period, values:[], format : (v) => {return v}});
+    let tpSMACalculator  = new SMA({period: period, values: [], format : (v) => v});
 
-    if(!((lows.length === highs.length) && (highs.length === closes.length) )){
-      throw ('Inputs(low,high, close) not of equal size');
+    if (!((lows.length === highs.length) && (highs.length === closes.length) )) {
+      throw new Error(('Inputs(low,high, close) not of equal size'));
     }
 
     this.result = [];
 
-    this.generator = (function* (){
-      var tick = yield;
+    this.generator = (function* () {
+      let tick = yield;
       while (true) {
-        let tp = (tick.high + tick.low + tick.close)/3
+        let tp = (tick.high + tick.low + tick.close) / 3;
         currentTpSet.push(tp);
         let smaTp = tpSMACalculator.nextValue(tp);
-        let meanDeviation:number = null;
-        let cci:number;
+        let meanDeviation: number = null;
+        let cci: number;
         let sum = 0;
-        if(smaTp != undefined) {
-          //First, subtract the most recent 20-period average of the typical price from each period's typical price. 
-          //Second, take the absolute values of these numbers.
-          //Third,sum the absolute values. 
+        if (smaTp !== undefined) {
+          // First, subtract the most recent 20-period average of the typical price from each period's typical price. 
+          // Second, take the absolute values of these numbers.
+          // Third,sum the absolute values. 
           // @ts-ignore
-          for(let x of currentTpSet.iterator()){
-            sum = sum + (Math.abs(x - smaTp))
+          for (let x of currentTpSet.iterator()) {
+            sum = sum + (Math.abs(x - smaTp));
           }
-          //Fourth, divide by the total number of periods (20). 
-          meanDeviation = sum / 20
-          cci = (tp  -  smaTp) / (constant * meanDeviation)
+          // Fourth, divide by the total number of periods (20). 
+          meanDeviation = sum / 20;
+          cci = (tp  -  smaTp) / (constant * meanDeviation);
         }
         tick = yield cci;
       }
@@ -59,34 +57,36 @@ export class CCI extends Indicator {
 
     this.generator.next();
 
-    lows.forEach((tick,index) => {
-      var result = this.generator.next({
+    lows.forEach((tick, index) => {
+      let result = this.generator.next({
         high : highs[index],
         low  : lows[index],
         close : closes[index]
       });
-      if(result.value != undefined){
+      if (result.value !== undefined) {
         this.result.push(result.value);
       }
     });
-  };
+  }
 
-  static calculate = cci;
 
-  nextValue(price:CandleData):number | undefined {
+  static calculate = cci1;
+  result: number[];
+  generator: IterableIterator<number | undefined>;
+
+  nextValue(price: CandleData): number | undefined {
       let result = this.generator.next(price).value;
-      if(result != undefined) {
+      if (result !== undefined) {
         return result;
       }
-  };
-}
+  }}
 
-export function cci(input:CCIInput):number[] {
+export function cci1(input: CCIInput): number[] {
     Indicator.reverseInputs(input);
-    var result = new CCI(input).result;
-    if(input.reversedInput) {
+    let result = new CCI(input).result;
+    if (input.reversedInput) {
         result.reverse();
     }
     Indicator.reverseInputs(input);
     return result;
-  };
+  }

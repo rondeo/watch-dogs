@@ -1,5 +1,5 @@
 
-import {SocketBase} from "./soket-base";
+import {SocketBase} from './soket-base';
 
 
 export class PoloniexTradesSocket extends SocketBase {
@@ -21,12 +21,12 @@ export class PoloniexTradesSocket extends SocketBase {
 
     // console.log(m);
 
-    let channel: string
+    let channel: string;
     const ar = JSON.parse(m.data);
    // console.log(ar);
     if (ar[0] === 1010) {
       this.hb = Date.now();
-      return
+      return;
     }
 
     let dataAr: any[] = ar[2];
@@ -66,7 +66,7 @@ export class PoloniexTradesSocket extends SocketBase {
           };
           this.dispatch(this.exchange + market, data, 'trades');
 
-          break
+          break;
       }
     });
 
@@ -79,7 +79,7 @@ export class PoloniexTradesSocket extends SocketBase {
     switch (channel) {
       case 'trades':
         let params = {
-          command: "subscribe",
+          command: 'subscribe',
           channel: market
 
         };

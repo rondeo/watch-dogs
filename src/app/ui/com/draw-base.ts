@@ -1,4 +1,5 @@
 import {Input, ViewChild} from '@angular/core';
+
 export class DrawBase {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
@@ -7,9 +8,9 @@ export class DrawBase {
   @Input() myWidth: number;
   @Input() myHeight: number;
   @Input() myTitle: string;
-  ratio: number = 600/100;
-  width: number = 600;
-  height: number = 100;
+  ratio: number = 600 / 100;
+  width = 600;
+  height = 100;
   widthG: number;
   heightG: number;
   vertical = 12;
@@ -27,11 +28,12 @@ export class DrawBase {
   private resize;
 
   font = '12px Arial';
-  constructor(){
+
+  constructor() {
 
   }
 
-  ngOnInit() {
+  onInit() {
     this.width = this.myWidth || this.width;
     this.height = this.myHeight || this.height;
     this.ratio = this.width / this.height;
@@ -46,21 +48,21 @@ export class DrawBase {
     this.setSize();
   }
 
-  drawGraphs(){
+  drawGraphs() {
 
     console.error('Implement please');
   }
 
-  drawXs(){
+  drawXs() {
 
   }
 
-  drawYs(){
+  drawYs() {
 
   }
 
   redraw() {
-    if(!this.widthG) return;
+    if (!this.widthG) return;
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawGrid(this.ctx, this.vertical, this.horizont, this.widthG, this.heightG, this.paddingLeft, this.paddingTop);
     this.drawGraphs();
@@ -81,14 +83,14 @@ export class DrawBase {
     setTimeout(() => this.redraw(), 100);
   }
 
-  ngAfterViewInit() {
+  aViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
 
-  ngOnChanges(evt) {
+  onChanges(evt) {
 
     if (this.ctx) this.redraw();
 
@@ -110,7 +112,7 @@ export class DrawBase {
     let n = horizont;
     let step = Math.round(heightG / n);
     // console.warn(step);
-     let height = heightG;
+    let height = heightG;
 
     for (let i = 0; i < n + 1; i++) {
       let pozY = offsetY + (step * i);

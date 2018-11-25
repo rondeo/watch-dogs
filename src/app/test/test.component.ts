@@ -22,10 +22,6 @@ import {UTILS} from '../com/utils';
 })
 export class TestComponent implements OnInit {
 
-  candles: VOCandle[];
-
-  orders: any[] = [];
-
   constructor(
     private alerts: BtcUsdtService,
     private apisPublic: ApisPublicService,
@@ -37,129 +33,20 @@ export class TestComponent implements OnInit {
 
   }
 
+  candles: VOCandle[];
+
+  orders: any[] = [];
+
   currentValues: any;
-
-  async saveCurrentAction(action: string) {
-
-    const actionValues = (await this.storage.select('action-values')) || [];
-    const exists = UTILS.find(this.currentValues, actionValues);
-
-    if (exists) {
-      console.log(exists);
-      return;
-    }
-    this.currentValues.action = action;
-    actionValues.push(this.currentValues);
-    return this.storage.upsert('action-values', actionValues);
-    this.storage.upsert('action-values', this.currentValues)
-  }
 
 
   followOrder: FollowOpenOrder;
 
-  ngOnInit() {
-    // this.followOrder = new FollowOpenOrder(
-    /*   'binance',
-       'BTC_ARDR',
-       -4,
-       this.apisPrivate,
-       this.apisPublic,
-       this.marketCap,
-       this.storage,
-       this.candlesService
-     )
-    // this.initAsync();
-    // this.tradeHistory();
-
-     this.followOrder.getCandles = this.getCandles.bind(this);
-     this.followOrder.isTooFast = ()=>{ return false};
-    /!* this.followOrder.start = ()=>{
-       console.log('SATRT called')
-     }*!/
-
-    // this.followOrder.balanceCoin = new VOBalance()
-     //this.followOrder.balanceCoin.available = 0;
-    // this.followOrder.balanceCoin.pending = 1000;
-     this.apisPrivate.getExchangeApi('binance').refreshBalances();
-
-     setTimeout(()=>{
-      /!* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
-
-         console.log('check');
-       }
-       *!/
-     }, 1000)*/
-
-
-  }
-
-
-  async getCandles() {
-    this.currentTime.add(5, 'minutes')
-    const candles = await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles('BTC_ARDR', '5m', 100, this.currentTime.valueOf());
-    return candles;
-  }
-
   prevPrice;
 
-  buyCoin(candle: VOCandle) {
-    const price = candle.close;
-    const time = moment(candle.to).format('HH:mm');
-    const stamp = candle.to;
-    const action = 'BUY';
-    if (this.prevAction === action) return;
-    this.prevAction = action;
-    const orders = this.orders || [];
-    this.lastOrder =  {stamp, action, price};
-    orders.push(this.lastOrder);
-    this.orders = orders;
-  }
-
   prevAction: string;
-
-  sellCoin(candle: VOCandle) {
-    const time = moment(candle.to).format('HH:mm');
-    const stamp = candle.to;
-    const price = candle.close;
-    const action = 'SELL';
-    if (this.prevAction === action) return;
-    this.prevAction = action;
-    const orders = this.orders || [];
-    this.lastOrder = {stamp, action, price };
-    orders.push(this.lastOrder);
-    this.orders = orders;
-  }
   patterns: any[] = [];
-  lastOrder:{stamp: number, action: string, price:number};
-
-  async tickBot(candles: VOCandle[]) {
-    const lastCandle = _.last(candles);
-    const lastPrice = lastCandle.close;
-    if (this.prevPrice === lastPrice) return;
-    this.prevPrice = lastCandle.close;
-    const result = await CandlesAnalys1.createState(this.candles);
-    this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
-
-    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
-    if(action) console.warn(action);
-
-    // @ts-ignore
-    if (action === 'BUY') this.buyCoin(lastCandle);
-    else if (action === 'SELL') this.sellCoin(lastCandle);
-    const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
-    console.log(' new price ' + newPrice);
-  }
-
-
-  async initAsync() {
-    /*
-      (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
-
-        this.candles = _.clone(candles);
-      })*/
-    // this.start();
-  }
+  lastOrder: {stamp: number, action: string, price: number};
 
   /*
   * '2018-10-23T16:15'
@@ -201,6 +88,121 @@ export class TestComponent implements OnInit {
   currentMarket = 'BTC_GO';
   lastStamp: number;
 
+  interval;
+
+  async saveCurrentAction(action: string) {
+
+    const actionValues = (await this.storage.select('action-values')) || [];
+    const exists = UTILS.find(this.currentValues, actionValues);
+
+    if (exists) {
+      console.log(exists);
+      return;
+    }
+    this.currentValues.action = action;
+    actionValues.push(this.currentValues);
+    return this.storage.upsert('action-values', actionValues);
+    this.storage.upsert('action-values', this.currentValues);
+  }
+
+  ngOnInit() {
+    // this.followOrder = new FollowOpenOrder(
+    /*   'binance',
+       'BTC_ARDR',
+       -4,
+       this.apisPrivate,
+       this.apisPublic,
+       this.marketCap,
+       this.storage,
+       this.candlesService
+     )
+    // this.initAsync();
+    // this.tradeHistory();
+
+     this.followOrder.getCandles = this.getCandles.bind(this);
+     this.followOrder.isTooFast = ()=>{ return false};
+    /!* this.followOrder.start = ()=>{
+       console.log('SATRT called')
+     }*!/
+
+    // this.followOrder.balanceCoin = new VOBalance()
+     //this.followOrder.balanceCoin.available = 0;
+    // this.followOrder.balanceCoin.pending = 1000;
+     this.apisPrivate.getExchangeApi('binance').refreshBalances();
+
+     setTimeout(()=>{
+      /!* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
+
+         console.log('check');
+       }
+       *!/
+     }, 1000)*/
+
+
+  }
+
+
+  async getCandles() {
+    this.currentTime.add(5, 'minutes');
+    const candles = await this.apisPublic.getExchangeApi('binance')
+      .downloadCandles('BTC_ARDR', '5m', 100, this.currentTime.valueOf());
+    return candles;
+  }
+
+  buyCoin(candle: VOCandle) {
+    const price = candle.close;
+    const time = moment(candle.to).format('HH:mm');
+    const stamp = candle.to;
+    const action = 'BUY';
+    if (this.prevAction === action) return;
+    this.prevAction = action;
+    const orders = this.orders || [];
+    this.lastOrder =  {stamp, action, price};
+    orders.push(this.lastOrder);
+    this.orders = orders;
+  }
+
+  sellCoin(candle: VOCandle) {
+    const time = moment(candle.to).format('HH:mm');
+    const stamp = candle.to;
+    const price = candle.close;
+    const action = 'SELL';
+    if (this.prevAction === action) return;
+    this.prevAction = action;
+    const orders = this.orders || [];
+    this.lastOrder = {stamp, action, price };
+    orders.push(this.lastOrder);
+    this.orders = orders;
+  }
+
+  async tickBot(candles: VOCandle[]) {
+    const lastCandle = _.last(candles);
+    const lastPrice = lastCandle.close;
+    if (this.prevPrice === lastPrice) return;
+    this.prevPrice = lastCandle.close;
+    const result = await CandlesAnalys1.createState(this.candles);
+    this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
+
+    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
+    if (action) console.warn(action);
+
+    // @ts-ignore
+    if (action === 'BUY') this.buyCoin(lastCandle);
+    else if (action === 'SELL') this.sellCoin(lastCandle);
+    const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
+    console.log(' new price ' + newPrice);
+  }
+
+
+  async initAsync() {
+    /*
+      (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
+
+        this.candles = _.clone(candles);
+      })*/
+    // this.start();
+  }
+
   async tick() {
     this.currentTime.add(1, 'minutes');
     //  await this.followOrder.tick();
@@ -230,6 +232,4 @@ export class TestComponent implements OnInit {
     clearInterval(this.interval);
     this.interval = 0;
   }
-
-  interval;
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatSnackBar} from "@angular/material";
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-add-script',
@@ -20,36 +20,37 @@ export class AddScriptComponent implements OnInit {
   }
 
 
-  onDeleteScriptClick(i:number){
-    this.scripAr.splice(i,1);
+  onDeleteScriptClick(i: number) {
+    this.scripAr.splice(i, 1);
   }
 
-  onEditScriptClick(i:number){
+  onEditScriptClick(i: number) {
     const script = this.scripAr[i];
     const signLess = script.indexOf('<');
     const signMore = script.indexOf('>');
     let value;
-    if(signLess !== -1){
+    if (signLess !== -1) {
       this.percent_change_1hLess = true;
-      value = script.substring(signLess +1, script.indexOf(')'));
-    }else if(signMore !==-1){
+      value = script.substring(signLess + 1, script.indexOf(')'));
+    } else if (signMore !== -1) {
       this.percent_change_1hLess = false;
-      value = script.substring(signMore +1, script.indexOf(')'));
+      value = script.substring(signMore + 1, script.indexOf(')'));
     } else console.error(script);
 
-    this.percent_change_1h = +value
+    this.percent_change_1h = +value;
   }
 
   onAddSellScriptClick() {
-    if(isNaN(this.percent_change_1h)){
-      this.snackBar.open('SET percent change 1h', 'x', {duration:1000});
+    if (isNaN(this.percent_change_1h)) {
+      this.snackBar.open('SET percent change 1h', 'x', {duration: 1000});
       return;
     }
-    const script = 'if(percent_change_1h  ' + (this.percent_change_1hLess ? '<' : '>') + ' ' + this.percent_change_1h + ')  { SELL(percent_change_1h) }';
+    const script = 'if(percent_change_1h  ' + (this.percent_change_1hLess ? '<' : '>')
+      + ' ' + this.percent_change_1h + ')  { SELL(percent_change_1h) }';
 
     this.scripAr.push(script);
-    //console.log(this.watchDog.sellScripts);
-    //this.initScripts();
+    // console.log(this.watchDog.sellScripts);
+    // this.initScripts();
   }
 
   onMinusSellScriptClick() {

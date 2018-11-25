@@ -7,11 +7,11 @@ export default class DownsideTasukiGap extends CandlestickFinder {
         this.requiredCount  = 3;
         this.name = 'DownsideTasukiGap';
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let firstdaysOpen   = data.open[0];
         let firstdaysClose  = data.close[0];
         let firstdaysHigh   = data.high[0];
-        let firstdaysLow    = data.low[0]
+        let firstdaysLow    = data.low[0];
         let seconddaysOpen  = data.open[1];
         let seconddaysClose = data.close[1];
         let seconddaysHigh  = data.high[1];
@@ -35,6 +35,6 @@ export default class DownsideTasukiGap extends CandlestickFinder {
    }
 }
 
-export function downsidetasukigap(data:StockData) {
+export function downsidetasukigap(data: StockData) {
   return new DownsideTasukiGap().hasPattern(data);
 }

@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+
 import {AuthHttpService} from '../../services/auth-http.service';
 import {MatSnackBar} from '@angular/material';
-import {StorageService} from "../../services/app-storage.service";
+import {StorageService} from '../../services/app-storage.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-email-main',
@@ -12,14 +13,14 @@ import {StorageService} from "../../services/app-storage.service";
 export class EmailMainComponent implements OnInit, OnDestroy {
 
 
-  isLoggedIn$:Observable<boolean>;
+  isLoggedIn$: Observable<boolean>;
   constructor(
-    private auth:AuthHttpService,
-    private snackBar:MatSnackBar,
-    private storage:StorageService
+    private auth: AuthHttpService,
+    private snackBar: MatSnackBar,
+    private storage: StorageService
   ) {
 
-    //this.isLoggedIn$ = auth.isLogedIn$;
+    // this.isLoggedIn$ = auth.isLogedIn$;
   }
 
  // private sub1;
@@ -27,7 +28,7 @@ export class EmailMainComponent implements OnInit, OnDestroy {
 
 
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
    //  this.sub1.unsubscribe();
   }
 
@@ -36,7 +37,7 @@ export class EmailMainComponent implements OnInit, OnDestroy {
   }*/
 
 
-  onLogoutClick(){
+  onLogoutClick() {
    /* if(confirm('You want to logout from Email Service?')) {
 
       this.auth.logout().subscribe((res:any)=>{

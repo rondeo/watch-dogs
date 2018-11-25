@@ -11,11 +11,11 @@ export class ConfirmStopLossComponent implements OnInit {
   stopPrice: number;
   sellPrice: number;
   fromRate: number;
-  msg:string;
+  msg: string;
 
   constructor(
     private dialogRef: MatDialogRef<{ triggerPrice: string, setPrice: string}>,
-    @Inject(MAT_DIALOG_DATA) public data: {rate: number, msg:string}
+    @Inject(MAT_DIALOG_DATA) public data: {rate: number, msg: string}
   ) {
     this.msg = data.msg;
     let rate = data.rate;
@@ -27,25 +27,25 @@ export class ConfirmStopLossComponent implements OnInit {
 
   }
 
-  onConfirmClick(){
+  onConfirmClick() {
     const stopPrice = this.stopPrice;
     const sellPrice = this.sellPrice;
     this.dialogRef.close({stopPrice, sellPrice});
 
   }
 
-  onCancelClick(){
+  onCancelClick() {
     this.dialogRef.close();
   }
 
-  onPriceCanage(){
+  onPriceCanage() {
     const rate = this.stopPrice;
     const l = rate.toString().length;
     this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
 
   }
-  setRate(percent: number){
-    percent = percent/100;
+  setRate(percent: number) {
+    percent = percent / 100;
     let rate = this.fromRate;
     const l = rate.toString().length;
     rate = +(rate - (rate * percent)).toString().substr(0, l);
@@ -53,7 +53,7 @@ export class ConfirmStopLossComponent implements OnInit {
     this.sellPrice = +(rate - rate * 0.01).toString().substr(0, l);
   }
 
-  onSladerChange(evt){
+  onSladerChange(evt) {
     this.setRate(evt.value);
 
   }

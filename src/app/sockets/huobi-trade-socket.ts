@@ -1,35 +1,37 @@
 
-import * as pako from 'pako';
+/*import * as pako from 'pako';
 
-import * as JSZip from 'jszip';
+import * as JSZip from 'jszip';*/
 
-import {SocketBase} from "./soket-base";
+import {SocketBase} from './soket-base';
 
 
 export class HuobiTradesSocket extends SocketBase {
-
-  hb: number;
-  exchange = 'huobi'
-  socketUrl = 'wss://api.huobi.pro/ws';
 
   constructor() {
   super();
 
   }
 
+  hb: number;
+  exchange = 'huobi';
+  socketUrl = 'wss://api.huobi.pro/ws';
+
+  subscriptions: any = {};
+
 
   onMessage(m) {
 
-    console.log(m)
-    //let blob = m.data;
+    console.log(m);
+    // let blob = m.data;
 
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = function() {
       console.log(reader.result);
-      let res =  pako.inflate(reader.result);
-      console.log(res);
-    }
-    reader.readAsBinaryString(m.data)
+    //  let res =  pako.inflate(reader.result);
+    // console.log(res);
+    };
+    reader.readAsBinaryString(m.data);
 
   // let res = unzip.Parse(m.data);
 
@@ -78,8 +80,6 @@ export class HuobiTradesSocket extends SocketBase {
 
 
   }
-
-  subscriptions :any ={};
 
   async createChannelId(channel, market): Promise<string> {
 

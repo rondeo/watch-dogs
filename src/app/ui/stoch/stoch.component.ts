@@ -22,19 +22,21 @@ export class StochComponent implements OnInit, OnChanges {
   area: number[];
 
   myGraphs: VOGraphs;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
-    this.area =  [200, 800];
-    this.myTitle = 'Stoch(' + this.period +','+this.signalPeriod + ')';
+    this.area = [200, 800];
+    this.myTitle = 'Stoch(' + this.period + ',' + this.signalPeriod + ')';
   }
 
-  ngOnChanges(){
-   this.ctr();
+  ngOnChanges() {
+    this.ctr();
   }
 
-  ctr(){
-    if(!this.closes || !this.lows || !this.highs) return;
+  ctr() {
+    if (!this.closes || !this.lows || !this.highs) return;
     const input: StochasticInput = {
       high: this.highs,
       low: this.lows,
@@ -44,26 +46,26 @@ export class StochComponent implements OnInit, OnChanges {
     };
 
     const stochastic = new Stochastic(input);
-    const result:any[] = stochastic.getResult();
-    const ds:number[] = [];
-    const ks:number[] = [];
+    const result: any[] = stochastic.getResult();
+    const ds: number[] = [];
+    const ks: number[] = [];
     let min = 1e12;
     let max = 1e12;
 
     result.forEach(function (item) {
-      if(min > item.d) min = item.d;
-      if(max < item.d) max = item.d;
-      if(min > item.k) min = item.k;
-      if(max < item.k) max = item.k;
+      if (min > item.d) min = item.d;
+      if (max < item.d) max = item.d;
+      if (min > item.k) min = item.k;
+      if (max < item.k) max = item.k;
 
       ds.push(Math.round(item.d * 10));
       ks.push(Math.round(item.k * 10));
     });
 
-    //console.log(ds);
+    // console.log(ds);
     const g: VOGraphs = {
-      labelsX:[],
-      graphs:[
+      labelsX: [],
+      graphs: [
         {
           label: '',
           color: 'blue',
@@ -79,11 +81,11 @@ export class StochComponent implements OnInit, OnChanges {
           min: 0
         }
       ]
-    }
+    };
 
     this.myGraphs = g;
 
-   // console.log(g);
+    // console.log(g);
 
   }
 

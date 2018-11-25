@@ -1,7 +1,7 @@
-import FixedSizeLinkedList from "./Utils/FixedSizeLinkedList";
+import FixedSizeLinkedList from './Utils/FixedSizeLinkedList';
 
-export { CandleData, CandleList } from "./StockData";
-export  { sma, SMA } from './moving_averages/SMA'
+export { CandleData, CandleList } from './StockData';
+export  { sma, SMA } from './moving_averages/SMA';
 export  { ema, EMA }                       from  './moving_averages/EMA';
 export  { wma, WMA }                       from  './moving_averages/WMA';
 export  { wema, WEMA }                     from  './moving_averages/WEMA';
@@ -20,7 +20,7 @@ export  { adl, ADL }                       from  './volume/ADL';
 export  { obv, OBV }                       from  './volume/OBV';
 export  { trix, TRIX }                     from  './momentum/TRIX';
 export  { forceindex, ForceIndex }         from  './volume/ForceIndex';
-export  { cci, CCI }                       from  './oscillators/CCI';
+export  { CCI }                       from  './oscillators/CCI';
 export  { awesomeoscillator, AwesomeOscillator }                       from  './oscillators/AwesomeOscillator';
 export  { vwap, VWAP }                     from  './volume/VWAP';
 export  { volumeprofile, VolumeProfile }   from  './volume/VolumeProfile';
@@ -33,7 +33,7 @@ export  { sd, SD }                         from  './Utils/SD';
 export  { highest, Highest }                         from  './Utils/Highest';
 export  { lowest, Lowest }                         from  './Utils/Lowest';
 export  { sum, Sum }                         from  './Utils/Sum';
-export  { FixedSizeLinkedList }                 
+export  { FixedSizeLinkedList };
 
 export  { renko }                         from  './chart_types/Renko';
 export  { HeikinAshi, heikinashi }        from  './chart_types/HeikinAshi';
@@ -88,4 +88,4 @@ export  { hasInverseHeadAndShoulder }   from './patterndetection/patterndetectio
 export  { isTrendingUp}                 from './patterndetection/patterndetection';
 export  { isTrendingDown }              from './patterndetection/patterndetection';
 
-export  { setConfig, getConfig }       from './config'
+export  { setConfig, getConfig }       from './config';

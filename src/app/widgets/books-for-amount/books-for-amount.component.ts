@@ -12,6 +12,12 @@ import {VOMarketCap} from '../../models/app-models';
 })
 export class BooksForAmountComponent implements OnInit, OnChanges {
 
+  constructor(
+    private apiMarketCap: ApiMarketCapService,
+    private apisPublic: ApisPublicService
+  ) {
+  }
+
   @Input() exchange: string;
   @Input() market: string;
   @Input() amountUS: number;
@@ -19,18 +25,14 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
   @Output() rate: EventEmitter<number> = new EventEmitter();
   booksDisplay: BooksDisplay = new BooksDisplay({});
 
-  isRefreshing: boolean = false;
+  isRefreshing = false;
 
 
   private baseMC: VOMarketCap;
   private coinMC: VOMarketCap;
   private allCoins: { [symbol: string]: VOMarketCap };
 
-  constructor(
-    private apiMarketCap: ApiMarketCapService,
-    private apisPublic: ApisPublicService
-  ) {
-  }
+  books;
 
   ngOnChanges(evt: any) {
    this.initAsync();
@@ -45,7 +47,7 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     let market = this.market;
     if (!market) return;
     let ar = market.split('_');
-    if(ar.length !== 2) return;
+    if (ar.length !== 2) return;
     let base = ar[0];
     let coin = ar[1];
     this.allCoins = await this.apiMarketCap.getTicker();
@@ -79,20 +81,18 @@ export class BooksForAmountComponent implements OnInit, OnChanges {
     this.booksDisplay = booksDisplay1;
   }
 
-  private books;
-
   downloadBooks() {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     if (!api) throw new Error(' no api for ' + this.exchange);
 
     this.isRefreshing = true;
-    api.books$(this.market).subscribe(books =>{
+    api.books$(this.market).subscribe(books => {
 
-      if(!books) return;
+      if (!books) return;
       this.books = books;
       this.isRefreshing = false;
       this.calculate();
-    })
+    });
 
   }
 

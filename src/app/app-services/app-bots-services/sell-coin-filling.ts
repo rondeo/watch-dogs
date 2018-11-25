@@ -2,7 +2,6 @@ import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract'
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {OrderType, VOBalance, VOOrder} from '../../models/app-models';
 import {UtilsBooks} from '../../com/utils-books';
-import {Subject} from 'rxjs/Subject';
 import {reject} from 'q';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
@@ -10,6 +9,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMovingAvg} from '../../com/moving-average';
 import * as moment from 'moment';
 import {WatchDogStatus, IWatchDog} from './watch-dog-status';
+import {Subject} from 'rxjs';
 
 
 export class SellCoinFilling {

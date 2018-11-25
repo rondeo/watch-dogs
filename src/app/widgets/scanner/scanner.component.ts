@@ -12,7 +12,7 @@ export class ScannerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //this.scanMarkets.start();
+    // this.scanMarkets.start();
   }
 
 }

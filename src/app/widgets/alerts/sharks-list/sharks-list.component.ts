@@ -4,11 +4,11 @@ import {MarketCapService} from '../../../market-cap/services/market-cap.service'
 import {ApiMarketCapService} from '../../../apis/api-market-cap.service';
 import {MarketsHistoryService} from '../../../app-services/market-history/markets-history.service';
 import {VOOrderExt} from '../../../models/app-models';
-import {Subscription} from 'rxjs/Subscription';
 import {StorageService} from '../../../services/app-storage.service';
 import * as moment from 'moment';
 import {MatSnackBar} from '@angular/material';
 import {SignalBuySell} from '../../../app-services/market-history/sharks-alert';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-sharks-list',
@@ -16,11 +16,6 @@ import {SignalBuySell} from '../../../app-services/market-history/sharks-alert';
   styleUrls: ['./sharks-list.component.css']
 })
 export class SharksListComponent implements OnInit, OnChanges {
-
-  @Input() exchange: string;
-  @Input() market: string;
-  @Output() signal: EventEmitter<SignalBuySell> = new EventEmitter();
-  sharks: VOOrderExt[];
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -30,12 +25,17 @@ export class SharksListComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnInit() {
-
-  }
+  @Input() exchange: string;
+  @Input() market: string;
+  @Output() signal: EventEmitter<SignalBuySell> = new EventEmitter();
+  sharks: VOOrderExt[];
 
   private sub: Subscription;
   private sub2: Subscription;
+
+  ngOnInit() {
+
+  }
 
   unsubscribe() {
     if (this.sub) this.sub.unsubscribe();
@@ -79,12 +79,12 @@ export class SharksListComponent implements OnInit, OnChanges {
               });*/
           }
         } catch (e) {
-          console.error(e, sharks)
+          console.error(e, sharks);
         }
 
 
         sharks.reverse();
-        this.sharks = sharks;// _.orderBy(sharks, 'timestamp', 'desc');
+        this.sharks = sharks; // _.orderBy(sharks, 'timestamp', 'desc');
         this.storage.upsert('sharks-' + this.exchange + this.market, this.sharks);
 
       });

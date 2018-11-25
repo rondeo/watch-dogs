@@ -23,10 +23,10 @@ import {UiModule} from '../ui/ui.module';
 const routes: Routes = [
   {
     path: 'email-service', component: EmailMainComponent,
-    children:[
-      { path: '', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
-      { path: 'watchdogs', redirectTo:'watchdogs-list/SELL', pathMatch:'full'},
-      { path: 'watchdogs-list/:orderType', component:WatchdogsListComponent},
+    children: [
+      { path: '', redirectTo: 'watchdogs-list/SELL', pathMatch: 'full'},
+      { path: 'watchdogs', redirectTo: 'watchdogs-list/SELL', pathMatch: 'full'},
+      { path: 'watchdogs-list/:orderType', component: WatchdogsListComponent},
       { path: 'create-bot/:exchange/:base/:coin', component: CreateWatchdogComponent},
       { path: 'watchdog-edit/:uid', component: WatchdogEditComponent},
       { path: 'watchdog-test/:uid', component: WatchdogTestComponent},
@@ -58,7 +58,7 @@ const routes: Routes = [
     AddScriptComponent,
     WatchdogTestComponent
   ],
-  providers:[
+  providers: [
     WatchDogService,
     EmailServiceService
   ]

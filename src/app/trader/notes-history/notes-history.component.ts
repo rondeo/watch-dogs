@@ -16,7 +16,7 @@ export class NotesHistoryComponent implements OnInit {
    this.market = data.market;
    this.result = data.result;
    const ar = [];
-    for(let str in data.history){
+    for (let str in data.history) {
       ar.push(str + ' ' + data.history[str]);
     }
    this.history = ar;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShapeShiftService} from '../shape-shift.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
@@ -12,64 +12,63 @@ import {VOMarketCap} from '../../models/app-models';
 })
 export class SSCoinsAvailableComponent implements OnInit {
 
-  coinsAvailable:any[];
-  coinsSorted:any[];
-  markets:{[symbol:string]:VOMarketCap};
+  coinsAvailable: any[];
+  coinsSorted: any[];
+  markets: { [symbol: string]: VOMarketCap };
 
 
-
-  coinFrom:{
-    symbol:string;
-    US:number,
-    amount:number,
-    price:number,
-    revertUS:number,
-    revertAmount:number;
+  coinFrom: {
+    symbol: string;
+    US: number,
+    amount: number,
+    price: number,
+    revertUS: number,
+    revertAmount: number;
   } = {
-    symbol:'',
-    US:1000,
-    amount:0,
-    price:0,
-    revertUS:0,
-    revertAmount:0
-  }
-
-  coinTo:{
-    symbol:string,
-    US:number,
-    amount:number,
-    price:number,
-    revertUS:number,
-    revertAmount:number;
-  } ={
-    symbol:'',
-    US:0,
-    amount:0,
-    price:0,
-    revertUS:0,
-    revertAmount:0
+    symbol: '',
+    US: 1000,
+    amount: 0,
+    price: 0,
+    revertUS: 0,
+    revertAmount: 0
   };
 
-  exchange={
-    pair:''
+  coinTo: {
+    symbol: string,
+    US: number,
+    amount: number,
+    price: number,
+    revertUS: number,
+    revertAmount: number;
+  } = {
+    symbol: '',
+    US: 0,
+    amount: 0,
+    price: 0,
+    revertUS: 0,
+    revertAmount: 0
+  };
+
+  exchange = {
+    pair: ''
   };
 
 
   constructor(
-    private shapeShiftService:ShapeShiftService,
-    private marketCap:MarketCapService
-
-  ) { }
+    private shapeShiftService: ShapeShiftService,
+    private marketCap: MarketCapService
+  ) {
+  }
 
   ngOnInit() {
 
 
-    this.shapeShiftService.coinsAvailable$.subscribe(res=>{
-    //  console.log(res);
+    this.shapeShiftService.coinsAvailable$.subscribe(res => {
+      //  console.log(res);
       this.coinsAvailable = res;
-      this.coinsSorted = _.sortBy(res,'symbol')
+      this.coinsSorted = _.sortBy(res, 'symbol');
       this.merge();
-    })
+    });
 
     /*this.marketCap.coinsAr$.subscribe(res =>{
       if(!res) return
@@ -81,73 +80,73 @@ export class SSCoinsAvailableComponent implements OnInit {
       this.merge()
     })
 */
-   //  this.marketCap.refresh();
+    //  this.marketCap.refresh();
   }
 
-  calculateRequest(){
+  calculateRequest() {
 
     let symbol = this.coinFrom.symbol;
 
     let us = +this.coinFrom.US;
-    console.log('calculateRequest ' + symbol +'  ' + us);
-    if(!symbol || !us) return;
+    console.log('calculateRequest ' + symbol + '  ' + us);
+    if (!symbol || !us) return;
 
     let market = this.markets[symbol];
     console.log(market);
-    if(!market)return;
+    if (!market) return;
 
     let price = market.price_usd;
     this.coinFrom.amount = us / price;
   }
 
-  coinSelectChanged1(evt){
+  coinSelectChanged1(evt) {
 
     this.calculateRequest();
 
 
   }
 
-  coinSelectChanged2(evt){
+  coinSelectChanged2(evt) {
     this.calculateRequest();
 
   }
 
-  onSubmit(){
+  onSubmit() {
 
-    //console.log(this.selectedValue1, this.selectedValue2, this.selectedValue3);
-    let pair = this.coinFrom.symbol.toLowerCase() +'_'+this.coinTo.symbol.toLowerCase();
+    // console.log(this.selectedValue1, this.selectedValue2, this.selectedValue3);
+    let pair = this.coinFrom.symbol.toLowerCase() + '_' + this.coinTo.symbol.toLowerCase();
     this.exchange.pair = pair;
 
     let amount = this.coinFrom.amount;
 
-    this.shapeShiftService.getExchangeRate(pair).subscribe(res=>{
+    this.shapeShiftService.getExchangeRate(pair).subscribe(res => {
       console.log(res);
 
-      let total = (amount-res.minerFee) * res.rate;
-     this.coinTo.amount = total;
+      let total = (amount - res.minerFee) * res.rate;
+      this.coinTo.amount = total;
 
       let symbol = this.coinTo.symbol;
       let market = this.markets[symbol];
-      if(market)  {
+      if (market) {
         this.coinTo.US = +(total * market.price_usd).toFixed(2);
-       this.getRevert();
+        this.getRevert();
       }
 
 
-    })
+    });
 
   }
 
-  getRevert(){
+  getRevert() {
 
     this.coinTo.revertUS = this.coinFrom.US;
 
 
-    let pair = this.coinTo.symbol.toLowerCase() +'_'+this.coinFrom.symbol.toLowerCase();
+    let pair = this.coinTo.symbol.toLowerCase() + '_' + this.coinFrom.symbol.toLowerCase();
 
     let symbol = this.coinTo.symbol;
     let market = this.markets[symbol];
-    if(!market){
+    if (!market) {
       console.error(' market ' + market);
     }
 
@@ -158,15 +157,15 @@ export class SSCoinsAvailableComponent implements OnInit {
     this.coinTo.revertAmount = amount;
 
 
-    this.shapeShiftService.getExchangeRate(pair).subscribe(res=>{
+    this.shapeShiftService.getExchangeRate(pair).subscribe(res => {
       console.log(res);
-      let total = (amount-res.minerFee) * res.rate;
+      let total = (amount - res.minerFee) * res.rate;
 
-     let symbol = this.coinFrom.symbol;
+      symbol = this.coinFrom.symbol;
       console.log(total);
-      let market = this.markets[symbol];
+      market = this.markets[symbol];
 
-      if(market)  {
+      if (market) {
 
         this.coinFrom.revertAmount = total;
 
@@ -176,7 +175,7 @@ export class SSCoinsAvailableComponent implements OnInit {
       }
 
 
-    })
+    });
 
   }
 
@@ -197,8 +196,8 @@ export class SSCoinsAvailableComponent implements OnInit {
           item.price_usd = market.price_usd;
 
           item.market = market;
-        } else console.warn(' no coin ' + item.symbol)
-      })
+        } else console.warn(' no coin ' + item.symbol);
+      });
       this.coinsAvailable = _.orderBy(ar, 'symbol');
 
     }

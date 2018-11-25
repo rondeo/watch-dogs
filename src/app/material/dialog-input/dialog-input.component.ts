@@ -14,7 +14,7 @@ export class DialogInputComponent implements OnInit {
   message: string;
   constructor(
     private dialogRef: MatDialogRef<{ userInput: string }>,
-    @Inject(MAT_DIALOG_DATA) public data :{message: string, hint:string}) {
+    @Inject(MAT_DIALOG_DATA) public data: {message: string, hint: string}) {
     this.message = data.message;
     this.userInput = data.hint;
   }
@@ -30,7 +30,7 @@ export class DialogInputComponent implements OnInit {
     this.dialogRef.close({userInput, msg});
   }
 
-  onCancelClick(){
-    this.dialogRef.close()
+  onCancelClick() {
+    this.dialogRef.close();
   }
 }

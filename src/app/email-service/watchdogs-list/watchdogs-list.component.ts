@@ -35,7 +35,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
 
-  dryRunDogs(){
+  dryRunDogs() {
     this.botsService.dryRun(this.orderType);
   }
   ngOnInit() {
@@ -58,8 +58,8 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
     this.botsService.allWatchDogs$().subscribe(wds => {
       this.watchDogs = wds.filter(function (item) {
         return item.orderType === OrderType.SELL;
-      })
-    })
+      });
+    });
   }
 
 
@@ -87,7 +87,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   onEditClick(dog: WatchDog) {
-    this.router.navigateByUrl('/email-service/watchdog-edit/' + dog.id)
+    this.router.navigateByUrl('/email-service/watchdog-edit/' + dog.id);
   }
 
   startStopBots() {
@@ -99,7 +99,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   }
 
-  isActiveClick(dog: WatchDog){
+  isActiveClick(dog: WatchDog) {
     dog.isActive = !dog.isActive;
     this.botsService.save();
   }

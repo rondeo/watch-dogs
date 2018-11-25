@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {VOMarketCap, VOOrder} from '../../models/app-models';
 import {UtilsOrder} from '../../com/utils-order';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
@@ -7,19 +7,19 @@ import {ShowExternalPageService} from '../../services/show-external-page.service
 import * as _ from 'lodash';
 
 export interface VOMarketSnapshot {
-  buy: VOOrder[],
-  sell: VOOrder[],
-  bubbles: any[],
-  min: number,
-  max: number,
-  sumBuy: number,
-  sumSell: number,
-  dustCountBuy: number,
-  dustCountSell: number,
-  fishes: VOOrder[],
-  speed: number,
-  duration: number,
-  tolerance: number
+  buy: VOOrder[];
+  sell: VOOrder[];
+  bubbles: any[];
+  min: number;
+  max: number;
+  sumBuy: number;
+  sumSell: number;
+  dustCountBuy: number;
+  dustCountSell: number;
+  fishes: VOOrder[];
+  speed: number;
+  duration: number;
+  tolerance: number;
 }
 
 export const VO_MARKET_SNAPSHOT = {
@@ -36,7 +36,7 @@ export const VO_MARKET_SNAPSHOT = {
   duration: 0,
   tolerance: 0,
   fishes: []
-}
+};
 
 
 @Component({
@@ -44,7 +44,7 @@ export const VO_MARKET_SNAPSHOT = {
   templateUrl: './trades-exchange-snapshot.component.html',
   styleUrls: ['./market-snapshot.component.css']
 })
-export class TradesExchangeSnapshotComponent implements OnInit {
+export class TradesExchangeSnapshotComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
@@ -59,7 +59,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
 
   private marketHistory: VOOrder[];
   fishes: VOOrder[];
-  amountFishUS: number = 0;
+  amountFishUS = 0;
 
 
   exchanges: string[];
@@ -76,17 +76,17 @@ export class TradesExchangeSnapshotComponent implements OnInit {
   }
 
   ngOnChanges(evt: SimpleChanges) {
-   // console.log(' onchanges ');
+    // console.log(' onchanges ');
     this.initAsync();
   }
 
   ngOnInit() {
-   // console.log(' ngOnInit  ')
+    // console.log(' ngOnInit  ')
     this.analytics = VO_MARKET_SNAPSHOT;
   }
 
   async initAsync() {
-    //console.log('initAsync   ')
+    // console.log('initAsync   ')
     let pair = this.market;
     if (!pair || pair.indexOf('_') === -1) return;
     let ar = pair.split('_');
@@ -98,13 +98,13 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     this.coinMC = this.allCoins[coin];
     const basePrice = this.baseMC.price_usd;
     const coinPrice = this.coinMC.price_usd;
-    this.coinPrice =  (coinPrice / basePrice).toPrecision(5) + ' $' + coinPrice.toPrecision(5);
+    this.coinPrice = (coinPrice / basePrice).toPrecision(5) + ' $' + coinPrice.toPrecision(5);
     this.downloadHistory();
   }
 
 
   async downloadHistory() {
-   // console.log('download history')
+    // console.log('download history')
     this.isRefreshingHistory = true;
     if (!this.exchange) return;
     if (!this.baseMC || !this.coinMC) return;
@@ -116,7 +116,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     // console.log(coindatas);
     if (!history) throw new Error('No coindatas base: ' + this.baseMC.symbol + ' coin: ' + this.coinMC.symbol);
     this.analytics = UtilsOrder.analizeOrdersHistory(history, this.priceBaseUS);
-    this.isRefreshingHistory = false
+    this.isRefreshingHistory = false;
 
   }
 
@@ -129,7 +129,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     if (!this.amountFishUS) return;
     const history = this.marketHistory;
     const basePrice = this.baseMC.price_usd;
-    const priceCoin = this.coinMC.price_usd
+    const priceCoin = this.coinMC.price_usd;
     // console.log(history, basePrice);
     const amount = this.amountFishUS / priceCoin;
     // console.log(history);
@@ -137,7 +137,7 @@ export class TradesExchangeSnapshotComponent implements OnInit {
       return item.amountCoin > amount;
     }).sort(function (a, b) {
       return b.timestamp - a.timestamp;
-    })
+    });
   }
 
   onAmountFishChanged(evt) {
@@ -149,10 +149,10 @@ export class TradesExchangeSnapshotComponent implements OnInit {
     this.showMarket.showMarket(this.exchange, ar[0], ar[1]);
   }
 
-  showFishes3(){
-    const fishes =  this.marketHistory.sort(function (a, b) {
+  showFishes3() {
+    const fishes = this.marketHistory.sort(function (a, b) {
       return b.amountCoin - a.amountCoin;
-    }).slice(0,3);
+    }).slice(0, 3);
     const last = _.last(fishes);
     this.fishes = fishes.sort(function (a, b) {
       return b.timestamp - a.timestamp;
@@ -160,8 +160,9 @@ export class TradesExchangeSnapshotComponent implements OnInit {
 
     this.amountFishUS = Math.round(last.amountCoin * last.rate * this.priceBaseUS);
   }
-  onFishClick(){
-    if(this.fishes && this.fishes.length) {
+
+  onFishClick() {
+    if (this.fishes && this.fishes.length) {
       this.fishes = [];
       return;
     }

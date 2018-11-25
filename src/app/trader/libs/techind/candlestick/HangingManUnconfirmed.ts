@@ -7,13 +7,13 @@ export default class HangingManUnconfirmed extends HangingMan {
         this.name = 'HangingManUnconfirmed';
     }
 
-    logic (data:StockData) {
+    logic (data: StockData) {
         let isPattern = this.upwardTrend(data, false);
         isPattern = isPattern && this.includesHammer(data, false);
         return isPattern;
     }
 }
 
-export function hangingmanunconfirmed(data:StockData) {
+export function hangingmanunconfirmed(data: StockData) {
   return new HangingManUnconfirmed().hasPattern(data);
 }

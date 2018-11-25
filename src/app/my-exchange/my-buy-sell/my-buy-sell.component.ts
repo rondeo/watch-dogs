@@ -1,10 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../models/app-models';
-import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConnectorApiService} from '../../../../archive/services/connector-api.service';
-import {ApiBase} from '../../../../archive/services/apis/api-base';
-import {Observable} from 'rxjs/Observable';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UtilsOrder} from '../../com/utils-order';
 import {placeOrder} from './place-order';
@@ -18,6 +14,7 @@ import {MATH} from '../../com/math';
 import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-my-buy-sell',
@@ -25,7 +22,20 @@ import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service'
   styleUrls: ['./my-buy-sell.component.css']
 })
 
-export class MyBuySellComponent implements OnInit {
+export class MyBuySellComponent implements OnInit, OnDestroy {
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private apisPrivate: ApisPrivateService,
+    private apisPublic: ApisPublicService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private marketCap: ApiMarketCapService,
+    private followOrders: FollowOrdersService
+  ) {
+
+  }
 
 
   markets: string[];
@@ -38,7 +48,7 @@ export class MyBuySellComponent implements OnInit {
   coin: string;
   base: string;
 
-  amountUS: number = 100;
+  amountUS = 100;
   userRate: number;
 
   isBuyDisabled = false;
@@ -54,8 +64,8 @@ export class MyBuySellComponent implements OnInit {
   bookSell1000US: number;
 
 
-  //priceBaseUS:number;
-  amountBase: number = 0;
+  // priceBaseUS:number;
+  amountBase = 0;
 
   /////////////////////
   priceCoin: number;
@@ -63,24 +73,28 @@ export class MyBuySellComponent implements OnInit {
   balanceBase: VOBalance;
   balanceCoin: VOBalance;
 
-  isInstant: boolean = true;
+  isInstant = true;
 
 
-  // marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string} = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
-  selectedMarketExchange = {exchange:null, market:null};
+  // marketInit:{base:string, coin:string, exchange:string, priceBaseUS:number, rate:number, market:string}
+  // = {base:'', coin:'', exchange:'', market:'',priceBaseUS:0, rate:0};
+  selectedMarketExchange = {exchange: null, market: null};
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private apisPrivate: ApisPrivateService,
-    private apisPublic: ApisPublicService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private marketCap: ApiMarketCapService,
-    private followOrders: FollowOrdersService
-  ) {
 
-  }
+  books: VOBooks;
+
+  focusBuy = 'first';
+  focusSell = 'first';
+
+  newOrder: VOOrder;
+
+  private sub1: Subscription;
+  private sub2: Subscription;
+  private sub3: Subscription;
+
+
+  marketHistoryData: { priceBaseUS: number, history: VOOrder[] };
+  marketSummaryData: { summary: VOMarket, priceBaseUS: number };
 
   onMarketExchangeChange(evt) {
     this.selectedMarketExchange = evt;
@@ -93,9 +107,6 @@ export class MyBuySellComponent implements OnInit {
   onUserPriceChanged(rate) {
 
   }
-
-
-  books: VOBooks;
 
 
   async downloadBooks() {
@@ -121,9 +132,6 @@ export class MyBuySellComponent implements OnInit {
     else if (this.focusSell === 'b1000') this.rateSell = this.bookSell1000US;
   }
 
-  focusBuy = 'first';
-  focusSell = 'first';
-
 
   onFocusBuy(field: string) {
     // console.log(field);
@@ -148,7 +156,7 @@ export class MyBuySellComponent implements OnInit {
     if (this.balanceBase.available < amountBase) amountBase = this.balanceBase.available;
     if (amountBase * priceBase < 9) {
       alert('Low amount $' + (amountBase * priceBase).toFixed(2));
-      return
+      return;
     }
     let amountCoin = amountBase / this.rateBuy;
     amountCoin = +amountCoin.toPrecision(5);
@@ -157,7 +165,7 @@ export class MyBuySellComponent implements OnInit {
 
   async buyCoin(amount: number) {
     let rateBuy = +this.rateBuy;
-    if(this.isInstant){
+    if (this.isInstant) {
       rateBuy = UtilsBooks.getRateForAmountCoin(this.books.sell, amount);
       this.rateBuy = rateBuy;
     }
@@ -168,7 +176,7 @@ export class MyBuySellComponent implements OnInit {
     const precision = rateBuy.toString();
     console.log('buy coin ' + amount + ' rate ' + rateBuy);
     if (isNaN(rateBuy)) {
-      console.warn(' rateBuy ' + rateBuy)
+      console.warn(' rateBuy ' + rateBuy);
       return;
     }
 
@@ -179,25 +187,25 @@ export class MyBuySellComponent implements OnInit {
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
 
-    const msg = 'Buy $' + Math.round(amount * priceCoin) + '\n' + amount + '\n' + rateBuy;
+    let msg = 'Buy $' + Math.round(amount * priceCoin) + '\n' + amount + '\n' + rateBuy;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     if (!await this.confirm(msg)) return;
     try {
 
       const order = await api.buyLimit2(this.market, amount, rateBuy);
 
-      const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
+      msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
-      //this.onNewOrder(order);
+      // this.onNewOrder(order);
 
     } catch (e) {
-      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
+      this.snackBar.open('ERROR ' + e.message, 'x', {panelClass: 'error'});
       console.warn(e);
     }
     this.focusBuy = 'first';
     this.focusSell = 'first';
-    //api.startRefreshBalances();
+    // api.startRefreshBalances();
   }
 
   async onSellClick() {
@@ -208,7 +216,7 @@ export class MyBuySellComponent implements OnInit {
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[this.coin].price_usd;
     let amountCoin = amountUS / priceCoin;
-    if (amountCoin + (amountCoin/10) > this.balanceCoin.available) amountCoin = this.balanceCoin.available;
+    if (amountCoin + (amountCoin / 10) > this.balanceCoin.available) amountCoin = this.balanceCoin.available;
 
     if (amountCoin * priceCoin < 9) {
       const msg = 'Minimum trading amount $10 got ' + (amountCoin * priceCoin).toFixed(2);
@@ -221,7 +229,7 @@ export class MyBuySellComponent implements OnInit {
 
   async sellCoin(amount: number) {
     let rateSell = this.rateSell;
-    if(this.isInstant){
+    if (this.isInstant) {
       rateSell = UtilsBooks.getRateForAmountCoin(this.books.buy, amount);
       this.rateSell = rateSell;
     }
@@ -241,7 +249,7 @@ export class MyBuySellComponent implements OnInit {
     try {
       const order = await api.sellLimit2(this.market, amount, rateSell);
 
-      //this.newOrder.emit(order);
+      // this.newOrder.emit(order);
     } catch (e) {
       console.warn(e);
     }
@@ -258,7 +266,7 @@ export class MyBuySellComponent implements OnInit {
 
     const rate = this.rateBuy;
     if (isNaN(rate)) return;
-    //if(!openOrders.length) {
+    // if(!openOrders.length) {
     try {
       const MC = await this.marketCap.getTicker();
       const priceCoin = MC[this.coin].price_usd;
@@ -280,7 +288,7 @@ export class MyBuySellComponent implements OnInit {
 
     } catch (e) {
       console.warn(e);
-      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
+      this.snackBar.open('ERROR ' + e.message, 'x', {panelClass: 'error'});
     }
 
     // }
@@ -297,25 +305,15 @@ export class MyBuySellComponent implements OnInit {
         if (confirm(msg)) resolve(true);
         else resolve(false);
       }, 100);
-    })
+    });
   }
-
-  newOrder: VOOrder;
-
-  private sub1: Subscription;
-  private sub2: Subscription;
-  private sub3: Subscription;
 
   ngOnDestroy() {
     if (this.sub1) this.sub1.unsubscribe();
     this.unsubscribe();
   }
 
-
-  marketHistoryData: { priceBaseUS: number, history: VOOrder[] };
-  marketSummaryData: { summary: VOMarket, priceBaseUS: number }
-
-  //marketSummary:VOMarket;
+  // marketSummary:VOMarket;
 
 
   unsubscribe() {
@@ -330,9 +328,9 @@ export class MyBuySellComponent implements OnInit {
     this.base = ar[0];
     this.coin = ar[1];
     const MC = this.marketCap.getTicker();
-   this.sub2 =  this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances =>{
-      this.balanceBase = _.find(balances, {symbol:this.base});
-     this.balanceCoin = _.find(balances, {symbol:this.coin});
+   this.sub2 =  this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances => {
+      this.balanceBase = _.find(balances, {symbol: this.base});
+     this.balanceCoin = _.find(balances, {symbol: this.coin});
 
     });
 
@@ -363,7 +361,7 @@ export class MyBuySellComponent implements OnInit {
 
       if (api) api.getMarkets().then(M => {
         this.markets = Object.keys(M).sort();
-        if (this.market && !this.selectedMarket) this.selectedMarket = this.market
+        if (this.market && !this.selectedMarket) this.selectedMarket = this.market;
       });
 
       this.subscribe();
@@ -374,7 +372,7 @@ export class MyBuySellComponent implements OnInit {
 
   onMarketSelected($event) {
     const market = $event.value;
-    this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market)
+    this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market);
   }
 
   onAmountChanged(amount) {

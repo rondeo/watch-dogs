@@ -6,19 +6,19 @@ export class Rsi1 {
 
   wildersSmoothing(values, prevAvg) {
     return prevAvg + (values[values.length - 1] - prevAvg) / values.length;
-  };
+  }
 
 // If possible, use wilderSmoothing if not just use the mean (e.g. first N values)
   updateAverage(changes: Float32Array, prevAverage) {
     return prevAverage !== undefined ? this.wildersSmoothing(changes, prevAverage) : _.mean(changes);
-  };
+  }
 
 
   ctrModifier(data: { close: number, hasClosed?: boolean }[]) {
     let slidingWindowUpMoves = new Float32Array(this.period);
     let slidingWindowDownMoves = new Float32Array(this.period);
 
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       const record = data[i];
 
       // First N records cannot be calculated, leave the existing value in there if it was already calculated
@@ -60,7 +60,7 @@ export class Rsi1 {
         averageDown
       };
     }
-    ;
+    
 
   }
 }

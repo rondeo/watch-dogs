@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 
 import * as _ from 'lodash';
-import {VOBubble} from "../../com/utils-order";
+import {VOBubble} from '../../com/utils-order';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -12,12 +12,12 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild('graphs') canv;
   private ctx: CanvasRenderingContext2D;
-  @Input() bubbles:{x:number, y:number, r:number, a:number}[];
-  @Input() exchange:string;
-  @Input() market:string;
+  @Input() bubbles: {x: number, y: number, r: number, a: number}[];
+  @Input() exchange: string;
+  @Input() market: string;
 
-  startTime:string;
-  endTime:string;
+  startTime: string;
+  endTime: string;
 
   constructor() { }
 
@@ -27,42 +27,43 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
 
-    let el:HTMLCanvasElement = this.canv.nativeElement;
-     this.ctx = el.getContext("2d");
-     if(this.bubbles) this.drawData();
+    let el: HTMLCanvasElement = this.canv.nativeElement;
+     this.ctx = el.getContext('2d');
+     if (this.bubbles) this.drawData();
   }
 
-  ngOnChanges(evt){
-    //console.log(evt);
-    if(this.ctx && this.bubbles) this.drawData();
+  ngOnChanges(evt) {
+    // console.log(evt);
+    if (this.ctx && this.bubbles) this.drawData();
 
   }
 
 
-  drawVerticalLines(startTime:number, rangeX:number, ctx:CanvasRenderingContext2D, width:number, height:number, offsetX:number,  offsetY:number, scaleX:number, scaleY:number){
+  drawVerticalLines(startTime: number, rangeX: number, ctx: CanvasRenderingContext2D,
+                    width: number, height: number, offsetX: number,  offsetY: number, scaleX: number, scaleY: number) {
 
 
    // let x = offsetX + ((o.x - startTime) / scaleX);
 
-    let step = rangeX/10;
+    let step = rangeX / 10;
 
-    offsetY +=30;
+    offsetY += 30;
 
-    for (let i= 0; i<11; i++) {
+    for (let i = 0; i < 11; i++) {
 
       let stamp = startTime + (i * step);
 
 
       let date = new Date(stamp);
 
-      let display = date.getHours() +':'+date.getMinutes();
+      let display = date.getHours() + ':' + date.getMinutes();
 
       let x = offsetX + ((stamp - startTime) / scaleX);
 
-      ctx.font = "9px Arial";
-      ctx.fillText(display, x-8 , height + offsetY);
+      ctx.font = '9px Arial';
+      ctx.fillText(display, x - 8 , height + offsetY);
       ctx.beginPath();
-      ctx.moveTo(x, height+offsetY);
+      ctx.moveTo(x, height + offsetY);
       ctx.lineTo(x, 0);
       ctx.lineWidth = 0.1;
       ctx.stroke();
@@ -71,7 +72,8 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
 
-  drawHorizontalLines(rangeY:number, minY:number, ctx:CanvasRenderingContext2D, width:number, height:number, offsetX:number,  offsetY:number, scaleX:number, scaleY:number){
+  drawHorizontalLines(rangeY: number, minY: number, ctx: CanvasRenderingContext2D,
+                      width: number, height: number, offsetX: number,  offsetY: number, scaleX: number, scaleY: number) {
 
    /* let min = bubbles.reduce(function (s, item) {
       return (item.y && item.y < s)?item.y:s;
@@ -81,39 +83,40 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
    // console.warn(min,  max)
 
-    //let rangeY = max - min;
+    // let rangeY = max - min;
 
-    //let scaleY = rangeY/(height - offsetY);
+    // let scaleY = rangeY/(height - offsetY);
 
-    //console.warn(rangeY);
+    // console.warn(rangeY);
 
-    let linesStep = rangeY/10;
+    let linesStep = rangeY / 10;
 
 
-    for(let i = 0; i< 11; i++){
+    for (let i = 0; i < 11; i++) {
 
       let pozY = (i * linesStep);
       let value = minY + pozY;
-      pozY = height - (pozY/scaleY);
+      pozY = height - (pozY / scaleY);
       pozY += offsetY;
       const display = (value *= 1e8).toString().substr(0, 4);
-      ctx.font = "9px Arial";
-      ctx.fillText(display,4,pozY);
+      ctx.font = '9px Arial';
+      ctx.fillText(display, 4, pozY);
       ctx.beginPath();
       ctx.moveTo(offsetX, pozY);
-      ctx.lineTo(width,pozY);
+      ctx.lineTo(width, pozY);
       ctx.lineWidth = 0.1;
       ctx.stroke();
     }
   }
 
 
-  drawBubbles( minY:number, ctx:CanvasRenderingContext2D, bubbles:VOBubble[], width:number, height:number, offsetX:number,  offsetY:number, scaleX:number, scaleY:number){
+  drawBubbles( minY: number, ctx: CanvasRenderingContext2D, bubbles: VOBubble[],
+               width: number, height: number, offsetX: number,  offsetY: number, scaleX: number, scaleY: number) {
 
     let startTime  = bubbles[0].x;
 
-    bubbles.forEach(function (o:VOBubble) {
-      if(o.y) {
+    bubbles.forEach(function (o: VOBubble) {
+      if (o.y) {
         let amount = o.y;
 
         let x = offsetX + ((o.x - startTime) / scaleX);
@@ -124,35 +127,34 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
         ctx.fillStyle = o.r > 0 ? 'rgba(0,100,0,0.8)' : 'rgba(255,0,0,0.8)';
         if (R > 99000) {
-          ctx.font = "10px Arial";
+          ctx.font = '10px Arial';
 
           ctx.fillText((R / 1000).toFixed(0), x - 10, y - 10);
           r = 5;
         } else if (R > 49000) {
-          ctx.font = "10px Arial";
+          ctx.font = '10px Arial';
           ctx.fillText((R / 1000).toFixed(0), x - 10, y - 10);
           r = 4;
         } else if (R > 10000) {
-          //ctx.font = "8px Arial";
-          //ctx.fillText((R / 1000).toFixed(0), x - 6, y - 6);
+          // ctx.font = "8px Arial";
+          // ctx.fillText((R / 1000).toFixed(0), x - 6, y - 6);
           r = 3;
-        }
-        else if (R > 1000) r = 2;
+        } else if (R > 1000) r = 2;
 
         ctx.beginPath();
-        ctx.arc(x-(r/2), y-(r/2), r, 0, 2 * Math.PI, false);
+        ctx.arc(x - (r / 2), y - (r / 2), r, 0, 2 * Math.PI, false);
 
         ctx.fill();
       }
-    })
+    });
   }
 
 
-  drawData(){
+  drawData() {
     let ctx = this.ctx;
     ctx.clearRect(0, 0, 360, 240);
     ctx.fillStyle = 'black';
-    if(!this.bubbles.length) return;
+    if (!this.bubbles.length) return;
 
     let bubbles = this.bubbles;
 
@@ -161,8 +163,8 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
     let offsetY = 10;
     let offsetX = 40;
 
-    let startTime  = bubbles[0].x
-    let endTime = bubbles[bubbles.length-1].x;
+    let startTime  = bubbles[0].x;
+    let endTime = bubbles[bubbles.length - 1].x;
 
 
    /*let startDate = new Date(startTime);
@@ -179,7 +181,7 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
     let rangeX = endTime - startTime;
 
-    let scaleX = rangeX/(width - offsetX);
+    let scaleX = rangeX / (width - offsetX);
 
     let dust = [];
 
@@ -188,30 +190,30 @@ export class BubbleChartComponent implements OnInit, OnChanges, AfterViewInit {
 
     bubbles.forEach(function (item) {
      // if(item.r > 300){
-        if(item.y > maxY) maxY = item.y;
-        if(item.y && item.y < minY) minY = item.y;
+        if (item.y > maxY) maxY = item.y;
+        if (item.y && item.y < minY) minY = item.y;
      // }else dust.push(item)
 
     });
 
-    let persent = (100*(maxY - minY)/maxY).toFixed(1);
+    let persent = (100 * (maxY - minY) / maxY).toFixed(1);
 
-    ctx.font = "10px Arial";
-    ctx.fillText(persent +' %', 5 , height +   30);
-    //console.warn(minY, max)
+    ctx.font = '10px Arial';
+    ctx.fillText(persent + ' %', 5 , height +   30);
+    // console.warn(minY, max)
 
 
     let rangeY = maxY - minY;
 
-    let scaleY = rangeY/(height - offsetY);
+    let scaleY = rangeY / (height - offsetY);
 
-    //console.warn(rangeY);
+    // console.warn(rangeY);
 
     this.drawVerticalLines(startTime, rangeX, ctx, width, height, offsetX, offsetY, scaleX, scaleY );
 
     this.drawHorizontalLines(rangeY, minY,  ctx, width, height, offsetX, offsetY, scaleX, scaleY);
 
-    this.drawBubbles(minY,  ctx, bubbles, width, height, offsetX, offsetY, scaleX, scaleY)
+    this.drawBubbles(minY,  ctx, bubbles, width, height, offsetX, offsetY, scaleX, scaleY);
 
 
    /*

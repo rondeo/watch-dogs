@@ -1,10 +1,8 @@
 /*
  * Created by Vlad on 7/8/2017.
  */
-
-
-import {Observable} from 'rxjs/Observable';
 import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
+import {Observable} from 'rxjs';
 
 
 export interface VOBooksStats {
@@ -45,7 +43,7 @@ export class VOTransaction {
   timestamp: number;
   date: string;
   incoming: boolean;
-  hex?: string
+  hex?: string;
 }
 
 
@@ -58,7 +56,7 @@ export const VOORDER: VOOrder = {
   rate: 0,
   action: ''
 
-}
+};
 
 export interface VOOrder {
   uuid: string;
@@ -86,7 +84,7 @@ export interface VOOrder {
 }
 
 export interface VOOrderExt extends VOOrder {
-  overlap: number,
+  overlap: number;
   orders: number;
 }
 
@@ -108,7 +106,7 @@ export interface ConfigAPI {
 }
 
 export interface IExchangePublic {
-  getCurrencies(): Observable<any>
+  getCurrencies(): Observable<any>;
 }
 
 
@@ -118,7 +116,7 @@ export class VOTransfer {
   market: string;
   base: string;
   amountBase: number;
-  coin: string
+  coin: string;
   amountCoin: number;
   amountBaseUS: number;
   amountCoinUS: number;
@@ -137,7 +135,7 @@ export class VOTransfer {
 export interface VOSearch {
   exchange: string;
   symbol?: string;
-  pair?: string
+  pair?: string;
 }
 
 
@@ -190,10 +188,6 @@ export interface IVOMarket {
 }
 */
 
-export interface IVOMarketExt {
-
-}
-
 
 export class VOMarket {
   pair?: string;
@@ -245,15 +239,15 @@ export class VOMarket {
   change?: number;
   usMC?: number;
   toMC?: number;
-  Created?: string
-  DisplayMarketName?: string
+  Created?: string;
+  DisplayMarketName?: string;
   disabled?: any;
   coinId?: string;
   coinRank?: number;
   mcDiff?: string;
   selected?: boolean;
 
-  mcCoin?: VOMarketCap
+  mcCoin?: VOMarketCap;
 
   percent_change_1h?: number;
   percent_change_24h?: number;
@@ -305,7 +299,7 @@ export class VOMarketCap {
   selected?: boolean;
 
   constructor(obj?: any) {
-    if (obj) Object.assign(this, obj);
+    if (obj) for (let str in obj) this[str] = obj[str];
   }
 }
 
@@ -447,7 +441,7 @@ export interface UserProfile {
   timestamp: number;
   date: string;
   filename: string;
-  //coins: CoinConfig[]
+  // coins: CoinConfig[]
 }
 
 /*
@@ -505,7 +499,7 @@ export class VOBalance {
   isDetails?: boolean;
 
   constructor(obj?: VOBalance) {
-    if (obj) Object.assign(this, obj);
+    if (obj) for (let str in obj) this[str] = obj[str];
   }
 }
 
@@ -568,12 +562,12 @@ export class VOWatchdog {
   _status: WatchDogStatus;
 
   constructor(obj: any) {
-    Object.assign(this, obj);
+    if (obj) for (let str in obj) this[str] = obj[str];
     //  if(obj.action)this.orderType = obj.action
   }
 }
 
-export const VOWATCHDOG = new VOWatchdog({})
+export const VOWATCHDOG = new VOWatchdog({});
 
 
 /*
@@ -613,11 +607,11 @@ export interface VOResult {
   message: string;
 }
 
-export enum VOAlert{
-  UP='UP',
+export enum VOAlert {
+  UP= 'UP',
   DOWN = 'DOWN',
   DROPPING = 'DROPPING',
   JAMPING = 'JUMPING',
-  WATERFALL='WATERFALL',
-  FOUNTAIN ='FOUNTAIN'
+  WATERFALL= 'WATERFALL',
+  FOUNTAIN = 'FOUNTAIN'
 }

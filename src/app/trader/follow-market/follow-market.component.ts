@@ -17,13 +17,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class FollowMarketComponent implements OnInit {
   bots: any[];
 
-  market:string;
+  market: string;
 
   testbot: MarketBot;
   constructor(
 
-    private rote:ActivatedRoute,
-    private router:Router,
+    private rote: ActivatedRoute,
+    private router: Router,
     private apisPublic: ApisPublicService,
     private followOrder: FollowOrdersService,
     private marketCap: ApiMarketCapService,
@@ -33,51 +33,51 @@ export class FollowMarketComponent implements OnInit {
 
 
 
- async onCreateClick(){
+ async onCreateClick() {
     const MC = await this.marketCap.getTicker();
-    const coniMC= MC[this.market.split('_')[1]];
-    if(!coniMC) return;
-    this.followOrder.createBot(this.market, Math.round(100/ coniMC.price_usd));
+    const coniMC = MC[this.market.split('_')[1]];
+    if (!coniMC) return;
+    this.followOrder.createBot(this.market, Math.round(100 / coniMC.price_usd));
 
   }
 
   ngOnInit() {
-    this.rote.params.subscribe(params=>{
-      if(params.market) this.market = params.market;
-    })
-    this.followOrder.botsSub.subscribe(bots =>{
-      if(!bots) return;
+    this.rote.params.subscribe(params => {
+      if (params.market) this.market = params.market;
+    });
+    this.followOrder.botsSub.subscribe(bots => {
+      if (!bots) return;
 
       this.bots = bots.map(function (item) {
         return {
           market: item.market,
           amountCoin: item.amountCoin,
-          x:'X'
-        }
+          x: 'X'
+        };
       });
     });
 
   }
 
 
-  async createBot(market: string, amountUS:number){
+  async createBot(market: string, amountUS: number) {
     const MC = await this.marketCap.getTicker();
     const amountCoin = +(amountUS / MC[market.split('_')[1]].price_usd).toFixed(2);
     await this.followOrder.createBot(market, amountCoin);
   }
 
 
-  onMarketSelected(evt){
+  onMarketSelected(evt) {
     const market: string = evt.item.market;
     switch (evt.prop) {
       case 'market':
         this.router.navigate(['/trader/follow-market', {market}]);
         break;
       case 'x':
-        if(confirm('DELETE ' + market)){
+        if (confirm('DELETE ' + market)) {
           this.followOrder.deleteBot(market);
         }
-        break
+        break;
     }
   }
 

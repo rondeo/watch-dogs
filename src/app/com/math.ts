@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 export class MATH {
 
-  static priceChnage(closes: number[]){
+  static priceChnage(closes: number[]) {
     const lasts = _.mean(_.takeRight(closes, 3));
     const last10 = _.min(_.takeRight(closes, 10));
     return MATH.percent(lasts, last10);
@@ -14,31 +14,31 @@ export class MATH {
       this.last = o;
       return speed;
     }, {last: numbers[0]});
-    return speeds
+    return speeds;
   }
 
-  static isFallLog(numbers: number[]){
+  static isFallLog(numbers: number[]) {
     const first = numbers.shift();
     return numbers.every(function (o) {
       const res =  o < this.prev;
       console.log(o, this.prev);
       this.prev = o;
       return res;
-    },{prev:first});
+    }, {prev: first});
   }
 
-  static isFall(numbers: number[]){
+  static isFall(numbers: number[]) {
     const first = numbers.shift();
     return numbers.every(function (o) {
       const res =  o < this.prev;
       this.prev = o;
       return res;
-    },{prev:first});
+    }, {prev: first});
   }
 
   static formatDecimals(value: number, decimals: number) {
     const k = Math.pow(10, decimals);
-   return Math.floor(value * k)/k;
+   return Math.floor(value * k) / k;
   }
 
   static toString(value: number, length = 4) {
@@ -71,7 +71,7 @@ export class MATH {
     // console.log(btc)
     let ar = ('' + btc).replace(',', '.').split('.');
     let suffix = '';
-    if (ar.length == 1) suffix = '00000000';
+    if (ar.length === 1) suffix = '00000000';
     else {
       suffix = ar[1];
       while (suffix.length < 8) suffix += '0';
@@ -89,16 +89,16 @@ export class MATH {
 
   static sort(ar: number[]) {
     ar.sort(function (a, b) {
-      return a - b
+      return a - b;
     });
   }
 
-  static mean(vals: number[]){
-    return _.mean(vals)
+  static mean(vals: number[]) {
+    return _.mean(vals);
   }
   static median(numbers: number[]) {
     numbers = numbers.slice(0);
-    var median = 0, numsLen = numbers.length;
+    let median = 0, numsLen = numbers.length;
     MATH.sort(numbers);
     //  console.log(numbers);
     if (numsLen % 2 === 0) median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2;
@@ -123,14 +123,14 @@ export class MATH {
   static addDecimal(rate: number, number: number) {
     const ar1 = rate.toString().split('.');
     console.log(ar1);
-    if(ar1.length == 2){
-      let out:string = ar1[0];
+    if (ar1.length === 2) {
+      let out: string = ar1[0];
       const l = ar1[1].length;
-      const k =  Math.pow(10,l);
+      const k =  Math.pow(10, l);
       let val1 = Math.round(rate * k);
-      val1+=number;
-      return +(ar1[0]+'.'+String(val1).padStart(l,'0'));
-    } else rate+=number;
+      val1 += number;
+      return +(ar1[0] + '.' + String(val1).padStart(l, '0'));
+    } else rate += number;
     return rate;
   }
 }

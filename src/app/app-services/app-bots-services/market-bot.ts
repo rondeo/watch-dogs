@@ -18,14 +18,6 @@ import {UtilsBooks} from '../../com/utils-books';
 import {StopLossOrder} from './stop-loss-order';
 
 export class MarketBot {
-  base: string;
-  coin: string;
-  balanceBase: VOBalance;
-  balanceCoin: VOBalance;
-
-  logs: string[] = [];
-  id: string;
-  private stopLossOrder: StopLossOrder;
 
 
   constructor(
@@ -44,11 +36,35 @@ export class MarketBot {
 
     //  this.stopLossOrder = new StopLossOrder(market, apiPrivate);
   }
+  base: string;
+  coin: string;
+  balanceBase: VOBalance;
+  balanceCoin: VOBalance;
+
+  logs: string[] = [];
+  id: string;
+  private stopLossOrder: StopLossOrder;
+
+  orders: any[] = [];
+  prevAction: string;
+  patterns: any[] = [];
+  lastOrder: {stamp: number, action: string, price: number};
+  prevPrice: number;
+
+  interval;
+
+  sub1;
+  sub2;
+
+  private activeOrder: VOOrder;
+
+
+  timeout;
 
   async sellCoinInstant() {
     console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
     console.log(this.balanceCoin);
-    if (!this.balanceCoin || this.balanceCoin.available ===0 ) {
+    if (!this.balanceCoin || this.balanceCoin.available === 0 ) {
       this.log('SELL no Balance');
       return;
     }
@@ -88,11 +104,11 @@ export class MarketBot {
      }, 2000)*/
   }
 
-  getBalanceCoin(){
+  getBalanceCoin() {
 
   }
 
-  getBalanceBase(){
+  getBalanceBase() {
 
   }
 
@@ -133,12 +149,6 @@ export class MarketBot {
     console.log(out);
      this.logs.push(out);
   }
-
-  orders: any[] = [];
-  prevAction: string
-  patterns: any[] = [];
-  lastOrder:{stamp: number, action: string, price:number};
-  prevPrice: number;
   async tick() {
     setTimeout(() => this.save(), 5000);
     const candles = await this.candlesService.getCandles(this.market);
@@ -150,7 +160,7 @@ export class MarketBot {
     this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
 
     const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
-    if(action) console.warn(action);
+    if (action) console.warn(action);
 
     if (action === 'BUY') this.buyCoinInstant();
     else if (action === 'SELL') this.sellCoinInstant();
@@ -165,10 +175,8 @@ export class MarketBot {
     if (!this.interval) return;
     clearInterval(this.interval);
     this.interval = 0;
-    this.log('ending tick')
+    this.log('ending tick');
   }
-
-  interval
 
   start() {
     if (this.interval) return;
@@ -176,19 +184,14 @@ export class MarketBot {
     this.interval = setInterval(() => this.tick(), 60 * 1000);
   }
 
-  sub1;
-  sub2;
-
-  private activeOrder: VOOrder;
-
   async init() {
     const ar = this.market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
     this.balanceBase = new VOBalance();
-    this.balanceCoin;
-    this.patterns = (await this.storage.select(this.id+ '-patterns')) || [];
-    this.orders = (await  this.storage.select(this.id+ '-orders')) || [];
+
+    this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
+    this.orders = (await  this.storage.select(this.id + '-orders')) || [];
 
    /* this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
       if (!balances) return;
@@ -209,26 +212,23 @@ export class MarketBot {
 
   async save() {
     if (!this.patterns.length) return;
-    this.storage.upsert(this.id+ '-patterns', this.patterns);
-    this.storage.upsert(this.id+ '-orders', this.orders);
+    this.storage.upsert(this.id + '-patterns', this.patterns);
+    this.storage.upsert(this.id + '-orders', this.orders);
     if (!this.logs.length) return;
     let history: string[] = (await this.storage.select(this.id)) || [];
     history = history.concat(this.logs);
     this.logs = [];
     history = _.takeRight(history, 500);
-    this.storage.upsert(this.id+ '-logs', history);
+    this.storage.upsert(this.id + '-logs', history);
   }
 
   destroy() {
     this.log('destroy');
     this.storage.remove(this.id);
     this.stop();
-    if(this.sub1) this.sub1.unsubscribe();
-    if(this.sub2)this.sub2.unsubscribe();
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2)this.sub2.unsubscribe();
   }
-
-
-  timeout;
 
 
 }

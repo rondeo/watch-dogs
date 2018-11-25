@@ -26,7 +26,7 @@ export class SaveValueDirective implements AfterViewInit {
     //   el.nativeElement.checked = true;
     // el.nativeElement.constructor.checked = true
     //  console.warn(el.nativeElement.constructor.checked);
-    //el.nativeElement.toggle();
+    // el.nativeElement.toggle();
     //  console.log(el.nativeElement.checked)
   }
 

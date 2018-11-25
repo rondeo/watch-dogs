@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   login = {email: '', password: '', nickname: null};
   selectedTab: number;
   exists: boolean;
-  notMatch: boolean = true;
+  notMatch = true;
 
   confirmPassword: string;
 
@@ -40,12 +40,12 @@ export class LoginComponent implements OnInit {
   onRegister() {
     this.exists = false;
 
-    let password = '' //this.storage.hashPassword2(this.login.password)
+    let password = ''; // this.storage.hashPassword2(this.login.password)
     this.authHttp.register(this.login.email, password).subscribe((res: any) => {
       console.log(res);
       if (res.success && res.nickname) {
 
-        this.snakBar.open('Registered ' + res.message, 'x', {extraClasses: ['alert-green']});
+        this.snakBar.open('Registered ' + res.message, 'x', {panelClass: ['alert-green']});
 
       } else {
 
@@ -53,12 +53,12 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/login/login');
         }
 
-        this.snakBar.open((res.nickname || '') + ' ' + res.message, 'x', {extraClasses: ['alert-red']});
+        this.snakBar.open((res.nickname || '') + ' ' + res.message, 'x', {panelClass: ['alert-red']});
       }
 
     }, error => {
-      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
-    })
+      this.snakBar.open('Connection error', 'x', {panelClass: ['alert-red']});
+    });
   }
 
   checkPassword() {
@@ -77,10 +77,10 @@ export class LoginComponent implements OnInit {
         switch (topic) {
           case 'sign-in':
             this.selectedTab = 0;
-            break
+            break;
           case 'forgot-password':
             this.selectedTab = 2;
-            break
+            break;
           case 'register':
             this.selectedTab = 1;
             break;
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
 
-    let password = '' // this.storage.hashPassword2(this.login.password);
+    let password = ''; // this.storage.hashPassword2(this.login.password);
 
     console.warn(password);
 
@@ -122,12 +122,12 @@ export class LoginComponent implements OnInit {
         this.authHttp.setUser(res.user);
 
         setTimeout(() => {
-          this.router.navigateByUrl(url)
+          this.router.navigateByUrl(url);
         }, 3000);
-      } else this.snakBar.open(res.message, 'x', {extraClasses: ['alert-red']});
+      } else this.snakBar.open(res.message, 'x', {panelClass: ['alert-red']});
 
     }, error => {
-      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
+      this.snakBar.open('Connection error', 'x', {panelClass: ['alert-red']});
     });
   }
 
@@ -145,23 +145,23 @@ export class LoginComponent implements OnInit {
 
   onRequestNewNickname() {
     let url = 'api/login/new-nickname';
-    let password = '' //this.storage.hashPassword2(this.login.password);
+    let password = ''; // this.storage.hashPassword2(this.login.password);
     let out = {
       email: this.login.email,
       password: password,
       nickname: this.login.nickname
-    }
+    };
     this.authHttp.post(url, out).subscribe((res: any) => {
       console.log(res);
       this.snakBar.open(res.message, 'x');
       if (res.success) {
 
-        this.authHttp.setUserNickname(this.login.nickname)
+        this.authHttp.setUserNickname(this.login.nickname);
       }
 
     }, err => {
-      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
-    })
+      this.snakBar.open('Connection error', 'x', {panelClass: ['alert-red']});
+    });
   }
 
 
@@ -171,12 +171,12 @@ export class LoginComponent implements OnInit {
 
         if (res.success) {
           this.authHttp.setUser(null);
-          this.snakBar.open(res.message, 'x', {extraClasses: ['alert-green']});
+          this.snakBar.open(res.message, 'x', {panelClass: ['alert-green']});
         } else this.snakBar.open(res.message, 'x');
 
       }, error => {
-        this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
-      })
+        this.snakBar.open('Connection error', 'x', {panelClass: ['alert-red']});
+      });
     }
   }
 
@@ -198,8 +198,8 @@ export class LoginComponent implements OnInit {
       }
     }, err => {
       console.log(err);
-      this.snakBar.open('Connection error', 'x', {extraClasses: ['alert-red']});
-    })
+      this.snakBar.open('Connection error', 'x', {panelClass: ['alert-red']});
+    });
 
   }
 }

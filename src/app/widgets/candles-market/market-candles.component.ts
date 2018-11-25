@@ -16,36 +16,39 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   candlesInterval = '1m';
 
   inBrowser = false;
+
   constructor(
     private apisPublic: ApisPublicService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
   }
 
-  ngOnChanges(){
-      this.downloadCandles();
+  ngOnChanges() {
+    this.downloadCandles();
   }
 
-  downloadCandles(){
-    if(!this.exchange || ! this.market) return;
+  downloadCandles() {
+    if (!this.exchange || !this.market) return;
 
     this.apisPublic.getExchangeApi(this.exchange).downloadCandles(this.market, this.candlesInterval, 200)
-      .then(candles=>{
-        if(!candles){
+      .then(candles => {
+        if (!candles) {
           this.candles = null;
           this.volumes = null;
           return;
         }
-      this.candles = candles;
+        this.candles = candles;
         this.volumes = candles.map(function (o) {
           return o.open > o.close ? -o.Volume : o.Volume;
         });
-    })
+      });
 
 
-    if(this.inBrowser) {
-      const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
+    if (this.inBrowser) {
+      const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');
+      //   api.getMarketUrl(ar[0], ar[1]);
       window.open(url, this.exchange);
     }
   }

@@ -1,10 +1,10 @@
-let config:any = {
+let config: any = {
 
 };
-export function setConfig(key:any, value:any) {
+export function setConfig(key: any, value: any) {
     config[key] = value;
 }
 
-export function getConfig(key:any){
+export function getConfig(key: any) {
     return config[key];
 }

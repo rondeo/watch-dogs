@@ -4,37 +4,37 @@ import {VOOrder} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
 import {Subject} from 'rxjs/internal/Subject';
 
-enum OrdersAlers{
+enum OrdersAlers {
   VOLUME_UP
 }
 
 // [0:to, 1:bought, 2:sold, 3:volPerMinute, 4:ordersPerMinute];
 export class OrdersStatsAlerts {
-  volumeAlertSub:Subject<number> = new Subject();
+  volumeAlertSub: Subject<number> = new Subject();
   voluumeUpPercent: number;
 
   private statsHistory: number[][] = [];
 
-  constructor(private exchange: string, private market: string, private storage: StorageService){
+  constructor(private exchange: string, private market: string, private storage: StorageService) {
 
   }
 
-  setVolumeUP(percent: number){
+  setVolumeUP(percent: number) {
     this.voluumeUpPercent = percent;
   }
 
-  async next2(ar: number[][]){
+  async next2(ar: number[][]) {
     const vols = ar.map(function (item) {
       return item[3];
     });
-    const last = vols[vols.length -1];
-    const prev = vols[vols.length -2] ;// _.sum(_.takeRight(vols, 10))/10;
+    const last = vols[vols.length - 1];
+    const prev = vols[vols.length - 2] ; // _.sum(_.takeRight(vols, 10))/10;
 
-    const diff = Math.round(100 * (last - prev)/prev);
+    const diff = Math.round(100 * (last - prev) / prev);
 
     // console.log('diff ', diff, this.voluumeUpPercent);
 
-    if(Math.abs(diff) > this.voluumeUpPercent) this.volumeAlertSub.next(diff);
+    if (Math.abs(diff) > this.voluumeUpPercent) this.volumeAlertSub.next(diff);
   }
 
   next(ar: VOOrder[], overlap: number) {
@@ -56,7 +56,7 @@ export class OrdersStatsAlerts {
     this.next2(this.statsHistory);
   }
 
-  volumeAlert$(){
-    return this.volumeAlertSub.asObservable()
+  volumeAlert$() {
+    return this.volumeAlertSub.asObservable();
   }
 }

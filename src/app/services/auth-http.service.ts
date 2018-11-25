@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+
 
 import {
   Http,
@@ -15,44 +13,48 @@ import {ActivatedRoute, Router} from '@angular/router';
 /*import {HDNode} from 'bitcoinjs-lib';*/
 import {StorageService} from './app-storage.service';
 import {VOResult} from '../models/app-models';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 
 @Injectable()
 export class AuthHttpService {
-  headers: Headers;
-
-  private userSub: BehaviorSubject<VOUser>;
-  //user$: Observable<VOUser>;
-  private user: VOUser = null;
-  isLogedInSub: BehaviorSubject<boolean>;
-  //isLogedIn$: Observable<boolean>
+  // isLogedIn$: Observable<boolean>
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private storage:StorageService
+    private storage: StorageService
   ) {
 
     this.userSub = new BehaviorSubject<VOUser>(null);
-    //this.user$ = this.userSub.asObservable();
+    // this.user$ = this.userSub.asObservable();
 
-    this.isLogedInSub= new BehaviorSubject(null);
+    this.isLogedInSub = new BehaviorSubject(null);
 
     this.isOnlineSub = new BehaviorSubject(window.navigator.onLine);
     window.addEventListener('online', () => {
 
       this.isOnlineSub.next( true);
-    })
+    });
 
     window.addEventListener('offline', () => {
       this.isOnlineSub.next( false);
-    })
-    //setTimeout(() => this.autoLogin(), 2000);
+    });
+    // setTimeout(() => this.autoLogin(), 2000);
   }
+  headers: Headers;
 
-  async autoLogin(){
+  private userSub: BehaviorSubject<VOUser>;
+  // user$: Observable<VOUser>;
+  private user: VOUser = null;
+  isLogedInSub: BehaviorSubject<boolean>;
+
+  isOnlineSub: BehaviorSubject<boolean>;
+
+  async autoLogin() {
   /*  let user = {} // await this.storage.restoreUserSimple();
     console.warn(user);
     let password2 =  '' // this.storage.hashPassword1(user.p);
@@ -64,16 +66,14 @@ export class AuthHttpService {
     })*/
   }
 
-  isOnlineSub:BehaviorSubject<boolean>;
-
-  isOnline$(){
+  isOnline$() {
     return this.isOnlineSub.asObservable();
   }
 
-    isLogedIn():boolean{
+    isLogedIn(): boolean {
     return !!this.user;
   }
-  getUserEmail():string{
+  getUserEmail(): string {
     return this.user.email;
   }
 
@@ -84,18 +84,18 @@ export class AuthHttpService {
 
     let url = '/api/login/login';
     console.log(url);
-    return this.http.post(url, {email: email, password: password})
+    return this.http.post(url, {email: email, password: password});
 
 
-    //return sub.asObservable();
+    // return sub.asObservable();
   }
 
   register(email: string, password: string) {
     let url = 'api/login/register';
-    return this.http.post(url, {email: email, password: password})
-      //.shareReplay().map(res => res.json())
+    return this.http.post(url, {email: email, password: password});
+      // .shareReplay().map(res => res.json())
 
-      //.do(user => this.userSub.next(user))
+      // .do(user => this.userSub.next(user))
   }
 
  /* autoLogin(): void {
@@ -118,11 +118,11 @@ export class AuthHttpService {
 
   dispatchUser(): void {
     this.userSub.next(this.user);
-    //this.isLogedInSub.next((this.user !== null));
+    // this.isLogedInSub.next((this.user !== null));
   }
 
   logout() {
-    return this.post('/api/login/logout', this.user)
+    return this.post('/api/login/logout', this.user);
   }
 
 
@@ -131,7 +131,7 @@ export class AuthHttpService {
     return user ? user.token : null;
   }
 
-  getUser$(){
+  getUser$() {
 
     return this.userSub.asObservable();
   }
@@ -148,7 +148,7 @@ export class AuthHttpService {
               // /   new VOUser(JSON.parse(atob(str)));
            // } catch (e) {
            //   console.error(e);
-              //this.removeAuthentication();
+              // this.removeAuthentication();
            // }
 
       }
@@ -158,8 +158,8 @@ export class AuthHttpService {
 
   removeAuthentication(): void {
     this.storage.removeItem('authentication');
-    //this.user = null;
-    //this.userSub.next(null);
+    // this.user = null;
+    // this.userSub.next(null);
   }
 
   saveUser() {
@@ -191,9 +191,9 @@ export class AuthHttpService {
 
   public get(url: string): Observable<any> {
 
-    return this.http.get(url).map(res =>{
+    return this.http.get(url).pipe(map(res => {
       return res;
-    })//, this.addHeaders(options));
+    })); // , this.addHeaders(options));
   }
 
   public post(url: string, body: any) {
@@ -261,7 +261,7 @@ export class AuthHttpService {
   setUser(user: VOUser) {
     this.user = user;
     this.saveUser();
-    if(user && user.session) this.isLogedInSub.next(true);
+    if (user && user.session) this.isLogedInSub.next(true);
     else this.isLogedInSub.next(false);
     this.dispatchUser();
   }
@@ -280,6 +280,6 @@ export interface VOUser {
   email: string;
   password: string;
   token: string;
-  session:string;
-  uid:string;
+  session: string;
+  uid: string;
 }

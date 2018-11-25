@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as _ from 'lodash';
 
 interface VOLine {
   ys: number[];
-  xs: number[]
+  xs: number[];
   color: string;
 }
 
@@ -29,22 +29,26 @@ export interface VOGraphs {
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit, AfterViewInit {
+export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
+
+  constructor() {
+
+  }
 
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
   private ctx: CanvasRenderingContext2D;
   @Input() graphs: VOGraphs;
 
-  @Input() myWidth:number;
+  @Input() myWidth: number;
   @Input() myHeight: number;
   lines: VOLine[];
 
 
 
   ratio: number;
-  width: number = 600;
-  height: number = 400;
+  width = 600;
+  height = 400;
   widthG: number;
   heightG: number;
   vertical = 12;
@@ -57,15 +61,13 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   y0: number;
   x0: number;
 
+  private resise;
+
   static convertToScale(ar: number[], range: number, min: number, height: number): number[] {
     if (range === 0) range = 1;
     return ar.map(function (item) {
       return (this.h * (item - this.min)) / this.range;
     }, {h: height, min: min, range: range});
-  }
-
-  constructor() {
-
   }
 
   drawData() {
@@ -78,8 +80,6 @@ export class LineChartComponent implements OnInit, AfterViewInit {
   onResise() {
     this.setSize();
   }
-
-  private resise;
 
   ngOnInit() {
     this.width = this.myWidth || 600;
@@ -117,7 +117,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
-    this.ctx = el.getContext("2d");
+    this.ctx = el.getContext('2d');
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
@@ -132,12 +132,12 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
     let ctx = this.ctx;
     let ar = this.graphs.labelsX;
-    let step = (this.widthG + (this.widthG/12)) / ar.length;
+    let step = (this.widthG + (this.widthG / 12)) / ar.length;
     let y = this.height;
     let x0 = this.paddingLeft - 20;
 
     ctx.fillStyle = '#000000';
-    ctx.font = "12px Arial";
+    ctx.font = '12px Arial';
     ar.forEach(function (item, i) {
       ctx.fillText(item, x0 + (i * step), y);
     });
@@ -161,7 +161,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     let y0 = this.y0;
     this.graphs.graphs.forEach(function (graph, i) {
       ctx.fillStyle = graph.color;
-      ctx.font = "12px Arial";
+      ctx.font = '12px Arial';
       let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
       let min = graph.min;
       let max = graph.max;
@@ -181,8 +181,8 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     let y0 = this.y0;
     let x0 = this.x0;
     let ys = line.ys;
-    let min = isNaN(line.min)?_.min(ys):line.min;
-    let max = isNaN(line.max)?_.max(ys):line.max;
+    let min = isNaN(line.min) ? _.min(ys) : line.min;
+    let max = isNaN(line.max) ? _.max(ys) : line.max;
 
    // if (min === 0) min = 1;
     let range = max - min;
@@ -234,7 +234,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
     let n = this.vertical;
-    //console.warn(n);
+    // console.warn(n);
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;

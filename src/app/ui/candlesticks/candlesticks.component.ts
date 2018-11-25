@@ -16,35 +16,6 @@ export enum EnumOverlay {
 })
 export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
-  @ViewChild('graphs') canv;
-  @ViewChild('myContainer') container;
-  @ViewChild('myOverlay') overlayView;
-  private ctx: CanvasRenderingContext2D;
-  private overlayCTX: CanvasRenderingContext2D;
-  @Input() candles: VOCandle[];
-
-  @Input() myWidth: number;
-  @Input() myHeight: number;
-
-  @Input() overlays: EnumOverlay[];
-
-  ratio: number = 600 / 250;
-  width: number = 600;
-  height: number = 250;
-  widthG: number = 0;
-  heightG: number = 0;
-  vertical = 12;
-  horizont = 6;
-  padding = 10;
-  paddingTop = 30;
-  paddingBottom = 20;
-  paddingLeft = 10;
-  paddingRight = 50;
-  y0: number;
-  x0: number;
-
-  font = '9px Arial';
-
   /*static convertToScale(item: VOCandleMin, scale: number, min: number): VOCandleMin {
     return {
       h: Math.round((item.h - min) * scale),
@@ -60,7 +31,53 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   constructor() {
   }
 
+
+  @ViewChild('graphs') canv;
+  @ViewChild('myContainer') container;
+  @ViewChild('myOverlay') overlayView;
+  private ctx: CanvasRenderingContext2D;
+  private overlayCTX: CanvasRenderingContext2D;
+  @Input() candles: VOCandle[];
+
+  @Input() myWidth: number;
+  @Input() myHeight: number;
+
+  @Input() overlays: EnumOverlay[];
+
+  ratio: number = 600 / 250;
+  width = 600;
+  height = 250;
+  widthG = 0;
+  heightG = 0;
+  vertical = 12;
+  horizont = 6;
+  padding = 10;
+  paddingTop = 30;
+  paddingBottom = 20;
+  paddingLeft = 10;
+  paddingRight = 50;
+  y0: number;
+  x0: number;
+
+  font = '9px Arial';
+
   linesOverlay: LinesOverlay;
+
+  gX0: number;
+  scaleX: number;
+  gY0: number;
+  gScaleY: number;
+
+  private resize;
+
+  startPoint: { x: number, y: number };
+
+  isMouseMove = false;
+
+  moveElement;
+  onMouseMoveHandler: EventListenerOrEventListenerObject = this.onMouseMove.bind(this);
+
+  private clicks = 0;
 
   async drawOverlay() {
 
@@ -81,7 +98,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
 
     // const Y0 = this.y0;
-    //const y0 = this.y0 - offsetY;
+    // const y0 = this.y0 - offsetY;
     // const x0 = this.x0;
 
     let maxV = 0;
@@ -134,7 +151,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
 
     for (let i = 0, n = ar.length; i < n; i++) {
 
-      const item: VOCandle = ar[i];// CandlesticksComponent.convertToScale(ar[i], scale, min);
+      const item: VOCandle = ar[i]; // CandlesticksComponent.convertToScale(ar[i], scale, min);
       const x = x0 + (item.to * scaleX);  // (i * dx);
 
       ctx.beginPath();
@@ -153,16 +170,11 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     this.drawYs(height, min, max, maxV);
   }
 
-  gX0: number;
-  scaleX: number;
-  gY0: number;
-  gScaleY: number;
-
   drawYs(height: number, min: number, max: number, maxV: number) {
 
     const step = (max - min) / 6;
     const out = [];
-    for (let i = min; i < max; i += step) out.push(MATH.toString(i))
+    for (let i = min; i < max; i += step) out.push(MATH.toString(i));
     out.push(MATH.toString(max));
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
@@ -184,8 +196,6 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
      ctx.fillText(firstV, x, yV );
  */
   }
-
-  private resize;
 
   ngOnInit() {
     this.width = this.myWidth || this.width;
@@ -275,7 +285,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
     let n = this.vertical;
-    //console.warn(n);
+    // console.warn(n);
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
@@ -290,10 +300,6 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
       ctx.stroke();
     }
   }
-
-  startPoint: { x: number, y: number };
-
-  isMouseMove = false;
 
   onMouseMove(evt) {
     if (!this.startPoint) return;
@@ -327,32 +333,26 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
     ctx.font = this.font;
 
 
-    //const pos2 = this.getMousePos(el, evt)
+    // const pos2 = this.getMousePos(el, evt)
     // console.log(start , diff, perc);
 
   }
 
   getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+    let rect = canvas.getBoundingClientRect();
     return {
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     };
-  };
-
-  moveElement;
-  onMouseMoveHandler: EventListenerOrEventListenerObject = this.onMouseMove.bind(this);
-
-  private clicks = 0;
-  onMouseDown(el, evt) {
-    //console.log(this.startPoint, this.isMouseMove);
+  }  onMouseDown(el, evt) {
+    // console.log(this.startPoint, this.isMouseMove);
     this.clicks ++;
-    if(this.clicks >= 3){
+    if (this.clicks >= 3) {
       this.overlayCTX.clearRect(0, 0, this.width, this.height);
       this.clicks = 0;
       return;
     }
-    var pos = this.getMousePos(el, evt);
+    let pos = this.getMousePos(el, evt);
     this.moveElement = el;
     if (!this.startPoint) {
       this.startPoint = pos;
@@ -387,7 +387,7 @@ export class CandlesticksComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
-    el = this.overlayView.nativeElement
+    el = this.overlayView.nativeElement;
     this.overlayCTX = el.getContext('2d');
     // el.addEventListener("touchend",(evt)=>this.onTouchEnd(el, evt), false);
     el.addEventListener('mousedown', (evt) => this.onMouseDown(el, evt));

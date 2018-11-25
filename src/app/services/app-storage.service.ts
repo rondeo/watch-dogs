@@ -2,30 +2,15 @@ import {Injectable} from '@angular/core';
 import {VOMarketCap, VOWatchdog} from '../models/app-models';
 import * as CryptoJS from 'crypto-js';
 
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
 import * as localforage from 'localforage';
 import * as _ from 'lodash';
-import {Subject} from '../../../node_modules/rxjs';
+import {Observable, Subject} from '../../../node_modules/rxjs';
 import {UserLoginService} from './user-login.service';
 
 
 @Injectable()
 export class StorageService {
-
-  static instance: StorageService;
-
-  readonly WATCH_DOGS = 'WATCH_DOGS';
-  //email:string;
-  email: string;
-  //password:string;
-
-
-  // private salt: string;
-
-  private needSaltSub: Subject<boolean>;
-  needSalt$: Observable<boolean>
-  //isLogedIn$:Observable<boolean>;
+  // isLogedIn$:Observable<boolean>;
   // private isLogedInSub:BehaviorSubject<boolean>;
 
   constructor(
@@ -34,10 +19,35 @@ export class StorageService {
     StorageService.instance = this;
     this.needSaltSub = new Subject();
     this.needSalt$ = this.needSaltSub.asObservable();
-    //this.isLogedInSub = new BehaviorSubject(false);
-    ///this.isLogedIn$ = this.isLogedInSub.asObservable();
+    // this.isLogedInSub = new BehaviorSubject(false);
+    /// this.isLogedIn$ = this.isLogedInSub.asObservable();
     this.lastVisitedUrl = localStorage.getItem('lastVisitedUrl');
   }
+
+  static instance: StorageService;
+
+  readonly WATCH_DOGS = 'WATCH_DOGS';
+  // email:string;
+  email: string;
+  // password:string;
+
+
+  // private salt: string;
+
+  private needSaltSub: Subject<boolean>;
+  needSalt$: Observable<boolean>;
+
+  /* hashPassword2(password: string): string {
+     return CryptoJS.SHA256(CryptoJS.SHA256(password).toString()).toString();
+   }
+ */
+
+
+  selectedMC: string[];
+
+  private watchDogs: VOWatchdog[];
+
+  private lastVisitedUrl: string;
 
 
 
@@ -86,17 +96,9 @@ export class StorageService {
     return this.email;
   }
 
-  /* hashPassword2(password: string): string {
-     return CryptoJS.SHA256(CryptoJS.SHA256(password).toString()).toString();
-   }
- */
-
-
-  selectedMC: string[];
-
   async addMCSelected(symbol: string) {
     let ar = this.selectedMC;
-    if (ar.indexOf(symbol) == -1) ar.push(symbol);
+    if (ar.indexOf(symbol) === -1) ar.push(symbol);
     this.saveSelectedMC();
   }
 
@@ -105,8 +107,6 @@ export class StorageService {
     for (let i = ar.length - 1; i >= 0; i--) if (ar[i] === symbol) ar.splice(i, 1);
     return this.saveSelectedMC();
   }
-
-  private watchDogs: VOWatchdog[];
 
   async upsertWatchDog(wd: VOWatchdog) {
     const exists = await this.getWatchDogByID(wd.id);
@@ -124,7 +124,7 @@ export class StorageService {
     else return this.select(this.WATCH_DOGS).then(res => {
       this.watchDogs = res || [];
       return this.watchDogs;
-    })
+    });
   }
 
   async saveWatchDogs(watchDogs: VOWatchdog[] = null) {
@@ -133,7 +133,7 @@ export class StorageService {
     else throw new Error('no watchdogs to save');
   }
 
-  keys(){
+  keys() {
     return localforage.keys();
   }
   async upsert(index: string, item: any): Promise<any> {
@@ -159,9 +159,9 @@ export class StorageService {
       const salt = await this.loginService.getSalt();
       s = CryptoJS.HmacSHA1(s, salt).toString();
       // console.log(s);
-      let str = localStorage.getItem(s)
+      let str = localStorage.getItem(s);
       if (str) return Promise.resolve(CryptoJS.AES.decrypt(str, salt).toString(CryptoJS.enc.Utf8));
-      else return Promise.resolve(null)
+      else return Promise.resolve(null);
     }
     return Promise.resolve(localStorage.getItem(s));
   }
@@ -188,8 +188,6 @@ export class StorageService {
     this.lastVisitedUrl = url;
     localStorage.setItem('lastVisitedUrl', url);
   }
-
-  private lastVisitedUrl: string;
 
   getLastVisitedUrl() {
     return this.lastVisitedUrl;

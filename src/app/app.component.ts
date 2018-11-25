@@ -1,12 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-//import {AuthHttp} from './libs/angular2-jwt';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {AuthHttpService, VOUser} from './services/auth-http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {LoginFormComponent} from './material/login-form/login-form.component';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
+
 import {StorageService} from './services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
 
@@ -19,16 +17,6 @@ import {FollowOrdersService} from './apis/open-orders/follow-orders.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
-  title = 'app works!';
-  menu: any;
-  isLogedIn: boolean;
-  nickname: string;
-  countDown: number;
-  historyCounter: number;
-
-  sellCoinsCount: number;
-
-  isMenu: boolean
 
   constructor(
     private auth: AuthHttpService,
@@ -40,6 +28,19 @@ export class AppComponent implements OnInit {
     private followOrders: FollowOrdersService
   ) {
   }
+  title = 'app works!';
+  menu: any;
+  isLogedIn: boolean;
+  nickname: string;
+  countDown: number;
+  historyCounter: number;
+
+  sellCoinsCount: number;
+
+  isMenu: boolean;
+
+  bgColor = '';
+  imageClass = '';
 
 
   onRefreshClick() {
@@ -65,9 +66,6 @@ export class AppComponent implements OnInit {
       localStorage.clear();
     }
   }
-
-  bgColor = '';
-  imageClass = '';
 
   ngOnInit(): void {
     this.auth.isOnline$().subscribe(res => {

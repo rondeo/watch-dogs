@@ -16,23 +16,23 @@ import {SendAlertService} from './send-alert.service';
 })
 export class ExchangeSsComponent implements OnInit {
 
-  myWallets:any[];
-  _myWallets:any[];
-  myCoins:VOMarketCap[];
-  market:any;
-  counter:number;
+  myWallets: any[];
+  _myWallets: any[];
+  myCoins: VOMarketCap[];
+  market: any;
+  counter: number;
 
-  start_stop ='Start';
-  active:boolean;
+  start_stop = 'Start';
+  active: boolean;
 
-  seconds:number;
-  interval:any;
-  tollerance:number = 5;
+  seconds: number;
+  interval: any;
+  tollerance = 5;
   constructor(
-    private api:ApiServerService,
+    private api: ApiServerService,
    /* private allWallets:WalletsAllService,*/
    // private coinsService:MarketCapSelectedService,
-    private sendAlertService:SendAlertService
+    private sendAlertService: SendAlertService
   ) { }
 
   ngOnInit() {
@@ -52,16 +52,16 @@ export class ExchangeSsComponent implements OnInit {
 
     })*/
    // this.exchangeService.init();
-    //this.exchangeService.myWallets$.subscribe(res=>this.myWallets= res);
+    // this.exchangeService.myWallets$.subscribe(res=>this.myWallets= res);
 
-    //this.exchangeService.myMarkets$.subscribe(res=>{
+    // this.exchangeService.myMarkets$.subscribe(res=>{
     //  console.log(res);
      // this.myMarkets = res
    // });
 
   }
 
-  refreshData(){
+  refreshData() {
 
    /* if(!this.market || !this._myWallets) return;
 
@@ -120,32 +120,32 @@ export class ExchangeSsComponent implements OnInit {
 
   }
 
-  startStop(){
-    if(this.start_stop === 'Start'){
+  startStop() {
+    if (this.start_stop === 'Start') {
       this.start_stop = 'Stop';
       this.active = true;
       this.seconds = 30;
-      this.interval = setInterval(()=>{this.seconds++},1000);
+      this.interval = setInterval(() => {this.seconds++; }, 1000);
      // this.coinsService.start();
-    }else{
+    } else {
       this.start_stop = 'Start';
-      this.seconds =0;
+      this.seconds = 0;
       clearInterval(this.interval);
       this.active = false;
-      //this.coinsService.stop();
+      // this.coinsService.stop();
     }
   }
 
-  updateBalance(wallet:any) {
+  updateBalance(wallet: any) {
 
-    this.api.getBalance(wallet.symbol, wallet.address).subscribe(balance=>{
+    this.api.getBalance(wallet.symbol, wallet.address).subscribe(balance => {
       console.log(balance);
-    })
+    });
 
    // this.exchangeService.updateBalance(wallet);
   }
 
-  onUsdClick(wallet){
+  onUsdClick(wallet) {
 
   }
 

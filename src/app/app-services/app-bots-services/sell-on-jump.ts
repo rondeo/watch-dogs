@@ -6,11 +6,9 @@ import * as moment from 'moment';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOOrder} from '../../models/app-models';
-import {C} from '@angular/core/src/render3';
 import {CandlesService} from '../candles/candles.service';
 
 export class SellOnJump {
-  private timeJump;
 
   constructor(
     private market: string,
@@ -19,19 +17,7 @@ export class SellOnJump {
   ) {
 
   }
-
-
-  sellOnSecondMax() {
-
-  }
-
-  log(message: string) {
-    console.log(message);
-  }
-
-  sellCoin() {
-
-  }
+  private timeJump;
 
   static isJumpEnd(candles: VOCandle[]) {
     const last = _.last(candles);
@@ -57,7 +43,7 @@ export class SellOnJump {
 
     console.log(moment(last.to).format('HH:mm') + ' ma3-7D  ' + ma3_7D + ' ma3_25D ' + ma3_25D + ' ma7_25D  ' + ma7_25D);
     if (ma3_7D < -1 && Math.abs(ma3_7D) > ma7_25D) {
-      console.warn(' sell coin')
+      console.warn(' sell coin');
       return true;
     }
     // const medianPrice = MATH.median(_.takeRight(closes, 7));
@@ -65,6 +51,19 @@ export class SellOnJump {
     // const prevPrice = _.mean(closes.slice(closes.length -4, closes.length -2));
     //  const priceChange = MATH.percent(lastPrice, medianPrice);
 
+
+  }
+
+
+  sellOnSecondMax() {
+
+  }
+
+  log(message: string) {
+    console.log(message);
+  }
+
+  sellCoin() {
 
   }
 

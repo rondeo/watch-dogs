@@ -10,16 +10,16 @@ export class ResistanceSupport {
 
   async getResistance(ar: VOCandle[]) {
     const out = [];
-    const range = this.range
-    const isTop = function (ar: VOCandle[], n, i) {
+    const range = this.range;
+    const isTop = function (ar1: VOCandle[], n, i) {
       const abs = Math.abs(n) + 1;
-      const cur = ar[i].high;
+      const cur = ar1[i].high;
       while (n < abs) {
-        if (ar[i + n].high > cur) return false;
+        if (ar1[i + n].high > cur) return false;
         n++;
       }
       return true;
-    }
+    };
     for (let i = range, n = ar.length - range; i < n; i++) {
       // const item = ar[i];
       // const cur = ar[i].high;
@@ -35,15 +35,15 @@ export class ResistanceSupport {
   getSupport(ar: VOCandle[]) {
     const out = [];
     const range = this.range;
-    const isBott = function (ar: VOCandle[], n, i) {
+    const isBott = function (ar1: VOCandle[], n, i) {
       const abs = Math.abs(n) + 1;
-      const cur = ar[i].low;
+      const cur = ar1[i].low;
       while (n < abs) {
-        if (ar[i + n].low < cur) return false;
+        if (ar1[i + n].low < cur) return false;
         n++;
       }
       return true;
-    }
+    };
 
     for (let i = range, n = ar.length - range; i < n; i++) {
       const item = ar[i];
@@ -60,8 +60,8 @@ export class ResistanceSupport {
 
 
   async ctr() {
-    //let maxAr = _.sortBy(this.candles, 'high').reverse();
-    const resistance: VOCandle[] = await this.getResistance(this.candles);
+    // let maxAr = _.sortBy(this.candles, 'high').reverse();
+    const resistance: VOCandle[] = <VOCandle[]>(await this.getResistance(this.candles));
 
     const support: VOCandle[] =  await this.getSupport(this.candles);
     this.result = {resistance, support};
@@ -69,7 +69,7 @@ export class ResistanceSupport {
   }
 
   async getResult() {
-    return this.ctr()
+    return this.ctr();
 
   }
 }

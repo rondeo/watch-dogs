@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {LineChartComponent, VOGraph} from '../line-chart/line-chart.component';
 import * as _ from 'lodash';
 
@@ -18,7 +18,7 @@ export interface VOLineGraph {
   templateUrl: './line-graph.component.html',
   styleUrls: ['./line-graph.component.css']
 })
-export class LineGraphComponent implements OnInit, AfterViewInit {
+export class LineGraphComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
@@ -28,8 +28,8 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
 
   @Input() name: string;
 
-  @Input() width: number = 600;
-  @Input() height: number = 400;
+  @Input() width = 600;
+  @Input() height = 400;
 
 
 
@@ -71,7 +71,7 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
     let ys = line.ys;
     let min = _.min(ys);
     let max = _.max(ys);
-    if(this.name === 'test') {
+    if (this.name === 'test') {
       console.log(min, max);
     }
 
@@ -81,13 +81,13 @@ export class LineGraphComponent implements OnInit, AfterViewInit {
     line.max = max;
     line.range = range;
 
-    if(this.name === 'test') {
+    if (this.name === 'test') {
       console.log(ys, range, min, this.heightG);
     }
 
     ys = LineChartComponent.convertToScale(ys, range, min, this.heightG);
 
-if(this.name === 'test') {
+if (this.name === 'test') {
   console.log(ys);
 }
     let dx = this.widthG / (ys.length - 1);
@@ -108,7 +108,7 @@ if(this.name === 'test') {
 
 
   private drwaHorizonts() {
-    if(!this.horizont) return;
+    if (!this.horizont) return;
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
@@ -129,12 +129,12 @@ if(this.name === 'test') {
   }
 
   private drwaVerticals() {
-    if(!this.vertical) return;
+    if (!this.vertical) return;
     let ctx = this.ctx;
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
     let n = this.vertical;
-    //console.warn(n);
+    // console.warn(n);
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;
@@ -157,9 +157,9 @@ if(this.name === 'test') {
      let x0 = this.x0 + 50;
      let y0 = this.y0;
      this.linegraphs.forEach(function (graph, i) {
-       if(!!graph.label) {
+       if (!!graph.label) {
          ctx.fillStyle = graph.color;
-         ctx.font = "12px Arial";
+         ctx.font = '12px Arial';
          let percent = (100 * ((graph.max - graph.min) / graph.min)).toFixed(2);
          let min = graph.min;
          let max = graph.max;
@@ -178,7 +178,7 @@ if(this.name === 'test') {
   }
 
   private drawTextsX() {
-    if(!this.textsxs) return;
+    if (!this.textsxs) return;
      let ctx = this.ctx;
      let ar = this.textsxs;
      let step = (this.widthG + 40) / ar.length;
@@ -186,7 +186,7 @@ if(this.name === 'test') {
      let x0 = this.paddingLeft - 20;
 
      ctx.fillStyle = '#000000';
-     ctx.font = "12px Arial";
+     ctx.font = '12px Arial';
      ar.forEach(function (item, i) {
        ctx.fillText(item, x0 + (i * step), y);
      });

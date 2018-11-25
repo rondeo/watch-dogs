@@ -38,10 +38,10 @@ export class VwmacdIndicatorComponent implements OnInit, OnChanges {
 
     if (!this.candles) return;
     const closesv = this.candles.map(function (item) {
-      return [item.close, item.Volume]
-    })
+      return [item.close, item.Volume];
+    });
 
-    var macdInput = {
+    let macdInput = {
       values: closesv,
       fastPeriod: this.fastPeriod,
       slowPeriod: this.slowPeriod,
@@ -49,7 +49,7 @@ export class VwmacdIndicatorComponent implements OnInit, OnChanges {
       SimpleMAOscillator: true,
       SimpleMASignal: false
     };
-    var macd = new VWMACD(macdInput);
+    const macd = new VWMACD(macdInput);
     const result: any[] = macd.getResult();
     this.allData = result;
     //  console.log(result);
@@ -62,10 +62,10 @@ export class VwmacdIndicatorComponent implements OnInit, OnChanges {
     let min = 1e12;
     let max = -1e12;
     result.forEach(function (item) {
-      if(min > item.MACD) min = item.MACD;
-      if(max < item.MACD) max = item.MACD;
-      if(min > item.signal) min = item.signal;
-      if(max < item.signal) max = item.signal;
+      if (min > item.MACD) min = item.MACD;
+      if (max < item.MACD) max = item.MACD;
+      if (min > item.signal) min = item.signal;
+      if (max < item.signal) max = item.signal;
       macdV.push(item.MACD);
       signals.push(item.signal);
       if (maxHist < item.histogram) maxHist = item.histogram;
@@ -80,10 +80,10 @@ export class VwmacdIndicatorComponent implements OnInit, OnChanges {
     // console.warn(min);
     const ampl = (max - min);
 
-    const mid = (max - min) /2;
-    //console.warn(mid);
+    const mid = (max - min) / 2;
+    // console.warn(mid);
 
-    const rel = (ampl - mid)/ ampl;
+    const rel = (ampl - mid) / ampl;
     // console.log(rel);
 
     const offsetY = (2 * maxHist) * rel;
@@ -114,10 +114,10 @@ export class VwmacdIndicatorComponent implements OnInit, OnChanges {
           min: -3 * maxHist,
           max: 3 * maxHist,
           hist: true,
-          offsetY : offsetY
+          offsetY: offsetY
         }
       ]
-    }
+    };
     this.myGraphs = graphs;
   }
 

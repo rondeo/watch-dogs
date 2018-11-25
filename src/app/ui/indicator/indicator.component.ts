@@ -1,10 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as _ from 'lodash';
 import {VOGraph, VOGraphs} from '../line-chart/line-chart.component';
 
 interface VOLine {
   ys: number[];
-  xs: number[]
+  xs: number[];
   color: string;
 }
 
@@ -13,35 +13,7 @@ interface VOLine {
   templateUrl: './indicator.component.html',
   styleUrls: ['./indicator.component.css']
 })
-export class IndicatorComponent implements OnInit {
-
-  @ViewChild('graphs') canv;
-  @ViewChild('myContainer') container;
-  private ctx: CanvasRenderingContext2D;
-  @Input() graphs: VOGraphs;
-  @Input() area: number[];
-  @Input() myWidth: number;
-  @Input() myHeight: number;
-  @Input() myTitle: string;
-  lines: VOLine[];
-
-
-  ratio: number;
-  width: number = 600;
-  height: number = 100;
-  widthG: number;
-  heightG: number;
-  vertical = 12;
-  horizont = 3;
-
-  padding = 10;
-  paddingTop = 0;
-  paddingBottom = 0;
-  paddingLeft = 10;
-  paddingRight = 50;
-
-  y0: number;
-  x0: number;
+export class IndicatorComponent implements OnInit, OnChanges, AfterViewInit {
 
   /* static convertToScale(ar: number[], range: number, min: number, height: number): number[] {
      if (range === 0) range = 1;
@@ -56,6 +28,41 @@ export class IndicatorComponent implements OnInit {
 
   }
 
+  @ViewChild('graphs') canv;
+  @ViewChild('myContainer') container;
+  private ctx: CanvasRenderingContext2D;
+  @Input() graphs: VOGraphs;
+  @Input() area: number[];
+  @Input() myWidth: number;
+  @Input() myHeight: number;
+  @Input() myTitle: string;
+  lines: VOLine[];
+
+
+  ratio: number;
+  width = 600;
+  height = 100;
+  widthG: number;
+  heightG: number;
+  vertical = 12;
+  horizont = 3;
+
+  padding = 10;
+  paddingTop = 0;
+  paddingBottom = 0;
+  paddingLeft = 10;
+  paddingRight = 50;
+
+  y0: number;
+  x0: number;
+
+  private resise;
+
+  scale: number;
+  min: number;
+
+  my0;
+
   drawData() {
     //   console.warn('draw data');
     if (!this.graphs) return;
@@ -66,8 +73,6 @@ export class IndicatorComponent implements OnInit {
   onResise() {
     this.setSize();
   }
-
-  private resise;
 
   ngOnInit() {
     this.width = this.myWidth || 600;
@@ -195,11 +200,6 @@ export class IndicatorComponent implements OnInit {
        ctx.fillText(max.toPrecision(4), 2, 30 + (i * 20), 40);
      });*/
   }
-
-  scale: number;
-  min: number;
-
-  my0;
   private drawline(line: VOGraph) {
     let ctx = this.ctx;
     ctx.strokeStyle = line.color;
@@ -221,15 +221,15 @@ export class IndicatorComponent implements OnInit {
     this.min = min;
     // console.warn(line.color+ ' ' + (min * scale))
     ys = ys.map(function (item) {
-      return (item - min) * scale
-    })// IndicatorComponent.convertToScale(ys, range, min, this.heightG);
+      return (item - min) * scale;
+    }); // IndicatorComponent.convertToScale(ys, range, min, this.heightG);
 
 
     let zero = (this.heightG * (0 - min)) / range;
     zero = y0 - zero;
 
-    if(line.hist){
-       const offsetY = 0;// - this.my0 ;// line.offsetY * scale;
+    if (line.hist) {
+       const offsetY = 0; // - this.my0 ;// line.offsetY * scale;
       // console.warn(offsetY);
       this.drawHist(ctx, ys, x0, y0, zero);
     } else {
@@ -261,15 +261,15 @@ export class IndicatorComponent implements OnInit {
        ctx.setLineDash([]);*/
      }
   }
-  drawHist(ctx: CanvasRenderingContext2D, ys: number[], x0:number, y0:number, zero:number){
+  drawHist(ctx: CanvasRenderingContext2D, ys: number[], x0: number, y0: number, zero: number) {
    // console.log(this.my0, this.heightG);
-    const Y0 = zero;//(this.heightG /2) ;// + offsetY;
+    const Y0 = zero; // (this.heightG /2) ;// + offsetY;
 
     const offset = this.my0 - zero;
    // console.warn(Y0);
 
-    //console.log(this.my0);
-    //console.log(Y0);
+    // console.log(this.my0);
+    // console.log(Y0);
     // console.log(this.y0);
     let dx = this.widthG / (ys.length - 1);
     for (let i = 0, n = ys.length; i < n; i++) {
@@ -278,7 +278,7 @@ export class IndicatorComponent implements OnInit {
 
 
 
-      const color = 'red' ;//= y < Y0?'green':'red';
+      const color = 'red' ; // = y < Y0?'green':'red';
       ctx.strokeStyle = color;
       ctx.beginPath();
        ctx.moveTo(x, Y0 + offset);
@@ -312,7 +312,7 @@ export class IndicatorComponent implements OnInit {
     ctx.fillStyle = 'black';
     ctx.lineWidth = 0.3;
     let n = this.vertical;
-    //console.warn(n);
+    // console.warn(n);
 
     let offsetY = this.paddingTop;
     let offsetX = this.paddingLeft;

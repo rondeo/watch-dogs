@@ -7,18 +7,11 @@ import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
   styleUrls: ['./media.component.css']
 })
 export class MediaComponent implements OnInit, OnChanges {
-
-  @Input() coin: string;
   constructor(
    private cryptoCompare: ApiCryptoCompareService
   ) { }
 
-  ngOnInit() {
-  }
-
-  ngOnChanges(){
-    this.showMedia();
-  }
+  @Input() coin: string;
 
   mediaFrom: string;
   mediaTo: string;
@@ -28,12 +21,19 @@ export class MediaComponent implements OnInit, OnChanges {
   redditFollow: string;
   facebookPoints: string;
 
+  ngOnInit() {
+  }
+
+  ngOnChanges() {
+    this.showMedia();
+  }
+
 
 
   showMedia() {
-    if(!this.coin) return;
+    if (!this.coin) return;
     this.cryptoCompare.getSocialStats(this.coin).then(res => {
-      if(!res){
+      if (!res) {
         this.mediaFrom = '';
         this.mediaTo = '';
         this.twitterPoints = '';
@@ -51,7 +51,7 @@ export class MediaComponent implements OnInit, OnChanges {
       this.twitterFollow = res.TwFollow;
       this.redditFollow = res.RdFollow;
 
-    })
+    });
   }
 
 }

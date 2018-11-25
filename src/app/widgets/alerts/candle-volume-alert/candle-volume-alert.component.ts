@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {CandlesService} from '../../../app-services/candles/candles.service';
 import {StorageService} from '../../../services/app-storage.service';
-import {Subscription} from 'rxjs/Subscription';
-import  * as moment from 'moment';
+import * as moment from 'moment';
 import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -13,15 +13,15 @@ import * as _ from 'lodash';
 })
 export class CandleVolumeAlertComponent implements OnInit, OnChanges {
 
-  @Input() exchange:string;
+  @Input() exchange: string;
   @Input() market: string;
-  alerts:{value1:string, value2:string, time:string}[] = [];
+  alerts: {value1: string, value2: string, time: string}[] = [];
 
-  private DBID:string;
-  private sub1:Subscription;
+  private DBID: string;
+  private sub1: Subscription;
   constructor(
     private candleService: CandlesService,
-    private storage:StorageService
+    private storage: StorageService
   ) { }
 
   ngOnInit() {
@@ -29,22 +29,22 @@ export class CandleVolumeAlertComponent implements OnInit, OnChanges {
 
   }
 
-  async ngOnChanges(){
+  async ngOnChanges() {
 
    //  this.alerts = this.storage.select('volume')
-    this.subscribe()
+    this.subscribe();
   }
 
-  unsubscribe(){
+  unsubscribe() {
 
-    if(this.DBID) this.storage.remove(this.DBID);
-    if(this.sub1) this.sub1.unsubscribe();
+    if (this.DBID) this.storage.remove(this.DBID);
+    if (this.sub1) this.sub1.unsubscribe();
   }
 
-  subscribe(){
-    if(!this.exchange || !this.market) return;
+  subscribe() {
+    if (!this.exchange || !this.market) return;
     this.unsubscribe();
-    this.DBID = 'CandleVolumeAlert'+ this.exchange+ this.market;
+    this.DBID = 'CandleVolumeAlert' + this.exchange + this.market;
     this.storage.select(this.DBID).then(res => this.alerts = res || []);
 
    /* const hist = this.candleService.getCandlesHist(this.exchange,this.market );

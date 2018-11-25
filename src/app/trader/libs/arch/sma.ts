@@ -3,7 +3,8 @@ export class SSMA {
   fast = 12;
   signal = 9;
 
-  constructor(){
+
+  constructor() {
 
   }
 
@@ -19,7 +20,7 @@ export class SSMA {
     for (let i = 0, n = lasts.length; i < n; i++) {
       if (i > 12) {
         val12 = sum12 / 12;
-        fasts.push(val12)
+        fasts.push(val12);
         sum12 -= lasts[i - 13];
         sum12 += lasts[i];
       } else fasts.push(1);
@@ -29,7 +30,7 @@ export class SSMA {
         sum26 -= lasts[i - 27];
         sum26 += lasts[i];
 
-      } else slows.push(1)
+      } else slows.push(1);
     }
 
   }

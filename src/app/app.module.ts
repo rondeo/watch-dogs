@@ -42,14 +42,14 @@ import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-tab
 
 import {StorageService} from './services/app-storage.service';
 
-import {SlackService} from "./services/slack.service";
-import {HttpClientModule} from "@angular/common/http";
-import {WebsocketService} from "./shared/websocket-service";
-import {MyExchangeModule} from "./my-exchange/my-exchange.module";
-import {DatabaseService} from "./services/database.service";
-import {TraderModule} from "./trader/trader.module";
-import {AllInOneModule} from "./all-in-one/all-in-one.module";
-import {UiModule} from "./ui/ui.module";
+import {SlackService} from './services/slack.service';
+import {HttpClientModule} from '@angular/common/http';
+import {WebsocketService} from './shared/websocket-service';
+import {MyExchangeModule} from './my-exchange/my-exchange.module';
+import {DatabaseService} from './services/database.service';
+import {TraderModule} from './trader/trader.module';
+import {AllInOneModule} from './all-in-one/all-in-one.module';
+import {UiModule} from './ui/ui.module';
 import {UserLoginService} from './services/user-login.service';
 import {ShowExternalPageService} from './services/show-external-page.service';
 import {AppServicesModule} from './app-services/app-services.module';
@@ -60,7 +60,7 @@ import { TestComponent } from './test/test.component';
 
 
 
-//import {WebsocketService} from "./shared/websocket-service";
+// import {WebsocketService} from "./shared/websocket-service";
 
 declare const Buffer: any;
 

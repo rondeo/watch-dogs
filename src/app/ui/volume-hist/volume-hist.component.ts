@@ -11,14 +11,16 @@ import * as _ from 'lodash';
   templateUrl: './volume-hist.component.html',
   styleUrls: ['./volume-hist.component.css']
 })
-export class VolumeHistComponent extends DrawBase implements OnInit {
-
- //  @Input() candles: VOCandle[];
-  @Input() values: number[];
+export class VolumeHistComponent extends DrawBase {
 
   constructor() {
     super();
   }
+
+  //  @Input() candles: VOCandle[];
+  @Input() values: number[];
+
+  maxV;
 
 
   drawGraphs() {
@@ -29,13 +31,13 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
     // const x0 = this.x0 + 50;
     const offsetY = this.heightG;
     const Y0 = this.y0;
-    //const y0 = this.y0 - offsetY;
+    // const y0 = this.y0 - offsetY;
     const x0 = this.x0;
 
     let maxV = 0;
 
-   ar.forEach(function (item) {
-     const v = Math.abs(item);
+    ar.forEach(function (item) {
+      const v = Math.abs(item);
       if (v > maxV) maxV = v;
     });
     let scaleV = offsetY / maxV;
@@ -56,16 +58,15 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
       ctx.lineTo(x, Y0 - (Math.abs(item * scaleV)));
       ctx.stroke();
     }
-    this.maxV = maxV
-   //  this.drawYs();
+    this.maxV = maxV;
+    //  this.drawYs();
   }
 
-  maxV;
   drawYs() {
-    const  maxV:number = this.maxV;
+    const maxV: number = this.maxV;
     const step = (maxV) / 3;
     const out = [];
-    for (let i = 0; i < maxV; i += step) out.push(Math.round(i))
+    for (let i = 0; i < maxV; i += step) out.push(Math.round(i));
     out.push(Math.round(maxV));
     const ctx = this.ctx;
     ctx.fillStyle = '#000000';
@@ -73,12 +74,12 @@ export class VolumeHistComponent extends DrawBase implements OnInit {
     const x = this.widthG + this.paddingLeft + 5;
     let y = this.height - this.paddingBottom;
 
-   //  const lastY = y - height;
-    const step2 = Math.round(y  / 3);
+    //  const lastY = y - height;
+    const step2 = Math.round(y / 3);
 
     out.forEach(function (item) {
       ctx.fillText(item, x, y + 11);
-      y-= step2;
+      y -= step2;
     });
 
   }

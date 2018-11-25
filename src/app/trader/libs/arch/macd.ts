@@ -68,10 +68,10 @@ export class Macd {
         macd = prevEma12 - prevEma26;
         macds.push(macd);
         macdCount++;
-       if(macdCount > 9){
-         macdSma = macdSum /9;
-         if(!macdPrev) macdPrev = macdSma;
-         macdSum -= macds[i-10];
+       if (macdCount > 9) {
+         macdSma = macdSum / 9;
+         if (!macdPrev) macdPrev = macdSma;
+         macdSum -= macds[i - 10];
          const signal = ((macd - macdPrev) * exponent9) + macdPrev;
          signals.push(signal);
          histos.push(macd - signal);
@@ -98,7 +98,7 @@ export class Macd {
       macds,
       signals,
       histos
-    }
+    };
 
   }
 }

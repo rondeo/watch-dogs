@@ -1,6 +1,6 @@
-import {Subject} from "rxjs/Subject";
-import {SocketBase} from "./soket-base";
+
 import {SocketChannel} from './socket-channel';
+import {SocketBase} from './soket-base';
 
 
 
@@ -23,12 +23,12 @@ export class PoloniexTradesSocket extends SocketBase {
 
     // console.log(m);
 
-    let channel: string
+    let channel: string;
     const ar = JSON.parse(m.data);
    // console.log(ar);
     if (ar[0] === 1010) {
       this.hb = Date.now();
-      return
+      return;
     }
 
     let dataAr: any[] = ar[2];
@@ -66,9 +66,9 @@ export class PoloniexTradesSocket extends SocketBase {
             amountCoin: +(msg[2] ? msg[4] : -msg[4]),
             rate: +msg[3]
           };
-          //this.dispatch(this.exchange + market, data, 'trades');
+          // this.dispatch(this.exchange + market, data, 'trades');
 
-          break
+          break;
       }
     });
 
@@ -84,7 +84,7 @@ export class PoloniexTradesSocket extends SocketBase {
     switch (channel.channel) {
       case 'trades':
         let params = {
-          command: "subscribe",
+          command: 'subscribe',
           channel: channel.market
 
         };

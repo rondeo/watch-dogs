@@ -5,7 +5,7 @@ import {Moment} from 'moment';
 export class GRAPHS {
 
 
-  static createLabels12(fromS: string, toS:string, format = 'HH:mm'): string[] {
+  static createLabels12(fromS: string, toS: string, format = 'HH:mm'): string[] {
     const from = moment(fromS);
     const to = moment(toS);
     const dur = moment.duration(moment(toS).diff(moment(fromS))).asHours();
@@ -14,15 +14,15 @@ export class GRAPHS {
     const firstV = from.valueOf();
     const lastV = to.valueOf();
     const labels = [];
-    for(let i = firstV; i < lastV ; i+= step){
-      labels.push(moment(i).format(format))
+    for (let i = firstV; i < lastV ; i += step) {
+      labels.push(moment(i).format(format));
     }
     labels.push(moment(lastV).format(format));
     return labels;
   }
 
-  static integralData(item:any){
-    const cur = item.symbol === 'BTC' ? item.price_usd : item.price_btc
+  static integralData(item: any) {
+    const cur = item.symbol === 'BTC' ? item.price_usd : item.price_btc;
     const cur_prev = +(100 * (cur - item.prev) / item.prev).toFixed(4);
     const cur_prev5 = +(100 * (cur - item.last5) / item.last5).toFixed(4);
     const prev5_10 = +(100 * (item.last5 - item.last10) / item.last10).toFixed(4);
@@ -30,7 +30,7 @@ export class GRAPHS {
     const prev20_30 = +(100 * (item.last20 - item.last30) / item.last30).toFixed(4);
     const h1_ago2h = +(100 * (item.last10 - item.ago2h) / item.ago2h).toFixed(4);
     const h1_pago3h = +(100 * (item.last10 - item.ago3h) / item.ago3h).toFixed(4);
-    const vol1_6 = item.vol_6h? +(100 * (item.vol_1h - item.vol_6h) / item.vol_6h).toFixed(4):0;
+    const vol1_6 = item.vol_6h ? +(100 * (item.vol_1h - item.vol_6h) / item.vol_6h).toFixed(4) : 0;
     const rankD = +(100 * (item.rankPrev - item.rank) / item.rank).toFixed(4);
 
     return {
@@ -44,7 +44,7 @@ export class GRAPHS {
       h1_pago3h,
       vol1_6,
       rankD
-    }
+    };
   }
 
   static mcAggregatedToGraphs(data: any[]) {
@@ -62,18 +62,18 @@ export class GRAPHS {
       price_btc = [],
       price_usd = [],
       rank = [],
-      trigger =[];
+      trigger = [];
 
     data.forEach(function (item) {
       const integ = GRAPHS.integralData(item);
       const trigger_ =
         integ.cur_prev < 0  &&
-        integ.prev5_10 <0 &&
+        integ.prev5_10 < 0 &&
         integ.prev10_20 < 0 &&
         integ.prev5_10 < 0
-          ?1:2;
+          ? 1 : 2;
 
-      trigger.push(trigger_)
+      trigger.push(trigger_);
       current.push(integ.cur);
       cur_prev.push(integ.cur_prev);
       cur_prev5.push(integ.cur_prev5);
@@ -87,7 +87,7 @@ export class GRAPHS {
       labels.push('');
       dates.push(item.date);
       rank.push(item.rank);
-    })
+    });
 
 
 
@@ -106,7 +106,7 @@ export class GRAPHS {
       dates,
       labels,
       trigger
-    }
+    };
 
   }
 }

@@ -15,10 +15,10 @@ export class StochRsiComponent implements OnInit, OnChanges {
 
   myTitle: string;
   area: number[];
-  rsiPeriod: number = 14;
-  stochasticPeriod: number = 14;
-  kPeriod: number = 3;
-  dPeriod: number = 3;
+  rsiPeriod = 14;
+  stochasticPeriod = 14;
+  kPeriod = 3;
+  dPeriod = 3;
 
   constructor() {
   }
@@ -28,7 +28,7 @@ export class StochRsiComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.myTitle = 'StochRSI('+this.kPeriod+','+this.dPeriod+','+this.stochasticPeriod + ','+this.rsiPeriod+')'
+    this.myTitle = 'StochRSI(' + this.kPeriod + ',' + this.dPeriod + ',' + this.stochasticPeriod + ',' + this.rsiPeriod + ')';
   }
 
   ctr() {
@@ -46,14 +46,14 @@ export class StochRsiComponent implements OnInit, OnChanges {
    //  console.log(stochRSI.getResult());
     const results: {stochRSI: number, k: number, d: number}[] = stochRSI.getResult();
 
-    while(results.length < length) results.unshift({stochRSI:0, k:0, d:0});
+    while (results.length < length) results.unshift({stochRSI: 0, k: 0, d: 0});
     const stchs = [];
     const ks = [];
-    const ds = []
+    const ds = [];
     results.forEach(function (item) {
       stchs.push(item.stochRSI);
       ks.push(item.k);
-      ds.push(item.d)
+      ds.push(item.d);
     });
 
 
@@ -70,16 +70,16 @@ export class StochRsiComponent implements OnInit, OnChanges {
         {
           label: '',
           color: 'red',
-          ys:ds,
-          min:0,
-          max:100
+          ys: ds,
+          min: 0,
+          max: 100
         },
         {
           label: '',
           color: 'blue',
-          ys:ks,
-          min:0,
-          max:100
+          ys: ks,
+          min: 0,
+          max: 100
         }
       ]
     };
@@ -98,7 +98,9 @@ export class StochRsiComponent implements OnInit, OnChanges {
 
 
 // var inputStochasticRSI = {
-//   values : [44.34,44.09,44.15,43.61,44.33,44.83,45.10,45.42,45.84,46.08,45.89,46.03,45.61,46.28,46.28,46.00,46.03,46.41,46.22,45.64,46.21,46.25,45.71,46.45,45.78,45.35,44.03,44.18,44.22,44.57,43.42,42.66,43.13],
+//   values : [44.34,44.09,44.15,43.61,44.33,44.83,45.10,45.42,
+// 45.84,46.08,45.89,46.03,45.61,46.28,46.28,46.00,46.03,46.41,46.22,45.64,46.21,46.
+// 25,45.71,46.45,45.78,45.35,44.03,44.18,44.22,44.57,43.42,42.66,43.13],
 //   rsiPeriod : 14,
 //   stochasticPeriod : 14,
 //   kPeriod : 3,

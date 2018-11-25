@@ -1,4 +1,4 @@
-import {StorageService} from "../services/app-storage.service";
+import {StorageService} from '../services/app-storage.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Observable} from 'rxjs/internal/Observable';
 
@@ -6,34 +6,34 @@ import {Observable} from 'rxjs/internal/Observable';
 export class ApiLogin {
 
 
-  apiKey:string;
-  password:string;
-  isLogedInSub:BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public exchange:string;
-  storage:StorageService;
+  apiKey: string;
+  password: string;
+  isLogedInSub: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public exchange: string;
+  storage: StorageService;
   constructor(
-    storage:StorageService,
-    exchange:string
-  ){
+    storage: StorageService,
+    exchange: string
+  ) {
     this.exchange = exchange;
     this.storage = storage;
   }
 
-  login(apiKey: string, password: string, isSave:boolean) {
+  login(apiKey: string, password: string, isSave: boolean) {
     this.apiKey = apiKey;
     this.password = password;
-    //console.log(this.apiKey, password);
-    if(isSave)  this.storage.setItem(this.exchange+'-credentials', JSON.stringify({apiKey:apiKey, password:password}), true);
-    if(apiKey && password)this.isLogedInSub.next(true);
+    // console.log(this.apiKey, password);
+    if (isSave)  this.storage.setItem(this.exchange + '-credentials', JSON.stringify({apiKey: apiKey, password: password}), true);
+    if (apiKey && password)this.isLogedInSub.next(true);
     else this.isLogedInSub.next(false);
   }
 
-  removeSavedLogin(){
-    this.storage.removeItem(this.exchange+ +'-credentials');
+  removeSavedLogin() {
+    this.storage.removeItem(this.exchange + +'-credentials');
   }
 
   autoLogin(): void {
-    //if (!this.storage.isLoggedIn()) return ;
+    // if (!this.storage.isLoggedIn()) return ;
    /* let str = this.storage.getItem(this.exchange +'-credentials', true);
     //console.warn('autoLogin ', str);
     if (str) {
@@ -43,7 +43,7 @@ export class ApiLogin {
     }*/
   }
 
-  isLogedIn$():Observable<boolean>{
+  isLogedIn$(): Observable<boolean> {
     return this.isLogedInSub.asObservable();
   }
 
@@ -52,6 +52,6 @@ export class ApiLogin {
     this.apiKey = null;
     this.password = null;
     this.removeSavedLogin();
-    this.isLogedInSub.next(false)
+    this.isLogedInSub.next(false);
   }
 }

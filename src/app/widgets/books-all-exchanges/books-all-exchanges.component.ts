@@ -11,7 +11,7 @@ import {VOBooks} from '../../models/app-models';
 })
 export class BooksAllExchangesComponent implements OnInit {
 
- // @ViewChild('amount') amoubtView: ElementRef;
+  // @ViewChild('amount') amoubtView: ElementRef;
 
   @Input() coin: string;
   @Input() market: string;
@@ -22,7 +22,7 @@ export class BooksAllExchangesComponent implements OnInit {
   allMarkets: { exchange: string, market: string, selected: boolean }[];
   amountUS = 1000;
   coinPriceMC: string;
-  amountInput:number;
+  amountInput: number;
   exchange: string;
 
   constructor(
@@ -38,25 +38,25 @@ export class BooksAllExchangesComponent implements OnInit {
 
   getAllMarketsForCoin() {
     const coin = this.coin;
-    if(!coin) return;
+    if (!coin) return;
     this.apiPublic.getAvailableMarketsForCoin(coin).then(res => {
       //  console.warn(res);
       this.marketCap.getTicker().then(MC => {
-        this.coinPriceMC = '$' +MC[coin].price_usd;
-       //  console.log(res);
+        this.coinPriceMC = '$' + MC[coin].price_usd;
+        //  console.log(res);
         this.allMarkets = res.map(o => {
           return {
             exchange: o.exchange,
             market: o.base + '_' + o.coin,
             selected: false
-          }
+          };
         });
-      })
-    })
+      });
+    });
   }
 
   getMarkets() {
-    if(!this.market) return this.getAllMarketsForCoin();
+    if (!this.market) return this.getAllMarketsForCoin();
     const ar = this.market.split('_');
 
     this.apiPublic.getMarketAllExchanges(ar[0], ar[1]).then(res => {
@@ -66,19 +66,16 @@ export class BooksAllExchangesComponent implements OnInit {
         const coinPrice = MC[ar[1]].price_usd;
 
         this.coinPriceMC = (coinPrice / basePrice).toPrecision(5).substr(0, 10) + ' $' + coinPrice.toPrecision(5).substr(0, 6);
-       // console.log(res);
+        // console.log(res);
         this.allMarkets = res.map(o => {
           return {
             exchange: o.exchange,
             market: o.base + '_' + o.coin,
             selected: false
-          }
+          };
         });
-      })
-    })
-
-
-
+      });
+    });
 
 
   }
@@ -91,8 +88,8 @@ export class BooksAllExchangesComponent implements OnInit {
 
 
   onBooksClick(item) {
-    if (item == this.selected) return;
-   //  console.log(item);
+    if (item === this.selected) return;
+    //  console.log(item);
     if (this.selected) this.selected.selected = false;
     item.selected = true;
     this.selected = item;
@@ -101,11 +98,10 @@ export class BooksAllExchangesComponent implements OnInit {
     this.marketExchange.emit(copy);
   }
 
-  onExternalLinkClick(books:VOBooks) {
-   // console.log(books);
+  onExternalLinkClick(books: VOBooks) {
+    // console.log(books);
     const url = this.apiPublic.getExchangeApi(books.exchange).getMarketURL(books.market);
     window.open(url, books.exchange);
-
 
 
   }

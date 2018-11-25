@@ -16,12 +16,12 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
 
   myTitle: string;
   area: number[];
-  period:number = 14;
+  period = 14;
 
   constructor() { }
 
   ngOnInit() {
-    this.myTitle = 'MFI('+ this.period + ')';
+    this.myTitle = 'MFI(' + this.period + ')';
   }
 
   /*
@@ -40,10 +40,10 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
   main() {
 
     //  console.log(this.candles);
-    //if (!Array.isArray(this.candles)) return;
+    // if (!Array.isArray(this.candles)) return;
     if (!Array.isArray(this.candles)) return;
 
-    const input = {close:[], open:[], high:[], low:[], volume:[] , period:this.period};
+    const input = {close: [], open: [], high: [], low: [], volume: [] , period: this.period};
       this.candles.forEach(function (item) {
       this.close.push(item.close);
       this.high.push(item.high);
@@ -57,10 +57,10 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
     const result = mfi.getResult();
     const out: number[] = result;
     // const length = this.closes.length
-    while(out.length < length) out.unshift(0);
+    while (out.length < length) out.unshift(0);
     // console.log(result);
     // let mod = new Rsi1();
-    //mod.ctrModifier(this.candles);
+    // mod.ctrModifier(this.candles);
 
 
     // console.log(this.candles);
@@ -78,8 +78,8 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
           label: '',
           color: 'green',
           ys: out,
-          min:0,
-          max:100
+          min: 0,
+          max: 100
         }
       ]
     };

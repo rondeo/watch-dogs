@@ -4,12 +4,9 @@ import {ApisPublicService} from '../api-public/apis-public.service';
 import {ApiMarketCapService} from '../api-market-cap.service';
 import * as _ from 'lodash';
 import {CandlesService} from '../../app-services/candles/candles.service';
-import {Observable} from 'rxjs/Observable';
 import {VOCandle, VOMCObj} from '../../models/api-models';
 import {MATH} from '../../com/math';
 import * as moment from 'moment';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
 import {StorageService} from '../../services/app-storage.service';
 import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
 import {SellOnJump} from '../../app-services/app-bots-services/sell-on-jump';
@@ -17,8 +14,30 @@ import {StopLossOrder} from '../../app-services/app-bots-services/stop-loss-orde
 import {ApiPrivateAbstaract} from '../api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
+import {Subject, Subscription} from 'rxjs';
 
 export class FollowOpenOrder {
+  constructor(
+    public exchange: string,
+    public market: string,
+    private amountCoin: number,
+    public percentStopLoss: number,
+    private apisPrivate: ApisPrivateService,
+    private apisPublic: ApisPublicService,
+    private marketCap: ApiMarketCapService,
+    private storage: StorageService,
+    private candlesService: CandlesService
+  ) {
+
+    this.id = 'follow-order-' + market;
+    const ar = market.split('_');
+    this.base = ar[0];
+    this.coin = ar[1];
+    this.init();
+    // console.log(this);
+
+    // this.percentStopLoss = -1;
+  }
   static status: Subject<string> = new Subject<string>();
   base: string;
   coin: string;
@@ -38,37 +57,23 @@ export class FollowOpenOrder {
   id: string;
 
   logs: string[] = [];
-  constructor(
-    public exchange: string,
-    public market: string,
-    private amountCoin: number,
-    public percentStopLoss: number,
-    private apisPrivate: ApisPrivateService,
-    private apisPublic: ApisPublicService,
-    private marketCap: ApiMarketCapService,
-    private storage: StorageService,
-    private candlesService: CandlesService
-  ) {
 
-    this.id = 'follow-order-'+market;
-    const ar = market.split('_');
-    this.base = ar[0];
-    this.coin = ar[1];
-    this.init();
-    // console.log(this);
+  sub1: Subscription;
 
-    // this.percentStopLoss = -1;
-  }
+  // lastQuery: number = 0;
+  lastCheck: number;
+
+  checkInterval;
 
   getCandles() {
-    return this.candlesService.getCandles(this.market)
+    return this.candlesService.getCandles(this.market);
   }
 
   isTooFast() {
     const now = Date.now();
     if (now - this.lastCheck < 5e4) {
       console.warn(' TOO FAST ' + this.market);
-      return true
+      return true;
     }
     this.lastCheck = now;
     return false;
@@ -88,11 +93,11 @@ export class FollowOpenOrder {
 
 
 
-    if(this.balanceCoin.available + this.balanceCoin.pending > this.amountCoin * 0.1){
+    if (this.balanceCoin.available + this.balanceCoin.pending > this.amountCoin * 0.1) {
       const OK = await this.stopLossOrder.checkStopLoss(this.candles, this.balanceCoin);
-      if(!OK) return;
+      if (!OK) return;
       const  isJump = await this.sellOnJump.isJump(this.candles);
-      if(isJump) {
+      if (isJump) {
         return;
       }
 
@@ -120,7 +125,7 @@ export class FollowOpenOrder {
     this.log(' SELL INSTANT ');
     const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
     this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
-   setTimeout(()=>{
+   setTimeout(() => {
      this.log(' Downloading books ');
      this.apisPublic.getExchangeApi(this.exchange).downloadBooks2(this.market).toPromise().then(books => {
        const qty =  this.balanceCoin.available + this.balanceCoin.pending;
@@ -128,8 +133,8 @@ export class FollowOpenOrder {
        this.log(' SELL COIN by biooks price ' + qty + ' rate ' + rate);
        const result2 = this.apiPrivate.sellLimit2(this.market, qty, rate);
        this.log(' SELL COIN RESULT ' + JSON.stringify(result2));
-     })
-   }, 2000)
+     });
+   }, 2000);
 
 
   }
@@ -182,7 +187,7 @@ export class FollowOpenOrder {
 
     this.sellOnJump.sellCoin = () => {
       this.log(' SELL COIN by sellOnJump ', true);
-      setTimeout(()=>{
+      setTimeout(() => {
         this.sellCoinInstant();
       }, 2000);
 
@@ -203,8 +208,6 @@ export class FollowOpenOrder {
     return this.storage.upsert('no-balance' + this.exchange + this.market, last);
     // throw new Error('no balance');
   }
-
-  sub1: Subscription;
 
   async subscribeForBalances() {
     // return new Promise((resolve, reject) =>{
@@ -262,14 +265,11 @@ export class FollowOpenOrder {
     } else this.initOrder = {rate: 0, fees: 0, amountCoin: 0, date: ''};
 
     this.storage.upsert('init-order' + this.exchange + market, this.initOrder);
-    //console.warn(buyOrders);
+    // console.warn(buyOrders);
     console.log(this.initOrder);
   }
-
-  // lastQuery: number = 0;
-  lastCheck: number;
   async destroy() {
-   console.log('%c destroy '+ this.market, 'color:red');
+   console.log('%c destroy ' + this.market, 'color:red');
     this.storage.remove(this.id);
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
@@ -280,8 +280,6 @@ export class FollowOpenOrder {
 
   }
 
-  checkInterval;
-
   async start() {
     if (this.checkInterval) return;
     this.initOrder = await this.storage.select('init-order' + this.exchange + this.market);
@@ -291,7 +289,7 @@ export class FollowOpenOrder {
       this.tick();
     }
     FollowOpenOrder.status.next(' Start following ' + this.market);
-    this.checkInterval = setInterval(() => this.tick(), moment.duration(1, 'minutes'));
+   //  this.checkInterval = setInterval(() => this.tick(), moment.duration(1, 'minutes'));
 
   }
 

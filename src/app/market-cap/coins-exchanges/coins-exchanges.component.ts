@@ -12,16 +12,16 @@ import * as _ from 'lodash';
 })
 export class CoinsExchangesComponent implements OnInit, OnChanges {
 
-  @Input() consAr:string[];
+  @Input() consAr: string[];
 
-  symbolExchanges:any[];
+  symbolExchanges: any[];
 
-  coinId:string;
+  coinId: string;
 //  exchanges:VOExchangeCoin[];
 
   constructor(
-    private route:ActivatedRoute,
-    private marketcap:MarketCapService
+    private route: ActivatedRoute,
+    private marketcap: MarketCapService
   ) { }
 
   ngOnInit() {
@@ -31,7 +31,7 @@ export class CoinsExchangesComponent implements OnInit, OnChanges {
 
     this.coinId = coinId;
 
-    //console.log(coinId);
+    // console.log(coinId);
 
    /* this.marketcap.getCoinsExchanges().subscribe((res:VOExchangeCoin[])=>{
       this.exchanges = res;

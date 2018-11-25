@@ -4,7 +4,8 @@ import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
 import * as moment from 'moment';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
+
 
 @Component({
   selector: 'app-orders-history',
@@ -13,22 +14,25 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class OrdersHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() exchange: string;
-  @Input() market: string;
-  @Input() afterTimestamp: number;
-  from:string;
-
-  orders: VOOrder[] = [];
-  MC: VOMCObj
-
-  isProgress = false;
-
-  sub1:Subscription;
   constructor(
     private apisPrivate: ApisPrivateService,
     private marketCap: ApiMarketCapService
   ) {
   }
+
+  @Input() exchange: string;
+  @Input() market: string;
+  @Input() afterTimestamp: number;
+  from: string;
+
+  orders: VOOrder[] = [];
+  MC: VOMCObj;
+
+  isProgress = false;
+
+  sub1: Subscription;
+
+  lastCall = 0;
 
   ngOnInit() {
     this.initAsync();
@@ -46,14 +50,14 @@ export class OrdersHistoryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  subscribe(){
-    if(this.sub1) this.sub1.unsubscribe();
-    if(!this.exchange || !this.market) return;
+  subscribe() {
+    if (this.sub1) this.sub1.unsubscribe();
+    if (!this.exchange || !this.market) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const ar = this.market.split('_');
-    this.marketCap.getTicker().then(MC=>{
+    this.marketCap.getTicker().then(MC => {
       const price_usd = MC[ar[1]].price_usd;
-     this.sub1 =  api.allOrders$(ar[0], ar[1]).subscribe(orders =>{
+      this.sub1 = api.allOrders$(ar[0], ar[1]).subscribe(orders => {
         orders.forEach(function (item) {
           item.amountUS = +(item.amountCoin * price_usd).toFixed(0);
         });
@@ -61,16 +65,15 @@ export class OrdersHistoryComponent implements OnInit, OnChanges, OnDestroy {
           return b.timestamp - a.timestamp;
         });
 
-      })
-    })
+      });
+    });
 
   }
 
-  lastCall = 0;
   async downloadOrders() {
     if (!this.exchange || !this.market) return;
     const now = Date.now();
-    if((now - this.lastCall) < 3000) return;
+    if ((now - this.lastCall) < 3000) return;
     this.lastCall = now;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const ar = this.market.split('_');
@@ -79,29 +82,28 @@ export class OrdersHistoryComponent implements OnInit, OnChanges, OnDestroy {
     const after: number = this.afterTimestamp || moment().subtract(23, 'hours').valueOf();
     this.from = moment(after).format('MM-DD HH:mm');
     this.isProgress = true;
-    const orders = await api.getAllOrders(ar[0], ar[1], after, moment().valueOf()).toPromise();//.subscribe(orders => {
-    setTimeout(()=>{
+    const orders = await api.getAllOrders(ar[0], ar[1], after, moment().valueOf()).toPromise(); // .subscribe(orders => {
+    setTimeout(() => {
       this.isProgress = false;
-    }, 500)
-   //  console.log(' all orders', orders);
+    }, 500);
+    //  console.log(' all orders', orders);
     orders.forEach(function (item) {
       item.amountUS = +(item.amountCoin * price_usd).toFixed(0);
-      });
+    });
 
-      this.orders = orders.sort(function (a, b) {
-        return b.timestamp - a.timestamp;
-      });
+    this.orders = orders.sort(function (a, b) {
+      return b.timestamp - a.timestamp;
+    });
 
   }
 
-  onRefreshClick(){
+  onRefreshClick() {
     this.downloadOrders();
   }
 
-  ngOnDestroy(){
-    if(this.sub1) this.sub1.unsubscribe();
+  ngOnDestroy() {
+    if (this.sub1) this.sub1.unsubscribe();
   }
-
 
 
 }

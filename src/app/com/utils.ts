@@ -3,6 +3,8 @@ import {ApiPublicBinance} from '../apis/api-public/api-public-binance';
 
 export class UTILS {
 
+  static decimals: { [symbol: string]: { rateDecimals: number, amountDecimals: number } } = {};
+
 
   static toString(obj: any) {
     let out = ' ';
@@ -18,9 +20,9 @@ export class UTILS {
   }
 
   static floorTo = function (number, n) {
-    var k = Math.pow(10, n);
+    let k = Math.pow(10, n);
     return (Math.floor(number * k) / k);
-  }
+  };
 
   static toURLparams(obj: any) {
     return Object.keys(obj).map(function (item) {
@@ -57,12 +59,10 @@ export class UTILS {
 
   static setDecimals(exchange: string, market: string, orders: { amountCoin: string, rate: string }[]) {
     if (!UTILS.decimals[exchange + market]) {
-      UTILS.decimals[exchange + market] = UTILS.parseDecimals(orders)
+      UTILS.decimals[exchange + market] = UTILS.parseDecimals(orders);
       // console.log('setting decimals ' + exchange + base + coin, val);
     }
   }
-
-  static decimals: { [symbol: string]: { rateDecimals: number, amountDecimals: number } } = {};
 
   static formatDecimals2(exchange: string, base: string, coin: string, data: { amountCoin: number, rate: number }) {
     if (!UTILS.decimals[exchange + base + coin]) {
@@ -89,18 +89,18 @@ export class UTILS {
 
   static find(currentValues: any, actionValues: any[]): any {
    return actionValues.find(function (item) {
-     for(let str in item ) if(currentValues[str] !== item[str]) return false;
+     for (let str in item ) if (currentValues[str] !== item[str]) return false;
      return true;
-    })
+    });
 
 
   }
 }
 
 export function applyMixins(derivedCtor: any, baseCtors: any[]) {
-  console.log(derivedCtor)
+  console.log(derivedCtor);
   baseCtors.forEach(baseCtor => {
-    console.log(baseCtors)
+    console.log(baseCtors);
     Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
       console.log(name);
       if (name !== 'constructor') {

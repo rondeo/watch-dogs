@@ -23,37 +23,37 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
   exchange: string;
   base: string;
-  coin:string;
+  coin: string;
   isActive: boolean;
   orderType: OrderType = OrderType.SELL;
   amount: number;
 
   constructor(
-    private dialog:MatDialog,
-    private router:Router,
-    private route:ActivatedRoute,
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
     private botsService: AppBotsService
   ) {
 
   }
 
 
-  //private sub3;
+  // private sub3;
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const amount = params.amount || 100;
       this.amount =  Math.ceil(amount);
-    })
-    this.route.params.subscribe(params =>{
+    });
+    this.route.params.subscribe(params => {
       this.exchange = params.exchange;
       this.base = params.base;
       this.coin = params.coin;
-    })
+    });
 
 
   }
 
-  setCurrentById(uid:string){
+  setCurrentById(uid: string) {
 
   }
 
@@ -62,7 +62,7 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
 
   }
 
- async onCreateClick(){
+ async onCreateClick() {
     const wdData: VOWatchdog = new VOWatchdog({
       id: moment().toISOString(),
       exchange: this.exchange,
@@ -71,13 +71,13 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
       amount: this.amount,
       isActive: this.isActive,
       orderType: this.orderType,
-      name: this.exchange + ' '+ this.base + ' ' + this.coin + ' ' + this.amount,
+      name: this.exchange + ' ' + this.base + ' ' + this.coin + ' ' + this.amount,
       _status: WatchDogStatus.WAITING
-    })
+    });
 
     const WD: WatchDog = new WatchDog(wdData);
     await this.botsService.saveWatchDog(WD);
-    this.router.navigateByUrl('/email-service/watchdogs-list/'+ this.orderType);
+    this.router.navigateByUrl('/email-service/watchdogs-list/' + this.orderType);
   }
 
 

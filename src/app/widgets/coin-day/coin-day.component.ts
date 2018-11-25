@@ -3,12 +3,12 @@ import {ActivatedRoute} from '@angular/router';
 import {VOGraphs} from '../../ui/line-chart/line-chart.component';
 import {GRAPHS} from '../../com/grpahs';
 import * as moment from 'moment';
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 import {MongoService} from '../../apis/mongo.service';
 import {Moment} from 'moment';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApiCryptoCompareService, VOHistHour} from '../../apis/api-crypto-compare.service';
-import {P} from '@angular/core/src/render3';
+
 
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
@@ -65,7 +65,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
   async getCoinHistory(): Promise<any[]> {
     const to: string = moment().toISOString();
     const coin = this.coin;
-    let coinData
+    let coinData;
     if (this.isWeek) {
       const ago50H = moment().subtract(500, 'hours').toISOString();
       coinData = await this.apiMarketCap.getCoinHistory5Hours(coin, ago50H, to).toPromise();
@@ -84,19 +84,20 @@ export class CoinDayComponent implements OnInit, OnChanges {
     const last = _.last(history);
 
 
-   // const from = moment(first.date);
-  //   const to = moment(last.date);
+    // const from = moment(first.date);
+    //   const to = moment(last.date);
 
     let dur = moment.duration(moment(last.date).diff(moment(first.date))).asHours();
 
     let labels = [];
-
     if (dur > 40) {
-      this.duration = (dur / 24).toFixed(2) + ' days ' + moment(first.date).format('MM-DD HH:MM')+ ' - ' + moment(last.date).format('MM-DD HH:MM');
+      this.duration = (dur / 24).toFixed(2) + ' days ' + moment(first.date)
+        .format('MM-DD HH:MM') + ' - ' + moment(last.date).format('MM-DD HH:MM');
       labels = GRAPHS.createLabels12(first.date, last.date, 'DD HH');
     } else {
       labels = GRAPHS.createLabels12(first.date, last.date);
-      this.duration = dur.toFixed(1) + ' hours ' + moment(first.date).format('DD HH:mm')+ ' - ' + moment(last.date).format('DD-HH:mm');
+      this.duration = dur.toFixed(1) + ' hours ' + moment(first.date).format('DD HH:mm') + ' - ' + moment(last.date)
+        .format('DD-HH:mm');
     }
 
 
@@ -111,13 +112,13 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
 
     history.forEach(function (item, i) {
-     // console.log(item['date']);
-     //let label = ' ';
+      // console.log(item['date']);
+      // let label = ' ';
       if (item) {
-       // label = moment(item['date']).format('HH')
+        // label = moment(item['date']).format('HH')
 
         const data: VOMarketCap = item[this.coin];
-        if(!!data){
+        if (!!data) {
           pricebtcs.push(data.price_btc);
           ranks.push(data.rank);
           volumes.push(data.volume_24h);
@@ -125,8 +126,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
 
       }
 
-     // console.log(label)
-     //  labels.push(label);
+      // console.log(label)
+      //  labels.push(label);
     }, {coin: this.coin});
 
     const min = _.min(pricebtcs);
@@ -180,12 +181,12 @@ export class CoinDayComponent implements OnInit, OnChanges {
           color: '#133075',
           label: 'MA 2h'
         }*/
-    ]
+    ];
 
     this.myGraps = {
       labelsX: labels,
       graphs: graphs
-    }
+    };
 
     this.coindatas.emit(history);
   }

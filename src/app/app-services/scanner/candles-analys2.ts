@@ -12,14 +12,14 @@ export class CandlesAnalys2 {
     const exchange = data.exchange;
     const market = data.market;
     const candles = data.candles;
-    const n = candles.length;   ;
+    const n = candles.length;   
     let last = _.last(candles);
     let first = _.first(candles);
     const sortedVol = _.orderBy(candles, 'Volume').reverse();
     const sortedPrice = _.orderBy(candles, 'close').reverse();
-    const sortedLows =  _.orderBy(candles, 'low')
+    const sortedLows =  _.orderBy(candles, 'low');
 
-    const low3 = _.mean([sortedLows[0].low,sortedLows[1].low, sortedLows[3].low]);
+    const low3 = _.mean([sortedLows[0].low, sortedLows[1].low, sortedLows[3].low]);
 
     const prelast = candles[n - 2];
 
@@ -53,7 +53,7 @@ export class CandlesAnalys2 {
     const maxVolumeCandle =  _.first(sortedVol);
 
     const maxVperc = MATH.percent(maxVolumeCandle.Volume, meanV);
-    //if(BtempSup < 0 || BtempRes > 0)
+    // if(BtempSup < 0 || BtempRes > 0)
     // console.log(market + ' ' + maxVperc, maxVolumeCandle);
 
 
@@ -62,9 +62,9 @@ export class CandlesAnalys2 {
     const Pprev = MATH.percent(last.close, prelast.close);
     const Pall = MATH.percent(last.close, first.close);
 
-    const V3 = Math.round(_.sum(_.takeRight(vols, 3))/3);
+    const V3 = Math.round(_.sum(_.takeRight(vols, 3)) / 3);
 
-    const PV3 = MATH.percent(V3, meanV);// MATH.percent(lastV, meanV);
+    const PV3 = MATH.percent(V3, meanV); // MATH.percent(lastV, meanV);
     // const VMD = MATH.percent(lastV, medV);
 
     const time = moment().format('HH:mm');
@@ -99,11 +99,11 @@ export class CandlesAnalys2 {
 
 
 
-    const out = {time, ts, market, rank, LowP, Pprev, Pmed, Pall, AMPL, PV3, S,P, x};
+    const out = {time, ts, market, rank, LowP, Pprev, Pmed, Pall, AMPL, PV3, S, P, x};
 
 
-    if(notify){
-      if(LowP < 1) notify(out);
+    if (notify) {
+      if (LowP < 1) notify(out);
     }
 
 
@@ -133,6 +133,6 @@ export class CandlesAnalys2 {
         notify(out);
       }
     }*/
-    return out
+    return out;
   }
 }

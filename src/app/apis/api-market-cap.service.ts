@@ -2,15 +2,10 @@ import {Injectable} from '@angular/core';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {HttpClient} from '@angular/common/http';
 import {VOMarketCap, VOMarketCapExt} from '../models/app-models';
-
-import 'rxjs/add/operator/concat';
 import * as _ from 'lodash';
-import 'rxjs/add/operator/share';
-
 import {StorageService} from '../services/app-storage.service';
 import {Parsers} from './parsers';
 import * as moment from 'moment';
-import {clearInterval} from 'timers';
 
 import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '../models/api-models';
 import {VOMovingAvg} from '../com/moving-average';
@@ -21,6 +16,14 @@ import {map} from 'rxjs/operators';
 
 @Injectable()
 export class ApiMarketCapService {
+
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {
+    ApiMarketCapService.instance = this;
+  }
+
   static instance: ApiMarketCapService;
 
   static MC: { [symbol: string]: VOMarketCap };
@@ -30,30 +33,29 @@ export class ApiMarketCapService {
 
   private coinsDay: VOCoinsDayData;
 
-  constructor(
-    private http: HttpClient,
-    private storage: StorageService
-  ) {
-    ApiMarketCapService.instance = this;
-  }
+  tikerInterval;
 
-  async getCoin(symbol: string): Promise<VOMarketCap> {
-    const data = await this.getTicker();
-    return data[symbol]
-  }
+  tickerGet$;
+
+
+  /* agregated$(): Observable<{ [symbol: string]: VOMCAgregated }> {
+     return this.agrigatedSub.asObservable();
+   }*/
+
+  private coinsAr: VOMarketCapSelected[];
 
   static mapDataMC(data: any[]) {
     const out = {};
 
-    const BTC:VOMarketCap = data.shift();
-    if(BTC.symbol !== 'BTC') throw new Error(' first not BTC');
+    const BTC: VOMarketCap = data.shift();
+    if (BTC.symbol !== 'BTC') throw new Error(' first not BTC');
     const btc1h = +BTC.percent_change_1h;
     const btc24h = +BTC.percent_change_24h;
     const btc7d = +BTC.percent_change_7d;
     BTC.price_usd = +BTC.price_usd;
     BTC.price_btc = +BTC.price_btc;
     data.forEach(function (item) {
-      if(item.symbol === 'ETHOS')item.symbol = 'BQX';
+      if (item.symbol === 'ETHOS') item.symbol = 'BQX';
 
       if (!out[item.symbol]) out[item.symbol] = {
         id: item.id,
@@ -72,26 +74,29 @@ export class ApiMarketCapService {
         percent_change_7d: +(item.percent_change_7d - btc7d).toFixed(2),
         last_updated: item.last_updated,
         stamp: item.stamp
-      }
+      };
     });
     out['BTC'] = BTC;
     return out;
   }
 
+  async getCoin(symbol: string): Promise<VOMarketCap> {
+    const data = await this.getTicker();
+    return data[symbol];
+  }
+
   refreshTicker() {
     this.downloadTicker().subscribe(res => {
-      let current = 0
+      let current = 0;
       const cur = this.tikerSub.getValue();
       if (cur) current = cur['BTC'].last_updated;
       const timestamp = res['BTC'].last_updated;
       if (timestamp !== current) {
         console.log(' new marketcap ' + moment(timestamp * 1000).format('HH:mm'));
-        this.tikerSub.next(res)
+        this.tikerSub.next(res);
       }
     });
   }
-
-  tikerInterval;
 
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
     if (!this.tikerInterval) {
@@ -100,8 +105,6 @@ export class ApiMarketCapService {
     }
     return this.tikerSub;
   }
-
-  tickerGet$;
 
   downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
     let url = 'api/proxy-5min/https://api.coinmarketcap.com/v1/ticker/?limit=500';
@@ -112,26 +115,21 @@ export class ApiMarketCapService {
       console.log('%c TICKER MAP ' + url, 'color:blue');
       return ApiMarketCapService.mapDataMC(res);
     }));
-    return this.tickerGet$
+    return this.tickerGet$;
   }
-
-
-  /* agregated$(): Observable<{ [symbol: string]: VOMCAgregated }> {
-     return this.agrigatedSub.asObservable();
-   }*/
-
-  private coinsAr: VOMarketCapSelected[];
 
   async getCoinsArWithSelected(): Promise<VOMarketCapSelected[]> {
     if (this.coinsAr) return Promise.resolve(this.coinsAr);
     return new Promise<VOMarketCapSelected[]>(async (resolve, reject) => {
       const selected = await this.storage.getSelectedMC();
+
       const sub = this.ticker$().subscribe(data => {
+        if (!data) return;
         selected.forEach(function (item) {
           if (!!data[item]) data[item].selected = true;
         });
         this.coinsAr = <VOMarketCapSelected[]>Object.values(data);
-        resolve(this.coinsAr)
+        resolve(this.coinsAr);
       }, reject);
 
     });
@@ -172,7 +170,7 @@ export class ApiMarketCapService {
   }
 
   getTicker30MinFrom(from: string, limit = 1): Observable<VOMCObj[]> {
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/from/' +from + '/' + limit;
+    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/from/' + from + '/' + limit;
     console.log(url);
     return this.http.get(url).pipe(map((res: any) => res.data));
   }

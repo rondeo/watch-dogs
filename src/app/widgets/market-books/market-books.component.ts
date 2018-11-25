@@ -9,15 +9,16 @@ import {VOMarketCap} from '../../models/app-models';
 
 export class BooksDisplay {
   base: string;
-  coin:string;
+  coin: string;
   sell: number;
   buy: number;
-  buyUS: string= '';
-  sellUS: string = ''
-  diff: string = '';
-  us: string = ''
-  constructor(obj){
-    Object.assign(this, obj);
+  buyUS = '';
+  sellUS = '';
+  diff = '';
+  us = '';
+
+  constructor(obj) {
+
   }
 }
 
@@ -36,7 +37,7 @@ export class MarketBooksComponent implements OnInit, OnChanges {
   bookDisplays: BooksDisplay[] = [];
   priceCoinUS: number;
 
-  isRefreshing: boolean = false;
+  isRefreshing = false;
 
   constructor(
     private apiMarketCap: ApiMarketCapService,
@@ -49,8 +50,8 @@ export class MarketBooksComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    if(!this.exchange) console.error(' no exchange');
-    if(!this.market) console.error( ' no market');
+    if (!this.exchange) console.error(' no exchange');
+    if (!this.market) console.error( ' no market');
 
 
    /* const baseMC = this.allCoins[base];
@@ -65,7 +66,7 @@ export class MarketBooksComponent implements OnInit, OnChanges {
 
 
   onRefreshClick() {
-     console.log('rfresh')
+     console.log('rfresh');
    // this.downloadBooks();
   }
 

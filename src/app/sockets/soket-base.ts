@@ -5,8 +5,8 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 export interface ISocketData {
   data: any;
   exchange: string;
-  market: string
-  channel: string
+  market: string;
+  channel: string;
 }
 
 export interface IChannel {
@@ -16,24 +16,28 @@ export interface IChannel {
 }
 
 export abstract class SocketBase {
+
+  // sub: Subject<ISocketData> = new Subject<ISocketData>();
+
+  constructor() {
+
+  }
   ws: WebSocket;
   abstract socketUrl: string;
   hb: number;
   exchange: string;
   market: string;
 
-  statusSub:BehaviorSubject<string> = new BehaviorSubject('CLOSED');
+  statusSub: BehaviorSubject<string> = new BehaviorSubject('CLOSED');
 
   HB: string;
   marketsMap: { [marketId: string]: string } = {};
 
-  //sub: Subject<ISocketData> = new Subject<ISocketData>();
-
-  constructor() {
-
-  }
-
   private intevalHB;
+
+  subscribers: { [id: string]: IChannel } = {};
+
+  isQ: boolean;
 
   onOpen(evt) {
 
@@ -46,14 +50,14 @@ export abstract class SocketBase {
         this.ws.send(this.HB);
       }
 
-    }, 60000)
+    }, 60000);
 
   }
 
-  onClose(evt){
+  onClose(evt) {
     console.warn(this.exchange + ' CLOSE');
   }
-  onError(err){
+  onError(err) {
     console.warn(err);
   }
   reconnect() {
@@ -63,11 +67,9 @@ export abstract class SocketBase {
     channelsAr.forEach((item) => {
       this.createChannel(item.channel, item.market, item.sub);
 
-    })
+    });
 
   }
-
-  subscribers: { [id: string]: IChannel } = {};
 
 
   createSocket(chanel, market): WebSocket {
@@ -81,7 +83,7 @@ export abstract class SocketBase {
   }
 
   dispatch(id: string, data, newChannel: string = null) {
-    let ch = this.subscribers[id]
+    let ch = this.subscribers[id];
     if (!ch) {
       console.warn(id);
       return;
@@ -92,7 +94,7 @@ export abstract class SocketBase {
     ch.sub.next({exchange, channel, market, data});
   }
 
-  abstract async createChannelId(chanel, market): Promise<string>
+  abstract async createChannelId(chanel, market): Promise<string>;
 
   async createChannel(channel, market, sub: Subject<any>) {
     this.ws = this.createSocket(channel, market);
@@ -103,7 +105,7 @@ export abstract class SocketBase {
       channel,
       market,
       sub
-    }
+    };
     //  return this.subscribeForTrades(market)
 
   }
@@ -122,8 +124,6 @@ export abstract class SocketBase {
 
 
   abstract onMessage(m) ;
-
-  isQ: boolean;
 
   send(params) {
 

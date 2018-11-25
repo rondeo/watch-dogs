@@ -7,7 +7,7 @@ export default class BearishMarubozu extends CandlestickFinder {
         this.name = 'BearishMarubozu';
         this.requiredCount  = 1;
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let daysOpen  = data.open[0];
         let daysClose = data.close[0];
         let daysHigh  = data.high[0];
@@ -23,6 +23,6 @@ export default class BearishMarubozu extends CandlestickFinder {
     }
 }
 
-export function bearishmarubozu(data:StockData) {
+export function bearishmarubozu(data: StockData) {
   return new BearishMarubozu().hasPattern(data);
 }

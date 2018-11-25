@@ -38,13 +38,13 @@ export default class BearishPatterns extends CandlestickFinder {
         this.name = 'Bearish Candlesticks';
     }
 
-    hasPattern (data:StockData) {
+    hasPattern (data: StockData) {
         return bearishPatterns.reduce(function(state, pattern) {
             return state || pattern.hasPattern(data);
-        }, false)
+        }, false);
     }
 }
 
-export function bearish(data:StockData){
+export function bearish(data: StockData) {
     return new BearishPatterns().hasPattern(data);
 }

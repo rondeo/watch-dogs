@@ -7,7 +7,7 @@ export default class DragonFlyDoji extends CandlestickFinder {
         this.requiredCount  = 1;
         this.name = 'DragonFlyDoji';
     }
-    logic (data:StockData) {
+    logic (data: StockData) {
         let daysOpen   = data.open[0];
         let daysClose  = data.close[0];
         let daysHigh   = data.high[0];
@@ -19,6 +19,6 @@ export default class DragonFlyDoji extends CandlestickFinder {
     }
 }
 
-export function dragonflydoji(data:StockData) {
+export function dragonflydoji(data: StockData) {
   return new DragonFlyDoji().hasPattern(data);
 }

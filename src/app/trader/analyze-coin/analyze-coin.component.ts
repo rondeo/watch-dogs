@@ -24,8 +24,8 @@ export class AnalyzeCoinComponent implements OnInit {
   @ViewChild('amount') amountView: ElementRef;
 
   coin: string;
-  coinMC: VOMarketCap = new VOMarketCap()
-  baseMC:VOMarketCap = new VOMarketCap();
+  coinMC: VOMarketCap = new VOMarketCap();
+  baseMC: VOMarketCap = new VOMarketCap();
   exchange: string;
   market: string;
   amountUS = 1000;
@@ -50,7 +50,8 @@ export class AnalyzeCoinComponent implements OnInit {
 
 
 
-   /* this.mongoBTC.downloadBTCLarge('2018-07-16T02:26:43-04:00', moment('2018-07-16T02:26:43-04:00').subtract(1, 'd').format()).then(res =>{
+   /* this.mongoBTC.downloadBTCLarge('2018-07-16T02:26:43-04:00',
+    moment('2018-07-16T02:26:43-04:00').subtract(1, 'd').format()).then(res =>{
       console.log(res);
     })*/
 
@@ -64,9 +65,9 @@ export class AnalyzeCoinComponent implements OnInit {
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
         this.coin = coin;
-        this.marketCap.getCoin(coin).then(c=>{
+        this.marketCap.getCoin(coin).then(c => {
           this.coinMC = c;
-        })
+        });
        // this.getLongHistory();
         this.gatherAllMarketsForCoin();
       }
@@ -75,8 +76,8 @@ export class AnalyzeCoinComponent implements OnInit {
   }
 
 
-  async gatherAllMarketsForCoin(){
-    if(!this.coin) return;
+  async gatherAllMarketsForCoin() {
+    if (!this.coin) return;
   //  const markets = await this.apiPublic.getMarketAllExchanges('BTC', this.coin);
     // console.log(markets);
    /* this.apiPublic.getAvailableMarketsForCoin(coin).subscribe(res => {
@@ -91,7 +92,7 @@ export class AnalyzeCoinComponent implements OnInit {
 
   }
 
- async getLongHistory(){
+ async getLongHistory() {
     const longHistory = await this.marketCap.getCoinLongHistory(this.coin).toPromise();
     console.log(longHistory);
   }
@@ -102,7 +103,7 @@ export class AnalyzeCoinComponent implements OnInit {
 
   onLineChartClick() {
     if (this.exchange && this.market) {
-      const ar = this.market.split('_')
+      const ar = this.market.split('_');
       this.showExtranPage.showMarket(this.exchange, ar[0], ar[1]);
     }
   }
@@ -115,7 +116,7 @@ export class AnalyzeCoinComponent implements OnInit {
 
   }
 
-  onAmountChanged(amount: number){
+  onAmountChanged(amount: number) {
     this.amountUS = amount;
   }
 

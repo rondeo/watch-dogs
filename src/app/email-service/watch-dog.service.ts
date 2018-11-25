@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {AuthHttpService} from "../services/auth-http.service";
+import {AuthHttpService} from '../services/auth-http.service';
 
-import {VOWatchdog} from "../models/app-models";
+import {VOWatchdog} from '../models/app-models';
 
-import {StorageService} from "../services/app-storage.service";
+import {StorageService} from '../services/app-storage.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Observable} from 'rxjs/internal/Observable';
 
@@ -11,8 +11,6 @@ import {Observable} from 'rxjs/internal/Observable';
 
 @Injectable()
 export class WatchDogService {
-
-  private watchDogsSub: BehaviorSubject<VOWatchdog[]>;
 
 
   constructor(
@@ -23,20 +21,22 @@ export class WatchDogService {
     this.watchDogsSub = new BehaviorSubject(null);
   }
 
+  private watchDogsSub: BehaviorSubject<VOWatchdog[]>;
+
+
+  private isloading: boolean;
+  private email: string;
+
   watchdogs$(): Observable<VOWatchdog[]> {
     let wd = this.watchDogsSub.getValue();
     if (!wd) this.refreshWatchdogs();
     return this.watchDogsSub.asObservable();
   }
 
-
-  private isloading: boolean;
-  private email:string;
-
   async refreshWatchdogs() {
     if (this.isloading) return;
 
-    const sellCoins:VOWatchdog[] = <VOWatchdog[]>await this.storage.getWatchDogs();
+    const sellCoins: VOWatchdog[] = <VOWatchdog[]>await this.storage.getWatchDogs();
     this.watchDogsSub.next(sellCoins);
 
 
@@ -83,13 +83,13 @@ export class WatchDogService {
     if (!dogs) dogs = [];
     let exists: VOWatchdog = dogs.find(function (item) {
       return item.id === watchDog.id;
-    })
+    });
     if (!exists) {
       dogs.push(watchDog);
       this.watchDogsSub.next(dogs);
     }
 
-   return this.storage.saveWatchDogs(dogs)
+   return this.storage.saveWatchDogs(dogs);
 
   }
 
@@ -148,6 +148,6 @@ export class WatchDogService {
     }
     this.watchDogsSub.next(dogs);
 
-    return this.storage.saveWatchDogs(dogs)
+    return this.storage.saveWatchDogs(dogs);
   }
 }

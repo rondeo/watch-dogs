@@ -7,9 +7,9 @@ import {MaterialAppModule} from '../material/material-app.module';
 
 import {V2DataComponent} from './v2-data/v2-data.component';
 
-import {HttpClientModule} from "@angular/common/http";
-import {ApisModule} from "../apis/apis.module";
+import {ApisModule} from '../apis/apis.module';
 import {AllInOneOutletComponent} from './all-in-one-outlet/all-in-one-outlet.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const routes: Routes = [
   {

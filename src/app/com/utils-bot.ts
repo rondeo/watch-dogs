@@ -1,4 +1,4 @@
-import {VOMarketCap} from "../models/app-models";
+import {VOMarketCap} from '../models/app-models';
 
 import * as _ from 'lodash';
 
@@ -6,15 +6,15 @@ import * as _ from 'lodash';
 
 
 export interface Result1 {
-  symbol:string
-  name: string
-  vD:number
-  priceD:number
-  to_btc_1h:number
-  price_to_btcD:number
-  rankD: number
-  rank: number
-  dur: number
+  symbol: string;
+  name: string;
+  vD: number;
+  priceD: number;
+  to_btc_1h: number;
+  price_to_btcD: number;
+  rankD: number;
+  rank: number;
+  dur: number;
 
 }
 
@@ -29,11 +29,11 @@ export class UtilsBot {
 
 
 
-  static analizeMongoData(data:any[]){
+  static analizeMongoData(data: any[]) {
 
    return data.map(function (coinMC) {
 
-     const current = coinMC.symbol === 'BTC'?coinMC.price_usd:coinMC.price_btc;
+     const current = coinMC.symbol === 'BTC' ? coinMC.price_usd : coinMC.price_btc;
      const cur_prev = +(100 * (current - coinMC.prev) / coinMC.prev).toFixed(4);
      const cur_prev5 = +(100 * (current - coinMC.last5) / coinMC.last5).toFixed(4);
 
@@ -53,13 +53,13 @@ export class UtilsBot {
        prev20_30,
        h1_ago2h,
        h1_pago3h
-     }
-   })
+     };
+   });
 
   }
 
 
-  static mapResult(MC) :{[sumbol:string]:Result1} {
+  static mapResult(MC): {[sumbol: string]: Result1} {
     let btc: VOMarketCap[] = MC['BTC'];
 
     const l = btc.length;
@@ -79,14 +79,14 @@ export class UtilsBot {
         const first: VOMarketCap = data[0];
         const last: VOMarketCap = data[l - 1];
 
-        const symbol:string = last.symbol;
-        const name:string = last.name;
+        const symbol: string = last.symbol;
+        const name: string = last.name;
 
         const priceD = +(100 * (last.price_usd - first.price_usd) / first.price_usd).toFixed(2);
       //  const vD = +(100 * (last.volume_usd_24h - first.volume_usd_24h) / first.volume_usd_24h).toFixed(2);
 
         const mc_1h = last.percent_change_1h;
-        const to_btc_1h = +(last.percent_change_1h - btcLast.percent_change_1h).toFixed(2)
+        const to_btc_1h = +(last.percent_change_1h - btcLast.percent_change_1h).toFixed(2);
 
         const price_to_btcD = +(priceD - btcD).toFixed(2);
 
@@ -105,7 +105,7 @@ export class UtilsBot {
           dur,
           symbol,
           name
-        }
+        };
 
       }
 

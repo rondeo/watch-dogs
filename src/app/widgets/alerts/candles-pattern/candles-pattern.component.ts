@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+
 import {CandlesService} from '../../../app-services/candles/candles.service';
 
 import {VOCandle, VOCandleExt} from '../../../models/api-models';
 import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-candles-pattern',
@@ -13,6 +14,11 @@ import * as _ from 'lodash';
 
 export class CandlesPatternComponent implements OnInit, OnChanges {
 
+  constructor(
+    private candlesService: CandlesService
+  ) {
+  }
+
   @Input() exchange: string;
   @Input() market: string;
   @Output() signal: EventEmitter<any> = new EventEmitter();
@@ -20,10 +26,8 @@ export class CandlesPatternComponent implements OnInit, OnChanges {
   candles: VOCandle[];
   volumes: number[];
 
-  constructor(
-    private candlesService: CandlesService
-  ) {
-  }
+  private sub1: Subscription;
+  private sub2: Subscription;
 
   ngOnInit() {
 
@@ -33,29 +37,26 @@ export class CandlesPatternComponent implements OnInit, OnChanges {
     this.subscribe();
   }
 
-  private sub1: Subscription;
-  private sub2: Subscription;
-
   subscribe() {
     this.unsubscribe();
     if (!this.exchange || !this.market) return;
 
 
-   /* const hist: CandlesHist = this.candlesService.getCandlesHist(this.exchange, this.market);
+    /* const hist: CandlesHist = this.candlesService.getCandlesHist(this.exchange, this.market);
 
-   this.sub1 = hist.candles$().subscribe(candles => {
-      if(!candles) return;
-      this.volumes = candles.map(function (o) {
-        return o.open > o.close ? -o.Volume : o.Volume;
-      });
+    this.sub1 = hist.candles$().subscribe(candles => {
+       if(!candles) return;
+       this.volumes = candles.map(function (o) {
+         return o.open > o.close ? -o.Volume : o.Volume;
+       });
 
-      this.candles = _.clone(candles);
-    })
+       this.candles = _.clone(candles);
+     })
 
-    this.sub2 = hist.volumeAlert$().subscribe((candle:VOCandleExt) =>{
-      console.warn(candle);
-    })
-*/
+     this.sub2 = hist.volumeAlert$().subscribe((candle:VOCandleExt) =>{
+       console.warn(candle);
+     })
+ */
 
   }
 

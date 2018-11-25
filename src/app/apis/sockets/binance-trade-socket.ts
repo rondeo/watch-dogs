@@ -1,4 +1,4 @@
-import {Subject} from 'rxjs/Subject';
+
 import {SocketBase} from './soket-base';
 import {SocketChannel} from './socket-channel';
 
@@ -7,7 +7,7 @@ export class BinanceTradesSocket extends SocketBase {
   exchange = 'binance';
   socketUrl = 'wss://stream.binance.com:9443/ws/';
 
-  //HB = '.';
+  // HB = '.';
 
   constructor() {
     super();
@@ -38,12 +38,12 @@ export class BinanceTradesSocket extends SocketBase {
       const ws = new WebSocket(url);
 
       ws.addEventListener('message', (evt) => this.onMessage(evt));
-      ws.addEventListener('open', (evt)=> this.onOpen(evt, resolve, reject));
+      ws.addEventListener('open', (evt) => this.onOpen(evt, resolve, reject));
       ws.addEventListener('close', (evt) => {
-        console.log('close  ', evt)
+        console.log('close  ', evt);
       });
       ws.addEventListener('error', (evt) => {
-        console.log('error', evt)
+        console.log('error', evt);
         reject();
       });
     });
@@ -54,11 +54,11 @@ export class BinanceTradesSocket extends SocketBase {
     console.log('createChannelId', channel);
     const socket = await this.getSocket(channel);
     this.sockets.push(socket);
-    return socket
+    return socket;
   }
 
 
-  onMessage(m: MessageEvent) {
+  onMessage(m: any) {
 
     let dataM: any = JSON.parse(m.data);
 
@@ -80,7 +80,7 @@ export class BinanceTradesSocket extends SocketBase {
       };
 
       if (!this.dispatch(channel, market, data)) {
-        console.log(' no subscribers closing ' + this.exchange + '  ' + channel + '  ' + market)
+        console.log(' no subscribers closing ' + this.exchange + '  ' + channel + '  ' + market);
         const ws: WebSocket = <WebSocket>m.currentTarget;
         ws.close();
       }

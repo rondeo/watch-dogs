@@ -1,7 +1,7 @@
 
-import * as pako from 'pako';
-import * as gzip from 'gzip';
-import {SocketBase} from "./soket-base";
+/*import * as pako from 'pako';
+import * as gzip from 'gzip';*/
+import {SocketBase} from './soket-base';
 
 
 export class OkexTradesSocket extends SocketBase {
@@ -12,7 +12,7 @@ export class OkexTradesSocket extends SocketBase {
 
   constructor() {
     super();
-    //const ar = market.split('_');
+    // const ar = market.split('_');
 
 
   }
@@ -23,8 +23,8 @@ export class OkexTradesSocket extends SocketBase {
 
     const id = Date.now();
     const params = {
-      event:'addChannel',
-      channel:'ok_sub_spot_btc_usd_deals'
+      event: 'addChannel',
+      channel: 'ok_sub_spot_btc_usd_deals'
     };
 
     this.send(JSON.stringify(params));
@@ -36,10 +36,10 @@ export class OkexTradesSocket extends SocketBase {
 
   onMessage(m) {
 
-    console.log(m.data)
+    console.log(m.data);
 
 
-    //let blob = m.data;
+    // let blob = m.data;
 
    /* var reader = new FileReader();
     reader.addEventListener("loadend", function(res) {

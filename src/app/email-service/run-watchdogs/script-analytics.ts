@@ -2,16 +2,16 @@
 import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 
-export function runDogScript(oldValue:VOMarketCap, newValue:VOMarketCap, script:string):string[]{
+export function runDogScript(oldValue: VOMarketCap, newValue: VOMarketCap, script: string): string[] {
 
-    let results:string[] =[];
+    let results: string[] = [];
     
     let send_notification = function (text) {
       results.push(text);
     };
 
-    let old_percent_change_1h:number, old_percent_change_24h:number, old_percent_change_7d:number, old_price_usd:number,
-    percent_change_1h:number, percent_change_24h:number, percent_change_7d:number, price_usd:number;
+    let old_percent_change_1h: number, old_percent_change_24h: number, old_percent_change_7d: number, old_price_usd: number,
+    percent_change_1h: number, percent_change_24h: number, percent_change_7d: number, price_usd: number;
 
 
     old_percent_change_1h = oldValue.percent_change_1h;

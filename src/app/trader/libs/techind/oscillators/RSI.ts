@@ -13,27 +13,25 @@ export class RSIInput extends IndicatorInput {
 
 export class RSI extends Indicator {
 
-  generator:IterableIterator<number | undefined>;
-
-  constructor(input:RSIInput) {
+  constructor(input: RSIInput) {
     super(input);
 
-    var period = input.period;
-    var values = input.values;
+    let period1 = input.period;
+    let values = input.values;
 
-    var GainProvider = new AverageGain({ period: period, values: [] });
-    var LossProvider = new AverageLoss({ period: period, values: [] });
+    let GainProvider = new AverageGain({ period: period1, values: [] });
+    let LossProvider = new AverageLoss({ period: period1, values: [] });
     let count = 1;
-    this.generator = (function* (period){
-      var current = yield;
-      var lastAvgGain,lastAvgLoss, RS, currentRSI;
-      while(true){
+    this.generator = (function* (period) {
+      let current = yield;
+      let lastAvgGain, lastAvgLoss, RS, currentRSI;
+      while (true) {
         lastAvgGain = GainProvider.nextValue(current);
         lastAvgLoss = LossProvider.nextValue(current);
-        if((lastAvgGain!==undefined) && (lastAvgLoss!==undefined)){
-          if(lastAvgLoss === 0){
+        if ((lastAvgGain !== undefined) && (lastAvgLoss !== undefined)) {
+          if (lastAvgLoss === 0) {
             currentRSI = 100;
-          } else if(lastAvgGain === 0 ) { 
+          } else if (lastAvgGain === 0 ) { 
             currentRSI = 0;
           } else {
             RS = lastAvgGain / lastAvgLoss;
@@ -44,33 +42,35 @@ export class RSI extends Indicator {
         count++;
         current = yield currentRSI;
       }
-    })(period);
+    })(period1);
 
     this.generator.next();
 
     this.result = [];
 
     values.forEach((tick) => {
-      var result = this.generator.next(tick);
-      if(result.value !== undefined){
+      let result = this.generator.next(tick);
+      if (result.value !== undefined) {
         this.result.push(result.value);
       }
     });
-  };
+  }
+
 
   static calculate = rsi;
 
-    nextValue(price:number):number | undefined {
-        return this.generator.next(price).value;
-    };
-}
+  generator: IterableIterator<number | undefined>;
 
-export function rsi(input:RSIInput):number[] {
+    nextValue(price: number): number | undefined {
+        return this.generator.next(price).value;
+    }}
+
+export function rsi(input: RSIInput): number[] {
        Indicator.reverseInputs(input);
-        var result = new RSI(input).result;
-        if(input.reversedInput) {
+        let result = new RSI(input).result;
+        if (input.reversedInput) {
             result.reverse();
         }
         Indicator.reverseInputs(input);
         return result;
-    };
+    }

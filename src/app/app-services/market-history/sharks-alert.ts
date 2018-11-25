@@ -1,13 +1,13 @@
-import {Subject} from 'rxjs/Subject';
+
 import {VOOrderExt, VOOrder} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 export enum BuySellType {
   NONE = 'NONE',
   SELL_WEAK = 'SELL_WEAK',
-  SELL_OK='SELL_OK',
+  SELL_OK= 'SELL_OK',
   BUY_WEAK = 'BUY_WEAK',
   BUY_OK = 'BUY_OK',
   SELL_STRONG = 'SELL_STRONG',
@@ -15,8 +15,8 @@ export enum BuySellType {
 }
 
 export interface SignalBuySell {
-  rate: number,
-  type: BuySellType
+  rate: number;
+  type: BuySellType;
 }
 
 export class SharksAlert {
@@ -41,7 +41,7 @@ export class SharksAlert {
       const id = item.action + item.amountCoin;
       const exists = indexed[id];
       if (!exists) {
-        indexed[id] = Object.assign({overlap: overlap, orders: 1}, item)
+        indexed[id] = Object.assign({overlap: overlap, orders: 1}, item);
       } else {
         exists.orders++;
       }
@@ -62,8 +62,8 @@ export class SharksAlert {
       return Object.assign({overlap: overlap}, item)
     })*/
 
-    //let history = this.historySub.getValue() || [];
-    //if (resExt.length) {
+    // let history = this.historySub.getValue() || [];
+    // if (resExt.length) {
     /// history = _.uniqBy(history.concat(resExt), 'uuid');
     // if (history.length > this.length) history = history.slice(history.length - this.length);
     // this.storage.upsert(this.strorageIndex, history);
@@ -89,7 +89,7 @@ export class SharksAlert {
       return o.action === 'BUY';
     });
     let sell = orders.filter(function (o) {
-      return o.action === 'SELL'
+      return o.action === 'SELL';
     });
     const diff = buy.length - sell.length;
 
@@ -126,6 +126,6 @@ export class SharksAlert {
 
   alerts$(value: number) {
     this.value = value;
-    return this.alertSub.asObservable()
+    return this.alertSub.asObservable();
   }
 }

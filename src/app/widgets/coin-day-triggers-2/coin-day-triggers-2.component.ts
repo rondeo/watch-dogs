@@ -17,6 +17,13 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 })
 export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
+  constructor(
+    private apiMarketCap: ApiMarketCapService,
+    private cryptoCompare: ApiCryptoCompareService,
+    private apiPublic: ApisPublicService
+  ) {
+  }
+
   @Output() coindatas: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   @Input() coin: string;
@@ -28,25 +35,26 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
 
   myGraps: VOGraphs;
 
-  isExchanges:boolean;
+  isExchanges: boolean;
 
   rankFirst: number;
   rankLast: number;
 
   skip: number;
 
-  from: string = '';
-  to: string = '';
+  from = '';
+  to = '';
 
   momentTo: Moment;
   exchange: string;
-  market:string;
+  market: string;
 
-  constructor(
-    private apiMarketCap: ApiMarketCapService,
-    private cryptoCompare: ApiCryptoCompareService,
-    private apiPublic: ApisPublicService
-  ) { }
+  /* async getCoinHistory(): Promise<any[]> {
+     if (this.fullHistory) return Promise.resolve(this.fullHistory);
+     else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
+   }*/
+
+  fullHistory: any[];
 
   ngOnChanges(data: { [val: string]: SimpleChange }) {
     if (data.coin) {
@@ -60,11 +68,10 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
   }
 
 
-
   async filterDay() {
     if (!this.coin) return;
     // console.warn(this.coin);
-    //this.fullHistory  = await this.getCoinHistory();
+    // this.fullHistory  = await this.getCoinHistory();
     const to = this.momentTo.valueOf();
     const from = moment(to).subtract(1, 'd').valueOf();
 
@@ -75,13 +82,6 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.drawData(history);
 
   }
-
- /* async getCoinHistory(): Promise<any[]> {
-    if (this.fullHistory) return Promise.resolve(this.fullHistory);
-    else return this.apiMarketCap.getCoinWeek(this.coin).toPromise();
-  }*/
-
-  fullHistory: any[];
 
   drawData(history: any[]) {
 
@@ -101,7 +101,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.from = moment(first.timestamp).format('M/D, h:mm a');
     this.to = moment(last.timestamp).format('M/D, h:mm a');
 
-    this.rankFirst = first.rank
+    this.rankFirst = first.rank;
     this.rankLast = last.rank;
     const labels = [];
 
@@ -121,13 +121,13 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
         total_supply.push(item.total_supply);
         ranks.push(item.rank);
       }
-    })
+    });
 
     console.log(history);
 
     const mas = MovingAverage.movingAverageGraphFromCoinWeek(history);
 
-    const min = _.min( pricebtcs)
+    const min = _.min(pricebtcs);
     const max = _.max(pricebtcs);
     const ma_3hs = [];
     const ma_2hs = [];
@@ -143,27 +143,27 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     let lastValue_03h;
 
     mas.forEach(function (item: VOMovingAvg) {
-      if(item.price3h) {
+      if (item.price3h) {
         lastValue_3h = item.price3h;
       }
       ma_3hs.push(lastValue_3h);
 
-      if(item.price2h) {
+      if (item.price2h) {
         lastValue_2h = item.price2h;
       }
       ma_2hs.push(lastValue_2h);
 
-      if(item.price1h) {
+      if (item.price1h) {
         lastValue_1h = item.price1h;
       }
       ma_1hs.push(lastValue_1h);
 
-      if(item.price05h) {
+      if (item.price05h) {
         lastValue_05h = item.price05h;
       }
       ma_05hs.push(lastValue_05h);
 
-      if(item.price03h) {
+      if (item.price03h) {
         lastValue_03h = item.price03h;
       }
       ma_03hs.push(lastValue_03h);
@@ -218,23 +218,23 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
         color: '#9a1b99',
         label: '2H'
       }
-    ]
+    ];
 
     this.myGraps = {
       labelsX: labels,
       graphs: graphs
-    }
+    };
 
 
-    let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
+    let triggers: { timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
 
     //  while(triggers.length < length) triggers.unshift(1);
     // console.log(triggers);
     const values = _.map(triggers, 'trigger');
     this.triggers = [{
-      ys:values,
-      color:'#4c9561',
-      label:null
+      ys: values,
+      color: '#4c9561',
+      label: null
     }];
 
     this.coindatas.emit(history);
@@ -251,7 +251,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.momentTo.subtract(12, 'hours');
     this.filterDay();
 
-    //this.getCoinHistory(to);
+    // this.getCoinHistory(to);
   }
 
   onPlus12h() {
@@ -264,7 +264,7 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     this.momentTo.subtract(1, 'd');
     this.filterDay();
 
-    //this.getCoinHistory(to);
+    // this.getCoinHistory(to);
   }
 
   onPlus1D() {
@@ -288,15 +288,15 @@ export class CoinDayTriggers2Component implements OnInit, OnChanges {
     console.log(moment(_.first(mas).timestamp).format('M/DD HH:mm'));
     console.log(moment(_.last(mas).timestamp).format('M/DD HH:mm'));
 
-    let triggers:{ timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
+    let triggers: { timestamp: number, trigger: number }[] = MovingAverage.triggerMovingAvarages(mas);
 
     //  while(triggers.length < length) triggers.unshift(1);
     // console.log(triggers);
     const values = _.map(triggers, 'trigger');
     this.triggers = [{
-      ys:values,
-      color:'#4c9561',
-      label:null
+      ys: values,
+      color: '#4c9561',
+      label: null
     }];
   }
 }

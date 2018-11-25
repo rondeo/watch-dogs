@@ -1,17 +1,21 @@
 
-import {SocketBase} from "./soket-base";
+import {SocketBase} from './soket-base';
 
 
 export class BitfinexTradesSocket extends SocketBase {
+
+  constructor() {
+    super();
+  }
 
   socketUrl = 'wss://api.bitfinex.com/ws/2';
   private version = 2;
   exchange = 'bitfinex';
   HB = '.';
 
-  constructor() {
-    super();
-  }
+  private channels: any = {};
+
+  private prev: any = {};
 
 
   async createChannelId(channel, market): Promise<string> {
@@ -19,12 +23,12 @@ export class BitfinexTradesSocket extends SocketBase {
 
     const id = Date.now();
     const ar = market.split('_');
-    const marketId = 't' + ar[1] + ar[0].replace('USDT', 'USD')
+    const marketId = 't' + ar[1] + ar[0].replace('USDT', 'USD');
     switch (channel) {
       case 'trades':
 
         let params = {
-          event: "subscribe",
+          event: 'subscribe',
           symbol: marketId,
           channel: channel
 
@@ -36,8 +40,6 @@ export class BitfinexTradesSocket extends SocketBase {
     return Promise.resolve(this.exchange + channel + marketId);
   }
 
-  private channels: any = {};
-
   onMessage(m) {
     let data = JSON.parse(m.data);
     //  console.log(data);
@@ -46,7 +48,7 @@ export class BitfinexTradesSocket extends SocketBase {
       case 'info':
         if (data.version !== this.version) {
 
-          console.warn(' wrong version ' + this.version, data)
+          console.warn(' wrong version ' + this.version, data);
         }
         break;
       case 'subscribed':
@@ -58,7 +60,7 @@ export class BitfinexTradesSocket extends SocketBase {
 
         break;
       case 'unsubscribed':
-        console.log(this.exchange + ' unsubscribed ', data)
+        console.log(this.exchange + ' unsubscribed ', data);
         // this.sub.next({evt: 2, message: 'unsubscribed'});
         break;
       default:
@@ -68,12 +70,10 @@ export class BitfinexTradesSocket extends SocketBase {
 
   }
 
-  private prev: any = {};
-
   onData(msg) {
     // console.log('msg ', msg);
     let load: number[];
-    let data: any
+    let data: any;
 
     let channel: string;
     const chanId = msg[0];
@@ -109,7 +109,7 @@ export class BitfinexTradesSocket extends SocketBase {
         break;
       case 'hb':
        this.hb = Date.now();
-        break
+        break;
       default:
 
         if (market && Array.isArray(msg[1])) {

@@ -5,23 +5,23 @@ import {VOMarketCap} from '../models/app-models';
 @Injectable()
 export class SendAlertService {
 
-  marketsHistory:{[s:string]:VOMarketCap}[];
+  marketsHistory: {[s: string]: VOMarketCap}[];
 
   tollerance = 5;
   change_1h = 10;
   chamge_24h = 10;
 
-  constructor(private http:Http) {
+  constructor(private http: Http) {
 
   }
 
 
-  comparePriceUsd(newVal:VOMarketCap, oldVal:VOMarketCap, tolerance:number):number{
+  comparePriceUsd(newVal: VOMarketCap, oldVal: VOMarketCap, tolerance: number): number {
 
     let newUsd = newVal.price_usd;
     let oldUsd = oldVal.price_usd;
 
-    return (Math.abs(newUsd - oldUsd) > oldUsd * tolerance) ? newUsd:0
+    return (Math.abs(newUsd - oldUsd) > oldUsd * tolerance) ? newUsd : 0;
 
   }
  /* comparePrice1h(newVal:VOExchangeData, oldVal:VOExchangeData, tolerance:number):number{
@@ -35,42 +35,42 @@ export class SendAlertService {
 
 
 
-  analiseData(newMarket:{[s:string]:VOMarketCap}){
+  analiseData(newMarket: {[s: string]: VOMarketCap}) {
 
-    if(!this.marketsHistory){
+    if (!this.marketsHistory) {
       this.marketsHistory = [newMarket];
       return;
     }
 
-    let alerts:any[] = [];
+    let alerts: any[] = [];
 
-    let lastMarket:{[s:string]:VOMarketCap} = this.marketsHistory[this.marketsHistory.length -1];
+    let lastMarket: {[s: string]: VOMarketCap} = this.marketsHistory[this.marketsHistory.length - 1];
 
-    let tollerance = 100/this.tollerance;
+    let tollerance = 100 / this.tollerance;
 
 
 
-    for(let str in newMarket){
+    for (let str in newMarket) {
 
       let newM = newMarket[str];
 
       let newPrice = this.comparePriceUsd( newM, lastMarket[str], tollerance);
-      if(newPrice){
+      if (newPrice) {
         alerts.push({
-          symbol:str,
+          symbol: str,
           lastPrice: lastMarket[str].price_usd,
-          newPrice:newMarket[str].price_usd,
+          newPrice: newMarket[str].price_usd,
 
-        })
+        });
       }
 
-      if(Math.abs(newM.percent_change_1h)  > this.change_1h ){
+      if (Math.abs(newM.percent_change_1h)  > this.change_1h ) {
         alerts.push({
-          symbol:str,
+          symbol: str,
           lastchange_1h: lastMarket[str].percent_change_1h,
-          newchange_1h:newMarket[str].percent_change_1h,
+          newchange_1h: newMarket[str].percent_change_1h,
 
-        })
+        });
       }
 
 
@@ -129,9 +129,9 @@ export class SendAlertService {
 */
 
 
-    this.marketsHistory.push(newMarket)
+    this.marketsHistory.push(newMarket);
   }
-  sendMarketChange(data:any){
+  sendMarketChange(data: any) {
 
 
   }

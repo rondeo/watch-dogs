@@ -12,8 +12,8 @@ import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MATH} from '../../com/math';
 import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
-import {Subscription} from 'rxjs/Subscription';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-buy-sell-panel',
@@ -23,9 +23,23 @@ import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.c
 export class BuySellPanelComponent implements OnInit, OnDestroy {
 
 
+  constructor(
+    private apisPrivate: ApisPrivateService,
+    private apisPublic: ApisPublicService,
+    private marketCap: ApiMarketCapService,
+    private marketsHistory: MarketsHistoryService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.exchanges = this.apisPrivate.getAllAvailable();
+  }
+
+
   exchanges: string[];
   markets = ['USDT_BTC'];
-  //@Input();
+  // @Input();
   exchange: string;
   // @Input()
   market: string;
@@ -34,7 +48,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
   selectedExchange: string;
 
-  //balanceBase: VOBalance;
+  // balanceBase: VOBalance;
   // balanceCoin: VOBalance;
 
   coin: string;
@@ -52,7 +66,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   tradingBalanceBaseUS: number;
   tradingBalanceBasePendingUS: number;
 
-  pendingBaseUS: number = 0;
+  pendingBaseUS = 0;
 
   balanceCoinAvailable: number;
   balanceCoinAvailableUS: number;
@@ -63,19 +77,26 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
   volumes: number[];
 
+  private sub1: Subscription;
+  private sub2: Subscription;
+  private sub3: Subscription;
+  private sub4: Subscription;
 
-  constructor(
-    private apisPrivate: ApisPrivateService,
-    private apisPublic: ApisPublicService,
-    private marketCap: ApiMarketCapService,
-    private marketsHistory: MarketsHistoryService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.exchanges = this.apisPrivate.getAllAvailable();
-  }
+  focusBuy = 'first';
+  focusSell = 'first';
+
+  ordersHistoryAfter: number;
+  /*
+
+    onNewOrder(order: VOOrder) {
+
+      //this.downloadAllAndOpenOrders();
+      // this.newOrder.emit(order);
+    }
+  */
+
+
+  isAbsolute = true;
 
 
   onMarketChange(evt) {
@@ -119,7 +140,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
     const half = this.tradingAmountUS / 2;
-    return percent * half / priceCoin
+    return percent * half / priceCoin;
   }
 
   async onBuyClick(percent: number) {
@@ -156,7 +177,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
     const rate = this.rateBuy;
     if (isNaN(rate)) return;
-    //if(!openOrders.length) {
+    // if(!openOrders.length) {
     try {
       const MC = await this.marketCap.getTicker();
       const priceCoin = MC[this.coin].price_usd;
@@ -176,7 +197,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
     } catch (e) {
       console.warn(e);
-      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
+      this.snackBar.open('ERROR ' + e.message, 'x', {panelClass: 'error'});
     }
 
     // }
@@ -210,7 +231,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
         amountCoin = await this.getPercentOfCoin(percent / 100);
       } else {
         amountCoin = this.balanceCoin.available * percent / 100;*/
-    //}
+    // }
 
     this.sellCoin(amountCoin);
   }
@@ -232,7 +253,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     try {
       const order = await api.sellLimit2(this.market, amount, rateSell);
 
-      //this.newOrder.emit(order);
+      // this.newOrder.emit(order);
     } catch (e) {
       console.warn(e);
     }
@@ -254,24 +275,24 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     const MC = await this.marketCap.getTicker();
     const priceCoin = MC[ar[1]].price_usd;
 
-    const msg = 'Buy $' + Math.round(amount * priceCoin) + '\n' + amount + '\n' + rateBuy;
+    let msg = 'Buy $' + Math.round(amount * priceCoin) + '\n' + amount + '\n' + rateBuy;
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
     if (!await this.confirm(msg)) return;
     try {
 
-      const order = await api.buyLimit2(this.market, amount, rateBuy)
-      const msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
+      const order = await api.buyLimit2(this.market, amount, rateBuy);
+      msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
-      //this.onNewOrder(order);
+      // this.onNewOrder(order);
 
     } catch (e) {
-      this.snackBar.open('ERROR ' + e.message, 'x', {extraClasses: 'error'});
+      this.snackBar.open('ERROR ' + e.message, 'x', {panelClass: 'error'});
       console.warn(e);
     }
     this.focusBuy = 'first';
     this.focusSell = 'first';
-    //api.startRefreshBalances();
+    // api.startRefreshBalances();
   }
 
   async confirm(msg) {
@@ -280,13 +301,8 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
         if (confirm(msg)) resolve(true);
         else resolve(false);
       }, 100);
-    })
+    });
   }
-
-  private sub1: Subscription;
-  private sub2: Subscription;
-  private sub3: Subscription;
-  private sub4: Subscription;
 
   subscribe() {
     if (!this.exchange || !this.market) return;
@@ -332,13 +348,14 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
         });
         this.pendingBaseUS = Math.round(priceCoin * sum);
         this.calculateBase();
-      })
-    })
+      });
+    });
 
   }
 
   calculateBase() {
-    if (this.tradingAmountUS) this.tradingBalanceBaseUS = this.tradingAmountUS - (this.balanceCoinPendingUS + this.balanceCoinAvailableUS) - this.pendingBaseUS;
+   //  if (this.tradingAmountUS) this.tradingBalanceBaseUS = this.tradingAmountUS
+    // - (this.balanceCoinPendingUS + this.balanceCoinAvailableUS) - this.pendingBaseUS;
   }
 
   /* async getBalances(){
@@ -428,9 +445,6 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     else if (this.focusSell === 'b1000') this.rateSell = this.bookSell1000US;
   }
 
-  focusBuy = 'first';
-  focusSell = 'first';
-
   onFocusBuy(field: string) {
     // console.log(field);
     this.focusBuy = field;
@@ -456,19 +470,6 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
   onSignal(signal) {
     this.snackBar.open(moment().format('HH:mm') + ' ' + signal.type + ' ' + signal.rate);
   }
-
-  ordersHistoryAfter: number;
-  /*
-
-    onNewOrder(order: VOOrder) {
-
-      //this.downloadAllAndOpenOrders();
-      // this.newOrder.emit(order);
-    }
-  */
-
-
-  isAbsolute: boolean = true;
 
   onAbsoluteChaged(evt) {
     this.isAbsolute = evt.checked;

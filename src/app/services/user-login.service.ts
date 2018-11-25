@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {DatabaseService} from './database.service';
 import {StorageService} from './app-storage.service';
-import {Subject} from 'rxjs/Subject';
 import * as CryptoJS from 'crypto-js';
 import {MatDialog} from '@angular/material';
 import {LoginFormComponent} from '../material/login-form/login-form.component';
 
 import {LoginExchangeComponent} from '../material/login-exchange/login-exchange.component';
+import {Subject} from 'rxjs';
 
 export enum LoginStatus {
   APPLICATION_LOGIN_REQIRED,
@@ -25,14 +25,14 @@ export class VOLogin {
 export class UserLoginService {
 
   private simplePass = 'watch dogs password';
-  //promiseReject: Function;
+  // promiseReject: Function;
   // promiseResolve: Function;
   exchange: string;
   salt: string;
   private loginSub: Subject<VOLogin> = new Subject();
 
   login$() {
-    return this.loginSub.asObservable()
+    return this.loginSub.asObservable();
   }
 
 
@@ -52,7 +52,7 @@ export class UserLoginService {
   }
 
   async getSalt() {
-    if (this.salt) return Promise.resolve(this.salt)
+    if (this.salt) return Promise.resolve(this.salt);
     let ID = CryptoJS.HmacSHA1('salt', this.simplePass).toString();
     this.salt = localStorage.getItem(ID);
     if (this.salt) return Promise.resolve(this.salt);
@@ -65,7 +65,7 @@ export class UserLoginService {
     return CryptoJS.AES.decrypt(str, salt).toString(CryptoJS.enc.Utf8);
   }
 
-  encodeString(str: string, salt: string): string {
+  encodeString(str: string, salt: string) {
     return CryptoJS.AES.encrypt(str, salt).toString();
   }
 
@@ -79,7 +79,7 @@ export class UserLoginService {
       let ref = this.dialog.open(LoginFormComponent, {
         width: '300px',
         height: '300px'
-      })
+      });
 
       ref.afterClosed().subscribe(data => {
 
@@ -90,8 +90,8 @@ export class UserLoginService {
           resolve(salt);
         }
         reject('no password from user');
-      })
-    })
+      });
+    });
   }
 
   async geCredentialsFromUser(exchange) {
@@ -102,14 +102,14 @@ export class UserLoginService {
         data: {
           exchange: exchange
         }
-      })
+      });
       ref.afterClosed().subscribe(data => {
         if (data && data.apiKey && data.password) {
           resolve(JSON.stringify(data));
         }
         reject('no credentials from user');
-      })
-    })
+      });
+    });
   }
 
   async removeSalt() {
@@ -124,10 +124,11 @@ export class UserLoginService {
   }
 
   async setExchnageCredentials(exchange: string) {
-    const salt = await this.getSalt();
+    const salt: string = await this.getSalt();
     const ID = CryptoJS.HmacSHA1(exchange + '-cred', salt).toString();
-    let credentials = await this.geCredentialsFromUser(exchange);
-    credentials = this.encodeString(credentials, salt);
+    let credentials: string = await this.geCredentialsFromUser(exchange);
+
+    credentials = await this.encodeString(credentials, salt);
     localStorage.setItem(ID, credentials);
     return credentials;
   }

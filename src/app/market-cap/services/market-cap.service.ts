@@ -1,15 +1,12 @@
 import {Injectable} from '@angular/core';
-
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subject} from 'rxjs/Subject';
 import {Http} from '@angular/http';
 import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
-import {HttpClient} from "@angular/common/http";
-import {ApiMarketCapService} from "../../apis/api-market-cap.service";
+import {HttpClient} from '@angular/common/http';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {Parsers} from '../../apis/parsers';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 
 @Injectable()
@@ -26,7 +23,7 @@ export class MarketCapService {
 
   constructor(public http: HttpClient,
               private storage: StorageService,
-              private api:ApiMarketCapService
+              private api: ApiMarketCapService
               ) {
 
     this.timestamp = Date.now();

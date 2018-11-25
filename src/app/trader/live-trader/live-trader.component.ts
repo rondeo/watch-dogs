@@ -10,11 +10,12 @@ import {EnumOverlay} from '../../ui/candlesticks/candlesticks.component';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {MarketsHistoryService} from '../../app-services/market-history/markets-history.service';
-import {Subscription} from 'rxjs/Subscription';
+
 import {TradesHistoryService} from '../../app-services/tests/trades-history.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {StorageService} from '../../services/app-storage.service';
 import {CandlesService} from '../../app-services/candles/candles.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-live-trader',
@@ -23,25 +24,6 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 })
 
 export class LiveTraderComponent implements OnInit, OnDestroy {
-
-  exchange: string;
-  market: string;
-
-  closes: number[];
-  highs: number[];
-  lows: number[];
-  refreshSignal: number;
-  overlays: EnumOverlay[] = [];
-
-  candles: VOCandle[];
-
-  fishes:VOOrderExt[] =[];
-
-  volumes: number[];
-
-  triggers1: number[];
-
-  alerts:{exchange:string, market:string, name: string, value1:string, value2:string}[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -54,6 +36,32 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     private storage: StorageService
   ) {
   }
+
+  exchange: string;
+  market: string;
+
+  closes: number[];
+  highs: number[];
+  lows: number[];
+  refreshSignal: number;
+  overlays: EnumOverlay[] = [];
+
+  candles: VOCandle[];
+
+  fishes: VOOrderExt[] = [];
+
+  volumes: number[];
+
+  triggers1: number[];
+
+  alerts: {exchange: string, market: string, name: string, value1: string, value2: string}[] = [];
+
+  interval;
+  isRequesting = false;
+
+  sub1: Subscription;
+  sub2: Subscription;
+  sub3: Subscription;
 
   ngOnInit() {
 
@@ -70,13 +78,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe();
   }
-
-  interval
-  isRequesting = false;
-
-  sub1: Subscription;
-  sub2: Subscription;
-  sub3: Subscription;
 
   subscribe() {
     const ar = this.market.split('_');
@@ -100,36 +101,36 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
     this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
       // console.warn('diff  ', diff);
-      this.snackBar.open(' Volume '+ this.exchange +' ' + this.market + ' ' + diff + '%', 'x')
+      this.snackBar.open(' Volume ' + this.exchange + ' ' + this.market + ' ' + diff + '%', 'x');
     });
-    this.marketCap.getTicker().then(MC=>{
+    this.marketCap.getTicker().then(MC => {
       const coinPrice = MC[ar[1]].price_usd;
       const coinAmount = 20000 / coinPrice;
 
 
-       this.sub3 = ctr.sharksHistory$(200).subscribe(res=>{
-         if(!res) return;
+       this.sub3 = ctr.sharksHistory$(200).subscribe(res => {
+         if (!res) return;
         // console.log(' sharksHistory$ ',res);
          this.fishes = _.clone(res).reverse();
          this.drawSignals();
 
        });
 
-      this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders=>{
+      this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders => {
         console.log('new fishes ', orders);
         //  this.drawSignals();
        // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
         // this.storage.upsert('fishes', this.fishes);
 
-      })
-    })
+      });
+    });
   }
 
-  async drawSignals(){
+  async drawSignals() {
     const candles = this.candles;
     let fishes: VOOrderExt[] = _.clone(this.fishes).reverse();
 
-    if(!fishes.length || ! candles.length) return;
+    if (!fishes.length || ! candles.length) return;
     const startTime = candles[0].to;
     const length = candles.length;
     let endTime =  _.last(candles).to;
@@ -139,21 +140,21 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
     const lastFishTime = _.last(fishes).timestamp;
 
-    if(lastFishTime > endTime) endTime = lastFishTime;
+    if (lastFishTime > endTime) endTime = lastFishTime;
 
-    const step = (endTime - startTime)/length;
-    endTime+=step;
+    const step = (endTime - startTime) / length;
+    endTime += step;
     const ordersAr = [];
-    for(let i = startTime; i< endTime; i+=step){
+    for (let i = startTime; i < endTime; i += step) {
       const fAr = [];
-      while(fishes.length && fishes[0].timestamp < i)fAr.push(fishes.shift());
+      while (fishes.length && fishes[0].timestamp < i)fAr.push(fishes.shift());
       ordersAr.push(fAr);
     }
     const signals = ordersAr.map(function (far) {
       let val = 0;
-      if(!far.length) return 0;
+      if (!far.length) return 0;
       far.forEach(function (item) {
-        if (item.action === 'BUY') val+=item.amountUS;
+        if (item.action === 'BUY') val += item.amountUS;
         else val -= item.amountUS;
       });
       return val;
@@ -198,7 +199,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
     }, err => {
       this.isRequesting = false;
-      this.snackBar.open('Error communication', 'x', {extraClasses: 'error'})
+      this.snackBar.open('Error communication', 'x', {panelClass: 'error'})
     });
 
     /!* api.downloadMarketHistory(ar[0], ar[1]).subscribe(res =>{
@@ -211,10 +212,10 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const ind = ar.indexOf(EnumOverlay.SUPPORT_RESISTANCE);
     if (evt.checked && ind === -1) {
 
-      ar.push(EnumOverlay.SUPPORT_RESISTANCE)
+      ar.push(EnumOverlay.SUPPORT_RESISTANCE);
       this.overlays = ar;
     } else {
-      if (ind !== -1) ar.splice(ind, 1)
+      if (ind !== -1) ar.splice(ind, 1);
     }
     this.overlays = ar;
   }

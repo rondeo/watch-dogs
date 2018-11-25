@@ -23,21 +23,6 @@ import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 })
 export class GainersLosersComponent implements OnInit {
 
-  pageId = 'marketcap-ganers-losers'
-  asc_desc = 'desc';
-  top: string = 'top300';
-  exchange: string;
-  MC: VOMCObj;
-  coinsAvailable:VOMarketCap[];
-  sortBy: string = 'percent_change_24h';
-
-  isToBTC: boolean;
-
-
-  exchangeCoins: string[] = [];
-  exchgangeCoinsTop350: string[] = [];
-  exchanges: string[];
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -52,16 +37,18 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
+  pageId = 'marketcap-ganers-losers';
+  asc_desc: 'asc' | 'desc' = 'asc';
+  top = 'top300';
+  exchange: string;
+  MC: VOMCObj;
+  coinsAvailable: VOMarketCap[];
+  sortBy = 'percent_change_24h';
+  isToBTC: boolean;
 
-
-  onMarketInput(evt) {
-    if (evt.code === 'Enter') this.showCandles();
-    //  console.log(evt, this.userMarket);
-  }
-
-  onCandlesIntrvalChange() {
-    this.showCandles();
-  }
+  exchangeCoins: string[] = [];
+  exchgangeCoinsTop350: string[] = [];
+  exchanges: string[];
 
 
 
@@ -73,25 +60,45 @@ export class GainersLosersComponent implements OnInit {
   market: string;
 
   candles: VOCandle[];
-  volumes:number[];
-  onItemClick(evt){
+  volumes: number[];
+
+  private missingImages: string[] = [];
+  private misingImagesTimeout;
+
+  allMarkets;
+
+  tooltipMessage = 'exchanges list';
+
+  selectedExchanges: string[] = [];
+
+
+
+  onMarketInput(evt) {
+    if (evt.code === 'Enter') this.showCandles();
+    //  console.log(evt, this.userMarket);
+  }
+
+  onCandlesIntrvalChange() {
+    this.showCandles();
+  }
+  onItemClick(evt) {
    //  console.log(evt);
     this.coin = evt.symbol;
-    this.market = this.base+ '_'+ this.coin;
+    this.market = this.base + '_' + this.coin;
     this.showCandles();
     if (this.inBrowser) this.openMarket();
   }
 
 
   openMarket() {
-    if(!this.market) return;
+    if (!this.market) return;
     const api = this.apisPublic.getExchangeApi('binance');
-    const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');//   api.getMarketUrl(ar[0], ar[1]);
+    const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_'); //   api.getMarketUrl(ar[0], ar[1]);
     window.open(url, 'binance');
   }
 
   async showCandles() {
-    if(!this.market) return;
+    if (!this.market) return;
     let candles = await this.cryptoCompare.downloadCandles(this.market, this.candlesInterval, 200);
     if (!candles) {
       this.candles = null;
@@ -110,9 +117,6 @@ export class GainersLosersComponent implements OnInit {
     this.router.navigateByUrl('/market-cap/coin-exchanges/' + mc.id);
   }
 
-  private missingImages: string[] = [];
-  private misingImagesTimeout;
-
 /*
   private setOut(ar: VOMCDisplay[]) {
     this.sortedAndFiltered = _.take(ar, 50);
@@ -124,7 +128,7 @@ export class GainersLosersComponent implements OnInit {
       asc_desc: this.asc_desc,
       exchange: this.exchange,
       top: this.top
-    }
+    };
     localStorage.setItem(this.pageId, JSON.stringify(state));
   }
 
@@ -153,7 +157,7 @@ export class GainersLosersComponent implements OnInit {
         localStorage.setItem('GainersLosersComponent-exchange', this.exchange);
         this.loadExchange();
       }
-      //}
+      // }
 
 
     });
@@ -163,17 +167,13 @@ export class GainersLosersComponent implements OnInit {
   //  this.ctrDownlaodCoinsDay();
   }
 
-  allMarkets;
-
-  tooltipMessage: string = 'exchanges list';
-
   async onMouseOver(item) {
     const symbol = item.symbol;
     if (!this.allMarkets) this.allMarkets = await this.apiPublic.getAllMarkets();
     const result = this.allMarkets.filter(function (item) {
       return !!item['BTC_' + symbol];
-    }).map(function (item) {
-      return item['BTC_' + symbol].exchange;
+    }).map(function (item1) {
+      return item1['BTC_' + symbol].exchange;
     });
     this.tooltipMessage = result.toString();
   }
@@ -197,7 +197,7 @@ export class GainersLosersComponent implements OnInit {
     if (!api) {
       this.exchangeCoins = [];
       this.sortData();
-      return
+      return;
     }
 
     this.exchangeCoins = await api.getAllCoins();
@@ -211,11 +211,11 @@ export class GainersLosersComponent implements OnInit {
     this.saveState();
   }
 
-  subscribe(){
-    this.apiMarketCap.ticker$().subscribe(MC=>{
+  subscribe() {
+    this.apiMarketCap.ticker$().subscribe(MC => {
       this.MC = MC;
       this.sortData();
-    })
+    });
   }
 
 
@@ -232,7 +232,7 @@ export class GainersLosersComponent implements OnInit {
     if (!this.MC) return;
     // console.log('sort');
 
-    var allCoins = Object.values(this.MC);
+    let allCoins = Object.values(this.MC);
 
     switch (this.top) {
       case 'top100':
@@ -263,7 +263,8 @@ export class GainersLosersComponent implements OnInit {
      });*/
 
     // console.log(allCoins);
-    // let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;}, {limit:this.capLimit, rank:this.rank});
+    // let cap = this.data.filter(function (item) { return item.volume_usd_24h > this.limit && item.rank < this.rank;},
+    // {limit:this.capLimit, rank:this.rank});
     let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
 
     // console.log(sorted);
@@ -288,13 +289,11 @@ export class GainersLosersComponent implements OnInit {
     const exchangeCoins = this.exchangeCoins || [];
     if (exchangeCoins.length) {
       return allCoins.filter(function (item) {
-        return exchangeCoins.indexOf(item.symbol) !== -1
+        return exchangeCoins.indexOf(item.symbol) !== -1;
       });
     }
     return allCoins;
   }
-
-  selectedExchanges: string[] = [];
 
   onExchangesChange(evt: MatCheckboxChange, exchange: string) {
     if (evt.checked) {
@@ -313,7 +312,7 @@ export class GainersLosersComponent implements OnInit {
     const apisPublic: ApiPublicAbstract[] = this.selectedExchanges.map((exchange) => {
       return this.apiPublic.getExchangeApi(exchange);
     });
-    let sorted = [];//this.sorted;
+    let sorted = []; // this.sorted;
     //   console.log(sorted);
     Promise.all(apisPublic.map((api: ApiPublicAbstract) => {
       return api.getAllCoins();
@@ -322,10 +321,10 @@ export class GainersLosersComponent implements OnInit {
         const coins = _.intersection(...coinsAll);
         sorted = sorted.filter(function (item) {
           return coins.indexOf(item.symbol) !== -1;
-        })
+        });
       }
      // this.setOut(sorted);
-    })
+    });
   }
 
 
@@ -348,11 +347,11 @@ export class GainersLosersComponent implements OnInit {
 
   }
 
-  openBTCMarketClick(coin:VOMarketCap){
-    if(this.exchange && this.exchange !== 'all'){
+  openBTCMarketClick(coin: VOMarketCap) {
+    if (this.exchange && this.exchange !== 'all') {
       const api = this.apiPublic.getExchangeApi(this.exchange);
-      if(api){
-        const url = api.getMarketURL('BTC_'+coin.symbol);
+      if (api) {
+        const url = api.getMarketURL('BTC_' + coin.symbol);
         window.open(url, this.exchange);
       }
     }

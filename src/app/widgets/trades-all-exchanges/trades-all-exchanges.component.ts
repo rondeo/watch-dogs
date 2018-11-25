@@ -10,17 +10,19 @@ import {VOMarket} from '../../models/app-models';
 })
 export class TradesAllExchangesComponent implements OnInit {
   @Input() market: string;
-  showMarkets: {exchange:string, market: string}[]
+  showMarkets: { exchange: string, market: string }[];
+
   constructor(
     private apisPublic: ApisPublicService,
     private marketCap: ApiMarketCapService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     const ar = this.market.split('_');
-    if(ar.length !== 2) {
+    if (ar.length !== 2) {
       console.error(this.market);
-      return
+      return;
     }
     this.initAsync();
   }
@@ -32,8 +34,8 @@ export class TradesAllExchangesComponent implements OnInit {
       return {
         exchange: item.exchange,
         market: item.base + '_' + item.coin
-      }
-    })
+      };
+    });
   }
 
 }

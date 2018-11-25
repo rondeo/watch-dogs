@@ -10,26 +10,29 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./order-reports.component.css']
 })
 export class OrderReportsComponent implements OnInit {
-
-  ordersRecords:any[];
-  ordersData: any[];
-  selectedKey: string;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private storage:StorageService,
+    private storage: StorageService,
     private followOrder: FollowOrdersService
   ) { }
 
+  ordersRecords: any[];
+  ordersData: any[];
+  selectedKey: string;
+
+  market: string;
+  dataName = '-logs';
+
   ngOnInit() {
-    this.route.params.subscribe(params=>{
+    this.route.params.subscribe(params => {
       this.market = params.market;
       this.showBotHistory();
 
     });
     this.initAsync();
   }
-  async initAsync(){
+  async initAsync() {
 
     setTimeout(() => this.populateBots(), 5000);
    /*
@@ -49,7 +52,7 @@ export class OrderReportsComponent implements OnInit {
   }
 
 
- //////////////////////////////////////BOTS
+ ////////////////////////////////////// BOTS
 
 
   /*onBotsChange(evt) {
@@ -58,15 +61,15 @@ export class OrderReportsComponent implements OnInit {
   }
 */
   populateBots() {
-    this.followOrder.getBots().then(res=>{
-      if(!res) return;
+    this.followOrder.getBots().then(res => {
+      if (!res) return;
       this.ordersRecords = res.map(function (item) {
         return{
           market: item.market,
-          x:'X'
-        }
-      })
-    })
+          x: 'X'
+        };
+      });
+    });
 
   }
 
@@ -79,40 +82,37 @@ export class OrderReportsComponent implements OnInit {
       case 'x':
         if (confirm(' DELETE ' + market)) {
           this.followOrder.deleteBot(market)
-            .then(this.populateBots.bind(this))
+            .then(this.populateBots.bind(this));
         }
         return;
 
     }
   }
-
-  market: string;
-  dataName = '-logs';
-  async showBotHistory(){
-    if(!this.market){
+  async showBotHistory() {
+    if (!this.market) {
       this.ordersData = null;
       return;
     }
 
-    const id = 'bot-'+this.market +this.dataName;
-    console.log(id)
+    const id = 'bot-' + this.market + this.dataName;
+    console.log(id);
     switch (this.dataName) {
       case '-logs':
         this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
           return {
-            record:item
-          }
+            record: item
+          };
         });
         break;
       default:
 
-        this.ordersData = ((await this.storage.select(id)) || [])
-        break
+        this.ordersData = ((await this.storage.select(id)) || []);
+        break;
     }
 
   }
 
-  onDataChange(evt){
+  onDataChange(evt) {
     this.dataName = evt.value;
     this.showBotHistory();
 
@@ -121,15 +121,15 @@ export class OrderReportsComponent implements OnInit {
 
 
   ///////////////////////////////////////////////////
-  onDeleteRecordsClick(){
-    if(confirm('Delete  history ' + this.market + '?')) {
-      this.storage.remove('bot-'+this.market).then(()=>{
+  onDeleteRecordsClick() {
+    if (confirm('Delete  history ' + this.market + '?')) {
+      this.storage.remove('bot-' + this.market).then(() => {
 
-      })
+      });
     }
   }
 
-  onOrdersDataClick(evt){
+  onOrdersDataClick(evt) {
     console.log(evt);
   }
 

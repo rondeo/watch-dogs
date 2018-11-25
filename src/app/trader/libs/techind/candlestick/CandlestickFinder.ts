@@ -1,27 +1,27 @@
 import StockData from '../StockData';
 export default class CandlestickFinder {
-    requiredCount:number
-    name:string
+    requiredCount: number;
+    name: string;
     constructor() {
         // if (new.target === Abstract) {
         //     throw new TypeError("Abstract class");
         // }
     }
-    approximateEqual(a:number, b:number):boolean {
+    approximateEqual(a: number, b: number): boolean {
         let left = parseFloat(Math.abs(a - b).toPrecision(4)) * 1;
         let right = parseFloat((a * 0.001).toPrecision(4)) * 1; 
-        return  left <= right 
+        return  left <= right; 
     }
     
-    logic(data:StockData):boolean {
-        throw "this has to be implemented";        
+    logic(data: StockData): boolean {
+        throw new Error('this has to be implemented');        
     }
-    getAllPatternIndex (data:StockData) {
-        if(data.close.length < this.requiredCount) {
+    getAllPatternIndex (data: StockData) {
+        if (data.close.length < this.requiredCount) {
             console.warn('Data count less than data required for the strategy ', this.name);
             return [];
         }
-        if(data.reversedInput) {
+        if (data.reversedInput) {
             data.open.reverse();
             data.high.reverse();
             data.low.reverse();
@@ -36,12 +36,12 @@ export default class CandlestickFinder {
                         });
     }
 
-    hasPattern (data:StockData) {
-        if(data.close.length < this.requiredCount) {
+    hasPattern (data: StockData) {
+        if (data.close.length < this.requiredCount) {
             console.warn('Data count less than data required for the strategy ', this.name);
             return false;
         }
-        if(data.reversedInput) {
+        if (data.reversedInput) {
             data.open.reverse();
             data.high.reverse();
             data.low.reverse();
@@ -51,7 +51,7 @@ export default class CandlestickFinder {
         return strategyFn.call(this, this._getLastDataForCandleStick(data));
     }
 
-    protected _getLastDataForCandleStick(data:StockData) {
+    protected _getLastDataForCandleStick(data: StockData) {
         let requiredCount = this.requiredCount;
         if (data.close.length === requiredCount) {
             return data;
@@ -75,7 +75,7 @@ export default class CandlestickFinder {
         }
     }
 
-    protected _generateDataForCandleStick(data:StockData) {
+    protected _generateDataForCandleStick(data: StockData) {
             let requiredCount = this.requiredCount;
             let generatedData = data.close.map(function(currentData, index) {
                 let i = 0;
@@ -85,7 +85,7 @@ export default class CandlestickFinder {
                     low  : [],
                     close: []
                 } as StockData;
-                while(i < requiredCount) {
+                while (i < requiredCount) {
                     returnVal.open.push(data.open[index + i]);
                     returnVal.high.push(data.high[index + i]);
                     returnVal.low.push(data.low[index + i]);
@@ -93,7 +93,7 @@ export default class CandlestickFinder {
                     i++;
                 }
                 return returnVal;
-            }).filter((val, index) => { return (index <= (data.close.length - requiredCount))  });
+            }).filter((val, index) => (index <= (data.close.length - requiredCount)));
             return generatedData;
     }
 }

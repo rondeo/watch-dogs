@@ -1,21 +1,62 @@
-import {VOBooks, VOMarket, VOOrder, VOTrade} from "../../models/app-models";
-import {SOMarketCryptopia} from "../../models/sos";
-import {ApiCryptopia} from "../../../../archive/services/apis/api-cryptopia";
+import {VOBooks, VOMarket, VOOrder, VOTrade} from '../../models/app-models';
 
-import {HttpClient} from "@angular/common/http";
-import {ApiPublicAbstract} from "./api-public-abstract";
-import {StorageService} from "../../services/app-storage.service";
+import {HttpClient} from '@angular/common/http';
+import {ApiPublicAbstract} from './api-public-abstract';
+import {StorageService} from '../../services/app-storage.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 
 export class ApiPublicCryptopia extends ApiPublicAbstract {
-  exchange = 'cryptopia';
 
-  constructor(http: HttpClient, storage:StorageService) {
+  constructor(http: HttpClient, storage: StorageService) {
     super(http, storage);
   }
+  exchange = 'cryptopia';
 
-  getMarketUrl(base:string, coin: string): string{
+  static mapMarkets(
+    result: any,
+    marketsAr: VOMarket[],
+    indexed: { [pair: string]: VOMarket },
+    bases: string[],
+    selected: string[]
+  ): number {
+
+    let ar1: any = result;
+    // console.log(ar);
+    ar1.forEach(function (item: any) {
+      let ar: string[] = item.Label.split('/');
+
+      let market: VOMarket = new VOMarket();
+      market.base = ar[1];
+      if (bases.indexOf(market.base) === -1) bases.push(market.base);
+      market.coin = ar[0];
+
+      market.pair = ar[1] + '_' + ar[0];
+      market.selected = selected.indexOf(market.pair) !== -1;
+
+      market.id = item.Label;
+      market.exchange = 'cryptopia';
+
+      // market.Volume = +item.Volume;
+      market.Last = item.LastPrice;
+      market.high = item.High;
+      market.low = item.Low;
+      market.Ask = item.AskPrice;
+      market.Bid = item.BidPrice;
+      market.BaseVolume = item.BaseVolume;
+      market.PrevDay = 0;
+      market.OpenBuyOrders = item.BuyVolume;
+      market.OpenSellOrders = item.SellVolume;
+
+      indexed[market.pair] = market;
+      marketsAr.push(market);
+
+    });
+
+    return result.length;
+  }
+
+  getMarketUrl(base: string, coin: string): string {
     return 'https://www.cryptopia.co.nz/Exchange/?market={{coin}}_{{base}}'
       .replace('{{base}}', base).replace('{{coin}}', coin);
   }
@@ -32,14 +73,14 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
         return {
           amountCoin: +item.Total,
           rate: +item.Price
-        }
+        };
       });
 
       let sell: VOTrade[] = res.Sell.map(function (item) {
         return {
           amountCoin: +item.Total,
           rate: +item.Price
-        }
+        };
       });
 
       return {
@@ -47,7 +88,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
         exchange: this.exchange,
         buy: buy,
         sell: sell
-      }
+      };
 
     }));
   }
@@ -101,22 +142,22 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
     return this.http.get(url).pipe(map((res: any) => {
       let result = res.Data;
 
-      const allCoins = {}
+      const allCoins = {};
       let marketsAr: VOMarket[] = [];
 
       let baseCoins: string[] = [];
 
       // let selected: string[] = this.getMarketsSelected();
-      const ar: any[] = res.Data;
+      const ar1: any[] = res.Data;
 
-      let indexed: {} = {}
+      let indexed: {} = {};
       let bases: string[] = [];
-      if (!Array.isArray(ar)) {
+      if (!Array.isArray(ar1)) {
         console.warn(res);
         return [];
       }
 
-      ar.forEach(function (item: SOMarketCryptopia) {
+      ar1.forEach(function (item: any) {
         let ar: string[] = item.Label.split('/');
 
         let market: VOMarket = new VOMarket();
@@ -146,54 +187,11 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
         if (!allCoins[market.coin]) allCoins[market.coin] = {};
         allCoins[market.coin][market.base] = market.Last;
 
-      })
+      });
 
-      this.allCoins = allCoins
+      this.allCoins = allCoins;
       return indexed;
     }));
-  }
-
-  static mapMarkets(
-    result: any,
-    marketsAr: VOMarket[],
-    indexed: { [pair: string]: VOMarket },
-    bases: string[],
-    selected: string[]
-  ): number {
-
-    let ar: any = result;
-    //console.log(ar);
-    ar.forEach(function (item: SOMarketCryptopia) {
-      let ar: string[] = item.Label.split('/');
-
-      let market: VOMarket = new VOMarket();
-      market.base = ar[1];
-      if (bases.indexOf(market.base) === -1) bases.push(market.base);
-      market.coin = ar[0];
-
-      market.pair = ar[1] + '_' + ar[0];
-      market.selected = selected.indexOf(market.pair) !== -1;
-
-      market.id = item.Label;
-      market.exchange = 'cryptopia';
-
-      // market.Volume = +item.Volume;
-      market.Last = item.LastPrice;
-      market.high = item.High;
-      market.low = item.Low;
-      market.Ask = item.AskPrice;
-      market.Bid = item.BidPrice;
-      market.BaseVolume = item.BaseVolume;
-      market.PrevDay = 0;
-      market.OpenBuyOrders = item.BuyVolume;
-      market.OpenSellOrders = item.SellVolume;
-
-      indexed[market.pair] = market;
-      marketsAr.push(market);
-
-    })
-
-    return result.length;
   }
 
   mapCoinDay(res) {
@@ -245,6 +243,6 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
       percentChange,
       Volume,
       stamps
-    }
+    };
   }
 }

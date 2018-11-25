@@ -26,14 +26,6 @@ export interface VOMessage {
 
 @Injectable()
 export class ScanMarketsService {
-  // exchange = 'binance';
-  scanInterval;
-  progressSub: Subject<string> = new Subject<string>();
-  // favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
-  marketsTrendDown: BehaviorSubject<{ market: string, percent: number, x: string }[]>
-    = new BehaviorSubject<{ market: string, percent: number, x: string }[]>(null);
-
-  currentMarket: string;
 
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
@@ -51,16 +43,54 @@ export class ScanMarketsService {
       this.marketsTrendDown.next(data);
     })*/
   }
+  // exchange = 'binance';
+  scanInterval;
+  progressSub: Subject<string> = new Subject<string>();
+  // favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
+  marketsTrendDown: BehaviorSubject<{ market: string, percent: number, x: string }[]>
+    = new BehaviorSubject<{ market: string, percent: number, x: string }[]>(null);
+
+  currentMarket: string;
 
 
-  //////////////////////FAVORITES////////////////////////////////
+  ////////////////////// FAVORITES////////////////////////////////
 
   private favoriteSub$: BehaviorSubject<any[]>;
+
+  /* isFall(numbers: number[]): string {
+     numbers = _.takeRight(numbers, 4);
+     const speeds = MATH.speeds(numbers);
+     const isFall = MATH.isFall(speeds);
+     const per = MATH.percent(_.last(numbers), _.first(numbers));
+     return isFall ? 'FALL ' + per : null;
+   }
+ */
+///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
+
+
+  trendUPTimer;
+
+  subVol: Subject<any[]> = new Subject();
+  scanVolumeTimer;
+
+  isScanning = false;
+
+
+  volumeSub: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  first20coins = 'BTC,TUSD'; // 'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
+  deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  //////////////////////////// MFI start
+  scanMFITimer: any;
+  mfiSub: BehaviorSubject<any[]> = new BehaviorSubject(null);
 
   async favorites$() {
     if (this.favoriteSub$) return Promise.resolve(this.favoriteSub$);
     this.favoriteSub$ = new BehaviorSubject((await this.storage.select('favorite-markets')) || []);
-    return this.favoriteSub$
+    return this.favoriteSub$;
   }
 
 
@@ -75,8 +105,8 @@ export class ScanMarketsService {
         market,
         message
       });
-      this.saveFavorites(favour)
-    })
+      this.saveFavorites(favour);
+    });
 
 
   }
@@ -94,12 +124,12 @@ export class ScanMarketsService {
       let favour = sub.getValue();
       // @ts-ignore
       favour = _.reject(favour, {market: market});
-      this.saveFavorites(favour)
-    })
+      this.saveFavorites(favour);
+    });
   }
 
 
-  /////////////////////////selected ////////////////////////////////
+  ///////////////////////// selected ////////////////////////////////
 
   async addToSelected(ar: { market: string, message: string, time: string }[], creteria: string) {
     const selected: any[] = await this.getSelected();
@@ -113,9 +143,9 @@ export class ScanMarketsService {
         exist.history[creteria] = item.time + '  ' + item.message;
       } else {
         item.message = creteria + item.message;
-        selected.push(item)
+        selected.push(item);
       }
-    })
+    });
 
     return this.saveSelected(selected);
   }
@@ -134,19 +164,6 @@ export class ScanMarketsService {
   async getSelected() {
     return (await this.storage.select('selected-markets')) || [];
   }
-
-  /* isFall(numbers: number[]): string {
-     numbers = _.takeRight(numbers, 4);
-     const speeds = MATH.speeds(numbers);
-     const isFall = MATH.isFall(speeds);
-     const per = MATH.percent(_.last(numbers), _.first(numbers));
-     return isFall ? 'FALL ' + per : null;
-   }
- */
-///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
-
-
-  trendUPTimer;
 
   private async _scanGoingUP(
     markets: string[],
@@ -188,7 +205,7 @@ export class ScanMarketsService {
       });
     this.trendUPTimer = setTimeout(() => {
       this._scanGoingUP(markets, i, api, sub, candlesInterval);
-    }, 1000)
+    }, 1000);
 
   }
 
@@ -209,7 +226,7 @@ export class ScanMarketsService {
 
     this.trendUPTimer = setTimeout(() => {
       this._scanGoingUP(markets, -1, this.apiCryptoCompare, sub, candlesInterval);
-    }, 5000)
+    }, 5000);
 
     return sub;
   }
@@ -240,25 +257,17 @@ export class ScanMarketsService {
     let results: any[] = await this.getVolumes();
     // @ts-ignore
     results = _.reject(results, {market: market});
-    this.saveVolumes(results)
+    this.saveVolumes(results);
     return results;
   }
 
-  subVol: Subject<any[]> = new Subject();
-  scanVolumeTimer;
-
-  isScanning = false;
-
-
-  volumeSub: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
   volumeResults$() {
-    const results = this.volumeSub.getValue();
-    if (!results) {
+    const results1 = this.volumeSub.getValue();
+    if (!results1) {
       this.storage.select('scan-volumes').then(results => {
         this.volumeSub.next(results);
 
-      })
+      });
     }
     return this.volumeSub.asObservable();
   }
@@ -271,12 +280,12 @@ export class ScanMarketsService {
     }
 
     const market = markets[i];
-    let candles
+    let candles;
 
     try {
       candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '5m', 120);
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
     }
 
 
@@ -306,7 +315,7 @@ export class ScanMarketsService {
     const volumeCnahge = MATH.percent(avgAfter, avgBefore);
     const priceChange = MATH.percent(priceAfter, priceBefore);
 
-    const message = ' V: ' + volumeCnahge + ' P ' + priceChange
+    const message = ' V: ' + volumeCnahge + ' P ' + priceChange;
 
     this.currentMarket = market;
 
@@ -444,7 +453,7 @@ export class ScanMarketsService {
   stopVolumeScan() {
     clearTimeout(this.scanVolumeTimer);
     this.isScanning = false;
-    this.scanVolumeTimer = 0
+    this.scanVolumeTimer = 0;
   }
 
   /*async getValidMarkets(exchange: string) {
@@ -493,15 +502,6 @@ export class ScanMarketsService {
     return _.difference(markets, exclude);
   }
 
-  first20coins = 'BTC,TUSD';//'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
-  deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-  //////////////////////////// MFI start
-  scanMFITimer: any;
-  mfiSub: BehaviorSubject<any[]> = new BehaviorSubject(null);
-
   async getMFIs() {
     let results = this.mfiSub.getValue();
     if (Array.isArray(results)) return Promise.resolve(results);
@@ -509,7 +509,7 @@ export class ScanMarketsService {
       results = (await this.storage.select('mfi-results')) || [];
       this.mfiSub.next(results);
     }
-    return results
+    return results;
   }
 
   async saveMFIs(results: any[]) {
@@ -528,7 +528,7 @@ export class ScanMarketsService {
     i++;
     if (i >= markets.length) {
       this.stopMFIScan();
-      return
+      return;
     }
     this.isScanning = true;
     const market = markets[i];
@@ -559,19 +559,19 @@ export class ScanMarketsService {
         // @ts-ignore
         const excist = _.find(results, {market: market});
         if (excist) {
-          excist.intervals.push(candelsInterval)
+          excist.intervals.push(candelsInterval);
         } else {
-          const intervals = [candelsInterval]
-          results.push({time, market, message, intervals})
+          const intervals = [candelsInterval];
+          results.push({time, market, message, intervals});
         }
 
-        ;
+        
         this.saveMFIs(results);
       }
 
       this.scanMFITimer = setTimeout(() => this.nextMarketMFI(markets, i, candelsInterval), 2000);
 
-    })
+    });
   }
 
   scanForMFI(markets: string[], candelsInterval) {
