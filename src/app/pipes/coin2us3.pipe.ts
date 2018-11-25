@@ -6,7 +6,6 @@ import {VOMCObj} from '../models/api-models';
   name: 'coin2us3'
 })
 export class Coin2us3Pipe implements PipeTransform {
-  private MC: VOMCObj;
 
   constructor(
     private marketCap: ApiMarketCapService
@@ -15,10 +14,10 @@ export class Coin2us3Pipe implements PipeTransform {
 
   async transform(value: number, symbol: string): Promise<number> {
     if (!symbol) return;
-    if (this.MC) return Promise.resolve(Math.round(1000 * (this.MC[symbol].price_usd * value)) / 1000);
-    this.MC = await this.marketCap.getTicker();
-    const out = this.MC[symbol].price_usd * value;
-    return +out.toPrecision(3);
+    if (symbol === 'USDT' || symbol === 'USD') return Promise.resolve(+value.toFixed(2));
+    const MC = await this.marketCap.getTicker();
+    if(MC[symbol])  return +(MC[symbol].price_usd * value).toPrecision(3);
+    return 0;
   }
 
 }

@@ -1,14 +1,17 @@
 {
-  "name": "untitled",
-  "version": "0.0.0",
+  "name": "watchdogs",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload false",
-    "build": "ng build",
-    "test": "ng test",
+    "live-reload": "ng serve --port 4201 --proxy-config proxy.conf.json --live-reload true",
+    "verify": "ng eject --target=production",
+    "prod": "ng build --prod",
+    "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.1.0",
@@ -22,6 +25,10 @@
     "@angular/platform-browser": "~7.1.0",
     "@angular/platform-browser-dynamic": "~7.1.0",
     "@angular/router": "~7.1.0",
+    "@ngrx/effects": "^6.1.2",
+    "@ngrx/entity": "^6.1.2",
+    "@ngrx/schematics": "^6.1.2",
+    "@ngrx/store": "^6.1.2",
     "core-js": "^2.5.4",
     "crypto-js": "^3.1.9-1",
     "lodash": "^4.17.11",
@@ -31,6 +38,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
+    "@ngrx/store-devtools": "^6.1.2",
     "@angular-devkit/build-angular": "~0.10.0",
     "@angular/cli": "~7.0.6",
     "@angular/compiler-cli": "~7.1.0",

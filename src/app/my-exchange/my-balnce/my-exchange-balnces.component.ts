@@ -67,10 +67,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 */
   isShowAll: boolean;
-
-
   isBalancesLoading = false;
-
   sortBy: string;
   asc_desc: 'asc' | 'desc' = 'asc';
 
@@ -81,6 +78,8 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+
+    this.exchangesPrivate = this.apisPrivate.getAllAvailable();
     this.route.params.subscribe(params => {
       if (this.exchange !== params.exchange) {
         this.balancesAll = [];

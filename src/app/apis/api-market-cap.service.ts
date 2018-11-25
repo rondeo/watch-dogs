@@ -54,6 +54,14 @@ export class ApiMarketCapService {
     const btc7d = +BTC.percent_change_7d;
     BTC.price_usd = +BTC.price_usd;
     BTC.price_btc = +BTC.price_btc;
+
+
+
+    const USDT = data.find(function (item) {
+      return item.symbol === 'USDT';
+    })
+
+
     data.forEach(function (item) {
       if (item.symbol === 'ETHOS') item.symbol = 'BQX';
 
@@ -76,6 +84,10 @@ export class ApiMarketCapService {
         stamp: item.stamp
       };
     });
+
+    out['USDT'].percent_change_1h = +USDT.percent_change_1h;
+    out['USDT'].percent_change_24h = +USDT.percent_change_24h;
+    out['USDT'].percent_change_7d = +USDT.percent_change_7d;
     out['BTC'] = BTC;
     return out;
   }

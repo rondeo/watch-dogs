@@ -56,6 +56,12 @@ import {AppServicesModule} from './app-services/app-services.module';
 import {WidgetsModule} from './widgets/widgets.module';
 import { ValueColorDirective } from './directives/value-color.directive';
 import { TestComponent } from './test/test.component';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './app.effects';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 
 
@@ -84,7 +90,10 @@ declare const Buffer: any;
     AppServicesModule,
     WidgetsModule,
     // AuthModule,
-    RouterModule.forRoot(rootRouterConfig, {useHash: true})
+    RouterModule.forRoot(rootRouterConfig, {useHash: true}),
+    EffectsModule.forRoot([AppEffects]),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   declarations: [
     AppComponent,
