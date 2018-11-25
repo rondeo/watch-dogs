@@ -87,19 +87,36 @@ export class OrderReportsComponent implements OnInit {
   }
 
   market: string;
+  dataName = '-logs';
   async showBotHistory(){
     if(!this.market){
       this.ordersData = null;
       return;
     }
 
-    this.ordersData = ((await this.storage.select('bot-'+this.market)) || []).map(function (item) {
-      return {
-        record:item
-      }
-    });
+    const id = 'bot-'+this.market +this.dataName;
+    console.log(id)
+    switch (this.dataName) {
+      case '-logs':
+        this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
+          return {
+            record:item
+          }
+        });
+        break;
+      default:
+
+        this.ordersData = ((await this.storage.select(id)) || [])
+        break
+    }
+
   }
 
+  onDataChange(evt){
+    this.dataName = evt.value;
+    this.showBotHistory();
+
+  }
 
 
 

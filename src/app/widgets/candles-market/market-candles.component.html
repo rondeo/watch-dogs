@@ -1,6 +1,6 @@
 <div>
     <mat-checkbox [(ngModel)]="inBrowser">Browser</mat-checkbox>
-    <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">
+    <a class="btn" [routerLink]="['/my-exchange/buy-sell',{exchange:exchange, market:market}]">
         {{exchange}} &nbsp;&nbsp;
         {{market}}</a>
 

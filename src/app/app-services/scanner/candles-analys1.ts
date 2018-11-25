@@ -15,20 +15,20 @@ export class CandlesAnalys1 {
     const last = _.last(candles);
     const time = moment(last.to).format('HH:mm');
     const breakPoint = 25;
-   // const before = closes.slice(0, - breakPoint);
-   // const after = closes.slice(breakPoint);
+    // const before = closes.slice(0, - breakPoint);
+    // const after = closes.slice(breakPoint);
 
     const ma99 = _.mean(_.takeRight(closes, 99));
     const ma7 = _.mean(_.takeRight(closes, 7));
     const ma25 = _.mean(_.takeRight(closes, 25));
-   // const ma25_99 = MATH.percent(ma25, ma99);
-   // const ma7_25 = MATH.percent(ma7, ma25);
-      return {
-        time,
-        ma7,
-        ma25,
-        ma99
-      }
+    // const ma25_99 = MATH.percent(ma25, ma99);
+    // const ma7_25 = MATH.percent(ma7, ma25);
+    return {
+      time,
+      ma7,
+      ma25,
+      ma99
+    }
   }
 
   static vols(candles: VOCandle[]) {
@@ -54,12 +54,12 @@ export class CandlesAnalys1 {
     const ma3 = _.mean(_.takeRight(closes, 3));
     const ma25 = _.mean(_.takeRight(closes, 25));
 
-      return {
-        ma3,
-        ma7,
-        ma25,
-        ma99
-      }
+    return {
+      ma3,
+      ma7,
+      ma25,
+      ma99
+    }
   }
 
 
@@ -198,20 +198,134 @@ export class CandlesAnalys1 {
 
   }
 
-  static async analyze(candles: VOCandle[], storage:StorageService) {
-    const lastCandle = _.last(candles);
 
+  static getVolumePrice(patterns: any[]){
+    const largeVolume = patterns.find(function (item) {
+      return item.state.indexOf('LARGE-VOLUME') !== -1 || item.state.indexOf('HUGE-VOLUME') !==-1;
+    });
+
+    let price = 0;
+    if(largeVolume) price = largeVolume.P;
+    return price;
+  }
+
+  static createAction(patterns: {state:string, t:string, stamp: number}[], lastOrder: {stamp: number, action: string, price:number}) {
+    if (patterns.length < 3) return '';
+    const last = _.first(patterns);
+    console.log(last.t, last.state);
+    const prev = patterns[1];
+
+
+
+
+
+
+  /*  if(prev.state === 'WATCH-TO-BUY') {
+      if(last.state.indexOf('DOWN') !== -1){
+        last.state = 'WATCH-TO-BUY';
+        return 'WATCH-TO-BUY';
+      }
+    }*/
+
+    if (last.state === 'DROP_LARGE-VOLUME') return 'SELL';
+    if (last.state === 'DROP_WITH-VOLUME') return 'SELL';
+    if (last.state === 'DOWN_LARGE-VOLUME') return 'SELL';
+
+  const drop = _.find(patterns, function (item) {
+    return item.state.indexOf('DROP') !==-1;
+  });
+
+
+
+  if(drop){
+    const min = moment(last.stamp).diff(drop.stamp, 'minutes');
+    if(min < 30){
+      return 'WAIT-AFTER_DROP'
+     //  console.log(' WAS DROP ' + min + ' m ago');
+    }
+  }
+
+
+
+
+    if(last.state === 'UP_WITH-VOLUME') return 'BUY';
+
+
+
+
+   /* if (prev.state === 'DROP_LARGE-VOLUME' && last.state === 'STAY_LARGE-VOLUME') {
+      last.state = 'WATCH-TO-BUY';
+      return 'WATCH-TO-BUY'
+    }*/
+   /* if (last.state === 'UP_WITH-VOLUME') {
+
+
+      return '';
+    }*/
+
+
+    return null;
+  }
+
+  static createPattern(patterns: {state: string}[], lastResult: {state: string}) {
+    if (patterns.length < 2) {
+      patterns.unshift(lastResult);
+      return patterns;
+    }
+
+    const last = patterns[0];
+    const prelast = patterns[1];
+
+    if (patterns[0].state === patterns[1].state && patterns[0].state === lastResult.state) {
+      patterns.shift();
+    }
+    patterns.unshift(lastResult);
+
+    /* if(last.state === 'STAY_AVG-VOLUME' && lastResult.state ==='STAY_AVG-VOLUME') {
+      patterns.pop();
+     }
+
+     if(last.state === 'DOWN_WITH-VOLUME' && lastResult.state ==='DOWN_WITH-VOLUME') {
+       patterns.pop();
+     }
+
+
+
+     if(last.state === 'DROP_LARGE-VOLUME' && lastResult.state ==='DROP_LARGE-VOLUME') {
+       patterns.pop();
+     }*/
+
+
+    if (patterns.length > 600) patterns.pop();
+
+
+
+    const states = patterns.map(function (item) {
+      return item.state;
+    });
+
+    // console.log(states);
+    console.log(_.clone(patterns));
+    return patterns;
+  }
+
+
+  static async createState(candles: VOCandle[]) {
+    const lastCandle = _.last(candles);
+    const t = moment(lastCandle.to).format('HH:mm');
+    const stamp = lastCandle.to;
     const closes = CandlesAnalys1.closes(candles);
     const volumes = CandlesAnalys1.volumes(candles);
 
-    const lastPrice = _.mean(_.takeRight(closes, 3));
+    const P = +_.mean(_.takeRight(closes, 3)).toPrecision(3);
+
     const lastVolume = _.mean(_.takeRight(volumes, 3));
 
-    const preLastVolume = _.mean(_.take(_.takeRight(volumes, 6),3));
+    const preLastVolume = _.mean(_.take(_.takeRight(volumes, 6), 3));
 
-    const preLastPrice =  _.mean(_.take(_.takeRight(closes, 6),3));
+    const preLastPrice = closes[closes.length - 4];
 
-    const PD = MATH.percent(lastPrice, preLastPrice);
+    const PD = MATH.percent(P, preLastPrice);
 
     const VD = MATH.percent(lastVolume, preLastVolume);
 
@@ -221,19 +335,31 @@ export class CandlesAnalys1 {
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
-    const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(1);
-
-    const actionValues = await storage.select('action-values');
-    const currentValues = {PD, ma3_25, ma25_99, VD, v3_25, v3_med};
+    const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
 
 
+    //const actionValues = await storage.select('action-values');
+    const curr = {v3_med, PD, ma3_25, ma25_99, VD, v3_25, P, t, stamp, state: ''};
 
-   //  console.log(this.currentValues);
-    /*if(!actionValues) return;
-    const result = UTILS.find(this.currentValues, actionValues);
-    console.log(result);*/
+    let volume = 'AVG-VOLUME';
+    let price = 'STAY';
 
-    // return (data.PD > 0 && data.VD > 50 && data.VI < 10);
+    if (curr.v3_med < 20) volume = 'NO-VOLUME';
+    else if (curr.v3_med > 1000) volume = 'HUGE-VOLUME';
+    else if (curr.v3_med > 500) volume = 'LARGE-VOLUME';
+    else if (curr.v3_med > 100) volume = 'WITH-VOLUME';
+
+
+    if (curr.PD > 2) price = 'JUMP';
+    else if (curr.PD > 0.4) price = 'UP';
+    if (PD < -2) price = 'FAST-DROP';
+    else if (PD < -1) price = 'DROP';
+    // else if(ma3_25 < -2 && curr.PD < 0) price = 'DROP';
+    else if ((PD < -0.4) || (ma3_25 < -0.5)) price = 'DOWN';
+
+    curr.state = price + '_' + volume;
+   //  console.log(curr);
+    return curr;
   }
 
   static analyseVolume(candles: VOCandle[]) {

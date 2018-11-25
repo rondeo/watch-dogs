@@ -1,11 +1,22 @@
 <div>
+
+
 <div class="horizontal">
     <div class="scrollY300">
         <app-table-props [dataset]="ordersRecords" (selected)="onRecordsClick($event)"></app-table-props>
     </div>
-    <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
-    <div class="scrollY300">
-        <app-table-props [dataset]="ordersData" (selected)="onOrdersDataClick($event)"></app-table-props>
+
+    <div>
+        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
+        <mat-radio-group (change)="onDataChange($event)">
+            <mat-radio-button value="-logs" [checked]="true">Logs</mat-radio-button>
+            <mat-radio-button value="-patterns">Patterns</mat-radio-button>
+            <mat-radio-button value="-orders">Orders</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="scrollY300">
+            <app-table-props [dataset]="ordersData" (selected)="onOrdersDataClick($event)"></app-table-props>
+        </div>
     </div>
 
 </div>

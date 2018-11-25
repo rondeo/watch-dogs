@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BtcUsdtService} from '../app-services/alerts/btc-usdt.service';
 import {VOCandle} from '../models/api-models';
 import * as _ from 'lodash';
@@ -24,7 +24,7 @@ export class TestComponent implements OnInit {
 
   candles: VOCandle[];
 
-  orders: any[]
+  orders: any[] = [];
 
   constructor(
     private alerts: BtcUsdtService,
@@ -37,13 +37,14 @@ export class TestComponent implements OnInit {
 
   }
 
-  currentValues:any;
-  async saveCurrentAction(action: string){
+  currentValues: any;
+
+  async saveCurrentAction(action: string) {
 
     const actionValues = (await this.storage.select('action-values')) || [];
     const exists = UTILS.find(this.currentValues, actionValues);
 
-    if(exists) {
+    if (exists) {
       console.log(exists);
       return;
     }
@@ -54,72 +55,110 @@ export class TestComponent implements OnInit {
   }
 
 
-  followOrder:FollowOpenOrder;
+  followOrder: FollowOpenOrder;
+
   ngOnInit() {
-   // this.followOrder = new FollowOpenOrder(
-   /*   'binance',
-      'BTC_ARDR',
-      -4,
-      this.apisPrivate,
-      this.apisPublic,
-      this.marketCap,
-      this.storage,
-      this.candlesService
-    )
-   // this.initAsync();
-   // this.tradeHistory();
+    // this.followOrder = new FollowOpenOrder(
+    /*   'binance',
+       'BTC_ARDR',
+       -4,
+       this.apisPrivate,
+       this.apisPublic,
+       this.marketCap,
+       this.storage,
+       this.candlesService
+     )
+    // this.initAsync();
+    // this.tradeHistory();
 
-    this.followOrder.getCandles = this.getCandles.bind(this);
-    this.followOrder.isTooFast = ()=>{ return false};
-   /!* this.followOrder.start = ()=>{
-      console.log('SATRT called')
-    }*!/
+     this.followOrder.getCandles = this.getCandles.bind(this);
+     this.followOrder.isTooFast = ()=>{ return false};
+    /!* this.followOrder.start = ()=>{
+       console.log('SATRT called')
+     }*!/
 
-   // this.followOrder.balanceCoin = new VOBalance()
-    //this.followOrder.balanceCoin.available = 0;
-   // this.followOrder.balanceCoin.pending = 1000;
-    this.apisPrivate.getExchangeApi('binance').refreshBalances();
+    // this.followOrder.balanceCoin = new VOBalance()
+     //this.followOrder.balanceCoin.available = 0;
+    // this.followOrder.balanceCoin.pending = 1000;
+     this.apisPrivate.getExchangeApi('binance').refreshBalances();
 
-    setTimeout(()=>{
-     /!* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
+     setTimeout(()=>{
+      /!* this.followOrder.stopLossOrder.checkStopLossPrice= (candles, qty)=>{
 
-        console.log('check');
-      }
-      *!/
-    }, 1000)*/
+         console.log('check');
+       }
+       *!/
+     }, 1000)*/
 
 
   }
 
 
-
- async getCandles(){
-   this.currentTime.add(5, 'minutes')
-   const candles =  await this.apisPublic.getExchangeApi('binance')
-     .downloadCandles('BTC_ARDR','5m', 100, this.currentTime.valueOf());
-   return candles;
+  async getCandles() {
+    this.currentTime.add(5, 'minutes')
+    const candles = await this.apisPublic.getExchangeApi('binance')
+      .downloadCandles('BTC_ARDR', '5m', 100, this.currentTime.valueOf());
+    return candles;
   }
 
   prevPrice;
 
-  async tickBot(candles:VOCandle[]){
-    const lastCandle = _.last(candles);
-    if (this.prevPrice === lastCandle.close) return;
-    this.prevPrice = lastCandle.close;
-   const result =  await CandlesAnalys1.analyze(this.candles, this.storage);
-   console.log(result);
+  buyCoin(candle: VOCandle) {
+    const price = candle.close;
+    const time = moment(candle.to).format('HH:mm');
+    const stamp = candle.to;
+    const action = 'BUY';
+    if (this.prevAction === action) return;
+    this.prevAction = action;
+    const orders = this.orders || [];
+    this.lastOrder =  {stamp, action, price};
+    orders.push(this.lastOrder);
+    this.orders = orders;
+  }
 
+  prevAction: string;
+
+  sellCoin(candle: VOCandle) {
+    const time = moment(candle.to).format('HH:mm');
+    const stamp = candle.to;
+    const price = candle.close;
+    const action = 'SELL';
+    if (this.prevAction === action) return;
+    this.prevAction = action;
+    const orders = this.orders || [];
+    this.lastOrder = {stamp, action, price };
+    orders.push(this.lastOrder);
+    this.orders = orders;
+  }
+  patterns: any[] = [];
+  lastOrder:{stamp: number, action: string, price:number};
+
+  async tickBot(candles: VOCandle[]) {
+    const lastCandle = _.last(candles);
+    const lastPrice = lastCandle.close;
+    if (this.prevPrice === lastPrice) return;
+    this.prevPrice = lastCandle.close;
+    const result = await CandlesAnalys1.createState(this.candles);
+    this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
+
+    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
+    if(action) console.warn(action);
+
+    // @ts-ignore
+    if (action === 'BUY') this.buyCoin(lastCandle);
+    else if (action === 'SELL') this.sellCoin(lastCandle);
+    const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
+    console.log(' new price ' + newPrice);
   }
 
 
-
   async initAsync() {
-  /*
-    (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
+    /*
+      (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
 
-      this.candles = _.clone(candles);
-    })*/
- // this.start();
+        this.candles = _.clone(candles);
+      })*/
+    // this.start();
   }
 
   /*
@@ -158,34 +197,36 @@ export class TestComponent implements OnInit {
   * */
 
 
+  currentTime = moment('2018-11-20T20:00');
+  currentMarket = 'BTC_GO';
+  lastStamp: number;
 
-  currentTime = moment('2018-11-11T11:15');
-  currentMarket = 'BTC_VIB';
-  lastStamp:number;
- async  tick(){
-   this.currentTime.add(1, 'minutes');
-  //  await this.followOrder.tick();
+  async tick() {
+    this.currentTime.add(1, 'minutes');
+    //  await this.followOrder.tick();
     // this.currentTime.add(5, 'minutes')
-   const candles =  await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles(this.currentMarket,'1m', 100, this.currentTime.valueOf());
+    const candles = await this.apisPublic.getExchangeApi('binance')
+      .downloadCandles(this.currentMarket, '1m', 100, this.currentTime.valueOf());
 
-   this.candles = candles;
+    this.candles = candles;
 
-   this.tickBot(candles);
+    this.tickBot(candles);
 
   }
+
   onStartClick() {
-   if(!this.interval) this.start();
-   else this.stop();
+    if (!this.interval) this.start();
+    else this.stop();
 
     // this.alerts.stop();
   }
 
-  start(){
-   if(this.interval) return;
-    this.interval = setInterval(()=>this.tick(), 2000);
+  start() {
+    if (this.interval) return;
+    this.interval = setInterval(() => this.tick(), 2000);
   }
-  stop(){
+
+  stop() {
     clearInterval(this.interval);
     this.interval = 0;
   }
