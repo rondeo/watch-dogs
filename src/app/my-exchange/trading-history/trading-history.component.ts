@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {VOOrder} from "../../models/app-models";
 import * as _ from 'lodash';
-import {ConnectorApiService} from "../services/connector-api.service";
+import {ConnectorApiService} from "../../../../archive/services/connector-api.service";
 import {MatSnackBar} from "@angular/material";
 
 @Component({

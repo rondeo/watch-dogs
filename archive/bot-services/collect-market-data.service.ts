@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {IApiPublic} from "../services/apis/api-base";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {CollectMarketData} from "./collect-market-data";
 
 import {Subject} from "rxjs/Subject";

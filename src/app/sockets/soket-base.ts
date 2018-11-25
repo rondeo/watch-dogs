@@ -1,5 +1,5 @@
-import {Subject} from "rxjs/Subject";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Subject} from 'rxjs/internal/Subject';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 
 export interface ISocketData {

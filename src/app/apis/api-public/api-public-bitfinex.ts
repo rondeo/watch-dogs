@@ -1,16 +1,15 @@
 import {HttpClient} from "@angular/common/http";
 import {VOBooks, VOMarket, VOTrade} from "../../models/app-models";
-import {Observable} from "rxjs/Observable";
+
 import {SOMarketBittrex} from "../../models/sos";
-import {Subject} from "rxjs/Subject";
-import {from} from "rxjs/observable/from";
-import {of} from "rxjs/observable/of";
-import {concatMap, delay} from "rxjs/operators";
-import {timer} from "rxjs/observable/timer";
+
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
 import {VOCandle} from '../../models/api-models';
 import {UTILS} from '../../com/utils';
+import {concatMap, delay, map} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
+import {from} from 'rxjs/internal/observable/from';
 
 export class ApiPublicBitfinex extends ApiPublicAbstract{
   exchange = 'bitfinex';
@@ -35,7 +34,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
      limit:String(limit)
     };
     if(to) params.end = to;
-    return this.http.get(url, {params}).map((res: any[]) => {
+    return this.http.get(url, {params}).pipe(map((res: any[]) => {
        // console.warn(res);
        res.reverse();
       return res.map(function (item) {
@@ -49,7 +48,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
           Volume: +item[5]
         }
       })
-    }).toPromise();
+    })).toPromise();
   }
   async getCandlesticks(base: string, coin: string, limit = 100, from = 0, to = 0): Promise<VOCandle[]>{
    // const markets = await this.getMarkets();
@@ -65,7 +64,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
     const url = 'api/proxy/https://api.bitfinex.com/v2/candles/trade:5m:t'
       +coin+base+'/hist?limit='+limit+'?'+UTILS.toURLparams(params);
     console.log(url);
-    return this.http.get(url).map((res: any[]) => {
+    return this.http.get(url).pipe(map((res: any[]) => {
       return res.reverse().map(function (item) {
         return {
           from:0,
@@ -79,14 +78,14 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
       })
 
 
-    }).toPromise()
+    })).toPromise()
 
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
     const url = '/api/proxy/https://api.bitfinex.com/v1/book/' + coin +(base === 'USDT'?'USD':base);
     console.log(url)
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       let r = (<any>res);
       return {
         market: base + '_' + coin,
@@ -98,7 +97,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
           return {amountCoin: +o.amount, rate: +o.price}
         })
       }
-    }, console.error);
+    }, console.error));
   }
 
 
@@ -122,16 +121,18 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
    const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/';
 
     return from(ids).pipe(
-      concatMap(id => <Observable<any>> this.http.get(url + id).map(res=>{
+      concatMap(id => <Observable<any>> this.http.get(url + id)
+        .pipe(
+        map(res=>{
         console.log(res);
         return res;
-
-      }).pipe(delay(5000)))
-    );
+        },
+        delay(5000)))
+    ));
   }
 
   downloadTicker(): Observable<{ [market: string]: VOMarket }> {
-   return this.downlaodMarketsAvailable().map(markets =>{
+   return this.downlaodMarketsAvailable().pipe(map(markets =>{
      const coins = {};
       markets.forEach(function (item) {
        item = item.toUpperCase();
@@ -143,16 +144,16 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
        coins[m.base + '_' + m.coin] = m;
      });
       return coins
-   })
+   }));
   }
 
   private getTickerForMarket(market: string) {
     const url = '/api/proxy-5min/https://api.bitfinex.com/v1/pubticker/' + market;
     console.log(url);
-    return this.http.get(url).map(res => {
+    return this.http.get(url).pipe(map(res => {
       console.log(res);
       return res;
-    })
+    }));
   }
 
   private downlaodMarketsAvailable():Observable<string[]>{
@@ -185,7 +186,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
       .replace('{{coin}}', coin);
 
     console.log(url);
-    return this.http.get(url).map((res: any[]) => {
+    return this.http.get(url).pipe(map((res: any[]) => {
 
       return res.map(function (o) {
         return {
@@ -200,7 +201,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
           rate: o[3]
         }
       })
-    });
+    }));
 
   }
 

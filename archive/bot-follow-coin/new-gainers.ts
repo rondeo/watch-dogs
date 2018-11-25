@@ -2,7 +2,7 @@ import {VOMarketCap} from "../../src/app/models/app-models";
 import {FollowCoinHelper} from "./follow-coin-helper";
 import {IMarketRecommended} from "../../src/app/com/utils-order";
 import * as _ from 'lodash';
-import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {IApiPublic} from "../services/apis/api-base";
 import {forEach} from "@angular/router/src/utils/collection";
 
 

@@ -12,7 +12,7 @@ import {ACTIONS, FollowCoinHelper} from "./follow-coin-helper";
 import {FollowCoinAnalytics} from "./follow-coin-analytics";
 import {AnalizeData} from "./analize-data";
 import {BuySellCoins} from "./buy-sell-coins";
-import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {IApiPublic} from "../services/apis/api-base";
 import {CoinAnalytics, NewGainers} from "./new-gainers";
 import {ApisPublicService} from "../../src/app/apis/api-public/apis-public.service";
 import {ApiMarketCapService} from "../../src/app/apis/api-market-cap.service";

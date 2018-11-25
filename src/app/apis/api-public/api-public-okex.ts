@@ -2,7 +2,9 @@ import {ApiPublicAbstract} from './api-public-abstract';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from '../../services/app-storage.service';
 import {VOBooks, VOMarket, VOOrder, VOTrade} from '../../models/app-models';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+
 
 export class ApiPublicOkex extends ApiPublicAbstract {
   exchange = 'okex';
@@ -20,7 +22,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
       .replace('{{base}}', base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
-    return this.http.get(url).map((res:any[]) => {
+    return this.http.get(url).pipe(map((res:any[]) => {
 
       return res.map(function (o) {
         return {
@@ -35,7 +37,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
           rate:o.price
         }
       }).reverse()
-    });
+    }));
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
@@ -44,7 +46,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
       .replace('{{base}}',  base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
 
       if(!res.bids){
         console.log(res);
@@ -78,7 +80,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
         sell: sell
       }
 
-    })
+    }))
   }
 
   /*allCoins: {[coin:string]:{[base:string]:number}};
@@ -104,7 +106,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
     let url = '/api/proxy-5min/https://www.okex.com/api/v1/tickers.do';
     console.log(url);
 
-    return this.http.get(url).map((result: any) => {
+    return this.http.get(url).pipe(map((result: any) => {
 
       let data: any[] = result.tickers;
 
@@ -134,7 +136,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
       });
       this.allCoins = allCoins;
       return indexed;
-    });
+    }));
   }
 
   downloadTicker2():Observable<{[market:string]:VOMarket}> {
@@ -142,13 +144,13 @@ export class ApiPublicOkex extends ApiPublicAbstract {
     let url = '/api/proxy-5min/https://www.okex.com/v2/spot/markets/products';
     console.log(url);
 
-    return this.http.get(url).map((result: any) => {
+    return this.http.get(url).pipe(map((result: any) => {
 
       let data: any[] = result.data;
       const indexed = {};
 
       const bases = [];
-      const allCoins = {}
+      const allCoins = {};
       //   console.log(ar);
       data.forEach(function (item) {
         let market: VOMarket = new VOMarket();
@@ -172,7 +174,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
       });
       this.allCoins = allCoins;
       return indexed;
-    });
+    }));
   }
 }
 

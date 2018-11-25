@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ConnectorApiService} from '../services/connector-api.service';
+import {ConnectorApiService} from '../../../../archive/services/connector-api.service';
 import {VOBalance, VOTransfer} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,7 +9,7 @@ import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {E} from '@angular/core/src/render3';
 
-import {MyExchangeService} from '../services/my-exchange.service';
+import {MyExchangeService} from '../../../../archive/services/my-exchange.service';
 import {ShowExternalPageService} from '../../services/show-external-page.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';

@@ -3,18 +3,20 @@ import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {CandlesService} from '../candles/candles.service';
-import {Subscription} from 'rxjs/Subscription';
+
 import {VOCandle} from '../../models/api-models';
 import {CandlesAnalys1} from './candles-analys1';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs/Subject';
+
 import {CandlesAnalys2} from './candles-analys2';
 import {MATH} from '../../com/math';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MFI} from '../../trader/libs/techind';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {Subject} from 'rxjs/internal/Subject';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 export interface VOMessage {
   time: string;

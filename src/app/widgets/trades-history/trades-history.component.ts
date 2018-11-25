@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {ConnectorApiService} from '../../my-exchange/services/connector-api.service';
-import {ChannelEvents, Channels, IChannel} from '../../my-exchange/services/apis/socket-models';
+import {ConnectorApiService} from '../../../../archive/services/connector-api.service';
+import {ChannelEvents, Channels, IChannel} from '../../../../archive/services/apis/socket-models';
 import * as _ from 'lodash';
 import {VOOrder} from '../../models/app-models';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';

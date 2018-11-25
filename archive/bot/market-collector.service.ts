@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BooksService} from "../app-services/books-service";
 import {UtilsOrder, VOTradesStats} from "../../src/app/com/utils-order";
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 
 
 import {promise} from "selenium-webdriver";

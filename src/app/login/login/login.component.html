@@ -7,17 +7,17 @@
             <form #f1="ngForm">
                 <mat-list>
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input #username
                                    matInput
                                    [(ngModel)]="login.email"
                                    required
                                    minlength="6" type="text" placeholder="email" name="email" type="email"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
 
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input matInput
                                    (blur)="checkPassword()"
                                    placeholder="Password"
@@ -27,7 +27,7 @@
                                    minlength="6"
                                    type ="password"
                                    style="width: 100%"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
 
                     <br/>
@@ -54,7 +54,7 @@
 
                         </mat-chip-list>
 
-                        <mat-input-container>
+                        <mat-form-field>
                             <input #username
                                    matInput
                                    [(ngModel)]="login.email"
@@ -63,13 +63,13 @@
                                    placeholder="email"
                                    name="email"
                                    type="email"/>
-                        </mat-input-container>
+                        </mat-form-field>
 
                     </mat-list-item>
 
 
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input matInput
                                    (blur)="checkPassword()"
                                    placeholder="Password"
@@ -79,10 +79,10 @@
                                    minlength="6"
                                    type ="password"
                                    style="width: 100%"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input matInput
                                    (blur)="checkPassword()"
                                    placeholder="Confirm Password"
@@ -92,7 +92,7 @@
                                    minlength="6"
                                    type ="password"
                                    style="width: 100%"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
 
                     <br/>
@@ -110,10 +110,10 @@
 
                 <mat-list>
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input #username matInput [(ngModel)]="login.email" required
                                    minlength="6" type="text" placeholder="Email" name="email" type="email"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
                     <br/>
                     <mat-list-item>
@@ -130,17 +130,17 @@
             <form #f5="ngForm"  autocomplete="off">
                 <mat-list>
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input #username
                                    matInput
                                    [(ngModel)]="login.email"
                                    required
                                    minlength="6" type="text" placeholder="email" name="email" type="email"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
 
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input matInput
                                    (blur)="checkPassword()"
                                    placeholder="Password"
@@ -150,10 +150,10 @@
                                    minlength="6"
                                    type ="password"
                                    style="width: 100%"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
                     <mat-list-item>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input matInput
                                    placeholder="New Nickname"
                                    name="nickname"
@@ -162,7 +162,7 @@
                                    minlength="6"
                                    type ="text"
                                    style="width: 100%"/>
-                        </mat-input-container>
+                        </mat-form-field>
                     </mat-list-item>
 
                     <br/>

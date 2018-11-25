@@ -3,7 +3,7 @@
     <app-mc-data [coin]="'BTC'"></app-mc-data>
     <br/>
     <mat-form-field class="w6">
-        <mat-select [(ngModel)]="top" (change)="onTopChange($event)" placeholder="by Rank">
+        <mat-select [(ngModel)]="top" (selectionChange)="onTopChange($event)" placeholder="by Rank">
             <mat-option value="all">All</mat-option>
             <mat-option value="top100">Top 100</mat-option>
             <mat-option value="top200">Top 200</mat-option>
@@ -15,7 +15,7 @@
     </mat-form-field>
 
     <mat-form-field class="w6">
-        <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
+        <mat-select [(ngModel)]="exchange" (selectionChange)="onExcgangeChange($event)" placeholder="Exchange">
             <mat-option value="all">All</mat-option>
             <mat-option *ngFor="let exchange1 of exchanges" [value]="exchange1">{{exchange1}}</mat-option>
         </mat-select>
@@ -55,7 +55,7 @@
             >
         </mat-form-field>
         <mat-form-field class="w3">
-            <mat-select [(ngModel)]="candlesInterval" (change)="onCandlesIntrvalChange()">
+            <mat-select [(ngModel)]="candlesInterval" (selectionChange)="onCandlesIntrvalChange()">
                 <mat-option value="5m">5m</mat-option>
                 <mat-option value="1h">1h</mat-option>
                 <mat-option value="6h">6h</mat-option>

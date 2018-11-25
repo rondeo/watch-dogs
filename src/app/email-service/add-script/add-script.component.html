@@ -4,9 +4,9 @@
 
           [ngClass]="percent_change_1hLess?'fa-chevron-left':'fa-chevron-right'"></span>
 
-    <mat-input-container class="w3" [ngClass]="percent_change_1h>0?'green':'red'">
+    <mat-form-field class="w3" [ngClass]="percent_change_1h>0?'green':'red'">
         <input class="w5" matInput placeholder="%1h" type="number" [(ngModel)]="percent_change_1h"/>
-    </mat-input-container>
+    </mat-form-field>
     <span class="btn fa fa-minus" (click)="onMinusSellScriptClick()"></span>
 
     <button mat-raised-button color="accent" (click)="onAddSellScriptClick()">Add</button>

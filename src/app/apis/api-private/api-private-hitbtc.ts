@@ -1,5 +1,4 @@
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
+
 import {VOBalance, VOOrder} from '../../models/app-models';
 import {ApiPrivateAbstaract} from './api-private-abstaract';
 import {StorageService} from '../../services/app-storage.service';
@@ -7,8 +6,11 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
 import {ApiPublicHitbtc} from '../api-public/api-public-hitbtc';
 import {UtilsBooks} from '../../com/utils-books';
-import {PrivateCalls} from '../../my-exchange/services/apis/api-base';
+import {PrivateCalls} from '../../../../archive/services/apis/api-base';
 import {UserLoginService} from '../../services/user-login.service';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
 
 export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   apiPublic: ApiPublicHitbtc
@@ -45,34 +47,34 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
     const url = 'api/proxy//order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
-    return this.call(url, null).map(res => {
+    return this.call(url, null).pipe(map(res => {
       console.log('getOpenOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
-    });
+    }));
   }
 
   downloadAllOpenOrders(): Observable<VOOrder[]> {
     const url = 'api/hitbtc/order'
-    return this.call(url, null).map(res => {
+    return this.call(url, null).pipe(map(res => {
       console.log('getAllOpenOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
-    });
+    }));
   }
 
   getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
     const url = 'api/hitbtc/history/order'
-    return this.call(url, null).map(res => {
+    return this.call(url, null).pipe(map(res => {
       console.log('getAllOrders', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
-    });
+    }));
   }
 
 
   getOrder(orderId, base: string, coin: string): Observable<VOOrder> {
     const url = 'api/hitbtc/order?symbol={{coin}}{{base}}'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.call(url, null)
-      .map((res: any[]) => {
+    return this.call(url, null).pipe(
+      map((res: any[]) => {
         console.log(res);
 
         return res.map(function (item) {
@@ -94,13 +96,13 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           uuid: orderId,
           isOpen: false
         };
-      });
+      }));
   }
 
   cancelOrder(uuid: string): Observable<VOOrder> {
     const url = 'api/hitbtc-delete/' + uuid;
     return this.call(url, null)
-      .map((res: any) => {
+      .pipe(map((res: any) => {
         console.log(res);
         let result: any = res;
         return {
@@ -112,7 +114,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           date: res.createdAt,
           timestamp: new Date(res.createdAt).getTime()
         }
-      });
+      }));
   }
 
   /* balancesSub: Subject<VOBalance[]>
@@ -139,7 +141,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     const url = 'api/hitbtc/trading/balance';
     const exchange = this.exchange;
 
-    return this.call(url, null).map((res: any[]) => res.map(function (item: any) {
+    return this.call(url, null).pipe(map((res: any[]) => res.map(function (item: any) {
       if (item.currency === 'USD') item.currency = 'USDT';
       return {
         exchange: exchange,
@@ -147,7 +149,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
         balance: +item.available + (+item.reserved),
         available: +item.available
       }
-    }));
+    })));
   }
 
 
@@ -164,7 +166,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     };
 
     return this.call(url, data)
-      .map((res: any) => {
+      .pipe(map((res: any) => {
         console.log(res);
         let result: any = res;
         return {
@@ -176,7 +178,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           rate: +res.price,
           status: res.status
         }
-      }).toPromise();
+      })).toPromise();
 
   }
 
@@ -193,7 +195,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     }
 
     return this.call(url, data)
-      .map((res: any) => {
+      .pipe(map((res: any) => {
         console.log(res);
         let result: any = res;
 
@@ -207,7 +209,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           status: res.status
 
         }
-      }).toPromise();
+      })).toPromise();
   }
 
   private call(URL: string, post: any): Observable<any> {

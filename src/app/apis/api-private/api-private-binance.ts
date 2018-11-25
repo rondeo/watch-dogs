@@ -1,7 +1,7 @@
 import {VOBalance, VOBooks, VOOrder, VOWatchdog} from '../../models/app-models';
-import {Observable} from 'rxjs/Observable';
+
 import {ApiPrivateAbstaract} from './api-private-abstaract';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 import * as cryptojs from 'crypto-js';
 import * as _ from 'lodash';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -9,7 +9,7 @@ import {StorageService} from '../../services/app-storage.service';
 import {ApiPublicBittrex} from '../api-public/api-public-bittrex';
 
 import {UtilsBooks} from '../../com/utils-books';
-import {Subject} from 'rxjs/Subject';
+
 import {UserLoginService} from '../../services/user-login.service';
 import {type} from 'os';
 import {WatchDog} from '../../models/watch-dog';
@@ -17,6 +17,9 @@ import * as moment from 'moment';
 import {UTILS} from '../../com/utils';
 import {ApiPublicBinance} from '../api-public/api-public-binance';
 import {MATH} from '../../com/math';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
 
 enum RequestType {
   GET,
@@ -47,7 +50,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
     let url = this.prefix + 'https://api.binance.com/api/v1/depth';
 
-        return this.http.get(url, {params}).map((res: any) => {
+        return this.http.get(url, {params}).pipe(map((res: any) => {
       let r = (<any>res);
        const  buy =  r.bids.map(function (o) {
           return {amountCoin: +o[1], rate: +o[0]}
@@ -57,7 +60,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         });
       return buy.concat(sell)
 
-    }, console.error).toPromise();
+    }, console.error)).toPromise();
   }
 
   decimals = {};
@@ -80,7 +83,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       endTime
     };
     console.log(url);
-    return this.call(url, data, RequestType.GET).map(res => {
+    return this.call(url, data, RequestType.GET).pipe(map(res => {
       // console.log(' allOrders ', res);
 
       /*     return res.filter(function (item) {
@@ -119,13 +122,13 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           date: moment(item.time).format('MM-DD HH a')
         }
       })
-    });
+    }));
   }
 
   downloadAllOpenOrders(): Observable<VOOrder[]> {
     let url =  this.prefix +'https://api.binance.com/api/v3/openOrders';
     console.log(url);
-    return this.call(url, null, RequestType.GET).map(res => {
+    return this.call(url, null, RequestType.GET).pipe(map(res => {
       //  console.log(' allOpenOrders ', res);
 
       return res.map(function (item) {
@@ -147,7 +150,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           fee: -1
         }
       })
-    });
+    }));
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
@@ -157,7 +160,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
     console.warn(url);
 
-    return this.call(url, data, RequestType.GET).map(res => {
+    return this.call(url, data, RequestType.GET).pipe(map(res => {
       console.log(' openOrders ', res);
 
       return res.map(function (item) {
@@ -175,7 +178,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           fee: -1
         }
       })
-    });
+    }));
   }
 
 
@@ -186,9 +189,9 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       symbol: coin + base,
       orderId: orderId
     };
-    return this.call(url, data, RequestType.DELETE).map(res => {
+    return this.call(url, data, RequestType.DELETE).pipe(map(res => {
       return res
-    });
+    }));
   }
 
   getOrder(orderId: string, base: string, coin: string): Observable<VOOrder> {
@@ -199,7 +202,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       symbol: coin + base,
       orderId: orderId
     };
-    return this.call(url, data, RequestType.GET).map(res => {
+    return this.call(url, data, RequestType.GET).pipe(map(res => {
       let r = <any>res.result;
       // console.log('getOrderById ',r);
       console.log(res);
@@ -215,7 +218,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         timestamp: res.time,
         fee: -1
       };
-    });
+    }));
   }
 
 
@@ -226,7 +229,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     console.log(uri);
     const exchange = this.exchange;
     this.isLoadingBalances = true;
-    return this.call(uri, {}, RequestType.GET).map(res => {
+    return this.call(uri, {}, RequestType.GET).pipe(map(res => {
       this.isLoadingBalances = false;
       // console.log(res);
       return res.balances.map(function (item) {
@@ -239,7 +242,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           address: ''
         })
       });
-    })
+    }));
   }
 
   /*  async _stopLoss2(market: string, quantity: number, stopPrice: number) {
@@ -317,7 +320,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
 
 
-    return this.call(url, data, RequestType.POST).map(res => {
+    return this.call(url, data, RequestType.POST).pipe(map(res => {
       console.log('result STOP_LOSS market ' + market, res);
       return {
         uuid: res.orderId,
@@ -330,7 +333,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         amountCoin: +res.origQty,
         fee: -1
       }
-    }).toPromise();
+    })).toPromise();
 
   }
 
@@ -362,7 +365,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
     console.log(url, data);
 
-    return this.call(url, data, RequestType.POST).map(res => {
+    return this.call(url, data, RequestType.POST).pipe(map(res => {
       console.log('result buyLimit market ' + base + coin, res);
       return {
         uuid: res.orderId,
@@ -375,7 +378,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         amountCoin: +res.origQty,
         fee: -1
       }
-    }).toPromise();
+    })).toPromise();
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
@@ -398,7 +401,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       timeInForce: 'GTC'
     };
 
-    return this.call(url, data, RequestType.POST).map(res => {
+    return this.call(url, data, RequestType.POST).pipe(map(res => {
       console.log('result sellLimit market ' + market, res);
 
       return {
@@ -412,7 +415,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         amountCoin: +res.origQty,
         fee: -1
       }
-    }).toPromise();
+    })).toPromise();
   }
 
   private call(URL: string, data: any, type: RequestType): Observable<any> {

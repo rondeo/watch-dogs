@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import {Observer} from "rxjs/Observer";
-import {Subject} from "rxjs/Subject";
+import {Observer} from 'rxjs/internal/types';
+import {Subject} from 'rxjs/internal/Subject';
+import {Observable} from 'rxjs/internal/Observable';
 
 
 export interface VOBuys{

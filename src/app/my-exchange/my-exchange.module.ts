@@ -6,7 +6,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {MaterialAppModule} from "../material/material-app.module";
 import {RouterModule, Routes} from "@angular/router";
 import { MyMarketsComponent } from './my-markets/my-markets.component';
-import {ConnectorApiService} from "./services/connector-api.service";
+import {ConnectorApiService} from "../../../archive/services/connector-api.service";
 
 import { MyBuySellComponent } from './my-buy-sell/my-buy-sell.component';
 
@@ -15,7 +15,7 @@ import {TradingHistoryComponent} from "./trading-history/trading-history.compone
 import { MyOrdersHistoryComponent } from './my-orders-history/my-orders-history.component';
 import { AllMainCoinsComponent } from './all-main-coins/all-main-coins.component';
 import {UiModule} from '../ui/ui.module';
-import {MyExchangeService} from './services/my-exchange.service';
+import {MyExchangeService} from '../../../archive/services/my-exchange.service';
 import { BuySellCoinComponent } from './buy-sell-coin/buy-sell-coin.component';
 import {WidgetsModule} from '../widgets/widgets.module';
 import {MyExchangeBalncesComponent} from './my-balnce/my-exchange-balnces.component';

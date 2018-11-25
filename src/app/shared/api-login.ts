@@ -1,6 +1,7 @@
 import {StorageService} from "../services/app-storage.service";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Observable} from "rxjs/Observable";
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {Observable} from 'rxjs/internal/Observable';
+
 
 export class ApiLogin {
 

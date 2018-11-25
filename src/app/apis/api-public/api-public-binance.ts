@@ -1,5 +1,5 @@
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
@@ -8,6 +8,8 @@ import {UTILS} from '../../com/utils';
 import {VOCandle} from '../../models/api-models';
 import {SocketBase} from '../sockets/soket-base';
 import {BinanceTradesSocket} from '../sockets/binance-trade-socket';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
 
 
 
@@ -44,7 +46,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     if(endTime) params.endTime = endTime;
     const url = this.prefix + 'https://api.binance.com/api/v1/klines';
    // console.log(url);
-   return await this.http.get(url, {params}).map((res: any[]) => {
+   return await this.http.get(url, {params}).pipe(map((res: any[]) => {
      //  console.log(res);
       return res.map(function (item) {
         return {
@@ -58,7 +60,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           Volume: +item[5]
         }
       })
-    }).toPromise();
+    })).toPromise();
 
   }
 
@@ -78,7 +80,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
     const url =  this.prefix + 'https://api.binance.com/api/v1/klines?'+UTILS.toURLparams(params);
     console.log(url);
-    return this.http.get(url).map((res: any[]) => {
+    return this.http.get(url).pipe(map((res: any[]) => {
       return res.map(function (item) {
         return {
           from:+item[0],
@@ -93,7 +95,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       })
 
 
-    }).toPromise()
+    })).toPromise()
 
   }
 
@@ -126,7 +128,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     // const url = '/api/proxy/api.binance.com/api/v3/ticker/price';
     const url =  this.prefix +'https://api.binance.com/api/v1/ticker/24hr';
     console.log(url);
-    return this.http.get(url).map((res: any[]) => {
+    return this.http.get(url).pipe(map((res: any[]) => {
 
       const indexed = {};
       const allCoins = {}
@@ -167,14 +169,14 @@ export class ApiPublicBinance extends ApiPublicAbstract {
       })
       this.allCoins = allCoins;
       return indexed;
-    })
+    }));
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
     let url =  this.prefix +'https://api.binance.com/api/v1/depth?symbol={{coin}}{{base}}&limit=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       let r = (<any>res);
 
 
@@ -189,17 +191,14 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           return {amountCoin: +o[1], rate: +o[0]}
         })
       }
-    }, console.error).do(res =>{
-      const orders = res.sell;
-
-    });
+    }, console.error));
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
     let url =  this.prefix +'https://api.binance.com/api/v1/trades?symbol={{coin}}{{base}}&limit=200'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any[]) => {
+    return this.http.get(url).pipe(map((res: any[]) => {
 
       //console.log(res);
       return res.reverse().map(function (o) {
@@ -215,7 +214,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           rate: +o.price
         }
       })
-    });
+    }));
   }
 
   mapCoinDay(res) {

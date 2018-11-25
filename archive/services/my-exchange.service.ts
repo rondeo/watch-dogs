@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {StorageService} from '../../services/app-storage.service';
-import {VOBalance, VOMarket} from '../../models/app-models';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {StorageService} from '../../src/app/services/app-storage.service';
+import {VOBalance, VOMarket} from '../../src/app/models/app-models';
+import {ApisPublicService} from '../../src/app/apis/api-public/apis-public.service';
+import {ApiPublicAbstract} from '../../src/app/apis/api-public/api-public-abstract';
 import * as _ from 'lodash';
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import {ApisPrivateService} from '../../src/app/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../src/app/apis/api-private/api-private-abstaract';
 
 @Injectable()
 export class MyExchangeService {

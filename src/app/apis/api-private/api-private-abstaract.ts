@@ -1,15 +1,18 @@
 import {VOBalance, VOOrder} from '../../models/app-models';
-import {Observable} from 'rxjs/Observable';
+
 import {StorageService} from '../../services/app-storage.service';
 import {reject} from 'q';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subject} from 'rxjs/Subject';
+
+
 import {UtilsBooks} from '../../com/utils-books';
 import {LoginStatus, UserLoginService} from '../../services/user-login.service';
 import {WatchDog} from '../../models/watch-dog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {BehaviorSubjectMy} from '../../com/behavior-subject-my';
+import {Subject} from 'rxjs/internal/Subject';
+import {Observable} from 'rxjs/internal/Observable';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 export abstract class ApiPrivateAbstaract {
 
@@ -240,6 +243,7 @@ export abstract class ApiPrivateAbstaract {
     return sub;
 
   }
+
 
   async getBalance(symbol: string): Promise<VOBalance> {
     if (this.balancesSub.getValue()) {

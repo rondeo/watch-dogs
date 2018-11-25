@@ -2,7 +2,7 @@
     <app-mc-data [coin]="coin"></app-mc-data>
     <section>
         <mat-form-field class="w8">
-            <mat-select [ngModel]="selectedMarket" placeholder="Market" (change)="onMarketSelected($event)">
+            <mat-select [ngModel]="selectedMarket" placeholder="Market" (selectionChange)="onMarketSelected($event)">
                 <mat-option *ngFor="let market of markets" [value]="market">
                     {{market}}
                 </mat-option>

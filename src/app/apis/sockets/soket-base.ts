@@ -1,6 +1,5 @@
-import {Subject} from 'rxjs/Subject';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from '../../../../node_modules/rxjs';
+
+import {BehaviorSubject, Observable} from '../../../../node_modules/rxjs';
 import {IChannel} from '../../sockets/soket-base';
 import {SocketChannel} from './socket-channel';
 import {reject} from 'q';

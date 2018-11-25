@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 import {VOOrder} from '../../models/app-models';
 import {ApisPrivateService} from '../api-private/apis-private.service';
 import {FollowOpenOrder} from './follow-open-order';
@@ -10,6 +10,7 @@ import {ApiMarketCapService} from '../api-market-cap.service';
 import {ApisPublicService} from '../api-public/apis-public.service';
 import * as _ from 'lodash';
 import {MarketBot} from '../../app-services/app-bots-services/market-bot';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 @Injectable()
 export class FollowOrdersService {

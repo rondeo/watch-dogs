@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
+
 import * as _ from 'lodash';
 import {AuthHttpService, VOUser} from '../services/auth-http.service';
 
@@ -11,6 +9,9 @@ import {StorageService} from '../services/app-storage.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {ApiMarketCapService} from "../apis/api-market-cap.service";
 import {WatchDog} from '../models/watch-dog';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 
 
@@ -245,7 +246,7 @@ export class EmailServiceService {
       };
 
       console.log(' sendNotification ' + url, payload);
-      return this.http.post(url, payload).map(res=>res);
+      return this.http.post(url, payload).pipe(map(res=>res));
     }else{
       let sub:BehaviorSubject<any> = new BehaviorSubject({error:'login',message:'Please login into email service'})
       return sub.asObservable();

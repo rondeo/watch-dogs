@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {VOMarket, VOMarketCap} from "../../src/app/models/app-models";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import * as _ from 'lodash';
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 

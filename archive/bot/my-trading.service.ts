@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {VOMarketCap, VOOrder} from "../../src/app/models/app-models";
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 
 import {UtilsOrder} from "../../src/app/com/utils-order";
 import {BooksService} from "../app-services/books-service";

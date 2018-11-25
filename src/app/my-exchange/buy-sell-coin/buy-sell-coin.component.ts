@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MyExchangeService} from '../services/my-exchange.service';
+import {MyExchangeService} from '../../../../archive/services/my-exchange.service';
 import {VOBalance, VOMarket, VOOrder} from '../../models/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 import * as _ from 'lodash';
-import {ApiBase} from '../services/apis/api-base';
+import {ApiBase} from '../../../../archive/services/apis/api-base';
 import {MatSnackBar} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';

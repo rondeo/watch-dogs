@@ -3,8 +3,8 @@ import {VOMarketCap, VOOrder} from "../../src/app/models/app-models";
 
 import {Subject} from "rxjs/Subject";
 
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ApiBase} from "../services/apis/api-base";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {FollowCoinController, IBotData} from "./follow-coin-controller";
 import {MarketCapService} from "../../src/app/market-cap/services/market-cap.service";
 import {VOTradesStats} from "../../src/app/com/utils-order";

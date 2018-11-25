@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {VOMarket, VOMarketCap} from '../../models/app-models';
 import {ApiMarketCapService} from "../../apis/api-market-cap.service";
 import {ApisPublicService} from "../../apis/api-public/apis-public.service";
-import {forkJoin} from "rxjs/observable/forkJoin";
+
 import * as _ from 'lodash';
 import {V2DataHelper} from "./v2-data-helper";
 import {MatSnackBar} from "@angular/material";

@@ -1,5 +1,5 @@
-import {VOBubble} from "../../com/utils-order";
-import {VOMarketCap, VOOrder} from "../../models/app-models";
+import {VOBubble} from "../../src/app/com/utils-order";
+import {VOMarketCap, VOOrder} from "../../src/app/models/app-models";
 
 /*
 export interface IBooksStats{

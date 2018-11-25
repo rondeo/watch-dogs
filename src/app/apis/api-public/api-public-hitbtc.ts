@@ -1,10 +1,11 @@
 import {VOBooks, VOMarket, VOOrder, VOTrade} from '../../models/app-models';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import {ApiPublicAbstract} from './api-public-abstract';
 import {StorageService} from '../../services/app-storage.service';
 import {VOCandle} from '../../models/api-models';
 import * as moment from 'moment';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
 
 export class ApiPublicHitbtc extends ApiPublicAbstract {
   exchange = 'hitbtc';
@@ -27,7 +28,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
     if (endTime) params.endTime = endTime;
     const url = '/api/proxy/https://api.hitbtc.com/api/2/public/candles/';
     // console.log(url);
-    return await this.http.get(url, {params}).map((res: any[]) => {
+    return await this.http.get(url, {params}).pipe(map((res: any[]) => {
       //  console.log(res);
       return res.map(function (item) {
         return {
@@ -41,7 +42,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
           Volume: +item.volume
         }
       })
-    }).toPromise();
+    })).toPromise();
 
   }
 
@@ -56,7 +57,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
     let url = '/api/proxy-5min/https://api.hitbtc.com/api/2/public/orderbook/{{coin}}{{base}}'
       .replace('{{base}}', base === 'USDT' ? 'USD' : base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
 
       if (!res.bid) {
         console.log(res);
@@ -83,7 +84,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
         sell: sell
       }
 
-    })
+    }));
   }
 
   /*allCoins: {[coin:string]:{[base:string]:number}};
@@ -109,7 +110,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
     console.log(url);
 
 
-    return this.http.get(url).map(result => {
+    return this.http.get(url).pipe(map(result => {
 
       let ar: any = result;
       const indexed = {};
@@ -141,7 +142,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
       // console.log(marketsAr);
       this.allCoins = allCoins;
       return indexed;
-    });
+    }));
   }
 
 
@@ -150,7 +151,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
     let url = '/api/proxy/https://api.hitbtc.com/api/2/public/trades/{{coin}}{{base}}?sort=DESC'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       ///console.warn(res);
 
       return res.map(function (item) {
@@ -169,7 +170,7 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
           timestamp: time.getTime()
         };
       });
-    });
+    }));
   }
 
   mapCoinDay(res) {

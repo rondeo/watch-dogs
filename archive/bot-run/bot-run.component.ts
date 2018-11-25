@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from "@angular/material";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ApiBase, IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase, IApiPublic} from "../services/apis/api-base";
 import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble, VOTradesStats} from "../../src/app/com/utils-order";
 
 

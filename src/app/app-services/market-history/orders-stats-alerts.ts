@@ -1,7 +1,8 @@
-import {Subject} from 'rxjs/Subject';
+
 import * as _ from 'lodash';
 import {VOOrder} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
+import {Subject} from 'rxjs/internal/Subject';
 
 enum OrdersAlers{
   VOLUME_UP

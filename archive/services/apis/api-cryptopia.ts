@@ -1,18 +1,18 @@
 import {Observable} from 'rxjs/Observable';
-import {AuthHttpService} from '../../../services/auth-http.service';
-import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../models/app-models";
-import {StorageService} from "../../../services/app-storage.service";
+import {AuthHttpService} from '../../../src/app/services/auth-http.service';
+import {VOBalance, VOBooks, VOMarket, VOMarketCap, VOOrder, VOOrderBook, VOTrade} from "../../../src/app/models/app-models";
+import {StorageService} from "../../../src/app/services/app-storage.service";
 
-import {ApiLogin} from "../../../shared/api-login";
+import {ApiLogin} from "../../../src/app/shared/api-login";
 import {IExchangeConnector} from "../connector-api.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 
-import {SelectedSaved} from "../../../com/selected-saved";
+import {SelectedSaved} from "../../../src/app/com/selected-saved";
 import {ApiBase, PrivateCalls} from "./api-base";
-import {MarketCapService} from "../../../market-cap/services/market-cap.service";
-import {Mappers} from "../../../apis/mappers";
-import {SOMarketBittrex, SOMarketCryptopia, SOMarketPoloniex} from "../../../models/sos";
+import {MarketCapService} from "../../../src/app/market-cap/services/market-cap.service";
+import {Mappers} from "../../../src/app/apis/mappers";
+import {SOMarketBittrex, SOMarketCryptopia, SOMarketPoloniex} from "../../../src/app/models/sos";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/Subject";
 

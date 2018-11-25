@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {ActivatedRoute} from "@angular/router";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
-import {ApiBase, IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {ConnectorApiService} from "../services/connector-api.service";
+import {ApiBase, IApiPublic} from "../services/apis/api-base";
 
 
 import {UtilsOrder} from "../../src/app/com/utils-order";

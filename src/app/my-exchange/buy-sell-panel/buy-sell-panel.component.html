@@ -5,13 +5,13 @@
 
 <hr/>
 <mat-form-field class="w6">
-    <mat-select [(ngModel)]="exchange" (change)="onExcgangeChange($event)" placeholder="Exchange">
+    <mat-select [(ngModel)]="exchange" (selectionChange)="onExcgangeChange($event)" placeholder="Exchange">
         <mat-option *ngFor="let exchange1 of exchanges" [value]="exchange1">{{exchange1}}</mat-option>
     </mat-select>
 </mat-form-field>
 
 <mat-form-field class="w6">
-    <mat-select [(ngModel)]="market" (change)="onMarketChange($event)" placeholder="Market">
+    <mat-select [(ngModel)]="market" (selectionChange)="onMarketChange($event)" placeholder="Market">
         <mat-option *ngFor="let market1 of markets" [value]="market1">{{market1}}</mat-option>
     </mat-select>
 </mat-form-field>
@@ -77,7 +77,7 @@
                             </mat-hint>
                         </mat-form-field>
                         <mat-slider
-                                [thumb-label]="true"
+                                [thumbLabel]="true"
                                 color="primary"
                                 (change)="onSladerBuyChange($event)"
                                 [vertical]="true"
@@ -133,7 +133,7 @@
                     </mat-hint>
                 </mat-form-field>
                 <mat-slider
-                        [thumb-label]="true"
+                        [thumbLabel]="true"
                         color="primary"
                         (change)="onSladerSellChange($event)"
                         [vertical]="true"

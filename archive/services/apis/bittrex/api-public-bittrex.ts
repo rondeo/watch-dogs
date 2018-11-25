@@ -2,7 +2,7 @@ import {IApiPublic} from "../api-base";
 import {HttpClient} from "@angular/common/http";
 
 import {Observable} from "rxjs/Observable";
-import {VOMarket} from "../../../../models/app-models";
+import {VOMarket} from "../../../../src/app/models/app-models";
 
 
 

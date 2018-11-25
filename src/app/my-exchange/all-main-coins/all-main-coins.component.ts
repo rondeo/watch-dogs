@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ConnectorApiService} from "../services/connector-api.service";
+import {ConnectorApiService} from "../../../../archive/services/connector-api.service";
 import {ActivatedRoute} from "@angular/router";
-import {ChannelEvents, Channels} from "../services/apis/socket-models";
+import {ChannelEvents, Channels} from "../../../../archive/services/apis/socket-models";
 
 
 @Component({

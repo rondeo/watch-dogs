@@ -1,5 +1,6 @@
-import {Subject} from "rxjs/Subject";
+
 import {HttpClient} from "@angular/common/http";
+import {Subject} from 'rxjs/internal/Subject';
 
 export class HttpDelay {
 

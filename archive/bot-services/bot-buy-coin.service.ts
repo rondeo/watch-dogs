@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {MarketCapService} from "../../src/app/market-cap/services/market-cap.service";
 
-import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {IApiPublic} from "../services/apis/api-base";
 import {IMarketRecommended, UtilsOrder} from "../../src/app/com/utils-order";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";

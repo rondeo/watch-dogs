@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import * as _ from 'lodash';
 import {MatDialog, MatSnackBar} from "@angular/material";
 
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {GainersService} from "../bot/gainers.service";
 
 @Component({

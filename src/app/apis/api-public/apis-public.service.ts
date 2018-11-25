@@ -8,15 +8,15 @@ import {ApiPublicBinance} from './api-public-binance';
 import {ApiPublicBittrex} from './api-public-bittrex';
 import {ApiPublicBitfinex} from './api-public-bitfinex';
 import {ApiPublicAbstract} from './api-public-abstract';
-import {Observable} from 'rxjs/Observable';
-import {forkJoin} from 'rxjs/observable/forkJoin';
+
 import {StorageService} from '../../services/app-storage.service';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/observable/forkJoin';
+
+
 import {VOCandle} from '../../models/api-models';
 import {ApiPublicOkex} from './api-public-okex';
 import {ApiPublicHuobi} from './api-public-huobi';
 import {VOMarket} from '../../models/app-models';
+import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 
 
 

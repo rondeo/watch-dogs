@@ -1,15 +1,18 @@
 import {ApiPrivateAbstaract} from './api-private-abstaract';
 import {StorageService} from '../../services/app-storage.service';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+
 import {VOBalance, VOOrder} from '../../models/app-models';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiPublicPoloniex} from '../api-public/api-public-poloniex';
 
 import * as cryptojs from 'crypto-js';
-import {Subject} from 'rxjs/Subject';
+
 import {UserLoginService} from '../../services/user-login.service';
 import {UTILS} from '../../com/utils';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
 
 export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   apiPublic: ApiPublicPoloniex
@@ -71,7 +74,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     return this.call({
       command: 'returnOpenOrders',
       currencyPair: 'all'
-    }).map(res => {
+    }).pipe(map(res => {
       let out = [];
      //  console.log(' AllOpenOrders ', res);
       for(let str in res) {
@@ -99,7 +102,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       }
       return out;
 
-    });
+    }));
   }
 
   getAllOrders(base: string, coin: string): Observable<VOOrder[]> {
@@ -108,7 +111,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     return this.call({
       command: 'returnTradeHistory',
       currencyPair: base + '_' + coin
-    }).map(res => {
+    }).pipe(map(res => {
 
       console.log(' AllOrders ' + base + '_' + coin, res);
       return res.map(function (o) {
@@ -128,14 +131,14 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
         }
       })
-    });
+    }));
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
     return this.call({
       command: 'returnOpenOrders',
       currencyPair: base + '_' + coin
-    }).map(res => {
+    }).pipe(map(res => {
 
       console.log(' OpenOrders ' + base + '_' + coin, res);
       return res.map(function (o) {
@@ -155,7 +158,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
         }
       })
-    })
+    }));
 
   }
 
@@ -163,7 +166,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     return this.call({
       command: 'cancelOrder',
       orderNumber: orderId
-    }).map(res => {
+    }).pipe(map(res => {
       console.log(res);
       if (res)
         return {
@@ -175,7 +178,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
           amountCoin: 0
         }
       else return null;
-    })
+    }))
   }
 
 
@@ -183,7 +186,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     return this.call({
       command: 'returnOrderTrades',
       orderNumber: orderId
-    }).map(res => {
+    }).pipe(map(res => {
       console.log(res);
 
 
@@ -215,7 +218,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       }
 
 
-    })
+    }))
 
   }
 
@@ -240,7 +243,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
   downloadBalances(): Observable<VOBalance[]> {
     this.isLoadingBalances = true;
     const exchange = this.exchange;
-    return this.call({command: 'returnBalances'}).map(res => {
+    return this.call({command: 'returnBalances'}).pipe(map(res => {
     //   console.log(res);
 
       if (!res) {
@@ -263,7 +266,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       this.isLoadingBalances = false;
       this.balancesSub.next(out);
       return out;
-    });
+    }));
   }
 
   async buyLimit(base: string, coin: string, quantity: number, rate: number): Promise<VOOrder> {
@@ -275,7 +278,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       currencyPair: market,
       rate: rate,
       amount: quantity
-    }).map(res => {
+    }).pipe(map(res => {
 
       console.log(' buyLimit market ' + market, res);
 
@@ -288,7 +291,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         coin: coin,
         type: res.type
       };
-    }).toPromise();
+    })).toPromise();
   }
 
   /*{"orderNumber":31226040,"resultingTrades":[{"amount":"338.8732","date":"2014-10-18 23:03:21","rate":"0.00000173","total":"0.00058625","tradeID":"16164","type":"buy"}]}*/
@@ -304,7 +307,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       rate: rate,
       amount: quantity
 
-    }).map(res => {
+    }).pipe(map(res => {
       console.log(' sellLimit market ' + market, res);
       return {
         uuid: res.orderNumber,
@@ -316,7 +319,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         type: res.type
       };
 
-    }).toPromise();
+    })).toPromise();
   }
 
   private call(post: any): Observable<any> {
@@ -337,10 +340,10 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     let url = '/api/poloniex/private';
     ;
     console.log(url);
-    return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).map(res => {
+    return this.http.post(url, {apiKey: cred.apiKey, signed: signed, postData: load}).pipe(map(res => {
 
       return res
-    })
+    }));
 
 
   }

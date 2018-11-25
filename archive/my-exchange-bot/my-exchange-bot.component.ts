@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {GainersService} from "../bot/gainers.service";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {VOBalance, VOBooksStats, VOMarket, VOMarketCap, VOOrder} from "../../src/app/models/app-models";
 import {MyTradingService} from "../bot/my-trading.service";
 
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {Subscription} from "rxjs/Subscription";
 import * as _ from 'lodash';
 import {MarketCollectorService} from "../bot/market-collector.service";

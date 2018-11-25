@@ -4,7 +4,7 @@ import {VOMarket, VOOrder} from "../../src/app/models/app-models";
 import {MappersHistory, VOHistoryStats} from "../../src/app/com/mappers-history";
 import {UtilsBooks} from "../../src/app/com/utils-books";
 import * as _ from 'lodash';
-import {MarketHistory} from '../../src/app/my-exchange/services/utils/market-history';
+import {MarketHistory} from '../services/utils/market-history';
 
 @Component({
   selector: 'market-history-table',

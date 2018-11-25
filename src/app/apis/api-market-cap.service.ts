@@ -2,19 +2,21 @@ import {Injectable} from '@angular/core';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {HttpClient} from '@angular/common/http';
 import {VOMarketCap, VOMarketCapExt} from '../models/app-models';
-import {Observable} from 'rxjs/Observable';
+
 import 'rxjs/add/operator/concat';
 import * as _ from 'lodash';
 import 'rxjs/add/operator/share';
-import {Subject} from 'rxjs/Subject';
+
 import {StorageService} from '../services/app-storage.service';
 import {Parsers} from './parsers';
 import * as moment from 'moment';
 import {clearInterval} from 'timers';
-import {BehaviorSubjectMy} from '../com/behavior-subject-my';
-import {Subscription} from 'rxjs/Subscription';
+
 import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '../models/api-models';
 import {VOMovingAvg} from '../com/moving-average';
+import {Observable} from 'rxjs/internal/Observable';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {map} from 'rxjs/operators';
 
 
 @Injectable()
@@ -24,7 +26,7 @@ export class ApiMarketCapService {
   static MC: { [symbol: string]: VOMarketCap };
   // private data: { [symbol: string]: VOMarketCap };
   //  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
-  private tikerSub: BehaviorSubjectMy<{ [symbol: string]: VOMarketCap }> = new BehaviorSubjectMy();
+  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }> = new BehaviorSubject(null);
 
   private coinsDay: VOCoinsDayData;
 
@@ -96,7 +98,7 @@ export class ApiMarketCapService {
       this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
       this.refreshTicker();
     }
-    return this.tikerSub.asObservable();
+    return this.tikerSub;
   }
 
   tickerGet$;
@@ -106,10 +108,10 @@ export class ApiMarketCapService {
     // const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     if (this.tickerGet$) return this.tickerGet$;
     console.log('%c TICKER ' + url, 'color:blue');
-    this.tickerGet$ = this.http.get(url).map((res: any[]) => {
+    this.tickerGet$ = this.http.get(url).pipe(map((res: any[]) => {
       console.log('%c TICKER MAP ' + url, 'color:blue');
       return ApiMarketCapService.mapDataMC(res);
-    }).share();
+    }));
     return this.tickerGet$
   }
 
@@ -153,26 +155,26 @@ export class ApiMarketCapService {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/5-hours/coin-history/:symbol/:from/:to'
       .replace(':symbol', coin).replace(':from', from).replace(':to', to);
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   get30MinLast(): Observable<VOMCObj[]> {
 
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/last/1';
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   getTickers30Min(limit = 2): Observable<VOMCObj[]> {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-min/last/' + limit;
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   getTicker30MinFrom(from: string, limit = 1): Observable<VOMCObj[]> {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/from/' +from + '/' + limit;
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   getCoinHistory(coin: string, from: string, to: string): Observable<VOMCObj[]> {
@@ -180,18 +182,18 @@ export class ApiMarketCapService {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
       .replace(':symbol', coin).replace(':from', from).replace(':to', to);
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   getTickers5Hours(limit = 2): Observable<VOMCObj[]> {
     const url = 'api/proxy-1hour/http://uplight.ca:50001/cmc-mongo/hours/last/' + limit;
     console.log(url);
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
   getTicker5HoursFrom(from: string, limit = 1) {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/hours/from/' + from + '/' + limit;
-    return this.http.get(url).map((res: any) => res.data);
+    return this.http.get(url).pipe(map((res: any) => res.data));
   }
 
 }

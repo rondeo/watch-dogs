@@ -11,7 +11,7 @@
                         From:
                     </td>
                     <td>
-                        <mat-select  [(ngModel)]="coinFrom.symbol" #select1 placeholder="Select Coin" (change)="coinSelectChanged1($event)">
+                        <mat-select  [(ngModel)]="coinFrom.symbol" #select1 placeholder="Select Coin" (selectionChange)="coinSelectChanged1($event)">
                             <mat-option *ngFor="let coin of coinsSorted" [value]="coin.symbol">
                                 {{ coin.symbol}} <small> ${{coin.price_usd?coin.price_usd.toFixed(2):''}}</small>
                             </mat-option>
@@ -19,9 +19,9 @@
 
                     </td>
                     <td>
-                        <mat-input-container>
+                        <mat-form-field>
                             <input [(ngModel)]="coinFrom.US"  matInput  placeholder="amount" name="dollarsAmount" >
-                        </mat-input-container>
+                        </mat-form-field>
 
                     </td>
 
@@ -42,7 +42,7 @@
                         To:
                     </td>
                     <td>
-                        <mat-select [(ngModel)]="coinTo.symbol" #select2 placeholder="Select Coin" (change)="coinSelectChanged2($event)">
+                        <mat-select [(ngModel)]="coinTo.symbol" #select2 placeholder="Select Coin" (selectionChange)="coinSelectChanged2($event)">
                             <mat-option *ngFor="let coin of coinsSorted" [value]="coin.symbol">
                                 {{ coin.symbol}}<small> ${{coin.price_usd?coin.price_usd.toFixed(2):''}}</small>
                             </mat-option>

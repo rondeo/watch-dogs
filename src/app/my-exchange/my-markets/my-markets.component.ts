@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {ConnectorApiService} from "../services/connector-api.service";
+import {ConnectorApiService} from "../../../../archive/services/connector-api.service";
 import {Subscription} from "rxjs/Subscription";
 import {VOMarket} from "../../models/app-models";
 import * as _ from 'lodash';
-import {ApiBase} from "../services/apis/api-base";
+import {ApiBase} from "../../../../archive/services/apis/api-base";
 
 
 @Component({

@@ -1,5 +1,5 @@
 import {VOBooks, VOMarketCap, VOOrder} from "../../src/app/models/app-models";
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {MarketCollectorService} from "./market-collector.service";
 import {VOTradesStats} from '../../src/app/com/utils-order';
 

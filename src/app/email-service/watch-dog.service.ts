@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {AuthHttpService} from "../services/auth-http.service";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+
 import {VOWatchdog} from "../models/app-models";
-import {Observable} from "rxjs/Observable";
+
 import {StorageService} from "../services/app-storage.service";
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {Observable} from 'rxjs/internal/Observable';
 
 
 

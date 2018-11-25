@@ -1,4 +1,4 @@
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 import {ANALYTICS, UtilsOrder, VOAnalytics, VOBubble} from "../../src/app/com/utils-order";
 import {EventEmitter} from "@angular/core";
 import {Observable} from "rxjs/Observable";

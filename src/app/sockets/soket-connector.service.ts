@@ -1,6 +1,4 @@
-import {Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
+
 import {BitfinexTradesSocket} from "./bitfinex-trades-socket";
 import {PoloniexTradesSocket} from "./poloniex-trade-socket";
 import {BinanceTradesSocket} from "./binance-trade-socket";
@@ -10,6 +8,8 @@ import {OkexTradesSocket} from "./okex-trade-socket";
 import {HitbtcTradesSocket} from "./hitbtc-trade-socket";
 import {SocketBase} from "./soket-base";
 import {BittrexTradesSocket} from "./bittrex/bittrex-trades-socket";
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/internal/Observable';
 
 
 export interface IVOTrade {

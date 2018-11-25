@@ -1,9 +1,11 @@
 import {HttpClient} from "@angular/common/http";
 import {VOBooks, VOMarket, VOTrade} from "../../models/app-models";
-import {Observable} from "rxjs/Observable";
+
 import {SOMarketBittrex} from "../../models/sos";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 export class ApiPublicBittrex extends ApiPublicAbstract{
 
@@ -23,7 +25,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
 
     let url =  this.prefix +'https://bittrex.com/api/v1.1/public/getorderbook?type=both&market=' + base + '-' + coin + '&depth=' + 50;
     console.log(url)
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       let r = (<any>res).result;
       return {
         market: base + '_' + coin,
@@ -35,7 +37,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
           return {amountCoin: o.Quantity, rate: o.Rate}
         })
       }
-    }, console.error);
+    }, console.error));
   }
 
 
@@ -61,7 +63,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
     let url =  this.prefix +'https://bittrex.com/api/v1.1/public/getmarketsummaries';
     console.log(url);
 
-    return this.http.get(url).map((result: any) => {
+    return this.http.get(url).pipe(map((result: any) => {
       let ar: SOMarketBittrex[] = result.result;
       let bases = [];
       ;
@@ -96,7 +98,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
       this.allCoins = allCoins;
       // console.log(marketsAr);
       return indexed;
-    });
+    }));
   }
 
 
@@ -106,7 +108,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
     let url =  this.prefix + 'https://bittrex.com/api/v1.1/public/getmarkethistory?market=' + market;
     console.log(url);
 
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       return (<any>res).result.map(function (item: any) {
 
         let time = (new Date(item.TimeStamp + 'Z'));
@@ -127,7 +129,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
         }
       });
 
-    });
+    }));
 
   }
 

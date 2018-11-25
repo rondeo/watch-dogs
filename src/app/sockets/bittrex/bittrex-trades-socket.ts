@@ -1,4 +1,4 @@
-import {Subject} from "rxjs/Subject";
+
 
 import * as  signalR from 'signalr-client';
 import {SocketBase} from "../soket-base";

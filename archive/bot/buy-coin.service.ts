@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ApiBase} from "../services/apis/api-base";
 
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";

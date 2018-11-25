@@ -1,10 +1,12 @@
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {reject} from "q";
-import {Subject} from "rxjs/Subject";
+
+
+
 import {VOBooks, VOMarket, VOOrder} from "../../models/app-models";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 export class ApiPublicPoloniex extends ApiPublicAbstract{
   exchange = 'poloniex';
@@ -23,7 +25,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     const url = 'https://poloniex.com/public?command=returnOrderBook&currencyPair={{base}}_{{coin}}&depth=100'
       .replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res:any) =>{
+    return this.http.get(url).pipe(map((res:any) =>{
       const market = base+'_'+coin;
       const exchange = 'poloniex';
       const buy = res.bids.map(function (item) {
@@ -46,7 +48,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
         market,
         exchange
       }
-    })
+    }))
   }
 
 
@@ -70,7 +72,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     let url  = '/api/proxy-5min/https://poloniex.com/public?command=returnTicker';
     console.log(url);
 
-    return this.http.get(url).map(result=>{
+    return this.http.get(url).pipe(map(result=>{
 
       const allCoins = {}
 
@@ -111,7 +113,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
       this.marketsAr = marketsAr;
 
       return indexed;
-    });
+    }));
   }
 
 
@@ -119,7 +121,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     let url = 'https://poloniex.com/public?command=returnTradeHistory&currencyPair={{base}}_{{coin}}';
     url =  url.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url)
-    return this.http.get(url).map((res:any[])=>{
+    return this.http.get(url).pipe(map((res:any[])=>{
       // console.log(res);
 
       return res.map(function(item) {
@@ -138,8 +140,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
           timestamp:time.getTime()
         };
       });
-
-    })
+    }));
   }
 
 

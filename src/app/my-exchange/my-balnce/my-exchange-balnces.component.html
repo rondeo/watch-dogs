@@ -1,7 +1,7 @@
 <div>
 
     <mat-form-field class="w8">
-        <mat-select [ngModel]="exchange" placeholder="Select Exchange" (change)="onEchangeChanged($event)">
+        <mat-select [ngModel]="exchange" placeholder="Select Exchange" (selectionChange)="onEchangeChanged($event)">
             <mat-option *ngFor="let exch of exchangesPrivate" [value]="exch">
                 {{exch}}
             </mat-option>

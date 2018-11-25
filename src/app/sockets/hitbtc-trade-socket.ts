@@ -1,4 +1,4 @@
-import {Subject} from "rxjs/Subject";
+
 import * as pako from 'pako';
 import * as gzip from 'gzip';
 import {IChannel, SocketBase} from "./soket-base";

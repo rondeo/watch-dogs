@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
+import {ConnectorApiService} from "../services/connector-api.service";
+import {ApiBase} from "../services/apis/api-base";
 import {VOMarket, VOOrder} from "../../src/app/models/app-models";
 import {UtilsOrder} from "../../src/app/com/utils-order";
 import * as _ from 'lodash';

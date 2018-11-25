@@ -2,7 +2,9 @@ import {ApiPublicAbstract} from './api-public-abstract';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from '../../services/app-storage.service';
 import {VOBooks, VOMarket, VOOrder, VOTrade} from '../../models/app-models';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+
 
 export class ApiPublicHuobi extends ApiPublicAbstract {
   exchange = 'huobi';
@@ -21,7 +23,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
       .replace('{{base}}', base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
-    return this.http.get(url).map((res:any) => {
+    return this.http.get(url).pipe(map((res:any) => {
       return res.data.map(function (o) {
         o = o.data[0];
         return {
@@ -36,7 +38,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
           rate:o.price
         }
       })
-    });
+    }));
   }
 
   downloadBooks(base: string, coin: string): Observable<VOBooks> {
@@ -45,7 +47,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
       .replace('{{base}}',  base.toLowerCase())
       .replace('{{coin}}', coin.toLowerCase());
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       const result = res.tick;
 
       if(!result.bids){
@@ -73,7 +75,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
         sell: sell
       }
 
-    })
+    }));
   }
 
   downloadTicker():Observable<{[market:string]:VOMarket}> {
@@ -81,7 +83,7 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
     let url = '/api/proxy-5min/https://api.huobipro.com//market/tickers';
     console.log(url);
 
-    return this.http.get(url).map((result: any) => {
+    return this.http.get(url).pipe(map((result: any) => {
       let data: any[] = result.data;
       const indexed = {};
       const bases = [];
@@ -113,6 +115,6 @@ export class ApiPublicHuobi extends ApiPublicAbstract {
       });
       this.allCoins = allCoins;
       return indexed;
-    });
+    }));
   }
 }

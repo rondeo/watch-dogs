@@ -1,9 +1,9 @@
 import {IApiPublic} from "../api-base";
-import {VOMarket, VOOrder} from "../../../../models/app-models";
+import {VOMarket, VOOrder} from "../../../../src/app/models/app-models";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 
-import {SOMarketPoloniex} from "../../../../models/sos";
+import {SOMarketPoloniex} from "../../../../src/app/models/sos";
 import {reject} from "q";
 import {Subject} from "rxjs/Subject";
 

@@ -1,4 +1,4 @@
-import {IApiPublic} from "../../src/app/my-exchange/services/apis/api-base";
+import {IApiPublic} from "../services/apis/api-base";
 import {
   IMarketDataCollect, IMarketRecommended, UtilsOrder, VOMarketsStats,
   VOTradesStats

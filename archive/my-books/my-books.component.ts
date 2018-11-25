@@ -1,6 +1,6 @@
 import {Component, Input, Output, OnChanges, OnDestroy, OnInit, EventEmitter} from '@angular/core';
-import {ApiBase} from "../../src/app/my-exchange/services/apis/api-base";
-import {ConnectorApiService} from "../../src/app/my-exchange/services/connector-api.service";
+import {ApiBase} from "../services/apis/api-base";
+import {ConnectorApiService} from "../services/connector-api.service";
 import {BooksService} from "../app-services/books-service";
 import {VOBooks} from "../../src/app/models/app-models";
 

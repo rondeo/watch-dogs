@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+
 import * as moment from 'moment';
 import {MATH} from '../com/math';
 import {VOCandle} from '../models/api-models';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
+import {of} from 'rxjs/internal/observable/of';
 
 
 export interface VOTweeterAccount {
@@ -64,7 +67,7 @@ export class ApiCryptoCompareService {
     };
     const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
     // console.warn(url);
-    return this.http.get(url, {params}).map((res: any) => {
+    return this.http.get(url, {params}).pipe(map((res: any) => {
     //  console.log(res);
       if (!res.from || !res.from.Twitter) return null;
       const from = res.from;
@@ -99,29 +102,30 @@ export class ApiCryptoCompareService {
         RdFollow,
         FbPoints
       };
-    }).toPromise()
+    })).toPromise();
   }
 
 
   getSocialStats0(symbol: string) {
 
     return this.getCoinLists().switchMap(coins => {
-      if (!coins[symbol]) {
+      if (coins[symbol]) {
+        const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
+        console.log(url);
+        return this.http.get(url).pipe(map((res: any) => {
+          console.log(res.Data);
+          return res.Data || {};
+        }));
+      } else {
         console.warn(symbol, coins);
-        return Observable.of({});
+        return of({});
       }
-      const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/socialstats/?id=' + coins[symbol].Id;
-      console.log(url);
-      return this.http.get(url).map((res: any) => {
-        console.log(res.Data);
-        return res.Data || {};
-      })
     })
   }
 
   getCoinLists() {
     const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/coinlist';
-    if (this.coinList) return Observable.of(this.coinList);
+    if (this.coinList) return of(this.coinList);
     else return (<any> this.http.get(url)).map(res => {
       this.coinList = res.Data;
       return this.coinList
@@ -132,9 +136,9 @@ export class ApiCryptoCompareService {
   getMarkets(base: string, coin: string) {
     const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/coinsnapshot/?fsym={{coin}}&tsym={{base}}'
       .replace('{{coin}}', coin).replace('{{base}}', base);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       return res.Data
-    })
+    }));
   }
 
 
@@ -164,7 +168,7 @@ export class ApiCryptoCompareService {
 
     const url = 'https://min-api.cryptocompare.com/data/histohour';
 
-    return this.http.get(url, {params}).map((res: any) => {
+    return this.http.get(url, {params}).pipe(map((res: any) => {
       console.log(res.Data.length)
       return res.Data.map(function (item) {
         return {
@@ -176,7 +180,7 @@ export class ApiCryptoCompareService {
           Volume: item.volumefrom
         }
       })
-    }).toPromise();
+    })).toPromise();
   }
 
   private getHistoMinute(market: string, aggregate: string, limit = '120'): Promise<VOCandle[]> {
@@ -191,7 +195,7 @@ export class ApiCryptoCompareService {
     };
 
     const url = 'https://min-api.cryptocompare.com/data/histominute';
-    return this.http.get(url, {params}).map((res: any) => {
+    return this.http.get(url, {params}).pipe(map((res: any) => {
     //   console.log('results ' + res.Data.length);
       return res.Data.map(function (item) {
         return {
@@ -204,7 +208,7 @@ export class ApiCryptoCompareService {
 
         }
       })
-    }).toPromise();
+    })).toPromise();
 
   }
 

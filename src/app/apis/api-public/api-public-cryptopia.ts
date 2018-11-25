@@ -1,10 +1,12 @@
 import {VOBooks, VOMarket, VOOrder, VOTrade} from "../../models/app-models";
 import {SOMarketCryptopia} from "../../models/sos";
-import {ApiCryptopia} from "../../my-exchange/services/apis/api-cryptopia";
-import {Observable} from "rxjs/Observable";
+import {ApiCryptopia} from "../../../../archive/services/apis/api-cryptopia";
+
 import {HttpClient} from "@angular/common/http";
 import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 export class ApiPublicCryptopia extends ApiPublicAbstract {
   exchange = 'cryptopia';
@@ -22,7 +24,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
 
     let url = 'https://www.cryptopia.co.nz/api/GetMarketOrders/{{coin}}_{{base}}/100'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       // console.log(res);
       res = res.Data;
 
@@ -47,14 +49,14 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
         sell: sell
       }
 
-    })
+    }));
   }
 
   downloadMarketHistory(base: string, coin: string): Observable<VOOrder[]> {
 
     let url = 'https://www.cryptopia.co.nz/api/GetMarketHistory/{{coin}}_{{base}}/1'.replace('{{base}}', base).replace('{{coin}}', coin);
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       res = res.Data;
       console.log(' MarketHistory ' + res.length);
       return res.map(function (item) {
@@ -73,7 +75,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
           local: time.toLocaleTimeString()
         };
       });
-    });
+    }));
   }
 
   /* allCoins: {[coin:string]:{[base:string]:number}};
@@ -96,7 +98,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
 
     let url = 'https://www.cryptopia.co.nz/api/GetMarkets';
     console.log(url);
-    return this.http.get(url).map((res: any) => {
+    return this.http.get(url).pipe(map((res: any) => {
       let result = res.Data;
 
       const allCoins = {}
@@ -148,7 +150,7 @@ export class ApiPublicCryptopia extends ApiPublicAbstract {
 
       this.allCoins = allCoins
       return indexed;
-    });
+    }));
   }
 
   static mapMarkets(
