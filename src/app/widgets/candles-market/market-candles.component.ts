@@ -39,11 +39,13 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
           this.volumes = null;
           return;
         }
+
         this.candles = candles;
         this.volumes = candles.map(function (o) {
           return o.open > o.close ? -o.Volume : o.Volume;
         });
       });
+
 
 
     if (this.inBrowser) {

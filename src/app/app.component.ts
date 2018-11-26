@@ -11,6 +11,8 @@ import {MarketCapService} from './market-cap/services/market-cap.service';
 import {LoginExchangeComponent} from './material/login-exchange/login-exchange.component';
 import {AppBotsService} from './app-services/app-bots-services/app-bots.service';
 import {FollowOrdersService} from './apis/open-orders/follow-orders.service';
+import {Store} from '@ngrx/store';
+import {AppState} from './reducers';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,8 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private botsService: AppBotsService,
     private snackBar: MatSnackBar,
-    private followOrders: FollowOrdersService
+    private followOrders: FollowOrdersService,
+    private store: Store<AppState>
   ) {
   }
   title = 'app works!';
@@ -68,6 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.store.subscribe()
     this.auth.isOnline$().subscribe(res => {
       this.imageClass = res ? '' : 'glow-red';
       this.bgColor = res ? '' : 'bg-red';

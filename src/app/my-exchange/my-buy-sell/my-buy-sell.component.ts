@@ -151,7 +151,7 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
     if (isNaN(this.rateBuy)) return;
     const MC = await this.marketCap.getTicker();
     let amountUS = this.amountUS;
-    const priceBase = this.base === 'USDT' ? 1 : MC[this.base].price_usd;
+    const priceBase = (this.base === 'USDT' || this.base === 'USD')  ? 1 : MC[this.base].price_usd;
     let amountBase = amountUS / priceBase;
     if (this.balanceBase.available < amountBase) amountBase = this.balanceBase.available;
     if (amountBase * priceBase < 9) {

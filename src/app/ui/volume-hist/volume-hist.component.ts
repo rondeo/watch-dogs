@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {VOCandle} from '../../models/api-models';
 import {MATH} from '../../com/math';
 import * as moment from 'moment';
@@ -11,17 +11,15 @@ import * as _ from 'lodash';
   templateUrl: './volume-hist.component.html',
   styleUrls: ['./volume-hist.component.css']
 })
-export class VolumeHistComponent extends DrawBase {
+export class VolumeHistComponent extends DrawBase{
 
   constructor() {
     super();
   }
 
-  //  @Input() candles: VOCandle[];
   @Input() values: number[];
 
   maxV;
-
 
   drawGraphs() {
     const ar = this.values;

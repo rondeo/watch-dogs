@@ -1,6 +1,6 @@
-import {Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Input, OnChanges, ViewChild} from '@angular/core';
 
-export class DrawBase {
+export class DrawBase implements OnChanges, AfterViewInit {
   @ViewChild('graphs') canv;
   @ViewChild('myContainer') container;
   protected ctx: CanvasRenderingContext2D;
@@ -83,17 +83,15 @@ export class DrawBase {
     setTimeout(() => this.redraw(), 100);
   }
 
-  aViewInit() {
+  ngAfterViewInit() {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
     // if (this.graphs) this.drawData();
     setTimeout(() => this.setSize(), 100);
   }
 
-  onChanges(evt) {
-
+  ngOnChanges(evt) {
     if (this.ctx) this.redraw();
-
   }
 
   drawGrid(
