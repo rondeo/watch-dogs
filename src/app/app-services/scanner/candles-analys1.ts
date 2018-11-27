@@ -297,7 +297,7 @@ export class CandlesAnalys1 {
     });
 
     // console.log(states);
-    console.log(_.clone(patterns));
+   //  console.log(_.clone(patterns));
     return patterns;
   }
 

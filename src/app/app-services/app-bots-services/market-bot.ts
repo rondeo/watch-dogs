@@ -16,10 +16,10 @@ import {CandlesAnalys1} from '../scanner/candles-analys1';
 import * as moment from 'moment';
 import {UtilsBooks} from '../../com/utils-books';
 import {StopLossOrder} from './stop-loss-order';
+import {ResistanceSupportController} from './resistance-support-controller';
 
 export class MarketBot {
-
-
+  resistanceSupport: ResistanceSupportController;
   constructor(
     public exchange: string,
     public market: string,
@@ -50,17 +50,12 @@ export class MarketBot {
   patterns: any[] = [];
   lastOrder: {stamp: number, action: string, price: number};
   prevPrice: number;
-
   interval;
-
   sub1;
   sub2;
 
   private activeOrder: VOOrder;
-
-
   timeout;
-
   async sellCoinInstant() {
     console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
     console.log(this.balanceCoin);
@@ -68,7 +63,6 @@ export class MarketBot {
       this.log('SELL no Balance');
       return;
     }
-
 
     const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
     const qty = this.amountCoin;
@@ -157,6 +151,9 @@ export class MarketBot {
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
     const result = await CandlesAnalys1.createState(candles);
+
+    const support = this.resistanceSupport.getSupportLevel(result.P);
+
     this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
 
     const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
@@ -193,6 +190,9 @@ export class MarketBot {
     this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
     this.orders = (await  this.storage.select(this.id + '-orders')) || [];
 
+    this.resistanceSupport = new ResistanceSupportController(this.market, '15m', this.apiPublic, this.storage);
+    await this.resistanceSupport.init();
+
    /* this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
       if (!balances) return;
       const bb = _.find(balances, {symbol: this.base});
@@ -208,6 +208,15 @@ export class MarketBot {
       //  console.log(this.market + ' my order ', myOrder);
       this.activeOrder = myOrder;
     })*/
+  }
+
+  async deleteHistory(){
+    await this.storage.remove(this.id + '-logs');
+    await this.storage.remove(this.id + '-patterns');
+    await this.storage.remove(this.id + '-orders');
+    this.patterns = [];
+    this.orders = [];
+    this.logs = [];
   }
 
   async save() {
@@ -228,6 +237,7 @@ export class MarketBot {
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2)this.sub2.unsubscribe();
+    this.resistanceSupport.destroy();
   }
 
 

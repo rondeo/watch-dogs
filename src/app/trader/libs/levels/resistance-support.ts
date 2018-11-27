@@ -2,74 +2,60 @@ import {VOCandle} from '../../../models/api-models';
 import * as _ from 'lodash';
 
 export class ResistanceSupport {
-  result: { resistance: VOCandle[], support: VOCandle[] };
-  range = 5;
+  private supports: VOCandle[];
+  private resistances: VOCandle[];
 
-  constructor(private candles: VOCandle[]) {
+  constructor(private candles: VOCandle[], private range = 5) {
   }
-
-  async getResistance(ar: VOCandle[]) {
+  getResistances() {
+    if (this.resistances) return this.resistances;
+    const data: VOCandle[] = this.candles;
     const out = [];
     const range = this.range;
-    const isTop = function (ar1: VOCandle[], n, i) {
-      const abs = Math.abs(n) + 1;
-      const cur = ar1[i].high;
-      while (n < abs) {
-        if (ar1[i + n].high > cur) return false;
-        n++;
+    const isTop = function (ar: VOCandle[], j, i) {
+      const abs = Math.abs(j) + 1;
+      const cur = ar[i].close;
+      while (j < abs) {
+        if (ar[i + j].close > cur) return false;
+        j++;
       }
       return true;
     };
-    for (let i = range, n = ar.length - range; i < n; i++) {
-      // const item = ar[i];
-      // const cur = ar[i].high;
-      if (isTop(ar, -range, i)) {
-        out.push(ar[i]);
-      }
-
+    for (let i = range, n = data.length - range; i < n; i++) {
+      if (isTop(data, -range, i)) out.push(data[i]);
     }
-
-    return Promise.resolve(out);
+    this.resistances = out;
+    return out;
   }
 
-  getSupport(ar: VOCandle[]) {
+  getSupports() {
+    if (this.supports) return this.supports;
+    const data = this.candles;
     const out = [];
     const range = this.range;
-    const isBott = function (ar1: VOCandle[], n, i) {
-      const abs = Math.abs(n) + 1;
-      const cur = ar1[i].low;
-      while (n < abs) {
-        if (ar1[i + n].low < cur) return false;
-        n++;
+    const isLowest = function (ar: VOCandle[], j, i) {
+      const n = Math.abs(j) + 1;
+      const cur = ar[i].close;
+      while (j < n) {
+        if (ar[i + j].close < cur) return false;
+        j++;
       }
       return true;
     };
 
-    for (let i = range, n = ar.length - range; i < n; i++) {
-      const item = ar[i];
-      const cur = ar[i].low;
-      if (isBott(ar, -range, i)
-      ) {
-        out.push(item);
-      }
-
+    for (let i = range, n = data.length - range; i < n; i++) {
+      const item = data[i];
+      if (isLowest(data, -range, i)) out.push(item);
     }
-
-    return Promise.resolve(out);
+    this.supports = out;
+    return out;
   }
 
-
-  async ctr() {
-    // let maxAr = _.sortBy(this.candles, 'high').reverse();
-    const resistance: VOCandle[] = <VOCandle[]>(await this.getResistance(this.candles));
-
-    const support: VOCandle[] =  await this.getSupport(this.candles);
-    this.result = {resistance, support};
-    return this.result;
-  }
-
-  async getResult() {
-    return this.ctr();
+  getResult() {
+    return {
+      resistance: this.getResistances(),
+      support: this.getSupports()
+    }
 
   }
 }

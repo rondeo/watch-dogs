@@ -14,7 +14,6 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   candles: VOCandle[];
   volumes: number[];
   candlesInterval = '1m';
-
   inBrowser = false;
 
   constructor(

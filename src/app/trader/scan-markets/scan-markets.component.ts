@@ -196,6 +196,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.showMarket(this.scanner.currentMarket);
 
   }
+
   onBotsChange(evt) {
     if (evt.checked) this.populateBots();
     else this.bots = null;
@@ -205,7 +206,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.followOrder.getBots().then(res => {
       if (!res) return;
       this.bots = res.map(function (item) {
-        return{
+        return {
           market: item.market,
           x: 'X'
         };
@@ -376,20 +377,27 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }
 
+  volumeInterval= '5m';
+  volumeChange = 500;
+  subVolume;
   async onVolumeChange(evt) {
     if (evt.checked) {
-      this.setVolumes(await this.scanner.getVolumes());
-
-    } else this.volumesResults = null;
+      this.subVolume = this.scanner.volumeResults$().subscribe(results => {
+        if (!results) return;
+        this.setVolumes(results);
+      })
+    } else {
+      if (this.subVolume) this.subVolume.unsubscribe();
+      this.volumesResults = null;
+    }
   }
-
 
   async onVolumeStartClick() {
     if (!this.volumeSub) this.volumeSub = this.scanner.volumeResults$().subscribe(results => {
 
       if (!Array.isArray(results)) return;
       this.volumesResults = results.map(function (item) {
-        return Object.assign(item, {x: 'X'});
+        return Object.assign({}, item, {x: 'X'});
       });
     });
 
@@ -400,9 +408,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
     const markets = this.scanOnlyUP ?
       _.map(await this.scanner.getSelected(), 'market') : await this.scanner.getAvailableMarkets('binance');
-    
 
-    this.scanner.scanForVolume(markets);
+
+    this.scanner.scanForVolume(markets, this.volumeInterval, this.volumeChange);
     // console.log(markets);
     // const sub = await this.scanner.scanForVolume(markets);
     // sub.subscribe(this.setVolumes.bind(this));
@@ -418,7 +426,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     if (confirm('Delete Volumes?')) {
       setTimeout(async () => {
         await this.scanner.deleteVolumes();
-        this.setVolumes(await this.scanner.getVolumes());
 
       }, 500);
     }
@@ -662,7 +669,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.selectedMarket = market;
     const api = this.apisPublic.getExchangeApi('binance');
 
-     let candles = await api.downloadCandles(market, this.candlesInterval, 200);
+    let candles = await api.downloadCandles(market, this.candlesInterval, 200);
     if (!candles) {
       this.candles = null;
       this.volumes = null;

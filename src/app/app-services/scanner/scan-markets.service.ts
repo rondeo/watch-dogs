@@ -43,6 +43,7 @@ export class ScanMarketsService {
       this.marketsTrendDown.next(data);
     })*/
   }
+
   // exchange = 'binance';
   scanInterval;
   progressSub: Subject<string> = new Subject<string>();
@@ -244,17 +245,13 @@ export class ScanMarketsService {
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////
-  async getVolumes() {
-    return (await this.storage.select('scan-volumes')) || [];
-  }
 
   deleteVolumes() {
     this.saveVolumes([]);
-
   }
 
   async deleteVolume(market: string) {
-    let results: any[] = await this.getVolumes();
+    let results: any[] =  this.volumeSub.getValue();
     // @ts-ignore
     results = _.reject(results, {market: market});
     this.saveVolumes(results);
@@ -266,31 +263,35 @@ export class ScanMarketsService {
     if (!results1) {
       this.storage.select('scan-volumes').then(results => {
         this.volumeSub.next(results);
-
       });
     }
     return this.volumeSub.asObservable();
   }
 
-  async volumeNext(markets: string[], i: number) {
+  stopVolumeScan(){
+    clearTimeout(this.scanVolumeTimer);
+    this.isScanning = false;
+  }
+  async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number) {
     i++;
     if (i >= markets.length) {
-      this.stopVolumeScan();
+     clearTimeout(this.scanVolumeTimer);
+     this.isScanning = false;
       return;
     }
 
     const market = markets[i];
     let candles;
-
+    this.isScanning = true;
     try {
-      candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, '5m', 120);
+      candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 120);
     } catch (e) {
       console.warn(e);
     }
 
 
     if (!candles) {
-      this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i), 10000);
+      this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange), 10000);
       return;
     }
 
@@ -312,11 +313,10 @@ export class ScanMarketsService {
     const priceBefore = _.mean(closes.slice(50, -10));
     const priceAfter = _.mean(closes.slice(-10));
 
-    const volumeCnahge = MATH.percent(avgAfter, avgBefore);
+    const VD = MATH.percent(avgAfter, avgBefore);
     const priceChange = MATH.percent(priceAfter, priceBefore);
 
-    const message = ' V: ' + volumeCnahge + ' P ' + priceChange;
-
+    const message = ' V: ' + volumeChange + ' P ' + priceChange;
     this.currentMarket = market;
 
     console.log(market + message);
@@ -333,15 +333,13 @@ export class ScanMarketsService {
     //  console.log(market , tailD);
 
 // && Math.abs(amplUP) < 2 && Math.abs(amplDOWN) < 2
-    if (volumeCnahge > 500) {
+    if (VD > volumeChange) {
       const results = this.volumeSub.getValue() || [];
-
       results.push({time, market, message});
       this.saveVolumes(results);
     }
 
-    this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i), 2000);
-
+    this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange), 2000);
   }
 
   async saveVolumes(results: any[]) {
@@ -349,13 +347,13 @@ export class ScanMarketsService {
     return await this.storage.upsert('scan-volumes', results);
   }
 
-  async scanForVolume(markets: string[]) {
-
+  scanForVolume(markets: string[], candlesInterval: string, volumeChange: number) {
     this.isScanning = true;
     this.scanVolumeTimer = 1;
     this.saveVolumes([]);
+    this.volumeNext(markets, -1, candlesInterval, volumeChange);
+    return this.volumeSub;
 
-    this.volumeNext(markets, -1);
 
     /*
         this.progressSub.next('SCANNING Volume');
@@ -450,11 +448,7 @@ export class ScanMarketsService {
     // return this.subVol;
   }
 
-  stopVolumeScan() {
-    clearTimeout(this.scanVolumeTimer);
-    this.isScanning = false;
-    this.scanVolumeTimer = 0;
-  }
+
 
   /*async getValidMarkets(exchange: string) {
 
@@ -565,7 +559,7 @@ export class ScanMarketsService {
           results.push({time, market, message, intervals});
         }
 
-        
+
         this.saveMFIs(results);
       }
 

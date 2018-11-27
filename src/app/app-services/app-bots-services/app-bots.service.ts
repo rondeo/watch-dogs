@@ -87,7 +87,7 @@ export class AppBotsService {
   private runInterval;
 
   async init() {
-    const botsIds: any[] = await this.storage.select('my-bots') || [];
+  /*  const botsIds: any[] = await this.storage.select('my-bots') || [];
     const bots = botsIds.map((o) => {
       return new MarketBot(
         o.exchange,
@@ -104,7 +104,7 @@ export class AppBotsService {
     bots.forEach(function (item) {
       item.start();
     });
-    setInterval(() => this.saveBots(), 6e4);
+    setInterval(() => this.saveBots(), 6e4);*/
   }
 
   addBot(exchange: string, market: string): MarketBot {

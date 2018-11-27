@@ -3,6 +3,7 @@ import {StorageService} from '../../services/app-storage.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-order-reports',
@@ -70,7 +71,6 @@ export class OrderReportsComponent implements OnInit {
         };
       });
     });
-
   }
 
   onRecordsClick(evt) {
@@ -85,17 +85,16 @@ export class OrderReportsComponent implements OnInit {
             .then(this.populateBots.bind(this));
         }
         return;
-
     }
   }
+
   async showBotHistory() {
     if (!this.market) {
       this.ordersData = null;
       return;
     }
-
     const id = 'bot-' + this.market + this.dataName;
-    console.log(id);
+    // console.log(id);
     switch (this.dataName) {
       case '-logs':
         this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
@@ -105,27 +104,24 @@ export class OrderReportsComponent implements OnInit {
         });
         break;
       default:
-
         this.ordersData = ((await this.storage.select(id)) || []);
         break;
     }
-
   }
 
   onDataChange(evt) {
     this.dataName = evt.value;
     this.showBotHistory();
-
   }
 
-
-
   ///////////////////////////////////////////////////
-  onDeleteRecordsClick() {
+  async onDeleteRecordsClick() {
+    const bots =  await this.followOrder.getBots();
+    const exist = _.find(bots, {market: this.market});
+    if(!exist) return;
     if (confirm('Delete  history ' + this.market + '?')) {
-      this.storage.remove('bot-' + this.market).then(() => {
-
-      });
+      await exist.deleteHistory();
+      this.showBotHistory();
     }
   }
 
