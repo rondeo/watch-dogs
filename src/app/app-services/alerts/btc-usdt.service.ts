@@ -31,7 +31,7 @@ export class BtcUsdtService {
 
   }
 
-  alertSub: Subject<string> = new Subject();
+  alertSub: Subject<{PD: number, VD: number, trades: any[]}> = new Subject();
 
 
   candlesSub: BehaviorSubject<VOCandle[]>;
@@ -276,45 +276,36 @@ export class BtcUsdtService {
     return this.candlesSub;
   }
 
+  lastPrice:number;
   async next() {
     // const trades: VOOrder[] = await this.downlaodTrades();
     let candles: VOCandle[] = await this.downloadNewCandles();
-    if (_.last(candles).Volume < candles[candles.length - 2].Volume)
-      candles = candles.slice(0, -1);
-    const last3: VOCandle[] = _.takeRight(candles, 3);
+    if(this.lastPrice === _.last(candles).close) return;
+    this.lastPrice = _.last(candles).close;
 
+    const lasts: VOCandle[] = _.takeRight(candles, 2);
     const volumes = _.map(candles, 'Volume');
     const medV = MATH.median(volumes);
-
-    const lastV = (last3[0].Volume + last3[1].Volume + last3[2].Volume) / 3;
-
-    const PV3 = MATH.percent(lastV, medV);
-
-    if (this.lastcandlesStats === PV3) return;
-    this.lastcandlesStats = PV3;
-    const startPrice = last3[0].open;
-    const endPrice = last3[2].close;
-    const PD3 = MATH.percent(endPrice, startPrice);
-
-    if (PD3 < -0.3) {
-      this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3 + '% ' + await this.getTopTrades());
-    } else if (PV3 > 1000) {
-      this.alertSub.next(' BTC ' + PD3 + '% ' + 'V: ' + PV3 + '% ' + await this.getTopTrades());
+    const lastV = (lasts[0].Volume + lasts[1].Volume) / 2;
+    const VD = MATH.percent(lastV, medV);
+    const startPrice = lasts[0].open;
+    const endPrice = lasts[1].close;
+    const PD = MATH.percent(endPrice, startPrice);
+    if (PD < -0.3 || VD > 1000) {
+      const trades = await this.getTopTrades();
+      this.alert({PD, VD, trades})
     }
 
-    this.candlesStats.push({PV3, PD3});
-    if (this.candlesStats.length > 200) this.candlesStats.shift();
-    this.storage.upsert('candlesStats', this.candlesStats);
-
-    if (this.tradesStats.length > 200) this.tradesStats.shift();
-    this.storage.upsert('test-trades', this.tradesStats);
-
-    //  console.log('PD3 ' + PD3 + ' PV3  ' + PV3);
-
-
-    // console.log(trades, candles);
   }
 
+  async alert(data){
+    this.alertSub.next(data);
+    const alerts:any[] = (await this.storage.select('USDT_BTC-alerts')) || [];
+    if(alerts.length > 100) alerts.pop();
+    data.date = moment().format('DD HH:mm');
+    alerts.unshift(data);
+    this.storage.upsert('USDT_BTC-alerts', alerts);
+  }
   async getTopTrades() {
     const trades: VOOrder[] = await this.downlaodTrades();
     const sorted = _.orderBy(trades, 'amountCoin').reverse();
@@ -348,6 +339,7 @@ export class BtcUsdtService {
     newcandles.forEach(function (o) {
       o.time = moment(o.to).format('HH:mm');
     });
+
     const t = newcandles[0].to;
     // console.log(oldcandles.length);
     oldcandles = oldcandles.filter(function (o) {

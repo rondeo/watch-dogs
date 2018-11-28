@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
@@ -16,7 +16,8 @@ export class OrderReportsComponent implements OnInit {
     private router: Router,
     private storage: StorageService,
     private followOrder: FollowOrdersService
-  ) { }
+  ) {
+  }
 
   ordersRecords: any[];
   ordersData: any[];
@@ -33,27 +34,30 @@ export class OrderReportsComponent implements OnInit {
     });
     this.initAsync();
   }
+
   async initAsync() {
+    setTimeout(() => this.populateBots(), 2000);
+    /*
+     const keys:string[] = await this.storage.keys();
 
-    setTimeout(() => this.populateBots(), 5000);
-   /*
-    const keys:string[] = await this.storage.keys();
-
-    // console.log(keys);
-    const orders = keys.filter(function (item) {
-      return item.indexOf('order') !==-1
-    })
-    this.ordersRecords = orders.map(function (item) {
-      return {
-        key:item,
-        x:'X'
-      }
-    });*/
+     // console.log(keys);
+     const orders = keys.filter(function (item) {
+       return item.indexOf('order') !==-1
+     })
+     this.ordersRecords = orders.map(function (item) {
+       return {
+         key:item,
+         x:'X'
+       }
+     });*/
 
   }
 
+  async onUsdtBtcClick() {
+    this.ordersData = await this.storage.select('USDT_BTC-alerts');
+  }
 
- ////////////////////////////////////// BOTS
+  ////////////////////////////////////// BOTS
 
 
   /*onBotsChange(evt) {
@@ -65,7 +69,7 @@ export class OrderReportsComponent implements OnInit {
     this.followOrder.getBots().then(res => {
       if (!res) return;
       this.ordersRecords = res.map(function (item) {
-        return{
+        return {
           market: item.market,
           x: 'X'
         };
@@ -116,9 +120,9 @@ export class OrderReportsComponent implements OnInit {
 
   ///////////////////////////////////////////////////
   async onDeleteRecordsClick() {
-    const bots =  await this.followOrder.getBots();
+    const bots = await this.followOrder.getBots();
     const exist = _.find(bots, {market: this.market});
-    if(!exist) return;
+    if (!exist) return;
     if (confirm('Delete  history ' + this.market + '?')) {
       await exist.deleteHistory();
       this.showBotHistory();
@@ -129,26 +133,26 @@ export class OrderReportsComponent implements OnInit {
     console.log(evt);
   }
 
- /* onOrdersRecordsClick(evt){
-    console.log(evt)
-    switch (evt.prop) {
-      case 'key':
-        this.selectedKey = evt.item.key;
-        this.storage.select(this.selectedKey).then(results =>{
-        //  console.log(results);
+  /* onOrdersRecordsClick(evt){
+     console.log(evt)
+     switch (evt.prop) {
+       case 'key':
+         this.selectedKey = evt.item.key;
+         this.storage.select(this.selectedKey).then(results =>{
+         //  console.log(results);
 
-         if(Array.isArray(results))
-          this.ordersData = results.map(function (item) {
-            return {
-              record:item,
-            }
-          });
-         else this.ordersData = [results]
-        });
+          if(Array.isArray(results))
+           this.ordersData = results.map(function (item) {
+             return {
+               record:item,
+             }
+           });
+          else this.ordersData = [results]
+         });
 
-        return
-    }
+         return
+     }
 
-  }*/
+   }*/
 
 }

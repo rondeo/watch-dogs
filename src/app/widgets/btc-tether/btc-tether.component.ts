@@ -33,7 +33,8 @@ export class BtcTetherComponent implements OnInit {
     this.btcMC$ = this.btcusdt.btcMC$;
     this.usdtMC$ = this.btcusdt.usdtMC$;
     this.btcusdt.alertSub.subscribe(alert => {
-      this.snackBar.open(alert, 'x', {panelClass: 'error'});
+      const message = 'BTC P '+ alert.PD + ' V ' + alert.VD + alert.trades.toString();
+      this.snackBar.open(message, 'x', {panelClass: 'error'});
     });
     this.btcusdt.start();
   }
