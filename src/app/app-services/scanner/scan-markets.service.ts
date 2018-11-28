@@ -44,6 +44,53 @@ export class ScanMarketsService {
     })*/
   }
 
+  /////////////////////patterns scan //////////////////////
+
+  async scanNextPattern(markets:string[], i, sub: Subject<any>, candlesInterval: string, diff:number, results: any[]){
+    if(!this.isScanning) return;
+    i++;
+    if(i >= markets.length){
+      this.isScanning = false;
+      sub.complete();
+      return
+    }
+
+    const market = markets[i];
+    try{
+      const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 100);
+
+      let result =  CandlesAnalys1.getDropWithVolume(candles, diff);
+      if(result.length)
+      {
+        const drops = result.map(function (item) {
+          return{
+            market,
+            date: moment(item.to).format('DD HH:mm')
+          }
+        });
+        results = results.concat(drops);
+        console.log(results);
+        sub.next(results);
+      }
+
+
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.scanInterval = setTimeout(()=>this.scanNextPattern(markets, i, sub, candlesInterval, diff, results), 2000);
+
+  }
+  scanPatterns(markets: string[], candlesInterval: string, diff){
+    const sub = new Subject<any[]>();
+    this.isScanning = true;
+    this.scanNextPattern(markets, -1, sub, candlesInterval, diff,[]);
+
+    return sub;
+  }
+
+  ///////////////////////////
+
   // exchange = 'binance';
   scanInterval;
   progressSub: Subject<string> = new Subject<string>();
@@ -241,6 +288,7 @@ export class ScanMarketsService {
   stop() {
     clearInterval(this.scanInterval);
     this.scanInterval = 0;
+    this.isScanning = false;
   }
 
 
@@ -318,7 +366,6 @@ export class ScanMarketsService {
 
     const message = ' V: ' + volumeChange + ' P ' + priceChange;
     this.currentMarket = market;
-
     console.log(market + message);
     this.progressSub.next(message);
 

@@ -201,65 +201,55 @@ export class CandlesAnalys1 {
     return price;
   }
 
-  static createAction(patterns: {state: string, t: string, stamp: number}[], lastOrder: {stamp: number, action: string, price: number}) {
+  static createAction(patterns: { state: string, t: string, stamp: number }[], lastOrder: { stamp: number, action: string, price: number }, support) {
     if (patterns.length < 3) return '';
     const last = _.first(patterns);
     console.log(last.t, last.state);
     const prev = patterns[1];
 
 
-
-
-
-
-  /*  if(prev.state === 'WATCH-TO-BUY') {
-      if(last.state.indexOf('DOWN') !== -1){
-        last.state = 'WATCH-TO-BUY';
-        return 'WATCH-TO-BUY';
-      }
-    }*/
+    /*  if(prev.state === 'WATCH-TO-BUY') {
+        if(last.state.indexOf('DOWN') !== -1){
+          last.state = 'WATCH-TO-BUY';
+          return 'WATCH-TO-BUY';
+        }
+      }*/
 
     if (last.state === 'DROP_LARGE-VOLUME') return 'SELL';
     if (last.state === 'DROP_WITH-VOLUME') return 'SELL';
     if (last.state === 'DOWN_LARGE-VOLUME') return 'SELL';
 
-  const drop = _.find(patterns, function (item) {
-    return item.state.indexOf('DROP') !== -1;
-  });
+    const drop = _.find(patterns, function (item) {
+      return item.state.indexOf('DROP') !== -1;
+    });
 
 
-
-  if (drop) {
-    const min = moment(last.stamp).diff(drop.stamp, 'minutes');
-    if (min < 30) {
-      return 'WAIT-AFTER_DROP';
-     //  console.log(' WAS DROP ' + min + ' m ago');
+    if (drop) {
+      const min = moment(last.stamp).diff(drop.stamp, 'minutes');
+      if (min < 30) {
+        return 'WAIT-AFTER_DROP';
+        //  console.log(' WAS DROP ' + min + ' m ago');
+      }
     }
-  }
-
-
-
 
     if (last.state === 'UP_WITH-VOLUME') return 'BUY';
 
 
+    /* if (prev.state === 'DROP_LARGE-VOLUME' && last.state === 'STAY_LARGE-VOLUME') {
+       last.state = 'WATCH-TO-BUY';
+       return 'WATCH-TO-BUY'
+     }*/
+    /* if (last.state === 'UP_WITH-VOLUME') {
 
 
-   /* if (prev.state === 'DROP_LARGE-VOLUME' && last.state === 'STAY_LARGE-VOLUME') {
-      last.state = 'WATCH-TO-BUY';
-      return 'WATCH-TO-BUY'
-    }*/
-   /* if (last.state === 'UP_WITH-VOLUME') {
-
-
-      return '';
-    }*/
+       return '';
+     }*/
 
 
     return null;
   }
 
-  static createPattern(patterns: {state: string}[], lastResult: {state: string}) {
+  static createPattern(patterns: { state: string }[], lastResult: { state: string }) {
     if (patterns.length < 2) {
       patterns.unshift(lastResult);
       return patterns;
@@ -291,13 +281,12 @@ export class CandlesAnalys1 {
     if (patterns.length > 600) patterns.pop();
 
 
-
     const states = patterns.map(function (item) {
       return item.state;
     });
 
     // console.log(states);
-   //  console.log(_.clone(patterns));
+    //  console.log(_.clone(patterns));
     return patterns;
   }
 
@@ -331,7 +320,7 @@ export class CandlesAnalys1 {
 
 
     // const actionValues = await storage.select('action-values');
-    const curr = {v3_med, PD, ma3_25, ma25_99, VD, v3_25, P, t, stamp, state: ''};
+    const curr = {sup: '', v3_med, PD, ma3_25, ma25_99, VD, v3_25, P, t, stamp, state: ''};
 
     let volume = 'AVG-VOLUME';
     let price = 'STAY';
@@ -350,7 +339,7 @@ export class CandlesAnalys1 {
     else if ((PD < -0.4) || (ma3_25 < -0.5)) price = 'DOWN';
 
     curr.state = price + '_' + volume;
-   //  console.log(curr);
+    //  console.log(curr);
     return curr;
   }
 
@@ -388,6 +377,17 @@ export class CandlesAnalys1 {
     const prelast = candles[candles.length - 2];
     const lastmed = (last.high + last.low) / 2;
     const prelastmed = (prelast.high + prelast.low) / 2;
+
+  }
+
+  static getDropWithVolume(candles: VOCandle[], diff: number) {
+    const volumes = CandlesAnalys1.volumes(candles);
+    const vMed = MATH.median(volumes);
+    const results =    candles.filter(function (item) {
+      if(item.Volume > (diff * vMed) && item.open > item.close ) return true;
+    });
+
+    return results;
 
   }
 }

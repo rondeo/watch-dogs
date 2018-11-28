@@ -57,25 +57,33 @@ export class MarketBot {
   private activeOrder: VOOrder;
   timeout;
   async sellCoinInstant() {
-    console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
-    console.log(this.balanceCoin);
-    if (!this.balanceCoin || this.balanceCoin.available === 0 ) {
+    // console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
+  //  console.log(this.balanceCoin);
+    this.log('sellCoinInstant')
+   /* if (!this.balanceCoin || this.balanceCoin.available === 0 ) {
       this.log('SELL no Balance');
       return;
+    }*/
+
+
+    try{
+      const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
+      const qty = this.amountCoin;
+      const rate = UtilsBooks.getRateForAmountCoin(books.buy, this.balanceCoin.available);
+      const action = 'SELL';
+      this.log({action, rate});
+      this.balanceCoin = new VOBalance();
+      this.balanceCoin.available = this.amountCoin;
+      const balance =  this.amountCoin;
+      this.log({action, rate, balance});
+      this.balanceCoin.available = 0;
+      this.balanceBase.available = 1000;
+    } catch (e) {
+      this.log(' ERROR download books and buy coin  ' + e.toString());
     }
 
-    const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
-    const qty = this.amountCoin;
-    const rate = UtilsBooks.getRateForAmountCoin(books.buy, this.balanceCoin.available);
-    const action = 'SELL';
-    this.log({action, rate});
 
-    this.balanceCoin = new VOBalance();
-    this.balanceCoin.available = this.amountCoin;
-    const balance =  this.amountCoin;
-    this.log({action, rate, balance});
-    this.balanceCoin.available = 0;
-    this.balanceBase.available = 1000;
+
 
 
    /* if ((this.balanceCoin.pending + this.balanceCoin.available) < (this.amountCoin + (this.amountCoin * 0.1))) {
@@ -108,24 +116,28 @@ export class MarketBot {
 
 
   async buyCoinInstant() {
-    this.log(' BUY COIN ');
-    console.log('%c !!!!! BUY COIN ' + this.market, 'color:red');
+    this.log(' buyCoinInstant ');
+    // console.log('%c !!!!! BUY COIN ' + this.market, 'color:red');
     if (!this.balanceBase) return;
 
-    if (this.balanceCoin && (this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
+    /*if (this.balanceCoin && (this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
       this.log(' BALANCE exists ');
       return;
     }
+*/
+    try {
+      const action = 'BUY';
+      const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
+      const qty = this.amountCoin;
+      const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
 
-    const action = 'BUY';
-    const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
-    const qty = this.amountCoin;
-    const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
-
-    this.balanceCoin = new VOBalance();
-    this.balanceCoin.available = this.amountCoin;
-    const balance =  this.amountCoin;
-    this.log({action, rate, balance});
+      this.balanceCoin = new VOBalance();
+      this.balanceCoin.available = this.amountCoin;
+      const balance = this.amountCoin;
+      this.log({action, rate, balance});
+    } catch (e) {
+      this.log('ERROR buy coin ' + e.toString());
+    }
 
     /* this.apiPublic.downloadBooks2(this.market).toPromise().then(books => {
 
@@ -143,6 +155,7 @@ export class MarketBot {
     console.log(out);
      this.logs.push(out);
   }
+
   async tick() {
     setTimeout(() => this.save(), 5000);
     const candles = await this.candlesService.getCandles(this.market);
@@ -151,18 +164,27 @@ export class MarketBot {
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
     const result = await CandlesAnalys1.createState(candles);
-
     const support = this.resistanceSupport.getSupportLevel(result.P);
+    if(support.length) {
+      console.log(this.market, support);
+      const supResults = support.map(function (item) {
+        return item.i + '  ' +item.v_D + ' ' + item.date;
+      });
+      result.sup = supResults.toString();
+    }
 
     this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
+    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder, support);
+    if (action) {
+      this.log(action);
+      console.warn(action);
+    }
 
-    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
-    if (action) console.warn(action);
 
     if (action === 'BUY') this.buyCoinInstant();
     else if (action === 'SELL') this.sellCoinInstant();
     const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
-    console.log(' new price ' + newPrice);
+
 
     // this.log(' sellPrices ' + sellPrices.toString() + ' buyPrices ' + buyPrices.toString())
     // if(soldD > 90) this.sellCoin(last.rate);

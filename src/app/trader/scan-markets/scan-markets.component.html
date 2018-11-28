@@ -9,10 +9,35 @@
         <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
         <mat-checkbox #followingCheck (change)="onFollowingChange($event)">Following</mat-checkbox>
         <mat-checkbox #botsCheck (change)="onBotsChange($event)">Bots</mat-checkbox>
+        <mat-checkbox #patternCheck (change)="onPatternChange($event)">Pattern</mat-checkbox>
         <!--<button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>-->
     </div>
 
     <small (click)="onProgressClick()">{{scanner.currentMarket}} {{scanner.progressSub | async}}</small>
+
+    <div *ngIf="patternCheck.checked">
+        <h3>Pattern</h3>
+        <mat-form-field class="w3">
+            <input matInput placeholder="Volume"
+                   [(ngModel)]="volumeDifference"
+            >
+        </mat-form-field>
+        <mat-form-field class="w5">
+            <mat-select [(ngModel)]="candlesInterval">
+                <mat-option value="5m">5m</mat-option>
+                <mat-option value="15m">15m</mat-option>
+                <mat-option value="30m">30m</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button="" (click)="onPatternStartClick()">
+            {{scanner.isScanning?'Stop':'Scan'}}
+        </button>
+
+        <div class="scrollY300">
+            <app-table-props [dataset]="patterns$ | async" (selected)="onPatternClick($event)"></app-table-props>
+        </div>
+    </div>
+
 
     <div *ngIf="botsCheck.checked">
         <h3>Bots</h3>

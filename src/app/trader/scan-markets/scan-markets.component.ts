@@ -21,6 +21,8 @@ import {AppBotsService} from '../../app-services/app-bots-services/app-bots.serv
 import {CandlesService} from '../../app-services/candles/candles.service';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-scan-markets',
@@ -72,6 +74,56 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
 
+
+  //////////////////////////////// Pattern ///////////////////////////////////////////
+
+  patterns: any[];
+
+  onPatternClick(evt) {
+    const market = evt.item.market;
+   // console.log(evt.item);
+    switch (evt.prop) {
+      case 'market':
+        this.showMarket(market);
+        return;
+      case 'x':
+        if (confirm(' DELETE ' + market)) {
+
+        }
+        return;
+      case 'message':
+
+        return;
+
+    }
+
+  }
+
+  onPatternChange(evt) {
+
+  }
+
+
+
+  patterns$: Observable<any[]>;
+  volumeDifference = 50;
+  async onPatternStartClick() {
+
+    if (this.scanner.isScanning) {
+      this.scanner.stop();
+    } else {
+      const markets = await this.scanner.getAvailableMarkets('binance');
+      this.patterns$ = this.scanner.scanPatterns(markets,  this.candlesInterval, this.volumeDifference).asObservable()
+        .pipe(
+          map(items=>items.map(function (item) {
+          return Object.assign(item, {x:'X'});
+        }))
+        );
+    }
+
+  }
+
+  //////////////////////////////////////////////////
 
   ////////////////////////////////////////////// MFI START ///////////////////////////////////////
 
@@ -377,9 +429,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }
 
-  volumeInterval= '5m';
+  volumeInterval = '5m';
   volumeChange = 500;
   subVolume;
+
   async onVolumeChange(evt) {
     if (evt.checked) {
       this.subVolume = this.scanner.volumeResults$().subscribe(results => {

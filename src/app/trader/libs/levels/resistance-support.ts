@@ -1,11 +1,16 @@
 import {VOCandle} from '../../../models/api-models';
 import * as _ from 'lodash';
+import {CandlesAnalys1} from '../../../app-services/scanner/candles-analys1';
+import {MATH} from '../../../com/math';
+import * as moment from 'moment';
 
 export class ResistanceSupport {
-  private supports: VOCandle[];
+  private supports: any[];
   private resistances: VOCandle[];
 
-  constructor(private candles: VOCandle[], private range = 5) {
+  vMed:number;
+
+  constructor(public candles: VOCandle[], private range = 5) {
   }
   getResistances() {
     if (this.resistances) return this.resistances;
@@ -47,10 +52,25 @@ export class ResistanceSupport {
       const item = data[i];
       if (isLowest(data, -range, i)) out.push(item);
     }
-    this.supports = out;
-    return out;
+    const vmed = this.getVmed();
+
+
+    this.supports = _.orderBy(out, 'close');
+
+    this.supports.forEach(function (item, i) {
+      item.i = i;
+      item.date = moment(item.to).format('DD HH:mm');
+      item.v_D = MATH.percent(item.Volume, vmed);
+    });
+    return this.supports;
   }
 
+  getVmed(){
+    if(this.vMed) return this.vMed;
+      const volumes = CandlesAnalys1.volumes(this.candles);
+      this.vMed = MATH.median(volumes);
+      return this.vMed;
+  }
   getResult() {
     return {
       resistance: this.getResistances(),
