@@ -44,47 +44,41 @@ export class ScanMarketsService {
     })*/
   }
 
-  /////////////////////patterns scan //////////////////////
+  ///////////////////// patterns scan //////////////////////
 
-  async scanNextPattern(markets:string[], i, sub: Subject<any>, candlesInterval: string, diff:number, results: any[]){
-    if(!this.isScanning) return;
+  async scanNextPattern(markets: string[], i, sub: Subject<any>, candlesInterval: string, diff: number, results: any[]) {
+    if (!this.isScanning) return;
     i++;
-    if(i >= markets.length){
+    if (i >= markets.length) {
       this.isScanning = false;
       sub.complete();
       return
     }
 
     const market = markets[i];
-    try{
+    try {
       const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 100);
 
-      let result =  CandlesAnalys1.getDropWithVolume(candles, diff);
-      if(result.length)
-      {
-        const drops = result.map(function (item) {
-          return{
-            market,
-            date: moment(item.to).format('DD HH:mm')
-          }
-        });
-        results = results.concat(drops);
-        console.log(results);
+      let result = CandlesAnalys1.getCandelsVolumes(market, candles, diff);
+
+      this.progressSub.next(market);
+     if (result.length) {
+        results = results.concat(result);
+      //   console.log(results);
         sub.next(results);
       }
-
-
     } catch (e) {
       console.log(e);
     }
 
-    this.scanInterval = setTimeout(()=>this.scanNextPattern(markets, i, sub, candlesInterval, diff, results), 2000);
+    this.scanInterval = setTimeout(() => this.scanNextPattern(markets, i, sub, candlesInterval, diff, results), 2000);
 
   }
-  scanPatterns(markets: string[], candlesInterval: string, diff){
+
+  scanPatterns(markets: string[], candlesInterval: string, diff) {
     const sub = new Subject<any[]>();
     this.isScanning = true;
-    this.scanNextPattern(markets, -1, sub, candlesInterval, diff,[]);
+    this.scanNextPattern(markets, -1, sub, candlesInterval, diff, []);
 
     return sub;
   }
@@ -118,13 +112,12 @@ export class ScanMarketsService {
 
   trendUPTimer;
 
-  subVol: Subject<any[]> = new Subject();
-  scanVolumeTimer;
+
 
   isScanning = false;
 
 
-  volumeSub: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
 
   first20coins = 'BTC,TUSD'; // 'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
   deadMarkets = 'VEN,BCN,HSR,ICN,TRIG,CHAT,RPX';
@@ -293,38 +286,12 @@ export class ScanMarketsService {
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////
-
-  deleteVolumes() {
-    this.saveVolumes([]);
-  }
-
-  async deleteVolume(market: string) {
-    let results: any[] =  this.volumeSub.getValue();
-    // @ts-ignore
-    results = _.reject(results, {market: market});
-    this.saveVolumes(results);
-    return results;
-  }
-
-  volumeResults$() {
-    const results1 = this.volumeSub.getValue();
-    if (!results1) {
-      this.storage.select('scan-volumes').then(results => {
-        this.volumeSub.next(results);
-      });
-    }
-    return this.volumeSub.asObservable();
-  }
-
-  stopVolumeScan(){
-    clearTimeout(this.scanVolumeTimer);
-    this.isScanning = false;
-  }
-  async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number) {
+  async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number, sub: Subject<any[]>, results:any[]) {
     i++;
     if (i >= markets.length) {
-     clearTimeout(this.scanVolumeTimer);
-     this.isScanning = false;
+      clearTimeout(this.scanInterval);
+      sub.complete();
+      this.isScanning = false;
       return;
     }
 
@@ -339,7 +306,7 @@ export class ScanMarketsService {
 
 
     if (!candles) {
-      this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange), 10000);
+      this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 10000);
       return;
     }
 
@@ -362,139 +329,25 @@ export class ScanMarketsService {
     const priceAfter = _.mean(closes.slice(-10));
 
     const VD = MATH.percent(avgAfter, avgBefore);
-    const priceChange = MATH.percent(priceAfter, priceBefore);
+    const PD = MATH.percent(priceAfter, priceBefore);
 
-    const message = ' V: ' + volumeChange + ' P ' + priceChange;
+    const reason = ' V: ' + VD + ' PD ' + PD;
     this.currentMarket = market;
-    console.log(market + message);
-    this.progressSub.next(message);
-
-    // const closes = CandlesAnalys1.closes(candles);
-    // const ma25 = _.mean(_.takeRight(closes, 25));
-
-    //  const decoded = CandlesAnalys1.decode(max);
-
-    /* const tailD =Math.round( 100 * decoded.tail/ decoded.range);
-     const wickD = Math.round(100 * decoded.wick/decoded.range);
-     let message = ' tailD ' + tailD + ' wickD ' + wickD;*!/*/
-    //  console.log(market , tailD);
-
-// && Math.abs(amplUP) < 2 && Math.abs(amplDOWN) < 2
+    console.log(market + reason);
+    this.progressSub.next(reason);
     if (VD > volumeChange) {
-      const results = this.volumeSub.getValue() || [];
-      results.push({time, market, message});
-      this.saveVolumes(results);
+      results.push({time, market, reason});
+      sub.next(results);
     }
-
-    this.scanVolumeTimer = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange), 2000);
-  }
-
-  async saveVolumes(results: any[]) {
-    this.volumeSub.next(results);
-    return await this.storage.upsert('scan-volumes', results);
+    this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange,  sub, results), 2000);
   }
 
   scanForVolume(markets: string[], candlesInterval: string, volumeChange: number) {
     this.isScanning = true;
-    this.scanVolumeTimer = 1;
-    this.saveVolumes([]);
-    this.volumeNext(markets, -1, candlesInterval, volumeChange);
-    return this.volumeSub;
-
-
-    /*
-        this.progressSub.next('SCANNING Volume');
-
-        const out = [];
-
-        const sub = this.candlesService.scanOnce(markets);
-
-        sub.subscribe(async (data) => {
-
-          const exchange = data.exchange;
-          const market = data.market;
-
-          const candles: VOCandle[] = _.takeRight(data.candles, 50);
-          const last3 = _.takeRight(candles, 3);
-          const last = _.last(candles);
-
-          const sorted3 = _.orderBy(last3, 'Volume');
-          const maxVol3 = _.last(sorted3);
-          const indexMax3 = candles.indexOf(maxVol3);
-          let prevPrice = (candles[indexMax3 - 1].low + candles[indexMax3 - 1].high) / 2;
-          let nextPrice = maxVol3.close;
-          let close = maxVol3.close;
-          let low = maxVol3.low;
-          if (indexMax3 !== candles.length - 1) {
-            nextPrice = (candles[indexMax3 + 1].low + candles[indexMax3 + 1].high) / 2
-          }
-
-          const meds = CandlesAnalys1.meds(last3);
-          let volumes = CandlesAnalys1.volumes(candles);
-          /!* volumes = volumes.filter(function (item) {
-             return item;
-           })*!/
-          const volumeMean = _.mean(volumes);
-
-          const preiceChanges = MATH.percent(nextPrice, prevPrice);
-          const volume2 = maxVol3.Volume;
-          const volume2Change = Math.round(MATH.percent(volume2, volumeMean));
-
-          const volumes3 = _.sum(CandlesAnalys1.volumes(last3));
-
-          const D = Math.round(MATH.percent(volumes3, volumeMean));
-
-          const timestamp = maxVol3.to;
-          const time = moment(maxVol3.to).format('HH:mm');
-          let result = time + ' v3: ' + D + '  preiceChanges ' + preiceChanges;
-
-          this.currentMarket = market;
-          this.progressSub.next(result);
-
-          const results: any[] = await this.getVolumes();
-          const exists: any = _.find(results, {market: market});
-          if (exists) {
-            const minutes = moment(last.to).diff(exists.timestamp, 'minutes');
-            const candlesAfter = candles.filter(function (item) {
-              item.to > exists.timestamp;
-            });
-
-            const wasClose = exists.close;
-            const progressAfter = MATH.percent(last.close, wasClose);
-            result = time + ' after: ' + minutes + '  ' + progressAfter;
-            if (minutes > 30 && progressAfter < 0) {
-              exists.result = time + ' REMOVE after  ' + minutes + ' ' + progressAfter;
-            }
-            exists.history[time] = result;
-            await this.storage.upsert('scan-volumes', results);
-            return;
-          }
-
-
-          //  console.log(market, result);
-          // const sum = _.sum(last5);
-          //  const LastMax = MATH.percent(max, mean);
-          // console.log(market,D, maxIndex);
-          if (D > 600) {
-            console.log(market, D, volume2Change, preiceChanges);
-            const history = {time: result};
-            results.unshift({timestamp, market, result, close, low, history});
-
-            await this.storage.upsert('scan-volumes', results);
-            this.subVol.next(results);
-          }
-
-        }, err => {
-        }, () => {
-          this.isScanning = false;
-          this.currentMarket = null;
-          this.progressSub.next(' END scan Volume');
-          this.scanVolumeTimer = setTimeout(() => this.scanForVolume(markets), 5 * 60 * 1000);
-        });*/
-
-    // return this.subVol;
+    const sub = new Subject<any[]>();
+    this.volumeNext(markets, -1, candlesInterval, volumeChange, sub, []);
+    return  sub
   }
-
 
 
   /*async getValidMarkets(exchange: string) {

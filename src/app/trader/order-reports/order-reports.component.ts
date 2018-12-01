@@ -53,6 +53,13 @@ export class OrderReportsComponent implements OnInit {
 
   }
 
+  onDeleteUSDTRecordsClick(){
+    if(confirm('DELETE USDT_BTC ?')){
+      this.storage.remove('USDT_BTC-alerts').then(()=>{
+        this.onUsdtBtcClick();
+      })
+    }
+  }
   async onUsdtBtcClick() {
     this.ordersData = await this.storage.select('USDT_BTC-alerts');
   }
@@ -100,13 +107,6 @@ export class OrderReportsComponent implements OnInit {
     const id = 'bot-' + this.market + this.dataName;
     // console.log(id);
     switch (this.dataName) {
-      case '-logs':
-        this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
-          return {
-            record: item
-          };
-        });
-        break;
       default:
         this.ordersData = ((await this.storage.select(id)) || []);
         break;

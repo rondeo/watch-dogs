@@ -108,8 +108,8 @@ export class FollowOrdersService {
     });
 
 
-    this.apisPrivate.getExchangeApi(exchange).startRefreshBalances();
-    this.apisPrivate.getExchangeApi(exchange).refreshAllOpenOrders();
+  //////  this.apisPrivate.getExchangeApi(exchange).startRefreshBalances();
+   /// this.apisPrivate.getExchangeApi(exchange).refreshAllOpenOrders();
     this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
        if (!balances)  return;
 

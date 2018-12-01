@@ -69,7 +69,10 @@ export class ApiCryptoCompareService {
     // console.warn(url);
     return this.http.get(url, {params}).pipe(map((res: any) => {
     //  console.log(res);
-      if (!res.from || !res.from.Twitter) return null;
+      if (!res.from || !res.from.Twitter || !res.to.Twitter) {
+        console.log(res);
+        return null;
+      }
       const from = res.from;
       const to = res.to;
       const timeFrom = moment(from.time).format('MM-DD HH');
@@ -79,18 +82,23 @@ export class ApiCryptoCompareService {
       let FbPoints = '';
       let TwFollow = '';
       let RdFollow = '';
+      try{
+        if (to.Twitter.Points) {
+          TwPoints = '' + MATH.percent(to.Twitter.Points, from.Twitter.Points);
+          TwFollow = '' + MATH.percent(to.Twitter.followers, from.Twitter.followers);
+        }
+        if (to.Reddit.Points) {
+          RdPoints = '' + MATH.percent(to.Reddit.Points, from.Reddit.Points);
+          RdFollow = '' + MATH.percent(to.Reddit.subscribers, from.Reddit.subscribers);
+        }
+        if (to.Facebook.Points) {
+          FbPoints = '' + MATH.percent(to.Facebook.Points, from.Facebook.Points);
+        }
 
-      if (to.Twitter.Points) {
-        TwPoints = '' + MATH.percent(to.Twitter.Points, from.Twitter.Points);
-        TwFollow = '' + MATH.percent(to.Twitter.followers, from.Twitter.followers);
+      } catch (e) {
+        console.log(res);
       }
-      if (to.Reddit.Points) {
-        RdPoints = '' + MATH.percent(to.Reddit.Points, from.Reddit.Points);
-        RdFollow = '' + MATH.percent(to.Reddit.subscribers, from.Reddit.subscribers);
-      }
-      if (to.Facebook.Points) {
-        FbPoints = '' + MATH.percent(to.Facebook.Points, from.Facebook.Points);
-      }
+
 
       return {
         coin,

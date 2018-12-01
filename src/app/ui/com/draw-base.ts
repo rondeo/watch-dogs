@@ -29,7 +29,8 @@ export class DrawBase implements OnChanges, AfterViewInit {
 
   font = '12px Arial';
 
-  constructor() {
+  constructor( public name: string) {
+
 
   }
 
@@ -37,11 +38,11 @@ export class DrawBase implements OnChanges, AfterViewInit {
     this.width = this.myWidth || this.width;
     this.height = this.myHeight || this.height;
     this.ratio = this.width / this.height;
-
     window.addEventListener('resize', event => {
       clearTimeout(this.resize);
       this.resize = setTimeout(() => this.onResize(), 500);
     });
+    this.onResize();
   }
 
   onResize() {
@@ -87,7 +88,7 @@ export class DrawBase implements OnChanges, AfterViewInit {
     let el: HTMLCanvasElement = this.canv.nativeElement;
     this.ctx = el.getContext('2d');
     // if (this.graphs) this.drawData();
-    setTimeout(() => this.setSize(), 100);
+    setTimeout(() => this.onInit(), 100);
   }
 
   ngOnChanges(evt) {

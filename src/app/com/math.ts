@@ -96,7 +96,10 @@ export class MATH {
   static mean(vals: number[]) {
     return _.mean(vals);
   }
-  static median(numbers: number[]) {
+  static median(numbers: number[], removeZero = true) {
+    if(removeZero) numbers = numbers.filter(function (item) {
+      return item;
+    });
     numbers = numbers.slice(0);
     let median = 0, numsLen = numbers.length;
     MATH.sort(numbers);

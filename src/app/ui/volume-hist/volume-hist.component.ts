@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 export class VolumeHistComponent extends DrawBase{
 
   constructor() {
-    super();
+    super('VolumeHistComponent');
   }
 
   @Input() values: number[];

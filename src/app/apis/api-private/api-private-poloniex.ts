@@ -175,7 +175,8 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
           coin: null,
           base: null,
           rate: 0,
-          amountCoin: 0
+          amountCoin: 0,
+          market:null,
         }
       else return null;
     }))
@@ -204,6 +205,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
           base: a[0],
           rate: +r.rate,
           date: r.date,
+          market:base+'_'+coin,
           timestamp: (new Date(r.date.replace(' ', 'T'))).getTime()
 
         }
@@ -214,6 +216,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         coin: null,
         base: null,
         rate: 0,
+        market:base+'_'+coin,
         amountCoin: 0
       }
 
@@ -289,7 +292,8 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         amountCoin: quantity, //TODO get real property
         base: base,
         coin: coin,
-        type: res.type
+        type: res.type,
+        market:base+'_'+coin
       };
     })).toPromise();
   }
@@ -316,7 +320,8 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         amountCoin: quantity, //TODO get real property
         base: base,
         coin: coin,
-        type: res.type
+        type: res.type,
+        market:base+'_'+coin
       };
 
     })).toPromise();

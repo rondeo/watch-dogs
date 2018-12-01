@@ -201,10 +201,11 @@ export class CandlesAnalys1 {
     return price;
   }
 
-  static createAction(patterns: { state: string, t: string, stamp: number }[], lastOrder: { stamp: number, action: string, price: number }, support) {
-    if (patterns.length < 3) return '';
+  static createAction(market: string, patterns: { P: number, state: string, t: string, stamp: number, Pwas: number }[],
+                      lastOrder: { stamp: number, action: string, price: number }, support): { action: string, reason: string } {
+    if (patterns.length < 3) return null;
     const last = _.first(patterns);
-    console.log(last.t, last.state);
+    //  console.log(last.t, last.state);
     const prev = patterns[1];
 
 
@@ -214,25 +215,67 @@ export class CandlesAnalys1 {
           return 'WATCH-TO-BUY';
         }
       }*/
+    const lastState = last.state;
 
-    if (last.state === 'DROP_LARGE-VOLUME') return 'SELL';
-    if (last.state === 'DROP_WITH-VOLUME') return 'SELL';
-    if (last.state === 'DOWN_LARGE-VOLUME') return 'SELL';
+    if (lastState === 'DROP_LARGE-VOLUME') return {
+      action: 'SELL',
+      reason: 'DROP_LARGE-VOLUME'
+    };
+    if (lastState === 'DROP_WITH-VOLUME') return {
+      action: 'SELL',
+      reason: 'DROP_WITH-VOLUME'
+    };
+    if (lastState === 'DOWN_LARGE-VOLUME') return {
+      action: 'SELL',
+      reason: 'DOWN_LARGE-VOLUME'
+    };
 
-    const drop = _.find(patterns, function (item) {
-      return item.state.indexOf('DROP') !== -1;
+    const lastDown = patterns.find(function (item) {
+      return (item.state.indexOf('DOWN') !== -1 || item.state.indexOf('DROP') !== -1) && (item.state.indexOf('NO-VOLUME') === -1) && (item.state.indexOf('AVG-VOLUME') === -1);
     });
 
-
-    if (drop) {
-      const min = moment(last.stamp).diff(drop.stamp, 'minutes');
-      if (min < 30) {
-        return 'WAIT-AFTER_DROP';
-        //  console.log(' WAS DROP ' + min + ' m ago');
+    if (lastDown) {
+      const stayWithVolume = ['STAY_HUGE-VOLUME', 'STAY_WITH-VOLUME', 'STAY_LARGE-VOLUME'];
+      if (stayWithVolume.indexOf(lastState) !== -1) {
+        if (last.P > lastDown.Pwas) {
+          return {
+            action: 'BUY',
+            reason: 'lastDown ' + lastDown.P + ' NOW ' + last.P
+          };
+        }
       }
     }
 
-    if (last.state === 'UP_WITH-VOLUME') return 'BUY';
+
+    // console.log(market, lastDown);
+
+
+    /* const drop = _.find(patterns, function (item) {
+       return item.state.indexOf('DROP') !== -1;
+     });
+
+
+     if (drop) {
+       const min = moment(last.stamp).diff(drop.stamp, 'minutes');
+       if (min < 30) {
+         return 'WAIT-AFTER_DROP';
+         //  console.log(' WAS DROP ' + min + ' m ago');
+       }
+     }
+ */
+    if (last.state === 'UP_WITH-VOLUME') return {
+      action: 'BUY',
+      reason: 'UP_WITH-VOLUME'
+    };
+
+    if (last.state === 'UP_HUGE-VOLUME') return {
+      action: 'BUY',
+      reason: 'UP_HUGE-VOLUME'
+    };
+    if (last.state === 'UP_LARGE-VOLUME') return {
+      action: 'BUY',
+      reason: 'UP_HUGE-VOLUME'
+    };
 
 
     /* if (prev.state === 'DROP_LARGE-VOLUME' && last.state === 'STAY_LARGE-VOLUME') {
@@ -249,7 +292,7 @@ export class CandlesAnalys1 {
     return null;
   }
 
-  static createPattern(patterns: { state: string }[], lastResult: { state: string }) {
+  static groupPatterns(patterns: { state: string }[], lastResult: { state: string }) {
     if (patterns.length < 2) {
       patterns.unshift(lastResult);
       return patterns;
@@ -261,35 +304,55 @@ export class CandlesAnalys1 {
     if (patterns[0].state === patterns[1].state && patterns[0].state === lastResult.state) {
       patterns.shift();
     }
+
     patterns.unshift(lastResult);
-
-    /* if(last.state === 'STAY_AVG-VOLUME' && lastResult.state ==='STAY_AVG-VOLUME') {
-      patterns.pop();
-     }
-
-     if(last.state === 'DOWN_WITH-VOLUME' && lastResult.state ==='DOWN_WITH-VOLUME') {
-       patterns.pop();
-     }
-
-
-
-     if(last.state === 'DROP_LARGE-VOLUME' && lastResult.state ==='DROP_LARGE-VOLUME') {
-       patterns.pop();
-     }*/
-
-
-    if (patterns.length > 600) patterns.pop();
-
-
-    const states = patterns.map(function (item) {
-      return item.state;
-    });
-
-    // console.log(states);
-    //  console.log(_.clone(patterns));
     return patterns;
   }
 
+  static isToBuy(candles: VOCandle[]) {
+    candles = CandlesAnalys1.createCandlesX5(candles);
+
+  }
+
+  static createCandlesX5(candles: VOCandle[]) {
+    const out: VOCandle[] = [];
+    let j = 0;
+    let cur =  candles[0];
+    for (let i = 1, n = candles.length; i < n; i++) {
+      const next = candles[i];
+      if(j === 5){
+        out.push(cur);
+        cur = next;
+        j = 0;
+      } else{
+        cur.Volume += next.Volume;
+        cur.Trades += next.Trades;
+        cur.close = next.close;
+        cur.to = next.to;
+        cur.time = next.time;
+      }
+      j++;
+    }
+    if(j) out.push(cur);
+    return out;
+  }
+
+
+  static isToSell(candles: VOCandle[]) {
+    const mas = CandlesAnalys1.mas(candles);
+    const vols = CandlesAnalys1.vols(candles);
+    const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
+    const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
+    const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
+
+    if (ma3_25 < -0.5 && v3_med > 1000) {
+      return {
+        action: 'SELL',
+        reason: ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med
+      }
+    }
+
+  }
 
   static async createState(candles: VOCandle[]) {
     const lastCandle = _.last(candles);
@@ -298,29 +361,24 @@ export class CandlesAnalys1 {
     const closes = CandlesAnalys1.closes(candles);
     const volumes = CandlesAnalys1.volumes(candles);
 
-    const P = +_.mean(_.takeRight(closes, 3)).toPrecision(3);
+    const ma3 = +_.mean(_.takeRight(closes, 3)).toPrecision(4);
 
-    const lastVolume = _.mean(_.takeRight(volumes, 3));
+    const v3 = _.mean(_.takeRight(volumes, 3));
+    const v3was = _.mean(_.take(_.takeRight(volumes, 6), 3));
 
-    const preLastVolume = _.mean(_.take(_.takeRight(volumes, 6), 3));
+    const Pwas = _.mean(_.take(_.takeRight(closes, 6), 3));
 
-    const preLastPrice = closes[closes.length - 4];
-
-    const PD = MATH.percent(P, preLastPrice);
-
-    const VD = MATH.percent(lastVolume, preLastVolume);
-
+    const PD = MATH.percent(ma3, Pwas);
+    const VD = MATH.percent(v3, v3was);
     const mas = CandlesAnalys1.mas(candles);
     const vols = CandlesAnalys1.vols(candles);
-
+    const ma25 = +mas.ma25.toPrecision(4);
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
-
-
     // const actionValues = await storage.select('action-values');
-    const curr = {sup: '', v3_med, PD, ma3_25, ma25_99, VD, v3_25, P, t, stamp, state: ''};
+    const curr = {sup: '', v3_med, PD, ma3_25, ma25_99, VD, v3_25, ma3, ma25, Pwas, t, stamp, state: ''};
 
     let volume = 'AVG-VOLUME';
     let price = 'STAY';
@@ -347,7 +405,6 @@ export class CandlesAnalys1 {
     const last = _.last(candles);
     const closes = CandlesAnalys1.closes(candles);
     const ma25 = _.mean(_.takeRight(closes, 25));
-
     const byVolume = _.orderBy(candles, 'Volume');
     const max: VOCandle = byVolume.pop();
     const volumePrice = (max.high - max.low) / 2;
@@ -380,14 +437,64 @@ export class CandlesAnalys1 {
 
   }
 
-  static getDropWithVolume(candles: VOCandle[], diff: number) {
+  static getCandelsVolumes(market: string, candles: VOCandle[], diff: number) {
     const volumes = CandlesAnalys1.volumes(candles);
     const vMed = MATH.median(volumes);
-    const results =    candles.filter(function (item) {
-      if(item.Volume > (diff * vMed) && item.open > item.close ) return true;
+    const criteria = vMed * diff / 100;
+
+    let prev = -2;
+    const volumeCandles: any[] = [];
+
+    candles.forEach(function (item, i) {
+      const isVolume = item.Volume > criteria;
+      if (isVolume) {
+        if ((prev + 1) === i) {
+          const prevCandle = _.last(volumeCandles);
+          prevCandle.Volume += item.Volume;
+          prevCandle.close = item.close;
+          prevCandle.time = moment(item.to).format('HH:mm');
+
+        }
+        else {
+          prev = i;
+          volumeCandles.push({
+            time: moment(item.to).format('HH:mm'),
+            market,
+            open: item.open,
+            close: item.close,
+            Volume: item.Volume,
+
+          });
+        }
+      }
+
     });
 
-    return results;
+    volumeCandles.forEach(function (item) {
+      item.PD = MATH.percent(item.close, item.open);
+      item.Volume = MATH.percent(item.Volume, vMed);
+    });
+
+    return volumeCandles;
+  }
+
+
+  static getDropWithVolume(market: string, candles: VOCandle[], diff: number) {
+    const volumes = CandlesAnalys1.volumes(candles);
+    const closes = CandlesAnalys1.closes(candles);
+    const vMed = MATH.median(volumes);
+
+    const results = candles.filter(function (item) {
+      return (item.Volume > (diff * vMed) && item.open > item.close);
+    });
+
+    return results.map(function (item) {
+      return {
+        market,
+        PD: MATH.percent(item.close, item.open),
+        VD: MATH.percent(item.Volume, vMed)
+      }
+    });
 
   }
 }

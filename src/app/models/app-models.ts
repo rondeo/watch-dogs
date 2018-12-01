@@ -54,8 +54,8 @@ export const VOORDER: VOOrder = {
   base: '',
   coin: '',
   rate: 0,
-  action: ''
-
+  action: '',
+  market:''
 };
 
 export interface VOOrder {
@@ -78,6 +78,7 @@ export interface VOOrder {
   feeUS?: number;
   base?: string;
   coin?: string;
+  market: string;
   local?: string;
   minutes?: string;
   lastStatus?: string;

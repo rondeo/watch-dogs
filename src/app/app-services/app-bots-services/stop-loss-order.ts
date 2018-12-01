@@ -164,8 +164,8 @@ export class StopLossOrder {
       const order =  await api.stopLoss(this.market, qty, newStopLoss, sellPrice);
       this.log('STOP LOSS result: ' + JSON.stringify(order));
       if (order && order.uuid) setTimeout(() => {
-        api.refreshBalances();
-        api.refreshAllOpenOrders();
+       //  api.refreshBalances();
+       //  api.refreshAllOpenOrders();
         console.log(order);
         if (order.stopPrice) this.order = order;
       }, 5e3);

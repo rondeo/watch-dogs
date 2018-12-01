@@ -41,7 +41,7 @@ export class MarketBot {
   balanceBase: VOBalance;
   balanceCoin: VOBalance;
 
-  logs: string[] = [];
+  logs: any[] = [];
   id: string;
   private stopLossOrder: StopLossOrder;
 
@@ -59,7 +59,7 @@ export class MarketBot {
   async sellCoinInstant() {
     // console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
   //  console.log(this.balanceCoin);
-    this.log('sellCoinInstant')
+
    /* if (!this.balanceCoin || this.balanceCoin.available === 0 ) {
       this.log('SELL no Balance');
       return;
@@ -69,17 +69,16 @@ export class MarketBot {
     try{
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const qty = this.amountCoin;
-      const rate = UtilsBooks.getRateForAmountCoin(books.buy, this.balanceCoin.available);
+      const rate = UtilsBooks.getRateForAmountCoin(books.buy, qty);
       const action = 'SELL';
-      this.log({action, rate});
+      this.log({action, reason: ''+rate});
       this.balanceCoin = new VOBalance();
-      this.balanceCoin.available = this.amountCoin;
-      const balance =  this.amountCoin;
-      this.log({action, rate, balance});
+      this.log({action, reason: rate + ' ' +qty});
       this.balanceCoin.available = 0;
+      this.balanceBase = new VOBalance();
       this.balanceBase.available = 1000;
     } catch (e) {
-      this.log(' ERROR download books and buy coin  ' + e.toString());
+      this.log({action: 'ERROR', reason:'download books and buy coin  ' + e.toString()});
     }
 
 
@@ -116,9 +115,9 @@ export class MarketBot {
 
 
   async buyCoinInstant() {
-    this.log(' buyCoinInstant ');
+
     // console.log('%c !!!!! BUY COIN ' + this.market, 'color:red');
-    if (!this.balanceBase) return;
+
 
     /*if (this.balanceCoin && (this.balanceCoin.pending + this.balanceCoin.available) > (this.amountCoin - (this.amountCoin * 0.1))) {
       this.log(' BALANCE exists ');
@@ -130,13 +129,12 @@ export class MarketBot {
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const qty = this.amountCoin;
       const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
-
       this.balanceCoin = new VOBalance();
-      this.balanceCoin.available = this.amountCoin;
-      const balance = this.amountCoin;
-      this.log({action, rate, balance});
+      this.balanceCoin.available = qty;
+
+      this.log({action, reason: rate + ' '+qty});
     } catch (e) {
-      this.log('ERROR buy coin ' + e.toString());
+      this.log({action: 'ERROR' , reason:'buy coin ' + e.toString()});
     }
 
     /* this.apiPublic.downloadBooks2(this.market).toPromise().then(books => {
@@ -147,43 +145,55 @@ export class MarketBot {
      })*/
   }
 
-  log(message: string | Object) {
-    let out: string;
-    if (typeof message !== 'string') out = UTILS.toString(message);
-    else out = message;
-    out = moment().format('HH:mm') + ' ' + this.market + out;
-    console.log(out);
+  log(log: {action: string, reason: string}) {
+   // if (typeof message !== 'string') out = UTILS.toString(message);
+   // else out = message;
+    const time = moment().format('HH:mm');
+    const market = this.market;
+    const out = Object.assign({time, market}, log);
+   //  console.log(out);
      this.logs.push(out);
   }
 
   async tick() {
     setTimeout(() => this.save(), 5000);
     const candles = await this.candlesService.getCandles(this.market);
+
     const lastCandle = _.last(candles);
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
+    const toSell  =  CandlesAnalys1.isToSell(candles);
+
+    if(toSell) {
+      this.log(toSell);
+      this.sellCoinInstant();
+    }
+
     const result = await CandlesAnalys1.createState(candles);
-    const support = this.resistanceSupport.getSupportLevel(result.P);
-    if(support.length) {
-      console.log(this.market, support);
+    this.patterns = CandlesAnalys1.groupPatterns(this.patterns, result);
+
+
+    /*
+
+    const support = this.resistanceSupport.getSupportLevel(result.ma3);
+   /!* if(support.length) {
+     // console.log(this.market, support);
       const supResults = support.map(function (item) {
         return item.i + '  ' +item.v_D + ' ' + item.date;
       });
-      result.sup = supResults.toString();
+      result.sup = supResults.join( '; ');
     }
+*!/
 
-    this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
-    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder, support);
-    if (action) {
+    const action = CandlesAnalys1.createAction(this.market, this.patterns, this.lastOrder, support);*/
+  /*  if (action) {
       this.log(action);
-      console.warn(action);
-    }
+      if (action.action === 'BUY') this.buyCoinInstant();
+      else if (action.action === 'SELL') this.sellCoinInstant();
+    }*/
 
-
-    if (action === 'BUY') this.buyCoinInstant();
-    else if (action === 'SELL') this.sellCoinInstant();
-    const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
+   //  const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
 
 
     // this.log(' sellPrices ' + sellPrices.toString() + ' buyPrices ' + buyPrices.toString())
@@ -194,12 +204,18 @@ export class MarketBot {
     if (!this.interval) return;
     clearInterval(this.interval);
     this.interval = 0;
-    this.log('ending tick');
+    this.log({action:'STOP', reason: 'tick'});
   }
 
-  start() {
+  async start() {
     if (this.interval) return;
-    this.log(' starting tick');
+    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
+    if(history.length === 0){
+      const candles =  await this.candlesService.getCandles(this.market);
+      const price = _.last(candles).close;
+      this.log({action:'BOUGTH', reason: ' P ' + price});
+    }
+
     this.interval = setInterval(() => this.tick(), 60 * 1000);
   }
 
@@ -242,11 +258,10 @@ export class MarketBot {
   }
 
   async save() {
-    if (!this.patterns.length) return;
-    this.storage.upsert(this.id + '-patterns', this.patterns);
-    this.storage.upsert(this.id + '-orders', this.orders);
+    if(this.patterns.length) this.storage.upsert(this.id + '-patterns', this.patterns);
+   //  this.storage.upsert(this.id + '-orders', this.orders);
     if (!this.logs.length) return;
-    let history: string[] = (await this.storage.select(this.id)) || [];
+    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
     history = history.concat(this.logs);
     this.logs = [];
     history = _.takeRight(history, 500);
@@ -254,8 +269,9 @@ export class MarketBot {
   }
 
   destroy() {
-    this.log('destroy');
+    this.log({action:'destroy', reason:''});
     this.storage.remove(this.id);
+    this.deleteHistory();
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2)this.sub2.unsubscribe();

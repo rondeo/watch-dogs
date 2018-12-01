@@ -113,7 +113,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.scanner.stop();
     } else {
       const markets = await this.scanner.getAvailableMarkets('binance');
-      this.patterns$ = this.scanner.scanPatterns(markets,  this.candlesInterval, this.volumeDifference).asObservable()
+      this.patterns$ = this.scanner.scanPatterns(markets,  this.candlesInterval, +this.volumeDifference).asObservable()
         .pipe(
           map(items=>items.map(function (item) {
           return Object.assign(item, {x:'X'});
@@ -136,9 +136,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   ////////////////////////////////////////// VOLUME START /////////////////////////////////////////////////
 
   scanOnlyUP = true;
-  volumesResults: any[];
+  volumesResults$
 
-  volumeSub: Subscription;
 
   ///////////////////////////////////////// VOLUME END ///////////////////////////////////////////////////////
 
@@ -159,80 +158,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   following: any[];
 
-
-  /*
-    async subscribe() {
-      this.unsubscribe();
-      const scanner: ScannerMarkets = this.scanner.getScanner(this.exchange);
-
-      this.sub1 = scanner.current$()
-        .subscribe(curr => {
-          //  console.log(curr);
-          this.currentData = [curr];
-        });
-
-      this.sub2 = (await scanner.notifications$())
-        .subscribe(notes => {
-
-          // console.log(notes);
-          this.notifications = notes;
-        });
-      this.sub3 = scanner.running$()
-        .subscribe(run => {
-          this.isRunning = run;
-        })
-
-    }*/
-
-  // analizeMarket: string;
-  // analizeTime: string;
-  //  analizeInterval = '30m';
-
-  /* onAnaliseCandlesClick() {
-     const api = this.apisPublic.getExchangeApi(this.exchange);
-     //  const to = moment('2018-10-08T04:30:00').valueOf()
-     api.downloadCandles(this.analizeMarket, this.analizeInterval, 200, moment(this.analizeTime).valueOf())
-       .then(res => {
-         this.candles = res;
-         this.volumes = res.map(function (o) {
-           return o.Volume;
-         })
-       })
-   }*/
-
-
   candles: VOCandle[];
   volumes: number[];
-
-  /*onDatasetClick(obj) {
-    const item = obj.item;
-    const prop = obj.prop;
-    const market = item.market;
-    const ar = market.split('_');
-
-
-    if (prop === 'x') {
-      const ref = this.dialog.open(DialogInputComponent, {data: {message: 'Suspend market for hours', userInput: '3'}});
-      ref.afterClosed().subscribe(res => {
-        if (res) {
-          const suspend = +res.userInput;
-          const msg = res.msg;
-          if (isNaN(suspend)) this.scanner.deleteNotification(this.exchange, market);
-          else this.scanner.addExclude(this.exchange, market, msg + ' ' + suspend + 'h', suspend);
-        }
-      })
-
-    }
-    /!* if (prop === 'LH') {
-       this.router.navigateByUrl('my-exchange/buy-sell/' + this.exchange + '/' + market);
-     }*!/
-    if (prop === 'market') {
-      this.showMarket(market);
-    }else if(prop === 'result') {
-      this.dialog.open( NotesHistoryComponent,{data:item} )
-    }
-
-  }*/
 
   mediaFrom: string;
   mediaTo: string;
@@ -380,7 +307,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
         this.scanner.getMFIs();
       }
 
-    } else this.volumesResults = null;
+    }
   }
 
   setMFIs(results: any[]) {
@@ -429,72 +356,23 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   }
 
-  volumeInterval = '5m';
-  volumeChange = 500;
-  subVolume;
-
   async onVolumeChange(evt) {
-    if (evt.checked) {
-      this.subVolume = this.scanner.volumeResults$().subscribe(results => {
-        if (!results) return;
-        this.setVolumes(results);
-      })
-    } else {
-      if (this.subVolume) this.subVolume.unsubscribe();
-      this.volumesResults = null;
-    }
   }
 
   async onVolumeStartClick() {
-    if (!this.volumeSub) this.volumeSub = this.scanner.volumeResults$().subscribe(results => {
-
-      if (!Array.isArray(results)) return;
-      this.volumesResults = results.map(function (item) {
-        return Object.assign({}, item, {x: 'X'});
-      });
-    });
-
-    if (this.scanner.scanVolumeTimer) {
-      this.scanner.stopVolumeScan();
-      return;
-    }
-
-    const markets = this.scanOnlyUP ?
-      _.map(await this.scanner.getSelected(), 'market') : await this.scanner.getAvailableMarkets('binance');
-
-
-    this.scanner.scanForVolume(markets, this.volumeInterval, this.volumeChange);
+      const markets =  await this.scanner.getAvailableMarkets('binance');
+    this.volumesResults$ = this.scanner.scanForVolume(markets, this.candlesInterval, this.volumeDifference);
     // console.log(markets);
     // const sub = await this.scanner.scanForVolume(markets);
     // sub.subscribe(this.setVolumes.bind(this));
   }
 
-  setVolumes(results) {
-    this.volumesResults = results.map(function (item) {
-      return Object.assign(item, {x: 'X'});
-    });
-  }
-
-  onDeleteVolumesClick() {
-    if (confirm('Delete Volumes?')) {
-      setTimeout(async () => {
-        await this.scanner.deleteVolumes();
-
-      }, 500);
-    }
-  }
 
   onVolumeClick(evt) {
     const market = evt.item.market;
     switch (evt.prop) {
       case 'market':
         this.showMarket(market);
-        return;
-      case 'x':
-        if (confirm(' DELETE ' + market)) {
-          this.scanner.deleteVolume(market)
-            .then(this.setVolumes.bind(this));
-        }
         return;
       case 'result':
         this.dialog.open(NotesHistoryComponent, {data: evt.item});

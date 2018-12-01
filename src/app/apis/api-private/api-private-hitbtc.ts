@@ -87,13 +87,15 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
             amountBase: +item.price * +item.quantity,
             date: item.createdAt,
             timestamp: new Date(item.createdAt).getTime(),
-            status: item.status
+            status: item.status,
+            market:base+'_'+coin
           };
         }).find(function (item: VOOrder) {
           return item.uuid === orderId;
         }) || {
           uuid: orderId,
-          isOpen: false
+          isOpen: false,
+          market:base+'_'+coin
         };
       }));
   }
@@ -111,6 +113,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           rate: +res.price,
           amountCoin: +res.quantity,
           date: res.createdAt,
+          market:null,
           timestamp: new Date(res.createdAt).getTime()
         };
       }));
@@ -175,7 +178,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           action: res.side.toUpperCase(),
           amountCoin: +res.quantity,
           rate: +res.price,
-          status: res.status
+          status: res.status,
+          market:base+'_'+coin
         };
       })).toPromise();
 
@@ -205,7 +209,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
           action: res.side.toUpperCase(),
           amountCoin: +res.quantity,
           rate: +res.price,
-          status: res.status
+          status: res.status,
+          market:base+'_'+coin
 
         };
       })).toPromise();

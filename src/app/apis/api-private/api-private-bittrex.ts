@@ -162,6 +162,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
         isOpen: r.IsOpen,
         base: a[0],
         coin: a[1],
+        market:base+'_'+coin,
         rate: +r.PricePerUnit,
         amountBase: r.Price,
         amountCoin: r.Quantity,

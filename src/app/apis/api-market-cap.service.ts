@@ -11,7 +11,7 @@ import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '..
 import {VOMovingAvg} from '../com/moving-average';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {map} from 'rxjs/operators';
+import {map, share} from 'rxjs/operators';
 
 
 @Injectable()
@@ -54,7 +54,6 @@ export class ApiMarketCapService {
     const btc7d = +BTC.percent_change_7d;
     BTC.price_usd = +BTC.price_usd;
     BTC.price_btc = +BTC.price_btc;
-
 
 
     const USDT = data.find(function (item) {
@@ -123,10 +122,14 @@ export class ApiMarketCapService {
     // const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
     if (this.tickerGet$) return this.tickerGet$;
     console.log('%c TICKER ' + url, 'color:blue');
-    this.tickerGet$ = this.http.get(url).pipe(map((res: any[]) => {
-      console.log('%c TICKER MAP ' + url, 'color:blue');
-      return ApiMarketCapService.mapDataMC(res);
-    }));
+    this.tickerGet$ = this.http.get(url)
+      .pipe(
+        map((res: any[]) => {
+          console.log('%c TICKER MAP ' + url, 'color:blue');
+          return ApiMarketCapService.mapDataMC(res);
+        }),
+        share()
+      );
     return this.tickerGet$;
   }
 
@@ -134,7 +137,6 @@ export class ApiMarketCapService {
     if (this.coinsAr) return Promise.resolve(this.coinsAr);
     return new Promise<VOMarketCapSelected[]>(async (resolve, reject) => {
       const selected = await this.storage.getSelectedMC();
-
       const sub = this.ticker$().subscribe(data => {
         if (!data) return;
         selected.forEach(function (item) {
