@@ -1,35 +1,36 @@
 <section class="line">
     <div class="scrollmenu">
-        <mat-radio-group [(ngModel)] = "amountUS" (ngModelChange)="onAmountChanged($event)" >
+        <mat-radio-group [(ngModel)]="amountUS" (change)="onAmountChanged($event)" >
             <a>
-                <mat-radio-button value="50">$50</mat-radio-button>
+                <mat-radio-button [value]="50">$50</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="100">$100</mat-radio-button>
+                <mat-radio-button [value]="100">$100</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="200">$200</mat-radio-button>
+                <mat-radio-button [value]="200">$200</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button  value="400">$400</mat-radio-button>
+                <mat-radio-button  [value]="400">$400</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="600">$600</mat-radio-button>
+                <mat-radio-button [value]="600">$600</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="1000">$1000</mat-radio-button>
+                <mat-radio-button [value]="1000">$1000</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="2000">$2000</mat-radio-button>
+                <mat-radio-button [value]="2000">$2000</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="4000">$4000</mat-radio-button>
+                <mat-radio-button [value]="4000">$4000</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="6000">$6000</mat-radio-button>
+                <mat-radio-button [value]="6000">$6000</mat-radio-button>
             </a>
             <a>
-                <mat-radio-button value="10000">$10000</mat-radio-button>
+                <mat-radio-button [value]="10000">$10000</mat-radio-button>
+
             </a>
 
         </mat-radio-group>

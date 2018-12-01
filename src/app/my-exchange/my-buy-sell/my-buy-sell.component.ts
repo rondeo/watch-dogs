@@ -349,12 +349,15 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
 
       });
     });*/
+
     this.downloadBooks();
   }
 
   ngOnInit() {
+   this.amountUS =  (+localStorage.getItem('amountUS')) || 100;
     this.sub1 = this.route.params.subscribe(params => {
-      console.log(params);
+     // console.log(params);
+
       this.exchange = params.exchange;
       this.market = params.market;
       const api = this.apisPublic.getExchangeApi(this.exchange);
@@ -376,6 +379,7 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
   }
 
   onAmountChanged(amount) {
+    localStorage.setItem('amountUS', amount);
     this.amountUS = amount;
 
   }

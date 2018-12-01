@@ -82,9 +82,9 @@ export class StopLossOrder {
     await this.cancelOrder(this.order);
     this.order = null;
     setTimeout(() => {
-      this.apiPrivate.refreshAllOpenOrders().then(() => {
-        this.setStopLoss(closes, qty);
-      });
+      this.apiPrivate.refreshAllOpenOrders();
+      setTimeout(()=>this.setStopLoss(closes, qty),2000);
+
     }, 2000);
 
   }

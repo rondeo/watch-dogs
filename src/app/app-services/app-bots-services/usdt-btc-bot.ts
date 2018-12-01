@@ -8,6 +8,7 @@ import {CandlesService} from '../candles/candles.service';
 import {map} from 'rxjs/operators';
 import {pipe} from 'rxjs/internal-compatibility';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {Subject} from 'rxjs/internal/Subject';
 
 export class UsdtBtcBot {
   priceCounUS;
@@ -37,47 +38,78 @@ export class UsdtBtcBot {
 
   }
 
-
   async tick() {
     if (!this.balanceBase || !this.balanceCoin) {
       console.log(this.market + ' BALANCES not ready');
       return;
     }
-    if (this.isNeedStopLoss()) return;
+    const progressOrders = this.currentOrders.filter(function (item) {
+      return !item.action;
+    });
 
-    console.log(this.market, this.currentOrders, this.stopLossOrders);
-    const candles = await this.candlesService.getCandles(this.market);
-    // console.log(candles);
-    const availableUS = this.balanceCoin.available * this.priceCounUS;
-    console.log(availableUS);
-    if (availableUS < (this.releaseAmountUS - 20)) {
-      if (this.currentOrders) {
-        console.log(this.market + ' ORDER in progress ', this.currentOrders);
-      } else {
+    if (progressOrders.length) {
+      console.log(' progress orders ', progressOrders);
+      this.apiPrivate.refreshAllOpenOrders();
+      return
+    }
 
-        // this.buyCoin();
-      }
+    const fullAmount = (this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS;
+    console.log(' full amount ' + fullAmount);
 
+    if(fullAmount < this.releaseAmountUS) {
+      this.buyCoin();
       return;
     }
+
+    await this.chekStopLoss();
+    const candles = await this.candlesService.getCandles(this.market);
   }
 
-  isNeedStopLoss() {
-    const availableUS = this.balanceCoin.available * this.priceCounUS;
-    if (availableUS / 1.5 < (this.releaseAmountUS + 20)) {
-      console.log(' amount too small for stop loss ' + (availableUS / 1.5) + '   ' + (this.releaseAmountUS + 20));
-      return false;
+  async cancelStopLosses() {
+    const orders = this.stopLossOrders;
+    this.stopLossOrders = [];
+    console.log(' CANCEL STOP_LOSS ', orders);
+    if (!orders || orders.length === 0) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const sub = new Subject();
+      this.cancelOrders(orders, -1, sub);
+      sub.subscribe(results => {
+        console.log('cancelStopLoss RESULT   ', results);
+      }, reject, () => {
+        this.stopLossOrders = null;
+        this.apiPrivate.refreshAllOpenOrders();
+        resolve();
+      })
+    })
+  }
+
+  async chekStopLoss() {
+    if (this.stopLossOrders && this.stopLossOrders.length > 1) {
+      console.log(' 2 STOP LOSSES');
+      return this.cancelStopLosses();
     }
 
+    const extraUS = (this.balanceCoin.available * this.priceCounUS) - this.releaseAmountUS;
+    console.log(' EXTRA ' + extraUS);
+    if (extraUS < 0) {
+      console.log(' NO amount for stop loss ');
+      if (this.stopLossOrders && this.stopLossOrders.length) {
+        console.log(' taking from stop loss');
+        return this.cancelStopLosses();
+      }
+      return Promise.resolve()
+    } else {
+      if (extraUS > 100) {
+        await this.cancelStopLosses();
+        await this.setStopLoss();
 
-    if (this.stopLossOrders) return false;
-    this.setStopLoss();
-    return true;
+      }
+    }
+
   }
 
-
   async setStopLoss() {
-    console.log(' NEED to set Stop loss');
+    console.log(' SET STOP_LOSS');
     const candles = await this.candlesService.getCandles(this.market);
     const lastPrice = _.last(candles).close;
     const mas = CandlesAnalys1.mas(candles);
@@ -96,21 +128,24 @@ export class UsdtBtcBot {
     const stopPrice = +(currentPrice + (currentPrice * this.percentStopLoss / 100)).toFixed(1);
     const sellPrice = +(stopPrice + (stopPrice * -0.001)).toFixed(1);
 
-    let message =  this.market + ' SET STOP_LOSS  stopPrice ' + stopPrice + '  sellPrice ' + sellPrice + '   ' + qty;
+    let message = this.market + ' SET STOP_LOSS  stopPrice ' + stopPrice + '  sellPrice ' + sellPrice + '   ' + qty;
 
     console.log(message);
 
     try {
       const order: VOOrder = await this.apiPrivate.stopLoss(this.market, qty, stopPrice, sellPrice);
       console.log('result STOP LOSS order', order);
+
       if (order && order.uuid) {
-        if(!this.stopLossOrders) this.stopLossOrders = [];
-        this.stopLossOrders.push(order);
+        if (!this.currentOrders) this.currentOrders = [];
+        this.currentOrders.push(order);
       }
 
     } catch (e) {
       console.error(e);
     }
+
+    return true;
   }
 
   async buyCoin() {
@@ -119,9 +154,27 @@ export class UsdtBtcBot {
     const amountCoin = (this.releaseAmountUS + 20 - availableUS) / this.priceCounUS;
     const rate = _.last(await this.candlesService.getCandles(this.market)).close;
     const order = await this.apiPrivate.buyLimit2(this.market, amountCoin, rate);
-    if(!this.currentOrders) this.currentOrders = [];
+    if (!this.currentOrders) this.currentOrders = [];
     this.currentOrders.push(order);
     console.log(this.market, order);
+  }
+
+  cancelOrders(orders: VOOrder[], i, sub: Subject<any>) {
+    i++;
+    if (i >= orders.length) {
+      sub.complete();
+      return;
+    }
+    const order = orders[i];
+    this.cancelOrder(order).then(res => {
+
+      sub.next(res);
+    }).catch(err => {
+      console.error(err);
+    });
+
+    setTimeout(() => this.cancelOrders(orders, i, sub), 5000);
+
   }
 
   async cancelOrder(order: VOOrder) {
@@ -130,14 +183,8 @@ export class UsdtBtcBot {
       return;
     }
     const uuid = order.uuid;
-    console.log(' canceling order ', order);
-    let result;
-    try {
-      result = await this.apiPrivate.cancelOrder(uuid, this.base, this.coin).toPromise();
-    } catch (e) {
-      console.error(e);
-    }
-    return result
+    console.log(' canceling order ' + uuid, order);
+    return this.apiPrivate.cancelOrder2(uuid, this.market);
   }
 
   unsubscribe() {
@@ -162,7 +209,7 @@ export class UsdtBtcBot {
       .pipe(
         map(orders => {
           console.log(' OPEN ORDERS ', orders);
-          return _.filter(orders, {coin: this.coin, base: this.base})
+          return _.filter(orders, {market:this.market})
         })
       ).subscribe(orders => {
         if (!orders) return;
@@ -178,7 +225,7 @@ export class UsdtBtcBot {
   start() {
     if (this.interval) return;
     this.subscribe();
-    this.interval = setInterval(() => this.tick(), 6000);
+    this.interval = setInterval(() => this.tick(), 15000);
   }
 
   stop() {

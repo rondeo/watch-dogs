@@ -207,6 +207,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           isOpen: false,
           base: base,
           coin: coin,
+          market: base+'_'+coin,
           exchange: 'binance',
           action: o.isBuyerMaker ? 'SELL' : 'BUY',
           timestamp: o.time,

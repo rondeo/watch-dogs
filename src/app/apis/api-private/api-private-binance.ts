@@ -42,22 +42,22 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     super(userLogin);
   }
 
-  downloadBooks(market:string): Promise<{amountCoin: string, rate: string}[]> {
+  downloadBooks(market: string): Promise<{ amountCoin: string, rate: string }[]> {
     const symbol = market.split('_').reverse().join('');
     const params = {
       symbol,
-      limit:'5'
+      limit: '5'
     };
     let url = this.prefix + 'https://api.binance.com/api/v1/depth';
 
-        return this.http.get(url, {params}).pipe(map((res: any) => {
+    return this.http.get(url, {params}).pipe(map((res: any) => {
       let r = (<any>res);
-       const  buy =  r.bids.map(function (o) {
-          return {amountCoin: +o[1], rate: +o[0]}
-        });
-        const sell = r.asks.map(function (o) {
-          return {amountCoin: +o[1], rate: +o[0]}
-        });
+      const buy = r.bids.map(function (o) {
+        return {amountCoin: +o[1], rate: +o[0]}
+      });
+      const sell = r.asks.map(function (o) {
+        return {amountCoin: +o[1], rate: +o[0]}
+      });
       return buy.concat(sell)
 
     }, console.error)).toPromise();
@@ -65,10 +65,11 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   decimals = {};
 
-  async getDecimals(market: string):Promise<{amountDecimals: number, rateDecimals: number}>{
-    if(this.decimals[market]) {
+  async getDecimals(market: string): Promise<{ amountDecimals: number, rateDecimals: number }> {
+    if (this.decimals[market]) {
       return Promise.resolve(this.decimals[market])
-    };
+    }
+    ;
     return this.downloadBooks(market).then(res => {
       this.decimals[market] = UTILS.parseDecimals(res);
       return this.decimals[market]
@@ -76,7 +77,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   getAllOrders(base: string, coin: string, startTime: number, endTime: number): Observable<VOOrder[]> {
-    let url =  this.prefix +'https://api.binance.com/api/v3/myTrades';
+    let url = this.prefix + 'https://api.binance.com/api/v3/myTrades';
     const data = {
       symbol: coin + base,
       startTime,
@@ -126,7 +127,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   downloadAllOpenOrders(): Observable<VOOrder[]> {
-    let url =  this.prefix +'https://api.binance.com/api/v3/openOrders';
+    let url = this.prefix + 'https://api.binance.com/api/v3/openOrders';
     console.log(url);
     return this.call(url, null, RequestType.GET).pipe(map(res => {
       //  console.log(' allOpenOrders ', res);
@@ -143,6 +144,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           isOpen: item.status !== 'FILLED',
           base: base,
           coin: coin,
+          market: base + '_' + coin,
           rate: +item.price,
           amountBase: -1,
           amountCoin: +item.origQty,
@@ -154,7 +156,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
-    let url =  this.prefix +'https://api.binance.com/api/v3/openOrders';
+    let url = this.prefix + 'https://api.binance.com/api/v3/openOrders';
     const data = {
       symbol: coin + base
     };
@@ -171,6 +173,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           isOpen: item.status !== 'FILLED',
           base: base,
           coin: coin,
+          market: base + '_' + coin,
           rate: +item.price,
           amountBase: -1,
           amountCoin: +item.origQty,
@@ -183,7 +186,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
 
   cancelOrder(orderId: string, base?: string, coin?: string) {
-    let url =  this.prefix +'https://api.binance.com/api/v3/order';
+    let url = this.prefix + 'https://api.binance.com/api/v3/order';
     console.log(url);
     const data = {
       symbol: coin + base,
@@ -212,7 +215,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         isOpen: res.status !== 'FILLED',
         base: base,
         coin: coin,
-        market:base+'_'+coin,
+        market: base + '_' + coin,
         rate: +res.price,
         amountBase: -1,
         amountCoin: +res.origQty,
@@ -226,7 +229,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   isLoadingBalances: boolean;
 
   downloadBalances(): Observable<VOBalance[]> {
-    let uri =  this.prefix + 'https://api.binance.com/api/v3/account';
+    let uri = this.prefix + 'https://api.binance.com/api/v3/account';
     console.log(uri);
     const exchange = this.exchange;
     this.isLoadingBalances = true;
@@ -287,7 +290,6 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     }*/
 
 
-
   async _stopLoss(market: string, amountCoin: number, stopPriceN: number, sellPriceN: number) {
 
     const ar = market.split('_');
@@ -298,18 +300,18 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       return null;
     }
 
-    const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
+    const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
 
-    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals) ;// Math.ceil(amountCoin * Math.pow(10, decimals.amountDecimals))/Math.pow(10, decimals.amountDecimals);
+    const quantity = '' + MATH.formatDecimals(amountCoin, decimals.amountDecimals);// Math.ceil(amountCoin * Math.pow(10, decimals.amountDecimals))/Math.pow(10, decimals.amountDecimals);
     const stopPrice = stopPriceN.toFixed(decimals.rateDecimals);
     const price = sellPriceN.toFixed(decimals.rateDecimals);
 
-  //  const amountDecimals = val.amountDecimals;
-   // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
-   // data.rate = +data.rate.toFixed(val.rateDecimals);
-    console.log('!!! STOP LOSS ',market,quantity,stopPrice, price);
+    //  const amountDecimals = val.amountDecimals;
+    // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
+    // data.rate = +data.rate.toFixed(val.rateDecimals);
+    console.log('!!! STOP LOSS ', market, quantity, stopPrice, price);
 
-    let url =  this.prefix + 'https://api.binance.com/api/v3/order';
+    let url = this.prefix + 'https://api.binance.com/api/v3/order';
     let data = {
       symbol: coin + base,
       side: 'SELL',
@@ -329,6 +331,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         isOpen: res.status !== 'FILLED',
         base: base,
         coin: coin,
+        market: market,
         rate: +res.price,
         amountBase: -1,
         amountCoin: +res.origQty,
@@ -343,18 +346,18 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   }
 
   async buyLimit(base: string, coin: string, amountCoin: number, rate: number): Promise<VOOrder> {
-     let market = base + '_' + coin;
+    let market = base + '_' + coin;
     console.log(' buy market ' + base + coin + '  amountCoin: ' + amountCoin + ' rate:' + rate);
     if (isNaN(amountCoin) || isNaN(rate)) {
       console.warn(' not a number ' + amountCoin + '  ' + rate);
     }
 
-    const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
-    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals);
+    const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
+    const quantity = '' + MATH.formatDecimals(amountCoin, decimals.amountDecimals);
     const price = rate.toFixed(decimals.rateDecimals);
 
 
-    let url =  this.prefix + 'https://api.binance.com/api/v3/order';
+    let url = this.prefix + 'https://api.binance.com/api/v3/order';
     let data = {
       symbol: coin + base,
       side: 'BUY',
@@ -374,7 +377,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         isOpen: res.status !== 'FILLED',
         base: base,
         coin: coin,
-        market:base+'_'+coin,
+        market: base + '_' + coin,
         rate: +res.price,
         amountBase: -1,
         amountCoin: +res.origQty,
@@ -388,10 +391,10 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   async sellLimit(base: string, coin: string, amountCoin: number, rate: number): Promise<VOOrder> {
     let market = base + '_' + coin;
     console.log(' sell market ' + market + '  quantity: ' + amountCoin + ' rate:' + rate);
-    let url =  this.prefix +'https://api.binance.com/api/v3/order';
+    let url = this.prefix + 'https://api.binance.com/api/v3/order';
 
-    const decimals:{amountDecimals: number, rateDecimals: number} = await  this.getDecimals(market);
-    const quantity = ''+MATH.formatDecimals(amountCoin, decimals.amountDecimals);
+    const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
+    const quantity = '' + MATH.formatDecimals(amountCoin, decimals.amountDecimals);
     const price = rate.toFixed(decimals.rateDecimals);
 
     let data = {
@@ -412,7 +415,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         isOpen: res.status !== 'FILLED',
         base: base,
         coin: coin,
-        market:base+'_'+coin,
+        market: base + '_' + coin,
         rate: +res.price,
         amountBase: -1,
         amountCoin: +res.origQty,

@@ -84,15 +84,17 @@ export abstract class ApiPrivateAbstaract {
      })
 
    }*/
+
   cancelOrder2(orderId: string, market: string): Promise<VOOrder> {
     return new Promise<VOOrder>((resolve, reject) => {
       const ar = market.split('_');
       this.cancelOrder(orderId, ar[0], ar[1]).subscribe(order => {
-        this.refreshBalances();
-        this.refreshAllOpenOrders();
+          this.refreshBalances();
+          this.refreshAllOpenOrders();
       }, reject)
     })
   }
+
 
   abstract cancelOrder(orderId, base?: string, coin?: string): Observable<VOOrder>;
 
@@ -112,18 +114,23 @@ export abstract class ApiPrivateAbstaract {
     this.refreshBalancesInterval = setInterval(() => this.refreshBalances(), delay * 1000);
   }
 
-  balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject(null);
-  loadingBalances: number;
 
-  refreshBalances() {
-    if (this.loadingBalances) return;
-    this.loadingBalances = Date.now();
+  private _refreshBalances(){
+    console.log('%c _refreshBalances ', 'color:red');
     this.downloadBalances().subscribe(balances => {
       this.balancesSub.next(balances);
-      setTimeout(() => this.loadingBalances = 0, 10000);
+      this.loadingBalances = 0;
     }, error => {
-      setTimeout(() => this.loadingBalances = 0, 10000);
+      setTimeout(() => this._refreshBalances(), 5000);
     });
+  }
+
+  balancesSub: BehaviorSubject<VOBalance[]>;
+  loadingBalances;
+  refreshBalances() {
+    if (this.loadingBalances) return;
+    this.loadingBalances = setTimeout(()=> this._refreshBalances(), 3000);
+
   }
 
   //////////////////////////////// Open Orders ////////////////////////////////////////////////////////////
@@ -132,11 +139,14 @@ export abstract class ApiPrivateAbstaract {
   }
 
   allOpenOrders$(): Observable<VOOrder[]> {
-   if(!this.openOrdersSub.getValue()) this.refreshAllOpenOrders();
+   if(!this.openOrdersSub) {
+     this.openOrdersSub  = new BehaviorSubject(null);
+     this.refreshAllOpenOrders();
+   }
     return this.openOrdersSub.asObservable();
   }
 
-  openOrdersSub = new BehaviorSubject(null);
+  openOrdersSub
 
   openOrders$(base: string, coin: string) {
     const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
@@ -158,11 +168,12 @@ export abstract class ApiPrivateAbstaract {
 
 
   private _refreshAllOpenOrders(){
+    console.log('%c _refreshAllOpenOrders ', 'color:red')
     this.downloadAllOpenOrders().subscribe(res => {
       if (res.length) {
-        this.refreshOrdersTimeout = setTimeout(() => {
+        setTimeout(() => {
           this.refreshAllOpenOrders();
-        }, 60000);
+        }, 120000);
       }
       const old: VOOrder[] = this.openOrdersSub.getValue();
       if(old && res.length !== old.length)this.refreshBalances();
@@ -170,15 +181,17 @@ export abstract class ApiPrivateAbstaract {
     }, err => {
       this.refreshOrdersTimeout = setTimeout(() => {
         this.refreshAllOpenOrders();
-      }, 30000);
+      }, 5000);
     });    //
   }
 
   refreshOrdersTimeout;
 
   refreshAllOpenOrders() {
+    console.log(' refreshAllOpenOrders ' + this.refreshOrdersTimeout);
       if(this.refreshOrdersTimeout) return;
       this.refreshOrdersTimeout =  setTimeout(()=>{
+
         this.refreshOrdersTimeout = 0;
         this._refreshAllOpenOrders();
       }, 5000);
@@ -206,7 +219,12 @@ export abstract class ApiPrivateAbstaract {
   }
 
 
+
   balances$() {
+    if(!this.balancesSub) {
+      this.balancesSub = new BehaviorSubject(null);
+      this.refreshBalances();
+    }
     return this.balancesSub.asObservable();
   }
 
@@ -252,16 +270,18 @@ export abstract class ApiPrivateAbstaract {
     return new Promise((resolve, reject) => {
       this.buyLimit(ar[0], ar[1], quantity, rate).then(order => {
         resolve(order);
-        this.refreshAllOpenOrders();
-        this.refreshBalances();
+          this.refreshBalances();
+          this.refreshAllOpenOrders();
       }, reject);
     })
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
     return this._stopLoss(market, quantity, stopPrice, sellPrice).then(res => {
-      this.refreshBalances();
-      this.refreshAllOpenOrders();
+
+        this.refreshBalances();
+        this.refreshAllOpenOrders();
+
       return res;
     });
 

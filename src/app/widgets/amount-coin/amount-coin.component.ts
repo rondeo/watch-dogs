@@ -24,7 +24,8 @@ export class AmountCoinComponent implements OnInit, OnChanges {
     }
   }
 
-  onAmountChanged(amount: number) {
+  onAmountChanged(evt) {
+    const amount  = evt.value;
     this.amountChanged.emit(amount);
   }
 
