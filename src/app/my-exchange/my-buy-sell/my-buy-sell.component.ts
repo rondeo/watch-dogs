@@ -3,7 +3,6 @@ import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../models/app-models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UtilsOrder} from '../../com/utils-order';
-import {placeOrder} from './place-order';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';

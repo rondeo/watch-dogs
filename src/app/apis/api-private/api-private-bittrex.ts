@@ -196,11 +196,8 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
 
   downloadBalances(): Observable<VOBalance[]> {
-
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
-    this.isLoadingBalances = true;
     return this.call(uri, {}).pipe(map(res => {
-      this.isLoadingBalances = false;
       console.log(res);
       return res.result.map(function (item) {
         return {

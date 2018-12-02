@@ -138,7 +138,6 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
    isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
-    this.isLoadingBalances = true;
 
     const url = 'api/hitbtc/trading/balance';
     const exchange = this.exchange;

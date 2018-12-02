@@ -244,7 +244,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     isLoadingBalances: boolean;*/
 
   downloadBalances(): Observable<VOBalance[]> {
-    this.isLoadingBalances = true;
     const exchange = this.exchange;
     return this.call({command: 'returnBalances'}).pipe(map(res => {
     //   console.log(res);
@@ -265,8 +264,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         bal.symbol = str;
         out.push(bal)
       }
-
-      this.isLoadingBalances = false;
       this.balancesSub.next(out);
       return out;
     }));

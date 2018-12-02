@@ -30,6 +30,7 @@ export class ApiPublicOkex extends ApiPublicAbstract {
           isOpen:false,
           base:base,
           coin:coin,
+          market: base + '_' + coin,
           exchange:'okex',
           action:o.type.toUpperCase(),
           timestamp:o.date_ms,

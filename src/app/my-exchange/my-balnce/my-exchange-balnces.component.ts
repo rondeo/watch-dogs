@@ -97,7 +97,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   async initAsync() {
     this.MC = await this.marketCap.getTicker();
     this.subscribe();
-
   }
 
   subscribe() {
@@ -108,14 +107,14 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       if (!balances) return;
       const MC = this.MC;
       // console.log(this.balancesAll);
-      console.log(balances);
+     //  console.log(balances);
       this.balancesAll = balances;
       this.balancesAll.forEach(function (item) {
         const coinMC = MC[item.symbol];
         if (coinMC) {
           item.id = coinMC.id;
           item.balanceUS = Math.round(item.balance * coinMC.price_usd);
-        } else item.balanceUS = item.balance;
+        } else item.balanceUS = 0;
       });
 
       this.render();

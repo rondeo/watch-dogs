@@ -4,6 +4,7 @@ import {NotesHistoryComponent} from '../notes-history/notes-history.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as _ from 'lodash';
+import * as  moment from 'moment';
 
 @Component({
   selector: 'app-order-reports',
@@ -105,8 +106,20 @@ export class OrderReportsComponent implements OnInit {
       return;
     }
     const id = 'bot-' + this.market + this.dataName;
-    // console.log(id);
+     console.log(id);
     switch (this.dataName) {
+      case '-patterns':
+        this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
+          return {
+            date: moment(item.stamp).format('DD HH:mm'),
+            state: item.state,
+            v3_med: item.v3_med,
+            VD: item.VD,
+            ma3_25: item.ma3_25,
+            PD: item.PD
+          }
+        });
+        break;
       default:
         this.ordersData = ((await this.storage.select(id)) || []);
         break;

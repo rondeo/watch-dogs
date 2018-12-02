@@ -65,7 +65,7 @@ export class ApiCryptoCompareService {
     const params = {
       coin
     };
-    const url = 'api/proxy-1hour/http://uplight.ca/cmc/get-coin-media.php';
+    const url = 'api/proxy-1hour/http://front-desk.ca/coin-media/get-coin-media.php';
     // console.warn(url);
     return this.http.get(url, {params}).pipe(map((res: any) => {
     //  console.log(res);

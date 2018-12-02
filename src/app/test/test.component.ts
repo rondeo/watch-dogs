@@ -181,7 +181,7 @@ export class TestComponent implements OnInit {
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
     const result = await CandlesAnalys1.createState(this.candles);
-    this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
+   /* this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
 
     const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
     if (action) console.warn(action);
@@ -190,7 +190,7 @@ export class TestComponent implements OnInit {
     if (action === 'BUY') this.buyCoin(lastCandle);
     else if (action === 'SELL') this.sellCoin(lastCandle);
     const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
-    console.log(' new price ' + newPrice);
+    console.log(' new price ' + newPrice);*/
   }
 
 

@@ -136,6 +136,7 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
           amountBase:+item.total,
           base: base,
           coin: coin,
+          market: base+ '_' + coin,
           date:item.date,
           timestamp:time.getTime()
         };

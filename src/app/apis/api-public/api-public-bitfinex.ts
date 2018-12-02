@@ -194,6 +194,7 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
           isOpen: false,
           base: base,
           coin: coin,
+          market: base + '_' + coin,
           exchange: 'bitfinex',
           action: o[2] < 0 ? 'SELL' : 'BUY',
           timestamp: o[1],
@@ -202,7 +203,6 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
         }
       })
     }));
-
   }
 
   mapCoinDay(res: any) {

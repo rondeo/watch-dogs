@@ -15,7 +15,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     private snackBar: MatSnackBar
   ) {
 
-      this.ordersHistory = [];
+    this.ordersHistory = [];
   }
 
   summary: number;
@@ -29,8 +29,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   checkOrder: VOOrder;
 
- ordersHistory: VOOrder[];
-
+  ordersHistory: VOOrder[];
 
 
   trackOrderTimeout;
@@ -46,7 +45,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: any) {
-   // console.log('trading-coindatas-component', changes);
+    // console.log('trading-coindatas-component', changes);
     if (changes.marketInit && changes.marketInit.currentValue) {
       this.loadSavedData();
       if (this.newOrder) {
@@ -63,36 +62,36 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       setTimeout(() => this.checkingOrder(this.checkOrder), 2000);
     }
 
-   /* if(changes.priceBaseUS && changes.priceBaseUS.currentValue){
-      console.log('trading-coindatas-component  '+ changes.priceBaseUS.currentValue);
+    /* if(changes.priceBaseUS && changes.priceBaseUS.currentValue){
+       console.log('trading-coindatas-component  '+ changes.priceBaseUS.currentValue);
 
-    }*/
-/*
-    if(changes.coin || changes.base || changes.exchange){
-      this.loadSavedData();
-    }*/
+     }*/
+    /*
+        if(changes.coin || changes.base || changes.exchange){
+          this.loadSavedData();
+        }*/
   }
 
- /* onCancelNewOrderClick() {
-    if (!this.checkOrder) return;
-    let api =  this.apiService.getCurrentAPI();
-    let order = this.checkOrder;
+  /* onCancelNewOrderClick() {
+     if (!this.checkOrder) return;
+     let api =  this.apiService.getCurrentAPI();
+     let order = this.checkOrder;
 
-    let uuid = order.uuid;
+     let uuid = order.uuid;
 
-    if (!confirm('Cancel order ' + order.action + ' ' + order.amountUS + ' ' + order.priceUS + '?')) return;
+     if (!confirm('Cancel order ' + order.action + ' ' + order.amountUS + ' ' + order.priceUS + '?')) return;
 
-    api.cancelOrder(uuid).toPromise().then(res => {
-      console.log(res);
-      if (res.uuid)this.snackBar.open('Order canceled', 'x', {duration: 3000, panelClass: 'alert-green'});
-      else  this.snackBar.open('cant cancel order ', 'x', {duration: 3000, panelClass: 'alert-red'});
+     api.cancelOrder(uuid).toPromise().then(res => {
+       console.log(res);
+       if (res.uuid)this.snackBar.open('Order canceled', 'x', {duration: 3000, panelClass: 'alert-green'});
+       else  this.snackBar.open('cant cancel order ', 'x', {duration: 3000, panelClass: 'alert-red'});
 
-    }).catch(err => {
-      console.warn(err);
-      this.snackBar.open('Server error ', 'x', {duration: 3000, panelClass: 'alert-red'});
-    });
-  }
-*/
+     }).catch(err => {
+       console.warn(err);
+       this.snackBar.open('Server error ', 'x', {duration: 3000, panelClass: 'alert-red'});
+     });
+   }
+ */
 
   checkingOrder(myOrder: VOOrder) {
 
@@ -106,9 +105,9 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     }
 
 
-   // let api = this.apiService.getCurrentAPI();
+    // let api = this.apiService.getCurrentAPI();
 
-   // console.log('checkingOrder ', myOrder);
+    // console.log('checkingOrder ', myOrder);
 
     /*api.trackOrder(myOrder.uuid).toPromise().then(res=>{
       console.log(res);
@@ -147,9 +146,11 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
   private addOrderHistory(order: VOOrder) {
 
     // console.log('add oredr ', order);
-    let exists = this.ordersHistory.find(function (item) { return item.uuid === order.uuid; });
+    let exists = this.ordersHistory.find(function (item) {
+      return item.uuid === order.uuid;
+    });
     if (!!exists) {
-      console.error('Order exists ' + order.uuid );
+      console.error('Order exists ' + order.uuid);
       return;
     }
 
@@ -160,7 +161,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
   private calculateSummary() {
     if (!this.marketInit || !this.ordersHistory) return;
-   // console.log(' calculateSummary ', this.marketInit.priceBaseUS, this.ordersHistory);
+    // console.log(' calculateSummary ', this.marketInit.priceBaseUS, this.ordersHistory);
 
     let totalFee = 0;
 
@@ -174,7 +175,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       else console.error(' no isActive ', item);
     });
 
-    let profit = (totalSell - totalBuy) ;
+    let profit = (totalSell - totalBuy);
     console.log('profit   ' + (profit * this.marketInit.priceBaseUS));
     this.summary = +(profit * this.marketInit.priceBaseUS).toFixed(2);
 
@@ -189,14 +190,15 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       uuid: order.uuid,
       amountBase: order.amountBase,
       amountCoin: order.amountCoin,
-       amountUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
-     //  amountUS: MATH.round(order.amountBase * priceBaseUS),
-      priceUS: +(order.rate * priceBaseUS).toPrecision(4) ,
+      amountUS: Math.round(order.amountCoin * order.rate * priceBaseUS),
+      //  amountUS: MATH.round(order.amountBase * priceBaseUS),
+      priceUS: +(order.rate * priceBaseUS).toPrecision(4),
       rate: order.rate,
       action: order.action,
       isOpen: order.isOpen,
       coin: order.coin,
       base: order.base,
+      market: order.base + '_' + order.coin,
       fee: order.fee
     };
   }
@@ -211,7 +213,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
     let id = exchange + '-' + base + '-' + coin;
 
     let data = this.ordersHistory.map(function (item) {
-      return{
+      return {
         uuid: item.uuid,
         amountBase: item.amountBase,
         amountCoin: item.amountCoin,
@@ -237,7 +239,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
     let price = this.marketInit.priceBaseUS;
 
-    if (str) this.ordersHistory  = JSON.parse(str).map( (item) => {
+    if (str) this.ordersHistory = JSON.parse(str).map((item) => {
       item.base = base;
       item.coin = coin;
       return this.mapOrder(item, price);
