@@ -3,7 +3,7 @@
         <small>{{exchange}}</small>
         <mat-spinner *ngIf="scanner.isScanning" [diameter]="24" class="mat-progress-spinner"></mat-spinner>
 
-        <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
+        <mat-checkbox #favoritesCheck (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
         <mat-checkbox #trendCheck >Trend</mat-checkbox>
         <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
         <mat-checkbox #followingCheck (change)="onFollowingChange($event)">Following</mat-checkbox>
@@ -86,10 +86,10 @@
         </div>
     </div>
 
-    <div *ngIf="favorites">
+    <div *ngIf="favoritesCheck.checked">
         <h4>Favorites</h4>
         <div class="scrollY300">
-            <app-table-props [dataset]="favorites" (selected)="onFavoritesClick($event)"></app-table-props>
+            <app-table-props [dataset]="dataset$ | async" (selected)="onFavoritesClick($event)"></app-table-props>
         </div>
     </div>
 

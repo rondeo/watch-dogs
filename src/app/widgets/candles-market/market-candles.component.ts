@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material';
 import * as _ from 'lodash';
 import {StorageService} from '../../services/app-storage.service';
 import * as  moment from 'moment';
+import {FavoritesService} from '../../app-services/favorites.service';
 
 @Component({
   selector: 'app-market-candles',
@@ -23,8 +24,8 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
   constructor(
     private apisPublic: ApisPublicService,
-    private dialog: MatDialog,
-    private storage: StorageService
+    private favorites: FavoritesService
+
   ) {
   }
 
@@ -36,26 +37,8 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   }
 
   onStarClick(){
-    const market = this.market + ' add to favorites';
-    const ref = this.dialog.open(DialogInputComponent, {data: {message: market,}});
-    const sub = ref.afterClosed().toPromise().then(res => {
-      if (res) {
-        const note = res.note;
-        const date = moment().format('DD HH:mm');
-        this.saveFavorites({date, market, note})
-      }
-    });
-
-  }
-
-  async saveFavorites(obj: {market: string, note:string, date: string}) {
-
-    let data = (await this.storage.select('favorite-markets')) || [];
-    data = data.filter(function (item) {
-      return !!item.market && item.market !== obj.market;
-    });
-    data.unshift(obj);
-    return this.storage.upsert('favorite-markets', data);
+    if(!this.market) return;
+    this.favorites.addMarket(this.market);
   }
 
   downloadCandles() {

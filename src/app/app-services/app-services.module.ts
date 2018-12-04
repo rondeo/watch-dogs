@@ -9,6 +9,7 @@ import {BtcTetherComponent} from '../widgets/btc-tether/btc-tether.component';
 import {BtcUsdtService} from './alerts/btc-usdt.service';
 import {MarketAlertsService} from './alerts/market-alerts.service';
 import {FollowOrdersService} from '../apis/open-orders/follow-orders.service';
+import {FavoritesService} from './favorites.service';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import {FollowOrdersService} from '../apis/open-orders/follow-orders.service';
     ScanMarketsService,
     MarketAlertsService,
     BtcUsdtService,
-    FollowOrdersService
+    FollowOrdersService,
+    FavoritesService
   ]
 })
 export class AppServicesModule {

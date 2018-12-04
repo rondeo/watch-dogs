@@ -23,6 +23,7 @@ import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service'
 import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
+import {FavoritesService} from '../../app-services/favorites.service';
 
 @Component({
   selector: 'app-scan-markets',
@@ -42,7 +43,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     public scanner: ScanMarketsService,
     private candlesService: CandlesService,
     private cryptoCompare: ApiCryptoCompareService,
-    private followOrder: FollowOrdersService
+    private followOrder: FollowOrdersService,
+    private favorites: FavoritesService
   ) {
 
   }
@@ -78,7 +80,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onPatternClick(evt) {
     const market = evt.item.market;
-   // console.log(evt.item);
+    // console.log(evt.item);
     switch (evt.prop) {
       case 'market':
         this.showMarket(market);
@@ -101,20 +103,20 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-
   patterns$: Observable<any[]>;
   volumeDifference = 50;
+
   async onPatternStartClick() {
 
     if (this.scanner.isScanning) {
       this.scanner.stop();
     } else {
       const markets = await this.scanner.getAvailableMarkets('binance');
-      this.patterns$ = this.scanner.scanPatterns(markets,  this.candlesInterval, +this.volumeDifference).asObservable()
+      this.patterns$ = this.scanner.scanPatterns(markets, this.candlesInterval, +this.volumeDifference).asObservable()
         .pipe(
-          map(items=>items.map(function (item) {
-          return Object.assign(item, {x:'X'});
-        }))
+          map(items => items.map(function (item) {
+            return Object.assign(item, {x: 'X'});
+          }))
         );
     }
 
@@ -144,11 +146,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   sub1: Subscription;
   sub2: Subscription;
   sub3: Subscription;
-
-  favorites: any[];
-  favoriteSub: Subscription;
-
-  ///////////////////////////////// FAVORITE END /////////////////////////////////////////////////////
 
 
   /////////////////////////////// Following//////////////////////////
@@ -214,7 +211,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   ////////////////////////////////////////////////// TREND  ///////////////////////////////////////////////////////
 
   async onScanStart() {
-    if(this.scanner.isScanning) {
+    if (this.scanner.isScanning) {
       this.scanner.stop();
       return;
     }
@@ -290,7 +287,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   async onVolumeStartClick() {
-      const markets =  await this.scanner.getAvailableMarkets('binance');
+    const markets = await this.scanner.getAvailableMarkets('binance');
     this.volumesResults$ = this.scanner.scanForVolume(markets, this.candlesInterval, this.volumeDifference);
     // console.log(markets);
     // const sub = await this.scanner.scanForVolume(markets);
@@ -328,18 +325,13 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
 
   /////////////////////////////////////////// FAVORITES START //////////////////////////////////////////////
-  onStarClick() {
-    const market = this.selectedMarket;
-    const ref = this.dialog.open(DialogInputComponent, {data: {message: market, userInput: '3'}});
-    const sub = ref.afterClosed().toPromise().then(res => {
-      if (res) {
-        const msg = res.msg;
-        this.scanner.addFavorite(market, msg);
-      }
-    });
 
-    // this.scanner.addFavorite()
+  onFavoriteChange(evt) {
+    if (evt.checked) {
+      this.dataset$ = this.favorites.view$()
+    }
   }
+
 
   onFavoritesClick(obj) {
     //   console.log(obj);
@@ -349,31 +341,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     const market = item.market;
     const ar = market.split('_');
     if (prop === 'x') {
-      if (confirm('remove from favorites ' + market + '?')) this.scanner.removeFavorite(market);
+      if (confirm('remove from favorites ' + market + '?')) this.favorites.delete(market);
     }
     if (prop === 'market') this.showMarket(market);
 
   }
 
-  onFavoriteChange(evt) {
-    if (evt.checked) {
-      this.scanner.favorites$().then(sub => {
-        this.favoriteSub = sub.subscribe(data => {
-          this.favorites = data.map(function (o) {
-            return {
-              stamp: moment(o.stamp).format('DD HH:mm'),
-              market: o.market,
-              message: o.message,
-              x: 'X'
-            };
-          });
-        });
-      });
-    } else {
-      this.favoriteSub.unsubscribe();
-      this.favorites = null;
-    }
-  }
 
   onFollowingClick(evt) {
     const item = evt.item;
