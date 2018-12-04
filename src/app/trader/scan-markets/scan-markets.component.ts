@@ -62,11 +62,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   scannerSatatsSub: Subject<string> = new Subject();
   // private selectedCoin: string;
   selectedMarket: string;
-
   dataset$: Observable<any[]>;
   maX: string;
   percent: number;
-
   ////////////////////////// BOTS ///////////////////////
 
   bots: any[];
@@ -141,7 +139,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   ///////////////////////////////////////// VOLUME END ///////////////////////////////////////////////////////
 
 
-  userMarket: string;
+  market: string;
 
   sub1: Subscription;
   sub2: Subscription;
@@ -287,11 +285,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   async onVolumeStartClick() {
+    if(this.scanner.isScanning) {
+      this.scanner.stop();
+      return;
+    }
     const markets = await this.scanner.getAvailableMarkets('binance');
     this.volumesResults$ = this.scanner.scanForVolume(markets, this.candlesInterval, this.volumeDifference);
-    // console.log(markets);
-    // const sub = await this.scanner.scanForVolume(markets);
-    // sub.subscribe(this.setVolumes.bind(this));
   }
 
 
@@ -310,12 +309,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   onMarketInput(evt) {
-    if (evt.code === 'Enter') this.showCandles(this.userMarket);
-    //  console.log(evt, this.userMarket);
+    if (evt.code === 'Enter') this.showCandles(this.market);
+    //  console.log(evt, this.market);
   }
 
   onCandlesIntrvalChange() {
-    this.showCandles(this.userMarket);
+    this.showCandles(this.market);
   }
 
   async ngOnInit() {
@@ -488,7 +487,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
 
   showMarket(market: string) {
-    this.userMarket = market;
+    this.market = market;
     this.coin = market.split('_')[1];
     this.selectedMarket = market;
     this.showCandles(market);

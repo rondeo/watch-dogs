@@ -1,4 +1,4 @@
-import {VOBalance, VOBooks, VOOrder} from '../../models/app-models';
+import {VOBalance, VOBooks, VOMarketCap, VOOrder} from '../../models/app-models';
 import {ApisPrivateService} from '../api-private/apis-private.service';
 import {ApisPublicService} from '../api-public/apis-public.service';
 import {ApiMarketCapService} from '../api-market-cap.service';
@@ -15,6 +15,8 @@ import {ApiPrivateAbstaract} from '../api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../api-public/api-public-abstract';
 import {UtilsBooks} from '../../com/utils-books';
 import {Subject, Subscription} from 'rxjs';
+import {noop} from 'rxjs/internal-compatibility';
+import {map} from 'rxjs/operators';
 
 export class FollowOpenOrder {
   constructor(
@@ -22,9 +24,9 @@ export class FollowOpenOrder {
     public market: string,
     private amountCoin: number,
     public percentStopLoss: number,
+    private marketCap: ApiMarketCapService,
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
-    private marketCap: ApiMarketCapService,
     private storage: StorageService,
     private candlesService: CandlesService
   ) {
@@ -52,7 +54,8 @@ export class FollowOpenOrder {
   sellOnJump: SellOnJump;
   stopLossOrder: StopLossOrder;
 
-  priceCounUS: number;
+  MC: VOMarketCap;
+  // priceCounUS: number;
   candles: VOCandle[];
   id: string;
 
@@ -143,12 +146,12 @@ export class FollowOpenOrder {
     const result1 = await this.stopLossOrder.cancelOrder(this.stopLossOrder.order);
     this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
     const qty = this.balanceCoin.available;
-    if (qty * this.priceCounUS < 20) {
+   /* if (qty * this.priceCounUS < 20) {
       this.log(' nothing to sell ');
 
       setTimeout(() => this.sellCoin(rate), 10000);
       return;
-    }
+    }*/
     if (!rate) {
       const last = _.last(this.candles);
       rate = last.close;
@@ -176,15 +179,13 @@ export class FollowOpenOrder {
   async init() {
     this.apiPrivate = this.apisPrivate.getExchangeApi(this.exchange);
     this.apiPublic = this.apisPublic.getExchangeApi(this.exchange);
-
+    this.marketCap.ticker$().subscribe(obj=>this.MC =obj[this.coin] );
     await this.subscribeForBalances();
-
     this.sellOnJump = new SellOnJump(this.market, this.candlesService,  this.apiPublic);
     this.sellOnJump.log = msg => {
      //  console.log(msg);
       this.log(msg, true);
     };
-
     this.sellOnJump.sellCoin = () => {
       this.log(' SELL COIN by sellOnJump ', true);
       setTimeout(() => {
@@ -211,8 +212,8 @@ export class FollowOpenOrder {
 
   async subscribeForBalances() {
     // return new Promise((resolve, reject) =>{
-    const MC: VOMCObj = await this.marketCap.getTicker();
-    this.priceCounUS = MC[this.coin] ? MC[this.coin].price_usd : 1;
+    // const MC: VOMCObj = await this.marketCap.getTicker();
+
 
     const apiPrivate = this.apisPrivate.getExchangeApi(this.exchange);
     this.sub1 = apiPrivate.balances$().subscribe(balances => {

@@ -15,7 +15,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 @Injectable()
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
-  excludes: string[] = ['BTC', 'USDT'];
+  excludes: string[] = ['BTC', 'USDT', 'USD'];
 
   botsSub: BehaviorSubject< MarketBot[] > = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
@@ -113,11 +113,13 @@ export class FollowOrdersService {
     this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
        if (!balances)  return;
 
-      const botsMarkets = _.map(this.botsSub.getValue(), 'market');
+    //   const botsMarkets = _.map(this.botsSub.getValue(), 'market');
      /// console.log('balances.length   ' + balances.length);
       this.marketCap.getTicker().then(MC => {
+
         const ar = this.followingOrdersSub.getValue();
-        const excludes = this.excludes.concat(botsMarkets);
+
+        const excludes = this.excludes;
 
         balances.forEach((o) => {
           if (excludes.indexOf(o.symbol) === -1) {
@@ -136,9 +138,9 @@ export class FollowOrdersService {
                   market,
                   balance,
                   -2,
+                  this.marketCap,
                   this.apisPrivate,
                   this.apisPublic,
-                  this.marketCap,
                   this.storage,
                   this.canlesService
                 );

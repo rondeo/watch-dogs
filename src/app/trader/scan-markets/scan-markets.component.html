@@ -121,7 +121,9 @@
 
     </div>
 
-   <app-media [coin]="coin"></app-media>
+    <app-market-candles [exchange]="exchange" [market]="market"></app-market-candles>
+
+  <!-- <app-media [coin]="coin"></app-media>
     <br/>
 
     <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">{{exchange}}
@@ -129,13 +131,13 @@
     &nbsp;&nbsp;
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
     &nbsp;&nbsp;
-    <a class="fa fa-anchor fa-2x dgreen"  routerLink="/trader/follow-market/{{userMarket}}"></a>
+    <a class="fa fa-anchor fa-2x dgreen"  routerLink="/trader/follow-market/{{market}}"></a>
     &nbsp;&nbsp;
-    <!-- <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>-->
+    &lt;!&ndash; <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>&ndash;&gt;
 
     <mat-form-field class="w6">
         <input matInput placeholder="Market"
-               [(ngModel)]="userMarket"
+               [(ngModel)]="market"
                (keyup)="onMarketInput($event)"
         >
     </mat-form-field>
@@ -152,8 +154,8 @@
     <app-mc-data [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
     <app-candlesticks [candles]="candles"></app-candlesticks>
     <app-volume-hist [values]="volumes"></app-volume-hist>
-   <!-- <app-macd-indicator [candles]="candles"></app-macd-indicator>
+    <app-macd-indicator [candles]="candles"></app-macd-indicator>
     <app-mfi-indicator [candles]="candles"></app-mfi-indicator>
-    <app-vwmacd-indicator  [candles]="candles" ></app-vwmacd-indicator>-->
-
+    <app-vwmacd-indicator  [candles]="candles" ></app-vwmacd-indicator>
+-->
 </div>

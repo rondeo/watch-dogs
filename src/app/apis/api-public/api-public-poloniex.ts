@@ -16,6 +16,11 @@ export class ApiPublicPoloniex extends ApiPublicAbstract{
     super(http, storage);
   }
 
+
+  downloadCandles(market: string, interval: string, limit: number, endTime = 0){
+    return Promise.resolve([]);
+  }
+
   getMarketUrl(base:string, coin: string): string{
     return  'https://poloniex.com/exchange#{{base}}_{{coin}}'
       .replace('{{base}}', base).replace('{{coin}}', coin);
