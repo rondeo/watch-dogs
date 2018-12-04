@@ -1,8 +1,17 @@
 <div>
-    <p>
+    &nbsp;&nbsp;
+    <a>
         <span (click)="onUsdtBtcClick()" class="btn">USDT_BTC</span>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteUSDTRecordsClick()"></span>
-    </p>
+    </a>
+    &nbsp;&nbsp;
+    <a>
+        <span (click)="onBotsClick()" class="btn">Bots</span>
+    </a>
+    &nbsp;&nbsp;
+    <a>
+        <span (click)="onOrdersClick()" class="btn">Orders</span>
+    </a>
 
 <div class="horizontal">
     <div class="scrollY300">
@@ -14,7 +23,6 @@
         <mat-radio-group (change)="onDataChange($event)">
             <mat-radio-button value="-logs" [checked]="true">Logs</mat-radio-button>
             <mat-radio-button value="-patterns">Patterns</mat-radio-button>
-            <mat-radio-button value="-orders">Orders</mat-radio-button>
         </mat-radio-group>
 
         <div class="scrollY300">

@@ -31,28 +31,9 @@ export class OrderReportsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.market = params.market;
       this.showBotHistory();
-
     });
-    this.initAsync();
   }
 
-  async initAsync() {
-    setTimeout(() => this.populateBots(), 2000);
-    /*
-     const keys:string[] = await this.storage.keys();
-
-     // console.log(keys);
-     const orders = keys.filter(function (item) {
-       return item.indexOf('order') !==-1
-     })
-     this.ordersRecords = orders.map(function (item) {
-       return {
-         key:item,
-         x:'X'
-       }
-     });*/
-
-  }
 
   onDeleteUSDTRecordsClick(){
     if(confirm('DELETE USDT_BTC ?')){
@@ -65,6 +46,14 @@ export class OrderReportsComponent implements OnInit {
     this.ordersData = await this.storage.select('USDT_BTC-alerts');
   }
 
+  onBotsClick(){
+    this.populateBots();
+
+  }
+
+  onOrdersClick(){
+
+  }
   ////////////////////////////////////// BOTS
 
 
@@ -73,6 +62,7 @@ export class OrderReportsComponent implements OnInit {
     else this.bots = null;
   }
 */
+
   populateBots() {
     this.followOrder.getBots().then(res => {
       if (!res) return;

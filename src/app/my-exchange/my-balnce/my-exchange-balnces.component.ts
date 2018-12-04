@@ -42,6 +42,8 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   isPendingOrders: boolean;
   MC: VOMCObj;
 
+  market: string;
+
   private sub1;
   private sub2;
 
@@ -87,6 +89,9 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       }
 
       this.exchange = params.exchange;
+      this.market = params.market;
+      if(this.market === 'undefined' || this.market === 'null') this.market = null;
+
       if (!this.MC) this.initAsync();
       else this.subscribe();
       // this.dowloadAllBalances();
@@ -114,7 +119,12 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
         if (coinMC) {
           item.id = coinMC.id;
           item.balanceUS = Math.round(item.balance * coinMC.price_usd);
-        } else item.balanceUS = 0;
+        } else {
+          if(item.symbol === 'USD')  {
+            item.balanceUS = item.balance;
+          }
+          else item.balanceUS = 0;
+        }
       });
 
       this.render();
@@ -142,7 +152,6 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 
   sortByBalance() {
-
     if (this.sortBy === 'balanceUS') {
       this.asc_desc = (this.asc_desc === 'asc') ? 'desc' : 'asc';
     }
@@ -178,13 +187,14 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 
   sortData() {
-
     this.balancesAr = _.orderBy(this.balancesAr, this.sortBy, this.asc_desc);
-
   }
 
   onSymbolClick(balance) {
-    this.router.navigateByUrl('/trader/analyze-coin/' + balance.symbol + '/' + this.exchange);
+    let market = 'BTC_' + balance.symbol;
+    if(balance.symbol === 'BTC' || balance.symbol === 'USDT') market = 'USDT_BTC';
+    const exchange =  this.exchange;
+    this.router.navigate(['/my-exchange/balances', {exchange, market}], {replaceUrl: true});
   }
 
   onPriceClick(balance: VOBalance) {
@@ -193,8 +203,9 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 
   onEchangeChanged(evt: MatSelectChange) {
-    // console.log(exch);
-    this.router.navigateByUrl('/my-exchange/balances/' + evt.value, {replaceUrl: true});
+    const exchange =  evt.value;
+    const market = null;
+    this.router.navigate(['/my-exchange/balances', {exchange, market}], {replaceUrl: true});
   }
 
   onKeyClick() {

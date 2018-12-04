@@ -335,7 +335,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onFavoritesClick(obj) {
     //   console.log(obj);
-
     const item = obj.item;
     const prop = obj.prop;
     const market = item.market;
