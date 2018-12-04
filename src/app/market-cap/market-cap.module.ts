@@ -27,8 +27,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'selected', pathMatch: 'full'},
       {path: 'all-coins', component: AllCoinsTableComponent},
       {path: 'selected', component: SelectedCoinsComponent},
-      {path: 'gainers-losers', redirectTo: 'gainers-losers/all', pathMatch: 'full'},
-      {path: 'gainers-losers/:exchange', component: GainersLosersComponent},
+      {path: 'gainers-losers', component: GainersLosersComponent},
       {path: 'coin-exchanges/:coinId', component: CoinsExchangesComponent},
       {path: 'exchanges-list', component: ExchangesListComponent}
     ]

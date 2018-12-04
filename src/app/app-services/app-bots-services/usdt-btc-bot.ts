@@ -114,7 +114,8 @@ export class UsdtBtcBot {
     const lastPrice = _.last(candles).close;
     const mas = CandlesAnalys1.mas(candles);
     const ma99 = mas.ma99;
-    const currentPrice = ma99 < lastPrice ? lastPrice : ma99;
+
+    const currentPrice = ma99 > lastPrice ? lastPrice : ma99;
     const availableUS = (this.balanceCoin.available * this.priceCounUS) - this.releaseAmountUS - 10;
     console.log(' STOP LOSS available ' + availableUS);
 
@@ -219,7 +220,6 @@ export class UsdtBtcBot {
           return !!item.stopPrice;
         })
       });
-
   }
 
   start() {
@@ -232,5 +232,13 @@ export class UsdtBtcBot {
     clearInterval(this.interval);
     this.interval = 0;
     this.unsubscribe();
+  }
+
+  stopFollow() {
+    if(this.interval) {
+      this.cancelStopLosses();
+      this.stop();
+    } else this.start();
+
   }
 }

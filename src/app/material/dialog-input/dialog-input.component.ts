@@ -8,15 +8,13 @@ import {DilaogData} from '../dialog-simple/dialog-simple.component';
   styleUrls: ['./dialog-input.component.css']
 })
 export class DialogInputComponent implements OnInit {
-
   userInput: string;
-  msg: string;
+  note: string;
   message: string;
   constructor(
     private dialogRef: MatDialogRef<{ userInput: string }>,
     @Inject(MAT_DIALOG_DATA) public data: {message: string, hint: string}) {
     this.message = data.message;
-    this.userInput = data.hint;
   }
 
   ngOnInit() {
@@ -25,9 +23,8 @@ export class DialogInputComponent implements OnInit {
 
 
   onOkClick() {
-    const userInput = this.userInput;
-    const msg = this.msg;
-    this.dialogRef.close({userInput, msg});
+    const note = this.note;
+    this.dialogRef.close({note});
   }
 
   onCancelClick() {

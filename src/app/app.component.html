@@ -11,6 +11,7 @@
                 <hr/>
 
                 <a mat-list-item routerLink='trader/live-trader/bitfinex/USDT_BTC'>Candles</a>
+                &nbsp;&nbsp;
 
                 <a mat-list-item routerLink='/my-exchange/balances/'>Balances</a>
                 <hr/>
@@ -35,16 +36,19 @@
                 <a [ngClass] ="imageClass" (click)="onDogClick()" class="btn watchdog">    </a>
             </div>
             &nbsp;&nbsp;
-           <a routerLink="/market-cap/gainers-losers/last">
+           <a routerLink="/market-cap/gainers-losers">
                <span class="fa fa-thumbs-o-up fa-2x btn yellow"></span>
                <span class="fa fa-thumbs-o-down fa-flip-horizontal fa-2x btn yellow"></span>
            </a>
+            &nbsp;&nbsp;
             <app-scanner></app-scanner>
+            &nbsp;&nbsp;
             <a routerLink="/trader/order-reports"><span class="fa fa-flag-checkered fa-2x"></span></a>
+            &nbsp;&nbsp;
             <mat-checkbox #openOrdersCheck>FO</mat-checkbox>
+            &nbsp;&nbsp;
             <app-btc-tether></app-btc-tether>
             <app-follow-order-list *ngIf="openOrdersCheck.checked" ></app-follow-order-list>
-
 
         </div>
         <div id="MainOutlet" [ngClass]="bgColor">

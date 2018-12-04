@@ -62,9 +62,9 @@ export class ScanMarketsService {
       let result = CandlesAnalys1.getCandelsVolumes(market, candles, diff);
 
       this.progressSub.next(market);
-     if (result.length) {
+      if (result.length) {
         results = results.concat(result);
-      //   console.log(results);
+        //   console.log(results);
         sub.next(results);
       }
     } catch (e) {
@@ -108,15 +108,7 @@ export class ScanMarketsService {
    }
  */
 ///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
-
-
-  trendUPTimer;
-
-
-
   isScanning = false;
-
-
 
 
   first20coins = 'BTC,TUSD'; // 'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
@@ -206,77 +198,71 @@ export class ScanMarketsService {
     return (await this.storage.select('selected-markets')) || [];
   }
 
-  private async _scanGoingUP(
-    markets: string[],
-    i,
-    api: ApiCryptoCompareService,
-    sub: Subject<VOMessage>,
-    candlesInterval: string
-  ) {
+  private async nextScan(markets: string[], i, api: ApiPublicAbstract, sub: BehaviorSubject<any[]>,
+                         candlesInterval: string, cretaria: string, percent: number) {
     i++;
     if (i >= markets.length) {
       sub.complete();
-      this.stopTrendUp();
+      this.isScanning = false;
       return;
     }
     const market = markets[i];
 
-    const candles1 = await api.downloadCandles(market, candlesInterval, 100);
-    const time = moment().format('HH:mm');
-    const result1 = CandlesAnalys1.mas(candles1);
+    let candles: VOCandle[];
+    try {
+      candles = await api.downloadCandles(market, candlesInterval, 100);
+    } catch (e) {
 
 
-    let onesec = new Promise((resolve, reject) => {
-      setTimeout(() => resolve('1 sec'), 1000);
-    });
+    }
 
-    let ma25_99 = MATH.percent(result1.ma25, result1.ma99);
-    const ma7_25 = MATH.percent(result1.ma7, result1.ma25);
-    const ma7_99 = MATH.percent(result1.ma7, result1.ma99);
-    let message = ' ma25-99 ' + ma25_99 + ' ma7-25 ' + ma7_25;
+    if (!candles) return;
+    const last = _.last(candles);
+    const time = moment(last.to).format('HH:mm');
+    const mas = CandlesAnalys1.mas(candles);
 
+    let creteriaValue = 0;
+    switch (cretaria) {
+      case 'ma7_25':
+        creteriaValue = MATH.percent(mas.ma7, mas.ma25);
+        break;
+      case 'ma7_99':
+        creteriaValue = MATH.percent(mas.ma7, mas.ma99);
+        break;
+      case 'ma25_99':
+        creteriaValue = MATH.percent(mas.ma25, mas.ma99);
+        break;
+    }
 
+    let message  =  candlesInterval + ' ' + cretaria + '  ' + creteriaValue;
     this.progressSub.next(message);
     this.currentMarket = market;
-    if (ma25_99 > 1 && ma7_99 > 0)
-      sub.next({
+    const res = percent > 0 ? creteriaValue > percent : creteriaValue < percent;
+    if (res) {
+      const results = sub.getValue();
+      results.push({
         time,
         market,
         message
       });
-    this.trendUPTimer = setTimeout(() => {
-      this._scanGoingUP(markets, i, api, sub, candlesInterval);
-    }, 1000);
+      sub.next(results);
+    }
+
+    this.scanInterval = setTimeout(() => {
+      this.nextScan(markets, i, api, sub, candlesInterval, cretaria, percent);
+    }, 2000);
 
   }
 
-  async scanGoingUP(markets: string[], candlesInterval: string): Promise<Subject<{ market: string, message: string }>> {
+  startScan(markets: string[], candlesInterval: string, cretaria: string, percent: number): Subject<any[]> {
     this.isScanning = true;
     this.progressSub.next('SCAN UP STARED ' + candlesInterval);
     //  const api = this.apisPublic.getExchangeApi('binance');
-
-    let results: VOMessage[] = [];
-    const sub = new Subject<VOMessage>();
-    sub.subscribe(market => {
-      results.push(market);
-    }, console.error, () => {
-      results = _.orderBy(results, 'market');
-      this.progressSub.next('SCAN UP DONE ' + candlesInterval);
-      this.isScanning = false;
-    });
-
-    this.trendUPTimer = setTimeout(() => {
-      this._scanGoingUP(markets, -1, this.apiCryptoCompare, sub, candlesInterval);
-    }, 5000);
-
+    const sub = new BehaviorSubject<any[]>([]);
+    this.nextScan(markets, -1, this.apisPublic.getExchangeApi('binance'), sub, candlesInterval, cretaria, percent);
     return sub;
   }
 
-  stopTrendUp() {
-    clearTimeout(this.trendUPTimer);
-    this.trendUPTimer = 0;
-    this.isScanning = false;
-  }
 
   stop() {
     clearInterval(this.scanInterval);
@@ -286,7 +272,7 @@ export class ScanMarketsService {
 
 
   ////////////////////////////////// VOLUMES ////////////////////////////////////////////
-  async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number, sub: Subject<any[]>, results:any[]) {
+  async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number, sub: Subject<any[]>, results: any[]) {
     i++;
     if (i >= markets.length) {
       clearTimeout(this.scanInterval);
@@ -304,7 +290,6 @@ export class ScanMarketsService {
       console.warn(e);
     }
 
-
     if (!candles) {
       this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 10000);
       return;
@@ -314,7 +299,6 @@ export class ScanMarketsService {
     const last: VOCandle = _.last(candles);
     const time = moment(last.to).format('HH:mm');
     const volumes = _.map(candles, 'Volume');
-
     let before = volumes.slice(0, -10);
     before = before.filter(function (item) {
       return !!item;
@@ -324,10 +308,8 @@ export class ScanMarketsService {
     const avgBefore = MATH.median(before);
     const avgAfter = _.mean(after);
 
-
     const priceBefore = _.mean(closes.slice(50, -10));
     const priceAfter = _.mean(closes.slice(-10));
-
     const VD = MATH.percent(avgAfter, avgBefore);
     const PD = MATH.percent(priceAfter, priceBefore);
 
@@ -339,14 +321,14 @@ export class ScanMarketsService {
       results.push({time, market, reason});
       sub.next(results);
     }
-    this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange,  sub, results), 2000);
+    this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 2000);
   }
 
   scanForVolume(markets: string[], candlesInterval: string, volumeChange: number) {
     this.isScanning = true;
     const sub = new Subject<any[]>();
     this.volumeNext(markets, -1, candlesInterval, volumeChange, sub, []);
-    return  sub
+    return sub
   }
 
 

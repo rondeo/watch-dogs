@@ -1,4 +1,4 @@
-<div class="mat-body">
+<div class="mat-body" *ngIf="coinMC$ | async as coinMC;">
     &nbsp;
     <span> {{coinMC.name}} </span>
     &nbsp;
@@ -8,7 +8,8 @@
     <span>{{coinMC.rank}}</span>
     &nbsp;<small>B</small>
     <span>{{coinMC.price_btc?coinMC.price_btc:'--'}}</span>
-    <small>$</small>
+    &nbsp;
+    <small> $</small>
     <span>{{coinMC.price_usd | myUs}}</span>
     &nbsp;
     <small>h</small>

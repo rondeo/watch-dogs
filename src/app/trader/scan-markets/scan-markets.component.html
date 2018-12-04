@@ -2,10 +2,9 @@
     <div>
         <small>{{exchange}}</small>
         <mat-spinner *ngIf="scanner.isScanning" [diameter]="24" class="mat-progress-spinner"></mat-spinner>
-        <mat-checkbox #selectedCheck (change)="onSelectedChange($event)">Selected</mat-checkbox>
 
         <mat-checkbox (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
-        <mat-checkbox #trendUPCheck >Trend UP</mat-checkbox>
+        <mat-checkbox #trendCheck >Trend</mat-checkbox>
         <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
         <mat-checkbox #followingCheck (change)="onFollowingChange($event)">Following</mat-checkbox>
         <mat-checkbox #botsCheck (change)="onBotsChange($event)">Bots</mat-checkbox>
@@ -46,14 +45,6 @@
         </div>
     </div>
 
-    <div *ngIf="selectedCheck.checked">
-        <h3>Selected</h3>
-        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteSelectedClick()"></span>
-        <div class="scrollY300">
-            <app-table-props [dataset]="selectedMarkets" (selected)="onSelectedClick($event)"></app-table-props>
-        </div>
-    </div>
-
     <div *ngIf="followingCheck.checked">
         <h3>Following</h3>
         <div class="scrollY300">
@@ -62,23 +53,36 @@
     </div>
 
 
-    <div *ngIf="trendUPCheck.checked">
-        <h3>Trend UP</h3>
+    <div *ngIf="trendCheck.checked">
+        <h3>Trend</h3>
+        &nbsp;&nbsp;
+        <mat-form-field class="w6">
+            <mat-select [(ngModel)]="maX">
+                <mat-option value="ma7_25">ma7_25</mat-option>
+                <mat-option value="ma7_99">ma7_99</mat-option>
+                <mat-option value="ma25_99">ma25_99</mat-option>
+            </mat-select>
+        </mat-form-field>
+        &nbsp;&nbsp;
         <mat-form-field class="w3">
-            <mat-select [(ngModel)]="trendUpCandlesInterval">
-                <mat-option value="1m">1m</mat-option>
+            <input matInput placeholder="Percent"
+                   [(ngModel)]="percent"
+            >
+        </mat-form-field>
+        &nbsp;&nbsp;
+        <mat-form-field class="w5">
+            <mat-select [(ngModel)]="candlesInterval">
                 <mat-option value="5m">5m</mat-option>
                 <mat-option value="15m">15m</mat-option>
-                <mat-option value="30m">30m</mat-option>
                 <mat-option value="1h">1h</mat-option>
-                <mat-option value="6h">6h</mat-option>
                 <mat-option value="1d">1D</mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-button="" (click)="onTrendUPStart()">{{scanner.trendUPTimer?'Stop':'Start'}}</button>
-        <button mat-button="" (click)="onTrendsAddToSelected()">Add to Selected</button>
+        &nbsp;&nbsp;
+        <button mat-button="" (click)="onScanStart()">{{scanner.isScanning?'Stop':'Start'}}</button>
+
         <div class="scrollY300">
-            <app-table-props [dataset]="trendUps" (selected)="onTrendUPClick($event)"></app-table-props>
+            <app-table-props [dataset]="dataset$ | async" (selected)="onMarketClick($event)"></app-table-props>
         </div>
     </div>
 

@@ -16,6 +16,9 @@
         </mat-select>
     </mat-form-field>
 
+    <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
+
+
     <app-media [coin]="market?market.split('_')[1]:null"></app-media>
     <app-mc-data [coin]="market?market.split('_')[1]:null"></app-mc-data>
     <app-candlesticks [candles]="candles"></app-candlesticks>

@@ -29,7 +29,7 @@ export class ApiMarketCapService {
   static MC: { [symbol: string]: VOMarketCap };
   // private data: { [symbol: string]: VOMarketCap };
   //  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
-  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }> = new BehaviorSubject(null);
+  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }>
 
   private coinsDay: VOCoinsDayData;
 
@@ -104,13 +104,15 @@ export class ApiMarketCapService {
       const timestamp = res['BTC'].last_updated;
       if (timestamp !== current) {
         console.log(' new marketcap ' + moment(timestamp * 1000).format('HH:mm'));
-        this.tikerSub.next(res);
+        if(!this.tikerSub) this.tikerSub = new BehaviorSubject(res);
+        else this.tikerSub.next(res);
       }
     });
   }
 
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
-    if (!this.tikerInterval) {
+    if(!this.tikerSub) {
+      this.tikerSub = new BehaviorSubject(null);
       this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
       this.refreshTicker();
     }

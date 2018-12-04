@@ -1,17 +1,10 @@
 <mat-card>
     <mat-card-title>
         <span>{{message}}</span>
-
-
     </mat-card-title>
     <mat-card-content>
         <mat-form-field>
-            <input matInput placeholder="Suspend Hours" [(ngModel)]="userInput"/>
-            <mat-hint>not number just delete value</mat-hint>
-        </mat-form-field>
-        <br/>
-        <mat-form-field>
-            <input matInput placeholder="Reason" [(ngModel)]="msg"/>
+            <input matInput placeholder="Note" [(ngModel)]="note"/>
         </mat-form-field>
         <br/>
         <button mat-button (click)="onOkClick()">OK</button>

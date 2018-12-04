@@ -61,17 +61,14 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   // private selectedCoin: string;
   selectedMarket: string;
 
+  dataset$: Observable<any[]>;
+  maX: string;
+  percent: number;
+
   ////////////////////////// BOTS ///////////////////////
 
   bots: any[];
-
-  selectedMarkets: any[];
-
-  trendUps: any[] = [];
   sub5;
-  trendUpCandlesInterval = '15m';
-
-
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
 
 
@@ -213,93 +210,26 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
   }
 
-  /////////////////////////////// SELECTED////////////////////////////
 
-  onDeleteSelectedClick() {
-    if (confirm('Delete all Selected? ')) {
-      this.scanner.saveSelected([]).then(this.populateSelected.bind(this));
-    }
-  }
+  ////////////////////////////////////////////////// TREND  ///////////////////////////////////////////////////////
 
-  addToSeleted(ar: { time: string, message: string, market: string }[], criteria: string) {
-    return this.scanner.addToSelected(ar, criteria);
-  }
-
-  populateSelected() {
-    this.scanner.getSelected().then(res => {
-      res = _.orderBy(res, 'market');
-      this.selectedMarkets = res.map(function (item) {
-        return Object.assign(item, {x: 'X'});
-      });
-    });
-  }
-
-  onSelectedChange(evt) {
-    if (evt.checked) this.populateSelected();
-    else this.selectedMarkets = [];
-  }
-
-  onSelectedClick(evt) {
-    const market = evt.item.market;
-    switch (evt.prop) {
-      case 'market':
-        this.showMarket(market);
-        return;
-      case 'x':
-        if (confirm(' DELETE ' + market)) {
-          this.scanner.removeSelected(market)
-            .then(this.populateSelected.bind(this));
-        }
-        return;
-      case 'message':
-        this.dialog.open(NotesHistoryComponent, {data: evt.item});
-        return;
-
-    }
-  }
-
-
-  ////////////////////////////////////////////////// TREND UP ///////////////////////////////////////////////////////
-
-  onTrendsAddToSelected() {
-    const ar = this.trendUps.map(function (item) {
-      return {
-        market: item.market,
-        message: item.message,
-        time: item.time
-
-      };
-    });
-    if (confirm(' ADD all ' + ar.length)) {
-      this.addToSeleted(ar, this.trendUpCandlesInterval);
-    }
-  }
-
-  async onTrendUPStart() {
-    if (this.scanner.trendUPTimer) {
-      this.scanner.stopTrendUp();
+  async onScanStart() {
+    if(this.scanner.isScanning) {
+      this.scanner.stop();
       return;
     }
     const markets = await this.scanner.getAvailableMarkets('binance');
-
-    this.trendUps = [];
-    const sub = await this.scanner.scanGoingUP(markets, this.trendUpCandlesInterval);
-    this.sub5 = sub.subscribe(market => {
-      let item = Object.assign(market, {x: 'X'});
-      this.trendUps.push(item);
-    });
+    this.dataset$ = this.scanner.startScan(markets, this.candlesInterval, this.maX, this.percent);
   }
 
-  onTrendUPClick(evt) {
+  onMarketClick(evt) {
     const market = evt.item.market;
     if (evt.prop === 'market') this.showMarket(market);
     else if (evt.prop === 'x') {
-      if (confirm(' DELETE ' + market)) {
-        this.trendUps = _.reject(this.trendUps, {market: market});
-      }
     }
   }
 
+  /////////////////////////////////
   onMFIChange(evt) {
     if (evt.checked) {
       if (!this.mfySub) {

@@ -52,21 +52,12 @@ export class BtcUsdtService {
   market = 'USDT_BTC';
 
   exchange = 'binance';
-
-  balanceCoin: VOBalance;
-  balanceBase: VOBalance;
   priceCounUS: number;
   percentStopLoss = -2;
 
   private sub1;
 
   releaseAmountUS = 120;
-
-  lastCheck;
-  checkInterval;
-  lastQuery;
-  stopLossOrder: VOOrder;
-  lastMessage: string;
 
   bot: UsdtBtcBot;
 
@@ -186,4 +177,7 @@ export class BtcUsdtService {
   }
 
 
+  stopFollow() {
+    this.bot.stopFollow();
+  }
 }

@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {Subscription} from 'rxjs';
+import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
 
 @Component({
   selector: 'app-my-buy-sell',
@@ -31,7 +32,8 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private marketCap: ApiMarketCapService,
-    private followOrders: FollowOrdersService
+    private followOrders: FollowOrdersService,
+    private usdtBtcService: BtcUsdtService
   ) {
 
   }
@@ -100,7 +102,8 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
   }
 
   onStopFollowClick() {
-    this.followOrders.stopFollow(this.exchange, this.market);
+    if(this.market === 'USDT_BTC') this.usdtBtcService.stopFollow();
+    else this.followOrders.stopFollow(this.exchange, this.market);
   }
 
   onUserPriceChanged(rate) {
