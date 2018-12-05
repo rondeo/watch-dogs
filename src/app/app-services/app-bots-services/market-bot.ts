@@ -23,11 +23,12 @@ export class MarketBot {
   constructor(
     public exchange: string,
     public market: string,
-    public amountCoin: number,
+    public amountCoinUS: number,
     private storage: StorageService,
     private apiPrivate: ApiPrivateAbstaract,
     private apiPublic: ApiPublicAbstract,
-    private candlesService: CandlesService
+    private candlesService: CandlesService,
+    private marketCap: ApiMarketCapService
   ) {
     this.id = 'bot-' + market;
     this.init().then(() => {
@@ -45,7 +46,6 @@ export class MarketBot {
   id: string;
   private stopLossOrder: StopLossOrder;
 
-  orders: any[] = [];
   prevAction: string;
   patterns: any[] = [];
   lastOrder: {stamp: number, action: string, price: number};
@@ -53,7 +53,6 @@ export class MarketBot {
   interval;
   sub1;
   sub2;
-
   private activeOrder: VOOrder;
   timeout;
   async sellCoinInstant() {
@@ -65,18 +64,15 @@ export class MarketBot {
       return;
     }*/
 
+   const qty = this.balanceCoin.available;
 
     try{
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
-      const qty = this.amountCoin;
       const rate = UtilsBooks.getRateForAmountCoin(books.buy, qty);
       const action = 'SELL';
       this.log({action, reason: ''+rate});
-      this.balanceCoin = new VOBalance();
-      this.log({action, reason: rate + ' ' +qty});
-      this.balanceCoin.available = 0;
-      this.balanceBase = new VOBalance();
-      this.balanceBase.available = 1000;
+     // const sellOrder = this.apiPrivate.sellLimit2(this.market,qty,rate);
+
     } catch (e) {
       this.log({action: 'ERROR', reason:'download books and buy coin  ' + e.toString()});
     }
@@ -105,13 +101,6 @@ export class MarketBot {
      }, 2000)*/
   }
 
-  getBalanceCoin() {
-
-  }
-
-  getBalanceBase() {
-
-  }
 
 
   async buyCoinInstant() {
@@ -125,14 +114,14 @@ export class MarketBot {
     }
 */
     try {
-      const action = 'BUY';
+     /* const action = 'BUY';
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const qty = this.amountCoin;
       const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
       this.balanceCoin = new VOBalance();
       this.balanceCoin.available = qty;
 
-      this.log({action, reason: rate + ' '+qty});
+      this.log({action, reason: rate + ' '+qty});*/
     } catch (e) {
       this.log({action: 'ERROR' , reason:'buy coin ' + e.toString()});
     }
@@ -144,6 +133,7 @@ export class MarketBot {
        this.log(' BUY COIN RESULT ' + JSON.stringify(result2));
      })*/
   }
+
 
   log(log: {action: string, reason: string}) {
    // if (typeof message !== 'string') out = UTILS.toString(message);
@@ -158,7 +148,6 @@ export class MarketBot {
   async tick() {
     setTimeout(() => this.save(), 5000);
     const candles = await this.candlesService.getCandles(this.market);
-
     const lastCandle = _.last(candles);
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
@@ -172,6 +161,8 @@ export class MarketBot {
 
     const result = await CandlesAnalys1.createState(candles);
     this.patterns = CandlesAnalys1.groupPatterns(this.patterns, result);
+
+    await this.stopLossOrder.checkStopLoss(candles, this.balanceCoin);
 
 
     /*
@@ -200,6 +191,93 @@ export class MarketBot {
     // if(soldD > 90) this.sellCoin(last.rate);
   }
 
+
+  async init() {
+    const ar = this.market.split('_');
+    this.base = ar[0];
+    this.coin = ar[1];
+
+    this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
+    this.boughtOrder = await this.storage.select(this.id + '-bought-order');
+
+    //  this.resistanceSupport = new ResistanceSupportController(this.market, '15m', this.apiPublic, this.storage);
+    // await this.resistanceSupport.init();
+
+    this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
+
+
+
+    /* this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
+       if (!balances) return;
+       const bb = _.find(balances, {symbol: this.base});
+       const bc = _.find(balances, {symbol: this.coin});
+       this.balanceBase = bb;
+       this.balanceCoin = bc;
+     });
+
+     this.sub2 = this.apiPrivate.allOpenOrders$().subscribe(orders => {
+       if (!orders) return;
+
+       const myOrder: VOOrder = <VOOrder>_.find(orders, {coin: this.coin});
+       //  console.log(this.market + ' my order ', myOrder);
+       this.activeOrder = myOrder;
+     })*/
+  }
+
+
+
+  boughtOrder: VOOrder;
+  async findBoughtOrder() {
+   /* this.boughtOrder = await this.storage.select(this.id + '-bought-order');
+    if (this.boughtOrder) return Promise.resolve();*/
+    const market = this.market;
+    const allOrders = await this.apiPrivate.getAllOrders(
+      this.base, this.coin,
+      moment().subtract(23, 'hours').valueOf(),
+      moment().valueOf()
+    ).toPromise();
+    // console.log(allOrders);
+    const buyOrders = _.filter(allOrders, {base: this.base, coin: this.coin, action: 'BUY'});
+    if (buyOrders.length) {
+      let rate = 0;
+      let fees = 0;
+      let amountCoin = 0;
+      const date = moment(_.last(buyOrders).timestamp).format('DD HH:mm');
+
+      buyOrders.forEach(function (o) {
+        rate += +o.rate;
+        fees += +o.fee;
+        amountCoin += o.amountCoin;
+      });
+      rate = rate / buyOrders.length;
+      const initOrder = {
+        uuid:'',
+        isOpen: false,
+        market,
+        rate,
+        fees,
+        amountCoin,
+        date
+      };
+
+      this.boughtOrder = initOrder;
+
+    } else this.boughtOrder = {
+      uuid:'',
+      isOpen: false,
+      market,
+      rate: 0,
+      fee: 0,
+      amountCoin : 0,
+      date:''}
+
+
+    // console.warn(buyOrders);
+    console.log('BOUGHT ORDER ', this.boughtOrder);
+  }
+
+
+
   stop() {
     if (!this.interval) return;
     clearInterval(this.interval);
@@ -209,63 +287,38 @@ export class MarketBot {
 
   async start() {
     if (this.interval) return;
-    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
-    if(history.length === 0){
-      const candles =  await this.candlesService.getCandles(this.market);
-      const price = _.last(candles).close;
-      this.log({action:'BOUGTH', reason: ' P ' + price});
-    }
-
     this.interval = setInterval(() => this.tick(), 60 * 1000);
   }
 
-  async init() {
-    const ar = this.market.split('_');
-    this.base = ar[0];
-    this.coin = ar[1];
-    this.balanceBase = new VOBalance();
 
-    this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
-    this.orders = (await  this.storage.select(this.id + '-orders')) || [];
+  async getLogs(){
+    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
+    return history.concat(this.logs);
+  }
 
-    this.resistanceSupport = new ResistanceSupportController(this.market, '15m', this.apiPublic, this.storage);
-    await this.resistanceSupport.init();
-
-   /* this.sub1 = this.apiPrivate.balances$().subscribe(balances => {
-      if (!balances) return;
-      const bb = _.find(balances, {symbol: this.base});
-      const bc = _.find(balances, {symbol: this.coin});
-      this.balanceBase = bb;
-      this.balanceCoin = bc;
-    });
-
-    this.sub2 = this.apiPrivate.allOpenOrders$().subscribe(orders => {
-      if (!orders) return;
-
-      const myOrder: VOOrder = <VOOrder>_.find(orders, {coin: this.coin});
-      //  console.log(this.market + ' my order ', myOrder);
-      this.activeOrder = myOrder;
-    })*/
+  getPatterns(){
+    return this.patterns;
   }
 
   async deleteHistory(){
     await this.storage.remove(this.id + '-logs');
     await this.storage.remove(this.id + '-patterns');
-    await this.storage.remove(this.id + '-orders');
     this.patterns = [];
-    this.orders = [];
     this.logs = [];
   }
 
   async save() {
-    if(this.patterns.length) this.storage.upsert(this.id + '-patterns', this.patterns);
+    if(this.patterns.length) {
+      const patterns = _.take(this.patterns, 500);
+      this.storage.upsert(this.id + '-patterns', patterns);
+    }
+
+   if(this.boughtOrder) this.storage.upsert(this.id + '-bought-order', this.boughtOrder);
    //  this.storage.upsert(this.id + '-orders', this.orders);
     if (!this.logs.length) return;
-    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
-    history = history.concat(this.logs);
+    const logs = await this.getLogs();
     this.logs = [];
-    history = _.takeRight(history, 500);
-    this.storage.upsert(this.id + '-logs', history);
+    this.storage.upsert(this.id + '-logs',_.takeRight(logs, 500));
   }
 
   destroy() {

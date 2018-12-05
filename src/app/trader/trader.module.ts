@@ -30,13 +30,10 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
       {path: 'live-trader/:exchange/:market', component: LiveTraderComponent},
-      {path: 'analyze-coin/:coin', component: AnalyzeCoinComponent},
-      {path: 'analyze-coin/:coin/:exchange', component: AnalyzeCoinComponent},
       {path: 'common-markets', component: CommonMarketsComponent},
       {path: 'scan-markets', component: ScanMarketsComponent},
       {path: 'order-reports', component: OrderReportsComponent},
-      {path: 'follow-market', component: FollowMarketComponent},
-      {path: 'follow-market/:market', component: FollowMarketComponent}
+      {path: 'follow-market', component: FollowMarketComponent}
     ]
   }
 ];

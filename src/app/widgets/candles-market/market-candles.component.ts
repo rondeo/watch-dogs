@@ -19,13 +19,12 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   @Input() market: string;
   candles: VOCandle[];
   volumes: number[];
-  candlesInterval = '1m';
+  candlesInterval = '1h';
   inBrowser = false;
 
   constructor(
     private apisPublic: ApisPublicService,
     private favorites: FavoritesService
-
   ) {
   }
 

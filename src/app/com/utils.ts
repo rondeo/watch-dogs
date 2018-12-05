@@ -37,7 +37,6 @@ export class UTILS {
   static parseDecimals(data: { amountCoin: string, rate: string }[]) {
     let maxRate = 0;
     let maxAmount = 0;
-    // console.log(orders);
     data.forEach(function (item) {
       let ar = String(item.rate).split('.');
       if (ar.length === 2) {

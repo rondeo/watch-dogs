@@ -122,40 +122,4 @@
     </div>
 
     <app-market-candles [exchange]="exchange" [market]="market"></app-market-candles>
-
-  <!-- <app-media [coin]="coin"></app-media>
-    <br/>
-
-    <a class="btn" routerLink="/my-exchange/buy-sell/{{exchange}}/{{selectedMarket}}">{{exchange}}
-        {{selectedMarket}}</a>
-    &nbsp;&nbsp;
-    <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
-    &nbsp;&nbsp;
-    <a class="fa fa-anchor fa-2x dgreen"  routerLink="/trader/follow-market/{{market}}"></a>
-    &nbsp;&nbsp;
-    &lt;!&ndash; <span class="fa fa-plus fa-2x dgreen" (click)="onAddBotClick()"></span>&ndash;&gt;
-
-    <mat-form-field class="w6">
-        <input matInput placeholder="Market"
-               [(ngModel)]="market"
-               (keyup)="onMarketInput($event)"
-        >
-    </mat-form-field>
-    <mat-form-field class="w3">
-        <mat-select [(ngModel)]="candlesInterval" (selectionChange)="onCandlesIntrvalChange()">
-            <mat-option value="5m">5m</mat-option>
-            <mat-option value="15m">15m</mat-option>
-            <mat-option value="1h">1h</mat-option>
-            <mat-option value="6h">6h</mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-checkbox [(ngModel)]="inBrowser">Browser</mat-checkbox>
-    <app-mc-data [coin]="selectedMarket?selectedMarket.split('_')[1]:null"></app-mc-data>
-    <app-candlesticks [candles]="candles"></app-candlesticks>
-    <app-volume-hist [values]="volumes"></app-volume-hist>
-    <app-macd-indicator [candles]="candles"></app-macd-indicator>
-    <app-mfi-indicator [candles]="candles"></app-mfi-indicator>
-    <app-vwmacd-indicator  [candles]="candles" ></app-vwmacd-indicator>
--->
 </div>

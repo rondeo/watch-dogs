@@ -232,15 +232,10 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     let Low = [];
 
     let percentChange = [];
-
     let OpenSellOrders = [];
-
     let Volume = [];
-
     let stamps = [];
-
     ar.forEach(function (item) {
-
       Ask.push(+item.askPrice);
       BaseVolume.push(+item.quoteVolume);
       Bid.push(+item.bidPrice);

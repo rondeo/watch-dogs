@@ -18,6 +18,7 @@ export class FollowMarketComponent implements OnInit {
   bots: any[];
 
   market: string;
+  exchange: string;
 
   testbot: MarketBot;
   constructor(
@@ -43,15 +44,19 @@ export class FollowMarketComponent implements OnInit {
 
   ngOnInit() {
     this.rote.params.subscribe(params => {
-      if (params.market) this.market = params.market;
+      this.market = params.market;
+      this.exchange = params.exchange;
+      if(this.market === 'null' || this.market === 'undefined') this.market = null;
+      if(this.exchange === 'null' || this.exchange === 'undefined') this.market = null;
     });
+
     this.followOrder.botsSub.subscribe(bots => {
       if (!bots) return;
 
       this.bots = bots.map(function (item) {
         return {
           market: item.market,
-          amountCoin: item.amountCoin,
+          amountCoinUS: item.amountCoinUS,
           x: 'X'
         };
       });

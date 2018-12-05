@@ -54,7 +54,12 @@ export class UsdtBtcBot {
     }
 
     const fullAmount = (this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS;
-    console.log(' full amount ' + fullAmount);
+    // console.log(' full amount ' + fullAmount);
+
+    const available = this.balanceBase.available;
+    if(available < this.releaseAmountUS) {
+      return;
+    }
 
     if(fullAmount < this.releaseAmountUS) {
       this.buyCoin();
@@ -90,7 +95,7 @@ export class UsdtBtcBot {
     }
 
     const extraUS = (this.balanceCoin.available * this.priceCounUS) - this.releaseAmountUS;
-    console.log(' EXTRA ' + extraUS);
+    // console.log(' EXTRA ' + extraUS);
     if (extraUS < 0) {
       console.log(' NO amount for stop loss ');
       if (this.stopLossOrders && this.stopLossOrders.length) {

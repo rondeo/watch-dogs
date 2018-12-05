@@ -66,10 +66,12 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   decimals = {};
 
   async getDecimals(market: string): Promise<{ amountDecimals: number, rateDecimals: number }> {
+    if (market === 'BTC_NAV') return Promise.resolve({amountDecimals: 2, rateDecimals: 7});
     if (this.decimals[market]) {
-      return Promise.resolve(this.decimals[market])
+      console.log(market, this.decimals[market]);
+      return Promise.resolve(this.decimals[market]);
     }
-    ;
+
     return this.downloadBooks(market).then(res => {
       this.decimals[market] = UTILS.parseDecimals(res);
       return this.decimals[market]
@@ -301,6 +303,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     }
 
     const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
+
 
     const quantity = '' + MATH.formatDecimals(amountCoin, decimals.amountDecimals);// Math.ceil(amountCoin * Math.pow(10, decimals.amountDecimals))/Math.pow(10, decimals.amountDecimals);
     const stopPrice = stopPriceN.toFixed(decimals.rateDecimals);

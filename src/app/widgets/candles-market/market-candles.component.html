@@ -17,6 +17,7 @@
     </mat-form-field>
 
     <span class="fa fa-star fa-2x dgreen" (click)="onStarClick()"></span>
+    <a [routerLink]="['/trader/follow-market', {market:market, exchange:exchange}]" ><span class="fa fa-anchor fa-2x dgreen"></span> </a>
 
 
     <app-media [coin]="market?market.split('_')[1]:null"></app-media>

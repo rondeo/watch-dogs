@@ -6,7 +6,9 @@ import {ApiPublicAbstract} from "./api-public-abstract";
 import {StorageService} from "../../services/app-storage.service";
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
-
+import {VOCandle} from '../../models/api-models';
+import * as moment from 'moment';
+import * as _ from 'lodash';
 export class ApiPublicBittrex extends ApiPublicAbstract{
 
   exchange = 'bittrex';
@@ -15,6 +17,60 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
   constructor(http: HttpClient, storage:StorageService) {
     super(http, storage);
   }
+
+
+  downloadCandles(market: string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]> {
+    let tickInterval =  'hour';
+    const marketName = market.split('_').join('-');
+
+    //let _ = Math.round(moment().subtract(1, 'day').valueOf()/1000) + '';
+    switch(interval){
+      case '1m':
+        tickInterval = 'oneMin';
+        break;
+      case '5m':
+        tickInterval = 'fiveMin';
+        break;
+      case '15m':
+        tickInterval = 'fiveMin';
+        break;
+      case '30m':
+        tickInterval = 'thirtyMin';
+        break;
+      case '1h':
+        tickInterval = 'hour';
+        break;
+      case '6h':
+        tickInterval = 'day';
+        break;
+    };
+
+    const url = this.prefix + 'https://international.bittrex.com/Api/v2.0/pub/market/GetTicks';
+
+    return this.http.get(url, {params:{ marketName, tickInterval}})
+      .pipe(map((res: any) =>{
+        console.log(res);
+        let result: any[] = _.takeRight(res.result, limit);
+
+        const out: VOCandle[] = result.map(function (item) {
+          return {
+            from: 0,
+            open: item.O,
+            close: item.C,
+            high: item.H,
+            low: item.L,
+            Volume: item.V,
+            to: this.moment(item.T).valueOf()
+          }
+        }, {moment:moment});
+        console.log(out);
+        return out
+      }))
+      .toPromise();
+//  'oneMin', 'fiveMin', 'thirtyMin, 'hour', 'day'.
+
+  }
+
 
   getMarketUrl(base:string, coin: string): string{
     return  'https://bittrex.com/Market/Index?MarketName={{base}}-{{coin}}'
