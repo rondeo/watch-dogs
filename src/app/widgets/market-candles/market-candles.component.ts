@@ -57,7 +57,8 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
         });
       });
     if (this.inBrowser) {
-      const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');
+      const url = this.apisPublic.getExchangeApi(this.exchange).getMarketUrl2(this.market);
+      // const url = 'https://www.binance.com/en/trade/pro/' + this.market.split('_').reverse().join('_');
       //   api.getMarketUrl(ar[0], ar[1]);
       window.open(url, this.exchange);
     }
