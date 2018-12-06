@@ -56,9 +56,9 @@ export class MarketBooksComponent implements OnInit, OnChanges {
 
    /* const baseMC = this.allCoins[base];
     const priceBaseUS = this.baseMC ? this.baseMC.price_usd : -1;
-    this.coinMC = this.allCoins[coin];
+    this.mcCoin = this.allCoins[coin];
 
-    this.conMCPrice = (this.coinMC.price_usd / priceBaseUS).toFixed(8) + ' $' + this.coinMC.price_usd;*/
+    this.conMCPrice = (this.mcCoin.price_usd / priceBaseUS).toFixed(8) + ' $' + this.mcCoin.price_usd;*/
 
   }
 

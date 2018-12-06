@@ -6,11 +6,13 @@
         <mat-select [(ngModel)]="top" (selectionChange)="onTopChange($event)" placeholder="by Rank">
             <mat-option value="all">All</mat-option>
             <mat-option value="top100">Top 100</mat-option>
+            <mat-option value="from80_120"> 80-120</mat-option>
             <mat-option value="top200">Top 200</mat-option>
             <mat-option value="100_200">100-200</mat-option>
             <mat-option value="200_300">200-300</mat-option>
             <mat-option value="after200"> > 200</mat-option>
             <mat-option value="after100"> > 100</mat-option>
+
         </mat-select>
     </mat-form-field>
 

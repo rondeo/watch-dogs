@@ -71,13 +71,13 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
 
 
     const status = this.status;
-    const prev = this.coinMC;
+    const prev = this.mcCoin;
     if (prev.timestamp === curr.timestamp) {
       console.log(this.wdId + ' sane timestamp ');
       return;
     }
 
-    this.coinMC = curr;
+    this.mcCoin = curr;
     this.baseMC = base;
     if (!prev) return this.status;
 
@@ -128,7 +128,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
 
   subscribeForBalances() {
     if (!this.exchange || !this.base || !this.coin) return;
-      // this.coinMC = MC[this.coin];
+      // this.mcCoin = MC[this.coin];
       const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.exchange);
       this.message = 'initialized';
       this.sub1 = api.balance$(this.coin).subscribe(balance => {
@@ -211,13 +211,13 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
 
 
   /*  const status = this.status;
-    const prev = this.coinMC;
+    const prev = this.mcCoin;
     if (prev.timestamp === curr.timestamp) {
       console.log(this.wdId + ' sane timestamp ');
       return;
     }
 
-    this.coinMC = curr;
+    this.mcCoin = curr;
     this.baseMC = base;
     if (!prev) return this.status;
 

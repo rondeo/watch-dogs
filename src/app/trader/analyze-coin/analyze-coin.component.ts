@@ -84,7 +84,7 @@ export class AnalyzeCoinComponent implements OnInit {
       //  console.warn(res);
       this.marketCap.downloadTicker().toPromise().then(MC => {
         this.coinPriceMC = MC[coin].price_usd;
-        this.coinMC = MC[coin];
+        this.mcCoin = MC[coin];
         this.baseMC = MC['BTC'];
         this.subscribedMarkets = res;
       })

@@ -4,33 +4,34 @@
         <span (click)="onUsdtBtcClick()" class="btn">USDT_BTC</span>
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteUSDTRecordsClick()"></span>
     </a>
-    &nbsp;&nbsp;
-    <a>
-        <span (click)="onBotsClick()" class="btn">Bots</span>
-    </a>
-    &nbsp;&nbsp;
-    <a>
-        <span (click)="onOrdersClick()" class="btn">Orders</span>
-    </a>
+
+
 
 <div class="horizontal">
     <div class="scrollY300">
         <app-table-props [dataset]="ordersRecords" (selected)="onRecordsClick($event)"></app-table-props>
     </div>
-
+    &nbsp;&nbsp;
+    &nbsp;&nbsp;
     <div>
-        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
+        <span>{{market}}</span>
+        &nbsp;&nbsp;
+        <button mat-button (click)="onBuyClick()" >Buy</button>
+        &nbsp;&nbsp;
+        <button mat-button (click)="onSellClick()" >Sell</button>
+        &nbsp;&nbsp;
         <mat-radio-group (change)="onDataChange($event)">
             <mat-radio-button value="-logs" [checked]="true">Logs</mat-radio-button>
             <mat-radio-button value="-patterns">Patterns</mat-radio-button>
         </mat-radio-group>
-
+        &nbsp;&nbsp;
+        <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
+        &nbsp;&nbsp;
         <div class="scrollY300">
             <app-table-props [dataset]="ordersData" (selected)="onOrdersDataClick($event)"></app-table-props>
         </div>
     </div>
 
 </div>
-
     <app-market-candles [exchange]="'binance'" [market]="market"></app-market-candles>
 </div>

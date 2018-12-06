@@ -2,11 +2,18 @@
     <mat-form-field class="w6">
         <input matInput placeholder="Market"
                [(ngModel)]="market"
+        >
 
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field >
+        <input matInput placeholder="Reason"
+               [(ngModel)]="reason"
         >
     </mat-form-field>
+
     <button mat-button (click)="onCreateClick()">Create</button>
-    <app-table-props [dataset]="bots" (selected)="onMarketSelected($event)"></app-table-props>
+    <app-table-props [dataset]="bots$ | async" (selected)="onMarketSelected($event)"></app-table-props>
 
    <app-market-candles [market]="market" [exchange]="'binance'"></app-market-candles>
 </div>

@@ -183,7 +183,7 @@ export interface IVOMarket {
   disabled:boolean;
   PrevDay: number;
 
-  coinMC?: VOMarketCap;
+  mcCoin?: VOMarketCap;
   baseMC?: VOMarketCap;
   stats?:IOrdersStats;
 }

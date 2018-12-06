@@ -21,12 +21,10 @@ export class ApiMarketCapService {
     private http: HttpClient,
     private storage: StorageService
   ) {
-    ApiMarketCapService.instance = this;
+    this.tikerSub = new BehaviorSubject(null);
+    this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
+    this.refreshTicker();
   }
-
-  static instance: ApiMarketCapService;
-
-  static MC: { [symbol: string]: VOMarketCap };
   // private data: { [symbol: string]: VOMarketCap };
   //  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
   private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }>
@@ -111,11 +109,6 @@ export class ApiMarketCapService {
   }
 
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
-    if(!this.tikerSub) {
-      this.tikerSub = new BehaviorSubject(null);
-      this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
-      this.refreshTicker();
-    }
     return this.tikerSub;
   }
 

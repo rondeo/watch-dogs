@@ -338,20 +338,22 @@ export class CandlesAnalys1 {
   }
 
 
-  static isToSell(candles: VOCandle[]) {
-    const mas = CandlesAnalys1.mas(candles);
-    const vols = CandlesAnalys1.vols(candles);
+  static isToSell(mas, vols) {
+
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
+    let action = null;
+    let reason = null;
 
     if (ma3_25 < -0.5 && v3_med > 1000) {
-      return {
-        action: 'SELL',
-        reason: ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med
-      }
+        action  =  'SELL';
+      reason = ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med
+    }else if (ma3_25 < -0.7 && v3_med > 500) {
+        action = 'SELL',
+        reason = ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med;
     }
-
+    return {vols, mas, action, reason};
   }
 
   static async createState(candles: VOCandle[]) {

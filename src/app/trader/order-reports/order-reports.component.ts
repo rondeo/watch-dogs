@@ -5,6 +5,10 @@ import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service'
 import {ActivatedRoute, Router} from '@angular/router';
 import * as _ from 'lodash';
 import * as  moment from 'moment';
+import {MarketBot} from '../../app-services/app-bots-services/market-bot';
+import {map} from 'rxjs/operators';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {noop} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-order-reports',
@@ -25,35 +29,72 @@ export class OrderReportsComponent implements OnInit {
   selectedKey: string;
 
   market: string;
+  exchange: string;
   dataName = '-logs';
 
+  subBot;
+
+  currentBot: MarketBot;
+
   ngOnInit() {
-    this.route.params.subscribe(params => {
+
+    this.subBot = this.followOrder.botsSub.asObservable().pipe(
+      map(bots => {
+        this.ordersRecords = bots.map(function (item) {
+          return {
+            exchange: item.exchange,
+            market: item.market,
+            reason: item.reason,
+            x: 'X'
+          };
+        });
+        return bots;
+      })
+    );
+
+    combineLatest(this.subBot, this.route.params).pipe(map((args) =>{
+      const bots = args[0];
+      const params = args[1];
       this.market = params.market;
+      this.exchange = params.exchange;
+      if(this.market === 'null' || this.market === 'undefined') this.market = null;
+      if(this.exchange === 'null' || this.exchange === 'undefined') this.exchange = null;
+      // @ts-ignore
+      this.currentBot = _.find(bots, {market: this.market})
       this.showBotHistory();
-    });
+    })).subscribe(noop);
   }
 
-
-  onDeleteUSDTRecordsClick(){
-    if(confirm('DELETE USDT_BTC ?')){
-      this.storage.remove('USDT_BTC-alerts').then(()=>{
+  onDeleteUSDTRecordsClick() {
+    if (confirm('DELETE USDT_BTC ?')) {
+      this.storage.remove('USDT_BTC-alerts').then(() => {
         this.onUsdtBtcClick();
       })
     }
   }
+
   async onUsdtBtcClick() {
     this.ordersData = await this.storage.select('USDT_BTC-alerts');
   }
 
-  onBotsClick(){
-    this.populateBots();
-
+  onBuyClick() {
+    const bot = this.currentBot;
+    if(!bot) return;
+    bot.buyCoinInstant().then(res=>{
+      this.showBotHistory();
+    })
   }
 
-  onOrdersClick(){
-
+  onSellClick() {
+    const bot = this.currentBot;
+    if(!bot) return;
+    bot.sellCoinInstant().then(res=>{
+      this.showBotHistory();
+    })
   }
+
+
+
   ////////////////////////////////////// BOTS
 
 
@@ -63,43 +104,31 @@ export class OrderReportsComponent implements OnInit {
   }
 */
 
-  populateBots() {
-    this.followOrder.getBots().then(res => {
-      if (!res) return;
-      this.ordersRecords = res.map(function (item) {
-        return {
-          market: item.market,
-          x: 'X'
-        };
-      });
-    });
-  }
-
   onRecordsClick(evt) {
     const market = evt.item.market;
+    const exchange = evt.item.exchange;
     switch (evt.prop) {
       case 'market':
-        this.router.navigate(['trader/order-reports', {market}]);
+        this.router.navigate(['trader/order-reports', {market, exchange}]);
         return;
       case 'x':
         if (confirm(' DELETE ' + market)) {
           this.followOrder.deleteBot(market)
-            .then(this.populateBots.bind(this));
         }
         return;
     }
   }
 
+
   async showBotHistory() {
-    if (!this.market) {
+    const bot = this.currentBot;
+    if (!bot) {
       this.ordersData = null;
       return;
     }
-    const id = 'bot-' + this.market + this.dataName;
-     console.log(id);
     switch (this.dataName) {
       case '-patterns':
-        this.ordersData = ((await this.storage.select(id)) || []).map(function (item) {
+        this.ordersData = bot.getPatterns().map(function (item) {
           return {
             date: moment(item.stamp).format('DD HH:mm'),
             state: item.state,
@@ -111,7 +140,9 @@ export class OrderReportsComponent implements OnInit {
         });
         break;
       default:
-        this.ordersData = ((await this.storage.select(id)) || []);
+        bot.getLogs().then(logs => {
+          this.ordersData = logs;
+        });
         break;
     }
   }

@@ -143,4 +143,8 @@ export class StopLossOrder {
 
 
   }
+
+  destroy() {
+
+  }
 }

@@ -19,15 +19,38 @@ export class ApiPublicHitbtc extends ApiPublicAbstract {
   async downloadCandles(market: string, interval: string, limit: number, endTime = 0): Promise<VOCandle[]> {
     /*  const markets = await this.getMarkets();
       if(!markets[market]) return Promise.resolve([]);*/
-    market = market.split('_').reverse().join('-to-');
+
+    switch(interval){
+      case '1m':
+        interval = 'M1';
+        break;
+      case '5m':
+        interval = 'M5';
+        break;
+      case '15m':
+        interval = 'M15';
+        break;
+      case '30m':
+        interval = 'M30';
+        break;
+      case '1h':
+        interval = 'H1';
+        break;
+      case '6h':
+        interval = 'H4';
+        break;
+      case '1d':
+        interval = 'D1';
+        break;
+
+    }
     const params: any = {
-      symbol: market.split('_').reverse().join(''),
       period: interval,
       limit: String(limit)
     };
     if (endTime) params.endTime = endTime;
-    const url = '/api/proxy/https://api.hitbtc.com/api/2/public/candles/';
-    // console.log(url);
+    const url = '/api/proxy/https://api.hitbtc.com/api/2/public/candles/' + market.split('_').reverse().join('');
+     console.log(url);
     return await this.http.get(url, {params}).pipe(map((res: any[]) => {
       //  console.log(res);
       return res.map(function (item) {

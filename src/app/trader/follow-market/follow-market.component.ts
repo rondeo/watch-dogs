@@ -8,6 +8,9 @@ import {VOCandle} from '../../models/api-models';
 import * as _ from 'lodash';
 import {TestCandlesService} from '../../test/test-candles.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {Observable} from 'rxjs/internal/Observable';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-follow-market',
@@ -15,10 +18,11 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./follow-market.component.css']
 })
 export class FollowMarketComponent implements OnInit {
-  bots: any[];
+  bots$: Observable<any[]>;
 
   market: string;
   exchange: string;
+  reason:string;
 
   testbot: MarketBot;
   constructor(
@@ -35,11 +39,19 @@ export class FollowMarketComponent implements OnInit {
 
 
  async onCreateClick() {
-    const MC = await this.marketCap.getTicker();
-    const coniMC = MC[this.market.split('_')[1]];
-    if (!coniMC) return;
-    this.followOrder.createBot(this.market, Math.round(100 / coniMC.price_usd));
+    if(!this.exchange || !this.market || !this.reason) return;
+    this.followOrder.createBot(this.exchange, this.market, this.reason);
+  }
 
+  mapBots(bots: MarketBot[]){
+    return bots.map(function (item) {
+      return {
+        exchange: item.exchange,
+        market: item.market,
+        reason: item.reason,
+        x: 'X'
+      };
+    })
   }
 
   ngOnInit() {
@@ -47,36 +59,21 @@ export class FollowMarketComponent implements OnInit {
       this.market = params.market;
       this.exchange = params.exchange;
       if(this.market === 'null' || this.market === 'undefined') this.market = null;
-      if(this.exchange === 'null' || this.exchange === 'undefined') this.market = null;
+      if(this.exchange === 'null' || this.exchange === 'undefined') this.exchange = null;
     });
 
-    this.followOrder.botsSub.subscribe(bots => {
-      if (!bots) return;
-
-      this.bots = bots.map(function (item) {
-        return {
-          market: item.market,
-          amountCoinUS: item.amountCoinUS,
-          x: 'X'
-        };
-      });
-    });
-
+    this.bots$ = this.followOrder.bots$()
+      .pipe(
+        map(this.mapBots)
+      );
   }
-
-
-  async createBot(market: string, amountUS: number) {
-    const MC = await this.marketCap.getTicker();
-    const amountCoin = +(amountUS / MC[market.split('_')[1]].price_usd).toFixed(2);
-    await this.followOrder.createBot(market, amountCoin);
-  }
-
 
   onMarketSelected(evt) {
     const market: string = evt.item.market;
+    const exchange = evt.item.exchange;
     switch (evt.prop) {
       case 'market':
-        this.router.navigate(['/trader/follow-market', {market}]);
+        this.router.navigate(['/trader/follow-market', {market, exchange}]);
         break;
       case 'x':
         if (confirm('DELETE ' + market)) {

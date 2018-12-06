@@ -140,6 +140,9 @@ export class GainersLosersComponent implements OnInit {
       case '200_300':
         allCoins = allCoins.filter(o => o.rank < 300 && o.rank > 200);
         break;
+      case 'from80_120':
+        allCoins = allCoins.filter(o => o.rank < 120 && o.rank > 80);
+        break;
     }
 
 

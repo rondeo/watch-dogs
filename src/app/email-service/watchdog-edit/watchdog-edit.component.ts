@@ -66,7 +66,7 @@ export class WatchdogEditComponent implements OnInit {
     if (!coin) return;
 
     console.log(MC[coin]);
-   // this.coinMC = MC[coin];
+   // this.mcCoin = MC[coin];
   }
 
   onCoinChange(evt) {

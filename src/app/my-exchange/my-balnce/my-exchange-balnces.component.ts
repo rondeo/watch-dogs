@@ -58,10 +58,10 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     // console.log(this.balancesAll);
    // console.log(this.balancesAll);
     this.balancesAll.forEach(function (item) {
-      const coinMC = MC[item.symbol];
-      if (coinMC) {
-        item.id = coinMC.id;
-        item.balanceUS = Math.round(item.balance * coinMC.price_usd);
+      const mcCoin = MC[item.symbol];
+      if (mcCoin) {
+        item.id = mcCoin.id;
+        item.balanceUS = Math.round(item.balance * mcCoin.price_usd);
       } else item.balanceUS = 0;
     })
     this.isBalancesLoading = false;
