@@ -317,14 +317,14 @@ export class CandlesAnalys1 {
   static createCandlesX5(candles: VOCandle[]) {
     const out: VOCandle[] = [];
     let j = 0;
-    let cur =  candles[0];
+    let cur = candles[0];
     for (let i = 1, n = candles.length; i < n; i++) {
       const next = candles[i];
-      if(j === 5){
+      if (j === 5) {
         out.push(cur);
         cur = next;
         j = 0;
-      } else{
+      } else {
         cur.Volume += next.Volume;
         cur.Trades += next.Trades;
         cur.close = next.close;
@@ -333,7 +333,7 @@ export class CandlesAnalys1 {
       }
       j++;
     }
-    if(j) out.push(cur);
+    if (j) out.push(cur);
     return out;
   }
 
@@ -343,44 +343,36 @@ export class CandlesAnalys1 {
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
+    const ma7_99 = MATH.percent(mas.ma7, mas.ma99);
     let action = null;
-    let reason = null;
+    const reason =' v3_m ' + v3_med +  ' 3_25 ' + ma3_25 + ' 7_99 '+ ma7_99;
 
     if (ma3_25 < -0.5 && v3_med > 1000) {
-        action  =  'SELL';
-      reason = ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med
-    }else if (ma3_25 < -0.7 && v3_med > 500) {
-        action = 'SELL',
-        reason = ' ma3_25 ' + ma3_25 + ' v3_med ' + v3_med;
+      action = 'SELL';
+    } else if (ma3_25 < -0.7 && v3_med > 500) {
+      action = 'SELL';
     }
-    return {vols, mas, action, reason};
+
+    return {action, reason};
   }
 
-  static async createState(candles: VOCandle[]) {
+  static async createState(mas, vols, candles: VOCandle[]) {
     const lastCandle = _.last(candles);
     const t = moment(lastCandle.to).format('HH:mm');
     const stamp = lastCandle.to;
     const closes = CandlesAnalys1.closes(candles);
-    const volumes = CandlesAnalys1.volumes(candles);
 
-    const ma3 = +_.mean(_.takeRight(closes, 3)).toPrecision(4);
+    const Pwas = _.mean(_.take(_.takeRight(closes, 8), 3));
 
-    const v3 = _.mean(_.takeRight(volumes, 3));
-    const v3was = _.mean(_.take(_.takeRight(volumes, 6), 3));
-
-    const Pwas = _.mean(_.take(_.takeRight(closes, 6), 3));
-
-    const PD = MATH.percent(ma3, Pwas);
-    const VD = MATH.percent(v3, v3was);
-    const mas = CandlesAnalys1.mas(candles);
-    const vols = CandlesAnalys1.vols(candles);
-    const ma25 = +mas.ma25.toPrecision(4);
+    const ma7 = mas.ma7;
+    const PD = MATH.percent(mas.ma3, Pwas);
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
+    const ma7_99 = MATH.percent(mas.ma7, mas.ma99);
     const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
     // const actionValues = await storage.select('action-values');
-    const curr = {sup: '', v3_med, PD, ma3_25, ma25_99, VD, v3_25, ma3, ma25, Pwas, t, stamp, state: ''};
+    const curr = {v3_med, PD, ma3_25, ma25_99, v3_25, ma7_99, stamp, ma7, state: ''};
 
     let volume = 'AVG-VOLUME';
     let price = 'STAY';

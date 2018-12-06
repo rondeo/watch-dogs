@@ -131,10 +131,9 @@ export class OrderReportsComponent implements OnInit {
         this.ordersData = bot.getPatterns().map(function (item) {
           return {
             date: moment(item.stamp).format('DD HH:mm'),
-            state: item.state,
             v3_med: item.v3_med,
-            VD: item.VD,
             ma3_25: item.ma3_25,
+            ma7_99: item.ma7_99,
             PD: item.PD
           }
         });

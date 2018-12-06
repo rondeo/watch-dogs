@@ -142,6 +142,7 @@ export class MarketBot {
     const mas = CandlesAnalys1.mas(candles);
     const vols = CandlesAnalys1.vols(candles);
 
+
     const toSell = CandlesAnalys1.isToSell(mas, vols);
 
     if (toSell.action && toSell.action === 'SELL') {
@@ -150,9 +151,8 @@ export class MarketBot {
       return;
     }
 
-    const result = await CandlesAnalys1.createState(candles);
+    const result = await CandlesAnalys1.createState(mas, vols, candles);
     this.patterns = CandlesAnalys1.groupPatterns(this.patterns, result);
-
 
     await this.stopLossOrder.checkStopLoss(candles, this.balanceCoin);
 

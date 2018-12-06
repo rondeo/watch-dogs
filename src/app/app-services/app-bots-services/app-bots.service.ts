@@ -114,7 +114,7 @@ export class AppBotsService {
       console.warn(excists);
       return null;
     }
-    const bot =  new MarketBot(
+   /* const bot =  new MarketBot(
       exchange,
       market,
       100,
@@ -127,6 +127,7 @@ export class AppBotsService {
     this.botsSub.next(bots);
     this.saveBots();
     return bot;
+    */
   }
 
   saveBots() {

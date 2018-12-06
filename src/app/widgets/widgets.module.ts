@@ -26,7 +26,7 @@ import {PipesModule} from '../pipes/pipes.module';
 import {CandleVolumeAlertComponent} from './alerts/candle-volume-alert/candle-volume-alert.component';
 import {SharksListComponent} from './alerts/sharks-list/sharks-list.component';
 import {CandlesPatternComponent} from './alerts/candles-pattern/candles-pattern.component';
-import {MarketCandlesComponent} from './candles-market/market-candles.component';
+import {MarketCandlesComponent} from './market-candles/market-candles.component';
 import {ScannerComponent} from './scanner/scanner.component';
 import {FollowOrderListComponent} from './follow-order-list/follow-order-list.component';
 import {MediaComponent} from './media/media.component';

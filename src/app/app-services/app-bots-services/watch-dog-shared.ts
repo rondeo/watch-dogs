@@ -32,8 +32,10 @@ export class WatchDogShared extends VOWatchdog {
   }
 
   subscribeForBalances() {
-    if (!this.wd.exchange || !this.wd.base || !this.wd.coin) return;
-    ApiMarketCapService.instance.getTicker().then(MC => {
+    
+
+ //    if (!this.wd.exchange || !this.wd.base || !this.wd.coin) return;
+   /* ApiMarketCapService.instance.getTicker().then(MC => {
       this.coinMC = MC[this.wd.coin];
       this.baseMC = MC[this.wd.base];
       const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.wd.exchange);
@@ -55,7 +57,7 @@ export class WatchDogShared extends VOWatchdog {
       this.sub2 = api.balance$(this.wd.base).subscribe(balance => {
         //  console.log(this.wdId, balance);
         if (balance) {
-          this.balanceBase = balance.balance;
+          this.balanceBase = balance.balance    ;
           this.baseUS = Math.round(this.balanceBase * this.baseMC.price_usd);
           //  if (!this.baseUS) this.status = WatchDogStatus.NO_BALANCE_BASE;
         } else {
@@ -63,7 +65,7 @@ export class WatchDogShared extends VOWatchdog {
           console.warn(' no balance for ' + this.wd.base);
         }
       })
-    })
+    })*/
 
   }
 

@@ -270,6 +270,8 @@ export class FollowOpenOrder {
     console.log('INIT ORDER ', this.initOrder);
   }
 
+
+
   async destroy() {
     console.log('%c destroy ' + this.market, 'color:red');
     this.storage.remove(this.id);
@@ -286,8 +288,8 @@ export class FollowOpenOrder {
     if (this.checkInterval) return;
     await this.findInitOrder();
     console.log('%c START FOLLOWING ' + this.market, 'color:green');
-    this.checkInterval = setInterval(() => this.tick(), moment.duration(1, 'minutes'));
 
+    this.checkInterval = setInterval(() => this.tick(), moment.duration(1, 'minutes').asMilliseconds());
   }
 
   stop() {

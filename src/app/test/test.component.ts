@@ -180,7 +180,7 @@ export class TestComponent implements OnInit {
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
-    const result = await CandlesAnalys1.createState(this.candles);
+    // const result = await CandlesAnalys1.createState(this.candles);
    /* this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
 
     const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
