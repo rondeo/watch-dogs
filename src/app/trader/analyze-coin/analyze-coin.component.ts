@@ -64,10 +64,10 @@ export class AnalyzeCoinComponent implements OnInit {
       this.exchange = params.exchange;
       if (!this.market) this.market = 'BTC_' + coin;
       if (this.coin !== coin) {
-        this.coin = coin;
+        /*this.coin = coin;
         this.marketCap.getCoin(coin).then(c => {
           this.coinMC = c;
-        });
+        });*/
        // this.getLongHistory();
         this.gatherAllMarketsForCoin();
       }
@@ -93,8 +93,8 @@ export class AnalyzeCoinComponent implements OnInit {
   }
 
  async getLongHistory() {
-    const longHistory = await this.marketCap.getCoinLongHistory(this.coin).toPromise();
-    console.log(longHistory);
+   /* const longHistory = await this.marketCap.getCoinLongHistory(this.coin).toPromise();
+    console.log(longHistory);*/
   }
 
   isDisabled() {

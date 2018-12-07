@@ -11,40 +11,39 @@ import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '..
 import {VOMovingAvg} from '../com/moving-average';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {map, share} from 'rxjs/operators';
-
+import {first, map, refCount, share, shareReplay} from 'rxjs/operators';
+import {MATH} from '../com/math';
+import {forkJoin} from 'rxjs/internal/observable/forkJoin';
+import {ajax, fromPromise} from 'rxjs/internal-compatibility';
+import { interval } from 'rxjs';
 
 @Injectable()
 export class ApiMarketCapService {
+
+  // oldMC$: Observable<{[symbol: string]:number}>;
+  //  oldMCSub = new BehaviorSubject<{[symbol: string]:number}>(null);
+
+  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
+  oldData$;
+  private coinsDay: VOCoinsDayData;
+  tikerInterval;
+  private coinsAr: VOMarketCapSelected[];
 
   constructor(
     private http: HttpClient,
     private storage: StorageService
   ) {
     this.tikerSub = new BehaviorSubject(null);
-    this.tikerInterval = setInterval(() => this.refreshTicker(), 3 * 60 * 1000);
+    this.tikerInterval = setInterval(() => this.refreshTicker(),  60000);
     this.refreshTicker();
   }
+
   // private data: { [symbol: string]: VOMarketCap };
   //  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
-  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }>
-
-  private coinsDay: VOCoinsDayData;
-
-  tikerInterval;
-
-  tickerGet$;
 
 
-  /* agregated$(): Observable<{ [symbol: string]: VOMCAgregated }> {
-     return this.agrigatedSub.asObservable();
-   }*/
-
-  private coinsAr: VOMarketCapSelected[];
-
-  static mapDataMC(data: any[]) {
+  static mapDataMC(data: any[], ranks) {
     const out = {};
-
     const BTC: VOMarketCap = data.shift();
     if (BTC.symbol !== 'BTC') throw new Error(' first not BTC');
     const btc1h = +BTC.percent_change_1h;
@@ -53,20 +52,21 @@ export class ApiMarketCapService {
     BTC.price_usd = +BTC.price_usd;
     BTC.price_btc = +BTC.price_btc;
 
-
     const USDT = data.find(function (item) {
       return item.symbol === 'USDT';
-    })
-
+    });
 
     data.forEach(function (item) {
       if (item.symbol === 'ETHOS') item.symbol = 'BQX';
+
+      const oldRank = ranks[item.symbol] ? ranks[item.symbol] : 500;
 
       if (!out[item.symbol]) out[item.symbol] = {
         id: item.id,
         name: item.name,
         symbol: item.symbol,
         rank: +item.rank,
+        rankD: MATH.percent(oldRank, +item.rank),
         price_usd: +item.price_usd,
         price_btc: +item.price_btc,
         volume_usd_24h: +item['24h_volume_usd'],
@@ -89,43 +89,66 @@ export class ApiMarketCapService {
     return out;
   }
 
-  async getCoin(symbol: string): Promise<VOMarketCap> {
-    const data = await this.getTicker();
-    return data[symbol];
+
+  getOldData() {
+    let url = 'api/proxy-1hour/http://front-desk.ca/coin-media/market-cap0.json';
+    if(!this.oldData$) this.oldData$ =  this.http.get(url)
+      .pipe(map((res: any[]) => {
+      const out = {};
+      res.forEach(function (item) {
+        if (!out[item.symbol]) out[item.symbol] = +item.rank;
+      });
+     //  console.warn(out);
+      return out;
+    }))
+      .pipe(shareReplay(1))
+    return this.oldData$;
+      // .pipe(refCount());
   }
 
   refreshTicker() {
-    this.downloadTicker().subscribe(res => {
-      let current = 0;
-      const cur = this.tikerSub.getValue();
-      if (cur) current = cur['BTC'].last_updated;
-      const timestamp = res['BTC'].last_updated;
-      if (timestamp !== current) {
-        console.log(' new marketcap ' + moment(timestamp * 1000).format('HH:mm'));
-        if(!this.tikerSub) this.tikerSub = new BehaviorSubject(res);
-        else this.tikerSub.next(res);
-      }
-    });
+    forkJoin(this.getOldData(), this.downloadTicker())
+      .pipe(map(res => {
+       //  console.log(res);
+        const oldData = res[0];
+        const newData = res[1];
+        const data = ApiMarketCapService.mapDataMC(newData, oldData);
+       //  console.log(data);
+        this.tikerSub.next(data);
+      }))
+      .subscribe(res => {
+      });
   }
 
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
+   /* if(!this.myTicker$) {
+
+     /!* interval(10000).subscribe(()=>{
+        console.log(' tick');
+      })*!/
+
+      const data = ajax('api/proxy-5min/https://api.coinmarketcap.com/v1/ticker/?limit=500');
+      data.subscribe((res) =>{
+        console.log(res.response);
+      });
+
+      this.myTicker$ = this.downloadTicker().pipe(
+
+
+      );
+
+      this.myTicker$.subscribe(console.warn);
+    }*/
     return this.tikerSub;
   }
 
-  downloadTicker(): Observable<{ [symbol: string]: VOMarketCap }> {
+  myTicker$;
+  downloadTicker(): Observable<any[]> {
     let url = 'api/proxy-5min/https://api.coinmarketcap.com/v1/ticker/?limit=500';
-    // const url = '/api/proxy-http/crypto.aesoft.ca:49890/market-cap';
-    if (this.tickerGet$) return this.tickerGet$;
-    console.log('%c TICKER ' + url, 'color:blue');
-    this.tickerGet$ = this.http.get(url)
+    return this.http.get(url)
       .pipe(
-        map((res: any[]) => {
-          console.log('%c TICKER MAP ' + url, 'color:blue');
-          return ApiMarketCapService.mapDataMC(res);
-        }),
-        share()
+        map((res: any[]) => res)
       );
-    return this.tickerGet$;
   }
 
   async getCoinsArWithSelected(): Promise<VOMarketCapSelected[]> {
@@ -144,13 +167,16 @@ export class ApiMarketCapService {
     });
   }
 
-  getTicker(): Promise<VOMCObj> {
-    const data = this.tikerSub.getValue();
-    if (data) return Promise.resolve(data);
-    return this.downloadTicker().toPromise();
+  async getTicker(): Promise<VOMCObj> {
+    return new Promise<VOMCObj>((resolve, reject) => {
+      this.ticker$().subscribe((res)=>{
+        if(res)  resolve(res)
+      })
+    })
   }
 
   // uplight.ca API //////////////////////////////////////////////////////////////////
+/*
   getCoinLongHistory(coin: string) {
     const now = moment().toISOString();
     const ago50H = moment().subtract(500, 'hours').toISOString();
@@ -202,16 +228,6 @@ export class ApiMarketCapService {
     const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/hours/from/' + from + '/' + limit;
     return this.http.get(url).pipe(map((res: any) => res.data));
   }
+*/
 
-}
-
-export interface VOMovingAvgD {
-  symbol: string;
-  price03hD: number;
-  price05hD: number;
-  price1hD: number;
-  price2hD: number;
-  price3hD: number;
-  price12hD: number;
-  rank12hD: number;
 }

@@ -11,6 +11,7 @@ import {VOCandle} from '../../models/api-models';
 
 import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
 import {MatSnackBar} from '@angular/material';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-btc-tether',
@@ -21,19 +22,38 @@ import {MatSnackBar} from '@angular/material';
 export class BtcTetherComponent implements OnInit {
   btcMC$;
   usdtMC$;
+
   constructor(
     private btcusdt: BtcUsdtService,
-    private snackBar: MatSnackBar
-
+    private snackBar: MatSnackBar,
+    private marketCap: ApiMarketCapService
   ) {
 
   }
 
   ngOnInit() {
-    this.btcMC$ = this.btcusdt.btcMC$;
-    this.usdtMC$ = this.btcusdt.usdtMC$;
+
+    this.btcMC$ = this.marketCap.ticker$()
+      .pipe(
+        filter(obj => !!obj),
+        map(OBJ => OBJ['BTC'] )
+      );
+    this.usdtMC$ = this.marketCap.ticker$()
+      .pipe(
+        filter(obj => !!obj),
+        map(OBJ => OBJ['USDT'] )
+      );
+
+/*   /!* this.btcMC$ = this.btcusdt.btcMC$
+      .pipe(
+        map(res => {
+          console.log(res);
+          return res
+        })
+      );*!/
+    this.usdtMC$ = this.btcusdt.usdtMC$;*/
     this.btcusdt.alertSub.subscribe(alert => {
-      const message = 'BTC '+ alert.PD +' '+ alert.P + ' V ' + alert.VD + ' ' + alert.trades.toString();
+      const message = 'BTC ' + alert.PD + ' ' + alert.P + ' V ' + alert.VD + ' ' + alert.trades.toString();
       this.snackBar.open(message, 'x', {panelClass: 'error'});
     });
     this.btcusdt.start();

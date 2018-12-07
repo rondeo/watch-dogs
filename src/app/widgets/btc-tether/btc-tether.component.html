@@ -1,4 +1,4 @@
-<p class="mat-body">
+<p class="mat-body" *ngIf="btcMC$ | async">
     &nbsp;
     <span>{{(btcMC$ | async).time}}</span>
     &nbsp;&nbsp;

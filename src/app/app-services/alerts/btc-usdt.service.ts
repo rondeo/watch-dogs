@@ -38,9 +38,6 @@ export class BtcUsdtService {
 
 
   candlesSub: BehaviorSubject<VOCandle[]>;
-  btcMC$: BehaviorSubject<VOMarketCap> = new BehaviorSubject(new VOMarketCap());
-  usdtMC$: BehaviorSubject<VOMarketCap> = new BehaviorSubject(new VOMarketCap());
-
   //  startTime = '2018-10-10T19:30';
   count = 0;
   candlesStats: any[] = [];
@@ -65,7 +62,6 @@ export class BtcUsdtService {
 
   lastcandlesStats: any;
 
-
   async start() {
     this.init();
     this.interval = setInterval(() => {
@@ -78,12 +74,6 @@ export class BtcUsdtService {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   init() {
-    this.marketCap.ticker$().subscribe(MC => {
-      if (!MC) return;
-      MC['BTC']['time'] = moment(MC['BTC'].last_updated * 1000).format('LT');
-      this.btcMC$.next(MC['BTC']);
-      this.usdtMC$.next(MC['USDT']);
-    });
 
     this.storage.select('trades-stats-bitfinex-usdt_btc').then(stats => {
       this.tradesStats = stats || [];

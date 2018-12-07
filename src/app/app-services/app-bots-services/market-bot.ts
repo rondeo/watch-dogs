@@ -124,8 +124,9 @@ export class MarketBot {
 
 
   async tick() {
-
+    // this.candlesService.getCandles2(this.exchange, this.market, '15m');
     setTimeout(() => this.save(), 5000);
+
     const candles = await this.candlesService.getCandles(this.market);
     const lastCandle = _.last(candles);
     const lastPrice = lastCandle.close;
@@ -137,7 +138,7 @@ export class MarketBot {
       return;
     }
 
-    console.log(this.market + ' TICK');
+    // console.log(this.market + ' TICK');
 
     const mas = CandlesAnalys1.mas(candles);
     const vols = CandlesAnalys1.vols(candles);
@@ -191,6 +192,7 @@ export class MarketBot {
     this.boughtOrder = await this.storage.select(this.id + '-bought-order');
     this.marketCap.ticker$().pipe(
       map(obj => {
+        if(!obj) return;
         this.mcCoin = obj[this.coin];
         this.mcBase = obj[this.base];
       })
@@ -282,7 +284,9 @@ export class MarketBot {
 
   async start() {
     if (this.interval) return;
-    this.interval = setInterval(() => this.tick(), 60 * 1000);
+    const sec = (60 + (Math.random() * 10));
+
+     this.interval = setInterval(() => this.tick(), sec * 1000);
   }
 
 

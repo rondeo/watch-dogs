@@ -200,19 +200,19 @@ export class CommonMarketsComponent implements OnInit {
 
     Promise.all(prs).then(res => {
       // console.log(res);
-      this.marketCap.getCoin(ar[1]).then(mc => {
+     /* this.marketCap.getCoin(ar[1]).then(mc => {
         const price: number = mc.price_usd;
         const amountCoin = 1000 / price;
        const result =  this.analizeBooks(res, amountCoin);
        this.adjustValuesBybooks(result);
        this.showBooksAnalys(result);
-        /*const prs2 = exchanges.map((item) => {
+        /!*const prs2 = exchanges.map((item) => {
           return this.apiPublic.getExchangeApi(item).downloadMarketHistory(ar[0], ar[1]).toPromise();
 
-        });*/
+        });*!/
 
       });
-
+*/
     });
 
       // console.log(market);

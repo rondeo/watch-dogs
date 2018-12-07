@@ -28,7 +28,6 @@ export class GainersLosersComponent implements OnInit {
     private route: ActivatedRoute,
     private apiPublic: ApisPublicService,
     private apiMarketCap: ApiMarketCapService,
-    private service: MarketCapService,
     private news: NewsService,
     private cryptoCompare: ApiCryptoCompareService,
     private apisPublic: ApisPublicService
@@ -63,12 +62,13 @@ export class GainersLosersComponent implements OnInit {
   onSymbolClick(mc: VOMarketCap) {
     this.router.navigateByUrl('/market-cap/coin-exchanges/' + mc.id);
   }
+
   ngOnInit() {
     this.exchanges = this.apiPublic.allExhanges;
     this.route.params.subscribe(params => {
       this.market = params.market;
       this.exchange = params.exchange;
-      if(this.market ==='undefined') this.market = null;
+      if(this.market ==='undefined' || this.market ==='null') this.market = null;
       this.loadExchange();
     });
 
@@ -76,7 +76,7 @@ export class GainersLosersComponent implements OnInit {
   }
 
   async onExcgangeChange(evt) {
-    this.router.navigate(['/market-cap/gainers-losers', {exchange:this.exchange, market: this.market}],
+    this.router.navigate(['/market-cap/gainers-losers', {exchange:this.exchange, market: 'undefined'}],
       {replaceUrl: true});
   }
 
@@ -88,7 +88,7 @@ export class GainersLosersComponent implements OnInit {
     }
 
     const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
-    if (!api) {
+    if (!api || !api.getAllCoins) {
       this.exchangeCoins = [];
       this.sortData();
       return;

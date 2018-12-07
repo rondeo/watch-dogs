@@ -63,7 +63,8 @@ export class CoinDayComponent implements OnInit, OnChanges {
   }
 
   async getCoinHistory(): Promise<any[]> {
-    const to: string = moment().toISOString();
+    return null;
+  /*  const to: string = moment().toISOString();
     const coin = this.coin;
     let coinData;
     if (this.isWeek) {
@@ -75,7 +76,7 @@ export class CoinDayComponent implements OnInit, OnChanges {
       coinData = await this.apiMarketCap.getCoinHistory(coin, from, to).toPromise();
     }
 
-    return coinData;
+    return coinData;*/
   }
 
   async drawData(history: any[]) {

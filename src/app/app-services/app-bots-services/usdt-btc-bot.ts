@@ -39,6 +39,7 @@ export class UsdtBtcBot {
   }
 
   async tick() {
+    return;
     if (!this.balanceBase || !this.balanceCoin) {
       console.log(this.market + ' BALANCES not ready');
       return;

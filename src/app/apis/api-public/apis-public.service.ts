@@ -17,6 +17,7 @@ import {ApiPublicOkex} from './api-public-okex';
 import {ApiPublicHuobi} from './api-public-huobi';
 import {VOMarket} from '../../models/app-models';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
+import {ApiCryptoCompareService} from '../api-crypto-compare.service';
 
 
 
@@ -218,6 +219,9 @@ export class ApisPublicService {
         return new ApiPublicOkex(this.http, this.storage);
       case 'huobi':
         return new ApiPublicHuobi(this.http, this.storage);
+      case 'all':
+        // @ts-ignore
+        return new ApiCryptoCompareService(this.http, this.storage);
 
 
     }

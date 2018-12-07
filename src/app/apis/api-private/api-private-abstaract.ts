@@ -121,7 +121,7 @@ export abstract class ApiPrivateAbstaract {
       this.balancesSub.next(balances);
       this.loadingBalances = 0;
     }, error => {
-      setTimeout(() => this._refreshBalances(), 5000);
+    //   setTimeout(() => this._refreshBalances(), 50000);
     });
   }
 
@@ -179,9 +179,9 @@ export abstract class ApiPrivateAbstaract {
       if(old && res.length !== old.length)this.refreshBalances();
       this.openOrdersSub.next(res);
     }, err => {
-      this.refreshOrdersTimeout = setTimeout(() => {
+     /* this.refreshOrdersTimeout = setTimeout(() => {
         this.refreshAllOpenOrders();
-      }, 5000);
+      }, 50000);*/
     });    //
   }
 

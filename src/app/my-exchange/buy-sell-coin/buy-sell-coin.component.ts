@@ -77,6 +77,7 @@ export class BuySellCoinComponent implements OnInit {
     if (this.market === market) return;
     const base = market.split('_')[0];
     if (!this.market || this.market.split('_')[0] !== base) {
+      
       this.marketCap.getTicker().then(MC => {
         this.basePriceUS = MC[base].price_usd;
       });

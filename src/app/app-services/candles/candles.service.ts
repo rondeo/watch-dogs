@@ -10,6 +10,7 @@ import {VOCandle} from '../../models/api-models';
 
 import * as moment from 'moment';
 import {Observable, Subject} from 'rxjs';
+import {CandlesAnalys1} from '../scanner/candles-analys1';
 
 @Injectable()
 export class CandlesService {
@@ -141,7 +142,100 @@ export class CandlesService {
     return this.getCandles( market);
   }
 */
-  async getCandles(market: string) {
+
+
+ createOneCandle(candles: VOCandle[]): VOCandle{
+   const first: VOCandle = _.first(candles);
+   const last: VOCandle = _.last(candles);
+   return {
+     to:last.to,
+     from: first.to,
+     close: last.close,
+     open: first.open,
+     high: -1,
+     low: -1,
+     Volume: _.sum(CandlesAnalys1.volumes(candles))
+   }
+ }
+
+  parseInterval(candlesInterval: string): number {
+    const units = candlesInterval.slice(-1);
+    const num = +candlesInterval.slice(0, -1);
+    if (isNaN(num)) throw new Error('candlesInterval ' +  num);
+    const mult = units === 'm' ? 60e3 : 360e3;
+    return num * mult;
+  }
+
+  async getOneMinuteCandles(exchange: string, market: string){
+    const id = 'candles-'+exchange + '-' + market +'-1m';
+    let candles: VOCandle[] =  (await this.storage.select(id));
+
+    return candles;
+
+  }
+
+ async getCandles2(exchange: string, market: string, candlesInterval: string ){
+   const id = 'candles-'+exchange + '-' + market +'-'+candlesInterval;
+   const api = this.apisPublic.getExchangeApi(exchange);
+   let candles: VOCandle[] =  (await this.storage.select(id));
+   if(!candles) {
+     console.log(' downloading 100 candles ' + candlesInterval);
+     candles = await api.downloadCandles(market, this.candlesInterval, 100);
+   } else {
+
+     let newCandles = await this.getOneMinuteCandles(exchange, market);
+     switch (candlesInterval) {
+       case '5m':
+         newCandles = _.takeRight(newCandles, 5);
+         break;
+       case '15m':
+         newCandles = _.takeRight(newCandles, 15);
+         break;
+       case '30m':
+         newCandles = _.takeRight(newCandles, 30);
+         break;
+       case '1h':
+         newCandles = _.takeRight(newCandles, 60);
+         break
+     }
+     const lastCandle: VOCandle = this.createOneCandle(newCandles);
+
+     const fromTime = lastCandle.from;
+
+     candles = candles.filter(function (item) {
+       return item.to < fromTime;
+     });
+
+     candles.push(lastCandle);
+
+    /*
+     const diff: number = Date.now() - _.last(candles).to;
+
+      const interval = this.parseInterval(candlesInterval);
+
+     let req = Math.ceil(diff / interval / 1000);
+
+     console.log(market + '  candles ' + candlesInterval + '  need: ' + req);
+     const lastCandles  = await api.downloadCandles(market, candlesInterval, req);
+     console.log(lastCandles);*/
+
+
+
+     // const diff = moment().diff(last.to, 'minutes');
+
+
+    // if(diff < 0){
+
+      //  const lastCandle  = api.downloadCandles(market, candlesInterval, 1);
+      // console.log(lastCandle);
+    // }
+
+   }
+   await this.storage.upsert(id, candles);
+   return candles;
+ }
+
+  async getCandles(market: string, candlesInterval: string = '1m') {
     const api = this.apisPublic.getExchangeApi(this.exchange);
     const id = 'candles-' + market;
     let oldCandels: VOCandle[] =  (await this.storage.select(id));

@@ -7,6 +7,7 @@ import {VOCandle} from '../models/api-models';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
+import {StorageService} from '../services/app-storage.service';
 
 
 export interface VOTweeterAccount {
@@ -55,7 +56,8 @@ export class ApiCryptoCompareService {
   private coinList: { [symbol: string]: VOCryptoCompare };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private storage: StorageService
   ) {
 
   }

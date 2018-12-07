@@ -63,7 +63,7 @@ export class ApiPublicBittrex extends ApiPublicAbstract{
             to: this.moment(item.T).valueOf()
           }
         }, {moment:moment});
-        console.log(out);
+       //  console.log(out);
         return out
       }))
       .toPromise();

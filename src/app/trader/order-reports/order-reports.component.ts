@@ -119,7 +119,6 @@ export class OrderReportsComponent implements OnInit {
     }
   }
 
-
   async showBotHistory() {
     const bot = this.currentBot;
     if (!bot) {
@@ -133,8 +132,7 @@ export class OrderReportsComponent implements OnInit {
             date: moment(item.stamp).format('DD HH:mm'),
             v3_med: item.v3_med,
             ma3_25: item.ma3_25,
-            ma7_99: item.ma7_99,
-            PD: item.PD
+            ma7_99: item.ma7_99
           }
         });
         break;
