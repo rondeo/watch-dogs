@@ -158,6 +158,8 @@ export class CandlesService {
    }
  }
 
+
+
   parseInterval(candlesInterval: string): number {
     const units = candlesInterval.slice(-1);
     const num = +candlesInterval.slice(0, -1);
@@ -174,64 +176,43 @@ export class CandlesService {
 
   }
 
- async getCandles2(exchange: string, market: string, candlesInterval: string ){
+ private async getMiniteCandles(market: string, from: number, to:number){
+   const candles =  await this.getCandles(market);
+   return candles.filter(function (item) {
+     return item.to > from && item.to < to;
+   });
+  }
+
+ async getCandles2(exchange: string, market: string, candlesInterval: string = '15m' ){
    const id = 'candles-'+exchange + '-' + market +'-'+candlesInterval;
    const api = this.apisPublic.getExchangeApi(exchange);
    let candles: VOCandle[] =  (await this.storage.select(id));
-   if(!candles) {
-     console.log(' downloading 100 candles ' + candlesInterval);
-     candles = await api.downloadCandles(market, this.candlesInterval, 100);
+   if(!candles || candles.length < 100) {
+     console.log(market + ' downloading 120 candles ' + candlesInterval);
+     candles = await api.downloadCandles(market, candlesInterval, 120);
    } else {
 
-     let newCandles = await this.getOneMinuteCandles(exchange, market);
-     switch (candlesInterval) {
-       case '5m':
-         newCandles = _.takeRight(newCandles, 5);
-         break;
-       case '15m':
-         newCandles = _.takeRight(newCandles, 15);
-         break;
-       case '30m':
-         newCandles = _.takeRight(newCandles, 30);
-         break;
-       case '1h':
-         newCandles = _.takeRight(newCandles, 60);
-         break
-     }
-     const lastCandle: VOCandle = this.createOneCandle(newCandles);
+     const diff: number = moment().diff( _.last(candles).to, 'minutes');
+    //  console.log(market + '  ' +diff);
+     let limit = 2;
+     if(diff < 1) return candles;
+     if(diff > 15) limit = 120;
+     console.log(market + ' downloading candles ' + limit);
+     const newCandles = await api.downloadCandles(market, candlesInterval, limit);
 
-     const fromTime = lastCandle.from;
-
-     candles = candles.filter(function (item) {
-       return item.to < fromTime;
+     const from = _.first(newCandles).from;
+     newCandles.forEach(function (item) {
+       item.time = moment(item.to).format('HH:mm');
      });
 
-     candles.push(lastCandle);
-
-    /*
-     const diff: number = Date.now() - _.last(candles).to;
-
-      const interval = this.parseInterval(candlesInterval);
-
-     let req = Math.ceil(diff / interval / 1000);
-
-     console.log(market + '  candles ' + candlesInterval + '  need: ' + req);
-     const lastCandles  = await api.downloadCandles(market, candlesInterval, req);
-     console.log(lastCandles);*/
-
-
-
-     // const diff = moment().diff(last.to, 'minutes');
-
-
-    // if(diff < 0){
-
-      //  const lastCandle  = api.downloadCandles(market, candlesInterval, 1);
-      // console.log(lastCandle);
-    // }
-
+     candles = candles.filter(function (item) {
+       return item.to < from;
+     });
+     // console.log(' new candles ', newCandles);
+     candles = candles.concat(newCandles);
+     // console.log(candles);
    }
-   await this.storage.upsert(id, candles);
+   await this.storage.upsert(id, _.takeRight(candles, 120));
    return candles;
  }
 

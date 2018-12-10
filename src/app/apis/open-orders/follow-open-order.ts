@@ -17,6 +17,7 @@ import {UtilsBooks} from '../../com/utils-books';
 import {Subject, Subscription} from 'rxjs';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
+import {getMatIconFailedToSanitizeLiteralError} from '@angular/material';
 
 export class FollowOpenOrder {
   constructor(
@@ -94,6 +95,17 @@ export class FollowOpenOrder {
     this.candles = await this.getCandles();
 
     //  console.log(moment().format('HH:mm')+ ' ctr ' + this.market);
+
+    if(!this.MC) {
+      console.log(' NO MC')
+      return;
+    }
+
+    const amounCoinUS = Math.round((this.balanceCoin.available + this.balanceCoin.pending) * this.MC.price_usd);
+    if(amounCoinUS < 10){
+      console.log(' AMOUNT TOO LOW ' + amounCoinUS);
+      return;
+    }
 
     await this.stopLossOrder.checkStopLoss(this.candles, this.balanceCoin);
    /* if (this.balanceCoin.available + this.balanceCoin.pending > this.amountCoin * 0.1) {

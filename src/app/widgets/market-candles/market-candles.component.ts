@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {VOCandle} from '../../models/api-models';
 import {DialogInputComponent} from '../../material/dialog-input/dialog-input.component';
@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {StorageService} from '../../services/app-storage.service';
 import * as  moment from 'moment';
 import {FavoritesService} from '../../app-services/favorites.service';
+import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
 
 @Component({
   selector: 'app-market-candles',
@@ -17,8 +18,10 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
   @Input() exchange: string;
   @Input() market: string;
-  candles: VOCandle[];
+  @Output() onCandles: EventEmitter< VOCandle[]> = new EventEmitter<VOCandle[]>();
+  candles:VOCandle[];
   volumes: number[];
+  closes: number[];
   candlesInterval = '1h';
   inBrowser = false;
 
@@ -45,13 +48,14 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
     this.apisPublic.getExchangeApi(this.exchange).downloadCandles(this.market, this.candlesInterval, 200)
       .then(candles => {
+        this.onCandles.emit(candles);
         if (!candles) {
           this.candles = null;
           this.volumes = null;
           return;
         }
-
         this.candles = candles;
+        this.closes = CandlesAnalys1.closes(candles);
         this.volumes = candles.map(function (o) {
           return o.open > o.close ? -o.Volume : o.Volume;
         });

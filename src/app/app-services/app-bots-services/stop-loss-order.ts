@@ -83,6 +83,7 @@ export class StopLossOrder {
     const lastPrice = _.last(closes);
     let price = ma99;
     if (lastPrice < ma99) price = lastPrice;
+
     const orders = this.stopLossOrders();
     if (orders.length > 1) {
       return this.cancelSopLossOrders();
@@ -94,12 +95,12 @@ export class StopLossOrder {
 
     let order = orders[0];
     // const last_ma99 = MATH.percent(lastPrice, ma99);
-    const diff = MATH.percent(order.stopPrice, ma99);
+    const diff = MATH.percent(order.stopPrice, price);
     const message = ' STOP_LOSS ' + this.percentStopLoss + ' diff ' + diff;
     console.log(this.market + message);
     this.prevValue = diff;
 
-    if (diff < (this.percentStopLoss - 1)) {
+    if (diff < (this.percentStopLoss - 2)) {
       this.log(' RESETTING STOP_LOSS price: ' + price + ' qty ' + balanceTotal);
       await this.cancelSopLossOrders();
       return new Promise((resole, reject) => {
@@ -123,6 +124,7 @@ export class StopLossOrder {
     if(orders.length) return Promise.reject('ERROR REMOVE ORDER FIRST ' + JSON.stringify(orders));
     return new Promise(async (resolve, reject) => {
         const newStopLoss: number = price + (price * this.percentStopLoss / 100);
+
         this.log(' setStopLoss ' + newStopLoss + ' qty: ' + qty);
 
         const sellPrice = newStopLoss + (newStopLoss * -0.01);

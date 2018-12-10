@@ -24,6 +24,8 @@ import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {FavoritesService} from '../../app-services/favorites.service';
+import {MACDOutput} from '../libs/techind/moving_averages/MACD';
+import {VOGraphs} from '../../ui/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-scan-markets',
@@ -65,11 +67,59 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   dataset$: Observable<any[]>;
   maX: string;
   percent: number;
+
+  closes: number[];
   ////////////////////////// BOTS ///////////////////////
 
   bots: any[];
   sub5;
+
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
+
+  myGraphs: VOGraphs;
+  myTitle: string;
+  area: number[];
+
+  onMACDChange(data: MACDOutput[]) {
+   //  console.log(data);
+    const candles = this.candles;
+    const out = [];
+    candles.forEach(function (item, i) {
+      let action = 0;
+      if (i > 3) {
+        const macd = data[i];
+        const macd_1 = data[i-1];
+        const macd_2 = data[i-2];
+        if(macd.histogram > 0 && macd_1.histogram < 0){
+          action = 1;
+        }else if(macd.histogram < 0 && macd_1.histogram > 0) action = -1;
+      }
+      out.push(action);
+    })
+
+
+    const gr: VOGraphs = {
+      labelsX: [],
+      graphs: [
+        /* {
+           label: '',
+           color: 'green',
+           ys:stchs,
+           min:0,
+           max:100
+         },*/
+        {
+          label: '',
+          color: 'red',
+          ys: out,
+          min: -2,
+          max: 2
+        }
+      ]
+    };
+
+    this.myGraphs = gr;
+  }
 
 
   //////////////////////////////// Pattern ///////////////////////////////////////////
@@ -95,6 +145,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
 
   }
+
 
   onPatternChange(evt) {
 
@@ -285,7 +336,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   async onVolumeStartClick() {
-    if(this.scanner.isScanning) {
+    if (this.scanner.isScanning) {
       this.scanner.stop();
       return;
     }
@@ -523,6 +574,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     const url = 'https://www.binance.com/en/trade/pro/' + market.split('_').reverse().join('_'); //   api.getMarketUrl(ar[0], ar[1]);
     window.open(url, exchange);
   }
+
+
+  onCandlesChage(candles: VOCandle[]) {
+    this.closes = CandlesAnalys1.closes(candles);
+  }
+
 
   /*
     onClearMemoryClick() {

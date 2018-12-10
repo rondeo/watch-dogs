@@ -2,8 +2,11 @@
  * Created by Vlad on 7/8/2017.
  */
 import {WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
-import {Observable} from 'rxjs';
 
+export interface User {
+  id: string;
+  email: string;
+}
 
 export interface VOBooksStats {
   exchange: string;
@@ -105,11 +108,6 @@ export interface ConfigAPI {
   apiCurrencies?: string;
 
 }
-
-export interface IExchangePublic {
-  getCurrencies(): Observable<any>;
-}
-
 
 export class VOTransfer {
   uuid: string;

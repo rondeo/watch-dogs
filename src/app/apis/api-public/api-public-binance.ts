@@ -132,7 +132,6 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     const url = this.prefix + 'https://api.binance.com/api/v1/ticker/24hr';
     console.log(url);
     return this.http.get(url).pipe(map((res: any[]) => {
-
       const indexed = {};
       const allCoins = {}
       if (!Array.isArray(res)) return null;
@@ -170,6 +169,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
           BaseVolume
         }
       })
+
       this.allCoins = allCoins;
       return indexed;
     }));

@@ -62,6 +62,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import {AuthModule} from './auth/auth.module';
 
 
 
@@ -89,7 +90,7 @@ declare const Buffer: any;
     UiModule,
     AppServicesModule,
     WidgetsModule,
-    // AuthModule,
+    AuthModule.forRoot(),
     RouterModule.forRoot(rootRouterConfig, {useHash: true}),
     EffectsModule.forRoot([AppEffects]),
     StoreModule.forRoot(reducers, { metaReducers }),

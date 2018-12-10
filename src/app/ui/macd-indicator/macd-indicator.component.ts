@@ -1,9 +1,10 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 
 import {VOGraphs} from '../line-chart/line-chart.component';
 import {MACD} from '../../trader/libs/techind';
 import * as _ from 'lodash';
 import {VOCandle} from '../../models/api-models';
+import {MACDOutput} from '../../trader/libs/techind/moving_averages/MACD';
 
 @Component({
   selector: 'app-macd-indicator',
@@ -13,7 +14,7 @@ import {VOCandle} from '../../models/api-models';
 export class MacdIndicatorComponent implements OnInit, OnChanges {
 
   @Input() closes: number[];
-  @Input() candles: VOCandle[];
+  @Output() onMACD: EventEmitter<MACDOutput[]> = new EventEmitter()
 
   fastPeriod = 12;
   slowPeriod = 26;
@@ -36,10 +37,8 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
 
   draw() {
 
-    if (!this.closes && !this.candles) return;
-    const closes = this.candles ? _.map(this.candles, 'close') : this.closes;
-
-
+    if (!this.closes) return;
+    const closes = this.closes;
     let macdInput = {
       values: closes,
       fastPeriod: this.fastPeriod,
@@ -49,13 +48,24 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
       SimpleMASignal: false
     };
     let macd = new MACD(macdInput);
-    const result: any[] = macd.getResult();
+    const result: MACDOutput[] = macd.getResult().slice(10);
+    const length = closes.length;
+    while(result.length < length){
+      result.unshift({
+        MACD:0,
+        signal:0,
+        histogram:0
+      })
+    }
     this.allData = result;
-    //  console.log(result);
+    setTimeout(()=>{
+
+      this.onMACD.emit(result);
+    }, 300);
+
     const macdV = [];
     const signals = [];
     const histogram = [];
-
     let maxHist = -1e9;
     let minHist = 1e9;
     let min = 1e12;
@@ -71,23 +81,23 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
       if (minHist > item.histogram) minHist = item.histogram;
       histogram.push(item.histogram);
     });
-    const length = closes.length;
-    while (macdV.length < length) macdV.unshift(0);
-    while (signals.length < length) signals.unshift(0);
-    while (histogram.length < length) histogram.unshift(0);
 
-   // console.warn(min);
+   // while (macdV.length < length) macdV.unshift(0);
+   // while (signals.length < length) signals.unshift(0);
+   // while (histogram.length < length) histogram.unshift(0);
+
+    // console.warn(min);
     const ampl = (max - min);
 
     const mid = (max - min) / 2;
     // console.warn(mid);
 
     const rel = (ampl - mid) / ampl;
-   // console.log(rel);
+    // console.log(rel);
 
     const offsetY = (2 * maxHist) * rel;
 
-   // console.log(2 * maxHist, offsetY)
+    // console.log(2 * maxHist, offsetY)
     const graphs: VOGraphs = {
       labelsX: [],
       graphs: [
@@ -113,7 +123,7 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
           min: -3 * maxHist,
           max: 3 * maxHist,
           hist: true,
-          offsetY : offsetY
+          offsetY: offsetY
         }
       ]
     };

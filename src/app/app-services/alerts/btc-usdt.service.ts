@@ -91,15 +91,14 @@ export class BtcUsdtService {
     const P = Math.round(_.last(candles).close);
     if (this.lastPrice === P) return;
     this.lastPrice = P;
-    const lasts: VOCandle[] = _.takeRight(candles, 2);
+
+    const last: VOCandle = _.last(candles)
     const volumes = _.map(candles, 'Volume');
     const medV = MATH.median(volumes);
-    const lastV = lasts[0].Volume > lasts[1].Volume ? lasts[0].Volume : lasts[1].Volume;
-    const VD = MATH.percent(lastV, medV);
-    const startPrice = lasts[0].open;
-    const endPrice = lasts[1].close;
-    const PD = MATH.percent(endPrice, startPrice);
-    if (PD < -0.3 || VD > 1000) {
+   // const lastV = lasts[0].Volume > lasts[1].Volume ? lasts[0].Volume : lasts[1].Volume;
+    const VD = MATH.percent(last.Volume, medV);
+    const PD = MATH.percent(last.close, last.open);
+    if (Math.abs(PD) > 0.3 || VD > 1000) {
       const trades = await this.getTopTrades();
       this.alert({P, PD, VD, trades})
     }
@@ -144,18 +143,23 @@ export class BtcUsdtService {
     let candles;
     let oldcandles: VOCandle[] = (await this.storage.select('USDT_BTC-candles'));
     if (oldcandles) {
-      const newcandles: VOCandle[] = await this.apisPublic.getExchangeApi('bitfinex')
-        .downloadCandles('USDT_BTC', '5m', 5);
+      let diff = moment().diff(_.last(oldcandles).to,'minutes');
+      if(diff > 15){
+        candles =  await this.apisPublic.getExchangeApi('bitfinex')
+          .downloadCandles('USDT_BTC', '5m', 100);
+      } else {
+        const newcandles: VOCandle[] = await this.apisPublic.getExchangeApi('bitfinex')
+          .downloadCandles('USDT_BTC', '5m', 3);
+        newcandles.forEach(function (o) {
+          o.time = moment(o.to).format('HH:mm');
+        });
 
-      newcandles.forEach(function (o) {
-        o.time = moment(o.to).format('HH:mm');
-      });
-      const t = newcandles[0].to;
-      oldcandles = oldcandles.filter(function (o) {
-        return o.to < t;
-      });
-
-      candles = _.takeRight(oldcandles.concat(newcandles), 100);
+        const t = newcandles[0].to;
+        oldcandles = oldcandles.filter(function (o) {
+          return o.to < t;
+        });
+        candles = _.takeRight(oldcandles.concat(newcandles), 100);
+      }
 
     } else {
       candles = await this.apisPublic.getExchangeApi('bitfinex')

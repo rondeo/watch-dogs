@@ -19,6 +19,7 @@ import {StopLossOrder} from './stop-loss-order';
 import {ResistanceSupportController} from './resistance-support-controller';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
+import {MacdSignal} from './macd-signal';
 
 export class MarketBot {
   resistanceSupport: ResistanceSupportController;
@@ -53,6 +54,7 @@ export class MarketBot {
   id: string;
   private stopLossOrder: StopLossOrder;
 
+
   prevAction: string;
   patterns: any[] = [];
   lastOrder: { stamp: number, action: string, price: number };
@@ -62,10 +64,11 @@ export class MarketBot {
   sub2;
   private activeOrder: VOOrder;
   timeout;
+  macdSignal: MacdSignal = new MacdSignal();
 
-  async sellCoinInstant() {
+  async sellCoinInstant(reason: string = null) {
+    if(reason) this.log({action:'SELL', reason});
     const qty = this.getAmountCoin();
-
     // console.log('%c !!!!! SELL COIN ' + this.market, 'color:red');
     //  console.log(this.balanceCoin);
 
@@ -77,8 +80,7 @@ export class MarketBot {
     try {
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const rate = UtilsBooks.getRateForAmountCoin(books.buy, qty);
-      const action = 'SELL';
-      this.log({action, reason: '' + rate});
+      this.log({action: 'SOLD', reason: ' rate' + rate});
       // const sellOrder = this.apiPrivate.sellLimit2(this.market,qty,rate);
 
     } catch (e) {
@@ -94,17 +96,17 @@ export class MarketBot {
     return +(this.amountCoinUS / this.mcCoin.price_usd).toFixed(2);
   }
 
-  async buyCoinInstant() {
+  async buyCoinInstant(reason: string = null) {
+    if(reason) this.log({action:'BUY', reason})
     const qty = this.getAmountCoin();
     if (!qty) {
       console.warn(' no QTY')
       return null;
     }
     try {
-      const action = 'BUY';
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
-      this.log({action, reason: rate + ' ' + qty});
+      this.log({action:'BOUGHT', reason: ' rate ' + rate });
     } catch (e) {
       this.log({action: 'ERROR', reason: 'buy coin ' + e.toString()});
     }
@@ -124,7 +126,7 @@ export class MarketBot {
 
 
   async tick() {
-    // this.candlesService.getCandles2(this.exchange, this.market, '15m');
+
     setTimeout(() => this.save(), 5000);
 
     const candles = await this.candlesService.getCandles(this.market);
@@ -137,6 +139,22 @@ export class MarketBot {
       console.log('%c ' + this.market + ' NO MarketCap DATA', 'color:red');
       return;
     }
+
+    const candles15m = await this.candlesService.getCandles2(this.exchange, this.market, '15m');
+    const closes = CandlesAnalys1.closes(candles15m);
+
+    const signal = this.macdSignal.tick(closes, _.last(candles15m).time);
+
+    if(signal){
+      if(signal.action === 'BUY') {
+        this.buyCoinInstant(signal.reason)
+      }
+      if(signal.action === 'SELL') {
+        this.sellCoinInstant(signal.reason);
+      }
+
+    }
+
 
     // console.log(this.market + ' TICK');
 

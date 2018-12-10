@@ -9,7 +9,8 @@
                 <th  class="btn" (click)="onClickHeader('percent_change_7d')">%7d</th>
                 <th  class="btn" (click)="onClickHeader('price_usd')">$US</th>
                 <th  class="btn" (click)="onClickHeader('rank')"><small>Rank</small></th>
-                <th  class="btn" (click)="onClickHeader('rankD')"><small> % R</small></th>
+                <th  class="btn" (click)="onClickHeader('rankD')"><small> % r6</small></th>
+                <th  class="btn" (click)="onClickHeader('rank24')"><small> % r24</small></th>
             </tr>
             <tr *ngFor="let item of consAvailable">
                 <td><a href="https://coinmarketcap.com/currencies/{{item.id}}" target="_blank" class="btn"> <img class="w1 icon" src="assets/icons/{{item.id}}.png"/> </a></td>
@@ -30,6 +31,7 @@
                 <td class="small "  (click)="onPriceClick(item)">{{item.price_usd | myUs}}</td>
                 <td  (click)="onRankClick(item)">{{item.rank}}</td>
                 <td>{{item.rankD}}</td>
+                <td>{{item.rank24}}</td>
 
             </tr>
             </tbody>

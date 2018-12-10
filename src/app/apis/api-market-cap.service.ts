@@ -16,6 +16,7 @@ import {MATH} from '../com/math';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ajax, fromPromise} from 'rxjs/internal-compatibility';
 import { interval } from 'rxjs';
+import {keyframes} from '@angular/animations';
 
 @Injectable()
 export class ApiMarketCapService {
@@ -66,7 +67,8 @@ export class ApiMarketCapService {
         name: item.name,
         symbol: item.symbol,
         rank: +item.rank,
-        rankD: MATH.percent(oldRank, +item.rank),
+        rankD: MATH.percent(oldRank.r6, +item.rank),
+        rank24: oldRank.r24?MATH.percent(oldRank.r24, +item.rank): 0,
         price_usd: +item.price_usd,
         price_btc: +item.price_btc,
         volume_usd_24h: +item['24h_volume_usd'],
@@ -91,19 +93,39 @@ export class ApiMarketCapService {
 
 
   getOldData() {
-    let url = 'api/proxy-1hour/http://front-desk.ca/coin-media/market-cap0.json';
-    if(!this.oldData$) this.oldData$ =  this.http.get(url)
-      .pipe(map((res: any[]) => {
-      const out = {};
-      res.forEach(function (item) {
-        if (!out[item.symbol]) out[item.symbol] = +item.rank;
-      });
-     //  console.warn(out);
-      return out;
-    }))
-      .pipe(shareReplay(1))
+    if(!this.oldData$) {
+
+      const key = function (items:any[]) {
+        const out = {};
+        items.forEach(function (item) {
+          if (item.symbol === 'ETHOS') item.symbol = 'BQX';
+          if (!out[item.symbol]) out[item.symbol] = item;
+        });
+        return out;
+      };
+
+      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap1.json');
+      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap3.json');
+      this.oldData$ = forkJoin([mc6h, mc24h]).pipe(
+        (map(res =>{
+          const res6h = <any[]>res[0];
+          const res24h = key(<any []>res[1]);
+          const out = {};
+          res6h.forEach(function (item) {
+            let symbol = item.symbol;
+            if (symbol === 'ETHOS') symbol = 'BQX';
+            if (!out[symbol]) out[symbol] = {
+              r6: +item.rank,
+              r24: res24h[symbol]? +res24h[symbol].rank: 0
+            }
+          })
+         // console.log(res);
+
+          return out;
+        }))
+      ).pipe(shareReplay(1))
+    }
     return this.oldData$;
-      // .pipe(refCount());
   }
 
   refreshTicker() {
@@ -112,6 +134,7 @@ export class ApiMarketCapService {
        //  console.log(res);
         const oldData = res[0];
         const newData = res[1];
+       //  console.log(oldData)
         const data = ApiMarketCapService.mapDataMC(newData, oldData);
        //  console.log(data);
         this.tikerSub.next(data);

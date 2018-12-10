@@ -121,5 +121,16 @@
 
     </div>
 
-    <app-market-candles [exchange]="exchange" [market]="market"></app-market-candles>
+    <app-market-candles [exchange]="exchange" [market]="market" (onCandles)="onCandlesChage($event)" ></app-market-candles>
+
+    <app-macd-indicator [closes]="closes" (onMACD)="onMACDChange($event)"></app-macd-indicator>
+
+    <app-indicator
+            [graphs]="myGraphs"
+            [myWidth]="600"
+            [myHeight]="100"
+            [area]="area"
+            [myTitle]="myTitle"
+    >
+    </app-indicator>
 </div>
