@@ -296,6 +296,8 @@ export class VOMarketCap {
 
   last_updated?: number;
   selected?: boolean;
+  r6?:number;
+  r24?:number;
 
   constructor(obj?: any) {
     if (obj) for (let str in obj) this[str] = obj[str];

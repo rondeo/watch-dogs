@@ -21,6 +21,7 @@ export class CandlesService {
     private storage: StorageService
   ) {
   }
+
   collection: { [id: string]: CandlesData } = {};
   candlesInterval = '1m';
   // canlesLength = 240;
@@ -71,17 +72,12 @@ export class CandlesService {
     })
   }*/
 
-/*
-  async removeCandles(exchange: string, market: string) {
-    let ctr: CandlesData = this.collection[exchange];
-    console.log(ctr);
-    if (!!ctr) return ctr.removeCandles(market);
-  }*/
-
-
-
-
-
+  /*
+    async removeCandles(exchange: string, market: string) {
+      let ctr: CandlesData = this.collection[exchange];
+      console.log(ctr);
+      if (!!ctr) return ctr.removeCandles(market);
+    }*/
 
 
   /*async subscribeForAll() {
@@ -127,106 +123,116 @@ export class CandlesService {
       this.storage.upsert('subscribed-candles', data);
     }, 5000);
   }
- /* async getNewCandles(exchange: string, market: string, candlesInterval: string){
-    const id = 'candles-'+exchange + market + candlesInterval;
-    let oldCandels: VOCandle[] = await this.storage.select(id);
-    if (oldCandels && oldCandels.length > 100) {
-      const lastOld = _.last(oldCandels);
-      const diff = moment().diff(lastOld.to, 'minutes');
-      //  console.log(market + ' diff  min:' + diff ) ;
-      if (diff < 5) {
-        // console.log(oldCandels.length);
-        return null;
-      }
-    }
-    return this.getCandles( market);
-  }
-*/
 
-
- createOneCandle(candles: VOCandle[]): VOCandle{
-   const first: VOCandle = _.first(candles);
-   const last: VOCandle = _.last(candles);
-   return {
-     to:last.to,
-     from: first.to,
-     close: last.close,
-     open: first.open,
-     high: -1,
-     low: -1,
-     Volume: _.sum(CandlesAnalys1.volumes(candles))
+  /* async getNewCandles(exchange: string, market: string, candlesInterval: string){
+     const id = 'candles-'+exchange + market + candlesInterval;
+     let oldCandels: VOCandle[] = await this.storage.select(id);
+     if (oldCandels && oldCandels.length > 100) {
+       const lastOld = _.last(oldCandels);
+       const diff = moment().diff(lastOld.to, 'minutes');
+       //  console.log(market + ' diff  min:' + diff ) ;
+       if (diff < 5) {
+         // console.log(oldCandels.length);
+         return null;
+       }
+     }
+     return this.getCandles( market);
    }
- }
+ */
 
+
+  createOneCandle(candles: VOCandle[]): VOCandle {
+    const first: VOCandle = _.first(candles);
+    const last: VOCandle = _.last(candles);
+    return {
+      to: last.to,
+      from: first.to,
+      close: last.close,
+      open: first.open,
+      high: -1,
+      low: -1,
+      Volume: _.sum(CandlesAnalys1.volumes(candles))
+    }
+  }
 
 
   parseInterval(candlesInterval: string): number {
     const units = candlesInterval.slice(-1);
     const num = +candlesInterval.slice(0, -1);
-    if (isNaN(num)) throw new Error('candlesInterval ' +  num);
+    if (isNaN(num)) throw new Error('candlesInterval ' + num);
     const mult = units === 'm' ? 60e3 : 360e3;
     return num * mult;
   }
 
-  async getOneMinuteCandles(exchange: string, market: string){
-    const id = 'candles-'+exchange + '-' + market +'-1m';
-    let candles: VOCandle[] =  (await this.storage.select(id));
-
+  async getOneMinuteCandles(exchange: string, market: string) {
+    const id = 'candles-' + exchange + '-' + market + '-1m';
+    let candles: VOCandle[] = (await this.storage.select(id));
     return candles;
-
   }
 
- private async getMiniteCandles(market: string, from: number, to:number){
-   const candles =  await this.getCandles(market);
-   return candles.filter(function (item) {
-     return item.to > from && item.to < to;
-   });
+  private async getMiniteCandles(market: string, from: number, to: number) {
+    const candles = await this.getCandles(market);
+    return candles.filter(function (item) {
+      return item.to > from && item.to < to;
+    });
   }
 
- async getCandles2(exchange: string, market: string, candlesInterval: string = '15m' ){
-   const id = 'candles-'+exchange + '-' + market +'-'+candlesInterval;
-   const api = this.apisPublic.getExchangeApi(exchange);
-   let candles: VOCandle[] =  (await this.storage.select(id));
-   if(!candles || candles.length < 100) {
-     console.log(market + ' downloading 120 candles ' + candlesInterval);
-     candles = await api.downloadCandles(market, candlesInterval, 120);
-   } else {
 
-     const diff: number = moment().diff( _.last(candles).to, 'minutes');
-    //  console.log(market + '  ' +diff);
-     let limit = 2;
-     if(diff < 1) return candles;
-     if(diff > 15) limit = 120;
-     console.log(market + ' downloading candles ' + limit);
-     const newCandles = await api.downloadCandles(market, candlesInterval, limit);
+  async getCandles2(exchange: string, market: string, candlesInterval: string = '15m') {
+    const now = moment().valueOf();
+    const id = 'candles-' + exchange + '-' + market + '-' + candlesInterval;
+    const api = this.apisPublic.getExchangeApi(exchange);
+    let candles: VOCandle[] = (await this.storage.select(id));
+    if (!candles || candles.length < 100) {
+      console.log(market + ' downloading 120 candles ' + candlesInterval);
+      candles = await api.downloadCandles(market, candlesInterval, 120);
 
-     const from = _.first(newCandles).from;
-     newCandles.forEach(function (item) {
-       item.time = moment(item.to).format('HH:mm');
-     });
+    } else {
+      const diff: number = moment().diff(_.last(candles).to, 'minutes');
+      console.log(market + '  ' + diff);
+      let limit = 3;
+      if (diff > -1 && diff < 16) return candles;
 
-     candles = candles.filter(function (item) {
-       return item.to < from;
-     });
-     // console.log(' new candles ', newCandles);
-     candles = candles.concat(newCandles);
-     // console.log(candles);
-   }
-   await this.storage.upsert(id, _.takeRight(candles, 120));
-   return candles;
- }
+      if (diff > 30) limit = 120;
+      console.log(market + ' downloading candles ' + limit);
+      const newCandles = await api.downloadCandles(market, candlesInterval, limit);
+      const from = _.first(newCandles).from;
+
+      newCandles.forEach(function (item) {
+        item.time = moment(item.to).format('HH:mm');
+      });
+
+      candles = candles.filter(function (item) {
+        return item.to < from;
+      });
+
+      // console.log(' new candles ', newCandles);
+      candles = candles.concat(newCandles);
+      //console.log(candles);
+    }
+
+    if (_.last(candles).to > now) {
+      candles = candles.filter(function (item) {
+        return item.to < now;
+      });
+    }
+   // console.log(candles);
+    await this.storage.upsert(id, _.takeRight(candles, 120));
+    return candles;
+  }
 
   async getCandles(market: string, candlesInterval: string = '1m') {
+    const now = moment().valueOf();
     const api = this.apisPublic.getExchangeApi(this.exchange);
     const id = 'candles-' + market;
-    let oldCandels: VOCandle[] =  (await this.storage.select(id));
+    let oldCandels: VOCandle[] = (await this.storage.select(id));
     let limit = 240;
 
     if (oldCandels && oldCandels.length > 100) {
       const lastOld = _.last(oldCandels);
       const diff = moment().diff(lastOld.to, 'minutes');
       if (diff < 1) {
-       // console.log(oldCandels.length);
+        // console.log(oldCandels.length);
         return oldCandels;
       }
 
@@ -236,7 +242,7 @@ export class CandlesService {
     }
 
     console.log('%c ' + moment().format('HH:mm') + ' ' + market + ' download new candles ' + limit, 'color:brown');
-     // console.log(' updating candles ' + market + limit);
+    // console.log(' updating candles ' + market + limit);
     let candles = await api.downloadCandles(market, this.candlesInterval, limit);
 
     candles.forEach(function (item) {
@@ -252,6 +258,12 @@ export class CandlesService {
       oldCandels = _.takeRight(oldCandels.concat(candles), 480);
 
     } else oldCandels = candles;
+
+
+    oldCandels = oldCandels.filter(function (item) {
+      return item.to < now;
+    });
+
     await this.storage.upsert(id, oldCandels);
     return oldCandels;
   }
@@ -291,12 +303,12 @@ export class CandlesService {
   }
 
 
- /* stop() {
-    clearInterval(this.currentTimeout);
-    this.currentTimeout = 0;
-    /!* Object.values(this.collection).forEach(function (o) {
-       o.destroy();
-     });
-     this.collection= {};*!/
-  }*/
+  /* stop() {
+     clearInterval(this.currentTimeout);
+     this.currentTimeout = 0;
+     /!* Object.values(this.collection).forEach(function (o) {
+        o.destroy();
+      });
+      this.collection= {};*!/
+   }*/
 }

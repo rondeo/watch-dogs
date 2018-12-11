@@ -10,7 +10,8 @@
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "createReduser":"ng generate reducer Auth --flat=false --module auth/auth.module.ts"
+    "createReduser":"ng generate reducer Auth --flat=false --module auth/auth.module.ts",
+    "createEffect":"ng generate effect auth/Auth --module auth/auth.module.ts"
   },
   "private": true,
   "dependencies": {

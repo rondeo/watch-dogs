@@ -2,11 +2,10 @@ import {MACD} from '../../trader/libs/techind';
 import {MACDOutput} from '../../trader/libs/techind/moving_averages/MACD';
 import * as _ from 'lodash';
 
-export interface VOSignal{
+export interface VOSignal {
   action: string;
   reason: string;
 }
-
 
 
 export class MacdSignal {
@@ -17,9 +16,10 @@ export class MacdSignal {
   states: VOSignal[] = [];
   lastClose: number;
 
-  tick(closes: number[], time: string):VOSignal{
+  tick(closes: number[], time: string): VOSignal {
     const lastClose = _.last(closes);
-    if(lastClose === this.lastClose) return null;
+    const prevClose = closes[closes.length - 2];
+    if (lastClose === this.lastClose) return null;
     this.lastClose = lastClose;
     let macdInput = {
       values: closes,
@@ -33,27 +33,28 @@ export class MacdSignal {
     this.macd = new MACD(macdInput);
     const result: MACDOutput[] = this.macd.getResult();
     const L = result.length;
-    const last = result[L-1];
-    const prev = result[L-2];
-
+    const last = result[L - 1];
+    const prev = result[L - 2];
     let action: string = null;
     let reason: string = null;
-    if(last.histogram > 0 && prev.histogram < 0){
-      action = 'BUY';
-      reason =  time + ' hist '+ last.histogram + ' prev ' + prev.histogram;
-    }else if(last.histogram < 0 && prev.histogram > 0) {
-      action = 'SELL';
-      reason = time +  ' hist '+ last.histogram + ' prev ' + prev.histogram;
-  }
 
-  if(action) {
-    this.states.push({action, reason});
-    return {
-      action,
-      reason,
-    };
-  }
- return null
+    if (last.histogram > 0 && prev.histogram < 0) {
+      action = 'BUY';
+      const buyPrice = +((lastClose - prevClose) / 2).toFixed(8);
+      reason = time + ' P ' + buyPrice + ' hist ' + last.histogram + ' prev ' + prev.histogram;
+    } else if (last.histogram < 0 && prev.histogram > 0) {
+      action = 'SELL';
+      reason = time + ' hist ' + last.histogram + ' prev ' + prev.histogram;
+    }
+
+    if (action) {
+      this.states.push({action, reason});
+      return {
+        action,
+        reason,
+      };
+    }
+    return null
     //console.log(result);
   }
 }

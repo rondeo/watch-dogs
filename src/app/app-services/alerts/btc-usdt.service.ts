@@ -19,8 +19,18 @@ import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 import {UsdtBtcBot} from '../app-bots-services/usdt-btc-bot';
 
+export enum MarketState {
+  STAY = 'STAY',
+  GOING_DOWN = 'GOING_DOW',
+  GOING_UP = ' GOING_UP',
+  DROPPING = 'DROPPING',
+  JUMPING = 'JUMPING'
+}
+
+
 @Injectable()
 export class BtcUsdtService {
+  state$: BehaviorSubject<MarketState> = new BehaviorSubject(MarketState.STAY);
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -34,7 +44,7 @@ export class BtcUsdtService {
     this.bot.start();
   }
 
-  alertSub: Subject<{P:number, PD: number, VD: number, trades: any[] }> = new Subject();
+  alertSub: Subject<{ P: number, PD: number, VD: number, trades: any[] }> = new Subject();
 
 
   candlesSub: BehaviorSubject<VOCandle[]>;
@@ -86,16 +96,37 @@ export class BtcUsdtService {
   }
 
   lastPrice: number;
+
   async next() {
     let candles: VOCandle[] = await this.getCandles();
     const P = Math.round(_.last(candles).close);
     if (this.lastPrice === P) return;
     this.lastPrice = P;
 
-    const last: VOCandle = _.last(candles)
+    const last: VOCandle = _.last(candles);
     const volumes = _.map(candles, 'Volume');
     const medV = MATH.median(volumes);
-   // const lastV = lasts[0].Volume > lasts[1].Volume ? lasts[0].Volume : lasts[1].Volume;
+    // const lastV = lasts[0].Volume > lasts[1].Volume ? lasts[0].Volume : lasts[1].Volume
+
+    const mas = CandlesAnalys1.mas(candles);
+    let state: MarketState = MarketState.STAY;
+   //  const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+    const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
+    const diff = ma3_25;
+
+    if (diff > 0.5) {
+      state = MarketState.JUMPING
+    } else if (diff < -0.4) {
+      state = MarketState.DROPPING
+    } else if (diff > 0.2) {
+      state = MarketState.GOING_UP
+    } else if (diff < -0.2) {
+      state = MarketState.GOING_DOWN
+    }
+
+    this.state$.next(state);
+    console.log('usdt-btc ' + diff + ' ' + state);
+
     const VD = MATH.percent(last.Volume, medV);
     const PD = MATH.percent(last.close, last.open);
     if (Math.abs(PD) > 0.3 || VD > 1000) {
@@ -137,15 +168,14 @@ export class BtcUsdtService {
     return Promise.resolve(this.candlesSub.getValue());
   }
 
-
   async getCandles() {
     this.count++;
     let candles;
     let oldcandles: VOCandle[] = (await this.storage.select('USDT_BTC-candles'));
     if (oldcandles) {
-      let diff = moment().diff(_.last(oldcandles).to,'minutes');
-      if(diff > 15){
-        candles =  await this.apisPublic.getExchangeApi('bitfinex')
+      let diff = moment().diff(_.last(oldcandles).to, 'minutes');
+      if (diff > 15) {
+        candles = await this.apisPublic.getExchangeApi('bitfinex')
           .downloadCandles('USDT_BTC', '5m', 100);
       } else {
         const newcandles: VOCandle[] = await this.apisPublic.getExchangeApi('bitfinex')

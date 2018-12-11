@@ -20,6 +20,7 @@ import {ResistanceSupportController} from './resistance-support-controller';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
 import {MacdSignal} from './macd-signal';
+import {BtcUsdtService, MarketState} from '../alerts/btc-usdt.service';
 
 export class MarketBot {
   resistanceSupport: ResistanceSupportController;
@@ -33,7 +34,8 @@ export class MarketBot {
     private apiPrivate: ApiPrivateAbstaract,
     private apiPublic: ApiPublicAbstract,
     private candlesService: CandlesService,
-    private marketCap: ApiMarketCapService
+    private marketCap: ApiMarketCapService,
+    private btcusdt: BtcUsdtService
   ) {
     this.id = 'bot-' + market;
     this.init().then(() => {
@@ -135,6 +137,9 @@ export class MarketBot {
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
 
+    const usdtbtcState: MarketState = this.btcusdt.state$.getValue();
+
+
     if (!this.mcCoin) {
       console.log('%c ' + this.market + ' NO MarketCap DATA', 'color:red');
       return;
@@ -145,14 +150,22 @@ export class MarketBot {
 
     const signal = this.macdSignal.tick(closes, _.last(candles15m).time);
 
+    const last15m = _.last(candles15m);
+
     if(signal){
       if(signal.action === 'BUY') {
-        this.buyCoinInstant(signal.reason)
+        this.log({action:'USDT_BTC', reason: usdtbtcState});
+        const buyPrice = ((last15m.close - last15m.open) /2).toFixed(8);
+        const vols = CandlesAnalys1.volumes(candles15m);
+        const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
+        this.log({action:'Recommend', reason:' P ' + buyPrice + ' Vd ' + Vd});
+        this.log({action:'MC',reason:' r6 '+ this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24 });
+        this.buyCoinInstant(signal.reason);
       }
       if(signal.action === 'SELL') {
+        this.log({action:'USDT_BTC', reason: usdtbtcState});
         this.sellCoinInstant(signal.reason);
       }
-
     }
 
 

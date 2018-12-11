@@ -6,8 +6,6 @@ import {AppState} from '../reducers';
 import {isLoggedIn} from './auth.selectors';
 import {tap} from 'rxjs/operators';
 
-
-
 @Injectable()
 export class AuthGuard implements CanActivate {
 
@@ -26,7 +24,8 @@ export class AuthGuard implements CanActivate {
         tap(loggedIn => {
 
           if (!loggedIn) {
-            this.router.navigateByUrl('/login');
+            console.warn('user not loggedin')
+           //  this.router.navigateByUrl('/login');
           }
 
         })
