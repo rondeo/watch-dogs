@@ -11,6 +11,7 @@ import {VOCandle} from '../../models/api-models';
 import * as moment from 'moment';
 import {Observable, Subject} from 'rxjs';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 @Injectable()
 export class CandlesService {
@@ -189,7 +190,7 @@ export class CandlesService {
 
     } else {
       const diff: number = moment().diff(_.last(candles).to, 'minutes');
-      console.log(market + '  ' + diff);
+      //   console.log(market + '  ' + diff);
       let limit = 3;
       if (diff > -1 && diff < 16) return candles;
 
@@ -215,57 +216,88 @@ export class CandlesService {
       candles = candles.filter(function (item) {
         return item.to < now;
       });
+
     }
-   // console.log(candles);
+    // console.log(candles);
     await this.storage.upsert(id, _.takeRight(candles, 120));
     return candles;
   }
+
+
+ private checkCandles(candles: VOCandle[], interval: number){
+    let prev = _.first(candles).to - interval;
+   const err = [];
+    candles.forEach(function (item, i) {
+      const next = prev + interval;
+      const diff = Math.round(Math.abs(item.to - next)/ 30000);
+        if(diff)  err.push(i);
+         prev = item.to;
+    });
+   return err;
+ }
+
+  minuteCandles:{[market:string]: BehaviorSubject<VOCandle[]>} = {};
 
   async getCandles(market: string, candlesInterval: string = '1m') {
     const now = moment().valueOf();
     const api = this.apisPublic.getExchangeApi(this.exchange);
     const id = 'candles-' + market;
     let oldCandels: VOCandle[] = (await this.storage.select(id));
-    let limit = 240;
 
-    if (oldCandels && oldCandels.length > 100) {
-      const lastOld = _.last(oldCandels);
-      const diff = moment().diff(lastOld.to, 'minutes');
-      if (diff < 1) {
-        // console.log(oldCandels.length);
-        return oldCandels;
-      }
-
-      if (diff < 2) limit = 3;
-      else if (diff < 10) limit = 10;
-      else if (diff < 20) limit = 20;
+    if (!oldCandels ||  moment().diff(_.last(oldCandels).to, 'minutes') > 10 ) {
+      console.log(market + ' DOWNLOADING 120 candles ')
+      let candles = await api.downloadCandles(market, this.candlesInterval, 120);
+      candles = candles.filter(function (item) {
+        return item.to < now;
+      });
+      await this.storage.upsert(id, candles);
+      return candles;
     }
+
+    const lastOld = _.last(oldCandels);
+    const diff = moment().diff(lastOld.to, 'minutes');
+    console.log(market, diff);
+    if (diff < 3) {
+      // console.log(oldCandels.length);
+      return oldCandels;
+    }
+
+    let limit = 5;
+    if (diff > 5) limit = 11;
 
     console.log('%c ' + moment().format('HH:mm') + ' ' + market + ' download new candles ' + limit, 'color:brown');
     // console.log(' updating candles ' + market + limit);
     let candles = await api.downloadCandles(market, this.candlesInterval, limit);
+    candles = candles.filter(function (item) {
+      return item.to < now;
+    });
 
     candles.forEach(function (item) {
       item.time = moment(item.to).format('HH:mm');
     });
 
-    if (oldCandels) {
-      const first = _.first(candles);
-      oldCandels = oldCandels.filter(function (o) {
-        return o.to < first.to;
-      });
-
-      oldCandels = _.takeRight(oldCandels.concat(candles), 480);
-
-    } else oldCandels = candles;
-
+    const firstTime = _.first(candles).to;
 
     oldCandels = oldCandels.filter(function (item) {
-      return item.to < now;
+      return item.to < firstTime;
     });
 
-    await this.storage.upsert(id, oldCandels);
-    return oldCandels;
+    candles = oldCandels.concat(candles);
+    const err = this.checkCandles(candles, 60000);
+
+    if(err.length) {
+      console.error(err);
+      console.log(market + ' DOWNLOADING 120 candles ')
+      candles = await api.downloadCandles(market, this.candlesInterval, 120);
+      candles = candles.filter(function (item) {
+        return item.to < now;
+      });
+    }
+
+    if(this.minuteCandles[market]) this.minuteCandles[market].next(candles);
+    await this.storage.upsert(id, _.takeRight(candles, 120));
+
+    return candles;
   }
 
   getAllSubscriptions(): Observable<{ exchange: string, market: string, candles: VOCandle[] }>[] {

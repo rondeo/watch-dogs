@@ -104,10 +104,10 @@ export class ApiMarketCapService {
         return out;
       };
 
-      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap1.json');
-      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap3.json');
+      const mc6h = this.http.get('api/proxy/http://front-desk.ca/coin-media/market-cap1.json');
+      const mc24h =  this.http.get('api/proxy/http://front-desk.ca/coin-media/market-cap3.json');
       this.oldData$ = forkJoin([mc6h, mc24h]).pipe(
-        (map(res =>{
+        map(res =>{
           const res6h = <any[]>res[0];
           const res24h = key(<any []>res[1]);
           const out = {};
@@ -122,7 +122,7 @@ export class ApiMarketCapService {
          // console.log(res);
 
           return out;
-        }))
+        })
       ).pipe(shareReplay(1))
     }
     return this.oldData$;
@@ -136,7 +136,7 @@ export class ApiMarketCapService {
         const newData = res[1];
        //  console.log(oldData)
         const data = ApiMarketCapService.mapDataMC(newData, oldData);
-       //  console.log(data);
+         console.log('last_updated ' + moment(data['BTC'].last_updated * 1000).format('HH:mm'));
         this.tikerSub.next(data);
       }))
       .subscribe(res => {
@@ -167,7 +167,7 @@ export class ApiMarketCapService {
 
   myTicker$;
   downloadTicker(): Observable<any[]> {
-    let url = 'api/proxy-5min/https://api.coinmarketcap.com/v1/ticker/?limit=500';
+    let url = 'api/proxy/https://api.coinmarketcap.com/v1/ticker/?limit=500';
     return this.http.get(url)
       .pipe(
         map((res: any[]) => res)

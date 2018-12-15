@@ -1,12 +1,21 @@
 import {MACD} from '../../trader/libs/techind';
 import {MACDOutput} from '../../trader/libs/techind/moving_averages/MACD';
 import * as _ from 'lodash';
+import {BoundEvent} from '@angular/compiler/src/render3/r3_ast';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 export interface VOSignal {
   action: string;
   reason: string;
 }
 
+export enum BuySellState {
+  NONE = 'NONE',
+  BUY = 'BUY',
+  SELL = 'SELL',
+  BUY_NOW = 'BUY_NOW',
+  SELL_NOW = 'SELL_NOW'
+}
 
 export class MacdSignal {
   fastPeriod = 12;
@@ -15,8 +24,11 @@ export class MacdSignal {
   macd: MACD;
   states: VOSignal[] = [];
   lastClose: number;
+  reason: string;
 
-  tick(closes: number[], time: string): VOSignal {
+  state$: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
+
+  tick(closes: number[], time: string): BuySellState {
     const lastClose = _.last(closes);
     const prevClose = closes[closes.length - 2];
     if (lastClose === this.lastClose) return null;
@@ -30,31 +42,26 @@ export class MacdSignal {
       SimpleMASignal: false
     };
 
+
     this.macd = new MACD(macdInput);
     const result: MACDOutput[] = this.macd.getResult();
     const L = result.length;
-    const last = result[L - 1];
-    const prev = result[L - 2];
-    let action: string = null;
-    let reason: string = null;
+    const last = _.last(result);
+     const prev = result[L - 2];
+
+    const prevState = this.state$.getValue();
+    let newState = BuySellState.NONE;
+    this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.signal.toPrecision(3);
 
     if (last.histogram > 0 && prev.histogram < 0) {
-      action = 'BUY';
-      const buyPrice = +((lastClose - prevClose) / 2).toFixed(8);
-      reason = time + ' P ' + buyPrice + ' hist ' + last.histogram + ' prev ' + prev.histogram;
-    } else if (last.histogram < 0 && prev.histogram > 0) {
-      action = 'SELL';
-      reason = time + ' hist ' + last.histogram + ' prev ' + prev.histogram;
-    }
+      newState = BuySellState.BUY_NOW;
+    } else if(prev.histogram < last.histogram ) newState = BuySellState.BUY;
+    else if(last.histogram < 0 && prev.histogram > 0) newState = BuySellState.SELL_NOW;
+    else if(prev.histogram > last.histogram) newState = BuySellState.SELL;
 
-    if (action) {
-      this.states.push({action, reason});
-      return {
-        action,
-        reason,
-      };
-    }
-    return null
-    //console.log(result);
+
+    if (prevState !== newState) this.state$.next(newState);
+
+    return newState;
   }
 }

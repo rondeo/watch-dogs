@@ -72,13 +72,14 @@ export class FollowOrdersService {
         exchange: item.exchange,
         market: item.market,
         reason: item.reason,
-        amountCoinUS: item.amountCoinUS
+        amountCoinUS: item.amountCoinUS,
+        isLive: item.isLive
       };
     });
     return this.storage.upsert('bots', tosave);
   }
 
-  async createBot(exchange: string, market: string, reason: string) {
+  async createBot(exchange: string, market: string, reason: string, isLive = false) {
     const bots = this.botsSub.getValue();
     const excist = _.find(bots, {market: market});
     if (excist) {
@@ -92,6 +93,7 @@ export class FollowOrdersService {
         market,
         reason,
         100,
+        isLive,
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),
@@ -110,6 +112,7 @@ export class FollowOrdersService {
         item.market,
         item.reason,
         item.amountCoinUS,
+        item.isLive,
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),

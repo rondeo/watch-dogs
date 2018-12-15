@@ -21,7 +21,7 @@ import {UsdtBtcBot} from '../app-bots-services/usdt-btc-bot';
 
 export enum MarketState {
   STAY = 'STAY',
-  GOING_DOWN = 'GOING_DOW',
+  GOING_DOWN = 'GOING_DOWN',
   GOING_UP = ' GOING_UP',
   DROPPING = 'DROPPING',
   JUMPING = 'JUMPING'
@@ -97,7 +97,9 @@ export class BtcUsdtService {
 
   lastPrice: number;
 
+  reason: string;
   async next() {
+
     let candles: VOCandle[] = await this.getCandles();
     const P = Math.round(_.last(candles).close);
     if (this.lastPrice === P) return;
@@ -114,6 +116,7 @@ export class BtcUsdtService {
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const diff = ma3_25;
 
+
     if (diff > 0.5) {
       state = MarketState.JUMPING
     } else if (diff < -0.4) {
@@ -124,9 +127,10 @@ export class BtcUsdtService {
       state = MarketState.GOING_DOWN
     }
 
-    this.state$.next(state);
-    console.log('usdt-btc ' + diff + ' ' + state);
-
+    const prevState = this.state$.getValue();
+    if(state !== prevState) this.state$.next(state);
+    this.reason = moment().format('HH:mm') + ' ma3_25 ' + diff;
+    console.log('%c ' + this.reason, 'color:green');
     const VD = MATH.percent(last.Volume, medV);
     const PD = MATH.percent(last.close, last.open);
     if (Math.abs(PD) > 0.3 || VD > 1000) {

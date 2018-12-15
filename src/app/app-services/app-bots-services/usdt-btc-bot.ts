@@ -10,6 +10,8 @@ import {pipe} from 'rxjs/internal-compatibility';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {Subject} from 'rxjs/internal/Subject';
 
+
+
 export class UsdtBtcBot {
   priceCounUS;
   private sub1;
