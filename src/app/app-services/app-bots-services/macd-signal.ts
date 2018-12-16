@@ -51,11 +51,10 @@ export class MacdSignal {
 
     const prevState = this.state$.getValue();
     let newState = BuySellState.NONE;
-    this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.signal.toPrecision(3);
+    this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.histogram.toPrecision(3);
 
-    if (last.histogram > 0 && prev.histogram < 0) {
-      newState = BuySellState.BUY_NOW;
-    } else if(prev.histogram < last.histogram ) newState = BuySellState.BUY;
+    if (last.histogram > 0 && prev.histogram < 0)   newState = BuySellState.BUY_NOW;
+    else if(prev.histogram < last.histogram ) newState = BuySellState.BUY;
     else if(last.histogram < 0 && prev.histogram > 0) newState = BuySellState.SELL_NOW;
     else if(prev.histogram > last.histogram) newState = BuySellState.SELL;
 

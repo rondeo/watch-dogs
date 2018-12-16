@@ -36,6 +36,8 @@ export class OrderReportsComponent implements OnInit {
 
   currentBot: MarketBot;
 
+  isLive: boolean;
+
   ngOnInit() {
 
     this.subBot = this.followOrder.botsSub.asObservable().pipe(
@@ -52,15 +54,16 @@ export class OrderReportsComponent implements OnInit {
       })
     );
 
-    combineLatest(this.subBot, this.route.params).pipe(map((args) =>{
+    combineLatest(this.subBot, this.route.params).pipe(map((args) => {
       const bots = args[0];
       const params = args[1];
       this.market = params.market;
       this.exchange = params.exchange;
-      if(this.market === 'null' || this.market === 'undefined') this.market = null;
-      if(this.exchange === 'null' || this.exchange === 'undefined') this.exchange = null;
+      if (this.market === 'null' || this.market === 'undefined') this.market = null;
+      if (this.exchange === 'null' || this.exchange === 'undefined') this.exchange = null;
       // @ts-ignore
-      this.currentBot = _.find(bots, {market: this.market})
+      this.currentBot = _.find(bots, {market: this.market});
+      this.isLive = this.currentBot ? this.currentBot.isLive : false;
       this.showBotHistory();
     })).subscribe(noop);
   }
@@ -73,28 +76,34 @@ export class OrderReportsComponent implements OnInit {
     }
   }
 
+
+  onIsLiveChange(evt) {
+    this.currentBot.isLive = this.isLive;
+    const bots = this.followOrder.botsSub.getValue();
+    this.followOrder.saveBots(bots)
+  }
+
   async onUsdtBtcClick() {
     this.ordersData = await this.storage.select('USDT_BTC-alerts');
   }
 
   onBuyClick() {
     const bot = this.currentBot;
-    if(!bot) return;
+    if (!bot) return;
     const reason = prompt('Reason');
-    bot.buyCoinInstant(reason).then(res=>{
+    bot.buyCoinInstant(reason).then(res => {
       this.showBotHistory();
     })
   }
 
   onSellClick() {
     const bot = this.currentBot;
-    if(!bot) return;
+    if (!bot) return;
     const reason = prompt('Reason');
-    bot.sellCoinInstant(reason).then(res=>{
+    bot.sellCoinInstant(reason).then(res => {
       this.showBotHistory();
     })
   }
-
 
 
   ////////////////////////////////////// BOTS

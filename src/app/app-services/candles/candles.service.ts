@@ -256,7 +256,7 @@ export class CandlesService {
 
     const lastOld = _.last(oldCandels);
     const diff = moment().diff(lastOld.to, 'minutes');
-    console.log(market, diff);
+    // console.log(market, diff);
     if (diff < 3) {
       // console.log(oldCandels.length);
       return oldCandels;

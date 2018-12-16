@@ -20,10 +20,11 @@
         &nbsp;&nbsp;
         <button mat-button (click)="onSellClick()" >Sell</button>
         &nbsp;&nbsp;
-        <mat-radio-group (change)="onDataChange($event)">
+        <mat-checkbox [(ngModel)]="isLive" (ngModelChange)="onIsLiveChange($event)"> Live </mat-checkbox>
+       <!-- <mat-radio-group (change)="onDataChange($event)">
             <mat-radio-button value="-logs" [checked]="true">Logs</mat-radio-button>
             <mat-radio-button value="-patterns">Patterns</mat-radio-button>
-        </mat-radio-group>
+        </mat-radio-group>-->
         &nbsp;&nbsp;
         <span class="fa fa-trash btn dred fa-2x" (click)="onDeleteRecordsClick()"></span>
         &nbsp;&nbsp;

@@ -56,7 +56,7 @@ export class StopLossOrder {
     return new Promise(async (resolve, reject) => {
       const orders = this.stopLossOrders();
       if (!orders.length) {
-        this.log('ERROR no STOP_LOSS to cancel ');
+        this.log('NO STOP_LOSS to cancel ');
         resolve();
         return;
       }

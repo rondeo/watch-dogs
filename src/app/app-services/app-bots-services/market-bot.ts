@@ -24,15 +24,17 @@ export enum RankState {
   RED = 'RED'
 }
 
-export enum BotState{
+export enum BotState {
   NONE = 'NONE',
   BUYING = 'BUYING',
-  SELING = 'SELLING',
+  SELLING = 'SELLING',
   BOUGHT = 'BOUGHT',
   SOLD = 'SOLD',
   TO_USDT = 'TO_USDT',
   NO_BASE = 'NO_BASE',
-  INTERRUPTED_BY_BTC = 'INTERRUPTED_BY_BTC'
+  BALANCE_2 = 'BALANCE_2',
+  BUYING_SELLING = 'BUYING_SELLING',
+  IN_STOP_LOSS = 'IN_STOP_LOSS'
 }
 
 
@@ -86,6 +88,7 @@ export class MarketBot {
   private activeOrders: VOOrder[];
   timeout;
   macdSignal: MacdSignal = new MacdSignal();
+
   //macdSate: BuySellState;
   //usdtbtcState: MarketState;
 
@@ -137,6 +140,7 @@ export class MarketBot {
     return {uuid: 'test'};
   }
 
+
   private async cancelOrder(uuid: string) {
     this.log({action: 'CANCEL_ORDER', reason: uuid});
     const ar = this.market.split('_');
@@ -144,6 +148,7 @@ export class MarketBot {
   }
 
   async cancelOrders(uuids: string[]) {
+    this.log({action:'CANCEL ORDER', reason: uuids.toString()});
     return new Promise(async (resolve, reject) => {
       Promise.all(uuids.map((uuid) => {
         return this.cancelOrder(uuid)
@@ -158,29 +163,52 @@ export class MarketBot {
   }
 
 
-  async cancelBuyOrder(){
+  async cancelBuyOrders() {
     console.warn('cancelBuyOrder');
+
     const buyOrders = this.activeOrders.filter(function (item) {
       return item.action === 'BUY';
     });
-    if(buyOrders.length) return this.cancelOrders(_.map(buyOrders, 'uuid'));
+    if (buyOrders.length) return this.cancelOrders(_.map(buyOrders, 'uuid'));
     else return Promise.resolve()
   }
 
-  async cancelSellOrder(){
-
-    console.warn('cancelSellOrder')
+  async cancelSellOrders() {
+    console.warn('cancelSellOrder');
+    const sellOrders = this.activeOrders.filter(function (item) {
+      return item.action === 'SELL'
+    });
+    if(sellOrders.length) return this.cancelOrders(_.map(sellOrders, 'uuid'));
+    else return Promise.resolve();
   }
 
-  async buyCoin(rate: number) {
+  async setBuyOrder(rate: number) {
+    this.log({action: 'BUY_ORDER', reason: 'rate ' + rate});
+    if(!this.isLive) return Promise.resolve();
     return new Promise(async (resolve, reject) => {
       const qty = (this.amountCoinUS / this.mcCoin.price_usd);
       const order = await this.apiPrivate.buyLimit2(this.market, qty, rate);
-      const sub1 = this.apiPrivate.allOpenOrders$().subscribe(openOrders => {
+      resolve(order);
+    });
 
-      })
+  }
 
-    })
+  async setSellOrder(rate: number) {
+    this.log({action: 'SELL_ORDER', reason: 'rate ' + rate});
+    if(!this.isLive) return Promise.resolve();
+    return new Promise(async (resolve, reject) => {
+      await this.stopLossOrder.cancelSopLossOrders();
+
+      const qty = this.balanceCoin.available;
+      const amountUS = qty * this.mcCoin.price_usd;
+      if(amountUS < 10) {
+        reject(' amount too low ' + amountUS);
+        return;
+      }
+
+      const order = await this.apiPrivate.sellLimit2(this.market, qty, rate);
+      resolve(order);
+    });
 
   }
 
@@ -192,35 +220,100 @@ export class MarketBot {
     const market = this.market;
     const out = Object.assign({time, market}, log);
     //  console.log(out);
+    if(this.isLive) console.log(log.action + ' ' + log.reason);
     this.logs.push(out);
   }
 
+  getBuyOrderPrice(): number{
+    const orders = this.activeOrders;
+    if(!orders || !orders.length) return 0;
+    const buyOrders = orders.filter(function (item) {
+      return item.action === 'BUY';
+    });
+    return buyOrders[0].rate;
+
+  }
+  checkOpenOrders(){
+    const orders = this.activeOrders;
+    if(!orders || !orders.length) return;
+
+    console.log(this.market + ' OPEN ORDERS ', orders);
+    const buyOrders = orders.filter(function (item) {
+      return item.action === 'BUY';
+    });
+
+    const sellOrders = orders.filter(function (item) {
+      return item.action === 'SELL';
+    });
+
+    const stopLossOrders = orders.filter(function (item) {
+      return item.action === 'SELL' && !!item.stopPrice;
+    });
+
+    if(buyOrders.length && sellOrders.length) this.state$.next(BotState.BUYING_SELLING);
+    else if(buyOrders.length) this.state$.next(BotState.BUYING);
+    else if(sellOrders.length) {
+      console.log(this.market, sellOrders);
+      if(stopLossOrders.length) this.state$.next(BotState.IN_STOP_LOSS);
+      else this.state$.next(BotState.SELLING);
+    }
+
+  }
+
+  checkBalanceState() {
+    const bc = this.balanceCoin;
+    if (bc) {
+      const available = bc.available * this.mcCoin.price_usd;
+      const selling = bc.pending * this.mcCoin.price_usd;
+      const total = available + selling;
+
+      if (available > 10 && selling > 10) {
+        this.state$.next(BotState.BALANCE_2);
+      } else if (selling > 10) {
+        this.state$.next(BotState.SELLING);
+      } else if (available > 10) {
+        this.state$.next(BotState.BOUGHT);
+      } else if(available < 10 && selling < 10) this.state$.next(BotState.SOLD);
+
+    }
+
+  }
 
   async tick() {
 
     setTimeout(() => this.save(), 5000);
 
+    this.checkBalanceState();
+    this.checkOpenOrders();
+
+    const botState = this.state$.getValue();
+
+    if(this.isLive)console.log(this.market + ' ' + botState, this.isLive);
+
+
     const btcusdtState = this.btcusdt.state$.getValue();
 
-    if(btcusdtState === MarketState.DROPPING){
+    if (btcusdtState === MarketState.DROPPING) {
       const botState = this.state$.getValue();
 
-      if( botState === BotState.SOLD) {
+      if (botState === BotState.SOLD) {
         console.log(this.market + ' SOLD');
         return;
       }
 
-      if(botState === BotState.BUYING) return this.cancelBuyOrder();
+      if (botState === BotState.BUYING) return this.cancelBuyOrders();
 
-      if(botState === BotState.SELING) return this.cancelSellOrder();
+      if (botState === BotState.SELLING) return this.cancelSellOrders();
 
-      if(botState === BotState.BOUGHT) return this.sellCoinInstant('USDT-BTC dropping');
+      if (botState === BotState.BOUGHT) return this.sellCoinInstant('USDT-BTC dropping');
 
       return
     }
 
+
     const candles = await this.candlesService.getCandles(this.market);
     const lastCandle = _.last(candles);
+
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
@@ -235,35 +328,75 @@ export class MarketBot {
     const signal = this.macdSignal.tick(closes, _.last(candles15m).time);
     const last15m = _.last(candles15m);
     const mas = CandlesAnalys1.mas(candles15m);
-    const macdState = this.macdSignal.state$.getValue();
+    let macdState = this.macdSignal.state$.getValue();
+
+    if(botState === BotState.BUYING){
+      console.log(macdState+ '  ' + this.macdSignal.reason);
+
+     if(macdState === BuySellState.SELL || macdState === BuySellState.SELL_NOW){
+        this.log({action: 'STOP BUY by macd ', reason: this.macdSignal.reason});
+        this.cancelBuyOrders();
+      } else {
+
+       const buyPrice = this.getBuyOrderPrice();
+       const priceDiff = MATH.percent(lastPrice, buyPrice);
+       console.log(priceDiff);
+       if(priceDiff > 1) {
+         this.log({action: 'STOP BUY by Price ', reason: ' DIFF ' + priceDiff});
+         this.cancelBuyOrders();
+       }
+      }
+
+      return;
+
+    }
+    // if(this.market === 'BTC_POLY') macdState = BuySellState.BUY_NOW
 
 
     if (macdState === BuySellState.BUY_NOW) {
-      if(this.btcusdt.state$.getValue() === MarketState.DROPPING) {
-        this.log({action: 'CANCEL_BUY', reason:'USDT_BTC DROPPING'})
+      this.log({action: 'BUY NOW', reason: this.macdSignal.reason});
+      console.log('%c ' +this.market + ' ' + BuySellState.BUY_NOW, 'color:red');
+      if (this.btcusdt.state$.getValue() === MarketState.DROPPING) {
+        this.log({action: 'CANCEL_BUY', reason: 'USDT_BTC DROPPING'});
         return;
       }
 
-      const buyPrice = ((last15m.close + last15m.open) / 2).toFixed(8);
+      if(botState !== BotState.SOLD ) {
+        this.log({action: 'CANCEL_BUY', reason: 'NOT SOLD'});
+        return;
+      }
+
+      const buyPrice = +((last15m.close + last15m.open) / 2).toFixed(8);
       const vols = CandlesAnalys1.volumes(candles15m);
       const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
 
-      this.log({action: 'BUY NOW', reason: this.macdSignal.reason});
-      this.log({action: 'MAS', reason: 'MA25-99 ' + MATH.percent(mas.ma25, mas.ma99)});
+      this.log({action: 'MAS ', reason: 'MA25-99 ' + MATH.percent(mas.ma25, mas.ma99) + ' Vd ' + Vd});
+
       this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
       this.log({action: 'USDT_BTC', reason: btcusdtState});
-      this.buyCoinInstant(' P ' + buyPrice + ' Vd ' + Vd);
+      if(this.mcCoin.r6 >= 0) this.setBuyOrder(buyPrice);
+      else this.log({action:'NOT BUY', reason: this.mcCoin.r6 + ' < 0'})
+    //  this.buyCoinInstant(' P ' + buyPrice + ' Vd ' + Vd);
     }
 
     else if (macdState === BuySellState.SELL_NOW) {
-      const midPrice = ((last15m.close + last15m.open) / 2).toFixed(8);
-      const vols = CandlesAnalys1.volumes(candles15m);
-      const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
       this.log({action: 'SELL NOW', reason: this.macdSignal.reason});
-      this.log({action: 'MAS', reason: 'MA25-99' + MATH.percent(mas.ma25, mas.ma99)});
-      this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
-      this.log({action: 'USDT_BTC', reason: btcusdtState});
-      this.sellCoinInstant(' P ' + midPrice + ' Vd ' + Vd);
+
+      if(botState === BotState.BOUGHT || botState === BotState.IN_STOP_LOSS){
+        console.log('%c ' +this.market + ' ' + BuySellState.SELL_NOW, 'color:red');
+        const midPrice = +((last15m.close + last15m.open) / 2).toFixed(8);
+        const vols = CandlesAnalys1.volumes(candles15m);
+        const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
+
+        this.log({action: 'MAS', reason: 'MA25-99' + MATH.percent(mas.ma25, mas.ma99)});
+        this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
+        this.log({action: 'USDT_BTC', reason: btcusdtState});
+
+        this.setSellOrder(midPrice);
+      }
+
+
+      // this.sellCoinInstant(' P ' + midPrice + ' Vd ' + Vd);
     }
 
 
@@ -340,7 +473,6 @@ export class MarketBot {
   }
 
 
-
   async init() {
     const ar = this.market.split('_');
     this.base = ar[0];
@@ -372,15 +504,11 @@ export class MarketBot {
       const bc = _.find(balances, {symbol: this.coin});
       this.balanceBase = bb;
       this.balanceCoin = bc;
-
-      if(bc.available * this.mcCoin.price_usd > 10 && bc.pending * this.mcCoin.price_usd > 10) this.cancelSellOrder();
-     if((bc.pending * this.mcCoin.price_usd) > 10) this.state$.next(BotState.SELING);
-      if((bc.available * this.mcCoin.price_usd) > 10) this.state$.next(BotState.BOUGHT);
     });
 
     this.sub2 = this.apiPrivate.allOpenOrders$().subscribe(orders => {
       if (!orders) return;
-      const myOrders: VOOrder[] = <VOOrder[]>_.filter(orders, {coin: this.coin});
+      const myOrders: VOOrder[] = <VOOrder[]>_.filter(orders, {market: this.market});
       //  console.log(this.market + ' my order ', myOrder);
       this.activeOrders = myOrders;
     })
