@@ -60,9 +60,10 @@ export class FollowOrdersService {
     const exist = _.find(bots, {market: market});
     if (!exist) return;
     console.log(exist);
-    exist.destroy();
-    bots = _.reject(bots, {market: market});
-    return this.saveBots(bots);
+    if(exist.destroy()) {
+      bots = _.reject(bots, {market: market});
+      return this.saveBots(bots);
+    } return Promise.reject(' cant be destroyed yet');
   }
 
   async saveBots(bots: MarketBot[]) {
@@ -135,7 +136,7 @@ export class FollowOrdersService {
 
     //////  this.apisPrivate.getExchangeApi(exchange).startRefreshBalances();
     /// this.apisPrivate.getExchangeApi(exchange).refreshAllOpenOrders();
-    this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
+   /* this.apisPrivate.getExchangeApi(exchange).balances$().subscribe(balances => {
       if (!balances) return;
 
       //   const botsMarkets = _.map(this.botsSub.getValue(), 'market');
@@ -182,7 +183,7 @@ export class FollowOrdersService {
         this.followingOrdersSub.next(ar);
 
       });
-    });
+    });*/
   }
 
 }

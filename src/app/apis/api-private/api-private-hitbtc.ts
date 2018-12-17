@@ -148,7 +148,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
         exchange: exchange,
         symbol: item.currency,
         balance: +item.available + (+item.reserved),
-        available: +item.available
+        available: +item.available,
+        pending: 0
       };
     })));
   }

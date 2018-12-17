@@ -154,11 +154,11 @@ export class BuySellCoinComponent implements OnInit {
 
     const balanceBase = await api.getBalance(base);
    //  console.log(balanceBase);
-    const left = balanceBase.balance - amountBase;
+    const left = balanceBase.available - amountBase;
     let isMax = false;
     if (left * basePriceUS < 10) {
       isMax = true;
-      amountBase = balanceBase.balance;
+      amountBase = balanceBase.available;
       amountBase = amountBase - (amountBase * 0.0025);
 
     }
@@ -187,11 +187,11 @@ export class BuySellCoinComponent implements OnInit {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const balanceCoin = await api.getBalance(coin);
    //  console.log(balanceCoin);
-    const left = (balanceCoin.balance - amountCoin) * rate;
+    const left = (balanceCoin.available - amountCoin) * rate;
     let isMax = false;
     if (left * basePriceUS < 10) {
       isMax = true;
-      amountCoin = balanceCoin.balance;
+      amountCoin = balanceCoin.available;
     }
     this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);
   }

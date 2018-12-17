@@ -85,29 +85,8 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       startTime,
       endTime
     };
-    console.log(url);
-    return this.call(url, data, RequestType.GET).pipe(map(res => {
-      // console.log(' allOrders ', res);
 
-      /*     return res.filter(function (item) {
-             return item.status !== 'CANCELED';
-           }).map(function (item) {
-             return {
-               uuid: item.orderId,
-               action: item.side,
-               isOpen: item.status !== 'FILLED',
-               base: base,
-               coin: coin,
-               rate: +item.price,
-               amountBase: -1,
-               amountCoin: +item.origQty,
-               timestamp: item.time,
-               fee: -1,
-               date: moment(item.time).format('MM-DD HH a')
-             }
-           })
-         });*/
-
+    const mapFunction = function(res) {
       return res.filter(function (item) {
         return item.status !== 'CANCELED';
       }).map(function (item) {
@@ -124,8 +103,15 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           fee: item.commission,
           date: moment(item.time).format('MM-DD HH a')
         }
-      })
-    }));
+      });
+    };
+
+
+    console.log(url);
+    return this.call(url, data, RequestType.GET)
+      .pipe(
+      map(mapFunction)
+    );
   }
 
   downloadAllOpenOrders(): Observable<VOOrder[]> {
@@ -242,7 +228,6 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         return new VOBalance({
           exchange: exchange,
           symbol: item.asset,
-          balance: +item.free + +item.locked,
           available: +item.free,
           pending: +item.locked,
           address: ''

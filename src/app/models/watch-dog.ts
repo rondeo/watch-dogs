@@ -135,7 +135,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
         if (!this.coinMC) return;
         console.log(this.wdId, balance);
         if (balance) {
-          this.balanceCoin = balance.balance;
+          this.balanceCoin = balance.available;
           this.coinUS = Math.round(this.balanceCoin * this.coinMC.price_usd);
           if (!this.coinUS) this.status = WatchDogStatus.SOLD;
         } else {
@@ -149,7 +149,7 @@ export class WatchDog extends VOWatchdog implements IWatchDog {
         //  console.log(this.wdId, balance);
         if (!this.baseMC) return;
         if (balance) {
-          this.balanceBase = balance.balance;
+          this.balanceBase = balance.available;
           this.baseUS = Math.round(this.balanceBase * this.baseMC.price_usd);
           //  if (!this.baseUS) this.status = WatchDogStatus.NO_BALANCE_BASE;
         } else {

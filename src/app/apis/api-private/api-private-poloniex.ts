@@ -260,7 +260,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       for (let str in res) {
         let bal = new VOBalance();
         bal.exchange = exchange;
-        bal.balance = +res[str];
+        bal.available = +res[str];
         bal.symbol = str;
         out.push(bal)
       }

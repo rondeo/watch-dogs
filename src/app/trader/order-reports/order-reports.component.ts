@@ -63,9 +63,13 @@ export class OrderReportsComponent implements OnInit {
       if (this.exchange === 'null' || this.exchange === 'undefined') this.exchange = null;
       // @ts-ignore
       this.currentBot = _.find(bots, {market: this.market});
-      this.isLive = this.currentBot ? this.currentBot.isLive : false;
-      this.showBotHistory();
+      this.showBot()
     })).subscribe(noop);
+  }
+
+  showBot(){
+    this.isLive = this.currentBot ? this.currentBot.isLive : false;
+    this.showBotHistory();
   }
 
   onDeleteUSDTRecordsClick() {
@@ -120,7 +124,15 @@ export class OrderReportsComponent implements OnInit {
     const exchange = evt.item.exchange;
     switch (evt.prop) {
       case 'market':
-        this.router.navigate(['trader/order-reports', {market, exchange}]);
+        if(this.market === market){
+          this.market = null;
+          setTimeout(()=>{
+            this.market = market;
+            this.showBotHistory();
+          }, 1000)
+
+        }
+        else this.router.navigate(['trader/order-reports', {market, exchange}], {replaceUrl: true});
         return;
       case 'x':
         if (confirm(' DELETE ' + market)) {

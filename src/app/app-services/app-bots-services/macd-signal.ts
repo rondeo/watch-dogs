@@ -28,7 +28,25 @@ export class MacdSignal {
 
   state$: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
 
-  tick(closes: number[], time: string): BuySellState {
+  getHists3(closes: number[]){
+    let macdInput = {
+      values: closes,
+      fastPeriod: this.fastPeriod,
+      slowPeriod: this.slowPeriod,
+      signalPeriod: this.signalPeriod,
+      SimpleMAOscillator: true,
+      SimpleMASignal: false
+    };
+
+    this.macd = new MACD(macdInput);
+    const result: MACDOutput[] = this.macd.getResult();
+    const L = result.length;
+    return [result[L-1].histogram, result[L-2].histogram, result[L-3].histogram];
+  }
+
+
+  tick(closes: number[]): BuySellState {
+
     const lastClose = _.last(closes);
     const prevClose = closes[closes.length - 2];
     if (lastClose === this.lastClose) return null;
@@ -41,7 +59,6 @@ export class MacdSignal {
       SimpleMAOscillator: true,
       SimpleMASignal: false
     };
-
 
     this.macd = new MACD(macdInput);
     const result: MACDOutput[] = this.macd.getResult();

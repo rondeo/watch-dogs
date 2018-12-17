@@ -32,6 +32,7 @@ export class FollowOpenOrder {
     private candlesService: CandlesService
   ) {
 
+    console.error(this);
     this.id = 'follow-order-' + market;
     const ar = market.split('_');
     this.base = ar[0];

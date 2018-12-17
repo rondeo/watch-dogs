@@ -4,19 +4,18 @@ import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {CandlesService} from '../candles/candles.service';
 
-import {VOCandle} from '../../models/api-models';
+import {VOCandle, VOMCObj} from '../../models/api-models';
 import {CandlesAnalys1} from './candles-analys1';
 
 import * as moment from 'moment';
 import * as _ from 'lodash';
-
-import {CandlesAnalys2} from './candles-analys2';
 import {MATH} from '../../com/math';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {MFI} from '../../trader/libs/techind';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {Subject} from 'rxjs/internal/Subject';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {BuySellState, MacdSignal} from '../app-bots-services/macd-signal';
 
 export interface VOMessage {
   time: string;
@@ -46,7 +45,7 @@ export class ScanMarketsService {
 
   ///////////////////// patterns scan //////////////////////
 
-  async scanNextPattern(markets: string[], i, sub: Subject<any>, candlesInterval: string, diff: number, results: any[]) {
+  async scanNextPattern(markets: string[], i, sub: Subject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
     if (!this.isScanning) return;
     i++;
     if (i >= markets.length) {
@@ -56,30 +55,50 @@ export class ScanMarketsService {
     }
 
     const market = markets[i];
+    this.progressSub.next(market);
     try {
       const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 100);
 
-      let result = CandlesAnalys1.getCandelsVolumes(market, candles, diff);
+      const macd: MacdSignal = new MacdSignal();
+      const closes = CandlesAnalys1.closes(candles);
+      const last3 = macd.getHists3(closes);
+      const mc = MC[market.split('_')[1]];
 
-      this.progressSub.next(market);
-      if (result.length) {
-        results = results.concat(result);
-        //   console.log(results);
+      if(last3[0] < 0 && last3[0] > last3[1] &&  last3[1] > last3[2] &&  mc.r6 > 0) {
+
+        const reason = ' last  '+ last3[0].toPrecision(3)   + ' r6 ' + mc.r6;
+        results.push({market, reason});
         sub.next(results);
       }
+     /* const signal =  macd.tick(closes);
+
+
+
+
+      if (signal === BuySellState.BUY_NOW && mc.r6 > 0) {
+        const reason = signal + '   ' + macd.reason + ' r6 ' + mc.r6;
+        results.push({market, reason});
+        sub.next(results);
+      }
+*/
+     // let result = CandlesAnalys1.getCandelsVolumes(market, candles, diff);
+
+
     } catch (e) {
+      console.log(market);
       console.log(e);
     }
 
-    this.scanInterval = setTimeout(() => this.scanNextPattern(markets, i, sub, candlesInterval, diff, results), 2000);
+    this.scanInterval = setTimeout(() => this.scanNextPattern(markets, i, sub, candlesInterval, MC, results), 2000);
 
   }
 
   scanPatterns(markets: string[], candlesInterval: string, diff) {
     const sub = new Subject<any[]>();
-    this.isScanning = true;
-    this.scanNextPattern(markets, -1, sub, candlesInterval, diff, []);
-
+    this.marketCap.getTicker().then(MC=>{
+      this.isScanning = true;
+      this.scanNextPattern(markets, -1, sub, candlesInterval, MC, []);
+    })
     return sub;
   }
 

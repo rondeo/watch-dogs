@@ -7,8 +7,12 @@ import {LoginFormComponent} from '../material/login-form/login-form.component';
 
 import {LoginExchangeComponent} from '../material/login-exchange/login-exchange.component';
 import {Subject} from 'rxjs';
+import {Observable} from 'rxjs/internal/Observable';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {map} from 'rxjs/operators';
 
 export enum LoginStatus {
+  NONE,
   APPLICATION_LOGIN_REQIRED,
   APPLICATION_LOGGED_IN,
   EXCHANGE_LOGIN_REQIRED,
@@ -17,9 +21,13 @@ export enum LoginStatus {
 
 
 export class VOLogin {
-  exchange: string;
-  status: LoginStatus;
+  constructor(
+    public exchange: string,
+    public status: LoginStatus,
+    public credentials: string) {
+  }
 }
+
 
 @Injectable()
 export class UserLoginService {
@@ -133,6 +141,26 @@ export class UserLoginService {
     return credentials;
   }
 
+  credentials: { [exchange: string]: BehaviorSubject<VOLogin> } = {};
+
+ /* exchageCredetials$(exchange: string): Observable<VOLogin> {
+
+    if (this.credentials[exchange]) return this.credentials[exchange].asObservable();
+    const sub = new BehaviorSubject<VOLogin>(new VOLogin(exchange, LoginStatus.NONE, null));
+
+    this.getSalt().then(salt =>{
+      const ID = CryptoJS.HmacSHA1(exchange + '-cred', salt).toString();
+      let credentials = localStorage.getItem(ID);
+      if(!credentials) sub.next(new VOLogin(exchange, LoginStatus.EXCHANGE_LOGIN_REQIRED, null));
+      else sub.next(new VOLogin(exchange, LoginStatus.EXCHANGE_LOGGED_IN, credentials));
+    });
+
+
+    this.credentials[exchange] = sub;
+
+    return this.credentials[exchange].asObservable().pipe(map(_.partial()))
+  }
+*/
   async getExchangeCredentials(exchange: string): Promise<string> {
     const salt = await this.getSalt();
     const ID = CryptoJS.HmacSHA1(exchange + '-cred', salt).toString();

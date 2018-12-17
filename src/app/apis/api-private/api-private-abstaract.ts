@@ -337,6 +337,7 @@ export abstract class ApiPrivateAbstaract {
   }
 
   getAllOrders(base: string, coin: string, from: number, to: number): Observable<VOOrder[]> {
+
     return null;
   }
 

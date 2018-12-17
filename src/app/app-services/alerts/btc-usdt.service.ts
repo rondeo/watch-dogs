@@ -83,6 +83,9 @@ export class BtcUsdtService {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  get state(){
+    return this.state$.getValue();
+  }
   init() {
 
     this.storage.select('trades-stats-bitfinex-usdt_btc').then(stats => {

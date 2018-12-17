@@ -22,10 +22,11 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
-import {map} from 'rxjs/operators';
+import {catchError, finalize, map} from 'rxjs/operators';
 import {FavoritesService} from '../../app-services/favorites.service';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
 import {VOGraphs} from '../../ui/line-chart/line-chart.component';
+import {of} from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-scan-markets',
@@ -81,18 +82,18 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   area: number[];
 
   onMACDChange(data: MACDOutput[]) {
-   //  console.log(data);
+    //  console.log(data);
     const candles = this.candles;
     const out = [];
     candles.forEach(function (item, i) {
       let action = 0;
       if (i > 3) {
         const macd = data[i];
-        const macd_1 = data[i-1];
-        const macd_2 = data[i-2];
-        if(macd.histogram > 0 && macd_1.histogram < 0){
+        const macd_1 = data[i - 1];
+        const macd_2 = data[i - 2];
+        if (macd.histogram > 0 && macd_1.histogram < 0) {
           action = 1;
-        }else if(macd.histogram < 0 && macd_1.histogram > 0) action = -1;
+        } else if (macd.histogram < 0 && macd_1.histogram > 0) action = -1;
       }
       out.push(action);
     })
@@ -155,18 +156,35 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   patterns$: Observable<any[]>;
   volumeDifference = 50;
 
+  timeout;
+
   async onPatternStartClick() {
+    const mapFunction = function (items) {
+      return items.map(function (item) {
+        return Object.assign(item, {x: 'X'});
+      })
+    };
 
     if (this.scanner.isScanning) {
       this.scanner.stop();
     } else {
+
+      console.log('%c SCAN STARTED ', 'color:pink');
+      this.snackBar.open('SCAN START', 'x', {duration: 3000});
       const markets = await this.scanner.getAvailableMarkets('binance');
       this.patterns$ = this.scanner.scanPatterns(markets, this.candlesInterval, +this.volumeDifference).asObservable()
         .pipe(
-          map(items => items.map(function (item) {
-            return Object.assign(item, {x: 'X'});
-          }))
-        );
+          map(mapFunction),
+          catchError(err => {
+            console.log(err);
+            return of([]);
+          }),
+          finalize(() => {
+            this.timeout = setTimeout(() => this.onPatternStartClick(), 10 * 60000);
+            this.snackBar.open('SCAN COMPLETE', 'x', {duration: 10000});
+            console.log('%c SCAN COMPLETE new scan in 10 min', 'color:pink');
+            return null;
+          }));
     }
 
   }
@@ -509,6 +527,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unsubscribe();
+    clearTimeout(this.timeout);
   }
 
   unsubscribe() {

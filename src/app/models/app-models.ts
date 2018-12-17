@@ -485,19 +485,18 @@ export interface VOOpenOrder {
 export class VOBalance {
   symbol: string;
   exchange: string;
-  balance: number;
+  available: number;
+  pending: number;
 
   balanceUS?: number;
   address?: string;
   index?: number;
-  available?: number;
-  pending?: number;
   priceUS?: number;
   percent_change_1h?: number;
   percent_change_24h?: number;
   percent_change_7d?: number;
   id?: string;
-  isDetails?: boolean;
+  change?: number;
 
   constructor(obj?: VOBalance) {
     if (obj) for (let str in obj) this[str] = obj[str];
