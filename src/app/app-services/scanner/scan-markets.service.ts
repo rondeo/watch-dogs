@@ -25,7 +25,7 @@ export interface VOMessage {
 
 @Injectable()
 export class ScanMarketsService {
-
+  scanning$: BehaviorSubject<any> = new BehaviorSubject(0);
   // scanners: { [index: string]: ScannerMarkets } = {};
   constructor(
     private apisPublic: ApisPublicService,
@@ -46,10 +46,10 @@ export class ScanMarketsService {
   ///////////////////// patterns scan //////////////////////
 
   async scanNextPattern(markets: string[], i, sub: Subject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
-    if (!this.isScanning) return;
+    if (!this.scanning$.getValue()) return;
     i++;
     if (i >= markets.length) {
-      this.isScanning = false;
+     this.scanning$.next(0);
       sub.complete();
       return
     }
@@ -89,23 +89,24 @@ export class ScanMarketsService {
       console.log(e);
     }
 
-    this.scanInterval = setTimeout(() => this.scanNextPattern(markets, i, sub, candlesInterval, MC, results), 2000);
+    this.scanning$.next( setTimeout(() =>
+      this.scanNextPattern(markets, i, sub, candlesInterval, MC, results), 2000));
 
   }
 
   scanPatterns(markets: string[], candlesInterval: string, diff) {
     const sub = new Subject<any[]>();
     this.marketCap.getTicker().then(MC=>{
-      this.isScanning = true;
+      this.scanning$.next(1);
       this.scanNextPattern(markets, -1, sub, candlesInterval, MC, []);
-    })
+    });
     return sub;
   }
 
   ///////////////////////////
 
   // exchange = 'binance';
-  scanInterval;
+  // scanInterval;
   progressSub: Subject<string> = new Subject<string>();
   // favoritesSub: BehaviorSubject<any> = new BehaviorSubject(null);
   marketsTrendDown: BehaviorSubject<{ market: string, percent: number, x: string }[]>
@@ -127,7 +128,7 @@ export class ScanMarketsService {
    }
  */
 ///////////////////////////////////////////////////////  GOING UP ////////////////////////////////////////////
-  isScanning = false;
+  //isScanning = false;
 
 
   first20coins = 'BTC,TUSD'; // 'ETH,LTC,EOS,XRP,BCH,BNB,ADA,NXT,TRX,DOGE,DASH,XMR,XEM,ETC,NEO,ZEC,OMG,XTZ,VET,XLM';
@@ -222,9 +223,10 @@ export class ScanMarketsService {
     i++;
     if (i >= markets.length) {
       sub.complete();
-      this.isScanning = false;
+      this.scanning$.next(false);
       return;
     }
+    this.scanning$.next(true);
     const market = markets[i];
 
     let candles: VOCandle[];
@@ -267,14 +269,14 @@ export class ScanMarketsService {
       sub.next(results);
     }
 
-    this.scanInterval = setTimeout(() => {
+    this.scanning$.next( setTimeout(() => {
       this.nextScan(markets, i, api, sub, candlesInterval, cretaria, percent);
-    }, 2000);
+    }, 2000));
 
   }
 
   startScan(markets: string[], candlesInterval: string, cretaria: string, percent: number): Subject<any[]> {
-    this.isScanning = true;
+
     this.progressSub.next('SCAN UP STARED ' + candlesInterval);
     //  const api = this.apisPublic.getExchangeApi('binance');
     const sub = new BehaviorSubject<any[]>([]);
@@ -284,9 +286,8 @@ export class ScanMarketsService {
 
 
   stop() {
-    clearInterval(this.scanInterval);
-    this.scanInterval = 0;
-    this.isScanning = false;
+    clearInterval(this.scanning$.getValue());
+    this.scanning$.next(0);
   }
 
 
@@ -294,15 +295,14 @@ export class ScanMarketsService {
   async volumeNext(markets: string[], i: number, candlesInterval: string, volumeChange: number, sub: Subject<any[]>, results: any[]) {
     i++;
     if (i >= markets.length) {
-      clearTimeout(this.scanInterval);
       sub.complete();
-      this.isScanning = false;
+      this.scanning$.next(0);
       return;
     }
 
     const market = markets[i];
     let candles;
-    this.isScanning = true;
+
     try {
       candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 120);
     } catch (e) {
@@ -310,7 +310,8 @@ export class ScanMarketsService {
     }
 
     if (!candles) {
-      this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 10000);
+      this.scanning$.next(setTimeout(() =>
+        this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 10000));
       return;
     }
 
@@ -340,11 +341,11 @@ export class ScanMarketsService {
       results.push({time, market, reason});
       sub.next(results);
     }
-    this.scanInterval = setTimeout(() => this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 2000);
+    this.scanning$.next(setTimeout(() =>
+      this.volumeNext(markets, i, candlesInterval, volumeChange, sub, results), 2000));
   }
 
   scanForVolume(markets: string[], candlesInterval: string, volumeChange: number) {
-    this.isScanning = true;
     const sub = new Subject<any[]>();
     this.volumeNext(markets, -1, candlesInterval, volumeChange, sub, []);
     return sub
@@ -397,92 +398,5 @@ export class ScanMarketsService {
     return _.difference(markets, exclude);
   }
 
-  async getMFIs() {
-    let results = this.mfiSub.getValue();
-    if (Array.isArray(results)) return Promise.resolve(results);
-    else {
-      results = (await this.storage.select('mfi-results')) || [];
-      this.mfiSub.next(results);
-    }
-    return results;
-  }
 
-  async saveMFIs(results: any[]) {
-    this.mfiSub.next(results);
-    return this.storage.upsert('mfi-results', results);
-  }
-
-  stopMFIScan() {
-    this.isScanning = false;
-    clearTimeout(this.scanMFITimer);
-    this.scanMFITimer = 0;
-  }
-
-  nextMarketMFI(markets: string[], i: number, candelsInterval: string) {
-
-    i++;
-    if (i >= markets.length) {
-      this.stopMFIScan();
-      return;
-    }
-    this.isScanning = true;
-    const market = markets[i];
-    this.currentMarket = market;
-    this.apisPublic.getExchangeApi('binance').downloadCandles(market, candelsInterval, 120).then(candles => {
-      const input = {close: [], open: [], high: [], low: [], volume: [], period: 14};
-      candles.forEach(function (item) {
-        this.close.push(item.close);
-        this.high.push(item.high);
-        this.low.push(item.low);
-        this.open.push(item.open);
-        this.volume.push(item.Volume);
-      }, input);
-
-      const mfi = new MFI(input);
-      const mfiResults = mfi.getResult();
-
-      const last10 = _.takeRight(mfiResults, 10);
-      const myValue = _.min(last10);
-      const time = moment(_.last(candles).to).format('HH:mm');
-      let message = time + ' ' + market + ' ' + myValue;
-      this.progressSub.next(message);
-      if (myValue < 20) {
-        const ind = 10 - last10.indexOf(myValue);
-
-        message += ' ' + ind + ' ago';
-        let results = this.mfiSub.getValue() || [];
-        // @ts-ignore
-        const excist = _.find(results, {market: market});
-        if (excist) {
-          excist.intervals.push(candelsInterval);
-        } else {
-          const intervals = [candelsInterval];
-          results.push({time, market, message, intervals});
-        }
-
-
-        this.saveMFIs(results);
-      }
-
-      this.scanMFITimer = setTimeout(() => this.nextMarketMFI(markets, i, candelsInterval), 2000);
-
-    });
-  }
-
-  scanForMFI(markets: string[], candelsInterval) {
-    this.nextMarketMFI(markets, -1, candelsInterval);
-  }
-
-  deleteMFIs() {
-    this.saveMFIs([]);
-
-  }
-
-  deleteMFI(market: any) {
-    let results: any[] = this.mfiSub.getValue();
-    results = _.reject(results, {market: market});
-    return this.saveMFIs(results);
-
-
-  }
 }

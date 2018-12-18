@@ -47,7 +47,7 @@
                     <td>
                         <span class="btn" (click)="onBalanceClick(balance)">
                             <small class="grey">$</small>
-                            {{balance.balance | coin2us:balance.symbol | async}}
+                            {{balance.balanceUS}}
                         </span>
                     </td>
                     <td>

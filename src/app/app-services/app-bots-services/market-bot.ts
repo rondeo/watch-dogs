@@ -16,7 +16,7 @@ import {map} from 'rxjs/operators';
 import {BuySellState, MacdSignal} from './macd-signal';
 import {BtcUsdtService, MarketState} from '../alerts/btc-usdt.service';
 import {BalanceState, MarketBalance} from './market-balance';
-import {MarketOrders} from './market-orders';
+import {MarketOrders, OrdersState} from './market-orders';
 
 
 export enum RankState {
@@ -43,7 +43,7 @@ export enum BotState {
 
 export class MarketBot {
   resistanceSupport: ResistanceSupportController;
-  rankSate: RankState = null;
+  // rankSate: RankState = null;
   ordersHistory: VOOrder[];
 
   // state$: BehaviorSubject<BotState> = new BehaviorSubject(BotState.NONE);
@@ -91,40 +91,51 @@ export class MarketBot {
   timeout;
 
 
+  get priceBase() {
+    return this.mcBase.price_usd;
+  }
+
+  get priceCoin() {
+    return this.mcCoin.price_usd;
+  }
+
   //macdSate: BuySellState;
   //usdtbtcState: MarketState;
 
-  async sellCoinInstant(reason: string = null) {
-    if (reason) this.log({action: 'SELL', reason});
+  async sellCoinInstant(qty: number) {
 
     if (this.balance.balanceUS > 10) await this.orders.cancelAllOrders();
-
-    const qty = this.balance.balance;
+    if (!qty) qty = this.balance.balance;
 
     try {
       const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
       const rate = UtilsBooks.getRateForAmountCoin(books.buy, qty);
-      this.log({action: 'SELLING', reason: ' rate' + rate});
+      this.log({action: 'SELL_INSTANT', reason: 'qty ' + qty + ' rate ' + rate});
       const sellResult = await this.apiPrivate.sellLimit2(this.market, qty, rate);
-      this.log({action: 'SELL ORDER INSTANT ', reason: JSON.stringify(sellResult)});
+      console.log(sellResult);
+      this.log({action: 'RESULT SELL_INSTANT ', reason: sellResult.amountCoin + '  ' + sellResult.rate});
 
     } catch (e) {
-      this.log({action: 'ERROR', reason: 'download books and buy coin  ' + e.toString()});
+      this.log({action: 'ERROR SELL_INSTANT', reason: e.toString()});
     }
     // this.state$.next(BotState.SOLD);
   }
 
-  getAmountCoin() {
+  get amountCoin() {
     if (!this.mcCoin) {
       console.warn(' no MC data');
       return 0;
     }
-    return +(this.amountCoinUS / this.mcCoin.price_usd).toFixed(2);
+
+    let amount = (this.amountCoinUS / this.mcCoin.price_usd);
+    if (amount > 10) amount = Math.round(amount);
+    else amount = +amount.toFixed(2);
+    return amount
   }
 
-  async buyCoinInstant(reason: string = null) {
-    if (reason) this.log({action: 'BUY', reason})
-    const qty = this.getAmountCoin();
+  async buyCoinInstant(qty: number) {
+    if (!qty) qty = this.amountCoin;
+
     if (!qty) {
       console.warn(' no QTY');
       return null;
@@ -140,17 +151,25 @@ export class MarketBot {
   }
 
   async setBuyOrder(rate: number) {
-    this.log({action: 'BUY_ORDER', reason: 'rate ' + rate});
+    const qty = this.amountCoin;
+    this.log({action: 'BUY_ORDER', reason: ' qty ' + qty + ' rate ' + rate});
     if (!this.isLive) return Promise.resolve();
     return new Promise(async (resolve, reject) => {
-      const qty = (this.amountCoinUS / this.mcCoin.price_usd);
-      const order = await this.apiPrivate.buyLimit2(this.market, qty, rate);
-      resolve(order);
+      try{
+        const order = await this.apiPrivate.buyLimit2(this.market, qty, rate);
+        console.log('BUY ORDER RESULT ', order);
+        this.log({action: 'BUY_ORDER_RESULT', reason: JSON.stringify(order)});
+        this.apiPrivate.refreshAllOpenOrders();
+      } catch (e) {
+        this.log({action: 'ERROR BUY_ORDER_RESULT', reason: e.toString()});
+        reject();
+      }
+      setTimeout(()=>resolve(), 2000);
     });
   }
 
   async setSellOrder(rate: number) {
-    this.log({action: 'SELL_ORDER', reason: 'rate ' + rate});
+    this.log({action: 'SELL_ORDER', reason: 'rate ' + rate + ' live:' + this.isLive});
     if (!this.isLive) return Promise.resolve();
     return new Promise(async (resolve, reject) => {
 
@@ -169,22 +188,20 @@ export class MarketBot {
 
   async tick() {
     setTimeout(() => this.save(), 5000);
-
     if (this.isLive) console.log(this.market + ' ' + this.balance.state + ' ' + this.orders.state);
 
     const btcusdtState = this.btcusdt.state;
 
     if (btcusdtState === MarketState.DROPPING) {
       console.log(this.market + ' USDT_BTC DROPPING');
-      //const botState = this.state$.getValue();
 
       if (this.balance.state === BalanceState.SOLD) {
         console.log(this.market + ' SOLD');
         return;
       }
       await this.orders.cancelAllOrders();
-      this.sellCoinInstant('USDT_BTC DROPPING');
-      return
+      this.sellCoinInstant(0);
+      return;
     }
 
     const candles = await this.candlesService.getCandles(this.market);
@@ -192,8 +209,6 @@ export class MarketBot {
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
     this.prevPrice = lastCandle.close;
-
-
 
     if (!this.mcCoin) {
       console.log('%c ' + this.market + ' NO MarketCap DATA', 'color:red');
@@ -203,54 +218,85 @@ export class MarketBot {
     const candles15m = await this.candlesService.getCandles2(this.exchange, this.market, '15m');
     const closes = CandlesAnalys1.closes(candles15m);
 
-    const signal = this.macdSignal.tick(closes);
     const last15m = _.last(candles15m);
+    const signal = this.macdSignal.tick(closes, last15m);
+
     const mas = CandlesAnalys1.mas(candles15m);
     let macdState = this.macdSignal.state$.getValue();
+
     if (this.isLive) console.log(this.market + ' macd ' + macdState + ' ' + this.macdSignal.reason);
 
 
-
     if (macdState === BuySellState.BUY_NOW) {
-
       this.log({action: 'BUY NOW', reason: this.macdSignal.reason});
       console.log('%c ' + this.market + ' ' + BuySellState.BUY_NOW, 'color:red');
 
-      if (this.balance.state !== BalanceState.SOLD) {
-        this.log({action: 'CANCEL_BUY', reason: 'NOT SOLD'});
+
+      if (this.balance.state === BalanceState.BOUGHT) {
+        this.log({action: 'CANCEL_BUY', reason: this.orders.state});
         return;
       }
 
-      const buyPrice = +((last15m.close + last15m.open) / 2).toFixed(8);
-      const lastCandle = moment(last15m.to).format('HH:mm') + ' O ' + last15m.open + ' C ' + last15m.close;
-      this.log({action: 'Last Candle', reason: lastCandle});
+      if(this.orders.state === OrdersState.BUYING) {
+        this.log({action: 'CANCEL_BUY', reason: this.orders.state});
+        return;
+      }
+
+      const balanceBaseUS = this.balance.baseBalance * this.priceBase;
+      if (balanceBaseUS < this.amountCoinUS) {
+        this.log({action: 'CANCEL_BUY', reason: 'NO amount base'});
+        return
+      }
+
+      this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
+      if (this.mcCoin.r6 < 0) {
+        this.log({action: 'CANCEL_BUY', reason: 'r6 ' + this.mcCoin.r6});
+        return;
+      }
+
+      const buyPrice = this.macdSignal.price;
       const vols = CandlesAnalys1.volumes(candles15m);
       const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
 
       this.log({action: 'MAS ', reason: 'MA25-99 ' + MATH.percent(mas.ma25, mas.ma99) + ' Vd ' + Vd});
 
-      this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
       this.log({action: 'USDT_BTC', reason: btcusdtState});
-      if (this.mcCoin.r6 >= 0) this.setBuyOrder(buyPrice);
-      else this.log({action: 'NOT BUY', reason: this.mcCoin.r6 + ' < 0'})
+      this.setBuyOrder(buyPrice);
+
       //  this.buyCoinInstant(' P ' + buyPrice + ' Vd ' + Vd);
     }
 
     else if (macdState === BuySellState.SELL_NOW) {
       this.log({action: 'SELL NOW', reason: this.macdSignal.reason});
 
-      if (this.balance.state === BalanceState.BOUGHT) {
-        console.log('%c ' + this.market + ' ' + BuySellState.SELL_NOW, 'color:red');
-        const midPrice = +((last15m.close + last15m.open) / 2).toFixed(8);
-        const vols = CandlesAnalys1.volumes(candles15m);
-        const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
-
-        this.log({action: 'MAS', reason: 'MA25-99' + MATH.percent(mas.ma25, mas.ma99)});
-        this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
-        this.log({action: 'USDT_BTC', reason: btcusdtState});
-
-        this.setSellOrder(midPrice);
+      if (this.balance.state !== BalanceState.BOUGHT) {
+        this.log({action: 'CANCEL_SELL', reason: this.balance.state});
+        return;
       }
+
+      if(this.orders.state === OrdersState.SELLING) {
+        this.log({action: 'CANCEL_SELL', reason: this.orders.state});
+        return;
+      }
+
+      console.log('%c ' + this.market + ' ' + BuySellState.SELL_NOW, 'color:red');
+      const midPrice = this.macdSignal.price;
+      const vols = CandlesAnalys1.volumes(candles15m);
+      const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
+
+      this.log({action: 'MAS', reason: 'MA25-99' + MATH.percent(mas.ma25, mas.ma99)});
+      this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
+      this.log({action: 'USDT_BTC', reason: btcusdtState});
+      this.setSellOrder(midPrice);
+    } else {
+      const stopLossPrice = mas.ma25;
+
+      if (this.orders.state === OrdersState.STOP_LOSS) {
+        this.stopLossOrder.checkStopLoss(stopLossPrice, this.balance.balance);
+      } else if (this.orders.state === OrdersState.NONE && this.balance.state === BalanceState.BOUGHT) {
+        this.stopLossOrder.setStopLoss(stopLossPrice, this.balance.balance)
+      }
+
 
     }
 
@@ -308,19 +354,19 @@ export class MarketBot {
       map(obj => {
         if (!obj) return;
         this.mcCoin = obj[this.coin];
-        const prevSate = this.rankSate;
-        let newSate = RankState.NONE;
+        /* const prevSate = this.rankSate;
+         let newSate = RankState.NONE;
 
-        if (this.mcCoin.r6 < 0) newSate = RankState.RED;
-        else if (this.mcCoin.r6 > 0) newSate = RankState.GREEN;
-        if (this.rankSate && this.rankSate !== newSate) {
-          this.log({
-            action: prevSate + '->' + newSate, reason: this.mcCoin.rank + ' r6 ' + this.mcCoin.r6 + ' r24 ' +
-              this.mcCoin.r24 + ' ' + moment(this.mcCoin.last_updated * 1000).format('DD HH:mm')
-          });
-        }
-        this.rankSate = newSate;
-
+         if (this.mcCoin.r6 < 0) newSate = RankState.RED;
+         else if (this.mcCoin.r6 > 0) newSate = RankState.GREEN;
+         if (this.rankSate && this.rankSate !== newSate) {
+           this.log({
+             action: prevSate + '->' + newSate, reason: this.mcCoin.rank + ' r6 ' + this.mcCoin.r6 + ' r24 ' +
+               this.mcCoin.r24 + ' ' + moment(this.mcCoin.last_updated * 1000).format('DD HH:mm')
+           });
+         }
+         this.rankSate = newSate;
+ */
         this.mcBase = obj[this.base];
       })
     ).subscribe(noop);
@@ -332,23 +378,27 @@ export class MarketBot {
     this.base = ar[0];
     this.coin = ar[1];
     await this.initMarketCap();
+
+    console.log(this.market + ' init ' + this.isLive + ' $' + this.amountCoinUS);
     this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
-
-    const MC = await this.marketCap.ticker$().toPromise();
+    const MC = await this.marketCap.ticker();
     const priceUS = MC[this.coin].price_usd;
-
     this.balance = new MarketBalance(this.market, this.apiPrivate, this.storage, priceUS);
     this.orders = new MarketOrders(this.market, this.apiPrivate, this.storage, priceUS);
+    await this.orders.init();
+    console.log(this.market + ' ORDESR init DONE');
     this.macdSignal = new MacdSignal();
     await this.balance.init();
 
-    this.balance.balance$.subscribe(balance =>{
-      if(balance.change){
+
+    console.log(this.market + ' BALANCE  init DONE')
+    this.balance.balance$.subscribe(balance => {
+      if (balance.change) {
         console.warn(this.market + ' balanec changed ' + balance.change)
       }
     });
-
     this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
+    this.stopLossOrder.log = this.log.bind(this);
   }
 
   stop() {
@@ -360,8 +410,9 @@ export class MarketBot {
 
   async start() {
     if (this.interval) return;
-    const sec = (60 + (Math.random() * 10));
+    const sec = Math.round(60 + (Math.random() * 20));
 
+    console.log(this.market + ' start refresh rate ' + sec);
     this.interval = setInterval(() => this.tick(), sec * 1000);
   }
 
@@ -397,24 +448,24 @@ export class MarketBot {
   }
 
   destroy() {
-    if(this.balance.balance){
-      this.orders.cancelAllOrders().then(res =>{
-        this.sellCoinInstant('destroy')
+    if (this.balance.balance) {
+      this.orders.cancelAllOrders().then(res => {
+        this.sellCoinInstant(0);
       });
       console.log(' SELLING COIN');
       return;
     }
 
-
     this.log({action: 'destroy', reason: ''});
     this.storage.remove(this.id);
     this.deleteHistory();
     this.balance.destroy();
+    this.stopLossOrder.destroy();
     this.stop();
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
     if (this.resistanceSupport) this.resistanceSupport.destroy();
-    if (this.stopLossOrder) this.stopLossOrder.destroy();
+
     return true;
   }
 

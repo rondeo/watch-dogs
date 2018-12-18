@@ -1,1 +1,1 @@
-<a routerLink="/trader/scan-markets" class="fa fa-barcode fa-2x btn" [ngClass]="scanMarkets.scanInterval?'red':'yellow'" ></a>
+<a routerLink="/trader/scan-markets" class="fa fa-barcode fa-2x btn" [ngClass]="(scanMarkets.scanning$ | async)?'red':'yellow'" ></a>

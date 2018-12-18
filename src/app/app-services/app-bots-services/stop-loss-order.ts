@@ -16,29 +16,22 @@ export class StopLossOrder {
     this.subscribe();
   }
 
-  orders: VOOrder[];
-  percentStopLoss = -3;
+  orders: VOOrder[] = [];
+  percentStopLoss = -2;
   prevValue: number;
 
-  log(message: string) {
-    console.log(message);
-  }
-
   subscribe() {
-    const coin = this.market.split('_')[1];
-
     this.apiPrivate.openOrdersSub.subscribe(orders => {
       if (!Array.isArray(orders)) return;
-      // @ts-ignore
-      this.orders = _.filter(orders, {coin: coin});
+
+      this.orders = orders.filter(function (item) {
+        return item.market === this.market && item.stopPrice
+      }, {market: this.market});
     });
   }
 
-  stopLossOrders(): VOOrder[] {
-    if(!this.orders) return[];
-    return this.orders.filter(function (item) {
-      return item.stopPrice;
-    })
+  log(data: { action: string, reason: string }) {
+    console.log(data.action + ' ' + data.reason)
   }
 
   calculatePrice(candles: VOCandle[]): number {
@@ -47,21 +40,15 @@ export class StopLossOrder {
   }
 
   private async cancelOrder(uuid: string) {
-    this.log(' CANCELING ORDER ' + uuid);
+    this.log({action: 'CANCELING ORDER ', reason: uuid});
     const ar = this.market.split('_');
     return this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
   }
 
   async cancelSopLossOrders() {
+    if (!this.orders.length) return Promise.resolve();
     return new Promise(async (resolve, reject) => {
-      const orders = this.stopLossOrders();
-      if (!orders.length) {
-        this.log('NO STOP_LOSS to cancel ');
-        resolve();
-        return;
-      }
-
-      Promise.all(orders.map((order) => {
+      Promise.all(this.orders.map((order) => {
         return this.cancelOrder(order.uuid)
       })).then(result => {
         setTimeout(() => {
@@ -74,72 +61,41 @@ export class StopLossOrder {
   }
 
 
-  async checkStopLoss(candles: VOCandle[], balanceCoin: VOBalance) {
-    if(!balanceCoin) return Promise.resolve();
-    const balanceTotal = balanceCoin.available + balanceCoin.pending;
-
-    const closes = CandlesAnalys1.closes(_.takeRight(candles, 99));
-    let ma99 = _.mean(closes);
-    const lastPrice = _.last(closes);
-    let price = ma99;
-    if (lastPrice < ma99) price = lastPrice;
-
-    const orders = this.stopLossOrders();
-    if (orders.length > 1) {
-      return this.cancelSopLossOrders();
-    }
-
-    if(orders.length === 0){
-      return this.setStopLoss(price, balanceTotal);
-    }
-
-    let order = orders[0];
+  async checkStopLoss(price: number, qty: number) {
+    if (!this.orders.length) throw new Error('no stop loss');
+    let order = this.orders[0];
     // const last_ma99 = MATH.percent(lastPrice, ma99);
     const diff = MATH.percent(order.stopPrice, price);
     const message = ' STOP_LOSS ' + this.percentStopLoss + ' diff ' + diff;
     console.log(this.market + message);
     this.prevValue = diff;
-
-    if (diff < (this.percentStopLoss - 2)) {
-      this.log(' RESETTING STOP_LOSS price: ' + price + ' qty ' + balanceTotal);
-      await this.cancelSopLossOrders();
-      return new Promise((resole, reject) => {
-        setTimeout(() => {
-          this.apiPrivate.refreshAllOpenOrders();
-          setTimeout(() => {
-            this.setStopLoss(price, balanceTotal).then(res => {
-              resole();
-            });
-          }, 2000)
-
-        })
-      })
-
-
+    if (diff < (this.percentStopLoss - 3)) {
+      this.log({action: 'RESETTING STOP_LOSS', reason: ' price ' + price});
+      return this.cancelSopLossOrders();
     }
   }
 
   async setStopLoss(price: number, qty: number) {
-    const orders = this.stopLossOrders();
-    if(orders.length) return Promise.reject('ERROR REMOVE ORDER FIRST ' + JSON.stringify(orders));
+    const orders = this.orders;
+    if (orders.length) return Promise.reject('ERROR REMOVE ORDER FIRST ' + JSON.stringify(orders));
     return new Promise(async (resolve, reject) => {
-        const newStopLoss: number = price + (price * this.percentStopLoss / 100);
+      const newStopLoss: number = +(price + (price * this.percentStopLoss / 100)).toFixed(8);
+      const sellPrice = +(newStopLoss + (newStopLoss * -0.01)).toFixed(8);
+      this.log({action: ' setStopLoss ', reason: ' P ' + newStopLoss + ' qty: ' + qty + ' Ps ' + sellPrice});
 
-        this.log(' setStopLoss ' + newStopLoss + ' qty: ' + qty);
-
-        const sellPrice = newStopLoss + (newStopLoss * -0.01);
-        const api = this.apiPrivate;
-        // console.log(' SET STOP LOSS ' + market, currentPrice,  stopPrice, sellPrice);
+      const api = this.apiPrivate;
       let result;
-        try {
-          result = await api.stopLoss(this.market, qty, newStopLoss, sellPrice);
-        } catch (e) {
-          reject(e.toString());
-        }
-        this.apiPrivate.refreshAllOpenOrders();
-        setTimeout(() => {
-          resolve(result);
-        }, 5000);
+      try {
+        result = await api.stopLoss(this.market, qty, newStopLoss, sellPrice);
+        this.log({action: 'RESULT SL', reason: JSON.stringify(result)});
+      } catch (e) {
+        reject(e.toString());
+      }
+
+      this.apiPrivate.refreshAllOpenOrders();
+      setTimeout(() => {
+        resolve(result);
+      }, 2000);
 
     })
 

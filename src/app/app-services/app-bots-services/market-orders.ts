@@ -47,12 +47,16 @@ export class MarketOrders {
       //  console.log(this.market + ' my order ', myOrder);
       const oldOrders = this.openOrders$.getValue();
       if (oldOrders.length !== myOrders.length) {
-        this.openOrders$.next(myOrders)
+        this.openOrders$.next(myOrders);
         this.storage.upsert(this.id + '-open-orders', myOrders);
       }
-    })
+    });
 
     this.openOrders$.subscribe(orders =>{
+      if(orders.length === 0){
+        if(this.state !== OrdersState.NONE) this.state$.next(OrdersState.NONE);
+        return
+      }
       const sellOrders = _.filter(orders, {action:'SELL'});
       const buyOrdres = _.filter(orders, {action:'BUY'});
       const stopLoss = sellOrders.filter(function (item) {
@@ -74,6 +78,7 @@ export class MarketOrders {
       }
 
       if(this.state$.getValue() !== newState) this.state$.next(newState);
+
 
     })
   }

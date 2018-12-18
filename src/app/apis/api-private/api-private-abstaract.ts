@@ -17,20 +17,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 export abstract class ApiPrivateAbstaract {
 
   abstract exchange: string;
-  // balances: VOBalance[];
-
-
   apiPublic: any;
-
-  /* credetialsSub:BehaviorSubject<{apiKey:string, password: string}> = new BehaviorSubject(null);
-   credentials$(){
-
-     return this.credetialsSub.asObservable();
-   }
-
-   */
-
-
   loginSub: Subject<boolean> = new Subject()
 
   userLogin$() {
@@ -40,7 +27,10 @@ export abstract class ApiPrivateAbstaract {
   private credentials: { apiKey: string, password: string };
 
   constructor(private userLogin: UserLoginService) {
-
+    this.refreshBalancesInterval = setInterval(() => this.refreshBalances(), 60000);
+    setInterval(() => {
+      this.refreshAllOpenOrders();
+    }, 5 * 60000);
   }
 
   /* sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
@@ -101,18 +91,18 @@ export abstract class ApiPrivateAbstaract {
   abstract getOrder(orderId, base: string, coin: string): Observable<VOOrder>;
 
 
-  stopRefreshInterval() {
+ /* stopRefreshInterval() {
     clearInterval(this.refreshBalancesInterval);
     this.refreshBalancesInterval = null;
-  }
+  }*/
 
   refreshBalancesInterval;
 
-  startRefreshBalances(delay?: number) {
+  /*startRefreshBalances(delay?: number) {
     if (!delay) delay = 60;
     if (this.refreshBalancesInterval) return;
-    this.refreshBalancesInterval = setInterval(() => this.refreshBalances(), delay * 1000);
-  }
+
+  }*/
 
 
   private _refreshBalances(){
@@ -170,11 +160,7 @@ export abstract class ApiPrivateAbstaract {
   private _refreshAllOpenOrders(){
     console.log('%c _refreshAllOpenOrders ', 'color:red')
     this.downloadAllOpenOrders().subscribe(res => {
-      if (res.length) {
-        setTimeout(() => {
-          this.refreshAllOpenOrders();
-        }, 120000);
-      }
+
       const old: VOOrder[] = this.openOrdersSub.getValue();
       if(old && res.length !== old.length)this.refreshBalances();
       this.openOrdersSub.next(res);

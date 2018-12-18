@@ -143,6 +143,13 @@ export class ApiMarketCapService {
       });
   }
 
+  ticker():Promise<VOMCObj>{
+    return new Promise((resolve, reject)=>{
+      this.tikerSub.subscribe(res =>{
+        if(res) resolve(res);
+      })
+    })
+  }
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
    /* if(!this.myTicker$) {
 

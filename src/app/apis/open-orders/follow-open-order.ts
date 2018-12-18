@@ -17,7 +17,6 @@ import {UtilsBooks} from '../../com/utils-books';
 import {Subject, Subscription} from 'rxjs';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
-import {getMatIconFailedToSanitizeLiteralError} from '@angular/material';
 
 export class FollowOpenOrder {
   constructor(
@@ -108,7 +107,7 @@ export class FollowOpenOrder {
       return;
     }
 
-    await this.stopLossOrder.checkStopLoss(this.candles, this.balanceCoin);
+  //   await this.stopLossOrder.checkStopLoss(this.candles, this.balanceCoin);
    /* if (this.balanceCoin.available + this.balanceCoin.pending > this.amountCoin * 0.1) {
       const OK = await this.stopLossOrder.checkStopLoss(this.candles, this.balanceCoin);
       if (!OK) return;
@@ -211,7 +210,7 @@ export class FollowOpenOrder {
 
     this.stopLossOrder = new StopLossOrder(this.market,  this.apiPrivate);
     this.stopLossOrder.log = (msg) => {
-      this.log(msg, true);
+     //  this.log(msg, true);
     };
     this.start();
   }

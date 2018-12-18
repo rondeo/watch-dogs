@@ -165,9 +165,10 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       })
     };
 
-    if (this.scanner.isScanning) {
+    if (this.scanner.scanning$.getValue()) {
       this.scanner.stop();
-    } else {
+      return;
+    }
 
       console.log('%c SCAN STARTED ', 'color:pink');
       this.snackBar.open('SCAN START', 'x', {duration: 3000});
@@ -180,12 +181,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
             return of([]);
           }),
           finalize(() => {
-            this.timeout = setTimeout(() => this.onPatternStartClick(), 10 * 60000);
+           //  this.timeout = setTimeout(() => this.onPatternStartClick(), 10 * 60000);
             this.snackBar.open('SCAN COMPLETE', 'x', {duration: 10000});
             console.log('%c SCAN COMPLETE new scan in 10 min', 'color:pink');
             return null;
           }));
-    }
+
 
   }
 
@@ -278,7 +279,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   ////////////////////////////////////////////////// TREND  ///////////////////////////////////////////////////////
 
   async onScanStart() {
-    if (this.scanner.isScanning) {
+    if (this.scanner.scanning$.getValue()) {
       this.scanner.stop();
       return;
     }
@@ -293,68 +294,13 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     }
   }
 
-  /////////////////////////////////
-  onMFIChange(evt) {
-    if (evt.checked) {
-      if (!this.mfySub) {
-        this.mfySub = this.scanner.mfiSub.subscribe(this.setMFIs.bind(this));
-        this.scanner.getMFIs();
-      }
 
-    }
-  }
-
-  setMFIs(results: any[]) {
-    if (!results) return;
-    this.MFIResults = results.map(function (item) {
-      return Object.assign(item, {x: 'X'});
-    });
-  }
-
-  async onMFIStartClick() {
-    if (this.scanner.scanMFITimer) {
-      this.scanner.stopMFIScan();
-      return;
-    }
-
-    const markets = this.scanOnlyUP ?
-      _.map(await this.scanner.getSelected(), 'market') : await this.scanner.getAvailableMarkets('binance');
-    // console.log(markets);
-    this.scanner.scanForMFI(markets, this.mfiCandlesInterval);
-  }
-
-  onDeleteMFIsClick() {
-    if (confirm('Delete Volumes?')) {
-      this.scanner.deleteMFIs();
-    }
-
-  }
-
-  onMFIClick(evt) {
-    const market = evt.item.market;
-    switch (evt.prop) {
-      case 'market':
-        this.showMarket(market);
-        return;
-      case 'x':
-        if (confirm(' DELETE ' + market)) {
-          this.scanner.deleteMFI(market)
-            .then(this.setMFIs.bind(this));
-        }
-        return;
-      case 'result':
-        this.dialog.open(NotesHistoryComponent, {data: evt.item});
-        return;
-
-    }
-
-  }
 
   async onVolumeChange(evt) {
   }
 
   async onVolumeStartClick() {
-    if (this.scanner.isScanning) {
+    if (this.scanner.scanning$.getValue()) {
       this.scanner.stop();
       return;
     }

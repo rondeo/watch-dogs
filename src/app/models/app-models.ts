@@ -487,7 +487,6 @@ export class VOBalance {
   exchange: string;
   available: number;
   pending: number;
-
   balanceUS?: number;
   address?: string;
   index?: number;

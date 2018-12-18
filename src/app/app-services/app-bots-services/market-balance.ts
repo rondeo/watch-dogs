@@ -4,7 +4,6 @@ import {VOBalance, VOOrder} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
 import {StopLossOrder} from './stop-loss-order';
 import * as _ from 'lodash';
-import {BotState} from './market-bot';
 
 export enum BalanceState {
   NONE = 'NONE',
@@ -21,6 +20,7 @@ export class MarketBalance {
   base: string;
   sub1;
   sub2;
+  id: string;
 
   constructor(
     private market: string,
@@ -31,6 +31,11 @@ export class MarketBalance {
     const ar = market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
+    this.id = apiPrivate.exchange + this.coin + '-balance'
+  }
+
+  get baseBalance() {
+    return this.balanceBase.available
   }
 
   get available() {
@@ -38,21 +43,24 @@ export class MarketBalance {
   }
 
   get balance() {
-    return this.balance$.getValue().available + this.balance$.getValue().pending
+    let total = this.balance$.getValue().available + this.balance$.getValue().pending;
+    if (total * this.priceUS < 10) total = 0;
+    return total;
   }
 
   get balanceUS() {
     return (this.balance$.getValue().available + this.balance$.getValue().pending) * this.priceUS
   }
 
-  get state(){
+  get state(): BalanceState {
     return this.state$.getValue();
   }
 
   async init() {
+    this.state$ = new BehaviorSubject(BalanceState.NONE);
     const exchange = this.apiPrivate.exchange;
     this.balance$ = new BehaviorSubject<VOBalance>(
-      await this.storage.select(exchange + this.coin + '-balance') || new VOBalance({
+      (await this.storage.select(this.id)) || new VOBalance({
         exchange: exchange,
         symbol: this.coin,
         available: 0,
@@ -76,20 +84,24 @@ export class MarketBalance {
         exchange: exchange,
         symbol: this.coin,
         available: 0,
-        pending: 0
+        pending: 0,
+        change: 0
       });
+
       const balance = this.balance$.getValue();
       if (bc.available !== balance.available || bc.pending !== balance.pending) {
         bc.change = (bc.available + bc.pending) - (balance.available + balance.pending);
         this.balance$.next(bc);
-        this.storage.upsert(exchange + this.coin + '-balance', bc);
       }
+
+      this.storage.upsert(this.id, bc);
+
     });
   }
 
   destroy() {
     if (this.sub1) this.sub1.unsubscribe();
-    this.storage.remove(this.apiPrivate.exchange + this.coin + '-balance');
+    this.storage.remove(this.id);
     this.storage = null;
     this.apiPrivate = null;
   }
