@@ -181,7 +181,15 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       orderId: orderId
     };
     return this.call(url, data, RequestType.DELETE).pipe(map(res => {
-      return res
+      return {
+        uuid: res.orderId,
+        action: res.status,
+        isOpen: false,
+        base: base,
+        coin:coin,
+        market: base+'_'+coin,
+        timestamp: Date.now()
+      }
     }));
   }
 

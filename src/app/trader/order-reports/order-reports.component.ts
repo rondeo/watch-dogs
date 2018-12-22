@@ -94,8 +94,7 @@ export class OrderReportsComponent implements OnInit {
   onBuyClick() {
     const bot = this.currentBot;
     if (!bot) return;
-    const reason = prompt('Reason');
-    bot.buyCoinInstant(reason).then(res => {
+    bot.buyCoinInstant(0).then(res => {
       this.showBotHistory();
     })
   }
@@ -103,8 +102,8 @@ export class OrderReportsComponent implements OnInit {
   onSellClick() {
     const bot = this.currentBot;
     if (!bot) return;
-    const reason = prompt('Reason');
-    bot.sellCoinInstant(reason).then(res => {
+   // const reason = prompt('Reason');
+    bot.sellCoinInstant(0).then(res => {
       this.showBotHistory();
     })
   }

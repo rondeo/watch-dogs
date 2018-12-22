@@ -4,6 +4,8 @@ import {VOBalance, VOOrder} from '../../models/app-models';
 import {StorageService} from '../../services/app-storage.service';
 import {StopLossOrder} from './stop-loss-order';
 import * as _ from 'lodash';
+import {MarketCapService} from '../../market-cap/services/market-cap.service';
+import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 
 export enum BalanceState {
   NONE = 'NONE',
@@ -16,6 +18,7 @@ export class MarketBalance {
   state$: BehaviorSubject<BalanceState>;
   balance$: BehaviorSubject<VOBalance>;
   balanceBase: VOBalance;
+  priceUS:number;
   coin: string;
   base: string;
   sub1;
@@ -26,12 +29,16 @@ export class MarketBalance {
     private market: string,
     private apiPrivate: ApiPrivateAbstaract,
     private storage: StorageService,
-    private priceUS: number
+   private marketCap: ApiMarketCapService
   ) {
     const ar = market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
     this.id = apiPrivate.exchange + this.coin + '-balance'
+    marketCap.ticker$().subscribe(MC =>{
+      if(!MC) return;
+      this.priceUS = MC[this.coin].price_usd;
+    })
   }
 
   get baseBalance() {
@@ -48,8 +55,11 @@ export class MarketBalance {
     return total;
   }
 
+  get availableUS(){
+    return +((this.balance$.getValue().available) * this.priceUS).toFixed(2)
+  }
   get balanceUS() {
-    return (this.balance$.getValue().available + this.balance$.getValue().pending) * this.priceUS
+    return +((this.balance$.getValue().available + this.balance$.getValue().pending) * this.priceUS).toFixed(2)
   }
 
   get state(): BalanceState {
@@ -57,6 +67,7 @@ export class MarketBalance {
   }
 
   async init() {
+
     this.state$ = new BehaviorSubject(BalanceState.NONE);
     const exchange = this.apiPrivate.exchange;
     this.balance$ = new BehaviorSubject<VOBalance>(

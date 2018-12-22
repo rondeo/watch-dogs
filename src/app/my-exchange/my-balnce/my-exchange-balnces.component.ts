@@ -118,7 +118,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
         const coinMC = MC[item.symbol];
         if (coinMC) {
           item.id = coinMC.id;
-          item.balanceUS = Math.round(item.available * coinMC.price_usd);
+          item.balanceUS = Math.round((item.pending + item.available) * coinMC.price_usd);
         } else {
           if(item.symbol === 'USD')  {
             item.balanceUS = item.available;

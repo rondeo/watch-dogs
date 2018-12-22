@@ -3,12 +3,15 @@ import * as _ from 'lodash';
 
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {VOBalance, VOBooks, VOOrder} from '../../models/app-models';
+import {VOBalance, VOBooks, VOMarketCap, VOOrder} from '../../models/app-models';
 import {CandlesService} from '../candles/candles.service';
 import {map} from 'rxjs/operators';
 import {pipe} from 'rxjs/internal-compatibility';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {Subject} from 'rxjs/internal/Subject';
+import {MarketBalance} from './market-balance';
+import {MarketOrders} from './market-orders';
+import {StopLossOrder} from './stop-loss-order';
 
 
 
@@ -20,9 +23,14 @@ export class UsdtBtcBot {
   private base = 'USDT';
   private coin = 'BTC';
   private releaseAmountUS = 120;
-  private stopLossOrders: VOOrder[];
-  private currentOrders: VOOrder[];
   private percentStopLoss = -2;
+
+  private mcCoin: VOMarketCap;
+  private mcBace: VOMarketCap;
+
+  balances: MarketBalance;
+  marketOrders: MarketOrders;
+  stopLoss: StopLossOrder;
 
   private get market() {
     return this.base + '_' + this.coin;
@@ -41,20 +49,19 @@ export class UsdtBtcBot {
   }
 
   async tick() {
-    return;
     if (!this.balanceBase || !this.balanceCoin) {
       console.log(this.market + ' BALANCES not ready');
       return;
     }
-    const progressOrders = this.currentOrders.filter(function (item) {
+     /*  const progressOrders = this.currentOrders.filter(function (item) {
       return !item.action;
-    });
+    });*/
 
-    if (progressOrders.length) {
+   /* if (progressOrders.length) {
       console.log(' progress orders ', progressOrders);
       this.apiPrivate.refreshAllOpenOrders();
       return
-    }
+    }*/
 
     const fullAmount = (this.balanceCoin.available + this.balanceCoin.pending) * this.priceCounUS;
     // console.log(' full amount ' + fullAmount);
@@ -65,11 +72,11 @@ export class UsdtBtcBot {
     }
 
 
-    await this.chekStopLoss();
+   // await this.chekStopLoss();
     const candles = await this.candlesService.getCandles(this.market);
   }
 
-  async cancelStopLosses() {
+ /* async cancelStopLosses() {
     const orders = this.stopLossOrders;
     this.stopLossOrders = [];
     console.log(' CANCEL STOP_LOSS ', orders);
@@ -151,7 +158,7 @@ export class UsdtBtcBot {
     }
 
     return true;
-  }
+  }*/
 
   async buyCoin() {
     console.log(this.market + ' buyCoin');
@@ -159,8 +166,8 @@ export class UsdtBtcBot {
     const amountCoin = (this.releaseAmountUS + 20 - availableUS) / this.priceCounUS;
     const rate = _.last(await this.candlesService.getCandles(this.market)).close;
     const order = await this.apiPrivate.buyLimit2(this.market, amountCoin, rate);
-    if (!this.currentOrders) this.currentOrders = [];
-    this.currentOrders.push(order);
+    //if (!this.currentOrders) this.currentOrders = [];
+   // this.currentOrders.push(order);
     console.log(this.market, order);
   }
 
@@ -198,9 +205,9 @@ export class UsdtBtcBot {
     if (this.sub3) this.sub3.unsubscribe();
   }
 
-  async subscribe() {
+  async init() {
     this.sub2 = this.marketCap.ticker$().pipe(
-      map(obj => obj ? obj['BTC'].price_usd : 0)
+      map(obj => obj ? obj['BTC'] : 0)
     )
       .subscribe(price => this.priceCounUS = price);
 
@@ -219,16 +226,16 @@ export class UsdtBtcBot {
       ).subscribe(orders => {
         if (!orders) return;
         console.log(this.market, orders);
-        this.currentOrders = orders;
-        this.stopLossOrders = orders.filter(function (item) {
-          return !!item.stopPrice;
-        })
+       // this.currentOrders = orders;
+       // this.stopLossOrders = orders.filter(function (item) {
+        //  return !!item.stopPrice;
+       // })
       });
   }
 
   start() {
     if (this.interval) return;
-    this.subscribe();
+    //this.subscribe();
     this.interval = setInterval(() => this.tick(), 15000);
   }
 
@@ -240,7 +247,7 @@ export class UsdtBtcBot {
 
   stopFollow() {
     if(this.interval) {
-      this.cancelStopLosses();
+    //  this.cancelStopLosses();
       this.stop();
     } else this.start();
 

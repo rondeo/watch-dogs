@@ -18,6 +18,7 @@ export class StopLossOrder {
 
   orders: VOOrder[] = [];
   percentStopLoss = -2;
+  percentStopLoss2 = -3;
   prevValue: number;
 
   subscribe() {
@@ -70,16 +71,17 @@ export class StopLossOrder {
     console.log(this.market + message);
     this.prevValue = diff;
     if (diff < (this.percentStopLoss - 3)) {
+      this.percentStopLoss = this.percentStopLoss2;
       this.log({action: 'RESETTING STOP_LOSS', reason: ' price ' + price});
       return this.cancelSopLossOrders();
     }
   }
 
-  async setStopLoss(price: number, qty: number) {
+  async setStopLoss(lastPrice: number, qty: number) {
     const orders = this.orders;
     if (orders.length) return Promise.reject('ERROR REMOVE ORDER FIRST ' + JSON.stringify(orders));
     return new Promise(async (resolve, reject) => {
-      const newStopLoss: number = +(price + (price * this.percentStopLoss / 100)).toFixed(8);
+      const newStopLoss: number = +(lastPrice + (lastPrice * this.percentStopLoss / 100)).toFixed(8);
       const sellPrice = +(newStopLoss + (newStopLoss * -0.01)).toFixed(8);
       this.log({action: ' setStopLoss ', reason: ' P ' + newStopLoss + ' qty: ' + qty + ' Ps ' + sellPrice});
 
@@ -87,7 +89,7 @@ export class StopLossOrder {
       let result;
       try {
         result = await api.stopLoss(this.market, qty, newStopLoss, sellPrice);
-        this.log({action: 'RESULT SL', reason: JSON.stringify(result)});
+        this.log({action: 'RESULT SL', reason: result.uuid});
       } catch (e) {
         reject(e.toString());
       }

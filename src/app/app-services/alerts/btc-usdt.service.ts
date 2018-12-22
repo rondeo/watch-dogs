@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import * as moment from 'moment';
 
-import {VOCandle, VOMCObj} from '../../models/api-models';
+import {VOCandle} from '../../models/api-models';
 
-import {VOAlert, VOBalance, VOBooks, VOMarketCap, VOOrder} from '../../models/app-models';
+import {VOOrder} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
@@ -13,11 +13,14 @@ import {MATH} from '../../com/math';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {CandlesService} from '../candles/candles.service';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
-import {FollowOpenOrder} from '../../apis/open-orders/follow-open-order';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Subject} from 'rxjs/internal/Subject';
-import {Observable} from 'rxjs/internal/Observable';
 import {UsdtBtcBot} from '../app-bots-services/usdt-btc-bot';
+import {MarketBalance} from '../app-bots-services/market-balance';
+import {MarketOrders, OrdersState} from '../app-bots-services/market-orders';
+import {StopLossOrder} from '../app-bots-services/stop-loss-order';
+import {UTILS} from '../../com/utils';
+import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 
 export enum MarketState {
   STAY = 'STAY',
@@ -31,6 +34,7 @@ export enum MarketState {
 @Injectable()
 export class BtcUsdtService {
   state$: BehaviorSubject<MarketState> = new BehaviorSubject(MarketState.STAY);
+  apiPrivate: ApiPrivateAbstaract;
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -40,8 +44,12 @@ export class BtcUsdtService {
     private candlesService: CandlesService
   ) {
 
-    this.bot = new UsdtBtcBot(marketCap, apisPrivate.getExchangeApi('binance'), candlesService);
-    this.bot.start();
+    //this.bot = new UsdtBtcBot(marketCap, apisPrivate.getExchangeApi('binance'), candlesService);
+
+    this.init().then(() => {
+      this.start();
+    });
+
   }
 
   alertSub: Subject<{ P: number, PD: number, VD: number, trades: any[] }> = new Subject();
@@ -51,7 +59,7 @@ export class BtcUsdtService {
   //  startTime = '2018-10-10T19:30';
   count = 0;
   candlesStats: any[] = [];
-  tradesStats: any[] = [];
+
 
   trades: VOOrder[] = [];
   coin = 'BTC';
@@ -59,23 +67,26 @@ export class BtcUsdtService {
   market = 'USDT_BTC';
 
   exchange = 'binance';
-  priceCounUS: number;
+  priceCoinUS: number;
   percentStopLoss = -2;
 
   private sub1;
 
   releaseAmountUS = 120;
 
-  bot: UsdtBtcBot;
+  // bot: UsdtBtcBot;
+
+
+
 
   interval;
 
   lastcandlesStats: any;
 
   async start() {
-    this.init();
+    this.tick();
     this.interval = setInterval(() => {
-      this.next();
+      this.tick();
     }, 60000);
     console.log('START USDT_BTC');
 
@@ -83,14 +94,27 @@ export class BtcUsdtService {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  get state(){
+  get state() {
     return this.state$.getValue();
   }
-  init() {
 
-    this.storage.select('trades-stats-bitfinex-usdt_btc').then(stats => {
-      this.tradesStats = stats || [];
-    });
+  async init() {
+    this.apiPrivate = this.apisPrivate.getExchangeApi(this.exchange);
+
+    const MC = await this.marketCap.getTicker();
+    const priceUS = MC['BTC'].price_usd;
+    this.priceCoinUS = priceUS;
+   /* this.balances = new MarketBalance(this.market, this.apisPrivate.getExchangeApi(this.exchange), this.storage, this.marketCap);
+    await this.balances.init();
+    this.marketOrders = new MarketOrders(this.market, this.apisPrivate.getExchangeApi(this.exchange), this.storage, priceUS);
+    await this.marketOrders.init();
+    this.stopLoss = new StopLossOrder(this.market, this.apisPrivate.getExchangeApi(this.exchange));
+*/
+    this.marketCap.ticker$().subscribe(MC => {
+      if (!MC) return;
+      this.priceCoinUS = MC['BTC'].price_usd;
+    })
+
   }
 
   stop() {
@@ -99,9 +123,9 @@ export class BtcUsdtService {
   }
 
   lastPrice: number;
-
   reason: string;
-  async next() {
+
+  async tick() {
 
     let candles: VOCandle[] = await this.getCandles();
     const P = Math.round(_.last(candles).close);
@@ -115,31 +139,53 @@ export class BtcUsdtService {
 
     const mas = CandlesAnalys1.mas(candles);
     let state: MarketState = MarketState.STAY;
-   //  const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+    //  const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const diff = ma3_25;
 
-
     if (diff > 0.5) {
       state = MarketState.JUMPING
-    } else if (diff < -0.4) {
+    } else if (diff < -0.6) {
       state = MarketState.DROPPING
     } else if (diff > 0.2) {
       state = MarketState.GOING_UP
-    } else if (diff < -0.2) {
+    } else if (diff < -0.3) {
       state = MarketState.GOING_DOWN
     }
 
     const prevState = this.state$.getValue();
-    if(state !== prevState) this.state$.next(state);
+    if (state !== prevState) this.state$.next(state);
     this.reason = moment().format('HH:mm') + ' ma3_25 ' + diff;
-    console.log('%c ' + this.reason, 'color:green');
+    console.log('%c ' + this.reason + ' ' + state, 'color:green');
     const VD = MATH.percent(last.Volume, medV);
     const PD = MATH.percent(last.close, last.open);
     if (Math.abs(PD) > 0.3 || VD > 1000) {
       const trades = await this.getTopTrades();
       this.alert({P, PD, VD, trades})
     }
+
+   // const BTC_US = this.balances.balanceUS;
+   // const BTC_US_avai = this.balances.availableUS;
+   // const extraUS = BTC_US_avai - this.releaseAmountUS;
+
+   // if (extraUS > 10) {
+
+     // console.log('extra ' + extraUS);
+
+   /*   if (this.marketOrders.state === OrdersState.STOP_LOSS) {
+        const canselResult = await this.marketOrders.cancelSellOrders();
+        this.apiPrivate.refreshAllOpenOrders();
+        await UTILS.wait(10);
+      }
+      let lastPrice = last.close < mas.ma25 ? last.close : mas.ma25;
+      let qty = +((BTC_US - this.releaseAmountUS) / this.priceCoinUS).toFixed(8);
+      console.warn(lastPrice, qty);
+*/
+     // this.stopLoss.setStopLoss(lastPrice, qty)
+
+   // }
+   // console.log('BTC US ' + BTC_US);
+
 
   }
 
@@ -209,6 +255,7 @@ export class BtcUsdtService {
 
 
   stopFollow() {
-    this.bot.stopFollow();
+
+    //this.bot.stopFollow();
   }
 }

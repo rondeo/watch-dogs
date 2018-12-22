@@ -179,6 +179,8 @@ export class CandlesService {
   }
 
 
+  last15mCandle: VOCandle;
+
   async getCandles2(exchange: string, market: string, candlesInterval: string = '15m') {
     const now = moment().valueOf();
     const id = 'candles-' + exchange + '-' + market + '-' + candlesInterval;
@@ -189,54 +191,49 @@ export class CandlesService {
       candles = await api.downloadCandles(market, candlesInterval, 120);
 
     } else {
-      const diff: number = moment().diff(_.last(candles).to, 'minutes');
-      //   console.log(market + '  ' + diff);
+      const lastTime = _.last(candles).to;
+      const diff: number = moment().diff(lastTime, 'minutes');
+      //  console.log(market + '  ' + diff);
       let limit = 3;
       if (diff > -1 && diff < 16) return candles;
 
-      if (diff > 30) limit = 120;
-      console.log(market + ' downloading candles ' + limit);
-      const newCandles = await api.downloadCandles(market, candlesInterval, limit);
-      const from = _.first(newCandles).from;
+      if (diff > 30) {
+        limit = 120;
+      }
 
-      newCandles.forEach(function (item) {
+      console.log(market + ' downloading candles ' + limit + ' diff ' + diff);
+      let newCandles = await api.downloadCandles(market, candlesInterval, limit);
+      newCandles = newCandles.filter(function (item) {
         item.time = moment(item.to).format('HH:mm');
+        return item.to > lastTime && item.to < now;
       });
 
-      candles = candles.filter(function (item) {
-        return item.to < from;
-      });
-
-      // console.log(' new candles ', newCandles);
+      console.log(' new candles ' + newCandles.length);
       candles = candles.concat(newCandles);
       //console.log(candles);
     }
 
-    if (_.last(candles).to > now) {
-      candles = candles.filter(function (item) {
-        return item.to < now;
-      });
-
-    }
+    candles = _.takeRight(candles, 120);
     // console.log(candles);
-    await this.storage.upsert(id, _.takeRight(candles, 120));
+
+    await this.storage.upsert(id, candles);
     return candles;
   }
 
 
- private checkCandles(candles: VOCandle[], interval: number){
+  private checkCandles(candles: VOCandle[], interval: number) {
     let prev = _.first(candles).to - interval;
-   const err = [];
+    const err = [];
     candles.forEach(function (item, i) {
       const next = prev + interval;
-      const diff = Math.round(Math.abs(item.to - next)/ 30000);
-        if(diff)  err.push(i);
-         prev = item.to;
+      const diff = Math.round(Math.abs(item.to - next) / 30000);
+      if (diff) err.push(i);
+      prev = item.to;
     });
-   return err;
- }
+    return err;
+  }
 
-  minuteCandles:{[market:string]: BehaviorSubject<VOCandle[]>} = {};
+  minuteCandles: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
 
   async getCandles(market: string, candlesInterval: string = '1m') {
     const now = moment().valueOf();
@@ -244,7 +241,7 @@ export class CandlesService {
     const id = 'candles-' + market;
     let oldCandels: VOCandle[] = (await this.storage.select(id));
 
-    if (!oldCandels ||  moment().diff(_.last(oldCandels).to, 'minutes') > 10 ) {
+    if (!oldCandels || moment().diff(_.last(oldCandels).to, 'minutes') > 10) {
       console.log(market + ' DOWNLOADING 120 candles ')
       let candles = await api.downloadCandles(market, this.candlesInterval, 120);
       candles = candles.filter(function (item) {
@@ -285,7 +282,7 @@ export class CandlesService {
     candles = oldCandels.concat(candles);
     const err = this.checkCandles(candles, 60000);
 
-    if(err.length) {
+    if (err.length) {
       console.error(err);
       console.log(market + ' DOWNLOADING 120 candles ')
       candles = await api.downloadCandles(market, this.candlesInterval, 120);
@@ -294,7 +291,7 @@ export class CandlesService {
       });
     }
 
-    if(this.minuteCandles[market]) this.minuteCandles[market].next(candles);
+    if (this.minuteCandles[market]) this.minuteCandles[market].next(candles);
     await this.storage.upsert(id, _.takeRight(candles, 120));
 
     return candles;

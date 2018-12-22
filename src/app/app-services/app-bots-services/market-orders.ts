@@ -4,6 +4,8 @@ import {VOOrder} from '../../models/app-models';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import {until} from 'selenium-webdriver';
+import urlIs = until.urlIs;
 
 export enum OrdersState {
   NONE= 'NONE',
@@ -35,6 +37,11 @@ export class MarketOrders {
     this.base = ar[0];
     this.coin = ar[1];
     this.id = this.apiPrivate.exchange + this.market;
+  }
+
+
+  log(log: {action: string, reason: string}){
+    console.log(log.action + ' ' + log.reason);
   }
 
   async init() {
@@ -100,15 +107,29 @@ export class MarketOrders {
   }
 
   async cancelAllOrders() {
+    if(this.state$.getValue() === OrdersState.NONE) return Promise.resolve([{uuid:'no urders'}]);
+    this.state$.next(OrdersState.NONE);
     return Promise.all([this.cancelSellOrders(), this.cancelBuyOrders()]);
 
   }
+
   async cancelBuyOrders() {
-   return this.cancelOrders(_.map(this.buyOrders, 'uuid'));
+    const uuids = _.map(this.buyOrders, 'uuid');
+    if(uuids.length){
+      this.log({action: 'CANCEL', reason:' ALL BUY ORDERS'});
+      return this.cancelOrders(uuids);
+    }
+    return Promise.resolve([]);
   }
 
   async cancelSellOrders() {
-     return this.cancelOrders(_.map(this.sellOrders, 'uuid'));
+    const uuids = _.map(this.sellOrders, 'uuid');
+    if(uuids.length){
+      this.log({action: 'CANCEL', reason:' ALL SELL ORDERS'});
+      return this.cancelOrders(uuids);
+    }
+    return Promise.resolve([]);
+
   }
 
   private async cancelOrder(uuid: string) {

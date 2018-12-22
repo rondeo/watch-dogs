@@ -17,9 +17,10 @@ import {BuySellState, MacdSignal} from './macd-signal';
 import {BtcUsdtService, MarketState} from '../alerts/btc-usdt.service';
 import {BalanceState, MarketBalance} from './market-balance';
 import {MarketOrders, OrdersState} from './market-orders';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 
-export enum RankState {
+export enum MCState {
   NONE = 'NONE',
   GREEN = 'GREEN',
   RED = 'RED'
@@ -44,6 +45,7 @@ export enum BotState {
 export class MarketBot {
   resistanceSupport: ResistanceSupportController;
   // rankSate: RankState = null;
+  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
   ordersHistory: VOOrder[];
 
   // state$: BehaviorSubject<BotState> = new BehaviorSubject(BotState.NONE);
@@ -128,8 +130,16 @@ export class MarketBot {
     }
 
     let amount = (this.amountCoinUS / this.mcCoin.price_usd);
-    if (amount > 10) amount = Math.round(amount);
+    if (amount > 10) {
+      amount = Math.round(amount);
+      if(this.balance.balance > 0 && this.balance.balance < 1){
+        const add =  1 - this.balance.balance;
+        amount += add;
+      }
+    }
     else amount = +amount.toFixed(2);
+
+
     return amount
   }
 
@@ -155,34 +165,37 @@ export class MarketBot {
     this.log({action: 'BUY_ORDER', reason: ' qty ' + qty + ' rate ' + rate});
     if (!this.isLive) return Promise.resolve();
     return new Promise(async (resolve, reject) => {
-      try{
+      try {
         const order = await this.apiPrivate.buyLimit2(this.market, qty, rate);
         console.log('BUY ORDER RESULT ', order);
-        this.log({action: 'BUY_ORDER_RESULT', reason: JSON.stringify(order)});
+        this.log({action: 'BUY_ORDER_RESULT', reason: order.amountCoin + '  ' + order.rate + ' ' + order.isOpen});
         this.apiPrivate.refreshAllOpenOrders();
       } catch (e) {
         this.log({action: 'ERROR BUY_ORDER_RESULT', reason: e.toString()});
         reject();
       }
-      setTimeout(()=>resolve(), 2000);
+      setTimeout(() => resolve(), 2000);
     });
   }
 
   async setSellOrder(rate: number) {
-    this.log({action: 'SELL_ORDER', reason: 'rate ' + rate + ' live:' + this.isLive});
+    const qty = this.balance.balance;
+    this.log({action: 'SELL_ORDER', reason: 'qty ' + qty + 'rate ' + rate + ' live:' + this.isLive});
     if (!this.isLive) return Promise.resolve();
-    return new Promise(async (resolve, reject) => {
 
-      if (this.balance.balanceUS < 10) {
-        reject(' amount too low ' + this.balance.balanceUS);
-      }
+    if (!qty) {
+      Promise.resolve(' amount too low ' + this.balance.balanceUS);
+      return;
+    }
 
-      await this.orders.cancelSellOrders();
-      const qty = this.balance.balance;
-      const order = await this.apiPrivate.sellLimit2(this.market, qty, rate);
-      resolve(order);
-    });
+    const cancelResult = await this.orders.cancelSellOrders();
+    this.log({action: 'cancel orders result ', reason: JSON.stringify(cancelResult)});
 
+    const order = await this.apiPrivate.sellLimit2(this.market, qty, rate);
+    this.log({action: 'SELL_LIMIT ', reason: 'rate ' +order.rate + ' qty ' + order.amountCoin +' open ' + order.isOpen});
+
+    this.apiPrivate.refreshAllOpenOrders();
+    return order;
   }
 
 
@@ -190,6 +203,12 @@ export class MarketBot {
     setTimeout(() => this.save(), 5000);
     if (this.isLive) console.log(this.market + ' ' + this.balance.state + ' ' + this.orders.state);
 
+    const candles = await this.candlesService.getCandles(this.market);
+    const lastCandle = _.last(candles);
+    const lastPrice = lastCandle.close;
+    if (this.prevPrice === lastPrice) return;
+
+    const candles15m = await this.candlesService.getCandles2(this.exchange, this.market, '15m');
     const btcusdtState = this.btcusdt.state;
 
     if (btcusdtState === MarketState.DROPPING) {
@@ -199,15 +218,17 @@ export class MarketBot {
         console.log(this.market + ' SOLD');
         return;
       }
-      await this.orders.cancelAllOrders();
+
+      this.log({action: 'SELL_INSTANT',reason: 'USDT_BTC DROPPING'});
+
+      const cancelResults = await this.orders.cancelAllOrders();
+
+      this.log({action: 'CANCEL ALL ORDERS',reason: _.map(_.flatten(cancelResults), 'uuid').toString()});
       this.sellCoinInstant(0);
       return;
     }
 
-    const candles = await this.candlesService.getCandles(this.market);
-    const lastCandle = _.last(candles);
-    const lastPrice = lastCandle.close;
-    if (this.prevPrice === lastPrice) return;
+
     this.prevPrice = lastCandle.close;
 
     if (!this.mcCoin) {
@@ -215,7 +236,7 @@ export class MarketBot {
       return;
     }
 
-    const candles15m = await this.candlesService.getCandles2(this.exchange, this.market, '15m');
+
     const closes = CandlesAnalys1.closes(candles15m);
 
     const last15m = _.last(candles15m);
@@ -233,32 +254,36 @@ export class MarketBot {
 
 
       if (this.balance.state === BalanceState.BOUGHT) {
-        this.log({action: 'CANCEL_BUY', reason: this.orders.state});
+        this.log({action: 'STOP BUY', reason: 'balance BOUGHT orders ' + this.orders.state});
         return;
       }
 
-      if(this.orders.state === OrdersState.BUYING) {
-        this.log({action: 'CANCEL_BUY', reason: this.orders.state});
+      if (this.orders.state === OrdersState.BUYING) {
+        this.log({action: 'STOP BUY', reason: this.orders.state});
         return;
       }
 
       const balanceBaseUS = this.balance.baseBalance * this.priceBase;
       if (balanceBaseUS < this.amountCoinUS) {
-        this.log({action: 'CANCEL_BUY', reason: 'NO amount base'});
+        this.log({action: 'STOP BUY', reason: 'NO amount base'});
         return
       }
 
       this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
       if (this.mcCoin.r6 < 0) {
-        this.log({action: 'CANCEL_BUY', reason: 'r6 ' + this.mcCoin.r6});
+        this.log({action: 'STOP BUY', reason: 'r6 ' + this.mcCoin.r6});
         return;
       }
 
-      const buyPrice = this.macdSignal.price;
+      const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+
+      const buyPrice = +((last15m.close + last15m.open) / 2).toFixed(8);
+      this.log({action: 'Candle  ', reason: 'C ' + last15m.close + ' O ' + last15m.open + ' ' + moment(last15m.to).format('HH:mm')});
+
       const vols = CandlesAnalys1.volumes(candles15m);
       const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
 
-      this.log({action: 'MAS ', reason: 'MA25-99 ' + MATH.percent(mas.ma25, mas.ma99) + ' Vd ' + Vd});
+      this.log({action: 'MAS ', reason: 'ma3_7 ' + ma3_7 + 'ma25-99 ' + MATH.percent(mas.ma25, mas.ma99) + ' Vd ' + Vd});
 
       this.log({action: 'USDT_BTC', reason: btcusdtState});
       this.setBuyOrder(buyPrice);
@@ -270,12 +295,12 @@ export class MarketBot {
       this.log({action: 'SELL NOW', reason: this.macdSignal.reason});
 
       if (this.balance.state !== BalanceState.BOUGHT) {
-        this.log({action: 'CANCEL_SELL', reason: this.balance.state});
+        this.log({action: 'STOP SELL', reason: this.balance.state});
         return;
       }
 
-      if(this.orders.state === OrdersState.SELLING) {
-        this.log({action: 'CANCEL_SELL', reason: this.orders.state});
+      if (this.orders.state === OrdersState.SELLING) {
+        this.log({action: 'STOP SELL', reason: this.orders.state});
         return;
       }
 
@@ -288,12 +313,20 @@ export class MarketBot {
       this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
       this.log({action: 'USDT_BTC', reason: btcusdtState});
       this.setSellOrder(midPrice);
-    } else {
-      const stopLossPrice = mas.ma25;
 
+    } else {
+
+      let stopLossPrice = mas.ma25;
       if (this.orders.state === OrdersState.STOP_LOSS) {
         this.stopLossOrder.checkStopLoss(stopLossPrice, this.balance.balance);
       } else if (this.orders.state === OrdersState.NONE && this.balance.state === BalanceState.BOUGHT) {
+
+        if(last15m.close < stopLossPrice) {
+
+          this.log({action: 'ATTENTION', reason:' SL  ma25 '+ mas.ma25.toFixed(8) + ' close '+ last15m.close});
+          stopLossPrice = last15m.close;
+        }
+
         this.stopLossOrder.setStopLoss(stopLossPrice, this.balance.balance)
       }
 
@@ -353,21 +386,24 @@ export class MarketBot {
     this.marketCap.ticker$().pipe(
       map(obj => {
         if (!obj) return;
-        this.mcCoin = obj[this.coin];
-        /* const prevSate = this.rankSate;
-         let newSate = RankState.NONE;
 
-         if (this.mcCoin.r6 < 0) newSate = RankState.RED;
-         else if (this.mcCoin.r6 > 0) newSate = RankState.GREEN;
-         if (this.rankSate && this.rankSate !== newSate) {
-           this.log({
-             action: prevSate + '->' + newSate, reason: this.mcCoin.rank + ' r6 ' + this.mcCoin.r6 + ' r24 ' +
+        this.mcCoin = obj[this.coin];
+        this.mcBase = obj[this.base];
+
+        const prevSate = this.mcState$.getValue();
+        let newState = MCState.NONE;
+
+         if (this.mcCoin.r6 < 0) newState = MCState.RED;
+         else if (this.mcCoin.r6 >= 0) newState =MCState.GREEN;
+         if (prevSate !== newState) {
+
+            if(prevSate !== MCState.NONE) this.log({
+              action:  prevSate + '->' + newState,
+              reason: this.mcCoin.rank + ' r6 ' + this.mcCoin.r6 + ' r24 ' +
                this.mcCoin.r24 + ' ' + moment(this.mcCoin.last_updated * 1000).format('DD HH:mm')
            });
+           this.mcState$.next(newState);
          }
-         this.rankSate = newSate;
- */
-        this.mcBase = obj[this.base];
       })
     ).subscribe(noop);
 
@@ -377,26 +413,28 @@ export class MarketBot {
     const ar = this.market.split('_');
     this.base = ar[0];
     this.coin = ar[1];
+
     await this.initMarketCap();
 
     console.log(this.market + ' init ' + this.isLive + ' $' + this.amountCoinUS);
     this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
     const MC = await this.marketCap.ticker();
     const priceUS = MC[this.coin].price_usd;
-    this.balance = new MarketBalance(this.market, this.apiPrivate, this.storage, priceUS);
+    this.balance = new MarketBalance(this.market, this.apiPrivate, this.storage, this.marketCap);
     this.orders = new MarketOrders(this.market, this.apiPrivate, this.storage, priceUS);
     await this.orders.init();
     console.log(this.market + ' ORDESR init DONE');
     this.macdSignal = new MacdSignal();
     await this.balance.init();
 
-
-    console.log(this.market + ' BALANCE  init DONE')
+    console.log(this.market + ' BALANCE  init DONE $' + this.balance.balanceUS);
     this.balance.balance$.subscribe(balance => {
       if (balance.change) {
+        this.apiPrivate.refreshAllOpenOrders();
         console.warn(this.market + ' balanec changed ' + balance.change)
       }
     });
+
     this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
     this.stopLossOrder.log = this.log.bind(this);
   }
