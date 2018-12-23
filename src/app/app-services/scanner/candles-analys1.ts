@@ -13,6 +13,45 @@ export class CandlesAnalys1 {
   static analysData;
   static data;
 
+
+  static update15minCandles(candles1m: VOCandle[], candles15m: VOCandle[], market?:string) {
+
+    const lastFrom = moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();//.format('HH:mm:ss');
+
+    const prevFrom = moment(lastFrom).subtract(15, 'minutes').valueOf();
+    const to = moment().valueOf();
+
+
+    const prev15min1m: VOCandle[] = candles1m.filter(function (item) {
+      return item.to > prevFrom && item.to < lastFrom;
+    });
+
+    const last15min1m = candles1m.filter(function (item) {
+      return item.to > lastFrom;
+    });
+
+    candles15m = candles15m.filter(function (item) {
+      return item.to < prevFrom;
+    });
+
+    console.log(market + ' prev ' + prev15min1m.length + ' last15min1m ', last15min1m);
+
+    const prev = CandlesAnalys1.createCandle(prev15min1m);
+    const last = CandlesAnalys1.createCandle(last15min1m);
+
+    candles15m.push(prev);
+    candles15m.push(last);
+
+    const err = CandlesAnalys1.checkCandles(candles15m.slice(0, -1), 15 * 60000);
+
+    if(err.length){
+      console.error(err, candles15m);
+    }
+
+    return candles15m;
+
+  }
+
   static isTrendDownUp(candles: VOCandle[]) {
     const closes = CandlesAnalys1.closes(candles);
     const last = _.last(candles);

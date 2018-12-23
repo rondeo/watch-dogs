@@ -73,9 +73,6 @@ export class OrderReportsComponent implements OnInit {
   showBot(){
     this.isLive = this.currentBot ? this.currentBot.isLive : false;
     this.showBotHistory();
-
-
-
   }
 
   onDeleteUSDTRecordsClick() {
@@ -155,13 +152,16 @@ export class OrderReportsComponent implements OnInit {
       this.ordersData = null;
       return;
     }
+
     const market = this.currentBot.market;
     const candles = this.candlesService.getCandles15min(market);
     // console.log(candles);
-    const volumes = CandlesAnalys1.volumes(candles);
-    const closes = CandlesAnalys1.closes(candles);
-    this.volumes = volumes;
-    this.closes = closes;
+    if(candles){
+      const volumes = CandlesAnalys1.volumes(candles);
+      const closes = CandlesAnalys1.closes(candles);
+      this.volumes = volumes;
+      this.closes = closes;
+    }
 
     switch (this.dataName) {
       case '-patterns':

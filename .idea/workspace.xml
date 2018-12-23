@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-orders.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-orders.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -69,7 +64,7 @@
           <entry key="JavaScript" value="1" />
           <entry key="PLAIN_TEXT" value="1875" />
           <entry key="SCSS" value="1" />
-          <entry key="TypeScript" value="264145" />
+          <entry key="TypeScript" value="265475" />
           <entry key="tsconfig" value="10" />
         </counts>
       </usages-collector>
@@ -81,7 +76,7 @@
           <entry key="js" value="1" />
           <entry key="json" value="171" />
           <entry key="scss" value="1" />
-          <entry key="ts" value="264145" />
+          <entry key="ts" value="265475" />
           <entry key="txt" value="1867" />
         </counts>
       </usages-collector>
@@ -120,7 +115,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.51534885">
+    <splitter split-orientation="horizontal" split-proportion="0.4195349">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -180,8 +175,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="240">
-                  <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+                <state relative-caret-position="390">
+                  <caret line="158" column="16" lean-forward="true" selection-start-line="158" selection-start-column="16" selection-end-line="158" selection-end-column="16" />
                   <folding>
                     <element signature="e#0#48#0" expanded="true" />
                   </folding>
@@ -229,7 +224,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="585">
@@ -296,11 +291,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="633">
-                  <caret line="153" column="17" selection-start-line="153" selection-start-column="2" selection-end-line="153" selection-end-column="17" />
+                <state relative-caret-position="420">
+                  <caret line="134" column="29" selection-start-line="134" selection-start-column="29" selection-end-line="134" selection-end-column="29" />
                 </state>
               </provider>
             </entry>
@@ -308,8 +303,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="328">
-                  <caret line="316" column="21" selection-start-line="316" selection-start-column="9" selection-end-line="316" selection-end-column="21" />
+                <state relative-caret-position="450">
+                  <caret line="46" column="19" lean-forward="true" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
@@ -328,8 +323,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onCa</find>
-      <find>/login</find>
       <find>usdtbtcState</find>
       <find>btcusdtState</find>
       <find>MarketBot</find>
@@ -358,6 +351,8 @@
       <find>cancel orders result</find>
       <find>showBotHistory</find>
       <find>check</find>
+      <find>updateLast2Candles</find>
+      <find>updateCandles</find>
     </findStrings>
     <replaceStrings>
       <replace>myValueColor</replace>
@@ -423,11 +418,11 @@
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-orders.ts" />
         <option value="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.html" />
+        <option value="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" />
       </list>
     </option>
   </component>
@@ -740,14 +735,7 @@
       <workItem from="1544145376332" duration="170090000" />
       <workItem from="1545005321005" duration="5403000" />
       <workItem from="1545022574364" duration="69439000" />
-      <workItem from="1545350653150" duration="33734000" />
-    </task>
-    <task id="LOCAL-00086" summary="gainers - losers">
-      <created>1540827450732</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1540827450732</updated>
+      <workItem from="1545350653150" duration="43527000" />
     </task>
     <task id="LOCAL-00087" summary="bot stated">
       <created>1540846350308</created>
@@ -1085,11 +1073,18 @@
       <option name="project" value="LOCAL" />
       <updated>1545489692124</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="refactor">
+      <created>1545579892299</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1545579892299</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3227882000" />
+    <option name="totallyTimeSpent" value="3237675000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1630,43 +1625,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="316" column="21" selection-start-line="316" selection-start-column="9" selection-end-line="316" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3306">
           <caret line="448" column="28" lean-forward="true" selection-start-line="448" selection-start-column="28" selection-end-line="448" selection-end-column="28" />
           <folding>
             <element signature="e#0#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="633">
-          <caret line="153" column="17" selection-start-line="153" selection-start-column="2" selection-end-line="153" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="13" column="34" lean-forward="true" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1686,6 +1650,37 @@
             <element signature="e#10#16#0" expanded="true" />
             <element signature="e#16#22#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="13" column="34" lean-forward="true" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="158" column="16" lean-forward="true" selection-start-line="158" selection-start-column="16" selection-end-line="158" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="46" column="19" lean-forward="true" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="134" column="29" selection-start-line="134" selection-start-column="29" selection-end-line="134" selection-end-column="29" />
         </state>
       </provider>
     </entry>
