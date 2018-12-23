@@ -22,7 +22,7 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   candles:VOCandle[];
   volumes: number[];
   closes: number[];
-  candlesInterval = '1h';
+  candlesInterval = '15m';
   inBrowser = false;
 
   constructor(

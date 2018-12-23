@@ -314,6 +314,40 @@ export class CandlesAnalys1 {
 
   }
 
+  static checkCandles(candles: VOCandle[], interval: number) {
+    let prev = _.first(candles).to - interval;
+    const err = [];
+    candles.forEach(function (item, i) {
+      const next = prev + interval;
+      const diff = Math.round(Math.abs(item.to - next) / 30000);
+      if (diff) err.push(i);
+      prev = item.to;
+    });
+    return err;
+  }
+
+  static createCandle(candles:VOCandle[]): VOCandle{
+    const open = _.first(candles).open;
+    const close = _.last(candles).close;
+    const to = _.last(candles).to;
+
+    const Volume = candles.reduce(function (s, item) {
+      return s+=item.Volume
+    }, 0);
+
+    return {
+      from:0,
+      to,
+      time: moment(to).format('HH:mm'),
+      open,
+      close,
+      Volume,
+      high:0,
+      low:0
+    }
+
+  }
+
   static createCandlesX5(candles: VOCandle[]) {
     const out: VOCandle[] = [];
     let j = 0;

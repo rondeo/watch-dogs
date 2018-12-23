@@ -9,6 +9,8 @@ import {MarketBot} from '../../app-services/app-bots-services/market-bot';
 import {map} from 'rxjs/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {noop} from 'rxjs/internal-compatibility';
+import {CandlesService} from '../../app-services/candles/candles.service';
+import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
 
 @Component({
   selector: 'app-order-reports',
@@ -20,7 +22,8 @@ export class OrderReportsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private storage: StorageService,
-    private followOrder: FollowOrdersService
+    private followOrder: FollowOrdersService,
+    private candlesService: CandlesService
   ) {
   }
 
@@ -70,6 +73,9 @@ export class OrderReportsComponent implements OnInit {
   showBot(){
     this.isLive = this.currentBot ? this.currentBot.isLive : false;
     this.showBotHistory();
+
+
+
   }
 
   onDeleteUSDTRecordsClick() {
@@ -141,12 +147,22 @@ export class OrderReportsComponent implements OnInit {
     }
   }
 
+  volumes: number[];
+  closes: number[];
   async showBotHistory() {
     const bot = this.currentBot;
     if (!bot) {
       this.ordersData = null;
       return;
     }
+    const market = this.currentBot.market;
+    const candles = this.candlesService.getCandles15min(market);
+    // console.log(candles);
+    const volumes = CandlesAnalys1.volumes(candles);
+    const closes = CandlesAnalys1.closes(candles);
+    this.volumes = volumes;
+    this.closes = closes;
+
     switch (this.dataName) {
       case '-patterns':
         this.ordersData = bot.getPatterns().map(function (item) {

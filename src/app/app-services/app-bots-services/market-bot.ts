@@ -188,8 +188,10 @@ export class MarketBot {
       return;
     }
 
-    const cancelResult = await this.orders.cancelSellOrders();
-    this.log({action: 'cancel orders result ', reason: JSON.stringify(cancelResult)});
+    const cancelResult:VOOrder[] = await this.orders.cancelSellOrders();
+    this.log({action: 'cancel orders res ',reason: cancelResult.map(function (item) {
+        return item.action + ' ' +item.uuid;
+      }).toString()});
 
     const order = await this.apiPrivate.sellLimit2(this.market, qty, rate);
     this.log({action: 'SELL_LIMIT ', reason: 'rate ' +order.rate + ' qty ' + order.amountCoin +' open ' + order.isOpen});
@@ -197,7 +199,6 @@ export class MarketBot {
     this.apiPrivate.refreshAllOpenOrders();
     return order;
   }
-
 
   async tick() {
     setTimeout(() => this.save(), 5000);
@@ -415,28 +416,39 @@ export class MarketBot {
     this.coin = ar[1];
 
     await this.initMarketCap();
-
-    console.log(this.market + ' init ' + this.isLive + ' $' + this.amountCoinUS);
+   //  console.log(this.market + ' init ' + this.isLive + ' $' + this.amountCoinUS);
     this.patterns = (await this.storage.select(this.id + '-patterns')) || [];
     const MC = await this.marketCap.ticker();
     const priceUS = MC[this.coin].price_usd;
     this.balance = new MarketBalance(this.market, this.apiPrivate, this.storage, this.marketCap);
     this.orders = new MarketOrders(this.market, this.apiPrivate, this.storage, priceUS);
     await this.orders.init();
-    console.log(this.market + ' ORDESR init DONE');
+    // console.log(this.market + ' ORDERS init DONE ');
     this.macdSignal = new MacdSignal();
     await this.balance.init();
 
+    if(!this.isLive) console.log('%c ' + this.market + ' NOT LIVE ', 'color:red');
     console.log(this.market + ' BALANCE  init DONE $' + this.balance.balanceUS);
     this.balance.balance$.subscribe(balance => {
       if (balance.change) {
+        this.log({action:'BAL_CHANGE', reason: ' ' + balance.change})
         this.apiPrivate.refreshAllOpenOrders();
-        console.warn(this.market + ' balanec changed ' + balance.change)
+        console.warn(this.market + ' balance changed ' + balance.change)
       }
+    });
+
+    this.balance.state$.subscribe(state =>{
+      this.log({action: 'BAL_STATE', reason:state});
     });
 
     this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
     this.stopLossOrder.log = this.log.bind(this);
+
+   const sub =  this.candlesService.candles15min$(this.market);
+
+   sub.subscribe(candles =>{
+     console.log(_.map(_.takeRight(candles, 10),'time'));
+   })
   }
 
   stop() {
@@ -453,7 +465,6 @@ export class MarketBot {
     console.log(this.market + ' start refresh rate ' + sec);
     this.interval = setInterval(() => this.tick(), sec * 1000);
   }
-
 
   async getLogs() {
     let history: any[] = (await this.storage.select(this.id + '-logs')) || [];

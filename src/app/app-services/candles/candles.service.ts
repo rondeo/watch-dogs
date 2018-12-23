@@ -16,12 +16,18 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 @Injectable()
 export class CandlesService {
 
+  myCandles: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
+
   constructor(
     private marketCap: ApiMarketCapService,
     private apisPublic: ApisPublicService,
     private storage: StorageService
   ) {
+
+
+    setInterval(() => this.updateCandles(), 5 * 6000);
   }
+
 
   collection: { [id: string]: CandlesData } = {};
   candlesInterval = '1m';
@@ -38,6 +44,120 @@ export class CandlesService {
 
   timeout;
 
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  async updateLast2Candles(market, sub: BehaviorSubject<VOCandle[]>) {
+
+    let candles: VOCandle[] = sub.getValue();
+
+    if (candles.length === 0 || moment().diff(_.last(candles).to, 'minutes') > 20) {
+      console.log(' DOWNLOADING candles for ' + market);
+      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120);
+      candles.forEach(function (item) {
+        item.time = moment(item.to).format('HH:mm');
+      })
+    }
+
+    let minuteCandles = await this.getCandles(market);
+    const timestampMinute = _.last(minuteCandles).to;
+    const timestampLast = _.last(candles).to;
+
+    console.log( moment(timestampLast).format('HH:mm:ss'), moment(timestampMinute).format('HH:mm:ss'));
+    if (timestampMinute === timestampLast) {
+      console.log(market + ' same time ');
+      return
+    }
+
+
+    if (minuteCandles.length < 30) {
+      console.error(minuteCandles);
+      return;
+    }
+
+    const lastFrom = moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();//.format('HH:mm:ss');
+    const prevFrom = moment(lastFrom).subtract(15, 'minutes').valueOf();
+    const to = moment().valueOf();
+
+
+    const prev15min1m: VOCandle[] = minuteCandles.filter(function (item) {
+      return item.to > prevFrom && item.to < lastFrom;
+    });
+
+    const last15min1m = minuteCandles.filter(function (item) {
+      return item.to > lastFrom;
+    });
+
+    candles = candles.filter(function (item) {
+      return item.to < prevFrom;
+    });
+
+    console.log(market + ' last15min1m ' + prev15min1m.length , last15min1m);
+
+
+    const prev = CandlesAnalys1.createCandle(prev15min1m);
+    const last = CandlesAnalys1.createCandle(last15min1m);
+
+
+    candles.push(prev);
+    candles.push(last);
+
+    const err = CandlesAnalys1.checkCandles(candles.slice(0, -1), 15 * 60000);
+
+    if (err.length) {
+
+      console.log(err, candles);
+
+    } else {
+      candles = _.takeRight(candles, 120);
+      sub.next(candles);
+      this.storage.upsert(this.exchange + market + '15m', candles);
+    }
+  }
+
+  deleteCandles(market: string) {
+    delete this.myCandles[market];
+    this.storage.remove(this.exchange + market + '15m');
+  }
+
+  candles15min$(market: string): BehaviorSubject<VOCandle[]> {
+    if (!this.myCandles[market]) {
+      this.myCandles[market] = new BehaviorSubject([]);
+      this.storage.select(this.exchange + market + '15m').then((candles: VOCandle[]) => {
+        if (candles) {
+          /* candles.forEach(function (item) {
+             item.time = moment(item.to).format('HH:mm');
+           })*/
+          if (moment().diff(_.last(candles).to, 'minutes') < 20) this.myCandles[market].next(candles);
+        }
+      })
+    }
+
+    return this.myCandles[market];
+  }
+
+  async updateCandlesNext(markets: string[], i) {
+    i++;
+    if (i >= markets.length) {
+      return;
+    }
+    const market = markets[i];
+    const sub = this.myCandles[market];
+    await this.updateLast2Candles(market, sub);
+    setTimeout(() => this.updateCandlesNext(markets, i), 2000);
+  }
+
+  updateCandles() {
+    const markets = Object.keys(this.myCandles);
+    if (markets.length) this.updateCandlesNext(markets, -1);
+  }
+
+  getCandles15min(market: string) {
+    if (this.myCandles[market]) return this.myCandles[market].getValue();
+    return null;
+  }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /*async updateNext(exchange: string, markets: string[], i, candlesInterval: string, sub: Subject<any>) {
     i++;
     if (i >= markets.length) {

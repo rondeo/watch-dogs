@@ -122,7 +122,7 @@ export class MarketOrders {
     return Promise.resolve([]);
   }
 
-  async cancelSellOrders() {
+  async cancelSellOrders(): Promise<VOOrder[]> {
     const uuids = _.map(this.sellOrders, 'uuid');
     if(uuids.length){
       this.log({action: 'CANCEL', reason:' ALL SELL ORDERS'});
@@ -132,14 +132,14 @@ export class MarketOrders {
 
   }
 
-  private async cancelOrder(uuid: string) {
+  private async cancelOrder(uuid: string): Promise<VOOrder> {
     const ar = this.market.split('_');
     return this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
   }
 
-  async cancelOrders(uuids: string[]) {
-    if(uuids.length === 0) return Promise.resolve();
-    return new Promise(async (resolve, reject) => {
+  async cancelOrders(uuids: string[]): Promise<VOOrder[]> {
+    if(uuids.length === 0) return Promise.resolve([]);
+    return new Promise<VOOrder[]>( (resolve, reject) => {
       Promise.all(uuids.map((uuid) => {
         return this.cancelOrder(uuid)
       })).then(result => {

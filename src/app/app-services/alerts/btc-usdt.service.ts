@@ -127,6 +127,15 @@ export class BtcUsdtService {
 
   async tick() {
 
+   // const now = Date.now();
+
+   // console.log(moment().minutes());
+
+    //console.log(moment().minutes() % 15);
+
+    //console.log(moment().subtract(moment().minutes() % 15, 'minutes').second(0).format('HH:mm:ss'));
+
+
     let candles: VOCandle[] = await this.getCandles();
     const P = Math.round(_.last(candles).close);
     if (this.lastPrice === P) return;
@@ -139,7 +148,7 @@ export class BtcUsdtService {
 
     const mas = CandlesAnalys1.mas(candles);
     let state: MarketState = MarketState.STAY;
-    //  const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+      const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
     const ma3_25 = MATH.percent(mas.ma3, mas.ma25);
     const diff = ma3_25;
 
@@ -155,7 +164,7 @@ export class BtcUsdtService {
 
     const prevState = this.state$.getValue();
     if (state !== prevState) this.state$.next(state);
-    this.reason = moment().format('HH:mm') + ' ma3_25 ' + diff;
+    this.reason = moment().format('HH:mm') + ' ma3_25 ' + diff + '  ma25_99 ' +  ma25_99;
     console.log('%c ' + this.reason + ' ' + state, 'color:green');
     const VD = MATH.percent(last.Volume, medV);
     const PD = MATH.percent(last.close, last.open);
