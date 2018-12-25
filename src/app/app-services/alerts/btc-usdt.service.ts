@@ -27,7 +27,8 @@ export enum MarketState {
   GOING_DOWN = 'GOING_DOWN',
   GOING_UP = ' GOING_UP',
   DROPPING = 'DROPPING',
-  JUMPING = 'JUMPING'
+  JUMPING = 'JUMPING',
+  RECOVERING = 'RECOVERING'
 }
 
 
@@ -84,12 +85,11 @@ export class BtcUsdtService {
   lastcandlesStats: any;
 
   async start() {
+    if(this.interval) throw new Error('double call');
     this.tick();
     this.interval = setInterval(() => {
       this.tick();
     }, 60000);
-    console.log('START USDT_BTC');
-
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +137,7 @@ export class BtcUsdtService {
 
 
     let candles: VOCandle[] = await this.getCandles();
+
     const P = Math.round(_.last(candles).close);
     if (this.lastPrice === P) return;
     this.lastPrice = P;
@@ -163,7 +164,12 @@ export class BtcUsdtService {
     }
 
     const prevState = this.state$.getValue();
-    if (state !== prevState) this.state$.next(state);
+
+    if (state !== prevState) {
+
+      this.state$.next(state);
+    }
+
     this.reason = moment().format('HH:mm') + ' ma3_25 ' + diff + '  ma25_99 ' +  ma25_99;
     console.log('%c ' + this.reason + ' ' + state, 'color:green');
     const VD = MATH.percent(last.Volume, medV);
@@ -231,6 +237,7 @@ export class BtcUsdtService {
   }
 
   async getCandles() {
+    console.log('GET CANDLES ');
     this.count++;
     let candles;
     let oldcandles: VOCandle[] = (await this.storage.select('USDT_BTC-candles'));
@@ -240,6 +247,7 @@ export class BtcUsdtService {
         candles = await this.apisPublic.getExchangeApi('bitfinex')
           .downloadCandles('USDT_BTC', '5m', 100);
       } else {
+
         const newcandles: VOCandle[] = await this.apisPublic.getExchangeApi('bitfinex')
           .downloadCandles('USDT_BTC', '5m', 3);
         newcandles.forEach(function (o) {

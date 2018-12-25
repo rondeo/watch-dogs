@@ -7,15 +7,25 @@ import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract'
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {VOOrder} from '../../models/app-models';
 import {CandlesService} from '../candles/candles.service';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {BuySellState} from './macd-signal';
+
+
+
 
 export class SellOnJump {
 
+  status$:BehaviorSubject<BuySellState>
   constructor(
     private market: string,
-    private candlesService: CandlesService,
-    private apiPublic: ApiPublicAbstract
+    private candlesService: CandlesService
   ) {
 
+    this.status$ = new BehaviorSubject(BuySellState.NONE);
+    candlesService.candles15min$(market).asObservable().subscribe(candles =>{
+
+
+    })
   }
   private timeJump;
 

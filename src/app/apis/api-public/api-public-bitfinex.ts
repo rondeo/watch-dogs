@@ -29,11 +29,12 @@ export class ApiPublicBitfinex extends ApiPublicAbstract{
 
     const url = 'api/proxy/https://api.bitfinex.com/v2/candles/trade:'+interval+':t'+
       market+'/hist';
-   // console.log(url);
+   //  console.log(url);
     const params:any = {
      limit:String(limit)
     };
     if(to) params.end = to;
+
     return this.http.get(url, {params}).pipe(map((res: any[]) => {
        // console.warn(res);
        res.reverse();

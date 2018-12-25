@@ -59,7 +59,7 @@ export class ScanMarketsService {
     try {
       const candles = await this.apisPublic.getExchangeApi('binance').downloadCandles(market, candlesInterval, 100);
 
-      const macd: MacdSignal = new MacdSignal();
+      const macd: MacdSignal = new MacdSignal(market, null);
       const closes = CandlesAnalys1.closes(candles);
       const last3 = macd.getHists3(closes);
       const mc = MC[market.split('_')[1]];

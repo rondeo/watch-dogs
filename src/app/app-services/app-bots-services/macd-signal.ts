@@ -5,6 +5,8 @@ import {BoundEvent} from '@angular/compiler/src/render3/r3_ast';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {VOCandle} from '../../models/api-models';
 import * as moment from 'moment';
+import {CandlesService} from '../candles/candles.service';
+import {CandlesAnalys1} from '../scanner/candles-analys1';
 
 export interface VOSignal {
   action: string;
@@ -16,7 +18,8 @@ export enum BuySellState {
   BUY = 'BUY',
   SELL = 'SELL',
   BUY_NOW = 'BUY_NOW',
-  SELL_NOW = 'SELL_NOW'
+  SELL_NOW = 'SELL_NOW',
+  SELL_ON_JUMP = 'SELL_ON_JUMP'
 }
 
 export class MacdSignal {
@@ -30,6 +33,16 @@ export class MacdSignal {
 
   lastCandle: VOCandle;
   state$: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
+
+  constructor(market: string, candlesService: CandlesService) {
+    if(candlesService){
+      candlesService.closes15m$(market).asObservable().subscribe(closes =>{
+        const state = this.tick(closes);
+        console.log('%c ' + market + '  ' + state, 'color:blue');
+
+      })
+    }
+  }
 
   getHists3(closes: number[]) {
     let macdInput = {
@@ -50,21 +63,7 @@ export class MacdSignal {
 
   price: number;
 
-  tick(closes: number[], lastCandle: VOCandle): BuySellState {
-
-    if (this.lastCandle && this.lastCandle.to === lastCandle.to) {
-      return;
-    }
-    if(this.lastCandle){
-      const diff = moment(lastCandle.to).diff(this.lastCandle.to, 'minutes');
-      console.log(' diff ', diff);
-      if (diff > 16) {
-        console.error(this.lastCandle, lastCandle)
-      }
-    }
-
-    this.lastCandle = lastCandle;
-
+  tick(closes: number[]): BuySellState {
     let macdInput = {
       values: closes,
       fastPeriod: this.fastPeriod,
@@ -80,18 +79,15 @@ export class MacdSignal {
     const last = _.last(result);
     const prev = result[L - 2];
 
+
     const prevState = this.state$.getValue();
     let newState = BuySellState.NONE;
-
-
-    this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.histogram.toPrecision(3) + ' ' + moment(lastCandle.to).format('HH:mm');
-    this.price = +((lastCandle.close + lastCandle.open) / 2).toFixed(8);
+    this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.histogram.toPrecision(3);
 
     if (last.histogram > 0 && prev.histogram < 0) newState = BuySellState.BUY_NOW;
     else if (prev.histogram < last.histogram) newState = BuySellState.BUY;
     else if (last.histogram < 0 && prev.histogram > 0) newState = BuySellState.SELL_NOW;
     else if (prev.histogram > last.histogram) newState = BuySellState.SELL;
-
 
     if (prevState !== newState) this.state$.next(newState);
 

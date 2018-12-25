@@ -135,6 +135,7 @@ export interface VOCandle {
   time?: string;
 }
 
+
 export interface VOCandleExt extends VOCandle {
   rsi: any;
   index: number;

@@ -194,7 +194,7 @@ export class FollowOpenOrder {
     this.apiPublic = this.apisPublic.getExchangeApi(this.exchange);
     this.marketCap.ticker$().subscribe(obj => this.MC = obj[this.coin]);
     await this.subscribeForBalances();
-    this.sellOnJump = new SellOnJump(this.market, this.candlesService, this.apiPublic);
+    this.sellOnJump = new SellOnJump(this.market, this.candlesService);
     this.sellOnJump.log = msg => {
       //  console.log(msg);
       this.log(msg, true);

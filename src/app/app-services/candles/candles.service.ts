@@ -122,34 +122,55 @@ export class CandlesService {
     this.storage.remove(this.exchange + market + '15m');
   }
 
+  closes:{[market:string]: Subject<number[]>} = {};
+  closes15m$(market: string): Subject<number[]>{
+    if(!this.closes[market]) {
+      this.closes[market] = new Subject<number[]>();
+      this.candles15min$(market);
+    }
+    return this.closes[market];
+  }
+
   candles15min$(market: string): BehaviorSubject<VOCandle[]> {
     if (!this.myCandles[market]) {
       const sub =  new BehaviorSubject([]);
 
       this.minuteCandles$(market).asObservable().subscribe(candles1m =>{
         if(!candles1m.length) return;
+       //  console.log(market + ' 1 min candles triggered');
         const candles15m = sub.getValue();
         if(!candles15m.length) return;
         const minutes = moment().minutes() % 15;
         if(minutes < 10) return;
-        console.log(minutes);
+       //  console.log(minutes);
        /// console.log(candles1m, candles15m);
-        const candles =  CandlesAnalys1.update15minCandles(candles1m, candles15m, market);
+        const candles =  _.takeRight(CandlesAnalys1.update15minCandles(candles1m, candles15m, market), 120);
+
         sub.next(candles);
+        const closes = CandlesAnalys1.closes(candles);
+        this.closes15m$(market).next(closes);
+        this.storage.upsert(this.exchange + market + '15m', candles);
 
 
       });
 
       this.myCandles[market]  = sub;
       this.storage.select(this.exchange + market + '15m').then((candles: VOCandle[]) => {
+
         if (candles && moment().diff(_.last(candles).to, 'minutes') < 20) {
+          const closes = CandlesAnalys1.closes(candles);
+          this.closes15m$(market).next(closes);
           sub.next(candles);
         } else {
+          console.log('%c ' + market +  ' download ne candles ', 'color:#ffbf00');
           this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120).then(candles =>{
             candles.forEach(function (item) {
               item.time = moment(item.to).format('HH:mm');
 
             });
+            this.storage.upsert(this.exchange + market + '15m', candles);
+            const closes = CandlesAnalys1.closes(candles);
+            this.closes15m$(market).next(closes);
             sub.next(candles);
           })
         }

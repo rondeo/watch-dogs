@@ -34,7 +34,7 @@ export class CandlesAnalys1 {
       return item.to < prevFrom;
     });
 
-    console.log(market + ' prev ' + prev15min1m.length + ' last15min1m ', last15min1m);
+   //  console.log(market + ' prev ' + prev15min1m.length + ' last15min1m ', last15min1m);
 
     const prev = CandlesAnalys1.createCandle(prev15min1m);
     const last = CandlesAnalys1.createCandle(last15min1m);

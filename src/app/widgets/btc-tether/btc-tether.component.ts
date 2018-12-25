@@ -32,7 +32,6 @@ export class BtcTetherComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.btcMC$ = this.marketCap.ticker$()
       .pipe(
         filter(obj => !!obj),
@@ -56,7 +55,6 @@ export class BtcTetherComponent implements OnInit {
       const message = 'BTC ' + alert.PD + ' ' + alert.P + ' V ' + alert.VD + ' ' + alert.trades.toString();
       this.snackBar.open(message, 'x', {panelClass: 'error'});
     });
-    this.btcusdt.start();
   }
 
 }
