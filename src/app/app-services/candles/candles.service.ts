@@ -122,14 +122,24 @@ export class CandlesService {
     this.storage.remove(this.exchange + market + '15m');
   }
 
-  closes:{[market:string]: Subject<number[]>} = {};
-  closes15m$(market: string): Subject<number[]>{
+  closes:{[market:string]:  BehaviorSubject<number[]>} = {};
+  closes15m$(market: string): BehaviorSubject<number[]>{
     if(!this.closes[market]) {
-      this.closes[market] = new Subject<number[]>();
+      this.closes[market] = new BehaviorSubject<number[]>([]);
       this.candles15min$(market);
     }
     return this.closes[market];
   }
+
+  volumes:{[market:string]:  BehaviorSubject<number[]>} = {};
+  volumes15m$(market: string): BehaviorSubject<number[]>{
+    if(!this.closes[market]) {
+      this.closes[market] = new BehaviorSubject<number[]>([]);
+      this.candles15min$(market);
+    }
+    return this.closes[market];
+  }
+
 
   candles15min$(market: string): BehaviorSubject<VOCandle[]> {
     if (!this.myCandles[market]) {
@@ -171,6 +181,8 @@ export class CandlesService {
             this.storage.upsert(this.exchange + market + '15m', candles);
             const closes = CandlesAnalys1.closes(candles);
             this.closes15m$(market).next(closes);
+            const volumes = CandlesAnalys1.volumes(candles);
+            this.volumes15m$(market).next(volumes);
             sub.next(candles);
           })
         }

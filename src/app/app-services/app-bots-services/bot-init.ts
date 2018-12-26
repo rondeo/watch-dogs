@@ -15,6 +15,7 @@ import {CandlesService} from '../candles/candles.service';
 import * as _ from 'lodash';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {Subscription} from 'rxjs/internal/Subscription';
 
 export class BotInit{
   state$: BehaviorSubject<BotState>;
@@ -35,6 +36,10 @@ export class BotInit{
   id:string;
 
 
+  sub1: Subscription;
+  sub2: Subscription;
+
+  interval;
 
   constructor(
     public exchange: string,
@@ -259,6 +264,19 @@ export class BotInit{
   }
 
   destroy() {
+    if (this.balance.balance) {
+      this.orders.cancelAllOrders().then(res => {
+        this.sellCoinInstant(0);
+      });
+      console.log(' SELLING COIN');
+      return;
+    }
+
+
+    this.stop();
+    if (this.sub1) this.sub1.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
+
     this.log({action: 'destroy', reason: ''});
     this.storage.remove(this.id);
     this.candlesService.deleteCandles(this.market);
@@ -300,6 +318,28 @@ export class BotInit{
 
   getPatterns() {
     return this.patterns;
+  }
+
+
+  stop() {
+    if (!this.interval) return;
+    clearInterval(this.interval);
+    this.interval = 0;
+    this.log({action: 'STOP', reason: 'tick'});
+  }
+
+  async start() {
+    if (this.interval) return;
+    const sec = Math.round(60 + (Math.random() * 20));
+    console.log(this.market + ' start refresh rate ' + sec);
+    this.interval = setInterval(() => this.tick(), sec * 1000);
+  }
+
+
+
+
+  tick(){
+
   }
 
 

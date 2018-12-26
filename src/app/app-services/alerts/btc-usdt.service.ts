@@ -89,7 +89,7 @@ export class BtcUsdtService {
     this.tick();
     this.interval = setInterval(() => {
       this.tick();
-    }, 60000);
+    }, 3 * 60000);
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,15 +126,6 @@ export class BtcUsdtService {
   reason: string;
 
   async tick() {
-
-   // const now = Date.now();
-
-   // console.log(moment().minutes());
-
-    //console.log(moment().minutes() % 15);
-
-    //console.log(moment().subtract(moment().minutes() % 15, 'minutes').second(0).format('HH:mm:ss'));
-
 
     let candles: VOCandle[] = await this.getCandles();
 

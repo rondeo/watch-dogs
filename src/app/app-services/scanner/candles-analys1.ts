@@ -88,8 +88,8 @@ export class CandlesAnalys1 {
     };
   }
 
-  static mas(candles: VOCandle[]) {
-    const closes = CandlesAnalys1.closes(candles);
+  static mas(candles: VOCandle[], closes?: number[]) {
+   if(!closes) closes = CandlesAnalys1.closes(candles);
     const ma99 = _.mean(_.takeRight(closes, 99));
 
     const ma7 = _.mean(_.takeRight(closes, 7));

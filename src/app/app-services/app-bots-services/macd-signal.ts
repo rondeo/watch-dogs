@@ -37,6 +37,7 @@ export class MacdSignal {
   constructor(market: string, candlesService: CandlesService) {
     if(candlesService){
       candlesService.closes15m$(market).asObservable().subscribe(closes =>{
+        if(!closes.length) return;
         const state = this.tick(closes);
         console.log('%c ' + market + '  ' + state, 'color:blue');
 
@@ -59,9 +60,6 @@ export class MacdSignal {
     const L = result.length;
     return [result[L - 1].histogram, result[L - 2].histogram, result[L - 3].histogram];
   }
-
-
-  price: number;
 
   tick(closes: number[]): BuySellState {
     let macdInput = {
