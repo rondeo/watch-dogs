@@ -45,49 +45,59 @@ export class ApiMarketCapService {
 
   static mapDataMC(data: any[], ranks) {
     const out = {};
-    const BTC: VOMarketCap = data.shift();
+    const BTC = data.shift();
+
     if (BTC.symbol !== 'BTC') throw new Error(' first not BTC');
-    const btc1h = +BTC.percent_change_1h;
-    const btc24h = +BTC.percent_change_24h;
-    const btc7d = +BTC.percent_change_7d;
-    BTC.price_usd = +BTC.price_usd;
-    BTC.price_btc = +BTC.price_btc;
+    const btcusd =BTC['quote']['USD'];
+    const btc1h = +btcusd.percent_change_1h;
+    const btc24h = +btcusd.percent_change_24h;
+    const btc7d = +btcusd.percent_change_7d;
+    btcusd.price_btc = 1;
+    btcusd.percent_change_1h = +btc1h.toFixed(2);
+    btcusd.percent_change_24h = +btc24h.toFixed(2);
+    btcusd.percent_change_7d = +btc7d.toFixed(2);
+    const priceBTC = +btcusd.price;
+    btcusd.price_usd = priceBTC;
+    BTC.id = BTC.slug;
+
 
     const USDT = data.find(function (item) {
       return item.symbol === 'USDT';
-    });
+    })['quote']['USD'];
 
     data.forEach(function (item) {
       if (item.symbol === 'ETHOS') item.symbol = 'BQX';
 
       const oldRank = ranks[item.symbol] ? ranks[item.symbol] : 500;
 
+      const data = item['quote']['USD'];
       if (!out[item.symbol]) out[item.symbol] = {
-        id: item.id,
+        id: item.slug,// item.id,
+        slug: item.slug,
         name: item.name,
         symbol: item.symbol,
-        rank: +item.rank,
-        r6: MATH.percent(oldRank.r6, +item.rank),
-        r24: oldRank.r24?MATH.percent(oldRank.r24, +item.rank): 0,
-        price_usd: +item.price_usd,
-        price_btc: +item.price_btc,
-        volume_usd_24h: +item['24h_volume_usd'],
-        market_cap_usd: +item.market_cap_usd,
-        available_supply: +item.available_supply,
+        rank: +item.cmc_rank,
+        r6: MATH.percent(oldRank.r6, +item.cmc_rank),
+        r24: oldRank.r24?MATH.percent(oldRank.r24, +item.cmc_rank): 0,
+        price_usd: +data.price,
+        price_btc: +data.price / priceBTC,
+        volume_usd_24h: data.volume24h,
+        market_cap_usd: +data.market_cap,
+        available_supply: +item.circulating_supply,
         total_supply: +item.total_supply,
         max_supply: +item.max_supply,
-        percent_change_1h: +(item.percent_change_1h - btc1h).toFixed(2),
-        percent_change_24h: +(item.percent_change_24h - btc24h).toFixed(2),
-        percent_change_7d: +(item.percent_change_7d - btc7d).toFixed(2),
-        last_updated: item.last_updated,
-        stamp: item.stamp
+        percent_change_1h: +(data.percent_change_1h - btc1h).toFixed(2),
+        percent_change_24h: +(data.percent_change_24h - btc24h).toFixed(2),
+        percent_change_7d: +(data.percent_change_7d - btc7d).toFixed(2),
+        last_updated: item.last_updated
       };
     });
 
-    out['USDT'].percent_change_1h = +USDT.percent_change_1h;
-    out['USDT'].percent_change_24h = +USDT.percent_change_24h;
-    out['USDT'].percent_change_7d = +USDT.percent_change_7d;
-    out['BTC'] = BTC;
+    out['USDT'].percent_change_1h = +(USDT.percent_change_1h.toFixed(2));
+    out['USDT'].percent_change_24h = +(USDT.percent_change_24h.toFixed(2));
+    out['USDT'].percent_change_7d = +(USDT.percent_change_7d.toFixed(2));
+    out['BTC'] = Object.assign(BTC, btcusd);
+   // console.log(out);
     return out;
   }
 
@@ -104,12 +114,21 @@ export class ApiMarketCapService {
         return out;
       };
 
-      const mc6h = this.http.get('api/proxy/http://front-desk.ca/coin-media/market-cap1.json');
-      const mc24h =  this.http.get('api/proxy/http://front-desk.ca/coin-media/market-cap3.json');
+      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap1.json');
+      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap3.json');
       this.oldData$ = forkJoin([mc6h, mc24h]).pipe(
         map(res =>{
-          const res6h = <any[]>res[0];
-          const res24h = key(<any []>res[1]);
+          let res6h = <any>res[0];
+          if((<any>res[1]).data){
+            console.warn( ' res 1 has data');
+            res[1] = (<any>res[1]).data;
+          }
+
+          let res24h = key(<any>res[1]);
+          if(res6h.data){
+            console.warn(res6h);
+            res6h = res6h.data;
+          }
           const out = {};
           res6h.forEach(function (item) {
             let symbol = item.symbol;
@@ -131,7 +150,7 @@ export class ApiMarketCapService {
   refreshTicker() {
     forkJoin(this.getOldData(), this.downloadTicker())
       .pipe(map(res => {
-       //  console.log(res);
+         // console.log(res);
         const oldData = res[0];
         const newData = res[1];
        //  console.log(oldData)
@@ -174,10 +193,13 @@ export class ApiMarketCapService {
 
   myTicker$;
   downloadTicker(): Observable<any[]> {
-    let url = 'api/proxy/https://api.coinmarketcap.com/v1/ticker/?limit=500';
-    return this.http.get(url)
+    const CMC_PRO_API_KEY = '6d420757-bcc7-4e9e-89bc-9e17ef61717f';
+    const limit = '500';
+    const params = {CMC_PRO_API_KEY, limit};
+    let url = 'api/proxy-5min/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
+    return this.http.get(url, {params})
       .pipe(
-        map((res: any[]) => res)
+        map((res: any) => res.data)
       );
   }
 

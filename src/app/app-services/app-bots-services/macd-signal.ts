@@ -26,12 +26,21 @@ export class MacdSignal {
   fastPeriod = 12;
   slowPeriod = 26;
   signalPeriod = 9;
-  macd: MACD;
-  states: VOSignal[] = [];
+
   // lastClose: number;
   reason: string;
   lastCandle: VOCandle;
 
+  macdInput(closes){
+    return {
+      values: closes,
+      fastPeriod: this.fastPeriod,
+      slowPeriod: this.slowPeriod,
+      signalPeriod: this.signalPeriod,
+      SimpleMAOscillator: true,
+      SimpleMASignal: false
+    }
+  }
   get state(){
     return this._state.getValue();
   }
@@ -44,15 +53,56 @@ export class MacdSignal {
     if(candlesService){
       candlesService.candles15min$(market).asObservable().subscribe(candles =>{
         if(!candles.length) return;
+
         const closes = candlesService.closes(market);
-        const state = this.tick(closes);
-        console.log('%c ' + market + '  ' + state, 'color:blue');
+
+        if(closes.length <190) throw new Error(' length not enough' + closes.length);
+        const closes1h = CandlesAnalys1.from15mTo1h(closes);
+
+        const macd15m: MACDOutput[] = (new MACD(this.macdInput(closes))).getResult();
+        const macd1h: MACDOutput[] = (new MACD(this.macdInput(closes1h))).getResult();
+
+        const L1 = macd15m.length;
+        const L2 = macd1h.length;
+
+        const last15m = macd15m[L1-1];
+        const prev15m = macd15m[L1-2];
+        const last1h = macd1h[L2-1];
+        const prev1h = macd1h[L2-2];
+
+        let newState = BuySellState.NONE;
+        const prevState = this.state;
+
+        this.reason = ' last '+(last15m.histogram > 0) + ' prev '
+          +(prev15m.histogram < 0) +' 1h ' + (last1h.histogram > prev1h.histogram)
+        + ' 15m ' +  (last15m.histogram > prev15m.histogram);
+        console.log(market + this.reason);
+
+        if (last15m.histogram > 0 && prev15m.histogram < 0 && last1h.histogram > prev1h.histogram) newState = BuySellState.BUY_NOW;
+        else if (prev15m.histogram < last15m.histogram) newState = BuySellState.BUY;
+        else if (last15m.histogram < 0 && prev15m.histogram > 0) newState = BuySellState.SELL_NOW;
+        else if (last15m.histogram < prev15m.histogram) newState = BuySellState.SELL;
+
+        if (prevState !== newState) this._state.next(newState);
+
+
+
+
+
+       //  console.log('%c ' + market + '  ' + state, 'color:blue');
 
       })
     }
   }
 
   getHists3(closes: number[]) {
+    const macd = new MACD(this.macdInput(closes));
+    const result: MACDOutput[] = macd.getResult();
+    const L = result.length;
+    return [result[L - 1].histogram, result[L - 2].histogram, result[L - 3].histogram];
+  }
+
+  /*getHists3(closes: number[]) {
     let macdInput = {
       values: closes,
       fastPeriod: this.fastPeriod,
@@ -68,7 +118,7 @@ export class MacdSignal {
     return [result[L - 1].histogram, result[L - 2].histogram, result[L - 3].histogram];
   }
 
-  tick(closes: number[]): BuySellState {
+  static tick(closes: number[]) {
     let macdInput = {
       values: closes,
       fastPeriod: this.fastPeriod,
@@ -97,6 +147,6 @@ export class MacdSignal {
     if (prevState !== newState) this._state.next(newState);
 
 
-    return newState;
-  }
+    return {last, prev};
+  }*/
 }

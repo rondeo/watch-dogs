@@ -82,6 +82,8 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
       histogram.push(item.histogram);
     });
 
+    if(maxHist > max) max = maxHist;
+    if(minHist < min) min = minHist;
    // while (macdV.length < length) macdV.unshift(0);
    // while (signals.length < length) signals.unshift(0);
    // while (histogram.length < length) histogram.unshift(0);

@@ -23,15 +23,8 @@ export enum MCState {
 
 export enum BotState {
   NONE = 'NONE',
-  BUYING = 'BUYING',
-  SELLING = 'SELLING',
-  BOUGHT = 'BOUGHT',
-  SOLD = 'SOLD',
-  TO_USDT = 'TO_USDT',
-  NO_BASE = 'NO_BASE',
-  BALANCE_2 = 'BALANCE_2',
-  BUYING_SELLING = 'BUYING_SELLING',
-  IN_STOP_LOSS = 'IN_STOP_LOSS'
+  FIRST_BUY = 'FIRST_BUY',
+  TO_USDT = 'TO_USDT'
 }
 
 
@@ -133,10 +126,10 @@ export class MarketBot extends BotInit {
       }
 
       this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
-      /*  if (this.mcCoin.r6 < 0) {
-          this.log({action: 'STOP BUY', reason: 'r6 ' + this.mcCoin.r6});
+        if ((this.mcCoin.r6 - this.mcCoin.r24) < 0) {
+          this.log({action: 'STOP BUY', reason: 'r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24 + ' ' + (this.mcCoin.r6 - this.mcCoin.r24)});
           return;
-        }*/
+        }
 
       const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
 
@@ -185,10 +178,11 @@ export class MarketBot extends BotInit {
       }
       const buyOrders = this.orders.buyOrders;
       const age = moment().diff(_.first(buyOrders).timestamp, 'minutes');
-      const priceD = MATH.percent(mas.ma3,_.first(buyOrders).rate);
+      const rate = _.first(buyOrders).rate
+      const priceD = MATH.percent(mas.ma3, rate);
 
       if(age > 60 && priceD > 1) {
-        this.log({action: 'CANCEL BUY', reason: 'age ' + age + ' Pd ' + priceD});
+        this.log({action: 'CANCEL BUY', reason: 'age ' + age + ' Pd ' + priceD + ' ' +rate});
         this.orders.cancelBuyOrders();
       }else {
         this.log({action: 'BUYING', reason: 'age ' + age + ' Pd ' + priceD});
@@ -218,11 +212,6 @@ export class MarketBot extends BotInit {
     if (last15m.close < mas.ma25) {
       const vols = CandlesAnalys1.volumes(candles15m);
       const Vd = MATH.percent(last15m.Volume, MATH.median(vols));
-
-      this.log({
-        action: 'MAS ',
-        reason: 'ma3_7 ' + MATH.percent(mas.ma3, mas.ma7) + ' ma25-99 ' + MATH.percent(mas.ma25, mas.ma99) + ' Vd ' + Vd
-      });
     }
 
     // this.log({action: 'close < ma25', reason: '  ma25 ' + mas.ma25.toFixed(8) + ' close ' + last15m.close});

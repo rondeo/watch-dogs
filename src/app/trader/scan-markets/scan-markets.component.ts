@@ -83,7 +83,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onMACDChange(data: MACDOutput[]) {
     //  console.log(data);
+    return;
     const candles = this.candles;
+
     const out = [];
     candles.forEach(function (item, i) {
       let action = 0;
@@ -153,7 +155,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-  patterns$: Observable<any[]>;
+  scanResults$: Observable<any[]>;
   volumeDifference = 50;
 
   timeout;
@@ -173,7 +175,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       console.log('%c SCAN STARTED ', 'color:pink');
       this.snackBar.open('SCAN START', 'x', {duration: 3000});
       const markets = await this.scanner.getAvailableMarkets('binance');
-      this.patterns$ = this.scanner.scanPatterns(markets, this.candlesInterval, +this.volumeDifference).asObservable()
+      this.scanResults$ = this.scanner.scanPatterns(markets, this.candlesInterval, +this.volumeDifference).asObservable()
         .pipe(
           map(mapFunction),
           catchError(err => {
@@ -333,6 +335,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.scanResults$ = this.scanner.scanResults$;
     this.initAsync();
     //  this.botsService.init();
   }
@@ -542,7 +545,8 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
 
   onCandlesChage(candles: VOCandle[]) {
-    this.closes = CandlesAnalys1.closes(candles);
+
+    this.closes = CandlesAnalys1.from15mTo1h(CandlesAnalys1.closes(candles));
   }
 
 

@@ -7,32 +7,48 @@ import {CandlesService} from '../candles/candles.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BuySellState} from './macd-signal';
 import {distinctUntilChanged} from 'rxjs/operators';
+import {MarketState} from '../alerts/btc-usdt.service';
 
 
 export class SellOnJump {
 
-  state:BehaviorSubject<BuySellState>;
+  private _state:BehaviorSubject<BuySellState | MarketState>;
   get state$(){
-    return this.state.asObservable().pipe(distinctUntilChanged())
+    return this._state.asObservable().pipe(distinctUntilChanged())
+  }
+  get state(){
+    return this._state.getValue();
   }
   reason: string;
+  private prev:number;
   constructor(
     private market: string,
+
     private candlesService: CandlesService
   ) {
 
-    this.state = new BehaviorSubject(BuySellState.NONE);
+    this._state = new BehaviorSubject(BuySellState.NONE);
     candlesService.candles15min$(market).asObservable().subscribe(candles =>{
 
       const closes = candlesService.closes(market);
-      const L = closes.length;
-      const last = closes[L-1];
-      const prevMed = (closes[L-2] + closes[L-3]) /2;
-      const D = MATH.percent(last, prevMed);
-      this.reason = ' D ' + D;
+      const mas = candlesService.mas(market);
+
+      const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+      this.reason = ' ma3_7 ' + ma3_7;
       console.log(this.reason);
-      if(D > 2) this.state.next(BuySellState.SELL_ON_JUMP);
-      else this.state.next(BuySellState.NONE);
+
+      if(ma3_7 > 2) this._state.next(MarketState.JUMPING);
+      else this._state.next(BuySellState.NONE);
+
+
+      if(this.state === MarketState.JUMPING){
+        if(this.prev > ma3_7) {
+          this._state.next(BuySellState.SELL_ON_JUMP);
+        }
+      }
+
+      this.prev = ma3_7;
+
     })
   }
 

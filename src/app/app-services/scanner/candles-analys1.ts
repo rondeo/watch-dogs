@@ -13,6 +13,14 @@ export class CandlesAnalys1 {
   static analysData;
   static data;
 
+  static from15mTo1h(closes:number[]){
+    const out = [];
+    for(let i = closes.length -1; i>=0; i-=4){
+      out.push(closes[i]);
+    }
+    return out.reverse();
+  }
+
 
   static update15minCandles(candles1m: VOCandle[], candles15m: VOCandle[], market?:string) {
 

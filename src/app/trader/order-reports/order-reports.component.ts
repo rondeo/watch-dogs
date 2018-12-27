@@ -11,6 +11,8 @@ import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {noop} from 'rxjs/internal-compatibility';
 import {CandlesService} from '../../app-services/candles/candles.service';
 import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
+import {VOCandle} from '../../models/api-models';
+import {MACD} from '../libs/techind';
 
 @Component({
   selector: 'app-order-reports',
@@ -70,7 +72,7 @@ export class OrderReportsComponent implements OnInit {
     })).subscribe(noop);
   }
 
-  showBot(){
+  showBot() {
     this.isLive = this.currentBot ? this.currentBot.isLive : false;
     this.showBotHistory();
   }
@@ -105,7 +107,7 @@ export class OrderReportsComponent implements OnInit {
   onSellClick() {
     const bot = this.currentBot;
     if (!bot) return;
-   // const reason = prompt('Reason');
+    // const reason = prompt('Reason');
     bot.sellCoinInstant(0).then(res => {
       this.showBotHistory();
     })
@@ -126,9 +128,9 @@ export class OrderReportsComponent implements OnInit {
     const exchange = evt.item.exchange;
     switch (evt.prop) {
       case 'market':
-        if(this.market === market){
+        if (this.market === market) {
           this.market = null;
-          setTimeout(()=>{
+          setTimeout(() => {
             this.market = market;
             this.showBotHistory();
           }, 1000)
@@ -144,8 +146,31 @@ export class OrderReportsComponent implements OnInit {
     }
   }
 
+
+  onCandles(candles: VOCandle[]) {
+    //console.log(candles);
+    const closes = CandlesAnalys1.closes(candles);
+
+    this.closes = CandlesAnalys1.from15mTo1h(closes);
+   // console.log(this.closes);
+
+    const macdInput:any = {
+      values: this.closes,
+      fastPeriod: 12,
+      slowPeriod: 26,
+      signalPeriod: 9,
+      SimpleMAOscillator: true,
+      SimpleMASignal: false
+    };
+
+    const values = (new MACD(macdInput)).getResult();
+    //console.log(values);
+
+  }
+
   volumes: number[];
   closes: number[];
+
   async showBotHistory() {
     const bot = this.currentBot;
     if (!bot) {
@@ -153,15 +178,14 @@ export class OrderReportsComponent implements OnInit {
       return;
     }
 
-    const market = this.currentBot.market;
-    const candles = this.candlesService.getCandles15min(market);
-    // console.log(candles);
-    if(candles){
-      const volumes = CandlesAnalys1.volumes(candles);
-      const closes = CandlesAnalys1.closes(candles);
-      this.volumes = volumes;
-      this.closes = closes;
-    }
+    /* const market = this.currentBot.market;
+     const closes = this.candlesService.closes(market);
+
+     this.closes = CandlesAnalys1.from15mTo1h(closes);
+     console.log(this.closes);*/
+
+    // this.volumes = volumes;
+
 
     switch (this.dataName) {
       case '-patterns':

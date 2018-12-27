@@ -3,10 +3,10 @@ import {MarketBalance} from './market-balance';
 import {MarketOrders} from './market-orders';
 import {BuySellState, MacdSignal} from './macd-signal';
 import {StopLossOrder} from './stop-loss-order';
-import {BotState, MarketBot, MCState} from './market-bot';
+import {BotState, MCState} from './market-bot';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {distinctUntilChanged, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import * as moment from 'moment';
 import {noop} from 'rxjs/internal-compatibility';
 import {VOMarketCap, VOOrder} from '../../models/app-models';
@@ -159,8 +159,12 @@ export class BotInit {
 
     this.sellOnJump = new SellOnJump(this.market, this.candlesService);
     this.sellOnJump.state$.subscribe(state => {
+      if(state === BuySellState.SELL_ON_JUMP) {
+        this.log({action: 'SELL_ON_JUMP', reason: this.sellOnJump.reason});
+        this.sellCoinInstant(0);
+      }
       console.log(this.market + ' sellOnJump ' + state + ' ' + this.sellOnJump.reason);
-    })
+    });
 
     this.macdSignal.state$.subscribe(res => {
       if (res === BuySellState.BUY_NOW) {
@@ -203,6 +207,10 @@ export class BotInit {
         this.mcCoin = obj[this.coin];
         this.mcBase = obj[this.base];
 
+        if(!this.mcCoin) {
+          console.log(this.coin, obj);
+          return
+        }
         const prevSate = this.mcState$.getValue();
         let newState = MCState.NONE;
 

@@ -45,7 +45,7 @@ export class ScanMarketsService {
 
   ///////////////////// patterns scan //////////////////////
 
-  async scanNextPattern(markets: string[], i, sub: Subject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
+  async scanNextPattern(markets: string[], i, sub: BehaviorSubject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
     if (!this.scanning$.getValue()) return;
     i++;
     if (i >= markets.length) {
@@ -63,6 +63,7 @@ export class ScanMarketsService {
       const closes = CandlesAnalys1.closes(candles);
       const last3 = macd.getHists3(closes);
       const mc = MC[market.split('_')[1]];
+
 
       if(last3[0] < 0 && last3[0] > last3[1] &&  last3[1] > last3[2] &&  mc.r6 > 0) {
 
@@ -93,13 +94,17 @@ export class ScanMarketsService {
       this.scanNextPattern(markets, i, sub, candlesInterval, MC, results), 2000));
 
   }
-
+  get scanResults$(){
+    return this.scanResults.asObservable()
+  }
+  private scanResults: BehaviorSubject<any[]> = new BehaviorSubject([]);
   scanPatterns(markets: string[], candlesInterval: string, diff) {
-    const sub = new Subject<any[]>();
+    const sub: BehaviorSubject<any[]> = new BehaviorSubject([]);
     this.marketCap.getTicker().then(MC=>{
       this.scanning$.next(1);
       this.scanNextPattern(markets, -1, sub, candlesInterval, MC, []);
     });
+    this.scanResults = sub;
     return sub;
   }
 

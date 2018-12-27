@@ -34,9 +34,8 @@
     </div>
 
 </div>
-    <app-market-candles [exchange]="'binance'" [market]="market"></app-market-candles>
+    <app-market-candles [exchange]="'binance'" [market]="market" (onCandles)="onCandles($event)"></app-market-candles>
 
 </div>
 
-<app-volume-hist [values]="volumes"></app-volume-hist>
 <app-macd-indicator [closes]="closes"></app-macd-indicator>

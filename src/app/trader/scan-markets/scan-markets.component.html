@@ -32,9 +32,11 @@
             {{scanner.isScanning?'Stop':'Scan'}}
         </button>
 
-        <div class="scrollY300">
-            <app-table-props [dataset]="patterns$ | async" (selected)="onPatternClick($event)"></app-table-props>
-        </div>
+
+    </div>
+
+    <div class="scrollY300">
+        <app-table-props [dataset]="scanResults$ | async" (selected)="onPatternClick($event)"></app-table-props>
     </div>
 
 
