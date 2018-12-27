@@ -30,14 +30,21 @@ export class MacdSignal {
   states: VOSignal[] = [];
   // lastClose: number;
   reason: string;
-
   lastCandle: VOCandle;
-  state$: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
+
+  get state(){
+    return this._state.getValue();
+  }
+  _state: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
+  get state$(){
+    return this._state.asObservable()
+  }
 
   constructor(market: string, candlesService: CandlesService) {
     if(candlesService){
-      candlesService.closes15m$(market).asObservable().subscribe(closes =>{
-        if(!closes.length) return;
+      candlesService.candles15min$(market).asObservable().subscribe(candles =>{
+        if(!candles.length) return;
+        const closes = candlesService.closes(market);
         const state = this.tick(closes);
         console.log('%c ' + market + '  ' + state, 'color:blue');
 
@@ -78,7 +85,7 @@ export class MacdSignal {
     const prev = result[L - 2];
 
 
-    const prevState = this.state$.getValue();
+    const prevState = this.state;
     let newState = BuySellState.NONE;
     this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.histogram.toPrecision(3);
 
@@ -87,7 +94,7 @@ export class MacdSignal {
     else if (last.histogram < 0 && prev.histogram > 0) newState = BuySellState.SELL_NOW;
     else if (prev.histogram > last.histogram) newState = BuySellState.SELL;
 
-    if (prevState !== newState) this.state$.next(newState);
+    if (prevState !== newState) this._state.next(newState);
 
 
     return newState;

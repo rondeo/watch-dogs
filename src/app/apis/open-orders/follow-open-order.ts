@@ -197,7 +197,7 @@ export class FollowOpenOrder {
     this.sellOnJump = new SellOnJump(this.market, this.candlesService);
     this.sellOnJump.log = msg => {
       //  console.log(msg);
-      this.log(msg, true);
+      // this.log(msg, true);
     };
     this.sellOnJump.sellCoin = () => {
       this.log(' SELL COIN by sellOnJump ', true);

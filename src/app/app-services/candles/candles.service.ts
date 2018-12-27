@@ -25,7 +25,7 @@ export class CandlesService {
   ) {
 
 
-   //  setInterval(() => this.updateCandles(), 5 * 6000);
+    //  setInterval(() => this.updateCandles(), 5 * 6000);
 
 
   }
@@ -49,140 +49,147 @@ export class CandlesService {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- /* async updateLast2Candles(market, sub: BehaviorSubject<VOCandle[]>) {
+  /* async updateLast2Candles(market, sub: BehaviorSubject<VOCandle[]>) {
 
-    let candles: VOCandle[] = sub.getValue();
+     let candles: VOCandle[] = sub.getValue();
 
-    if (candles.length === 0 || moment().diff(_.last(candles).to, 'minutes') > 20) {
-      console.log(' DOWNLOADING candles for ' + market);
-      candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120);
-      candles.forEach(function (item) {
-        item.time = moment(item.to).format('HH:mm');
-      })
-    }
+     if (candles.length === 0 || moment().diff(_.last(candles).to, 'minutes') > 20) {
+       console.log(' DOWNLOADING candles for ' + market);
+       candles = await this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120);
+       candles.forEach(function (item) {
+         item.time = moment(item.to).format('HH:mm');
+       })
+     }
 
-    let minuteCandles = await this.getCandles(market);
+     let minuteCandles = await this.getCandles(market);
 
-    const timestampMinute = _.last(minuteCandles).to;
+     const timestampMinute = _.last(minuteCandles).to;
 
-    const timestampLast = _.last(candles).to;
-    console.log(moment(timestampLast).format('HH:mm:ss'), moment(timestampMinute).format('HH:mm:ss'));
-    if (timestampMinute === timestampLast) {
-      console.log(market + 'MINUTE candles same time ');
-      return
-    }
+     const timestampLast = _.last(candles).to;
+     console.log(moment(timestampLast).format('HH:mm:ss'), moment(timestampMinute).format('HH:mm:ss'));
+     if (timestampMinute === timestampLast) {
+       console.log(market + 'MINUTE candles same time ');
+       return
+     }
 
-    if (minuteCandles.length < 30) {
-      console.error(minuteCandles);
+     if (minuteCandles.length < 30) {
+       console.error(minuteCandles);
 
-      return;
-    }
-
-
-    const lastFrom = moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();//.format('HH:mm:ss');
-
-    const prevFrom = moment(lastFrom).subtract(15, 'minutes').valueOf();
-    const to = moment().valueOf();
+       return;
+     }
 
 
-    const prev15min1m: VOCandle[] = minuteCandles.filter(function (item) {
-      return item.to > prevFrom && item.to < lastFrom;
-    });
+     const lastFrom = moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();//.format('HH:mm:ss');
 
-    const last15min1m = minuteCandles.filter(function (item) {
-      return item.to > lastFrom;
-    });
+     const prevFrom = moment(lastFrom).subtract(15, 'minutes').valueOf();
+     const to = moment().valueOf();
 
-    candles = candles.filter(function (item) {
-      return item.to < prevFrom;
-    });
 
-    console.log(market + ' prev ' + prev15min1m.length + ' last15min1m ', last15min1m);
+     const prev15min1m: VOCandle[] = minuteCandles.filter(function (item) {
+       return item.to > prevFrom && item.to < lastFrom;
+     });
 
-    const prev = CandlesAnalys1.createCandle(prev15min1m);
-    const last = CandlesAnalys1.createCandle(last15min1m);
+     const last15min1m = minuteCandles.filter(function (item) {
+       return item.to > lastFrom;
+     });
 
-    candles.push(prev);
-    candles.push(last);
+     candles = candles.filter(function (item) {
+       return item.to < prevFrom;
+     });
 
-    const err = CandlesAnalys1.checkCandles(candles.slice(0, -1), 15 * 60000);
+     console.log(market + ' prev ' + prev15min1m.length + ' last15min1m ', last15min1m);
 
-    if (err.length) {
-      console.log(err, candles);
+     const prev = CandlesAnalys1.createCandle(prev15min1m);
+     const last = CandlesAnalys1.createCandle(last15min1m);
 
-    } else {
-      candles = _.takeRight(candles, 120);
-      sub.next(candles);
-      this.storage.upsert(this.exchange + market + '15m', candles);
-    }
-  }*/
+     candles.push(prev);
+     candles.push(last);
+
+     const err = CandlesAnalys1.checkCandles(candles.slice(0, -1), 15 * 60000);
+
+     if (err.length) {
+       console.log(err, candles);
+
+     } else {
+       candles = _.takeRight(candles, 120);
+       sub.next(candles);
+       this.storage.upsert(this.exchange + market + '15m', candles);
+     }
+   }*/
 
   deleteCandles(market: string) {
     delete this.myCandles[market];
     this.storage.remove(this.exchange + market + '15m');
   }
 
-  closes:{[market:string]:  BehaviorSubject<number[]>} = {};
-  closes15m$(market: string): BehaviorSubject<number[]>{
-    if(!this.closes[market]) {
-      this.closes[market] = new BehaviorSubject<number[]>([]);
-      this.candles15min$(market);
-    }
-    return this.closes[market];
+ private  _mas = {};
+  private _volumes = {};
+  private _closes = {};
+
+  closes(market: string): number[] {
+    if (!this._closes[market]) this._closes[market] = CandlesAnalys1.closes(this.myCandles[market].getValue());
+    return this._closes[market];
   }
 
-  volumes:{[market:string]:  BehaviorSubject<number[]>} = {};
-  volumes15m$(market: string): BehaviorSubject<number[]>{
-    if(!this.closes[market]) {
-      this.closes[market] = new BehaviorSubject<number[]>([]);
-      this.candles15min$(market);
-    }
-    return this.closes[market];
+  mas(market: string): { ma3: number, ma7: number, ma25: number,  ma99: number}  {
+    if (!this._mas[market]) this._mas[market] = CandlesAnalys1.mas(null, this.closes(market));
+    return this._mas[market];
   }
+
+  volumes(market: string) {
+    if (!this._volumes[market]) this._volumes[market] = CandlesAnalys1.volumes(this.myCandles[market].getValue());
+    return this._volumes[market];
+  }
+
 
 
   candles15min$(market: string): BehaviorSubject<VOCandle[]> {
     if (!this.myCandles[market]) {
-      const sub =  new BehaviorSubject([]);
+      const sub = new BehaviorSubject([]);
 
-      this.minuteCandles$(market).asObservable().subscribe(candles1m =>{
-        if(!candles1m.length) return;
-       //  console.log(market + ' 1 min candles triggered');
+      this.minuteCandles$(market).asObservable().subscribe(candles1m => {
+        if (!candles1m.length) return;
+        //  console.log(market + ' 1 min candles triggered');
         const candles15m = sub.getValue();
-        if(!candles15m.length) return;
+        if (!candles15m.length) return;
         const minutes = moment().minutes() % 15;
-        if(minutes < 10) return;
-       //  console.log(minutes);
-       /// console.log(candles1m, candles15m);
-        const candles =  _.takeRight(CandlesAnalys1.update15minCandles(candles1m, candles15m, market), 120);
+        if (minutes < 10) return;
 
+        //  console.log(minutes);
+        /// console.log(candles1m, candles15m);
+        const candles = _.takeRight(CandlesAnalys1.update15minCandles(candles1m, candles15m, market), 120);
+
+        this._volumes[market] = null;
+        this._mas[market] = null;
+        this._closes[market] = null;
         sub.next(candles);
-        const closes = CandlesAnalys1.closes(candles);
-        this.closes15m$(market).next(closes);
+
         this.storage.upsert(this.exchange + market + '15m', candles);
 
 
       });
 
-      this.myCandles[market]  = sub;
+      this.myCandles[market] = sub;
       this.storage.select(this.exchange + market + '15m').then((candles: VOCandle[]) => {
 
         if (candles && moment().diff(_.last(candles).to, 'minutes') < 20) {
-          const closes = CandlesAnalys1.closes(candles);
-          this.closes15m$(market).next(closes);
+
+
           sub.next(candles);
         } else {
-          console.log('%c ' + market +  ' download ne candles ', 'color:#ffbf00');
-          this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120).then(candles =>{
+          console.log('%c ' + market + ' download ne candles ', 'color:#ffbf00');
+          this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 120).then(candles => {
             candles.forEach(function (item) {
               item.time = moment(item.to).format('HH:mm');
 
             });
+
             this.storage.upsert(this.exchange + market + '15m', candles);
-            const closes = CandlesAnalys1.closes(candles);
-            this.closes15m$(market).next(closes);
-            const volumes = CandlesAnalys1.volumes(candles);
-            this.volumes15m$(market).next(volumes);
+           // const closes = CandlesAnalys1.closes(candles);
+           // this.closes15m$(market).next(closes);
+            this._volumes[market] = null;
+            this._mas[market] = null;
+            this._closes[market] = null;
             sub.next(candles);
           })
         }
@@ -193,34 +200,34 @@ export class CandlesService {
     return this.myCandles[market];
   }
 
- /* async updateCandlesNext(markets: string[], i) {
-    i++;
-    if (i >= markets.length) {
-      return;
-    }
-    const market = markets[i];
-    const sub = this.myCandles[market];
+  /* async updateCandlesNext(markets: string[], i) {
+     i++;
+     if (i >= markets.length) {
+       return;
+     }
+     const market = markets[i];
+     const sub = this.myCandles[market];
 
-    await this.updateLast2Candles(market, sub);
-    setTimeout(() => this.updateCandlesNext(markets, i), 2000);
-  }
+     await this.updateLast2Candles(market, sub);
+     setTimeout(() => this.updateCandlesNext(markets, i), 2000);
+   }
 
-  updateCandles() {
-    //  console.log(moment().subtract(moment().minutes() % 15, 'minutes').minutes());
+   updateCandles() {
+     //  console.log(moment().subtract(moment().minutes() % 15, 'minutes').minutes());
 
-    const minutes = moment().minutes() % 15;
-    // console.log(minutes);
-    // const lastCandle = _.last(Object.values(this.myCandles)[0].getValue());
-    if (minutes < 10) {
-      console.log(minutes);
-      return;
-    }
-    const subs = Object.values(this.myCandles);
-    if (subs.length === 0) return;
-    const markets = Object.keys(this.myCandles);
-    if (markets.length) this.updateCandlesNext(markets, -1);
-  }
-*/
+     const minutes = moment().minutes() % 15;
+     // console.log(minutes);
+     // const lastCandle = _.last(Object.values(this.myCandles)[0].getValue());
+     if (minutes < 10) {
+       console.log(minutes);
+       return;
+     }
+     const subs = Object.values(this.myCandles);
+     if (subs.length === 0) return;
+     const markets = Object.keys(this.myCandles);
+     if (markets.length) this.updateCandlesNext(markets, -1);
+   }
+ */
   getCandles15min(market: string) {
     if (this.myCandles[market]) return this.myCandles[market].getValue();
     return null;
@@ -423,8 +430,8 @@ export class CandlesService {
     return err;
   }
 
-  minuteCandles$(market: string){
-    if(!this.minuteCandles[market]) this.minuteCandles[market] = new BehaviorSubject([]);
+  minuteCandles$(market: string) {
+    if (!this.minuteCandles[market]) this.minuteCandles[market] = new BehaviorSubject([]);
     return this.minuteCandles[market];
   }
 

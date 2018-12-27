@@ -3,29 +3,46 @@ import {CandlesAnalys1} from '../scanner/candles-analys1';
 import * as _ from 'lodash';
 import {MATH} from '../../com/math';
 import * as moment from 'moment';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {VOOrder} from '../../models/app-models';
 import {CandlesService} from '../candles/candles.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BuySellState} from './macd-signal';
-
-
+import {distinctUntilChanged} from 'rxjs/operators';
 
 
 export class SellOnJump {
 
-  status$:BehaviorSubject<BuySellState>
+  state:BehaviorSubject<BuySellState>;
+  get state$(){
+    return this.state.asObservable().pipe(distinctUntilChanged())
+  }
+  reason: string;
   constructor(
     private market: string,
     private candlesService: CandlesService
   ) {
 
-    this.status$ = new BehaviorSubject(BuySellState.NONE);
+    this.state = new BehaviorSubject(BuySellState.NONE);
     candlesService.candles15min$(market).asObservable().subscribe(candles =>{
 
-
+      const closes = candlesService.closes(market);
+      const L = closes.length;
+      const last = closes[L-1];
+      const prevMed = (closes[L-2] + closes[L-3]) /2;
+      const D = MATH.percent(last, prevMed);
+      this.reason = ' D ' + D;
+      console.log(this.reason);
+      if(D > 2) this.state.next(BuySellState.SELL_ON_JUMP);
+      else this.state.next(BuySellState.NONE);
     })
+  }
+
+
+  init(){
+
+  }
+
+  log(log: {action: string, reason: string}){
+    console.log(this.market , log);
   }
   private timeJump;
 
@@ -69,10 +86,6 @@ export class SellOnJump {
 
   }
 
-  log(message: string) {
-    console.log(message);
-  }
-
   sellCoin() {
 
   }
@@ -97,30 +110,30 @@ export class SellOnJump {
     let message = ' jump  ma3_7  ' + ma3_7 + '  ma3_25 ' + ma3_25 + ' ma7_25 ' + ma7_25 + ' close ' + last.close;
 
     if (this.timeJump && ma7_25 < 0) {
-      this.log(' TOO LATE ' + message);
+      //this.log(' TOO LATE ' + message);
       this.timeJump = 0;
       return false;
     }
 
     if (ma3_25 > 4) {
-      this.log(' JUMP > 4 ');
+      //this.log(' JUMP > 4 ');
       this.timeJump = moment(last.to).valueOf();
     }
 
     if (!this.timeJump) return false;
     const dur = moment(last.to).diff(this.timeJump, 'minutes');
-    this.log(message);
+    //this.log(message);
     if (dur > 20) {
-      this.log(' RESETTING JUMP by duration > ' + dur);
+     // this.log(' RESETTING JUMP by duration > ' + dur);
       this.timeJump = 0;
       return false;
     }
 
     if (ma3_7 < -1 && Math.abs(ma3_7) > ma7_25) {
-      this.log(' jump DOWN => SELL  ma3_7D < -1 && Math.abs(ma3_7D) > ma7_25D)');
+      //this.log(' jump DOWN => SELL  ma3_7D < -1 && Math.abs(ma3_7D) > ma7_25D)');
 
     } else {
-      this.log(' jump continue ');
+      //this.log(' jump continue ');
     }
 
     return true;

@@ -169,7 +169,7 @@ export class ApiMarketCapService {
 
       this.myTicker$.subscribe(console.warn);
     }*/
-    return this.tikerSub;
+    return this.tikerSub.asObservable();
   }
 
   myTicker$;

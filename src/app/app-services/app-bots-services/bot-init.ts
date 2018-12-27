@@ -6,7 +6,7 @@ import {StopLossOrder} from './stop-loss-order';
 import {BotState, MarketBot, MCState} from './market-bot';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {map} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import * as moment from 'moment';
 import {noop} from 'rxjs/internal-compatibility';
 import {VOMarketCap, VOOrder} from '../../models/app-models';
@@ -16,11 +16,12 @@ import * as _ from 'lodash';
 import {UtilsBooks} from '../../com/utils-books';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {SellOnJump} from './sell-on-jump';
 
-export class BotInit{
+export class BotInit {
   state$: BehaviorSubject<BotState>;
-  mcState$: BehaviorSubject<MCState> =  new BehaviorSubject(MCState.NONE);
-  base:string;
+  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
+  base: string;
   coin: string;
   mcCoin: VOMarketCap;
   mcBase: VOMarketCap;
@@ -30,10 +31,11 @@ export class BotInit{
   orders: MarketOrders;
   macdSignal: MacdSignal;
   stopLossOrder: StopLossOrder;
+  sellOnJump: SellOnJump;
 
   patterns: any[];
   logs: any[] = [];
-  id:string;
+  id: string;
 
 
   sub1: Subscription;
@@ -50,7 +52,7 @@ export class BotInit{
     public candlesService: CandlesService,
     public storage: StorageService,
     public marketCap: ApiMarketCapService
-  ){
+  ) {
     this.id = 'bot-' + exchange + market;
   }
 
@@ -154,26 +156,32 @@ export class BotInit{
     this.macdSignal = new MacdSignal(this.market, this.candlesService);
     await this.balance.init();
 
-    this.macdSignal.state$.asObservable().subscribe(res => {
+
+    this.sellOnJump = new SellOnJump(this.market, this.candlesService);
+    this.sellOnJump.state$.subscribe(state => {
+      console.log(this.market + ' sellOnJump ' + state + ' ' + this.sellOnJump.reason);
+    })
+
+    this.macdSignal.state$.subscribe(res => {
       if (res === BuySellState.BUY_NOW) {
         this.log({action: 'BUY_SIGNAL', reason: this.macdSignal.reason})
       } else if (res === BuySellState.SELL_NOW) {
         this.log({action: 'SEL_SIGNAL', reason: this.macdSignal.reason})
       }
-    })
+    });
 
     if (!this.isLive) console.log('%c ' + this.market + ' NOT LIVE ', 'color:red');
     console.log(this.market + ' BALANCE  init DONE $' + this.balance.balanceUS);
     this.balance.balance$.subscribe(balance => {
       if (balance.change) {
-        this.log({action: 'BAL_CHANGE', reason: ' ' + balance.change});
+        this.log({action: 'BALANCE', reason: ' ' + balance.change});
         this.apiPrivate.refreshAllOpenOrders();
         console.warn(this.market + ' balance changed ' + balance.change)
       }
     });
 
     this.balance.state$.subscribe(state => {
-      this.log({action: 'BAL_STATE', reason: state});
+      this.log({action: 'BALANCE', reason: state});
     });
 
     this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
@@ -185,7 +193,6 @@ export class BotInit{
       //  console.log(_.map(_.takeRight(candles, 10),'time'));
     })
   }
-
 
 
   initMarketCap() {
@@ -235,14 +242,11 @@ export class BotInit{
     let amount = (this.amountCoinUS / this.mcCoin.price_usd);
     if (amount > 10) {
       amount = Math.round(amount);
-      if (this.balance.balance > 0 && this.balance.balance < 1) {
-        const add = 1 - this.balance.balance;
-        amount += add;
+      if (this.balance.balance > 0 ) {
+        amount  = amount - this.balance.balance;
       }
     }
     else amount = +amount.toFixed(2);
-
-
     return amount
   }
 
@@ -336,9 +340,7 @@ export class BotInit{
   }
 
 
-
-
-  tick(){
+  tick() {
 
   }
 
