@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import {VOCandle} from '../../models/api-models';
 
 import * as moment from 'moment';
+import * as moment_round from 'moment-round';
 import {Observable, Subject} from 'rxjs';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
@@ -16,7 +17,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 @Injectable()
 export class CandlesService {
 
-  myCandles: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
+  private candles15m: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
 
   constructor(
     private marketCap: ApiMarketCapService,
@@ -32,7 +33,7 @@ export class CandlesService {
 
 
   collection: { [id: string]: CandlesData } = {};
-  candlesInterval = '1m';
+
   // canlesLength = 240;
   // overlap = 20;
   exchange = 'binance';
@@ -117,8 +118,103 @@ export class CandlesService {
      }
    }*/
 
+  getCandles5m(market: string){
+    return this.candles5mCache[market].getValue();
+  }
+
+  private candles5mCache: {[market: string]: BehaviorSubject<VOCandle[]>} = { };
+
+  candles5m$(market: string){
+    if(!this.candles5mCache[market]){
+      const sub = new BehaviorSubject([]);
+      this.candles5mCache[market] = sub;
+      this.storage.select('candles-' +this.exchange + market +'5m').then((candles: VOCandle[]) =>{
+
+        if(!candles || moment().diff(_.last(candles).to, 'minutes') > 15 || candles.length < 190 ){
+          console.log('%c ' + market + ' downloading 200 candles 5min', 'color:#ffbf00');
+          this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '5m', 200).then(candles =>{
+            const now = moment().valueOf();
+            candles = candles.filter(function (item) {
+              item.time = moment(item.to).format('HH:mm');
+              return item.to < now;
+            });
+            this.storage.upsert('candles-' +this.exchange + market +'5m', candles);
+            sub.next(candles);
+          })
+
+        } else sub.next(candles)
+
+      });
+
+      this.minuteCandles$(market).subscribe(candles1m =>{
+        let candles5m = sub.getValue();
+        if(!candles1m.length || !candles5m.length) return;
+
+       // const from = moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf().;
+
+        /*const last5min = candles1m.filter(function (item) {
+          return item.to
+        })*/
+
+        let lastTime = _.last(candles5m).to;
+
+        let available = _.last(candles1m).to;
+
+        let availableMinutes = moment(available).diff(lastTime, 'minutes');
+      //  console.log(market + ' 5m available ' + availableMinutes +' ' +moment(lastTime).format('HH:mm:ss'));
+
+        if(availableMinutes < 6) return;
+
+
+        const timestamp =  moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf();
+        const from1 = moment(timestamp).subtract(5, 'minutes').valueOf();
+        const from2 = moment(timestamp).subtract(10, 'minutes').valueOf();
+
+        const lastCandles = candles1m.filter(function (item) {
+          return item.to > timestamp;
+        });
+
+       // console.log('5m last candles ' + lastCandles.length);
+
+        const prevCandles = candles1m.filter(function (item) {
+          return item.to < timestamp && item.to > from1;
+        });
+
+        const prev2Candles = candles1m.filter(function (item) {
+          return item.to < from1 && item.to > from2;
+        });
+
+        const prevCandle = CandlesAnalys1.createCandle(prevCandles);
+        const prev2Candle = CandlesAnalys1.createCandle(prev2Candles);
+
+        candles5m = candles5m.filter(function (item) {
+          return item.to < from2;
+        });
+
+        candles5m.push(prev2Candle);
+        candles5m.push(prevCandle);
+
+        if(lastCandles.length > 2){
+          const lastCandle = CandlesAnalys1.createCandle(lastCandles);
+          candles5m.push(lastCandle);
+        }
+
+       // console.log(_.map(candles5m,'time'));
+
+
+      //  console.log(' 5m last 2 '+candles5m[candles5m.length -2].time+ ' ' +_.last(candles5m).time);
+        candles5m = _.takeRight(candles5m, 200);
+
+        sub.next(candles5m);
+        this.storage.upsert('candles-' +this.exchange + market +'5m', candles5m);
+
+      })
+    }
+    return this.candles5mCache[market].asObservable();
+  }
+
   deleteCandles(market: string) {
-    delete this.myCandles[market];
+    delete this.candles15m[market];
     this.storage.remove(this.exchange + market + '15m');
   }
 
@@ -127,7 +223,7 @@ export class CandlesService {
   private _closes = {};
 
   closes(market: string): number[] {
-    if (!this._closes[market]) this._closes[market] = CandlesAnalys1.closes(this.myCandles[market].getValue());
+    if (!this._closes[market]) this._closes[market] = CandlesAnalys1.closes(this.candles15m[market].getValue());
     return this._closes[market];
   }
 
@@ -137,53 +233,91 @@ export class CandlesService {
   }
 
   volumes(market: string) {
-    if (!this._volumes[market]) this._volumes[market] = CandlesAnalys1.volumes(this.myCandles[market].getValue());
+    if (!this._volumes[market]) this._volumes[market] = CandlesAnalys1.volumes(this.candles15m[market].getValue());
     return this._volumes[market];
   }
 
 
-  candles15min$(market: string): BehaviorSubject<VOCandle[]> {
-    if (!this.myCandles[market]) {
+  candles15min$(market: string): Observable<VOCandle[]> {
+    if (!this.candles15m[market]) {
       const sub = new BehaviorSubject([]);
 
-      this.minuteCandles$(market).asObservable().subscribe(candles1m => {
+      this.minuteCandles$(market).subscribe(candles1m => {
         if (!candles1m.length) return;
         //  console.log(market + ' 1 min candles triggered');
-        const candles15m = sub.getValue();
+        let candles15m = sub.getValue();
         if (!candles15m.length) return;
 
-        const minutes = moment().minutes() % 15;
-        if (minutes < 10) return;
+        const timestamp =  moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();
+        const from1 = moment(timestamp).subtract(15, 'minutes').valueOf();
+        const from2 = moment(timestamp).subtract(30, 'minutes').valueOf();
 
-        //  console.log(minutes);
-        /// console.log(candles1m, candles15m);
-        const candles = _.takeRight(CandlesAnalys1.update15minCandles(candles1m, candles15m, market), 200);
+        const lastCandles = candles1m.filter(function (item) {
+          return item.to > timestamp;
+        });
 
+        // console.log('15m last candles ' + lastCandles.length);
+
+        const prevCandles = candles1m.filter(function (item) {
+          return item.to < timestamp && item.to > from1;
+        });
+
+        const prev2Candles = candles1m.filter(function (item) {
+          return item.to < from1 && item.to > from2;
+        });
+
+        const prevCandle = CandlesAnalys1.createCandle(prevCandles);
+        const prev2Candle = CandlesAnalys1.createCandle(prev2Candles);
+
+        candles15m = candles15m.filter(function (item) {
+          return item.to < from2;
+        });
+
+        candles15m.push(prev2Candle);
+        candles15m.push(prevCandle);
+
+        if(lastCandles.length > 3){
+          const lastCandle = CandlesAnalys1.createCandle(lastCandles);
+          candles15m.push(lastCandle);
+        }
+
+
+
+       // console.log(' 15m last 2 ' +candles15m[candles15m.length -2].time + ' ' +_.last(candles15m).time);
+       //  console.log(_.map(candles15m, 'time'));
+
+
+
+        candles15m = _.takeRight(candles15m, 200);
+
+        sub.next(candles15m);
         this._volumes[market] = null;
         this._mas[market] = null;
         this._closes[market] = null;
-        sub.next(candles);
 
-        this.storage.upsert(this.exchange + market + '15m', candles);
-
+        this.storage.upsert('candles-' +this.exchange + market +'15m', candles15m);
 
       });
 
-      this.myCandles[market] = sub;
-      this.storage.select(this.exchange + market + '15m').then((candles: VOCandle[]) => {
+      this.candles15m[market] = sub;
 
-        if (candles && moment().diff(_.last(candles).to, 'minutes') < 20 && candles.length > 190) {
+      this.storage.select('candles-' +this.exchange + market +'15m').then((candles: VOCandle[]) => {
+
+        if(candles) console.log(market + ' 15m ' + moment().diff(_.last(candles).to, 'minutes') + ' min');
+
+        if (candles && moment().diff(_.last(candles).to, 'minutes') < 25 && candles.length > 190) {
 
           sub.next(candles);
         } else {
-          console.log('%c ' + market + ' download 200 candles ', 'color:#ffbf00');
+
+          console.log('%c ' + market + ' download 200 candles 15m', 'color:#ffbf00');
           this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '15m', 200).then(candles => {
             candles.forEach(function (item) {
               item.time = moment(item.to).format('HH:mm');
 
             });
 
-            this.storage.upsert(this.exchange + market + '15m', candles);
+            this.storage.upsert('candles-' +this.exchange + market +'15m', candles);
             // const closes = CandlesAnalys1.closes(candles);
             // this.closes15m$(market).next(closes);
             this._volumes[market] = null;
@@ -196,7 +330,7 @@ export class CandlesService {
       })
     }
 
-    return this.myCandles[market];
+    return this.candles15m[market].asObservable();
   }
 
   /* async updateCandlesNext(markets: string[], i) {
@@ -205,7 +339,7 @@ export class CandlesService {
        return;
      }
      const market = markets[i];
-     const sub = this.myCandles[market];
+     const sub = this.candles15m[market];
 
      await this.updateLast2Candles(market, sub);
      setTimeout(() => this.updateCandlesNext(markets, i), 2000);
@@ -216,76 +350,23 @@ export class CandlesService {
 
      const minutes = moment().minutes() % 15;
      // console.log(minutes);
-     // const lastCandle = _.last(Object.values(this.myCandles)[0].getValue());
+     // const lastCandle = _.last(Object.values(this.candles15m)[0].getValue());
      if (minutes < 10) {
        console.log(minutes);
        return;
      }
-     const subs = Object.values(this.myCandles);
+     const subs = Object.values(this.candles15m);
      if (subs.length === 0) return;
-     const markets = Object.keys(this.myCandles);
+     const markets = Object.keys(this.candles15m);
      if (markets.length) this.updateCandlesNext(markets, -1);
    }
  */
   getCandles15min(market: string) {
-    if (this.myCandles[market]) return this.myCandles[market].getValue();
+    if (this.candles15m[market]) return this.candles15m[market].getValue();
     return null;
   }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /*async updateNext(exchange: string, markets: string[], i, candlesInterval: string, sub: Subject<any>) {
-    i++;
-    if (i >= markets.length) {
-      this.currentTimeout = 0;
-      sub.complete();
-      return;
-    }
-    const market = markets[i];
-    const candles = await this.getNewCandles(exchange, market, candlesInterval);
-    if(candles){
-      sub.next({exchange, market, candles});
-      this.currentTimeout = setTimeout(() => this.updateNext(exchange, markets, i, candlesInterval, sub), 2000);
-    } else  this.currentTimeout = setTimeout(() => this.updateNext(exchange, markets, i, candlesInterval, sub), 200);
-
-  }
-
-  currentTimeout;
-  scanOnce(markets: string[]) {
-    const exchange = 'binance';
-    console.log(moment().format('HH:mm') + ' scan');
-    if (this.currentTimeout) throw new Error('scan in process');
-
-    this.currentTimeout = 1;
-    const sub: Subject<any> = new Subject<any>();
-    const i = -1;
-    this.updateNext(exchange, markets, i, '5m', sub);
-    return sub;
-  }
-
-  removeAllCandles() {
-    Object.values(this.collection).forEach(function (o) {
-      o.removeAllCandles();
-    })
-  }*/
-
-  /*
-    async removeCandles(exchange: string, market: string) {
-      let ctr: CandlesData = this.collection[exchange];
-      console.log(ctr);
-      if (!!ctr) return ctr.removeCandles(market);
-    }*/
-
-
-  /*async subscribeForAll() {
-    const exchange= 'binance';
-   const markets = await this.getValidMarkets(exchange);
-    const res = markets.map((o) => {
-      return this.subscribe(exchange, o);
-    });
-    return Promise.all(res);
-  }
-*/
   statsSub: Subject<string> = new Subject();
 
   async init() {
@@ -377,45 +458,6 @@ export class CandlesService {
 
   last15mCandle: VOCandle;
 
-  async getCandles2(exchange: string, market: string, candlesInterval: string = '15m') {
-    const now = moment().valueOf();
-    const id = 'candles-' + exchange + '-' + market + '-' + candlesInterval;
-    const api = this.apisPublic.getExchangeApi(exchange);
-    let candles: VOCandle[] = (await this.storage.select(id));
-    if (!candles || candles.length < 100) {
-      console.log(market + ' downloading 200 candles ' + candlesInterval);
-      candles = await api.downloadCandles(market, candlesInterval, 200);
-
-    } else {
-      const lastTime = _.last(candles).to;
-      const diff: number = moment().diff(lastTime, 'minutes');
-      //  console.log(market + '  ' + diff);
-      let limit = 3;
-      if (diff > -1 && diff < 16) return candles;
-
-      if (diff > 30) {
-        limit = 200;
-      }
-
-      console.log(market + ' downloading candles ' + limit + ' diff ' + diff);
-      let newCandles = await api.downloadCandles(market, candlesInterval, limit);
-      newCandles = newCandles.filter(function (item) {
-        item.time = moment(item.to).format('HH:mm');
-        return item.to > lastTime && item.to < now;
-      });
-
-      console.log(' new candles ' + newCandles.length);
-      candles = candles.concat(newCandles);
-      //console.log(candles);
-    }
-
-    candles = _.takeRight(candles, 200);
-    // console.log(candles);
-
-    await this.storage.upsert(id, candles);
-    return candles;
-  }
-
 
   private checkCandles(candles: VOCandle[], interval: number) {
     let prev = _.first(candles).to - interval;
@@ -431,20 +473,20 @@ export class CandlesService {
 
   minuteCandles$(market: string) {
     if (!this.minuteCandles[market]) this.minuteCandles[market] = new BehaviorSubject([]);
-    return this.minuteCandles[market];
+    return this.minuteCandles[market].asObservable();
   }
 
   minuteCandles: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
 
-  async getCandles(market: string, candlesInterval: string = '1m') {
+  async getCandles(market: string) {
     const now = moment().valueOf();
     const api = this.apisPublic.getExchangeApi(this.exchange);
     const id = 'candles-' + market;
     let oldCandels: VOCandle[] = (await this.storage.select(id));
 
     if (!oldCandels || moment().diff(_.last(oldCandels).to, 'minutes') > 10) {
-      console.log(market + ' DOWNLOADING 200 candles ')
-      let candles = await api.downloadCandles(market, this.candlesInterval, 200);
+      console.log(market + ' 1m DOWNLOADING 200 candles')
+      let candles = await api.downloadCandles(market, '1m', 200);
       candles = candles.filter(function (item) {
         return item.to < now;
       });
@@ -463,9 +505,9 @@ export class CandlesService {
     let limit = 5;
     if (diff > 5) limit = 11;
 
-    console.log('%c ' + moment().format('HH:mm') + ' ' + market + ' download new candles ' + limit, 'color:brown');
+    console.log('%c ' + moment().format('HH:mm') + ' ' + market + ' 1m download new candles ' + limit, 'color:brown');
     // console.log(' updating candles ' + market + limit);
-    let candles = await api.downloadCandles(market, this.candlesInterval, limit);
+    let candles = await api.downloadCandles(market, '1m', limit);
     candles = candles.filter(function (item) {
       return item.to < now;
     });
@@ -485,8 +527,8 @@ export class CandlesService {
 
     if (err.length) {
       console.error(err);
-      console.log(market + ' DOWNLOADING 200 candles ')
-      candles = await api.downloadCandles(market, this.candlesInterval, 200);
+      console.log(market + ' 1m DOWNLOADING 200 candles ');
+      candles = await api.downloadCandles(market,'1m', 200);
       candles = candles.filter(function (item) {
         return item.to < now;
       });

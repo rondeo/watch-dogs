@@ -1,28 +1,14 @@
 import {MACD} from '../../trader/libs/techind';
 import {MACDOutput} from '../../trader/libs/techind/moving_averages/MACD';
-import * as _ from 'lodash';
-import {BoundEvent} from '@angular/compiler/src/render3/r3_ast';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {VOCandle} from '../../models/api-models';
-import * as moment from 'moment';
 import {CandlesService} from '../candles/candles.service';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {BuySellState} from './models';
 
-export interface VOSignal {
-  action: string;
-  reason: string;
-}
-
-export enum BuySellState {
-  NONE = 'NONE',
-  BUY = 'BUY',
-  SELL = 'SELL',
-  BUY_NOW = 'BUY_NOW',
-  SELL_NOW = 'SELL_NOW',
-  SELL_ON_JUMP = 'SELL_ON_JUMP'
-}
 
 export class MacdSignal {
+
   fastPeriod = 12;
   slowPeriod = 26;
   signalPeriod = 9;
@@ -31,7 +17,41 @@ export class MacdSignal {
   reason: string;
   lastCandle: VOCandle;
 
-  macdInput(closes){
+  static getState(hists: MACDOutput[]) {
+    const L = hists.length;
+    const last = hists[L - 1];
+    const prev = hists[L - 2];
+    if (last.histogram > 0 && prev.histogram < 0) return BuySellState.BUY_NOW;
+    if (last.histogram < 0 && prev.histogram > 0) return BuySellState.SELL_NOW;
+    if (prev.histogram < last.histogram) return BuySellState.BUY;
+    if (last.histogram < prev.histogram) return BuySellState.SELL;
+  }
+
+  private macd15m: BehaviorSubject<MACDOutput[]> = new BehaviorSubject([]);
+
+  get macd15m$() {
+    return this.macd15m.asObservable();
+  }
+
+  private macd1h: BehaviorSubject<MACDOutput[]> = new BehaviorSubject([]);
+
+  get macd1h$() {
+    return this.macd1h.asObservable();
+  }
+
+  private macd5m: BehaviorSubject<MACDOutput[]> = new BehaviorSubject([]);
+
+  get macd5m$() {
+    return this.macd5m.asObservable();
+  }
+
+  private macd30m: BehaviorSubject<MACDOutput[]> = new BehaviorSubject([]);
+
+  get macd30m$() {
+    return this.macd30m.asObservable();
+  }
+
+  macdInput(closes) {
     return {
       values: closes,
       fastPeriod: this.fastPeriod,
@@ -41,55 +61,75 @@ export class MacdSignal {
       SimpleMASignal: false
     }
   }
-  get state(){
+
+  get state() {
     return this._state.getValue();
   }
+
   _state: BehaviorSubject<BuySellState> = new BehaviorSubject(BuySellState.NONE);
-  get state$(){
+
+  get state$() {
     return this._state.asObservable()
   }
 
   constructor(market: string, candlesService: CandlesService) {
-    if(candlesService){
-      candlesService.candles15min$(market).asObservable().subscribe(candles =>{
-        if(!candles.length) return;
+
+    if (candlesService) {
+      /* this.macd15m = new BehaviorSubject([]);
+       this.macd1h = new BehaviorSubject([]);
+       this.macd30m = new BehaviorSubject<MACDOutput[]>([]);
+       this.macd5m = new BehaviorSubject([]);*/
+
+      candlesService.candles5m$(market).subscribe(candles => {
+        const closes = CandlesAnalys1.closes(candles);
+        this.macd5m.next((new MACD(this.macdInput(closes))).getResult());
+
+        // console.log(candles);
+      });
+
+      candlesService.candles15min$(market).subscribe(candles => {
+        if (!candles.length) return;
 
         const closes = candlesService.closes(market);
 
-        if(closes.length <190) throw new Error(' length not enough' + closes.length);
-        const closes1h = CandlesAnalys1.from15mTo1h(closes);
+        if (closes.length < 190) throw new Error(' length not enough' + closes.length);
+
 
         const macd15m: MACDOutput[] = (new MACD(this.macdInput(closes))).getResult();
-        const macd1h: MACDOutput[] = (new MACD(this.macdInput(closes1h))).getResult();
+        // const macd1h: MACDOutput[] = (new MACD(this.macdInput(closes1h))).getResult();
 
-        const L1 = macd15m.length;
-        const L2 = macd1h.length;
+        const closes1h = CandlesAnalys1.from15mTo1h(closes)
+        const macd2: MACDOutput[] = (new MACD(this.macdInput(closes1h))).getResult();
 
-        const last15m = macd15m[L1-1];
-        const prev15m = macd15m[L1-2];
-        const last1h = macd1h[L2-1];
-        const prev1h = macd1h[L2-2];
+        this.macd15m.next(macd15m);
 
-        let newState = BuySellState.NONE;
+        this.macd1h.next(macd2);
+        // this.macd30m.next(macd30m);
+
+
+        const state15m = MacdSignal.getState(macd15m);
+        const state2 = MacdSignal.getState(macd2);
+
+        this.reason = ' by15m ' + state15m + ' by1h ' + state2;
+        let newState;
+        if (state15m === BuySellState.BUY_NOW && state2 !== BuySellState.BUY)
+          newState = BuySellState.BUY;
+        else if (state15m === BuySellState.BUY_NOW && state2 == BuySellState.BUY_NOW)
+          newState = BuySellState.BUY_NOW;
+        else  if(state2 === BuySellState.SELL_NOW && state15m === BuySellState.SELL ){
+          newState = BuySellState.SELL_NOW;
+        }
+        else {
+          newState = state15m;
+        }
         const prevState = this.state;
 
-        this.reason = ' last '+(last15m.histogram > 0) + ' prev '
-          +(prev15m.histogram < 0) +' 1h ' + (last1h.histogram > prev1h.histogram)
-        + ' 15m ' +  (last15m.histogram > prev15m.histogram);
-        console.log(market + this.reason);
+        if(prevState === BuySellState.BUY && newState === BuySellState.SELL) newState = BuySellState.CHANGE_SELL;
+        else if(prevState === BuySellState.SELL && newState === BuySellState.BUY) newState = BuySellState.CHANGE_BUY;
 
-        if (last15m.histogram > 0 && prev15m.histogram < 0 && last1h.histogram > prev1h.histogram) newState = BuySellState.BUY_NOW;
-        else if (prev15m.histogram < last15m.histogram) newState = BuySellState.BUY;
-        else if (last15m.histogram < 0 && prev15m.histogram > 0) newState = BuySellState.SELL_NOW;
-        else if (last15m.histogram < prev15m.histogram) newState = BuySellState.SELL;
 
         if (prevState !== newState) this._state.next(newState);
-
-
-
-
-
-       //  console.log('%c ' + market + '  ' + state, 'color:blue');
+        //  console.log('%c ' + market + '  ' + state, 'color:blue');
 
       })
     }

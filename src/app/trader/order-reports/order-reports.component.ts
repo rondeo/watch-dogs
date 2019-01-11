@@ -13,6 +13,8 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
 import {VOCandle} from '../../models/api-models';
 import {MACD} from '../libs/techind';
+import {MACDOutput} from '../libs/techind/moving_averages/MACD';
+import {Observable} from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-order-reports',
@@ -32,6 +34,12 @@ export class OrderReportsComponent implements OnInit {
   ordersRecords: any[];
   ordersData: any[];
   selectedKey: string;
+
+  macd1: MACDOutput[];
+  macd2: MACDOutput[];
+
+  macd1$: Observable<MACDOutput[]>;
+  macd2$: Observable<MACDOutput[]>;
 
   market: string;
   exchange: string;
@@ -75,6 +83,7 @@ export class OrderReportsComponent implements OnInit {
   showBot() {
     this.isLive = this.currentBot ? this.currentBot.isLive : false;
     this.showBotHistory();
+
   }
 
   onDeleteUSDTRecordsClick() {
@@ -147,9 +156,11 @@ export class OrderReportsComponent implements OnInit {
   }
 
 
+  candles: VOCandle[];
   onCandles(candles: VOCandle[]) {
+    this.candles = candles;
     //console.log(candles);
-    const closes = CandlesAnalys1.closes(candles);
+   /* const closes = CandlesAnalys1.closes(candles);
 
     this.closes = CandlesAnalys1.from15mTo1h(closes);
    // console.log(this.closes);
@@ -164,7 +175,7 @@ export class OrderReportsComponent implements OnInit {
     };
 
     const values = (new MACD(macdInput)).getResult();
-    //console.log(values);
+    //console.log(values);*/
 
   }
 
@@ -178,6 +189,19 @@ export class OrderReportsComponent implements OnInit {
       return;
     }
 
+    if(this.currentBot.macdSignal){
+      this.macd1$ = this.currentBot.macdSignal.macd15m$;
+      this.macd2$ = this.currentBot.macdSignal.macd30m$;
+    }
+
+
+
+   /* this.currentBot.macdSignal.macd15m$.subscribe(res=>{
+      this.macd1 = res;
+    });
+    this.currentBot.macdSignal.macd1h$.subscribe(res=>{
+      this.macd2 = res;
+    });*/
     /* const market = this.currentBot.market;
      const closes = this.candlesService.closes(market);
 

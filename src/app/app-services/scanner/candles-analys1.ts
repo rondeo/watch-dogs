@@ -13,6 +13,21 @@ export class CandlesAnalys1 {
   static analysData;
   static data;
 
+  static from5mTo30m(closes:number[]){
+    const out = [];
+    for(let i = closes.length -1; i>=0; i-=6){
+      out.push(closes[i]);
+    }
+    return out.reverse();
+  }
+  static from15mTo30m(closes:number[]){
+    const out = [];
+    for(let i = closes.length -1; i>=0; i-=2){
+      out.push(closes[i]);
+    }
+    return out.reverse();
+  }
+
   static from15mTo1h(closes:number[]){
     const out = [];
     for(let i = closes.length -1; i>=0; i-=4){
@@ -374,23 +389,24 @@ export class CandlesAnalys1 {
   }
 
   static createCandle(candles:VOCandle[]): VOCandle{
-    const open = _.first(candles).open;
-    const close = _.last(candles).close;
-    const to = _.last(candles).to;
+    const first = _.first(candles);
+    const from = first.from;
+    const last = _.last(candles);
+    const open = first.open;
+    const close = last.close;
+    const to = last.to;
 
     const Volume = candles.reduce(function (s, item) {
       return s+=item.Volume
     }, 0);
 
     return {
-      from:0,
+      time: moment(from).format('HH:mm:ss') + ' ' +moment(to).format('HH:mm:ss'),
+      from,
       to,
-      time: moment(to).format('HH:mm'),
       open,
       close,
-      Volume,
-      high:0,
-      low:0
+      Volume
     }
 
   }

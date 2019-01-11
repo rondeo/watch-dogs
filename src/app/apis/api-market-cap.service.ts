@@ -118,23 +118,15 @@ export class ApiMarketCapService {
       const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap3.json');
       this.oldData$ = forkJoin([mc6h, mc24h]).pipe(
         map(res =>{
-          let res6h = <any>res[0];
-          if((<any>res[1]).data){
-            console.warn( ' res 1 has data');
-            res[1] = (<any>res[1]).data;
-          }
+          let res6h = (<any>res[0]).data;
+          let res24h = key((<any>res[1]).data);
 
-          let res24h = key(<any>res[1]);
-          if(res6h.data){
-            console.warn(res6h);
-            res6h = res6h.data;
-          }
           const out = {};
           res6h.forEach(function (item) {
             let symbol = item.symbol;
             if (symbol === 'ETHOS') symbol = 'BQX';
             if (!out[symbol]) out[symbol] = {
-              r6: +item.rank,
+              r6: item.cmc_rank,
               r24: res24h[symbol]? +res24h[symbol].rank: 0
             }
           })
@@ -155,7 +147,7 @@ export class ApiMarketCapService {
         const newData = res[1];
        //  console.log(oldData)
         const data = ApiMarketCapService.mapDataMC(newData, oldData);
-         console.log('last_updated ' + moment(data['BTC'].last_updated * 1000).format('HH:mm'));
+         console.log('last_updated ' + moment(data['BTC'].last_updated).format('HH:mm'));
         this.tikerSub.next(data);
       }))
       .subscribe(res => {

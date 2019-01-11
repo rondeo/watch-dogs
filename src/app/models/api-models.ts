@@ -123,12 +123,12 @@ export interface VOMCObj { [symbol: string]: VOMarketCap; }
 
 
 export interface VOCandle {
-  from: number;
+  from?: number;
   to: number;
-  open: number;
+  open?: number;
   close: number;
-  high: number;
-  low: number;
+  high?: number;
+  low?: number;
   Trades?: number;
   Volume: number;
   isClosed?: boolean;

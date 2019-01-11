@@ -56,8 +56,8 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
     const mfi = new MFI(input);
     const result = mfi.getResult();
     const out: number[] = result;
-    // const length = this.closes.length
-    while (out.length < length) out.unshift(0);
+     const length = this.candles.length;
+    while (out.length < length) out.unshift(50);
     // console.log(result);
     // let mod = new Rsi1();
     // mod.ctrModifier(this.candles);

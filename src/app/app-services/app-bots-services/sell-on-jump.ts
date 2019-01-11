@@ -5,9 +5,10 @@ import {MATH} from '../../com/math';
 import * as moment from 'moment';
 import {CandlesService} from '../candles/candles.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {BuySellState} from './macd-signal';
+
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MarketState} from '../alerts/btc-usdt.service';
+import {BuySellState} from './models';
 
 
 export class SellOnJump {
@@ -28,27 +29,24 @@ export class SellOnJump {
   ) {
 
     this._state = new BehaviorSubject(BuySellState.NONE);
-    candlesService.candles15min$(market).asObservable().subscribe(candles =>{
+    candlesService.candles15min$(market).subscribe(candles =>{
 
       const closes = candlesService.closes(market);
       const mas = candlesService.mas(market);
 
       const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
-      this.reason = ' ma3_7 ' + ma3_7;
-      console.log(this.reason);
+      this.reason = ' ma3_7 ' + ma3_7 + '  prev ' + this.prev;
 
-      if(ma3_7 > 2) this._state.next(MarketState.JUMPING);
+      if(ma3_7 > 3) this._state.next(MarketState.JUMPING);
       else this._state.next(BuySellState.NONE);
-
 
       if(this.state === MarketState.JUMPING){
         if(this.prev > ma3_7) {
+
           this._state.next(BuySellState.SELL_ON_JUMP);
         }
       }
-
       this.prev = ma3_7;
-
     })
   }
 

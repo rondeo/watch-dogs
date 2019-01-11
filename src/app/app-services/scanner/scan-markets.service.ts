@@ -15,7 +15,8 @@ import {MFI} from '../../trader/libs/techind';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {Subject} from 'rxjs/internal/Subject';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {BuySellState, MacdSignal} from '../app-bots-services/macd-signal';
+import {MacdSignal} from '../app-bots-services/macd-signal';
+import {ReplaySubject} from 'rxjs/internal/ReplaySubject';
 
 export interface VOMessage {
   time: string;
@@ -45,12 +46,12 @@ export class ScanMarketsService {
 
   ///////////////////// patterns scan //////////////////////
 
-  async scanNextPattern(markets: string[], i, sub: BehaviorSubject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
+  async scanNextPattern(markets: string[], i, sub: ReplaySubject<any>, candlesInterval: string, MC: VOMCObj, results: any[]) {
     if (!this.scanning$.getValue()) return;
     i++;
     if (i >= markets.length) {
      this.scanning$.next(0);
-      sub.complete();
+     sub.complete();
       return
     }
 
@@ -97,9 +98,9 @@ export class ScanMarketsService {
   get scanResults$(){
     return this.scanResults.asObservable()
   }
-  private scanResults: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  private scanResults: ReplaySubject<any[]> = new ReplaySubject(1);
   scanPatterns(markets: string[], candlesInterval: string, diff) {
-    const sub: BehaviorSubject<any[]> = new BehaviorSubject([]);
+    const sub: ReplaySubject<any[]> = new ReplaySubject(1);
     this.marketCap.getTicker().then(MC=>{
       this.scanning$.next(1);
       this.scanNextPattern(markets, -1, sub, candlesInterval, MC, []);

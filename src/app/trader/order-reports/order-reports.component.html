@@ -38,4 +38,6 @@
 
 </div>
 
-<app-macd-indicator [closes]="closes"></app-macd-indicator>
+<app-macd-indicator [macd]="macd1$ | async" ></app-macd-indicator>
+<app-macd-indicator [macd]="macd2$ | async"></app-macd-indicator>
+

@@ -14,6 +14,7 @@ import {MACDOutput} from '../../trader/libs/techind/moving_averages/MACD';
 export class MacdIndicatorComponent implements OnInit, OnChanges {
 
   @Input() closes: number[];
+  @Input() macd: MACDOutput[];
   @Output() onMACD: EventEmitter<MACDOutput[]> = new EventEmitter()
 
   fastPeriod = 12;
@@ -37,31 +38,38 @@ export class MacdIndicatorComponent implements OnInit, OnChanges {
 
   draw() {
 
-    if (!this.closes) return;
-    const closes = this.closes;
-    let macdInput = {
-      values: closes,
-      fastPeriod: this.fastPeriod,
-      slowPeriod: this.slowPeriod,
-      signalPeriod: this.signalPeriod,
-      SimpleMAOscillator: true,
-      SimpleMASignal: false
-    };
-    let macd = new MACD(macdInput);
-    const result: MACDOutput[] = macd.getResult().slice(10);
-    const length = closes.length;
-    while(result.length < length){
-      result.unshift({
-        MACD:0,
-        signal:0,
-        histogram:0
-      })
-    }
-    this.allData = result;
-    setTimeout(()=>{
+    if (!this.closes && !this.macd) return;
+    let result: MACDOutput[];
+    if(this.macd){
+      result = this.macd;
+    } else{
+      const closes = this.closes;
+      let macdInput = {
+        values: closes,
+        fastPeriod: this.fastPeriod,
+        slowPeriod: this.slowPeriod,
+        signalPeriod: this.signalPeriod,
+        SimpleMAOscillator: true,
+        SimpleMASignal: false
+      };
+      let macd = new MACD(macdInput);
+      result = macd.getResult().slice(10);
+      const length = closes.length;
+      while(result.length < length){
+        result.unshift({
+          MACD:0,
+          signal:0,
+          histogram:0
+        })
+      }
+      this.allData = result;
 
-      this.onMACD.emit(result);
-    }, 300);
+      setTimeout(()=>{
+
+        this.onMACD.emit(result);
+      }, 300);
+
+    }
 
     const macdV = [];
     const signals = [];

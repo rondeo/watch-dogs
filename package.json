@@ -10,8 +10,8 @@
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "createReduser":"ng generate reducer Auth --flat=false --module auth/auth.module.ts",
-    "createEffect":"ng generate effect auth/Auth --module auth/auth.module.ts"
+    "createReduser": "ng generate reducer Auth --flat=false --module auth/auth.module.ts",
+    "createEffect": "ng generate effect auth/Auth --module auth/auth.module.ts"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +36,7 @@
     "crypto-js": "^3.1.9-1",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
+    "moment-round": "^1.0.1",
     "ng2-localforage": "^0.1.30",
     "ngrx-store-freeze": "^0.2.4",
     "rxjs": "~6.3.3",
