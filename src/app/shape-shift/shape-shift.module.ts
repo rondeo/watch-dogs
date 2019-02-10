@@ -5,8 +5,8 @@ import { SsMainComponent } from './ss-main/ss-main.component';
 import {ShapeShiftService} from './shape-shift.service';
 
 import {FormsModule} from '@angular/forms';
-import {MaterialAppModule} from '../material/material-app.module';
-import {UiModule} from '../ui/ui.module';
+import {MaterialAppModule} from '../com/material/material-app.module';
+import {UiModule} from '../com/ui/ui.module';
 
 @NgModule({
   imports: [

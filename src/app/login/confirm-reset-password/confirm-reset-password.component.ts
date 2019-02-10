@@ -3,8 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {VOLoginResult} from '../../models/app-models';
-import {StorageService} from '../../services/app-storage.service';
-import {AuthHttpService} from '../../services/auth-http.service';
+import {StorageService} from '../../core/services/app-storage.service';
+import {AuthHttpService} from '../../core/services/auth-http.service';
 
 @Component({
   selector: 'app-confirm-reset-password',

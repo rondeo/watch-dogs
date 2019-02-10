@@ -4,9 +4,9 @@
         <mat-spinner *ngIf="scanner.isScanning" [diameter]="24" class="mat-progress-spinner"></mat-spinner>
 
         <mat-checkbox #favoritesCheck (change)="onFavoriteChange($event)">Favorite</mat-checkbox>
-        <mat-checkbox #trendCheck >Trend</mat-checkbox>
-        <mat-checkbox #volumeCheck (change)="onVolumeChange($event)">Volume</mat-checkbox>
-        <mat-checkbox #followingCheck (change)="onFollowingChange($event)">Following</mat-checkbox>
+
+        <mat-checkbox #buysellresults (change)="onBuySellResults($event)">Buy Sell</mat-checkbox>
+
         <mat-checkbox #botsCheck (change)="onBotsChange($event)">Bots</mat-checkbox>
         <mat-checkbox #patternCheck (change)="onPatternChange($event)">Pattern</mat-checkbox>
         <!--<button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>-->
@@ -47,80 +47,12 @@
         </div>
     </div>
 
-    <div *ngIf="followingCheck.checked">
-        <h3>Following</h3>
-        <div class="scrollY300">
-            <app-table-props [dataset]="following" (selected)="onFollowingClick($event)"></app-table-props>
-        </div>
-    </div>
-
-
-    <div *ngIf="trendCheck.checked">
-        <h3>Trend</h3>
-        &nbsp;&nbsp;
-        <mat-form-field class="w6">
-            <mat-select [(ngModel)]="maX">
-                <mat-option value="ma7_25">ma7_25</mat-option>
-                <mat-option value="ma7_99">ma7_99</mat-option>
-                <mat-option value="ma25_99">ma25_99</mat-option>
-            </mat-select>
-        </mat-form-field>
-        &nbsp;&nbsp;
-        <mat-form-field class="w3">
-            <input matInput placeholder="Percent"
-                   [(ngModel)]="percent"
-            >
-        </mat-form-field>
-        &nbsp;&nbsp;
-        <mat-form-field class="w5">
-            <mat-select [(ngModel)]="candlesInterval">
-                <mat-option value="5m">5m</mat-option>
-                <mat-option value="15m">15m</mat-option>
-                <mat-option value="1h">1h</mat-option>
-                <mat-option value="1d">1D</mat-option>
-            </mat-select>
-        </mat-form-field>
-        &nbsp;&nbsp;
-        <button mat-button="" (click)="onScanStart()">{{scanner.isScanning?'Stop':'Start'}}</button>
-
-        <div class="scrollY300">
-            <app-table-props [dataset]="dataset$ | async" (selected)="onMarketClick($event)"></app-table-props>
-        </div>
-    </div>
 
     <div *ngIf="favoritesCheck.checked">
         <h4>Favorites</h4>
         <div class="scrollY300">
             <app-table-props [dataset]="dataset$ | async" (selected)="onFavoritesClick($event)"></app-table-props>
         </div>
-    </div>
-
-
-
-    <div *ngIf="volumeCheck.checked">
-        <h4>Volume</h4>
-        <mat-form-field class="w3">
-            <input matInput placeholder="Volume"
-                   [(ngModel)]="volumeDifference"
-            >
-        </mat-form-field>
-        <mat-form-field class="w5">
-            <mat-select [(ngModel)]="candlesInterval">
-                <mat-option value="5m">5m</mat-option>
-                <mat-option value="15m">15m</mat-option>
-                <mat-option value="30m">30m</mat-option>
-                <mat-option value="1h">1h</mat-option>
-                <mat-option value="6h">6h</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-button="" (click)="onVolumeStartClick()">
-            {{scanner.isScanning?'Stop':'Scan'}}
-        </button>
-
-        <div class="scrollY300">
-            <app-table-props [dataset]="volumesResults$ | async" (selected)="onVolumeClick($event)"></app-table-props>
-        </div>
-
     </div>
 
     <app-market-candles [exchange]="exchange" [market]="market" (onCandles)="onCandlesChage($event)" ></app-market-candles>

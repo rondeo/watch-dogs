@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {AllCoinsTableComponent} from './all-coins-table/all-coins-table.component';
 import {SelectedCoinsComponent} from './selected-coins/selected-coins.component';
 import {MatButton, MatCard} from '@angular/material';
-import {MaterialAppModule} from '../material/material-app.module';
+import {MaterialAppModule} from '../com/material/material-app.module';
 import {RouterModule, Routes} from '@angular/router';
 import {GainersLosersComponent} from './gainers-losers/gainers-losers.component';
 import {ExchangesListComponent} from './exchanges-list/exchanges-list.component';
@@ -15,9 +15,9 @@ import {CoinsExchangesComponent} from './coins-exchanges/coins-exchanges.compone
 import {FormsModule} from '@angular/forms';
 import {MarketCapMainComponent} from './market-cap-main/market-cap-main.component';
 
-import {UiModule} from '../ui/ui.module';
-import {DirectivesModule} from '../directives/directives.module';
-import {WidgetsModule} from '../widgets/widgets.module';
+import {UiModule} from '../com/ui/ui.module';
+import {DirectivesModule} from '../com/directives/directives.module';
+import {WidgetsModule} from '../com/widgets/widgets.module';
 
 
 const routes: Routes = [

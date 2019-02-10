@@ -21,7 +21,7 @@ import "rxjs/add/operator/concat";
 
 
 
-import {MaterialAppModule} from './material/material-app.module';
+import {MaterialAppModule} from './com/material/material-app.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ExchangeSsComponent} from './exchange-ss/exchange-ss.component';
 import {ExchangeSsService} from './exchange-ss/exchange-ss.service';
@@ -29,7 +29,7 @@ import {ExchangeSsService} from './exchange-ss/exchange-ss.service';
 import {ApiServerService} from './api-server.service';
 import {SendAlertService} from './exchange-ss/send-alert.service';
 import {EmailServiceModule} from './email-service/email-service.module';
-import {AuthHttpService} from './services/auth-http.service';
+import {AuthHttpService} from './core/services/auth-http.service';
 import {LoginModule} from './login/login.module';
 import {ShapeShiftModule} from './shape-shift/shape-shift.module';
 import {MarketCapService} from './market-cap/services/market-cap.service';
@@ -40,29 +40,29 @@ import {MarketCapModule} from './market-cap/market-cap.module';
 import {AllCoinsTableComponent} from './market-cap/all-coins-table/all-coins-table.component';
 
 
-import {StorageService} from './services/app-storage.service';
+import {StorageService} from './core/services/app-storage.service';
 
-import {SlackService} from './services/slack.service';
+import {SlackService} from './core/services/slack.service';
 import {HttpClientModule} from '@angular/common/http';
 import {WebsocketService} from './shared/websocket-service';
 import {MyExchangeModule} from './my-exchange/my-exchange.module';
-import {DatabaseService} from './services/database.service';
+import {DatabaseService} from './core/services/database.service';
 import {TraderModule} from './trader/trader.module';
 import {AllInOneModule} from './all-in-one/all-in-one.module';
-import {UiModule} from './ui/ui.module';
-import {UserLoginService} from './services/user-login.service';
-import {ShowExternalPageService} from './services/show-external-page.service';
-import {AppServicesModule} from './app-services/app-services.module';
-import {WidgetsModule} from './widgets/widgets.module';
-import { ValueColorDirective } from './directives/value-color.directive';
+import {UiModule} from './com/ui/ui.module';
+import {UserLoginService} from './core/services/user-login.service';
+import {ShowExternalPageService} from './core/services/show-external-page.service';
+import {AppServicesModule} from './core/app-services/app-services.module';
+import {WidgetsModule} from './com/widgets/widgets.module';
+import { ValueColorDirective } from './com/directives/value-color.directive';
 import { TestComponent } from './test/test.component';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from './core/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import {AuthModule} from './auth/auth.module';
+import {AuthModule} from './core/auth/auth.module';
 
 
 

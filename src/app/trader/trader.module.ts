@@ -3,20 +3,20 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule, Routes} from '@angular/router';
-import {MaterialAppModule} from '../material/material-app.module';
+import {MaterialAppModule} from '../com/material/material-app.module';
 import {TraderOutletComponent} from './trader-outlet/trader-outlet.component';
 
-import {SoketConnectorService} from '../sockets/soket-connector.service';
+import {SoketConnectorService} from '../core/sockets/soket-connector.service';
 import {TraderSocketComponent} from './trader-socket/trader-socket.component';
-import {ApisModule} from '../apis/apis.module';
+import {ApisModule} from '../core/apis/apis.module';
 
 import {AnalyzeCoinComponent} from './analyze-coin/analyze-coin.component';
-import {UiModule} from '../ui/ui.module';
-import {WidgetsModule} from '../widgets/widgets.module';
+import {UiModule} from '../com/ui/ui.module';
+import {WidgetsModule} from '../com/widgets/widgets.module';
 import {CommonMarketsComponent} from './common-markets/common-markets.component';
 import {LiveTraderComponent} from './live-trader/live-trader.component';
-import {DirectivesModule} from '../directives/directives.module';
-import {PipesModule} from '../pipes/pipes.module';
+import {DirectivesModule} from '../com/directives/directives.module';
+import {PipesModule} from '../com/pipes/pipes.module';
 import { ScanMarketsComponent } from './scan-markets/scan-markets.component';
 import { MarketDetailsComponent } from './market-details/market-details.component';
 import { NotesHistoryComponent } from './notes-history/notes-history.component';

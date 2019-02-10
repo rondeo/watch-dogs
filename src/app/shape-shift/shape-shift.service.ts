@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AuthHttpService} from '../services/auth-http.service';
+import {AuthHttpService} from '../core/services/auth-http.service';
 
 import * as _ from 'lodash';
 import {VOMarketCap, VOSearch} from '../models/app-models';

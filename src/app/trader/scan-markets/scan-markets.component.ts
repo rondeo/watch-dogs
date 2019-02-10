@@ -1,32 +1,33 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
+import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
+import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
 import {VOMarketCap} from '../../models/app-models';
 import {VOCandle, VOMCObj} from '../../models/api-models';
-import {MATH} from '../../com/math';
+import {MATH} from '../../core/com/math';
 import * as _ from 'lodash';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import * as moment from 'moment';
-import {StorageService} from '../../services/app-storage.service';
+import {StorageService} from '../../core/services/app-storage.service';
 import {Router} from '@angular/router';
-import {ScanMarketsService} from '../../app-services/scanner/scan-markets.service';
+import {ScanMarketsService} from '../../core/app-services/scanner/scan-markets.service';
 
-import {DialogInputComponent} from '../../material/dialog-input/dialog-input.component';
-import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
+import {DialogInputComponent} from '../../com/material/dialog-input/dialog-input.component';
+import {CandlesAnalys1} from '../../core/app-services/scanner/candles-analys1';
 
-import {CandlesAnalys2} from '../../app-services/scanner/candles-analys2';
-import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {CandlesAnalys2} from '../../core/app-services/scanner/candles-analys2';
+import {ApiCryptoCompareService} from '../../core/apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
-import {AppBotsService} from '../../app-services/app-bots-services/app-bots.service';
-import {CandlesService} from '../../app-services/candles/candles.service';
-import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
+import {AppBotsService} from '../../core/app-services/app-bots-services/app-bots.service';
+import {CandlesService} from '../../core/app-services/candles/candles.service';
+import {FollowOrdersService} from '../../core/apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
 import {catchError, finalize, map} from 'rxjs/operators';
-import {FavoritesService} from '../../app-services/favorites.service';
+import {FavoritesService} from '../../core/app-services/favorites.service';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
-import {VOGraphs} from '../../ui/line-chart/line-chart.component';
+import {VOGraphs} from '../../com/ui/line-chart/line-chart.component';
 import {of} from 'rxjs/internal/observable/of';
+import {fromPromise} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-scan-markets',
@@ -75,6 +76,21 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   bots: any[];
   sub5;
 
+  async ngOnInit() {
+    this.scanResults$ = this.scanner.scanResults$;
+
+    //  this.botsService.init();
+  }
+
+
+  onBuySellResults(evt){
+    console.warn(evt)
+    if(evt.checked){
+      this.scanResults$ = fromPromise(this.scanner.buySellResults());
+    } else this.scanResults$ = this.scanner.scanResults$;
+
+
+  }
   /////////////////////////////////////////// END TREND UP //////////////////////////////////////////////////////
 
   myGraphs: VOGraphs;
@@ -167,12 +183,15 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       })
     };
 
-    if (this.scanner.scanning$.getValue()) {
-      this.scanner.stop();
+    if (this.scanner.scanningSub.getValue()) {
+      // this.scanner.stop();
+      this.scanner.autoScanStop();
       return;
     }
 
-      console.log('%c SCAN STARTED ', 'color:pink');
+    this.scanner.autoScanStart();
+
+    /*  console.log('%c SCAN STARTED ', 'color:pink');
       this.snackBar.open('SCAN START', 'x', {duration: 3000});
       const markets = await this.scanner.getAvailableMarkets('binance');
       this.scanResults$ = this.scanner.scanPatterns(markets, this.candlesInterval, +this.volumeDifference).asObservable()
@@ -187,28 +206,12 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
             this.snackBar.open('SCAN COMPLETE', 'x', {duration: 10000});
             console.log('%c SCAN COMPLETE new scan in 10 min', 'color:pink');
             return null;
-          }));
+          }));*/
 
 
   }
 
   //////////////////////////////////////////////////
-
-  ////////////////////////////////////////////// MFI START ///////////////////////////////////////
-
-  mfiCandlesInterval = '1h';
-  MFIResults;
-  mfySub: Subscription;
-
-  ////////////////////////////////////////////////// MFI END ///////////////////////////////////////////////
-
-  ////////////////////////////////////////// VOLUME START /////////////////////////////////////////////////
-
-  scanOnlyUP = true;
-  volumesResults$
-
-
-  ///////////////////////////////////////// VOLUME END ///////////////////////////////////////////////////////
 
 
   market: string;
@@ -278,52 +281,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   }
 
 
-  ////////////////////////////////////////////////// TREND  ///////////////////////////////////////////////////////
 
-  async onScanStart() {
-    if (this.scanner.scanning$.getValue()) {
-      this.scanner.stop();
-      return;
-    }
-    const markets = await this.scanner.getAvailableMarkets('binance');
-    this.dataset$ = this.scanner.startScan(markets, this.candlesInterval, this.maX, this.percent);
-  }
-
-  onMarketClick(evt) {
-    const market = evt.item.market;
-    if (evt.prop === 'market') this.showMarket(market);
-    else if (evt.prop === 'x') {
-    }
-  }
-
-
-
-  async onVolumeChange(evt) {
-  }
-
-  async onVolumeStartClick() {
-    if (this.scanner.scanning$.getValue()) {
-      this.scanner.stop();
-      return;
-    }
-    const markets = await this.scanner.getAvailableMarkets('binance');
-    this.volumesResults$ = this.scanner.scanForVolume(markets, this.candlesInterval, this.volumeDifference);
-  }
-
-
-  onVolumeClick(evt) {
-    const market = evt.item.market;
-    switch (evt.prop) {
-      case 'market':
-        this.showMarket(market);
-        return;
-      case 'result':
-        this.dialog.open(NotesHistoryComponent, {data: evt.item});
-        return;
-
-    }
-
-  }
 
   onMarketInput(evt) {
     if (evt.code === 'Enter') this.showCandles(this.market);
@@ -334,11 +292,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     this.showCandles(this.market);
   }
 
-  async ngOnInit() {
-    this.scanResults$ = this.scanner.scanResults$;
-    this.initAsync();
-    //  this.botsService.init();
-  }
+
 
 
   /////////////////////////////////////////// FAVORITES START //////////////////////////////////////////////
@@ -461,18 +415,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
       this.excludes = null;
     }*/
 
-  async initAsync() {
-
-    /* const sub = await this.scanner.notifications$();
-     this.sub1 = sub.subscribe(notes => {
-       this.notifications = _.filter(notes, 'a');
-       this.notifications2 = _.reject(notes, 'a');
-     });
-     this.sub2 = this.scanner.currentResult$().subscribe(curr => {
-
-       this.currentData = [curr];
-     })*/
-  }
 
   ngOnDestroy() {
     this.unsubscribe();

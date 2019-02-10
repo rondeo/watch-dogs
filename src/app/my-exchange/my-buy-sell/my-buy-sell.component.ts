@@ -2,19 +2,19 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../models/app-models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {UtilsOrder} from '../../com/utils-order';
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {UtilsBooks} from '../../com/utils-books';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {MATH} from '../../com/math';
+import {UtilsOrder} from '../../core/com/utils-order';
+import {ApisPrivateService} from '../../core/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../core/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
+import {ApiPublicAbstract} from '../../core/apis/api-public/api-public-abstract';
+import {UtilsBooks} from '../../core/com/utils-books';
+import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
+import {MATH} from '../../core/com/math';
 import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
-import {FollowOrdersService} from '../../apis/open-orders/follow-orders.service';
+import {FollowOrdersService} from '../../core/apis/open-orders/follow-orders.service';
 import {Subscription} from 'rxjs';
-import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
+import {BtcUsdtService} from '../../core/app-services/alerts/btc-usdt.service';
 
 @Component({
   selector: 'app-my-buy-sell',

@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {VOMarketCap} from '../../models/app-models';
 import {MarketCapService} from '../services/market-cap.service';
-import {StorageService} from '../../services/app-storage.service';
+import {StorageService} from '../../core/services/app-storage.service';
 
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 

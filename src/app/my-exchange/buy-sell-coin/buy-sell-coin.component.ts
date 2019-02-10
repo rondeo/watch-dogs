@@ -6,11 +6,11 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import * as _ from 'lodash';
 import {MatSnackBar} from '@angular/material';
 
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {ApisPrivateService} from '../../core/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../core/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
 import {VOMCObj} from '../../models/api-models';
-import {MATH} from '../../com/math';
+import {MATH} from '../../core/com/math';
 
 @Component({
   selector: 'app-buy-sell-coin',

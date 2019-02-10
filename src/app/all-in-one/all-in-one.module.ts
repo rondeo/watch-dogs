@@ -3,11 +3,11 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {MaterialAppModule} from '../material/material-app.module';
+import {MaterialAppModule} from '../com/material/material-app.module';
 
 import {V2DataComponent} from './v2-data/v2-data.component';
 
-import {ApisModule} from '../apis/apis.module';
+import {ApisModule} from '../core/apis/apis.module';
 import {AllInOneOutletComponent} from './all-in-one-outlet/all-in-one-outlet.component';
 import {HttpClientModule} from '@angular/common/http';
 

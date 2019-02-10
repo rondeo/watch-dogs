@@ -3,17 +3,17 @@ import {MarketCapService} from '../services/market-cap.service';
 import {VOMarketCap, VOMCDisplay} from '../../models/app-models';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
+import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
+import {ApiPublicAbstract} from '../../core/apis/api-public/api-public-abstract';
 
-import {MovingAverage} from '../../com/moving-average';
+import {MovingAverage} from '../../core/com/moving-average';
 import {MatCheckboxChange} from '@angular/material';
 import {VOCandle, VOMarketCapSelected, VOMCObj} from '../../models/api-models';
 import * as  moment from 'moment';
-import {MATH} from '../../com/math';
-import {NewsService} from '../../apis/news/news.service';
-import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
+import {MATH} from '../../core/com/math';
+import {NewsService} from '../../core/apis/news/news.service';
+import {ApiCryptoCompareService} from '../../core/apis/api-crypto-compare.service';
 
 
 @Component({

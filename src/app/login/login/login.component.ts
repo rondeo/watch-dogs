@@ -1,12 +1,12 @@
-///<reference path="../../services/auth-http.service.ts"/>
+///<reference path="../../core/services/auth-http.service.ts"/>
 import {Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthHttpService} from '../../services/auth-http.service';
+import {AuthHttpService} from '../../core/services/auth-http.service';
 import {element} from 'protractor';
-import {DialogSimpleComponent} from '../../material/dialog-simple/dialog-simple.component';
+import {DialogSimpleComponent} from '../../com/material/dialog-simple/dialog-simple.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {StorageService} from '../../services/app-storage.service';
+import {StorageService} from '../../core/services/app-storage.service';
 
 
 @Component({

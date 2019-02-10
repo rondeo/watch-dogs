@@ -1,17 +1,17 @@
 import {VOBalance, VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
 import {VOCoinDayValue, VOCoinsDayData} from './api-models';
-import {MovingAverage, VOMovingAvg} from '../com/moving-average';
+import {MovingAverage, VOMovingAvg} from '../core/com/moving-average';
 import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApiPublicAbstract} from '../apis/api-public/api-public-abstract';
-import {ApisPublicService} from '../apis/api-public/apis-public.service';
-import {ApiPrivateAbstaract} from '../apis/api-private/api-private-abstaract';
-import {ApisPrivateService} from '../apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../apis/api-market-cap.service';
-import {StorageService} from '../services/app-storage.service';
-import {SellCoinFilling} from '../app-services/app-bots-services/sell-coin-filling';
-import {IWatchDog, WatchDogStatus} from '../app-services/app-bots-services/watch-dog-status';
+import {ApiPublicAbstract} from '../core/apis/api-public/api-public-abstract';
+import {ApisPublicService} from '../core/apis/api-public/apis-public.service';
+import {ApiPrivateAbstaract} from '../core/apis/api-private/api-private-abstaract';
+import {ApisPrivateService} from '../core/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../core/apis/api-market-cap.service';
+import {StorageService} from '../core/services/app-storage.service';
+import {SellCoinFilling} from '../core/app-services/app-bots-services/sell-coin-filling';
+import {IWatchDog, WatchDogStatus} from '../core/app-services/app-bots-services/watch-dog-status';
 import {Observable, Subject, Subscription} from 'rxjs';
 
 export interface RunResults {

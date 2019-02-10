@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 
 
 import * as _ from 'lodash';
-import {AuthHttpService, VOUser} from '../services/auth-http.service';
+import {AuthHttpService, VOUser} from '../core/services/auth-http.service';
 
 import {VOMarketCap} from '../models/app-models';
-import {StorageService} from '../services/app-storage.service';
+import {StorageService} from '../core/services/app-storage.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
-import {ApiMarketCapService} from '../apis/api-market-cap.service';
+import {ApiMarketCapService} from '../core/apis/api-market-cap.service';
 import {WatchDog} from '../models/watch-dog';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Observable} from 'rxjs/internal/Observable';

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MaterialAppModule} from '../material/material-app.module';
+import {MaterialAppModule} from '../com/material/material-app.module';
 import {RouterModule} from '@angular/router';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { ConfirmResetPasswordComponent } from './confirm-reset-password/confirm-reset-password.component';
