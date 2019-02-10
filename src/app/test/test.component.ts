@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {BtcUsdtService} from '../core/app-services/alerts/btc-usdt.service';
-import {VOCandle} from '../models/api-models';
+import {BtcUsdtService} from '../adal/app-services/alerts/btc-usdt.service';
+import {VOCandle} from '../amodels/api-models';
 import * as _ from 'lodash';
-import {ApisPublicService} from '../core/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../adal/apis/api-public/apis-public.service';
 import * as moment from 'moment';
-import {CandlesAnalys1} from '../core/app-services/scanner/candles-analys1';
-import {MATH} from '../core/com/math';
-import {StorageService} from '../core/services/app-storage.service';
-import {FollowOpenOrder} from '../core/apis/open-orders/follow-open-order';
-import {ApisPrivateService} from '../core/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../core/apis/api-market-cap.service';
-import {CandlesService} from '../core/app-services/candles/candles.service';
-import {VOBalance} from '../models/app-models';
-import {SellOnJump} from '../core/app-services/app-bots-services/sell-on-jump';
-import {UTILS} from '../core/com/utils';
+import {CandlesAnalys1} from '../adal/app-services/scanner/candles-analys1';
+import {MATH} from '../acom/math';
+import {StorageService} from '../adal/services/app-storage.service';
+import {FollowOpenOrder} from '../adal/apis/open-orders/follow-open-order';
+import {ApisPrivateService} from '../adal/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../adal/apis/api-market-cap.service';
+import {CandlesService} from '../adal/app-services/candles/candles.service';
+import {VOBalance} from '../amodels/app-models';
+import {SellOnJump} from '../adal/app-services/app-bots-services/sell-on-jump';
+import {UTILS} from '../acom/utils';
 
 @Component({
   selector: 'app-test',

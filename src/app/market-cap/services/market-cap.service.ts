@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import * as _ from 'lodash';
-import {VOMarketCap} from '../../models/app-models';
-import {StorageService} from '../../core/services/app-storage.service';
+import {VOMarketCap} from '../../amodels/app-models';
+import {StorageService} from '../../adal/services/app-storage.service';
 import {HttpClient} from '@angular/common/http';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {Parsers} from '../../core/apis/parsers';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {Parsers} from '../../adal/apis/parsers';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 

@@ -1,31 +1,29 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
-import {VOMarketCap} from '../../models/app-models';
-import {VOCandle, VOMCObj} from '../../models/api-models';
-import {MATH} from '../../core/com/math';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {VOMarketCap} from '../../amodels/app-models';
+import {VOCandle, VOMCObj} from '../../amodels/api-models';
+import {MATH} from '../../acom/math';
 import * as _ from 'lodash';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import * as moment from 'moment';
-import {StorageService} from '../../core/services/app-storage.service';
+import {StorageService} from '../../adal/services/app-storage.service';
 import {Router} from '@angular/router';
-import {ScanMarketsService} from '../../core/app-services/scanner/scan-markets.service';
+import {ScanMarketsService} from '../../adal/app-services/scanner/scan-markets.service';
+import {CandlesAnalys1} from '../../adal/app-services/scanner/candles-analys1';
 
-import {DialogInputComponent} from '../../com/material/dialog-input/dialog-input.component';
-import {CandlesAnalys1} from '../../core/app-services/scanner/candles-analys1';
-
-import {CandlesAnalys2} from '../../core/app-services/scanner/candles-analys2';
-import {ApiCryptoCompareService} from '../../core/apis/api-crypto-compare.service';
+import {CandlesAnalys2} from '../../adal/app-services/scanner/candles-analys2';
+import {ApiCryptoCompareService} from '../../adal/apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
-import {AppBotsService} from '../../core/app-services/app-bots-services/app-bots.service';
-import {CandlesService} from '../../core/app-services/candles/candles.service';
-import {FollowOrdersService} from '../../core/apis/open-orders/follow-orders.service';
+import {AppBotsService} from '../../adal/app-services/app-bots-services/app-bots.service';
+import {CandlesService} from '../../adal/app-services/candles/candles.service';
+import {FollowOrdersService} from '../../adal/apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
 import {catchError, finalize, map} from 'rxjs/operators';
-import {FavoritesService} from '../../core/app-services/favorites.service';
+import {FavoritesService} from '../../adal/app-services/favorites.service';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
-import {VOGraphs} from '../../com/ui/line-chart/line-chart.component';
+import {VOGraphs} from '../../aui/comps/line-chart/line-chart.component';
 import {of} from 'rxjs/internal/observable/of';
 import {fromPromise} from 'rxjs/internal-compatibility';
 

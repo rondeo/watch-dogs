@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
-import {DilaogData} from '../../com/material/dialog-simple/dialog-simple.component';
 
 @Component({
   selector: 'app-notes-history',

@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {OrderType, VOMarketCap, VOWatchdog} from '../../models/app-models';
+import {OrderType, VOMarketCap, VOWatchdog} from '../../amodels/app-models';
 import {WatchDogService} from '../watch-dog.service';
-import {AuthHttpService} from '../../core/services/auth-http.service';
+import {AuthHttpService} from '../../adal/services/auth-http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
-import {StorageService} from '../../core/services/app-storage.service';
+import {StorageService} from '../../adal/services/app-storage.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {AppBotsService} from '../../core/app-services/app-bots-services/app-bots.service';
-import {WatchDog} from '../../models/watch-dog';
+import {AppBotsService} from '../../adal/app-services/app-bots-services/app-bots.service';
+import {WatchDog} from '../../amodels/watch-dog';
 
 
 @Component({

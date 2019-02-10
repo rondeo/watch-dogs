@@ -1,177 +1,330 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="cto 1h">
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="update angular">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-in-one.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/all-in-one/all-in-one.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-bitcoin-average.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-bitcoin-average.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-crypto-compare.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-crypto-compare.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-market-cap.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-abstaract.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-binance.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-bittrex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-hitbtc.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/api-private-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-poloniex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-private/apis-private.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-private/apis-private.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-abstract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-abstract.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-binance.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bitfinex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-bitfinex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-bittrex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-cryptopia.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-cryptopia.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-hitbtc.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-huobi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-huobi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-okex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-okex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/api-public-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-poloniex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/api-public/apis-public.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/api-public/apis-public.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/apis.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/apis.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/http-delay.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/http-delay.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/mappers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/mappers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/mongo.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/mongo.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/news/news.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/news/news.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/news/rss.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/news/rss.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/open-orders/follow-open-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/open-orders/follow-open-order.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/open-orders/follow-orders.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/parsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/parsers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/sockets/binance-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/sockets/binance-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/sockets/poloniex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/sockets/poloniex-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/sockets/socket-channel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/sockets/socket-channel.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apis/sockets/soket-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/apis/sockets/soket-base.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/alerts/btc-usdt.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/alerts/btc-usdt.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/alerts/market-alerts.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/alerts/market-alerts.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/app-bots.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/app-bots.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/bot-init.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/bot-init.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/buy-on-down.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/buy-on-down.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/macd-signal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/macd-signal.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-balance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-balance.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot-reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-bot-reducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-orders.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-orders.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/mfi-signal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/mfi-signal.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/resistance-support-controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/resistance-support-controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-coin-filling.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/sell-coin-filling.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/sell-on-jump.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/sell-on-jump.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/stop-loss-order.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/usdt-btc-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/usdt-btc-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/watch-dog-shared.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/watch-dog-shared.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-bots-services/watch-dog-status.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/watch-dog-status.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/app-services.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/app-services.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/candles/candles-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/candles/candles-data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/candles/candles.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/candles/candles.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/favorites.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/favorites.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/market-history/markets-history.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/market-history/markets-history.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/market-history/orders-history.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/market-history/orders-history.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/market-history/orders-stats-alerts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/market-history/orders-stats-alerts.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/market-history/sharks-alert.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/market-history/sharks-alert.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys1.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/scanner/candles-analys1.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/candles-analys2.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/scanner/candles-analys2.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/scanner/scan-markets.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-services/tests/trades-history.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/app-services/tests/trades-history.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-in-one-outlet/all-in-one-outlet.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/all-in-one-outlet/all-in-one-outlet.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-in-one-outlet/all-in-one-outlet.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/all-in-one-outlet/all-in-one-outlet.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-in-one-outlet/all-in-one-outlet.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/all-in-one-outlet/all-in-one-outlet.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/all-in-one.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/all-in-one.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data-helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/v2-data/v2-data-helper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/v2-data/v2-data.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/v2-data/v2-data.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/all-in-one/v2-data/v2-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/in-one/v2-data/v2-data.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api-server.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api-server.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-profile.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-profile.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.effects.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.effects.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.effects.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.effects.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.effects.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.effects.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.guard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.reducer.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.reducer.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.reducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.selectors.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/login/login.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/login.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/login/login.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/auth/login/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/behavior-subject-my.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/behavior-subject-my.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/grpahs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/grpahs.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/mappers-history.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/mappers-history.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/market-stats.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/market-stats.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/math.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/math.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/moving-average.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/moving-average.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/run-script.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/run-script.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/selected-saved.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/selected-saved.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils-books.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/utils-books.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/utils-bot.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/utils-order.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/com/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/com/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/directives/coin-icon.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/directives/coin-icon.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/directives/directives.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/directives/directives.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/directives/save-value.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/directives/save-value.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/directives/value-color.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/directives/value-color.directive.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/directives/coin-icon.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/directives/coin-icon.directive.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/directives/directives.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/directives/directives.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/directives/save-value.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/directives/save-value.directive.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/directives/value-color.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/directives/value-color.directive.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/forms/CustomValidators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/forms/CustomValidators.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/forms/CustomValidators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-input/dialog-input.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-input/dialog-input.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-input/dialog-input.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-simple/dialog-simple.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-simple/dialog-simple.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/dialog-simple/dialog-simple.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-exchange/login-exchange.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-exchange/login-exchange.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-exchange/login-exchange.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-form/login-form.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-form/login-form.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-form/login-form.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/login-form/login-form.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/material/material-app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/material/material-app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/cmc-market.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/cmc-market.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/cmc.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/cmc.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/coin2us.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/coin2us.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/coin2us3.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/coin2us3.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/my-displ-num.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/my-displ-num.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/my-us.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/my-us.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/pipes.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/pipes.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/round.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/round.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/to-date.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/to-date.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/pipes/to-time.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/pipes/to-time.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/bubble-chart/bubble-chart.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/bubble-chart/bubble-chart.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/bubble-chart/bubble-chart.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candles-volumes/candles-volumes.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candles-volumes/candles-volumes.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candles-volumes/candles-volumes.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candlesticks/candlesticks.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candlesticks/candlesticks.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candlesticks/candlesticks.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/candlesticks/lines-overlay.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/candlesticks/lines-overlay.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/com/draw-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/com/draw-base.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/cross-table/cross-table.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/cross-table/cross-table.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/cross-table/cross-table.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/cross-table/cross-table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/fishes/fishes.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/fishes/fishes.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/fishes/fishes.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/indicator/indicator.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/indicator/indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/indicator/indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-chart/line-chart.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-chart/line-chart.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-chart/line-chart.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-graph/line-graph.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-graph/line-graph.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/line-graph/line-graph.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/macd-indicator/macd-indicator.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/macd-indicator/macd-indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/macd-indicator/macd-indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-data/mc-data.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-data/mc-data.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-data/mc-data.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-percent/mc-percent.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-percent/mc-percent.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mc-percent/mc-percent.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mfi-indicator/mfi-indicator.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mfi-indicator/mfi-indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/mfi-indicator/mfi-indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/rsi-indicator/rsi-indicator.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/rsi-indicator/rsi-indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/rsi-indicator/rsi-indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/sortable-table/sortable-table.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/sortable-table/sortable-table.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/sortable-table/sortable-table.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/sortable-table/sortable-table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch-rsi/stoch-rsi.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch-rsi/stoch-rsi.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch-rsi/stoch-rsi.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch/stoch.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch/stoch.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/stoch/stoch.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/table-props/table-props.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/table-props/table-props.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/table-props/table-props.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/ui.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/ui.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/volume-hist/volume-hist.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/volume-hist/volume-hist.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/volume-hist/volume-hist.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/vwmacd-indicator/vwmacd-indicator.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/vwmacd-indicator/vwmacd-indicator.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/comps/vwmacd-indicator/vwmacd-indicator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candle-volume-alert/candle-volume-alert.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candle-volume-alert/candle-volume-alert.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candle-volume-alert/candle-volume-alert.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candles-pattern/candles-pattern.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candles-pattern/candles-pattern.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/candles-pattern/candles-pattern.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/sharks-list/sharks-list.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/sharks-list/sharks-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/alerts/sharks-list/sharks-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/amount-coin/amount-coin.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/amount-coin/amount-coin.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/amount-coin/amount-coin.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/balance-market/balance-market.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/balance-market/balance-market.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/balance-market/balance-market.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-all-exchanges/books-all-exchanges.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-all-exchanges/books-all-exchanges.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-all-exchanges/books-all-exchanges.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-for-amount/books-for-amount.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-for-amount/books-for-amount.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/books-for-amount/books-for-amount.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/bots-running/bots-running.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/bots-running/bots-running.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/bots-running/bots-running.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/btc-tether/btc-tether.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/btc-tether/btc-tether.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/btc-tether/btc-tether.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/btc-tether/btc-tether.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers-2/coin-day-triggers-2.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers-2/coin-day-triggers-2.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day/coin-day.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day/coin-day.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/coin-day/coin-day.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/follow-order-list/follow-order-list.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/follow-order-list/follow-order-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/follow-order-list/follow-order-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-books/market-books.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-books/market-books.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-books/market-books.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-candles/market-candles.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-candles/market-candles.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/market-candles/market-candles.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/media/media.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/media/media.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/media/media.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/open-orders/open-orders.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/open-orders/open-orders.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/open-orders/open-orders.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/orders-history/orders-history.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/orders-history/orders-history.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/orders-history/orders-history.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/scanner/scanner.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/scanner/scanner.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/scanner/scanner.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-all-exchanges/trades-all-exchanges.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-all-exchanges/trades-all-exchanges.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-all-exchanges/trades-all-exchanges.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/market-snapshot.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-exchange-snapshot/market-snapshot.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-history/trades-history.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-history/trades-history.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/trades-history/trades-history.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/com/widgets/widgets.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/widgets/widgets.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-bitcoin-average.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-bitcoin-average.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-crypto-compare.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-crypto-compare.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-market-cap.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-abstaract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-abstaract.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-binance.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-bittrex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-hitbtc.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/api-private-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-poloniex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-private/apis-private.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-private/apis-private.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-abstract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-abstract.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-binance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-binance.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-bitfinex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-bitfinex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-bittrex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-bittrex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-cryptopia.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-cryptopia.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-hitbtc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-hitbtc.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-huobi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-huobi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-okex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-okex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/api-public-poloniex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/api-public-poloniex.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/api-public/apis-public.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/api-public/apis-public.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/apis.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/apis.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/http-delay.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/http-delay.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/mappers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/mappers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/mongo.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/mongo.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/news/news.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/news/news.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/news/rss.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/news/rss.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/open-orders/follow-open-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/open-orders/follow-open-order.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/open-orders/follow-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/open-orders/follow-orders.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/parsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/parsers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/sockets/binance-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/sockets/binance-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/sockets/poloniex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/sockets/poloniex-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/sockets/socket-channel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/sockets/socket-channel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/apis/sockets/soket-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/apis/sockets/soket-base.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/alerts/btc-usdt.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/alerts/btc-usdt.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/alerts/market-alerts.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/alerts/market-alerts.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/app-bots.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/app-bots.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/bot-init.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/bot-init.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/buy-on-down.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/buy-on-down.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/macd-signal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/macd-signal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-balance.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-balance.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-bot-reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-bot-reducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-bot.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-orders.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-orders.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/mfi-signal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/mfi-signal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/resistance-support-controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/resistance-support-controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/sell-coin-filling.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/sell-coin-filling.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/sell-on-jump.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/sell-on-jump.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/stop-loss-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/stop-loss-order.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/usdt-btc-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/usdt-btc-bot.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/watch-dog-shared.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/watch-dog-shared.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-bots-services/watch-dog-status.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/watch-dog-status.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/app-services.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/app-services.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/candles/candles-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/candles/candles-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/candles/candles.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/candles/candles.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/favorites.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/favorites.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/market-history/markets-history.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/market-history/markets-history.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/market-history/orders-history.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/market-history/orders-history.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/market-history/orders-stats-alerts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/market-history/orders-stats-alerts.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/market-history/sharks-alert.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/market-history/sharks-alert.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/scanner/candles-analys1.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/scanner/candles-analys1.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/scanner/candles-analys2.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/scanner/candles-analys2.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/scanner/scan-markets.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/scanner/scan-markets.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/app-services/tests/trades-history.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/app-services/tests/trades-history.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.effects.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.effects.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.effects.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.effects.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.reducer.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.reducer.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.reducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/login/login.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/login/login.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/auth/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/behavior-subject-my.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/behavior-subject-my.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/grpahs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/grpahs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/mappers-history.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/mappers-history.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/market-stats.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/market-stats.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/math.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/math.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/moving-average.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/moving-average.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/run-script.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/run-script.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/selected-saved.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/selected-saved.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/utils-books.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/utils-books.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/utils-bot.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/utils-bot.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/utils-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/utils-order.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/com/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/acom/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/reducers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/reducers/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/app-storage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/app-storage.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/auth-http.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/auth-http.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/database.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/database.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/show-external-page.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/show-external-page.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/slack.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/slack.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/services/user-login.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/services/user-login.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/binance-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/binance-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/bitfinex-trades-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/bitfinex-trades-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/bittrex/bittrex-trades-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/bittrex/bittrex-trades-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/hitbtc-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/hitbtc-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/huobi-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/huobi-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/okex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/okex-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/poloniex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/poloniex-trade-socket.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/soket-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/soket-base.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/core/sockets/soket-connector.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/adal/sockets/soket-connector.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/edit-script/edit-script.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/email-main/email-main.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/email-main/email-main.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/email-service.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/email-service.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/email-service.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/email-service/run-watchdogs/run-watchdogs.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/run-watchdogs/run-watchdogs.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/email-service/run-watchdogs/script-analytics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/run-watchdogs/script-analytics.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/watch-dog.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/watch-dog.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/watchdog-edit/watchdog-edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/watchdog-edit/watchdog-edit.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/watchdog-test/watchdog-test.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/email-service/watchdogs-list/watchdogs-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/email-service/watchdogs-list/watchdogs-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/forms/CustomValidators.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/forms/CustomValidators.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/forms/CustomValidators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/forms/CustomValidators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/exchange-ss/exchange-ss.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/exchange-ss/send-alert.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/exchange-ss/send-alert.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/login/confirm-reset-password/confirm-reset-password.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/confirm-reset-password/confirm-reset-password.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/login/login.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/login.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/login/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/login/login.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/all-coins-table/all-coins-table.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gainers-losers/gainers-losers.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/market-cap/gl-all-exchanges/gl-all-exchanges.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/gl-all-exchanges/gl-all-exchanges.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/market-cap/market-cap-main/market-cap-main.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/market-cap-main/market-cap-main.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/selected-coins/selected-coins.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/selected-coins/selected-coins.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/market-cap/services/market-cap.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-input/dialog-input.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-input/dialog-input.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-input/dialog-input.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-input/dialog-input.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-simple/dialog-simple.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-simple/dialog-simple.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/dialog-simple/dialog-simple.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/dialog-simple/dialog-simple.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-exchange/login-exchange.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-exchange/login-exchange.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-exchange/login-exchange.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-exchange/login-exchange.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-form/login-form.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-form/login-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-form/login-form.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/login-form/login-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/login-form/login-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/material/material-app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/material/material-app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/models/app-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/app-models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/models/watch-dog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/models/watch-dog.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/models/api-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/amodels/api-models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/models/app-models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/amodels/app-models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/models/buy-sell-model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/amodels/buy-sell-model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/models/sos.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/amodels/sos.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/models/watch-dog.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/amodels/watch-dog.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/buy-sell-panel/buy-sell-panel.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-buy-sell/my-buy-sell.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/cmc-market.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/cmc-market.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/cmc.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/cmc.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/coin2us.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/coin2us.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/coin2us3.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/coin2us3.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/my-displ-num.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/my-displ-num.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/my-us.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/my-us.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/pipes.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/pipes.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/round.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/round.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/to-date.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/to-date.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pipes/to-time.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/pipes/to-time.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/reducers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/reducers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/app-storage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/app-storage.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/auth-http.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/auth-http.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/database.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/database.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/show-external-page.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/show-external-page.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/slack.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/slack.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/services/user-login.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/services/user-login.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-markets/my-markets.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/my-orders-history/my-orders-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/my-orders-history/my-orders-history.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/my-exchange/trading-history/trading-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/my-exchange/trading-history/trading-history.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/shape-shift.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/ss-coins-available/ss-coins-available.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/shape-shift/ss-main/ss-main.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shape-shift/ss-main/ss-main.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/shared/api-login.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shared/api-login.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/binance-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/binance-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/bitfinex-trades-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/bitfinex-trades-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/bittrex/bittrex-trades-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/bittrex/bittrex-trades-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/hitbtc-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/hitbtc-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/huobi-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/huobi-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/okex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/okex-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/poloniex-trade-socket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/poloniex-trade-socket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/soket-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/soket-base.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/sockets/soket-connector.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/core/sockets/soket-connector.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/test/test-candles.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/test-candles.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/test/test.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/test.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/analyze-coin/analyze-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/analyze-coin/analyze-coin.component.ts" afterDir="false" />
@@ -179,142 +332,14 @@
       <change beforePath="$PROJECT_DIR$/src/app/trader/follow-market/follow-market.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/follow-market/follow-market.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/libs/levels/resistance-support.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/libs/levels/resistance-support.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/live-trader/live-trader.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/market-details/market-details.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/market-details/market-details.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/trader-socket/trader-socket.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/trader-socket/trader-socket.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/trader/trader.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/trader/trader.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/bubble-chart/bubble-chart.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/bubble-chart/bubble-chart.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/bubble-chart/bubble-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/bubble-chart/bubble-chart.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candles-volumes/candles-volumes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candles-volumes/candles-volumes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candles-volumes/candles-volumes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candles-volumes/candles-volumes.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candlesticks/candlesticks.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candlesticks/candlesticks.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/candlesticks/lines-overlay.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/candlesticks/lines-overlay.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/com/draw-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/com/draw-base.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/cross-table/cross-table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/cross-table/cross-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/cross-table/cross-table.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/cross-table/cross-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/cross-table/cross-table.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/fishes/fishes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/fishes/fishes.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/indicator/indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/indicator/indicator.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-chart/line-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-chart/line-chart.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-graph/line-graph.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-graph/line-graph.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/line-graph/line-graph.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/line-graph/line-graph.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/macd-indicator/macd-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-data/mc-data.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-data/mc-data.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-data/mc-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-data/mc-data.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-percent/mc-percent.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-percent/mc-percent.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mc-percent/mc-percent.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mc-percent/mc-percent.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mfi-indicator/mfi-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mfi-indicator/mfi-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/mfi-indicator/mfi-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/rsi-indicator/rsi-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/sortable-table/sortable-table.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch-rsi/stoch-rsi.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch-rsi/stoch-rsi.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch-rsi/stoch-rsi.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch-rsi/stoch-rsi.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch/stoch.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch/stoch.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/stoch/stoch.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/stoch/stoch.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/table-props/table-props.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/table-props/table-props.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/table-props/table-props.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/table-props/table-props.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/ui.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/ui.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/volume-hist/volume-hist.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/volume-hist/volume-hist.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/volume-hist/volume-hist.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/volume-hist/volume-hist.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/vwmacd-indicator/vwmacd-indicator.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/vwmacd-indicator/vwmacd-indicator.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ui/vwmacd-indicator/vwmacd-indicator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/ui/vwmacd-indicator/vwmacd-indicator.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candle-volume-alert/candle-volume-alert.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candle-volume-alert/candle-volume-alert.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candle-volume-alert/candle-volume-alert.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candle-volume-alert/candle-volume-alert.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candles-pattern/candles-pattern.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candles-pattern/candles-pattern.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/candles-pattern/candles-pattern.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/candles-pattern/candles-pattern.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/sharks-list/sharks-list.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/sharks-list/sharks-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/alerts/sharks-list/sharks-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/alerts/sharks-list/sharks-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/amount-coin/amount-coin.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/amount-coin/amount-coin.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/amount-coin/amount-coin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/amount-coin/amount-coin.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/balance-market/balance-market.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/balance-market/balance-market.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-all-exchanges/books-all-exchanges.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-all-exchanges/books-all-exchanges.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/books-for-amount/books-for-amount.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/books-for-amount/books-for-amount.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/bots-running/bots-running.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/bots-running/bots-running.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/bots-running/bots-running.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/bots-running/bots-running.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/btc-tether/btc-tether.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/btc-tether/btc-tether.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/btc-tether/btc-tether.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/btc-tether/btc-tether.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers-2/coin-day-triggers-2.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers-2/coin-day-triggers-2.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers/coin-day-triggers.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers/coin-day-triggers.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day-triggers/coin-day-triggers.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day-triggers/coin-day-triggers.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/coin-day/coin-day.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/coin-day/coin-day.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/follow-order-list/follow-order-list.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/follow-order-list/follow-order-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/follow-order-list/follow-order-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-books/market-books.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-books/market-books.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-books/market-books.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-books/market-books.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/market-candles/market-candles.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/media/media.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/media/media.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/media/media.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/media/media.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/open-orders/open-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/open-orders/open-orders.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/orders-history/orders-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/orders-history/orders-history.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/scanner/scanner.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/scanner/scanner.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/scanner/scanner.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-all-exchanges/trades-all-exchanges.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-all-exchanges/trades-all-exchanges.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-all-exchanges/trades-all-exchanges.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-all-exchanges/trades-all-exchanges.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-exchange-snapshot/market-snapshot.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/market-snapshot.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-exchange-snapshot/trades-exchange-snapshot.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/trades-history/trades-history.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/trades-history/trades-history.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/widgets/widgets.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/com/widgets/widgets.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -331,10 +356,10 @@
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/bot-init.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/bot-init.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1515">
-                  <caret line="120" selection-start-line="120" selection-end-line="120" />
+                <state relative-caret-position="1575">
+                  <caret line="124" column="29" selection-start-line="124" selection-start-column="29" selection-end-line="124" selection-end-column="29" />
                   <folding>
                     <element signature="e#0#62#0" expanded="true" />
                   </folding>
@@ -342,11 +367,29 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/app/core/app-services/scanner/scan-markets.service.ts">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/app.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="303">
-                  <caret line="235" column="30" selection-start-line="235" selection-start-column="30" selection-end-line="235" selection-end-column="30" />
+                <state relative-caret-position="150">
+                  <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="210">
+                  <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/adal/services/user-login.service.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="285">
+                  <caret line="29" selection-start-line="29" selection-end-line="29" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -355,51 +398,69 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/macd-signal.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2265">
-                  <caret line="157" column="3" selection-start-line="157" selection-start-column="3" selection-end-line="157" selection-end-column="3" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-private/api-private-abstaract.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="34" selection-start-line="34" selection-end-line="34" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
+                <state relative-caret-position="120">
+                  <caret line="14" selection-start-line="14" selection-end-line="14" />
                   <folding>
-                    <element signature="e#0#59#0" expanded="true" />
+                    <element signature="e#0#55#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html">
+            <entry file="file://$PROJECT_DIR$/src/app/in-one/all-in-one.module.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="465">
-                  <caret line="31" column="33" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="33" />
+                <state relative-caret-position="75">
+                  <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/order-reports/order-reports.component.ts">
+            <entry file="file://$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2655">
-                  <caret line="193" column="56" selection-start-line="193" selection-start-column="56" selection-end-line="193" selection-end-column="56" />
+                <state relative-caret-position="15">
+                  <caret line="1" column="50" selection-start-line="1" selection-start-column="50" selection-end-line="1" selection-end-column="50" />
                   <folding>
-                    <element signature="e#0#48#0" expanded="true" />
+                    <element signature="e#0#56#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/favorites.service.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="570">
+                  <caret line="47" column="3" selection-start-line="47" selection-start-column="3" selection-end-line="47" selection-end-column="3" />
+                  <folding>
+                    <element signature="e#0#41#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/aui/material/material-app.module.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="532">
+                  <caret line="59" column="4" lean-forward="true" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
+                  <folding>
+                    <element signature="e#40#79#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-services.module.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="165">
+                  <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+                  <folding>
+                    <element signature="e#0#39#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -409,36 +470,9 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/index.html">
               <provider selected="true" editor-type-id="text-editor" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app.component.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/package.json">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="375">
-                  <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/models.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
-                </state>
-              </provider>
             </entry>
           </file>
         </leaf>
@@ -455,10 +489,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>closes</find>
-      <find>dectroy</find>
-      <find>buyOrders</find>
-      <find>downloadTicker</find>
       <find>price_btc</find>
       <find>mapDataMC</find>
       <find>close</find>
@@ -485,12 +515,20 @@
       <find>ngOn</find>
       <find>isS</find>
       <find>is</find>
+      <find>/models/</find>
+      <find>/core/</find>
+      <find>com/material</find>
+      <find>com/ui/</find>
     </findStrings>
     <replaceStrings>
       <replace>myValueColor</replace>
       <replace>coin2us</replace>
       <replace>proxy-5min</replace>
       <replace>bot</replace>
+      <replace>/amodels/</replace>
+      <replace>/adal/</replace>
+      <replace>amaterial</replace>
+      <replace>aui/comps/</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -505,28 +543,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/auth/auth.actions.ts" />
-        <option value="$PROJECT_DIR$/src/app/auth/auth.effects.ts" />
-        <option value="$PROJECT_DIR$/src/app/auth/auth.module.ts" />
-        <option value="$PROJECT_DIR$/angular.json" />
-        <option value="$PROJECT_DIR$/src/app/auth/auth.guard.ts" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/src/app/ui/mc-data/mc-data.component.html" />
-        <option value="$PROJECT_DIR$/src/app/ui/sortable-table/sortable-table.component.html" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot-reducer.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/open-orders/follow-orders.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/services/user-login.service.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-poloniex.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/models/watch-dog.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-hitbtc.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/balances.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/balanceMarket.ts" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.html" />
-        <option value="$PROJECT_DIR$/src/app/models/app-models.ts" />
-        <option value="$PROJECT_DIR$/src/app/widgets/scanner/scanner.component.html" />
-        <option value="$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-binance.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/stop-loss-order.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/usdt-btc-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-balance.ts" />
@@ -552,10 +568,32 @@
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/market-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/apis/api-private/api-private-abstaract.ts" />
         <option value="$PROJECT_DIR$/src/app/app-services/app-bots-services/macd-signal.ts" />
-        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.html" />
         <option value="$PROJECT_DIR$/src/app/app-services/scanner/scan-markets.service.ts" />
         <option value="$PROJECT_DIR$/src/app/core/app-services/scanner/scan-markets.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts" />
+        <option value="$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/login/login/login.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/email-service/email-service.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/aui/widgets/coin-day/coin-day.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/aui/widgets/widgets.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/trader.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/login/login.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/adal/services/user-login.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/app.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/in-one/all-in-one.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/adal/app-services/favorites.service.ts" />
+        <option value="$PROJECT_DIR$/src/app/aui/material/material-app.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/adal/app-services/app-services.module.ts" />
       </list>
     </option>
   </component>
@@ -585,6 +623,32 @@
               <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="adal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="adal" type="462c0819:PsiDirectoryNode" />
+              <item name="app-services" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -607,19 +671,19 @@
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2018.3.4\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\acom" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\com" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\shared" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\core" />
+      <recent name="D:\Projects\Bitcoin\watch-dogs\archive" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\assets" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\techind\moving_averages" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\techind" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\technicalindicators" />
       <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\trader\libs\gekko" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\com" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\shared" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\core" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\archive" />
-      <recent name="D:\Projects\Bitcoin\watch-dogs\src\app\apis\api-public" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -699,8 +763,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.start" />
         <item itemvalue="npm.prod" />
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.createReduser" />
         <item itemvalue="npm.live-reload" />
         <item itemvalue="npm.lint" />
@@ -841,14 +905,8 @@
       <workItem from="1548014517335" duration="11416000" />
       <workItem from="1549466953959" duration="1250000" />
       <workItem from="1549468387306" duration="1738000" />
-      <workItem from="1549826626112" duration="1883000" />
-    </task>
-    <task id="LOCAL-00093" summary="orders history">
-      <created>1541268380771</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1541268380771</updated>
+      <workItem from="1549826626112" duration="4114000" />
+      <workItem from="1549834481485" duration="331000" />
     </task>
     <task id="LOCAL-00094" summary="GOING UP">
       <created>1541435404938</created>
@@ -1186,11 +1244,18 @@
       <option name="project" value="LOCAL" />
       <updated>1547169836110</updated>
     </task>
-    <option name="localTasksCounter" value="142" />
+    <task id="LOCAL-00142" summary="update angular">
+      <created>1549831878534</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1549831878534</updated>
+    </task>
+    <option name="localTasksCounter" value="143" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3467039000" />
+    <option name="totallyTimeSpent" value="3469601000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1204,9 +1269,9 @@
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="2514" height="1456" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.74371374" visible="true" weight="0.1414018" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7427466" visible="true" weight="0.13365933" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.25628626" side_tool="true" visible="true" weight="0.1414018" />
+      <window_info id="npm" order="2" sideWeight="0.25725338" side_tool="true" visible="true" weight="0.13365933" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="DB Browser" order="4" sideWeight="0.49614963" weight="0.2555012" />
       <window_info anchor="bottom" id="Messages" order="0" />
@@ -1346,7 +1411,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/tables1" />
     </ignored-roots>
-    <MESSAGE value="published" />
     <MESSAGE value="gainers losers" />
     <MESSAGE value="reports" />
     <MESSAGE value="media" />
@@ -1371,7 +1435,8 @@
     <MESSAGE value="remove btc" />
     <MESSAGE value="adjusting" />
     <MESSAGE value="cto 1h" />
-    <option name="LAST_COMMIT_MESSAGE" value="cto 1h" />
+    <MESSAGE value="update angular" />
+    <option name="LAST_COMMIT_MESSAGE" value="update angular" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1399,154 +1464,28 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/models/watch-dog.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-private/api-private-hitbtc.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="172" column="12" selection-start-line="172" selection-start-column="12" selection-end-line="172" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/services/user-login.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="152" column="34" selection-start-line="152" selection-start-column="34" selection-end-line="152" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/follow-order-list/follow-order-list.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="32" column="16" lean-forward="true" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/models/app-models.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="489" column="21" lean-forward="true" selection-start-line="489" selection-start-column="21" selection-end-line="489" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/scanner/scanner.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="5" column="25" lean-forward="true" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/sockets/soket-base.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-300">
-          <caret line="25" column="17" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/stop-loss-order.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-balnce/my-exchange-balnces.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1605">
-          <caret line="119" column="30" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/usdt-btc-bot.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/btc-tether/btc-tether.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="33" column="14" selection-start-line="33" selection-start-column="14" selection-end-line="33" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-public/api-public-bitfinex.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="31" column="6" selection-start-line="31" selection-start-column="6" selection-end-line="31" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-private/api-private-binance.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="94" column="48" selection-start-line="94" selection-start-column="48" selection-end-line="94" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-orders.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/open-orders/follow-open-order.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="199" column="29" lean-forward="true" selection-start-line="199" selection-start-column="29" selection-end-line="199" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/alerts/btc-usdt.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="180" column="20" selection-start-line="180" selection-start-column="20" selection-end-line="180" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/com/moving-average.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/acom/moving-average.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="24" column="12" lean-forward="true" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/ui/macd-indicator/macd-indicator.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/comps/macd-indicator/macd-indicator.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
           <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-balance.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-balance.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.html">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/market-candles/market-candles.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="45" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
@@ -1560,57 +1499,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/widgets/market-candles/market-candles.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/market-candles/market-candles.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/ui/mfi-indicator/mfi-indicator.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/comps/mfi-indicator/mfi-indicator.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="59" column="48" lean-forward="true" selection-start-line="59" selection-start-column="48" selection-end-line="59" selection-end-column="48" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/mfi-signal.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/mfi-signal.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-services.module.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-market-cap.service.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/apis/api-market-cap.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="13" column="28" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/market-bot.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/market-bot.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
           <caret line="75" selection-start-line="75" selection-end-line="75" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/models/api-models.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/amodels/api-models.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1875">
           <caret line="125" column="7" selection-start-line="125" selection-start-column="7" selection-end-line="125" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/ui/rsi-indicator/rsi-indicator.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/comps/rsi-indicator/rsi-indicator.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="615">
           <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
@@ -1641,14 +1572,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/com/material/material-app.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="37" selection-start-line="37" selection-end-line="84" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/candles/candles.service.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/candles/candles.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4020">
           <caret line="268" column="36" selection-start-line="268" selection-start-column="36" selection-end-line="268" selection-end-column="36" />
@@ -1658,7 +1582,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/sell-on-jump.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/sell-on-jump.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
           <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
@@ -1668,7 +1592,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/scanner/candles-analys1.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/scanner/candles-analys1.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5775">
           <caret line="392" column="28" selection-start-line="392" selection-start-column="28" selection-end-line="392" selection-end-column="28" />
@@ -1682,37 +1606,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/bot-init.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1515">
-          <caret line="120" selection-start-line="120" selection-end-line="120" />
-          <folding>
-            <element signature="e#0#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/macd-signal.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2265">
-          <caret line="157" column="3" selection-start-line="157" selection-start-column="3" selection-end-line="157" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/apis/api-private/api-private-abstaract.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/apis/api-private/api-private-abstaract.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="34" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1733,10 +1630,224 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/scanner/scan-markets.service.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/models.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="235" column="30" selection-start-line="235" selection-start-column="30" selection-end-line="235" selection-end-column="30" />
+        <state relative-caret-position="195">
+          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/buy-sell-coin/buy-sell-coin.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="22" lean-forward="true" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/macd-signal.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="956">
+          <caret line="157" column="3" selection-start-line="157" selection-start-column="3" selection-end-line="157" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/scanner/scan-markets.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-405">
+          <caret line="6" column="62" lean-forward="true" selection-start-line="6" selection-start-column="62" selection-end-line="6" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="975">
+          <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
+          <folding>
+            <element signature="e#571#648#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers-2/coin-day-triggers-2.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-420">
+          <caret line="37" column="20" lean-forward="true" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#102#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/my-exchange/my-exchange.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-49">
+          <caret line="18" column="7" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/shape-shift/shape-shift.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="12" lean-forward="true" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/shared/shared.moduleOld.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/widgets.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="41" column="6" lean-forward="true" selection-start-line="41" selection-start-column="6" selection-end-line="41" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/scan-markets/scan-markets.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4759">
+          <caret line="11" column="88" selection-start-line="11" selection-start-column="88" selection-end-line="11" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/email-service/email-service.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/login/login/login.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="611">
+          <caret line="187" column="35" selection-start-line="187" selection-start-column="35" selection-end-line="187" selection-end-column="35" />
+          <folding>
+            <element signature="e#64#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/login/login.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="4" lean-forward="true" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/email-service/create-watchdog/create-watchdog.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/coin-day/coin-day.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="45" column="16" lean-forward="true" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="34" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-bots-services/bot-init.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1575">
+          <caret line="124" column="29" selection-start-line="124" selection-start-column="29" selection-end-line="124" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/market-cap/market-cap.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/adal/services/user-login.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/aui/widgets/coin-day-triggers/coin-day-triggers.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/in-one/all-in-one.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/trader/notes-history/notes-history.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="50" selection-start-line="1" selection-start-column="50" selection-end-line="1" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/favorites.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="47" column="3" selection-start-line="47" selection-start-column="3" selection-end-line="47" selection-end-column="3" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -1746,24 +1857,23 @@
     <entry file="file://$PROJECT_DIR$/src/index.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/aui/material/material-app.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+        <state relative-caret-position="532">
+          <caret line="59" column="4" lean-forward="true" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
+          <folding>
+            <element signature="e#40#79#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/core/app-services/app-bots-services/models.ts">
+    <entry file="file://$PROJECT_DIR$/src/app/adal/app-services/app-services.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+        <state relative-caret-position="165">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

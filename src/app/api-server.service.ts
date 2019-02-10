@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {VOBalance} from './models/app-models';
+import {VOBalance} from './amodels/app-models';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';

@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {VOBalance, VOTransfer} from '../../models/app-models';
+import {VOBalance, VOTransfer} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSelectChange, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
-import {ApisPrivateService} from '../../core/apis/api-private/apis-private.service';
-import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
+import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
+import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
 
-import {ShowExternalPageService} from '../../core/services/show-external-page.service';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {VOMCObj} from '../../models/api-models';
-import {UserLoginService} from '../../core/services/user-login.service';
+import {ShowExternalPageService} from '../../adal/services/show-external-page.service';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {VOMCObj} from '../../amodels/api-models';
+import {UserLoginService} from '../../adal/services/user-login.service';
 
 @Component({
   selector: 'app-my-balnce',

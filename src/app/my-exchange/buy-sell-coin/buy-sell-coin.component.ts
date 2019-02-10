@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {VOBalance, VOMarket, VOOrder} from '../../models/app-models';
+import {VOBalance, VOMarket, VOOrder} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 import * as _ from 'lodash';
 import {MatSnackBar} from '@angular/material';
 
-import {ApisPrivateService} from '../../core/apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../core/apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {VOMCObj} from '../../models/api-models';
-import {MATH} from '../../core/com/math';
+import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../adal/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {VOMCObj} from '../../amodels/api-models';
+import {MATH} from '../../acom/math';
 
 @Component({
   selector: 'app-buy-sell-coin',

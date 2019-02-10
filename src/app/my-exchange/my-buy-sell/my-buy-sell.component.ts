@@ -1,20 +1,20 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../models/app-models';
+import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../amodels/app-models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {UtilsOrder} from '../../core/com/utils-order';
-import {ApisPrivateService} from '../../core/apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../core/apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {ApiPublicAbstract} from '../../core/apis/api-public/api-public-abstract';
-import {UtilsBooks} from '../../core/com/utils-books';
-import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
-import {MATH} from '../../core/com/math';
+import {UtilsOrder} from '../../acom/utils-order';
+import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../adal/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiPublicAbstract} from '../../adal/apis/api-public/api-public-abstract';
+import {UtilsBooks} from '../../acom/utils-books';
+import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {MATH} from '../../acom/math';
 import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
-import {FollowOrdersService} from '../../core/apis/open-orders/follow-orders.service';
+import {FollowOrdersService} from '../../adal/apis/open-orders/follow-orders.service';
 import {Subscription} from 'rxjs';
-import {BtcUsdtService} from '../../core/app-services/alerts/btc-usdt.service';
+import {BtcUsdtService} from '../../adal/app-services/alerts/btc-usdt.service';
 
 @Component({
   selector: 'app-my-buy-sell',

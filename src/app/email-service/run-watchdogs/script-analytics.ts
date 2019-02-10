@@ -1,6 +1,6 @@
 
 import * as _ from 'lodash';
-import {VOMarketCap} from '../../models/app-models';
+import {VOMarketCap} from '../../amodels/app-models';
 
 export function runDogScript(oldValue: VOMarketCap, newValue: VOMarketCap, script: string): string[] {
 

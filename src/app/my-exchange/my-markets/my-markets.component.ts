@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
-import {VOMarket} from '../../models/app-models';
+import {VOMarket} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import {Subscription} from 'rxjs';
 

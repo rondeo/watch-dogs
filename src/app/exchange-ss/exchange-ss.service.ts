@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {VOMarketCap} from '../models/app-models';
+import {VOMarketCap} from '../amodels/app-models';
 
 import {ApiServerService} from '../api-server.service';
 import {BehaviorSubject, Observable} from 'rxjs';

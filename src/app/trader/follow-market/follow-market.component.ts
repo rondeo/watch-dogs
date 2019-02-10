@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FollowOrdersService} from '../../core/apis/open-orders/follow-orders.service';
-import {MarketBot} from '../../core/app-services/app-bots-services/market-bot';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
-import {CandlesService} from '../../core/app-services/candles/candles.service';
-import {VOCandle} from '../../models/api-models';
+import {FollowOrdersService} from '../../adal/apis/open-orders/follow-orders.service';
+import {MarketBot} from '../../adal/app-services/app-bots-services/market-bot';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {CandlesService} from '../../adal/app-services/candles/candles.service';
+import {VOCandle} from '../../amodels/api-models';
 import * as _ from 'lodash';
 import {TestCandlesService} from '../../test/test-candles.service';
 import {ActivatedRoute, Router} from '@angular/router';

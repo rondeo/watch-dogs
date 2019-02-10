@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {VOMarketCap} from '../../models/app-models';
+import {VOMarketCap} from '../../amodels/app-models';
 import {MarketCapService} from '../services/market-cap.service';
 import * as _ from 'lodash';
 @Component({

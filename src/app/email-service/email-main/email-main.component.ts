@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {AuthHttpService} from '../../core/services/auth-http.service';
+import {AuthHttpService} from '../../adal/services/auth-http.service';
 import {MatSnackBar} from '@angular/material';
-import {StorageService} from '../../core/services/app-storage.service';
+import {StorageService} from '../../adal/services/app-storage.service';
 import {Observable} from 'rxjs';
 
 @Component({

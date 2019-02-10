@@ -5,10 +5,10 @@ import {EmailServiceService} from '../email-service.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
 import {runDogScript} from './script-analytics';
-import {VOMarketCap} from '../../models/app-models';
+import {VOMarketCap} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {Router} from '@angular/router';
-import {WatchDog} from '../../models/watch-dog';
+import {WatchDog} from '../../amodels/watch-dog';
 
 @Component({
   selector: 'app-run-watchdogs',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
-import {VOMarketCap} from '../models/app-models';
+import {VOMarketCap} from '../amodels/app-models';
 
 @Injectable()
 export class SendAlertService {

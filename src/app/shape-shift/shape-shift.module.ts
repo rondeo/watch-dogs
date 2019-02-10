@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { SSCoinsAvailableComponent } from './ss-coins-available/ss-coins-available.component';
 import { SsMainComponent } from './ss-main/ss-main.component';
 import {ShapeShiftService} from './shape-shift.service';
-
 import {FormsModule} from '@angular/forms';
-import {MaterialAppModule} from '../com/material/material-app.module';
-import {UiModule} from '../com/ui/ui.module';
+import {UiModule} from '../aui/comps/ui.module';
+import {MaterialAppModule} from '../aui/material/material-app.module';
 
 @NgModule({
   imports: [

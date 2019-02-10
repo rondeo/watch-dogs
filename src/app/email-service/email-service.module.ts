@@ -5,18 +5,17 @@ import { CreateWatchdogComponent } from './create-watchdog/create-watchdog.compo
 import { RunWatchdogsComponent } from './run-watchdogs/run-watchdogs.component';
 import { EmailMainComponent } from './email-main/email-main.component';
 import {RouterModule, Routes} from '@angular/router';
-import {MaterialAppModule} from '../com/material/material-app.module';
 import {FormsModule} from '@angular/forms';
 import {EmailServiceService} from './email-service.service';
 import { EditScriptComponent } from './edit-script/edit-script.component';
-
 import { WatchdogsListComponent } from './watchdogs-list/watchdogs-list.component';
 import { WatchdogEditComponent } from './watchdog-edit/watchdog-edit.component';
 import { AddScriptComponent } from './add-script/add-script.component';
-import {AppServicesModule} from '../core/app-services/app-services.module';
+import {AppServicesModule} from '../adal/app-services/app-services.module';
 import { WatchdogTestComponent } from './watchdog-test/watchdog-test.component';
-import {WidgetsModule} from '../com/widgets/widgets.module';
-import {UiModule} from '../com/ui/ui.module';
+import {UiModule} from '../aui/comps/ui.module';
+import {MaterialAppModule} from '../aui/material/material-app.module';
+import {WidgetsModule} from '../aui/widgets/widgets.module';
 
 
 

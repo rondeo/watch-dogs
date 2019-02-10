@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {AuthHttpService} from '../core/services/auth-http.service';
+import {AuthHttpService} from '../adal/services/auth-http.service';
 
 import * as _ from 'lodash';
-import {VOMarketCap, VOSearch} from '../models/app-models';
+import {VOMarketCap, VOSearch} from '../amodels/app-models';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 

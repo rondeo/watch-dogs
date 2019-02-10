@@ -1,6 +1,6 @@
 import {Component, OnInit } from '@angular/core';
 import {ExchangeSsService} from './exchange-ss.service';
-import {VOMarketCap} from '../models/app-models';
+import {VOMarketCap} from '../amodels/app-models';
 /*
 import {WalletsAllService} from '../wallets/wallets-all.service';*/
 

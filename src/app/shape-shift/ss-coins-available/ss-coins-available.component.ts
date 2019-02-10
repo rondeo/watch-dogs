@@ -3,7 +3,7 @@ import {ShapeShiftService} from '../shape-shift.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 
 import * as _ from 'lodash';
-import {VOMarketCap} from '../../models/app-models';
+import {VOMarketCap} from '../../amodels/app-models';
 
 @Component({
   selector: 'app-ss-coins-available',

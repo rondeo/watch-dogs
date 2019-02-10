@@ -2,15 +2,15 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
 import {EmailServiceService} from '../email-service.service';
-import {DialogSimpleComponent} from '../../com/material/dialog-simple/dialog-simple.component';
+
 import {MatDialog} from '@angular/material';
-import {OrderType, VOMarketCap, VOWatchdog} from '../../models/app-models';
+import {OrderType, VOMarketCap, VOWatchdog} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {WatchDog} from '../../models/watch-dog';
+import {WatchDog} from '../../amodels/watch-dog';
 import * as moment from 'moment';
-import {AppBotsService} from '../../core/app-services/app-bots-services/app-bots.service';
-import {WatchDogStatus} from '../../core/app-services/app-bots-services/watch-dog-status';
+import {AppBotsService} from '../../adal/app-services/app-bots-services/app-bots.service';
+import {WatchDogStatus} from '../../adal/app-services/app-bots-services/watch-dog-status';
 
 
 @Component({

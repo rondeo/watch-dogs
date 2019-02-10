@@ -1,20 +1,20 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {VOCandle} from '../../models/api-models';
-import {ApiPublicAbstract} from '../../core/apis/api-public/api-public-abstract';
+import {VOCandle} from '../../amodels/api-models';
+import {ApiPublicAbstract} from '../../adal/apis/api-public/api-public-abstract';
 
-import {ApisPublicService} from '../../core/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
 import {MatSnackBar} from '@angular/material';
-import {VOOrder, VOOrderExt} from '../../models/app-models';
-import {EnumOverlay} from '../../com/ui/candlesticks/candlesticks.component';
+import {VOOrder, VOOrderExt} from '../../amodels/app-models';
+import {EnumOverlay} from '../../aui/comps/candlesticks/candlesticks.component';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {MarketsHistoryService} from '../../core/app-services/market-history/markets-history.service';
+import {MarketsHistoryService} from '../../adal/app-services/market-history/markets-history.service';
 
-import {TradesHistoryService} from '../../core/app-services/tests/trades-history.service';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {StorageService} from '../../core/services/app-storage.service';
-import {CandlesService} from '../../core/app-services/candles/candles.service';
+import {TradesHistoryService} from '../../adal/app-services/tests/trades-history.service';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {StorageService} from '../../adal/services/app-storage.service';
+import {CandlesService} from '../../adal/app-services/candles/candles.service';
 import {Subscription} from 'rxjs';
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {IVOTrade, SoketConnectorService} from '../../core/sockets/soket-connector.service';
-import {DatabaseService} from '../../core/services/database.service';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
+import {IVOTrade, SoketConnectorService} from '../../adal/sockets/soket-connector.service';
+import {DatabaseService} from '../../adal/services/database.service';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
 import * as moment from 'moment';
 @Component({
   selector: 'app-trader-socket',

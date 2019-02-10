@@ -1,7 +1,7 @@
-import {VOCandle} from '../../../models/api-models';
+import {VOCandle} from '../../../amodels/api-models';
 import * as _ from 'lodash';
-import {CandlesAnalys1} from '../../../core/app-services/scanner/candles-analys1';
-import {MATH} from '../../../core/com/math';
+import {CandlesAnalys1} from '../../../adal/app-services/scanner/candles-analys1';
+import {MATH} from '../../../acom/math';
 import * as moment from 'moment';
 
 export class ResistanceSupport {

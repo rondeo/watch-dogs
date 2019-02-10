@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
-import {VOOrder} from '../../models/app-models';
+import {VOOrder} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import {MatSnackBar} from '@angular/material';
 import set = Reflect.set;

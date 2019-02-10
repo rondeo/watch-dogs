@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderType, VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../models/app-models';
+import {OrderType, VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../amodels/app-models';
 import {ActivatedRoute} from '@angular/router';
 import {WatchDogService} from '../watch-dog.service';
-import {StorageService} from '../../core/services/app-storage.service';
+import {StorageService} from '../../adal/services/app-storage.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {MatSnackBar} from '@angular/material';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApiMarketCapService} from '../../core/apis/api-market-cap.service';
-import {AppBotsService} from '../../core/app-services/app-bots-services/app-bots.service';
-import {WatchDog} from '../../models/watch-dog';
+import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {AppBotsService} from '../../adal/app-services/app-bots-services/app-bots.service';
+import {WatchDog} from '../../amodels/watch-dog';
 
 
 @Component({
