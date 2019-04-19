@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {VOGraphs} from '../line-chart/line-chart.component';
 import {StochasticRSI} from '../../../trader/libs/techind';
 
@@ -10,6 +10,8 @@ import {StochasticRSI} from '../../../trader/libs/techind';
 export class StochRsiComponent implements OnInit, OnChanges {
 
   @Input() closes: number[];
+
+  @Output() stoch: EventEmitter<{stochRSI: number, k: number, d: number}[]> = new EventEmitter()
 
   myGraphs: VOGraphs;
 
@@ -90,8 +92,9 @@ export class StochRsiComponent implements OnInit, OnChanges {
     ];
     this.myGraphs = gr;
 
-
+    this.stoch.emit(results);
   }
+
 
 
 }

@@ -20,12 +20,14 @@ import {CandlesService} from '../../adal/app-services/candles/candles.service';
 import {FollowOrdersService} from '../../adal/apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
-import {catchError, finalize, map} from 'rxjs/operators';
+import {catchError, filter, finalize, map} from 'rxjs/operators';
 import {FavoritesService} from '../../adal/app-services/favorites.service';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
 import {VOGraphs} from '../../aui/comps/line-chart/line-chart.component';
 import {of} from 'rxjs/internal/observable/of';
 import {fromPromise} from 'rxjs/internal-compatibility';
+import {MyPatternService} from '../../app-scanners/my-pattern.service';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 @Component({
   selector: 'app-scan-markets',
@@ -46,11 +48,14 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     private candlesService: CandlesService,
     private cryptoCompare: ApiCryptoCompareService,
     private followOrder: FollowOrdersService,
-    private favorites: FavoritesService
+    private favorites: FavoritesService,
+    private myPatternService: MyPatternService
   ) {
 
   }
 
+  isScanning$: BehaviorSubject<boolean>;
+  textInput: string;
   coin: string;
   exchange = 'binance';
   // market: string;
@@ -72,17 +77,41 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   ////////////////////////// BOTS ///////////////////////
 
   bots: any[];
+  stochMarket: string;
+  macdMarket: string
   sub5;
 
+  candles: VOCandle[];
+
+
   async ngOnInit() {
-    this.scanResults$ = this.scanner.scanResults$;
 
     //  this.botsService.init();
   }
 
 
+
+  startMyScan() {
+    this.isScanning$ = this.myPatternService.isScanning$;
+    this.myPatternService.startScan().then(sub => {
+      if(!sub) return;
+      console.log('%c ' + moment().format('HH:mm') + ' start scan', 'color:red');
+      sub.subscribe(data => {
+        this.stochMarket = null;
+        this.macdMarket = null;
+        this.market = data;
+        // this.candles = candles.candles;
+        // this.closes = CandlesAnalys1.closes(data.candles);
+      }, err => {
+
+      }, () => {
+       //  setTimeout(() => this.startMyScan(), 20 * 60 * 1000)
+      })
+    })
+  }
+
   onBuySellResults(evt){
-    console.warn(evt)
+    console.warn(evt);
     if(evt.checked){
       this.scanResults$ = fromPromise(this.scanner.buySellResults());
     } else this.scanResults$ = this.scanner.scanResults$;
@@ -95,48 +124,7 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
   myTitle: string;
   area: number[];
 
-  onMACDChange(data: MACDOutput[]) {
-    //  console.log(data);
-    return;
-    const candles = this.candles;
 
-    const out = [];
-    candles.forEach(function (item, i) {
-      let action = 0;
-      if (i > 3) {
-        const macd = data[i];
-        const macd_1 = data[i - 1];
-        const macd_2 = data[i - 2];
-        if (macd.histogram > 0 && macd_1.histogram < 0) {
-          action = 1;
-        } else if (macd.histogram < 0 && macd_1.histogram > 0) action = -1;
-      }
-      out.push(action);
-    })
-
-
-    const gr: VOGraphs = {
-      labelsX: [],
-      graphs: [
-        /* {
-           label: '',
-           color: 'green',
-           ys:stchs,
-           min:0,
-           max:100
-         },*/
-        {
-          label: '',
-          color: 'red',
-          ys: out,
-          min: -2,
-          max: 2
-        }
-      ]
-    };
-
-    this.myGraphs = gr;
-  }
 
 
   //////////////////////////////// Pattern ///////////////////////////////////////////
@@ -223,7 +211,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   following: any[];
 
-  candles: VOCandle[];
   volumes: number[];
 
   mediaFrom: string;
@@ -297,7 +284,9 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
 
   onFavoriteChange(evt) {
     if (evt.checked) {
-      this.dataset$ = this.favorites.view$()
+      this.dataset$ = this.favorites.data$().pipe(filter(res => !!res), map(res => {
+        return res.map(item => Object.assign(item, {x:'X'}));
+      }))
     }
   }
 
@@ -475,7 +464,6 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     });
   }
 
-
   openMarket(exchange: string, market: string) {
     const api = this.apisPublic.getExchangeApi(exchange);
     const ar = market.split('_');
@@ -483,62 +471,39 @@ export class ScanMarketsComponent implements OnInit, OnDestroy {
     window.open(url, exchange);
   }
 
-
-  onCandlesChage(candles: VOCandle[]) {
-
-    this.closes = CandlesAnalys1.from15mTo1h(CandlesAnalys1.closes(candles));
+  onAddClick() {
+    const market = this.textInput;
+    console.log(market);
+    if(!market || market.length < 5) return;
+    this.favorites.addMarket(market);
   }
 
+  onStochRSI($event: { stochRSI: number; k: number; d: number }[]) {
 
-  /*
-    onClearMemoryClick() {
-      if (confirm('Remove all data? ')) this.scanner.clearMemory(this.exchange)
-        .then(res => {
-
-          this.snackBar.open('Memory cleared', 'x', {duration: 3000});
-        })
-
-    }*/
-
-  /* onDownClick(){
-     this.scanner.scanGoingDown();
-   }*/
-  /*falIntrval
-    onFallClick(){
-
-      if(this.falIntrval){
-        clearInterval(this.falIntrval);
-        this.falIntrval = 0;
-        return
-      }
-      this.scanner.scanForFall();
-     this.falIntrval =  setInterval(()=>{
-        this.scanner.scanForFall();
-      }, 5*60*1e3);
-    }*/
-
-
-  /* onStartClick() {
-    if (this.scanner.scanInterval) this.scanner.stop();
-      else this.scanner.start();
+   const last = _.last($event);
+   if(last.k < 20) {
+      this.stochMarket = ' stoch ' + last.k +' '  + last.d
+     if(this.macdMarket) console.log(this.market + this.stochMarket + this.macdMarket)
    }
+  }
 
-   onDeleteClick() {
-     if (confirm('Delete All')) {
-       this.scanner.deleteNotifications()
-     }
-   }
+  onMACD(data: MACDOutput[]) {
+    const last: MACDOutput = _.last(data);
+    const prelast: MACDOutput = data[data.length -2];
+    if(last.histogram > prelast.histogram && last.MACD < 0) {
+      this.macdMarket =  ' MACD  ' + last.histogram  + '   ' + prelast.histogram  + ' ' + last.MACD;
+      if(this.stochMarket) console.log(this.market + this.stochMarket + this.macdMarket)
+    }
+  }
+  onStartClick() {
+    this.startMyScan();
+  }
 
-   onDeleteTrendDownClick(){
-     if(confirm('Empty trend down? ')) {
-       this.scanner.emtyTrendDown();
-     }
+  onStopClick() {
+    this.myPatternService.stopScan();
+  }
 
-   }
-
-   onTrendDownClick(evt){
-     const market = evt.item;
-     // console.log(evt);
-     this.showMarket(market);
-   }*/
+  onCandles(candles: VOCandle[]) {
+    this.closes = CandlesAnalys1.closes(candles);
+  }
 }

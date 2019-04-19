@@ -16,7 +16,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
 
   exchange = 'binance';
   private prefix = '/api/proxy/';
-  static instance: ApiPublicBinance
+  static instance: ApiPublicBinance;
 
   constructor(http: HttpClient, storage: StorageService) {
     super(http, storage);
@@ -133,8 +133,13 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     console.log(url);
     return this.http.get(url).pipe(map((res: any[]) => {
       const indexed = {};
-      const allCoins = {}
+      const allCoins = {};
       if (!Array.isArray(res)) return null;
+      /// filter dead markets;
+      res = res.filter(function (item) {
+        return +item.volume;
+      });
+
       res.forEach(function (item) {
 
         const market = ApiPublicBinance.parseSymbol(item.symbol);

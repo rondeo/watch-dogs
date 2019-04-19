@@ -21,7 +21,7 @@ import {
   MatProgressSpinnerModule,
   MatChipsModule,
   MatSliderModule,
-  MatTooltipModule
+  MatTooltipModule, MatIconModule
 
 } from '@angular/material';
 
@@ -56,7 +56,8 @@ import { DialogInputComponent } from './dialog-input/dialog-input.component';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatSliderModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
   ],
   exports: [
     MatButtonModule,
@@ -78,7 +79,8 @@ import { DialogInputComponent } from './dialog-input/dialog-input.component';
     MatChipsModule,
     MatSliderModule,
     MatTooltipModule,
-    DialogInputComponent
+    DialogInputComponent,
+    MatIconModule
 
   ],
   declarations: [

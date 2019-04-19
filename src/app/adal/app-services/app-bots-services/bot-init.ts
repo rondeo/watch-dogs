@@ -3,7 +3,6 @@ import {BalanceState, MarketBalance} from './market-balance';
 import {MarketOrders} from './market-orders';
 import {MacdSignal} from './macd-signal';
 import {StopLossOrder} from './stop-loss-order';
-import {BotState, MCState} from './market-bot';
 import {StorageService} from '../../services/app-storage.service';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {map} from 'rxjs/operators';
@@ -18,6 +17,20 @@ import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {SellOnJump} from './sell-on-jump';
 import {BuySellState} from './models';
+
+
+export enum MCState {
+  NONE = 'NONE',
+  GREEN = 'GREEN',
+  RED = 'RED'
+}
+
+
+export enum BotState {
+  NONE = 'NONE',
+  FIRST_BUY = 'FIRST_BUY',
+  TO_USDT = 'TO_USDT'
+}
 
 export class BotInit {
   state$: BehaviorSubject<BotState>;
@@ -359,16 +372,13 @@ export class BotInit {
   }
 
   async start() {
-    if (this.interval) return;
-    const sec = Math.round(60 + (Math.random() * 20));
-    console.log(this.market + ' start refresh rate ' + sec);
-    this.interval = setInterval(() => this.tick(), sec * 1000);
+  //  if (this.interval) return;
+  //  const sec = Math.round(60 + (Math.random() * 20));
+  //  console.log(this.market + ' start refresh rate ' + sec);
+
+    // this.interval = setInterval(() => this.tick(), sec * 1000);
   }
 
-
-  tick() {
-
-  }
 
 
 }

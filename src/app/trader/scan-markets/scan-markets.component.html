@@ -10,6 +10,14 @@
         <mat-checkbox #botsCheck (change)="onBotsChange($event)">Bots</mat-checkbox>
         <mat-checkbox #patternCheck (change)="onPatternChange($event)">Pattern</mat-checkbox>
         <!--<button mat-button="" (click)="onClearMemoryClick()">Clear Memory</button>-->
+        &nbsp;&nbsp;
+        <input type="text" class="w6" [(ngModel)]="textInput" />
+        &nbsp;&nbsp;
+        <mat-icon (click)="onAddClick()" class="btn">add</mat-icon>
+        &nbsp;&nbsp;
+        <mat-icon (click)="onStopClick()" class="btn" *ngIf="isScanning$ | async">stop</mat-icon>
+        <mat-icon (click)="onStartClick()" class="btn" *ngIf="!(isScanning$ | async)">play_arrow</mat-icon>
+        &nbsp;&nbsp;
     </div>
 
     <small (click)="onProgressClick()">{{scanner.currentMarket}} {{scanner.progressSub | async}}</small>
@@ -50,15 +58,32 @@
 
     <div *ngIf="favoritesCheck.checked">
         <h4>Favorites</h4>
+
         <div class="scrollY300">
             <app-table-props [dataset]="dataset$ | async" (selected)="onFavoritesClick($event)"></app-table-props>
         </div>
     </div>
 
-    <app-market-candles [exchange]="exchange" [market]="market" (onCandles)="onCandlesChage($event)" ></app-market-candles>
+    <h3>{{scanMarket}}</h3>
+   <!-- <app-mfi-indicator [candles]="candles" (mfi)="onMFI($event)"></app-mfi-indicator>-->
+
+
+   <!-- <app-macd-indicator [closes]="closes" (onMACD)="onMACD($event)"></app-macd-indicator>-->
+
+    <app-market-candles
+            [candlesInterval]="'30m'"
+            [exchange]="exchange"
+            [market]="market"
+            (onCandles)="onCandles($event)"
+            (onMACD)="onMACD($event)"
+            (onStochRSI)="onStochRSI($event)"
+    ></app-market-candles>
+
+
+
 
 <!--
-    <app-macd-indicator [closes]="closes" (onMACD)="onMACDChange($event)"></app-macd-indicator>
+    <app-macd-indicator [closes]="closes" (onMACD)="onMACD($event)"></app-macd-indicator>
 
     <app-indicator
             [graphs]="myGraphs"

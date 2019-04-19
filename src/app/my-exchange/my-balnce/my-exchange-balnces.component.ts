@@ -110,6 +110,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
     this.sub1 = this.apisPrivate.getExchangeApi(this.exchange).balances$().subscribe(balances => {
 
       if (!balances) return;
+      console.log(balances)
       const MC = this.MC;
       // console.log(this.balancesAll);
      //  console.log(balances);

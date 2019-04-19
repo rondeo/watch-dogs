@@ -55,7 +55,7 @@ export abstract class ApiPublicAbstract {
   }
 
   async getMarkets(): Promise<{ [symbol: string]: VOMarket }> {
-    const timeout = Date.now() - (50 * 60 * 1000);
+    const timeout = Date.now() - 0//(50 * 60 * 1000);
 
     if (this.marketsData && this.marketsData.timestamp > timeout) return Promise.resolve(this.marketsData.markets);
 

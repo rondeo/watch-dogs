@@ -11,12 +11,13 @@ import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '..
 import {VOMovingAvg} from '../../acom/moving-average';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {first, map, refCount, share, shareReplay} from 'rxjs/operators';
+import {catchError, first, map, refCount, share, shareReplay} from 'rxjs/operators';
 import {MATH} from '../../acom/math';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ajax, fromPromise} from 'rxjs/internal-compatibility';
 import { interval } from 'rxjs';
 import {keyframes} from '@angular/animations';
+import {of} from 'rxjs/internal/observable/of';
 
 @Injectable()
 export class ApiMarketCapService {
@@ -68,7 +69,7 @@ export class ApiMarketCapService {
     data.forEach(function (item) {
       if (item.symbol === 'ETHOS') item.symbol = 'BQX';
 
-      const oldRank = ranks[item.symbol] ? ranks[item.symbol] : 500;
+      const oldRank = ranks?(ranks[item.symbol] ? ranks[item.symbol] : 500):0;
 
       const data = item['quote']['USD'];
       if (!out[item.symbol]) out[item.symbol] = {
@@ -77,8 +78,8 @@ export class ApiMarketCapService {
         name: item.name,
         symbol: item.symbol,
         rank: +item.cmc_rank,
-        r6: MATH.percent(oldRank.r6, +item.cmc_rank),
-        r24: oldRank.r24?MATH.percent(oldRank.r24, +item.cmc_rank): 0,
+        r6:oldRank? MATH.percent(oldRank.r6, +item.cmc_rank):0,
+        r24: oldRank?MATH.percent(oldRank.r24, +item.cmc_rank):0,
         price_usd: +data.price,
         price_btc: +data.price / priceBTC,
         volume_usd_24h: data.volume24h,
@@ -114,20 +115,21 @@ export class ApiMarketCapService {
         return out;
       };
 
-      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap1.json');
-      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap3.json');
-      this.oldData$ = forkJoin([mc6h, mc24h]).pipe(
+      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap12.json');
+      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap24.json');
+      this.oldData$ = forkJoin([mc6h, mc24h])
+        .pipe(catchError(error => of(null)),
         map(res =>{
+          if(!res) return  null;
           let res6h = (<any>res[0]).data;
           let res24h = key((<any>res[1]).data);
-
           const out = {};
           res6h.forEach(function (item) {
             let symbol = item.symbol;
             if (symbol === 'ETHOS') symbol = 'BQX';
             if (!out[symbol]) out[symbol] = {
               r6: item.cmc_rank,
-              r24: res24h[symbol]? +res24h[symbol].rank: 0
+              r24: res24h[symbol]? +res24h[symbol].cmc_rank: 0
             }
           })
          // console.log(res);
@@ -145,7 +147,6 @@ export class ApiMarketCapService {
          // console.log(res);
         const oldData = res[0];
         const newData = res[1];
-       //  console.log(oldData)
         const data = ApiMarketCapService.mapDataMC(newData, oldData);
          console.log('last_updated ' + moment(data['BTC'].last_updated).format('HH:mm'));
         this.tikerSub.next(data);

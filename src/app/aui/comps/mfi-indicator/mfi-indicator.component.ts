@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {VOGraphs} from '../line-chart/line-chart.component';
 import {MFI, RSI} from '../../../trader/libs/techind';
 import {VOCandle} from '../../../amodels/api-models';
@@ -11,6 +11,7 @@ import {VOCandle} from '../../../amodels/api-models';
 export class MfiIndicatorComponent implements OnInit, OnChanges {
 
   @Input() candles: VOCandle[];
+  @Output() mfi: EventEmitter<number[]> = new EventEmitter()
 
   myGraphs: VOGraphs;
 
@@ -24,14 +25,7 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
     this.myTitle = 'MFI(' + this.period + ')';
   }
 
-  /*
-  *   high:number[]
-  low:number[]
-  close:number[]
-  volume:number[]
-  period :number
-  *
-  * MFIInput*/
+
 
   ngOnChanges() {
     this.main();
@@ -39,8 +33,6 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
 
   main() {
 
-    //  console.log(this.candles);
-    // if (!Array.isArray(this.candles)) return;
     if (!Array.isArray(this.candles)) return;
 
     const input = {close: [], open: [], high: [], low: [], volume: [] , period: this.period};
@@ -58,19 +50,8 @@ export class MfiIndicatorComponent implements OnInit, OnChanges {
     const out: number[] = result;
      const length = this.candles.length;
     while (out.length < length) out.unshift(50);
-    // console.log(result);
-    // let mod = new Rsi1();
-    // mod.ctrModifier(this.candles);
 
-
-    // console.log(this.candles);
-
-    /* const out = this.candles.map(function (item: any) {
-       return Number(item.rsi.value)
-     });*/
-    // console.log(out);
-
-    //  console.log(out);
+    this.mfi.emit(out);
     const gr: VOGraphs = {
       labelsX: [],
       graphs: [

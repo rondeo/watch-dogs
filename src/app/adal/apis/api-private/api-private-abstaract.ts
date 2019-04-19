@@ -106,9 +106,9 @@ export abstract class ApiPrivateAbstaract {
 
 
   private _refreshBalances(){
-    console.log('%c _refreshBalances ', 'color:red');
+    console.log('%c _refreshBalances ' + this.exchange + ' ' + this.balancesSub, 'color:pink');
     if(!this.balancesSub) {
-      console.warn(' no balancesSub ' + this.exchange);
+     //  console.warn(' no balancesSub ' + this.exchange);
       return;
     }
     this.downloadBalances().subscribe(balances => {
@@ -163,9 +163,9 @@ export abstract class ApiPrivateAbstaract {
 
 
   private _refreshAllOpenOrders(){
-    console.log('%c _refreshAllOpenOrders ', 'color:red');
+     console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ' + this.openOrdersSub, 'color:pink');
     if(!this.openOrdersSub) {
-      console.warn(' no this.openOrdersSub ' + this.exchange);
+      // console.warn(' no this.openOrdersSub ' + this.exchange);
       return;
     }
     this.downloadAllOpenOrders().subscribe(res => {

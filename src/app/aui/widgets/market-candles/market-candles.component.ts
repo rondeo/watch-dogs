@@ -8,6 +8,7 @@ import {StorageService} from '../../../adal/services/app-storage.service';
 import * as  moment from 'moment';
 import {FavoritesService} from '../../../adal/app-services/favorites.service';
 import {CandlesAnalys1} from '../../../adal/app-services/scanner/candles-analys1';
+import {MACDOutput} from '../../../trader/libs/techind/moving_averages/MACD';
 
 @Component({
   selector: 'app-market-candles',
@@ -16,18 +17,21 @@ import {CandlesAnalys1} from '../../../adal/app-services/scanner/candles-analys1
 })
 export class MarketCandlesComponent implements OnInit, OnChanges {
 
+  @Input() candlesInterval = '15m';
   @Input() exchange: string;
   @Input() market: string;
   @Output() onCandles: EventEmitter< VOCandle[]> = new EventEmitter<VOCandle[]>();
+  @Output() onStochRSI: EventEmitter< { stochRSI: number; k: number; d: number }[]> = new EventEmitter();
+  @Output() onMACD: EventEmitter< MACDOutput[]> = new EventEmitter();
   candles:VOCandle[];
   volumes: number[];
   closes: number[];
-  candlesInterval = '15m';
+
   inBrowser = false;
 
   constructor(
-    private apisPublic: ApisPublicService,
-    private favorites: FavoritesService
+    private apisPublic: ApisPublicService
+
   ) {
   }
 
@@ -40,7 +44,7 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
 
   onStarClick(){
     if(!this.market) return;
-    this.favorites.addMarket(this.market);
+   // this.favorites.addMarket(this.market);
   }
 
   downloadCandles() {
@@ -72,4 +76,11 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
     this.downloadCandles();
   }
 
+  onStochRsi($event: { stochRSI: number; k: number; d: number }[]) {
+    this.onStochRSI.emit($event)
+  }
+
+  onMacd($event: MACDOutput[]) {
+    this.onMACD.emit($event);
+  }
 }

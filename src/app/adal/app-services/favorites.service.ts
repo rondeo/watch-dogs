@@ -21,17 +21,6 @@ export class FavoritesService {
   }
 
 
-  view$(): Observable<any[]> {
-    return this.data$()
-      .pipe(
-        map(o => o ? o.map(
-          function (item) {
-            return Object.assign({}, item, {x: 'X'})
-          }) : null
-        )
-      );
-  }
-
   private async data() {
     return this.storage.select('favorite-markets');
   }
@@ -44,7 +33,6 @@ export class FavoritesService {
       this.data().then(res => this.sub.next(res))
     }
     return this.sub.asObservable();
-
   }
 
   addMarket(market: string) {

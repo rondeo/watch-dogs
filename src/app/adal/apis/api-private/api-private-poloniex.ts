@@ -13,9 +13,10 @@ import {UTILS} from '../../../acom/utils';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {Subject} from 'rxjs/internal/Subject';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
-  apiPublic: ApiPublicPoloniex
+  apiPublic: ApiPublicPoloniex;
   exchange = 'poloniex';
 
   constructor(
@@ -23,6 +24,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     userLogin: UserLoginService
   ) {
     super(userLogin);
+    this.balancesSub = new BehaviorSubject<VOBalance[]>(null);
   }
 
 
@@ -261,10 +263,11 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         let bal = new VOBalance();
         bal.exchange = exchange;
         bal.available = +res[str];
+        bal.pending = 0;
         bal.symbol = str;
         out.push(bal)
       }
-      this.balancesSub.next(out);
+     //  this.balancesSub.next(out);
       return out;
     }));
   }

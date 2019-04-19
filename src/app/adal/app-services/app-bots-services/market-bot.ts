@@ -13,21 +13,7 @@ import {BalanceState} from './market-balance';
 import {OrdersState} from './market-orders';
 import {BotInit} from './bot-init';
 import {BuySellState} from './models';
-
-
-export enum MCState {
-  NONE = 'NONE',
-  GREEN = 'GREEN',
-  RED = 'RED'
-}
-
-
-export enum BotState {
-  NONE = 'NONE',
-  FIRST_BUY = 'FIRST_BUY',
-  TO_USDT = 'TO_USDT'
-}
-
+import {MinuteCandlesService} from './minute-candles.service';
 
 export class MarketBot extends BotInit {
 
@@ -42,11 +28,17 @@ export class MarketBot extends BotInit {
     apiPublic: ApiPublicAbstract,
     candlesService: CandlesService,
     marketCap: ApiMarketCapService,
-    public btcusdt: BtcUsdtService
+    public btcusdt: BtcUsdtService,
+    private minuteCandles: MinuteCandlesService
   ) {
+
     super(exchange, market, amountCoinUS, apiPrivate, apiPublic, candlesService, storage, marketCap);
 
     this.botInit().then(() => this.start());
+    minuteCandles.minuteCandles$(market).subscribe(candles => {
+      if(!candles.length) return;
+      console.log(' MINUTE CANDLES ' + market, candles);
+    })
   }
 
   // lastOrder: { stamp: number, action: string, price: number };
@@ -56,12 +48,12 @@ export class MarketBot extends BotInit {
   sub2;
   timeout;
 
+
   async tick() {
 
-
     const candles = await this.candlesService.getCandles(this.market);
-
     const lastCandle = _.last(candles);
+
     const lastPrice = lastCandle.close;
     if (this.prevPrice === lastPrice) return;
 
@@ -74,15 +66,12 @@ export class MarketBot extends BotInit {
 
     const last15m = _.last(candles15m);
 
-    console.log(candles15m);
+   //  console.log(candles15m);
 
     const volumes = this.candlesService.volumes(this.market);
     const closes = CandlesAnalys1.closes(candles15m);
 
-
-
-
-    const btcusdtState = this.btcusdt.state;
+   const btcusdtState = this.btcusdt.state;
 
     /*  if (btcusdtState === MarketState.DROPPING) {
         if (this.balance.state === BalanceState.SOLD) {

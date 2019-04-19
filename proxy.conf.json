@@ -3,6 +3,10 @@
     "target": "http://localhost:49888",
     "secure": false
   },
+  "/icons": {
+    "target": "http://localhost:49888",
+    "secure": false
+  },
   "/socket.io": {
     "target": "ws://localhost:49888",
     "secure": false,
