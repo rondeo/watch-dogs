@@ -4,14 +4,14 @@ import {ActivatedRoute} from '@angular/router';
 import {GRAPHS} from '../../../acom/grpahs';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {MongoService} from '../../../adal/apis/mongo.service';
+import {MongoService} from '../../../a-core/apis/mongo.service';
 import {Moment} from 'moment';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
-import {ApiCryptoCompareService, VOHistHour} from '../../../adal/apis/api-crypto-compare.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
+import {ApiCryptoCompareService, VOHistHour} from '../../../a-core/apis/api-crypto-compare.service';
 
 
 import {MarketCapService} from '../../../market-cap/services/market-cap.service';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
 
 import {MovingAverage} from '../../../acom/moving-average';
 import {VOMarketCap} from '../../../amodels/app-models';

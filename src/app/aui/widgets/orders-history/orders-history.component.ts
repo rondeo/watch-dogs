@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {VOOrder} from '../../../amodels/app-models';
-import {ApisPrivateService} from '../../../adal/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApisPrivateService} from '../../../a-core/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 import {VOMCObj} from '../../../amodels/api-models';
 import * as moment from 'moment';
 import {Subscription} from 'rxjs';

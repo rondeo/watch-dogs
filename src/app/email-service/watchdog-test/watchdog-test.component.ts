@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 
-import {StorageService} from '../../adal/services/app-storage.service';
+import {StorageService} from '../../a-core/services/app-storage.service';
 import {WatchDogService} from '../watch-dog.service';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {ActivatedRoute} from '@angular/router';
 import {VOMarketCap, VOWatchdog} from '../../amodels/app-models';
 
@@ -11,11 +11,11 @@ import {VOMarketCap, VOWatchdog} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {VOLineGraph} from '../../aui/comps/line-graph/line-graph.component';
-import {AppBotsService} from '../../adal/app-services/app-bots-services/app-bots.service';
+import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../acom/moving-average';
 
 import {WatchDog} from '../../amodels/watch-dog';
-import {ShowExternalPageService} from '../../adal/services/show-external-page.service';
+import {ShowExternalPageService} from '../../a-core/services/show-external-page.service';
 
 
 

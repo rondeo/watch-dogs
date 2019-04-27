@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 
 @Pipe({
   name: 'cmcMarket'

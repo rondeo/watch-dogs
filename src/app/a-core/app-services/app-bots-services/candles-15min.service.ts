@@ -23,8 +23,6 @@ export class Candles15minService {
     //setInterval(() => this.updateCandles(), 6e4);
   }
 
-
-
   private currentMarket: string;
 
   private timeout;
@@ -37,15 +35,19 @@ export class Candles15minService {
     let ind = markets.indexOf(this.currentMarket);
     ind++;
     if(ind >= markets.length) ind = 0;
-    const timeout = markets.length / 15;
+    let timeout = (15 * 6e4) / markets.length;
+
+    if(timeout < 10000) timeout = 10000;
+
     this.timeout = setTimeout(() => this.updateCandles(), timeout);
     this.currentMarket = markets[ind];
     let candles: VOCandle[] = this.candles[this.currentMarket].getValue();
-    const last = _.last(candles);
 
-    const diff = moment().diff(last.to, 'minutes');
+    const lastTo = candles.length?_.last(candles).to:0;
+
+    const diff = moment().diff(lastTo, 'minutes');
     if(diff > 15) {
-      this.getCandlesAfter(this.currentMarket, last.to).then(newCandles => {
+      this.getCandlesAfter(this.currentMarket, lastTo).then(newCandles => {
         console.log(this.currentMarket + ' new candles ', newCandles);
         if(candles.length) {
           const fromTime = newCandles[0].to;

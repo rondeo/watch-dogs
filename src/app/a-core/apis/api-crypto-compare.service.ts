@@ -5,9 +5,81 @@ import * as moment from 'moment';
 import {MATH} from '../../acom/math';
 import {VOCandle} from '../../amodels/api-models';
 import {Observable} from 'rxjs/internal/Observable';
-import {map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
 import {StorageService} from '../services/app-storage.service';
+
+export interface VOSocialHistObj{
+  time:  string []
+  comments: number []
+  posts: number []
+  followers: number []
+  points: number []
+  overview_page_views: number []
+  analysis_page_views: number []
+  markets_page_views: number []
+  charts_page_views: number []
+  trades_page_views: number []
+  forum_page_views: number []
+  influence_page_views: number []
+  total_page_views: number []
+  fb_likes: number []
+  fb_talking_about:number []
+  twitter_followers: number []
+  twitter_following: number []
+  twitter_lists: number []
+  twitter_favourites: number []
+  twitter_statuses: number []
+  reddit_subscribers: number []
+  reddit_active_users: number []
+  reddit_posts_per_hour: number []
+  reddit_posts_per_day: number []
+  reddit_comments_per_hour: number []
+  reddit_comments_per_day: number []
+  code_repo_stars: number []
+  code_repo_forks: number []
+  code_repo_subscribers: number []
+  code_repo_open_pull_issues: number []
+  code_repo_closed_pull_issues: number []
+  code_repo_open_issues: number []
+  code_repo_closed_issues: number []
+}
+
+export interface VOSocialHist{
+  time: number | string
+  comments: number
+  posts: number
+  followers: number
+  points: number
+  overview_page_views: number;
+  analysis_page_views: number;
+  markets_page_views: number
+  charts_page_views: number
+  trades_page_views: number
+  forum_page_views: number
+  influence_page_views: number
+  total_page_views: number
+  fb_likes: number
+  fb_talking_about:number
+  twitter_followers: number
+  twitter_following: number
+  twitter_lists: number
+  twitter_favourites: number
+  twitter_statuses: number
+  reddit_subscribers: number
+  reddit_active_users: number
+  reddit_posts_per_hour: number
+  reddit_posts_per_day: number
+  reddit_comments_per_hour: number
+  reddit_comments_per_day: number
+  code_repo_stars: number
+  code_repo_forks: number
+  code_repo_subscribers: number
+  code_repo_open_pull_issues: number
+  code_repo_closed_pull_issues: number
+  code_repo_open_issues: number
+  code_repo_closed_issues: number
+}
 
 
 export interface VOTweeterAccount {
@@ -52,7 +124,7 @@ export interface VOHistHour {
 
 @Injectable()
 export class ApiCryptoCompareService {
-
+  private API_KEY = '636376b2aaabce3f70270bc9b48cc029ace578fd32578b9a9ba7f30c8cff32fd';
   private coinList: { [symbol: string]: VOCryptoCompare };
 
   constructor(
@@ -62,6 +134,22 @@ export class ApiCryptoCompareService {
 
   }
 
+  getSocialHist(symbol: string, limit = 30): Observable<VOSocialHist[]> {
+    return this.getCoinLists().pipe(switchMap(coins => {
+      if (coins[symbol]) {
+        const id = coins[symbol].Id;
+        const url = '/api/proxy-1hour/https://min-api.cryptocompare.com/data/social/coin/histo/day?coinId={{ID}}'
+          .replace('{{ID}}', id)+ '&limit=' + limit + '&api_key='+ this.API_KEY  ;
+        // console.log(url);
+        return this.http.get(url).pipe(map((res: any) => {
+          return res.Data;
+        }));
+      } else {
+        console.warn(' no cryptocaomare symbol ' + symbol);
+        return of(null);
+      }
+    }))
+  }
 
   getSocialStats(coin: string) {
     const params = {
@@ -116,7 +204,7 @@ export class ApiCryptoCompareService {
   }
 
 
-  getSocialStats0(symbol: string) {
+  /*getSocialStats0(symbol: string) {
 
     return this.getCoinLists().switchMap(coins => {
       if (coins[symbol]) {
@@ -131,15 +219,15 @@ export class ApiCryptoCompareService {
         return of({});
       }
     })
-  }
+  }*/
 
   getCoinLists() {
-    const url = 'api/proxy-5min/https://www.cryptocompare.com/api/data/coinlist';
+    const url = 'api/proxy-1hour/https://min-api.cryptocompare.com/data/all/coinlist';
     if (this.coinList) return of(this.coinList);
-    else return (<any> this.http.get(url)).map(res => {
+    else return this.http.get(url).pipe(map((res: any) => {
       this.coinList = res.Data;
       return this.coinList
-    })
+    }))
 
   }
 

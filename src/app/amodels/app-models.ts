@@ -1,7 +1,7 @@
 /*
  * Created by Vlad on 7/8/2017.
  */
-import {WatchDogStatus} from '../adal/app-services/app-bots-services/watch-dog-status';
+import {WatchDogStatus} from '../a-core/app-services/app-bots-services/watch-dog-status';
 
 export interface User {
   id: string;

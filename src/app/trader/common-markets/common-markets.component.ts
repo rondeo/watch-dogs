@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 import {VOBooks, VOMarket, VOMarketCap} from '../../amodels/app-models';
 import * as _ from 'lodash';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {UtilsBooks} from '../../acom/utils-books';
 import {MATH} from '../../acom/math';
 import {MatSnackBar} from '@angular/material';

@@ -3,18 +3,18 @@ import {VOBalance, VOBooks, VOMarket, VOOrder} from '../../amodels/app-models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UtilsOrder} from '../../acom/utils-order';
-import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../adal/apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
-import {ApiPublicAbstract} from '../../adal/apis/api-public/api-public-abstract';
+import {ApisPrivateService} from '../../a-core/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../a-core/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
+import {ApiPublicAbstract} from '../../a-core/apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../acom/utils-books';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 import {MATH} from '../../acom/math';
 import * as _ from 'lodash';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
-import {FollowOrdersService} from '../../adal/apis/open-orders/follow-orders.service';
+import {FollowOrdersService} from '../../a-core/apis/open-orders/follow-orders.service';
 import {Subscription} from 'rxjs';
-import {BtcUsdtService} from '../../adal/app-services/alerts/btc-usdt.service';
+import {BtcUsdtService} from '../../a-core/app-services/alerts/btc-usdt.service';
 
 @Component({
   selector: 'app-my-buy-sell',
@@ -102,8 +102,7 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
   }
 
   onStopFollowClick() {
-    if(this.market === 'USDT_BTC') this.usdtBtcService.stopFollow();
-    else this.followOrders.stopFollow(this.exchange, this.market);
+    this.followOrders.stopFollow(this.exchange, this.market);
   }
 
   onUserPriceChanged(rate) {

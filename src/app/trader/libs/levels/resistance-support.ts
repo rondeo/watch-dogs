@@ -1,6 +1,6 @@
 import {VOCandle} from '../../../amodels/api-models';
 import * as _ from 'lodash';
-import {CandlesAnalys1} from '../../../adal/app-services/scanner/candles-analys1';
+import {CandlesAnalys1} from '../../../a-core/app-services/scanner/candles-analys1';
 import {MATH} from '../../../acom/math';
 import * as moment from 'moment';
 

@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import * as _ from 'lodash';
 import {MarketCapService} from '../../../../market-cap/services/market-cap.service';
-import {ApiMarketCapService} from '../../../../adal/apis/api-market-cap.service';
-import {MarketsHistoryService} from '../../../../adal/app-services/market-history/markets-history.service';
+import {ApiMarketCapService} from '../../../../a-core/apis/api-market-cap.service';
+import {MarketsHistoryService} from '../../../../a-core/app-services/market-history/markets-history.service';
 import {VOOrderExt} from '../../../../amodels/app-models';
-import {StorageService} from '../../../../adal/services/app-storage.service';
+import {StorageService} from '../../../../a-core/services/app-storage.service';
 import * as moment from 'moment';
 import {MatSnackBar} from '@angular/material';
-import {SignalBuySell} from '../../../../adal/app-services/market-history/sharks-alert';
+import {SignalBuySell} from '../../../../a-core/app-services/market-history/sharks-alert';
 import {Subscription} from 'rxjs';
 
 @Component({

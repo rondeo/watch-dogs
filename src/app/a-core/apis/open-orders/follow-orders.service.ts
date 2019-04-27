@@ -13,6 +13,7 @@ import {MarketBot} from '../../app-services/app-bots-services/market-bot';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
 import {MinuteCandlesService} from '../../app-services/app-bots-services/minute-candles.service';
+import {Candles15minService} from '../../app-services/app-bots-services/candles-15min.service';
 
 @Injectable()
 export class FollowOrdersService {
@@ -33,7 +34,8 @@ export class FollowOrdersService {
     private marketCap: ApiMarketCapService,
     private canlesService: CandlesService,
     private btcusdtService: BtcUsdtService,
-    private munuteCandles: MinuteCandlesService
+    private munuteCandles: MinuteCandlesService,
+    private candles15: Candles15minService
   ) {
 
   }
@@ -103,7 +105,8 @@ export class FollowOrdersService {
         this.canlesService,
         this.marketCap,
         this.btcusdtService,
-        this.munuteCandles
+        this.munuteCandles,
+        this.candles15
       )
     );
     return this.saveBots(bots);
@@ -123,7 +126,8 @@ export class FollowOrdersService {
         this.canlesService,
         this.marketCap,
         this.btcusdtService,
-        this.munuteCandles
+        this.munuteCandles,
+        this.candles15
       );
     });
     this.botsSub.next(bots);

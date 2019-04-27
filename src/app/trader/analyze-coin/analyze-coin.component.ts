@@ -1,16 +1,16 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
-import {ShowExternalPageService} from '../../adal/services/show-external-page.service';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ShowExternalPageService} from '../../a-core/services/show-external-page.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 
 import {VOMarketCap} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import {MATH} from '../../acom/math';
-import {MongoService} from '../../adal/apis/mongo.service';
+import {MongoService} from '../../a-core/apis/mongo.service';
 import * as moment from 'moment';
-import {ApiCryptoCompareService} from '../../adal/apis/api-crypto-compare.service';
+import {ApiCryptoCompareService} from '../../a-core/apis/api-crypto-compare.service';
 
 
 

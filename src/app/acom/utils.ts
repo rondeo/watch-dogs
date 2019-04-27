@@ -1,11 +1,19 @@
 import {VOOrder} from '../amodels/app-models';
-import {ApiPublicBinance} from '../adal/apis/api-public/api-public-binance';
+import {ApiPublicBinance} from '../a-core/apis/api-public/api-public-binance';
 
 export class UTILS {
 
   static decimals: { [symbol: string]: { rateDecimals: number, amountDecimals: number } } = {};
 
-
+  static arrayToObject(ar: any[]): any {// {[key:string]:number | string[]}  {
+    let y = {};
+    ar.forEach(obj => {
+      Object.keys(obj).forEach(key => {
+        y[key] = (y[key] || []).concat([obj[key]]);
+      });
+    });
+    return y;
+  }
   static toString(obj: any) {
     let out = ' ';
     for (let str in obj) out +=  str + ' ' + obj[str] + '; ';

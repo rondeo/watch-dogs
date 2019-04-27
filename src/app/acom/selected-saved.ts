@@ -1,4 +1,4 @@
-import {StorageService} from '../adal/services/app-storage.service';
+import {StorageService} from '../a-core/services/app-storage.service';
 
 export class SelectedSaved {
 

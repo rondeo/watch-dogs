@@ -19,10 +19,11 @@
     &nbsp;&nbsp;
     <a [routerLink]="['/trader/follow-market', {market:market, exchange:exchange}]" ><span class="fa fa-anchor fa-2x dgreen"></span> </a>
     &nbsp;&nbsp;
-    <app-media [coin]="market?market.split('_')[1]:null"></app-media>
+
     <app-mc-data [coin]="market?market.split('_')[1]:null"></app-mc-data>
     <app-candlesticks [candles]="candles"></app-candlesticks>
     <app-volume-hist [values]="volumes"></app-volume-hist>
     <app-macd-indicator [closes]="closes" (onMACD)="onMacd($event)"></app-macd-indicator>
     <app-stoch-rsi [closes]="closes" (stoch)="onStochRsi($event)"></app-stoch-rsi>
+    <app-media [coin]="market?market.split('_')[1]:null"></app-media>
 </div>

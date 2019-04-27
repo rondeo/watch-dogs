@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from '@angular/core';
 import {BooksDisplay} from '../market-books/market-books.component';
 import {UtilsBooks} from '../../../acom/utils-books';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
 import {VOMarketCap} from '../../../amodels/app-models';
 
 @Component({

@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
-import {ApisPrivateService} from '../../../adal/apis/api-private/apis-private.service';
+import {ApisPrivateService} from '../../../a-core/apis/api-private/apis-private.service';
 import {VOOrder} from '../../../amodels/app-models';
-import {ShowExternalPageService} from '../../../adal/services/show-external-page.service';
+import {ShowExternalPageService} from '../../../a-core/services/show-external-page.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {FollowOrdersService} from '../../../adal/apis/open-orders/follow-orders.service';
+import {FollowOrdersService} from '../../../a-core/apis/open-orders/follow-orders.service';
 
 @Component({
   selector: 'app-open-orders',

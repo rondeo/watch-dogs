@@ -1,13 +1,13 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 import {VOOrder} from '../../../amodels/app-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
-import {ApiPublicAbstract} from '../../../adal/apis/api-public/api-public-abstract';
-import {MarketsHistoryService} from '../../../adal/app-services/market-history/markets-history.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
+import {ApiPublicAbstract} from '../../../a-core/apis/api-public/api-public-abstract';
+import {MarketsHistoryService} from '../../../a-core/app-services/market-history/markets-history.service';
 
-import {OrdersHistory} from '../../../adal/app-services/market-history/orders-history';
+import {OrdersHistory} from '../../../a-core/app-services/market-history/orders-history';
 import {Subscription} from 'rxjs';
 
 @Component({

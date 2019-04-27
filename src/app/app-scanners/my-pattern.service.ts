@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ApisPublicService} from '../adal/apis/api-public/apis-public.service';
-import {ApiMarketCapService} from '../adal/apis/api-market-cap.service';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
 import {VOMarketCap} from '../amodels/app-models';
 import {Subject} from 'rxjs/internal/Subject';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';

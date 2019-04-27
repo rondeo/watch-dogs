@@ -14,6 +14,7 @@ import {OrdersState} from './market-orders';
 import {BotInit} from './bot-init';
 import {BuySellState} from './models';
 import {MinuteCandlesService} from './minute-candles.service';
+import {Candles15minService} from './candles-15min.service';
 
 export class MarketBot extends BotInit {
 
@@ -29,16 +30,17 @@ export class MarketBot extends BotInit {
     candlesService: CandlesService,
     marketCap: ApiMarketCapService,
     public btcusdt: BtcUsdtService,
-    private minuteCandles: MinuteCandlesService
+    private minuteCandles: MinuteCandlesService,
+    private candles15: Candles15minService
+
   ) {
 
     super(exchange, market, amountCoinUS, apiPrivate, apiPublic, candlesService, storage, marketCap);
 
     this.botInit().then(() => this.start());
-    minuteCandles.minuteCandles$(market).subscribe(candles => {
-      if(!candles.length) return;
-      console.log(' MINUTE CANDLES ' + market, candles);
-    })
+   candles15.subscribe$(market).subscribe(candles => {
+     console.log('market', candles)
+   })
   }
 
   // lastOrder: { stamp: number, action: string, price: number };

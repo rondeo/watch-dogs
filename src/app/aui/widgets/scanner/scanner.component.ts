@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ScanMarketsService} from '../../../adal/app-services/scanner/scan-markets.service';
+import {ScanMarketsService} from '../../../a-core/app-services/scanner/scan-markets.service';
 
 @Component({
   selector: 'app-scanner',

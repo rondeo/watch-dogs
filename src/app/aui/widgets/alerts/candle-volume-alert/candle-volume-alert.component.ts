@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {CandlesService} from '../../../../adal/app-services/candles/candles.service';
-import {StorageService} from '../../../../adal/services/app-storage.service';
+import {CandlesService} from '../../../../a-core/app-services/candles/candles.service';
+import {StorageService} from '../../../../a-core/services/app-storage.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {Subscription} from 'rxjs';

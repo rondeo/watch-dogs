@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FollowOrdersService} from '../../../adal/apis/open-orders/follow-orders.service';
-import {FollowOpenOrder} from '../../../adal/apis/open-orders/follow-open-order';
+import {FollowOrdersService} from '../../../a-core/apis/open-orders/follow-orders.service';
+import {FollowOpenOrder} from '../../../a-core/apis/open-orders/follow-open-order';
 
 @Component({
   selector: 'app-follow-order-list',

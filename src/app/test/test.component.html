@@ -1,6 +1,6 @@
 <p>
   test works!
-    <button (click)="onStartClick()">{{interval?'Stop':'Start'}}</button>
+    <button (click)="onStartClick()">{{running?'Stop':'Start'}}</button>
 
     <app-table-props [dataset]="orders"></app-table-props>
     <app-candles-volumes [candles]="candles"></app-candles-volumes>

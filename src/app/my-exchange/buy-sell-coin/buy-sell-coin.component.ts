@@ -6,9 +6,9 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import * as _ from 'lodash';
 import {MatSnackBar} from '@angular/material';
 
-import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../adal/apis/api-private/api-private-abstaract';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApisPrivateService} from '../../a-core/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../a-core/apis/api-private/api-private-abstaract';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {VOMCObj} from '../../amodels/api-models';
 import {MATH} from '../../acom/math';
 

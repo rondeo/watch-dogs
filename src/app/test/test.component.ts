@@ -1,19 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import {BtcUsdtService} from '../adal/app-services/alerts/btc-usdt.service';
+import {BtcUsdtService} from '../a-core/app-services/alerts/btc-usdt.service';
 import {VOCandle} from '../amodels/api-models';
 import * as _ from 'lodash';
-import {ApisPublicService} from '../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
 import * as moment from 'moment';
-import {CandlesAnalys1} from '../adal/app-services/scanner/candles-analys1';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import {MATH} from '../acom/math';
-import {StorageService} from '../adal/services/app-storage.service';
-import {FollowOpenOrder} from '../adal/apis/open-orders/follow-open-order';
-import {ApisPrivateService} from '../adal/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../adal/apis/api-market-cap.service';
-import {CandlesService} from '../adal/app-services/candles/candles.service';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {FollowOpenOrder} from '../a-core/apis/open-orders/follow-open-order';
+import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {VOBalance} from '../amodels/app-models';
-import {SellOnJump} from '../adal/app-services/app-bots-services/sell-on-jump';
+import {SellOnJump} from '../a-core/app-services/app-bots-services/sell-on-jump';
 import {UTILS} from '../acom/utils';
+import {TestCandlesService} from './test-candles.service';
+import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
 
 @Component({
   selector: 'app-test',
@@ -28,7 +30,8 @@ export class TestComponent implements OnInit {
     private apisPrivate: ApisPrivateService,
     private storage: StorageService,
     private marketCap: ApiMarketCapService,
-    private candlesService: CandlesService
+    private candlesService: CandlesService,
+    private testService: TestCandlesService
   ) {
 
   }
@@ -89,12 +92,11 @@ export class TestComponent implements OnInit {
   lastStamp: number;
 
   interval;
+  running = false;
 
   async saveCurrentAction(action: string) {
-
     const actionValues = (await this.storage.select('action-values')) || [];
     const exists = UTILS.find(this.currentValues, actionValues);
-
     if (exists) {
       console.log(exists);
       return;
@@ -193,7 +195,6 @@ export class TestComponent implements OnInit {
     console.log(' new price ' + newPrice);*/
   }
 
-
   async initAsync() {
     /*
       (await this.alerts.oneMinuteCandles$()).subscribe(candles =>{
@@ -204,32 +205,44 @@ export class TestComponent implements OnInit {
   }
 
   async tick() {
-    this.currentTime.add(1, 'minutes');
+    this.currentTime.add(5, 'minutes');
     //  await this.followOrder.tick();
     // this.currentTime.add(5, 'minutes')
-    const candles = await this.apisPublic.getExchangeApi('binance')
-      .downloadCandles(this.currentMarket, '1m', 100, this.currentTime.valueOf());
 
-    this.candles = candles;
 
-    this.tickBot(candles);
+   // this.tickBot(candles);
 
   }
 
   onStartClick() {
-    if (!this.interval) this.start();
+    this.running = !this.running;
+    if(this.running) this.start();
     else this.stop();
-
-    // this.alerts.stop();
   }
 
   start() {
-    if (this.interval) return;
-    this.interval = setInterval(() => this.tick(), 2000);
+    this.testService.getTicker('BTC_AST').subscribe(candles => {
+      this.candles = candles;
+      // console.log(candles);
+      const closes = CandlesUtils.closes(candles);
+      const volumes = CandlesUtils.volumes(candles);
+
+      const mas = CandlesUtils.mas(closes);
+      const vols = CandlesUtils.vols(volumes);
+
+      console.log(' ma3_ma25 ' + MATH.percent(mas.ma3, mas.ma25));
+      console.log(' ma3_ma7 ' + MATH.percent(mas.ma3, mas.ma7));
+
+
+      console.log(' v3_med ' + MATH.percent(vols.v3, vols.med));
+      console.log(' last_med ' + MATH.percent(vols.last, vols.med));
+
+    });
+    this.testService.start('2018-10-23T15:15')
+
   }
 
   stop() {
-    clearInterval(this.interval);
-    this.interval = 0;
+    this.testService.stop();
   }
 }

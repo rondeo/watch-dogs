@@ -18,6 +18,20 @@ export class ApiPublicBinance extends ApiPublicAbstract {
   private prefix = '/api/proxy/';
   static instance: ApiPublicBinance;
 
+  static mapCandles(res) {
+    return res.map(function (item) {
+      return {
+        from: +item[0],
+        to: +item[6],
+        open: +item[1],
+        high: +item[2],
+        low: +item[3],
+        close: +item[4],
+        Trades: +item[8],
+        Volume: +item[5]
+      }
+    })
+  }
   constructor(http: HttpClient, storage: StorageService) {
     super(http, storage);
     ApiPublicBinance.instance = this;
@@ -49,21 +63,7 @@ export class ApiPublicBinance extends ApiPublicAbstract {
     if (endTime) params.endTime = endTime;
     const url = this.prefix + 'https://api.binance.com/api/v1/klines';
     // console.log(url);
-    return await this.http.get(url, {params}).pipe(map((res: any[]) => {
-      //  console.log(res);
-      return res.map(function (item) {
-        return {
-          from: +item[0],
-          to: +item[6],
-          open: +item[1],
-          high: +item[2],
-          low: +item[3],
-          close: +item[4],
-          Trades: +item[8],
-          Volume: +item[5]
-        }
-      })
-    })).toPromise();
+    return await this.http.get(url, {params}).pipe(map(ApiPublicBinance.mapCandles)).toPromise();
 
   }
 

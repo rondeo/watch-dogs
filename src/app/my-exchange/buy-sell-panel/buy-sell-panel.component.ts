@@ -1,17 +1,17 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {VOBalance, VOBooks, VOOrder, VOOrderExt} from '../../amodels/app-models';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
-import {ApiPrivateAbstaract} from '../../adal/apis/api-private/api-private-abstaract';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
-import {ApiPublicAbstract} from '../../adal/apis/api-public/api-public-abstract';
+import {ApisPrivateService} from '../../a-core/apis/api-private/apis-private.service';
+import {ApiPrivateAbstaract} from '../../a-core/apis/api-private/api-private-abstaract';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
+import {ApiPublicAbstract} from '../../a-core/apis/api-public/api-public-abstract';
 import {UtilsBooks} from '../../acom/utils-books';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MATH} from '../../acom/math';
-import {MarketsHistoryService} from '../../adal/app-services/market-history/markets-history.service';
+import {MarketsHistoryService} from '../../a-core/app-services/market-history/markets-history.service';
 import {ConfirmStopLossComponent} from '../confirm-stop-loss/confirm-stop-loss.component';
 import {Subscription} from 'rxjs';
 

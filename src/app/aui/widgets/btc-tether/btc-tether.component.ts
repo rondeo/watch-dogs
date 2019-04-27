@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 import {VOAlert, VOMarketCap, VOOrder} from '../../../amodels/app-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
 
-import {StorageService} from '../../../adal/services/app-storage.service';
+import {StorageService} from '../../../a-core/services/app-storage.service';
 
 import {VOCandle} from '../../../amodels/api-models';
 
-import {BtcUsdtService} from '../../../adal/app-services/alerts/btc-usdt.service';
+import {BtcUsdtService} from '../../../a-core/app-services/alerts/btc-usdt.service';
 import {MatSnackBar} from '@angular/material';
 import {filter, map} from 'rxjs/operators';
 
@@ -51,7 +51,7 @@ export class BtcTetherComponent implements OnInit {
         })
       );*!/
     this.usdtMC$ = this.btcusdt.usdtMC$;*/
-    this.btcusdt.alertSub.subscribe(alert => {
+    this.btcusdt.alertSub$.subscribe(alert => {
       const message = 'BTC ' + alert.PD + ' ' + alert.P + ' V ' + alert.VD + ' ' + alert.trades.toString();
       this.snackBar.open(message, 'x', {panelClass: 'error'});
     });

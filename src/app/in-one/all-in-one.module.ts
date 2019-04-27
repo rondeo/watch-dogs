@@ -4,7 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {V2DataComponent} from './v2-data/v2-data.component';
-import {ApisModule} from '../adal/apis/apis.module';
+import {ApisModule} from '../a-core/apis/apis.module';
 import {AllInOneOutletComponent} from './all-in-one-outlet/all-in-one-outlet.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MaterialAppModule} from '../aui/material/material-app.module';

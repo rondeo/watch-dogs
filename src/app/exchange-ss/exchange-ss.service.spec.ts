@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/adal/testing';
+import { TestBed, inject } from '@angular/a-core/testing';
 
 import { ExchangeSsService } from './exchange-ss.service';
 

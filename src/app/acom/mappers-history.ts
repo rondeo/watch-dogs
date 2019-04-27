@@ -1,6 +1,6 @@
 import {VOOrder} from '../amodels/app-models';
 import * as moment from 'moment';
-import {VOUser} from '../adal/services/auth-http.service';
+import {VOUser} from '../a-core/services/auth-http.service';
 
 export interface VOHistoryStats {
   sold: {amount: number, price: number, priceUS: number};

@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 
 import {ActivatedRoute, Router} from '@angular/router';
 import {VOMarket, VOMarketCap} from '../../amodels/app-models';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 
 import * as _ from 'lodash';
 import {V2DataHelper} from './v2-data-helper';

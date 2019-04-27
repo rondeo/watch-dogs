@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 
 import {VOMarketCap} from '../../../amodels/app-models';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 

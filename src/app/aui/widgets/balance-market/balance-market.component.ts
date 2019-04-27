@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {VOBalance} from '../../../amodels/app-models';
-import {ApiPrivateAbstaract} from '../../../adal/apis/api-private/api-private-abstaract';
-import {ApisPrivateService} from '../../../adal/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApiPrivateAbstaract} from '../../../a-core/apis/api-private/api-private-abstaract';
+import {ApisPrivateService} from '../../../a-core/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 
 @Component({
   selector: 'app-balance-market',

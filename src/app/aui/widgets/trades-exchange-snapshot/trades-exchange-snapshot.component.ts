@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {VOMarketCap, VOOrder} from '../../../amodels/app-models';
 import {UtilsOrder} from '../../../acom/utils-order';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
-import {ShowExternalPageService} from '../../../adal/services/show-external-page.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
+import {ShowExternalPageService} from '../../../a-core/services/show-external-page.service';
 import * as _ from 'lodash';
 
 export interface VOMarketSnapshot {

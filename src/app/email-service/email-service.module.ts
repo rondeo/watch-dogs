@@ -11,7 +11,7 @@ import { EditScriptComponent } from './edit-script/edit-script.component';
 import { WatchdogsListComponent } from './watchdogs-list/watchdogs-list.component';
 import { WatchdogEditComponent } from './watchdog-edit/watchdog-edit.component';
 import { AddScriptComponent } from './add-script/add-script.component';
-import {AppServicesModule} from '../adal/app-services/app-services.module';
+import {AppServicesModule} from '../a-core/app-services/app-services.module';
 import { WatchdogTestComponent } from './watchdog-test/watchdog-test.component';
 import {UiModule} from '../aui/comps/ui.module';
 import {MaterialAppModule} from '../aui/material/material-app.module';

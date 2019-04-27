@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {VOOrder} from '../../../amodels/app-models';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
-import {SocketBase} from '../../../adal/apis/sockets/soket-base';
-import {SocketChannel} from '../../../adal/apis/sockets/socket-channel';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
+import {SocketBase} from '../../../a-core/apis/sockets/soket-base';
+import {SocketChannel} from '../../../a-core/apis/sockets/socket-channel';
 
 @Component({
   selector: 'app-trades-history',

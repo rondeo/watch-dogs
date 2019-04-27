@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 
-import {CandlesService} from '../../../../adal/app-services/candles/candles.service';
+import {CandlesService} from '../../../../a-core/app-services/candles/candles.service';
 
 import {VOCandle, VOCandleExt} from '../../../../amodels/api-models';
 import * as _ from 'lodash';

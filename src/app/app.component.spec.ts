@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/adal/testing';
+import { TestBed, async } from '@angular/a-core/testing';
 
 import { AppComponent } from './app.component';
 

@@ -4,13 +4,13 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatSelectChange, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
-import {ApisPrivateService} from '../../adal/apis/api-private/apis-private.service';
-import {ApisPublicService} from '../../adal/apis/api-public/apis-public.service';
+import {ApisPrivateService} from '../../a-core/apis/api-private/apis-private.service';
+import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 
-import {ShowExternalPageService} from '../../adal/services/show-external-page.service';
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ShowExternalPageService} from '../../a-core/services/show-external-page.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {VOMCObj} from '../../amodels/api-models';
-import {UserLoginService} from '../../adal/services/user-login.service';
+import {UserLoginService} from '../../a-core/services/user-login.service';
 
 @Component({
   selector: 'app-my-balnce',

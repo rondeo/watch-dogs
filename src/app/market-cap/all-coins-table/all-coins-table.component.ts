@@ -5,9 +5,9 @@ import * as _ from 'lodash';
 import {VOMarketCap} from '../../amodels/app-models';
 
 import {MarketCapService} from '../services/market-cap.service';
-import {StorageService} from '../../adal/services/app-storage.service';
+import {StorageService} from '../../a-core/services/app-storage.service';
 
-import {ApiMarketCapService} from '../../adal/apis/api-market-cap.service';
+import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 
 import {Router} from '@angular/router';
 

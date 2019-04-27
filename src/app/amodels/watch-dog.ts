@@ -4,14 +4,14 @@ import {MovingAverage, VOMovingAvg} from '../acom/moving-average';
 import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApiPublicAbstract} from '../adal/apis/api-public/api-public-abstract';
-import {ApisPublicService} from '../adal/apis/api-public/apis-public.service';
-import {ApiPrivateAbstaract} from '../adal/apis/api-private/api-private-abstaract';
-import {ApisPrivateService} from '../adal/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../adal/apis/api-market-cap.service';
-import {StorageService} from '../adal/services/app-storage.service';
-import {SellCoinFilling} from '../adal/app-services/app-bots-services/sell-coin-filling';
-import {IWatchDog, WatchDogStatus} from '../adal/app-services/app-bots-services/watch-dog-status';
+import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {SellCoinFilling} from '../a-core/app-services/app-bots-services/sell-coin-filling';
+import {IWatchDog, WatchDogStatus} from '../a-core/app-services/app-bots-services/watch-dog-status';
 import {Observable, Subject, Subscription} from 'rxjs';
 
 export interface RunResults {

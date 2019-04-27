@@ -6,9 +6,9 @@ import * as moment from 'moment';
 
 import {Moment} from 'moment';
 
-import {ApiCryptoCompareService} from '../../../adal/apis/api-crypto-compare.service';
-import {ApisPublicService} from '../../../adal/apis/api-public/apis-public.service';
-import {ApiMarketCapService} from '../../../adal/apis/api-market-cap.service';
+import {ApiCryptoCompareService} from '../../../a-core/apis/api-crypto-compare.service';
+import {ApisPublicService} from '../../../a-core/apis/api-public/apis-public.service';
+import {ApiMarketCapService} from '../../../a-core/apis/api-market-cap.service';
 import {VOLineGraph} from '../../comps/line-graph/line-graph.component';
 import {VOGraphs} from '../../comps/line-chart/line-chart.component';
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/adal/testing';
+import { async, ComponentFixture, TestBed } from '@angular/a-core/testing';
 
 import { LoginFormComponent } from './login-form.component';
 

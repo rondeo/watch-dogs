@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Coin2usPipe } from './coin2us.pipe';
-import {ApisModule} from '../../adal/apis/apis.module';
+import {ApisModule} from '../../a-core/apis/apis.module';
 import { Coin2us3Pipe } from './coin2us3.pipe';
 import { ToDatePipe } from './to-date.pipe';
 import { CmcPipe } from './cmc.pipe';

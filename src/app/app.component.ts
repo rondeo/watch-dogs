@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
-import {AuthHttpService, VOUser} from './adal/services/auth-http.service';
+import {AuthHttpService, VOUser} from './a-core/services/auth-http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {StorageService} from './adal/services/app-storage.service';
+import {StorageService} from './a-core/services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
-import {AppBotsService} from './adal/app-services/app-bots-services/app-bots.service';
-import {FollowOrdersService} from './adal/apis/open-orders/follow-orders.service';
+import {AppBotsService} from './a-core/app-services/app-bots-services/app-bots.service';
+import {FollowOrdersService} from './a-core/apis/open-orders/follow-orders.service';
 import {Store} from '@ngrx/store';
-import {AppState} from './adal/reducers';
+import {AppState} from './a-core/reducers';
 
 @Component({
   selector: 'app-root',
