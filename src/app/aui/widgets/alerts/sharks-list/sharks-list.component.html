@@ -5,7 +5,7 @@
         <tbody>
         <tr *ngFor="let fish of sharks">
             <td>{{fish.timestamp | toTime}}</td>
-            <td>{{fish.action}}</td>
+            <td>{{fish.orderType}}</td>
             <td>
                 <small>$</small>
                 {{fish.amountUS.toLocaleString()}}

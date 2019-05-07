@@ -6,7 +6,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {runDogScript} from '../run-watchdogs/script-analytics';
 import {VOMarketCap, VOWATCHDOG, VOWatchdog} from '../../amodels/app-models';
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 
 
 @Component({
@@ -25,14 +25,14 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute
   ) {
 
-    this.currentDog = new WatchDog(VOWATCHDOG);
+    this.currentDog = new MarketOrderModel(VOWATCHDOG);
    // this.currentDog.marketCap = new VOMarketCap();
   }
 
 
 
 
-  currentDog: WatchDog;
+  currentDog: MarketOrderModel;
 
   variablesAvailable = [
     {label: 'percent_change_1h', index: 'percent_change_1h'},
@@ -152,13 +152,13 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (results.length) {
       let message = results.join('<br/>');
-      let subject = this.currentDog.id + ' ' + this.currentDog.name + ' ' + this.currentDog.name || '';
-      this.emailService.sendNotification(subject, message).subscribe(res => {
+      // let subject = this.currentDog.id + ' ' + this.currentDog.name + ' ' + this.currentDog.name || '';
+     /* this.emailService.sendNotification(subject, message).subscribe(res => {
         console.log(res);
 
         if (res && res.message) this.snakBar.open(res.message, 'x', {duration: 3000});
 
-      });
+      });*/
     }
   }
 
@@ -242,12 +242,12 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  setCurrentDog(dog: WatchDog) {
+  setCurrentDog(dog: MarketOrderModel) {
    /* if(dog){
       let script = (dog && dog.sellScripts)?dog.sellScripts.toString():'';
       this.setCurrentScript(script);
       this.currentDog = dog;
-    }else this.currentDog = new WatchDog(new VOWatchdog({}));*/
+    }else this.currentDog = new MarketOrderModel(new VOWatchdog({}));*/
     console.log(' set dog ', dog);
   }
 
@@ -274,7 +274,7 @@ export class EditScriptComponent implements OnInit, AfterViewInit, OnDestroy {
      // this.currentDog.scriptText = text;
       console.log(text);
       this.emailService.saveData();
-      this.snakBar.open(this.currentDog.name + ' Saved!', '', {duration: 3000});
+     // this.snakBar.open(this.currentDog.name + ' Saved!', '', {duration: 3000});
     } else this.snakBar.open( 'Error no Dog', 'Error', {duration: 3000});
 
   }

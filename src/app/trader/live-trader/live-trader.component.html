@@ -1,70 +1,197 @@
-<mat-checkbox #checkRSI appSaveValue>RSI</mat-checkbox>
-<mat-checkbox #checkMACD>MACD</mat-checkbox>
-<mat-checkbox #checkStoch>Stoch</mat-checkbox>
-<mat-checkbox #checkStochRSI>StochRSI</mat-checkbox>
-<mat-checkbox (change)="onResSupChange($event)">Res/Sup</mat-checkbox>
-<mat-checkbox #checkFish><span class="fa fa-ship"></span></mat-checkbox>
+<div>
+    <div>
+        <mat-checkbox #allMarkets>All Markets</mat-checkbox>
+        &nbsp;&nbsp;
+        <mat-checkbox #USDT_BTC>USDT BTC</mat-checkbox>
+        &nbsp;&nbsp;
+        <mat-checkbox #bots>Bots</mat-checkbox>
+        &nbsp;&nbsp;
+        <mat-checkbox #botOrders>Orders</mat-checkbox>
+    </div>
 
-<app-candlesticks [candles]="candles" [overlays]="overlays"></app-candlesticks>
+    <br/>
+
+    <div>
+        <table>
+            <tbody>
+            <tr>
+                <th>{{marketService.exchange$ | async}}</th>
+                <th> {{base}} </th>
+                <th> {{coin}} </th>
+            </tr>
+            <tr>
+                <td>
+                    <small>Balances:</small>
+                </td>
+                <td><sup>$</sup> {{balanceBaseUS}} </td>
+                <td><sup>$</sup> {{balanceCoinUS}} </td>
+            </tr>
+            </tbody>
+        </table>
 
 
-<app-volume-hist [values]="volumes"></app-volume-hist>
-<app-volume-hist [values]="triggers1"></app-volume-hist>
+        <div>
+            <div>
+                <mat-form-field class="">
+                    <input matInput
+                           [(ngModel)]="amount"
+                           (ngModelChange)="onAmountChanged()"
+                           placeholder="Amount $US"
+                    >
+                </mat-form-field>
+            </div>
 
-<app-rsi-indicator *ngIf="checkRSI.checked" [closes]="closes"></app-rsi-indicator>
+            <div>
 
-<app-macd-indicator *ngIf="checkMACD.checked" [closes]="closes"></app-macd-indicator>
+                <mat-form-field class="">
+                    <input matInput
+                           [(ngModel)]="price"
+                           (ngModelChange)="onPriceChanged()"
+                           placeholder="Limit Price">
+                </mat-form-field>
 
-<app-stoch *ngIf="checkStoch.checked" [closes]="closes" [highs]="highs" [lows]="lows"></app-stoch>
-
-<app-stoch-rsi *ngIf="checkStochRSI.checked" [closes]="closes"></app-stoch-rsi>
+                <br/>
 
 
-<div class="w20 float-left">
-    <table>
-        <tbody>
-        <tr *ngFor="let fish of fishes">
-            <td>{{fish.timestamp | toTime}}</td>
-            <td>{{fish.action}}</td>
-            <td>
-                <small>$</small>
-                {{fish.amountUS.toLocaleString()}}
-                <sub>x{{fish.orders}}</sub>
-            </td>
-            <td>{{fish.rate | myDisplNum}}</td>
-            <td>{{fish.overlap}}</td>
-        </tr>
-        </tbody>
-    </table>
+                <div>
+                    <sup>Books</sup>
+                    <br/>
+                    <span
+                            (click)="onPriceBuyClick()"
+                    >{{marketService.priceBuy$ | async}}</span>
+                    &nbsp;&nbsp;
+                    <span
+                            (click)="onPriceSellClick()"
+                    >{{marketService.priceSell$ | async}}</span>
+                    &nbsp;&nbsp;
+                    <span
+                            (click)="onRefreshBooksClick()"
+                    ><mat-icon>cached</mat-icon></span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <mat-form-field class="">
+                <input matInput
+                       [(ngModel)]="stopLoss"
+                       placeholder="Stop Loss">
+            </mat-form-field>
+            <br/>
+            <mat-slider
+                    [(ngModel)]="stopLossPercent"
+                    (change)="onStopLossPercentChanged()"
+                    [thumbLabel]="true"
+                    [max]="2"
+                    [min]="0.2"
+                    [step]="0.2"
+            ></mat-slider>
+
+        </div>
+
+        <br/>
+        <div>
+            <button mat-raised-button class="green-color" (click)="onBuyClick()">Buy</button>
+
+            &nbsp;&nbsp;
+            <button mat-raised-button color="accent" (click)="onSellClick()">Sell</button>
+        </div>
+    </div>
+
+
+    <div *ngIf="allMarkets.checked">
+
+        <mat-form-field>
+            <mat-label>Exchange</mat-label>
+            <mat-select
+                    [(ngModel)]="exchange"
+                    (ngModelChange)="onExchangeChanged($event)"
+            >
+                <mat-option
+                        *ngFor="let exchange of (marketService.exchanges$ | async)" [value]="exchange"
+                >
+                    {{exchange}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        &nbsp;&nbsp;
+
+        <mat-form-field>
+            <mat-label>Market</mat-label>
+            <mat-select
+                    [(ngModel)]="market"
+                    (ngModelChange)="onMarketChanged($event)"
+            >
+                <mat-option
+                        *ngFor="let market of (marketService.markets$ | async)" [value]="market">
+                    {{market}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+
+    <div *ngIf="USDT_BTC.checked">
+        <h3>USDT-BTC</h3>
+        <table role="list">
+            <tbody>
+            <tr>
+                <td></td>
+                <td>BTC</td>
+                <td>USDT</td>
+                <td (click)="onUsdClick()">USD</td>
+            </tr>
+            <tr
+                    role="listitem"
+                    *ngFor="let usdtbtc of (usdtbtcs$ | async)" (click)="onUsdtBtcClick(usdtbtc)"
+            >
+                <td>
+                    {{usdtbtc.exchange}}
+                </td>
+                <td>
+                    {{usdtbtc.btc.balance | coin2us:'BTC' | async}}
+                </td>
+                <td>
+                    {{usdtbtc.usdt.balance | coin2us:'USDT' | async}}
+                </td>
+                <td>
+                    {{usdtbtc.usd.balance | coin2us:'USD' | async}}
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div *ngIf="bots.checked">
+        <h3>Bots</h3>
+        <table>
+            <tbody>
+            <tr *ngFor="let bot of (bots$ | async)">
+                <td (click)="onBotClick(bot)">{{bot.id}}</td>
+                <td (click)="onDeleteBotClick(bot)">X</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div *ngIf="botOrders.checked">
+        <h3>Active orders</h3>
+        <table>
+            <tbody>
+            <tr *ngFor="let ord of (myOrders$ | async)">
+                <td>{{ord.orderType}}</td>
+                <td>{{ord.amountUS}}</td>
+                <td>{{ord.isOpen}}</td>
+                <td (click)="onDeleteOrderClick(ord)">X</td>
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
 </div>
-
-<div class="w20 float-left">
-    <app-candle-volume-alert [exchange]="'binance'" [market]="market"></app-candle-volume-alert>
-    <app-candle-volume-alert [exchange]="'bitfinex'" [market]="market"></app-candle-volume-alert>
-</div>
-
-
-
-<section *ngIf="checkFish.checked">
-    <app-fishes
-            [exchange]="'bitfinex'"
-            [market]="market"
-            [refresh]="refreshSignal"
-    ></app-fishes>
-
-    <app-fishes
-            [exchange]="'huobi'"
-            [market]="market"
-            [refresh]="refreshSignal"
-    ></app-fishes>
-    <app-fishes
-            [exchange]="'okex'"
-            [market]="market"
-            [refresh]="refreshSignal"
-    ></app-fishes>
-    <app-fishes
-            [exchange]="'binance'"
-            [market]="market"
-            [refresh]="refreshSignal"
-    ></app-fishes>
-</section>

@@ -7,6 +7,7 @@ import {ApiPrivatePoloniex} from './api-private-poloniex';
 import {ApiPrivateHitbtc} from './api-private-hitbtc';
 import {UserLoginService} from '../../services/user-login.service';
 import {ApiPrivateBinance} from './api-private-binance';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 
 @Injectable()
@@ -14,7 +15,9 @@ export class ApisPrivateService {
 
   static instance: ApisPrivateService;
 
-  exchanges: { [exchange: string]: ApiPrivateAbstaract } = {};
+  private exchanges: { [exchange: string]: ApiPrivateAbstaract } = {};
+
+  exchanges$: BehaviorSubject<string[]> = new BehaviorSubject( ['binance', 'bittrex', 'poloniex', 'hitbtc']);
 
   constructor(
     private http: HttpClient,

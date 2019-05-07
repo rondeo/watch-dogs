@@ -7,7 +7,7 @@ import {MatDialog} from '@angular/material';
 import {OrderType, VOMarketCap, VOWatchdog} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 import * as moment from 'moment';
 import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {WatchDogStatus} from '../../a-core/app-services/app-bots-services/watch-dog-status';
@@ -75,8 +75,8 @@ export class CreateWatchdogComponent implements OnInit, OnDestroy {
       _status: WatchDogStatus.WAITING
     });
 
-    const WD: WatchDog = new WatchDog(wdData);
-    await this.botsService.saveWatchDog(WD);
+    const WD: MarketOrderModel = new MarketOrderModel(wdData);
+  //  await this.botsService.saveWatchDog(WD);
     this.router.navigateByUrl('/email-service/watchdogs-list/' + this.orderType);
   }
 

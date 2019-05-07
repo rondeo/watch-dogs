@@ -256,7 +256,7 @@ export class FollowOpenOrder {
       let rate = 0;
       let fees = 0;
       let amountCoin = 0;
-      const date = moment(_.last(buyOrders).timestamp).format('DD HH:mm');
+    /*  const date = moment(_.last(buyOrders).timestamp).format('DD HH:mm');
 
       buyOrders.forEach(function (o) {
         rate += +o.rate;
@@ -264,16 +264,16 @@ export class FollowOpenOrder {
         amountCoin += o.amountCoin;
       });
       rate = rate / buyOrders.length;
-
+*/
       const initOrder = {
         market,
         rate,
         fees,
         amountCoin,
-        date
+       //  date
       };
 
-      this.initOrder = initOrder;
+     // this.initOrder = initOrder;
 
     } else this.initOrder = {rate: 0, fees: 0, amountCoin: 0, date: ''};
 

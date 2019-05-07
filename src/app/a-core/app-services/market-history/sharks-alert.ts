@@ -38,7 +38,7 @@ export class SharksAlert {
     // console.log(this.value);
     const indexed = {};
     newOrders.forEach(function (item) {
-      const id = item.action + item.amountCoin;
+      const id = item.orderType + item.amountCoin;
       const exists = indexed[id];
       if (!exists) {
         indexed[id] = Object.assign({overlap: overlap, orders: 1}, item);
@@ -86,10 +86,10 @@ export class SharksAlert {
   async analizeSignal(orders: VOOrderExt[]) {
     await Promise.resolve();
     let buy = orders.filter(function (o) {
-      return o.action === 'BUY';
+      return o.orderType === 'BUY';
     });
     let sell = orders.filter(function (o) {
-      return o.action === 'SELL';
+      return o.orderType === 'SELL';
     });
     const diff = buy.length - sell.length;
 

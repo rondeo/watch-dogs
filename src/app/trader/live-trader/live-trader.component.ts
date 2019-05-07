@@ -1,21 +1,21 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {VOCandle} from '../../amodels/api-models';
-import {ApiPublicAbstract} from '../../a-core/apis/api-public/api-public-abstract';
-
-import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
-import {VOOrder, VOOrderExt} from '../../amodels/app-models';
-import {EnumOverlay} from '../../aui/comps/candlesticks/candlesticks.component';
-import * as moment from 'moment';
+import {OrderType, VOOrder} from '../../amodels/app-models';
 import * as _ from 'lodash';
-import {MarketsHistoryService} from '../../a-core/app-services/market-history/markets-history.service';
-
-import {TradesHistoryService} from '../../a-core/app-services/tests/trades-history.service';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
-import {StorageService} from '../../a-core/services/app-storage.service';
-import {CandlesService} from '../../a-core/app-services/candles/candles.service';
 import {Subscription} from 'rxjs';
+import {Observable} from 'rxjs/internal/Observable';
+import {filter} from 'rxjs/operators';
+import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
+import {MarketOrderModel} from '../../amodels/market-order-model';
+import {UsdtBtcMarket} from '../../a-core/app-services/app-bots-services/usdt-btc-market';
+import {TradeMarketService} from '../../a-core/services/trade-market.service';
+import {MarketBot} from '../../a-core/app-services/app-bots-services/market-bot';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {MATH} from '../../acom/math';
+import {Utils} from 'tslint';
+import {UTILS} from '../../acom/utils';
 
 @Component({
   selector: 'app-live-trader',
@@ -25,53 +25,120 @@ import {Subscription} from 'rxjs';
 
 export class LiveTraderComponent implements OnInit, OnDestroy {
 
+  exchanges$: Observable<string[]>;
+  markets$: Observable<string[]>;
+  market: string;
+  exchange: string;
+  // exchange: string = null;
+  amount = 100;
+  price: number;
+
+  base: string;
+  coin: string;
+
+  balanceBaseUS: number;
+  balanceCoinUS: number;
+
+  stopLossPercent: number = 1;
+  stopLoss: number;
+
+  currentBot: MarketBot;
+  myOrders$: BehaviorSubject<VOOrder[]>;
+
   constructor(
     private route: ActivatedRoute,
-    private apiPublic: ApisPublicService,
+    private router: Router,
+   // private apisPublic: ApisPublicService,
     private snackBar: MatSnackBar,
-    private marketsHistory: MarketsHistoryService,
-   private candleService: CandlesService,
-   // private tradesHistoryService: TradesHistoryService,
+   // private marketsHistory: MarketsHistoryService,
+   // private candleService: CandlesService,
+   // private apisPrivate: ApisPrivateService,
+    private botsService: AppBotsService,
+    public marketService: TradeMarketService,
+    // private tradesHistoryService: TradesHistoryService,
     private marketCap: ApiMarketCapService,
-    private storage: StorageService
+//    private storage: StorageService
   ) {
+
   }
-
-  exchange: string;
-  market: string;
-
-  closes: number[];
-  highs: number[];
-  lows: number[];
-  refreshSignal: number;
-  overlays: EnumOverlay[] = [];
-
-  candles: VOCandle[];
-
-  fishes: VOOrderExt[] = [];
-
-  volumes: number[];
-
-  triggers1: number[];
-
-  alerts: {exchange: string, market: string, name: string, value1: string, value2: string}[] = [];
-
-  interval;
-  isRequesting = false;
 
   sub1: Subscription;
   sub2: Subscription;
   sub3: Subscription;
 
-  ngOnInit() {
+  bots$: Observable<MarketBot[]>;
+  usdtbtcs$: Observable<UsdtBtcMarket[]>;
+  bookBuy: number;
+  bookSell: number;
 
-    this.route.params.subscribe(params => {
-      this.exchange = params.exchange;
-      this.market = params.market;
-      console.log(params);
-     //  this.getData();
+  ngOnInit() {
+    const params = this.route.snapshot.params;
+    this.marketService.exchange$.next(params.exchange);
+    this.marketService.market$.next(params.market);
+
+    this.bots$ = this.botsService.orders$;
+
+    this.usdtbtcs$ = this.botsService.usdtbtc$;
+    this.marketService.market$.pipe(filter(market => {
+      return this.market !== market && !!market;
+     //  if(this.sub1) this.sub1.unsubscribe();
+    })).subscribe(market => this.market = market);
+
+    this.marketService.exchange$.subscribe(exchange => {
+      this.exchange = exchange;
     });
-    this.subscribe();
+
+    UTILS.clearNull(this.marketService.market$).subscribe(market =>{
+      const ar = market.split('_');
+      this.base = ar[0];
+      this.coin = ar[1];
+    });
+
+    this.marketService.balanceBase$.subscribe(balance => {
+        this.balanceBaseUS = balance.balanceUS;
+    });
+
+    this.marketService.balanceCoin$.subscribe(balance =>{
+      this.balanceCoinUS = balance.balanceUS;
+    });
+
+
+    /* this.route.params.subscribe(params => {
+       console.warn(params);
+       if (this.market !== params.market) {
+         this.market = params.market;
+       }
+
+       console.log(this.exchange);
+       if (params.exchange === 'null') {
+
+         console.warn(' exhange null ')
+       } else if (this.exchange !== params.exchange) {
+
+         this.exchange = params.exchange;
+         console.log(' exchange ' + this.exchange);
+         const api: ApiPublicAbstract = this.apisPublic.getExchangeApi(this.exchange);
+         if (!api) {
+           console.warn('no api for ' + this.exchange);
+           return
+         }
+         const market = this.market;
+
+         this.markets$ = api.markets$.pipe(map(markets => {
+           console.log(markets);
+           console.log(markets.indexOf(market));
+           if (markets.indexOf(market) === -1) {
+             this.market = null;
+             this.onMarketChanged(null);
+           }
+           return markets.sort();
+         }));
+
+       } else {
+         console.warn(' same exchange');
+       }
+     });*/
+    // this.subscribe();
 
   }
 
@@ -79,8 +146,9 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     this.unsubscribe();
   }
 
+
   subscribe() {
-    const ar = this.market.split('_');
+    //  const ar = this.market.split('_');
 
     /*const hist = this.candleService.getCandlesHist(this.exchange, this.market);
     hist.candles$().subscribe(candles=>{
@@ -97,43 +165,43 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 */
 
 
-    const ctr = this.marketsHistory.getOrdersHistory(this.exchange, this.market);
+    /*  const ctr = this.marketsHistory.getOrdersHistory(this.exchange, this.market);
 
-    this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
-      // console.warn('diff  ', diff);
-      this.snackBar.open(' Volume ' + this.exchange + ' ' + this.market + ' ' + diff + '%', 'x');
-    });
-    this.marketCap.getTicker().then(MC => {
-      const coinPrice = MC[ar[1]].price_usd;
-      const coinAmount = 20000 / coinPrice;
-
-
-       this.sub3 = ctr.sharksHistory$(200).subscribe(res => {
-         if (!res) return;
-        // console.log(' sharksHistory$ ',res);
-         this.fishes = _.clone(res).reverse();
-         this.drawSignals();
-
-       });
-
-      this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders => {
-        console.log('new fishes ', orders);
-        //  this.drawSignals();
-       // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
-        // this.storage.upsert('fishes', this.fishes);
-
+      this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
+        // console.warn('diff  ', diff);
+        this.snackBar.open(' Volume ' + this.exchange + ' ' + this.market + ' ' + diff + '%', 'x');
       });
-    });
+      this.marketCap.getTicker().then(MC => {
+        const coinPrice = MC[ar[1]].price_usd;
+        const coinAmount = 20000 / coinPrice;
+
+
+        this.sub3 = ctr.sharksHistory$(200).subscribe(res => {
+          if (!res) return;
+          // console.log(' sharksHistory$ ',res);
+          this.fishes = _.clone(res).reverse();
+          this.drawSignals();
+
+        });
+
+        this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders => {
+          console.log('new fishes ', orders);
+          //  this.drawSignals();
+          // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
+          // this.storage.upsert('fishes', this.fishes);
+
+        });
+      });*/
   }
 
-  async drawSignals() {
+ /* async drawSignals() {
     const candles = this.candles;
     let fishes: VOOrderExt[] = _.clone(this.fishes).reverse();
 
-    if (!fishes.length || ! candles.length) return;
+    if (!fishes.length || !candles.length) return;
     const startTime = candles[0].to;
     const length = candles.length;
-    let endTime =  _.last(candles).to;
+    let endTime = _.last(candles).to;
     fishes = fishes.filter(function (item) {
       return item.timestamp > startTime;
     });
@@ -147,14 +215,14 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const ordersAr = [];
     for (let i = startTime; i < endTime; i += step) {
       const fAr = [];
-      while (fishes.length && fishes[0].timestamp < i)fAr.push(fishes.shift());
+      while (fishes.length && fishes[0].timestamp < i) fAr.push(fishes.shift());
       ordersAr.push(fAr);
     }
     const signals = ordersAr.map(function (far) {
       let val = 0;
       if (!far.length) return 0;
       far.forEach(function (item) {
-        if (item.action === 'BUY') val += item.amountUS;
+        if (item.orderType === 'BUY') val += item.amountUS;
         else val -= item.amountUS;
       });
       return val;
@@ -162,7 +230,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     console.log(_.last(signals));
     this.triggers1 = signals;
   }
-
+*/
   unsubscribe() {
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub1.unsubscribe();
@@ -207,6 +275,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
      })*!/
   }*/
 
+/*
   onResSupChange(evt) {
     const ar = this.overlays.slice(0);
     const ind = ar.indexOf(EnumOverlay.SUPPORT_RESISTANCE);
@@ -219,5 +288,113 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     }
     this.overlays = ar;
   }
+*/
 
+  onExchangeChanged($event: string) {
+    this.marketService.exchange$.next($event);
+    this.setRoute();
+  }
+
+  onMarketChanged($event: string) {
+    this.marketService.market$.next($event);
+    this.setRoute();
+  }
+
+  onBotClick(bot: MarketBot) {
+    if (this.exchange !== bot.exchange) {
+      this.marketService.exchange$.next(bot.exchange);
+    }
+    this.marketService.market$.next(bot.market);
+    if(this.currentBot) this.currentBot.selected = false;
+    this.currentBot = bot;
+    bot.selected = true;
+    this.myOrders$ = bot.orders$;
+    this.setRoute();
+  }
+
+  onUsdtBtcClick(usdtbtc: UsdtBtcMarket) {
+    this.marketService.exchange$.next(usdtbtc.exchange);
+    this.marketService.market$.next('USDT_BTC');
+    this.setRoute();
+  }
+
+  onUsdClick() {
+    this.marketService.market$.next('USD_BTC');
+    this.setRoute();
+  }
+
+  setRoute() {
+    const exchange = this.exchange,
+      market = this.marketService.market$.getValue(),
+      bot =  this.currentBot? this.currentBot.id: '';
+
+    this.router.navigate(['/trader/live-trader', {exchange, market, bot}])
+  }
+
+  onBuyClick() {
+    const amountUS = this.amount;
+    const price = this.price;
+    const exchange = this.marketService.exchange$.getValue();
+    const market = this.marketService.market$.getValue();
+    const bot: MarketBot = this.botsService.getBot(exchange, market);
+    bot.setBuyOrder(price, amountUS,this.stopLoss);
+
+  }
+
+  onSellClick() {
+    const amountUS = this.amount;
+    const price = this.price;
+    const exchange = this.marketService.exchange$.getValue();
+    const market = this.marketService.market$.getValue();
+    const bot: MarketBot = this.botsService.getBot(exchange, market);
+
+    bot.setSellOrder(price, amountUS, this.stopLoss);
+  }
+
+  onAmountChanged() {
+    const amount = this.amount;
+    if(isNaN(amount)) return;
+    this.marketService.amount$.next(this.amount)
+
+  }
+
+  onPriceBuyClick() {
+    this.price = MATH.toPrecision(this.marketService.priceBuy$.getValue(), 4);
+    this.calculateStopLoss();
+  }
+
+  onPriceSellClick() {
+    this.price =  MATH.toPrecision(this.marketService.priceSell$.getValue(), 4);
+    this.calculateStopLoss();
+  }
+
+  onStopLossPercentChanged() {
+   this.calculateStopLoss();
+
+  }
+
+  onDeleteOrderClick(order: VOOrder) {
+    if(!this.currentBot) return;
+    this.currentBot.removeOrder(order)
+  }
+
+  onRefreshBooksClick() {
+    this.marketService.refreshBooks();
+  }
+
+  onDeleteBotClick(bot: MarketBot) {
+    const msg = ' Delete ' + bot.id + '?';
+    if(confirm(msg)) {
+      this.botsService.deleteBot(bot)
+    }
+  }
+
+  onPriceChanged() {
+   this.calculateStopLoss();
+  }
+
+  calculateStopLoss(){
+    const num = this.price - (this.price * (this.stopLossPercent/100));
+    this.stopLoss = MATH.toPrecision(num, 4);//+num.toString().substr(0,this.marketService.marketPrecision)
+  }
 }

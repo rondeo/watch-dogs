@@ -241,7 +241,7 @@ export class UtilsOrder {
       this.US += volUS;
       this.vol += vol;
       this.amountCoin += o.amountCoin;
-      if (o.action === 'BUY') {
+      if (o.orderType === 'BUY') {
         this.amountBuy += o.amountCoin;
         this.amountBuyUS += volUS;
       } else {
@@ -361,17 +361,17 @@ export class UtilsOrder {
       this.out.bubbles.push({
         x: item.timestamp,
         y: priceUS,
-        r: item.action === 'BUY' ? amountUS : -amountUS
+        r: item.orderType === 'BUY' ? amountUS : -amountUS
       });
 
-      if (amountUS < this.out.dust)item.action === 'BUY' ? this.out.dustCountBuy++ : this.out.dustCountSell++;
+      if (amountUS < this.out.dust)item.orderType === 'BUY' ? this.out.dustCountBuy++ : this.out.dustCountSell++;
 
-      if (item.action === 'BUY') {
+      if (item.orderType === 'BUY') {
         this.out.sumBuyUS += amountUS;
         this.out.countBuy++;
 
       }
-      if (item.action === 'SELL') {
+      if (item.orderType === 'SELL') {
         this.out.sumSellUS += amountUS;
         this.out.countSell++;
 
@@ -430,20 +430,20 @@ export class UtilsOrder {
       let bbl: VOBubble = {
         x: item.timestamp,
         y: item.rate / this.o,
-        r: item.action === 'BUY' ? amountUS : -amountUS
+        r: item.orderType === 'BUY' ? amountUS : -amountUS
       };
 
       bubbles.push(bbl);
 
       if (amountUS > 50000) fishes.push(bbl);
 
-      if (amountUS < 100)item.action === 'BUY' ? dustCountBuy++ : dustCountSell++;
+      if (amountUS < 100)item.orderType === 'BUY' ? dustCountBuy++ : dustCountSell++;
 
-      if (item.action === 'BUY') {
+      if (item.orderType === 'BUY') {
         sumBuy += amountUS;
         this.buy.push(item);
       }
-      if (item.action === 'SELL') {
+      if (item.orderType === 'SELL') {
         sumSell += amountUS;
         this.sell.push(item);
       }
@@ -587,8 +587,8 @@ export class UtilsOrder {
 
     history.forEach(function (item, i) {
       if (item.timestamp > nextTime) {
-        if (item.action === 'BUY') groupB.push(item);
-        else if (item.action === 'SELL') groupS.push(item);
+        if (item.orderType === 'BUY') groupB.push(item);
+        else if (item.orderType === 'SELL') groupS.push(item);
         else console.warn(item);
       } else {
         // console.log(i + ' go next ' + item.timestamp + '  nextTime '+ nextTime);

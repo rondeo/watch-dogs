@@ -145,7 +145,7 @@ export class BtcUsdtService {
     const trades: VOOrder[] = await this.downloadTrades();
     const sorted = _.orderBy(trades, 'amountCoin').reverse();
     return _.take(sorted, 5).map(function (o) {
-      return o.action + ':' + Math.round(o.amountCoin);
+      return o.orderType + ':' + Math.round(o.amountCoin);
     }).join(', ');
   }
 

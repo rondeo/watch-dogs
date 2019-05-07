@@ -60,7 +60,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     const id = order.uuid;
     if (id) {
-      const msg = [order.action, order.coin, order.amountUS, order.priceUS].join(' ');
+      const msg = [order.orderType, order.coin, order.amountUS, order.priceUS].join(' ');
       if (confirm('You want to cancel order ' + msg)) {
         api.cancelOrder2(id, order.base + '_' + order.coin).then(res => {
 

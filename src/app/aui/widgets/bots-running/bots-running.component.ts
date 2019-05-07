@@ -4,7 +4,7 @@ import {OrderType, VOWatchdog} from '../../../amodels/app-models';
 
 import {MatSnackBar} from '@angular/material';
 import {AppBotsService} from '../../../a-core/app-services/app-bots-services/app-bots.service';
-import {WatchDog} from '../../../amodels/watch-dog';
+import {MarketOrderModel} from '../../../amodels/market-order-model';
 
 @Component({
   selector: 'app-bots-running',
@@ -31,7 +31,7 @@ export class BotsRunningComponent implements OnInit {
   timeout;
 
   ngOnInit() {
-    this.botsService.allWatchDogs$().subscribe(wds => {
+   /* this.botsService.allWatchDogs$().subscribe(wds => {
       this.activeSell = this.botsService.getActiveSellBots().length;
       this.totalSell = this.botsService.getAllSellBots().length;
 
@@ -49,7 +49,7 @@ export class BotsRunningComponent implements OnInit {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => this.showSbackBar(isRunning), 1300);
 
-    });
+    });*/
   }
 
   showSbackBar(isRunning) {

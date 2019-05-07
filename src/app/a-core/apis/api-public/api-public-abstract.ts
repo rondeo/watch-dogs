@@ -5,7 +5,7 @@ import {UTILS} from '../../../acom/utils';
 import {VOCandle} from '../../../amodels/api-models';
 import {SocketBase} from '../sockets/soket-base';
 import * as _ from 'lodash';
-import {map} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 export interface MarketDay {
@@ -24,6 +24,14 @@ export interface MarketDay {
 
 
 export abstract class ApiPublicAbstract {
+
+  private _markets$  = new BehaviorSubject(null);
+  get markets$(): Observable<string[]> {
+    if(!this._markets$.getValue()) {
+      this.getMarkets().then(markets => this._markets$.next(Object.keys(markets)));
+    }
+    return  this._markets$.pipe(filter(markets => !!markets));
+  }
 
   constructor(
     protected http: HttpClient,

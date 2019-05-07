@@ -468,7 +468,7 @@ export class CandlesAnalys1 {
     const ma25_99 = MATH.percent(mas.ma25, mas.ma99);
     const v3_25 = +MATH.percent(vols.v3, vols.v25).toPrecision(1);
     const v3_med = +MATH.percent(vols.v3, vols.vmed).toPrecision(2);
-    // const actionValues = await storage.select('action-values');
+    // const actionValues = await storage.select('orderType-values');
     const curr = {v3_med, PD, ma3_25, ma25_99, v3_25, ma7_99, stamp, ma7, state: ''};
 
     let volume = 'AVG-VOLUME';

@@ -34,7 +34,7 @@ export class MappersHistory {
     let maxPriceSold = 0;
 
     ar.forEach(function (item) {
-      if (item.action === 'SELL') {
+      if (item.orderType === 'SELL') {
         totalSell += item.amountBase;
         sumSell += item.rate;
         spentSell += item.amountBase * item.rate;
@@ -42,7 +42,7 @@ export class MappersHistory {
           maxSold = item.amountBase;
           maxPriceSold = item.rate;
         }
-      } else if (item.action === 'BUY') {
+      } else if (item.orderType === 'BUY') {
         totalBuy += item.amountBase;
         sumBuy += item.rate;
         spentBuy += item.amountBase * item.rate;

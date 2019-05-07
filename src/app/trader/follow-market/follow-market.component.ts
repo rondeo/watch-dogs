@@ -11,6 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
+import {OrderType} from '../../amodels/app-models';
 
 @Component({
   selector: 'app-follow-market',
@@ -22,11 +23,10 @@ export class FollowMarketComponent implements OnInit {
 
   market: string;
   exchange: string;
-  reason:string;
-
+  reason: OrderType;
   testbot: MarketBot;
-  constructor(
 
+  constructor(
     private rote: ActivatedRoute,
     private router: Router,
     private apisPublic: ApisPublicService,
@@ -35,8 +35,6 @@ export class FollowMarketComponent implements OnInit {
     private candelsService: CandlesService,
     private testCandles: TestCandlesService
   ) { }
-
-
 
  async onCreateClick() {
     if(!this.exchange || !this.market || !this.reason) return;
@@ -48,7 +46,7 @@ export class FollowMarketComponent implements OnInit {
       return {
         exchange: item.exchange,
         market: item.market,
-        reason: item.reason,
+       // reason: item.reason,
         x: 'X'
       };
     })

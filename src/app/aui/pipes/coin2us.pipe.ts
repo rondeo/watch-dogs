@@ -14,7 +14,7 @@ export class Coin2usPipe implements PipeTransform {
   }
 
   async transform(value: number, symbol: string): Promise<number> {
-    if (!symbol) return;
+    if (!value) return Promise.resolve(0);
     if (symbol === 'USDT' || symbol === 'USD') return Promise.resolve(+value.toFixed(2));
 
     const MC = await this.marketCap.getTicker();

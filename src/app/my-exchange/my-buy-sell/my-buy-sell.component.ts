@@ -195,7 +195,7 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
 
       const order = await api.buyLimit2(this.market, amount, rateBuy);
 
-      msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
+      msg = 'New Order ' + order.orderType + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
       // this.onNewOrder(order);

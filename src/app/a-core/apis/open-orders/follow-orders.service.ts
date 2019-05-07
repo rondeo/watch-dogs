@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
 
-import {VOOrder} from '../../../amodels/app-models';
+import {OrderType, VOOrder} from '../../../amodels/app-models';
 import {ApisPrivateService} from '../api-private/apis-private.service';
 import {FollowOpenOrder} from './follow-open-order';
 import {VOCandle} from '../../../amodels/api-models';
@@ -19,7 +19,6 @@ import {Candles15minService} from '../../app-services/app-bots-services/candles-
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
   excludes: string[] = ['BTC', 'USDT', 'USD'];
-
   botsSub: BehaviorSubject<MarketBot[]> = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
@@ -64,10 +63,11 @@ export class FollowOrdersService {
     const exist = _.find(bots, {market: market});
     if (!exist) return;
     console.log(exist);
-    if(exist.destroy()) {
-      bots = _.reject(bots, {market: market});
-      return this.saveBots(bots);
-    } return Promise.reject(' cant be destroyed yet');
+    /* if(exist.destroy()) {
+       bots = _.reject(bots, {market: market});
+       return this.saveBots(bots);
+     } return Promise.reject(' cant be destroyed yet');
+   }*/
   }
 
   async saveBots(bots: MarketBot[]) {
@@ -76,19 +76,19 @@ export class FollowOrdersService {
       return {
         exchange: item.exchange,
         market: item.market,
-        reason: item.reason,
-        amountCoinUS: item.amountCoinUS,
+        orderType: item.orderType,
+        amountUS: item.amountUS,
         isLive: item.isLive
       };
     });
     return this.storage.upsert('bots', tosave);
   }
 
-  async createBot(exchange: string, market: string, reason: string, isLive = false) {
+  async createBot(exchange: string, market: string, orderType: OrderType, isLive = false) {
     const bots = this.botsSub.getValue();
     const excist = _.find(bots, {market: market});
     if (excist) {
-      excist.reason = reason;
+      // excist.reason = reason;
       this.saveBots(bots);
       return;
     }
@@ -96,7 +96,7 @@ export class FollowOrdersService {
       new MarketBot(
         exchange,
         market,
-        reason,
+        orderType,
         100,
         isLive,
         this.storage,
@@ -104,16 +104,14 @@ export class FollowOrdersService {
         this.apisPublic.getExchangeApi('binance'),
         this.canlesService,
         this.marketCap,
-        this.btcusdtService,
-        this.munuteCandles,
-        this.candles15
+        this.btcusdtService
       )
     );
     return this.saveBots(bots);
   }
 
   async initBots() {
-    const bots = ((await this.storage.select('bots')) || []).map((item) => {
+   /* const bots = ((await this.storage.select('bots')) || []).map((item) => {
       return new MarketBot(
         item.exchange,
         item.market,
@@ -125,12 +123,10 @@ export class FollowOrdersService {
         this.apisPublic.getExchangeApi('binance'),
         this.canlesService,
         this.marketCap,
-        this.btcusdtService,
-        this.munuteCandles,
-        this.candles15
+        this.btcusdtService
       );
     });
-    this.botsSub.next(bots);
+    this.botsSub.next(bots);*/
   }
 
 

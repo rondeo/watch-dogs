@@ -2,6 +2,10 @@ import * as _ from 'lodash';
 
 export class MATH {
 
+  static toPrecision(value: number, precision: number): number {
+    return +value.toPrecision(precision);
+  }
+
   static priceChnage(closes: number[]) {
     const lasts = _.mean(_.takeRight(closes, 3));
     const last10 = _.min(_.takeRight(closes, 10));

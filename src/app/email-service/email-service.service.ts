@@ -8,7 +8,7 @@ import {VOMarketCap} from '../amodels/app-models';
 import {StorageService} from '../a-core/services/app-storage.service';
 import {MarketCapService} from '../market-cap/services/market-cap.service';
 import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
-import {WatchDog} from '../amodels/watch-dog';
+import {MarketOrderModel} from '../amodels/market-order-model';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
@@ -39,11 +39,11 @@ export class EmailServiceService {
 
   }
 
-  private watchDogs: WatchDog[];
-  private watchDogsSub: BehaviorSubject<WatchDog[]>;
-  watchDogs$: Observable<WatchDog[]>;
+  private watchDogs: MarketOrderModel[];
+  private watchDogsSub: BehaviorSubject<MarketOrderModel[]>;
+  watchDogs$: Observable<MarketOrderModel[]>;
 
-  currentWatchDog: WatchDog;
+  currentWatchDog: MarketOrderModel;
 
   marketCapData: {[id: string]: VOMarketCap};
 
@@ -87,7 +87,7 @@ export class EmailServiceService {
     this.watchDogsSub.next(this.watchDogs);*/
   }
 
-  getWatchDogs(): WatchDog[] {
+  getWatchDogs(): MarketOrderModel[] {
 
     if (!this.watchDogs) {
       let str = this.storage.getItem('watch-dogs');
@@ -139,7 +139,7 @@ export class EmailServiceService {
 
   }
 
- /* static mergeData(markets, ar:WatchDog[]){
+ /* static mergeData(markets, ar:MarketOrderModel[]){
 
     ar.forEach(function (item) {
 
@@ -154,7 +154,7 @@ export class EmailServiceService {
   }*/
 
 
- addDog(dog: WatchDog) {
+ addDog(dog: MarketOrderModel) {
   /* dog.scriptIcon = dog.scriptText?'fa fa-battery-full':'fa fa-battery-empty';
    dog.statusIcon = dog.isActive !=='isActive'?'fa fa-play':'fa fa-pause';
    dog.marketCap = this.marketCapData[dog.coinId];
@@ -166,7 +166,7 @@ export class EmailServiceService {
    this.watchDogsSub.next(this.watchDogs);*/
  }
 
-  /*editDog(dog:WatchDog){
+  /*editDog(dog:MarketOrderModel){
     if(!dog) return;
     console.log(dog);
 
@@ -191,7 +191,7 @@ export class EmailServiceService {
   }
 
 
-  deleteDog(dog: WatchDog) {
+  deleteDog(dog: MarketOrderModel) {
     this.watchDogs = _.filter(this.watchDogs, function (item) {
       return item.id !== dog.id;
     });
@@ -201,14 +201,14 @@ export class EmailServiceService {
   }
 
 
-  getDogByUid(uid: string): WatchDog {
+  getDogByUid(uid: string): MarketOrderModel {
 
     return this.getWatchDogs().find((item) => {
           return item.id === uid;
       });
 
    /* console.warn(uid);
-    let sub:Subject<WatchDog> | BehaviorSubject<WatchDog>;
+    let sub:Subject<MarketOrderModel> | BehaviorSubject<MarketOrderModel>;
     if(!this.watchDogs){
 
 

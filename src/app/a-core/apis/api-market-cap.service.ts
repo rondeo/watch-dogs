@@ -11,7 +11,7 @@ import {MCdata, VOCoinsDayData, VOMarketCapSelected, VOMCData, VOMCObj} from '..
 import {VOMovingAvg} from '../../acom/moving-average';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {catchError, first, map, refCount, share, shareReplay} from 'rxjs/operators';
+import {catchError, filter, first, map, refCount, share, shareReplay} from 'rxjs/operators';
 import {MATH} from '../../acom/math';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ajax, fromPromise} from 'rxjs/internal-compatibility';
@@ -181,7 +181,7 @@ export class ApiMarketCapService {
 
       this.myTicker$.subscribe(console.warn);
     }*/
-    return this.tikerSub.asObservable();
+    return this.tikerSub.pipe(filter(MC =>!!MC));
   }
 
   myTicker$;

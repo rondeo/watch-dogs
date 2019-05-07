@@ -66,11 +66,11 @@ export class MarketOrders {
       }
       const sellOrders = _.filter(orders, {action:'SELL'});
       const buyOrdres = _.filter(orders, {action:'BUY'});
-      const stopLoss = sellOrders.filter(function (item) {
+   /*   const stopLoss = sellOrders.filter(function (item) {
         return item.stopPrice
       });
-
-      let newState = OrdersState.NONE;
+*/
+    /*  let newState = OrdersState.NONE;
 
       if(buyOrdres.length && sellOrders.length) newState = OrdersState.BUYING_SELLING;
       else if(stopLoss.length ) {
@@ -84,7 +84,7 @@ export class MarketOrders {
         else newState = OrdersState.DUAL_BUY;
       }
 
-      if(this.state$.getValue() !== newState) this.state$.next(newState);
+      if(this.state$.getValue() !== newState) this.state$.next(newState);*/
 
 
     })
@@ -97,12 +97,12 @@ export class MarketOrders {
   get buyOrders() {
     const activeOrders = this.openOrders$.getValue();
      return activeOrders.filter(function (item) {
-      return item.action === 'BUY';
+      return item.orderType === 'BUY';
     });
   }
   get sellOrders() {
      return this.openOrders$.getValue().filter(function (item) {
-      return item.action === 'SELL'
+      return item.orderType === 'SELL'
     });
   }
 

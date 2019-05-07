@@ -8,7 +8,7 @@ import {runDogScript} from './script-analytics';
 import {VOMarketCap} from '../../amodels/app-models';
 import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {Router} from '@angular/router';
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 
 @Component({
   selector: 'app-run-watchdogs',
@@ -28,7 +28,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   counter = 0;
-  watchDogs: WatchDog[] = [];
+  watchDogs: MarketOrderModel[] = [];
   isRunning: boolean;
   progress: number;
   seconds: number;
@@ -80,7 +80,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub2.unsubscribe();
   }
 
-  onEditDog(dog: WatchDog) {
+  onEditDog(dog: MarketOrderModel) {
 
     this.router.navigateByUrl('/email-service/dog-edit/' + dog.id);
 
@@ -99,7 +99,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.counter++;
 
-    let ar: WatchDog[] = this.watchDogs.filter(function (item) {
+   /* let ar: MarketOrderModel[] = this.watchDogs.filter(function (item) {
       return item.isActive;
     });
     let results: string[] = [];
@@ -107,7 +107,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     let subjects: string[] = [];
 
     ar.forEach(function (item) {
-      /* let newValue = newValues[item.coin];
+      /!* let newValue = newValues[item.coin];
       // let oldValue = item.marketCap;
       // let script = item.scriptText;
 
@@ -120,10 +120,10 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
            results.push(' end '+ item.dogName +"\n\r");
          }
        }//else console.warn(script ,oldValue, newValue);
- */
+ *!/
     });
-
-
+*/
+/*
     console.log('results ', subjects);
 
     if (subjects.length === 0) return;
@@ -134,7 +134,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log(res);
       if (res && res.message) this.snakBar.open(res.message, 'x', {duration: 3000});
       else this.snakBar.open('Error send email', 'x', {duration: 3000});
-    });
+    });*/
   }
 
 
@@ -151,7 +151,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  onScriptClick(dog: WatchDog) {
+  onScriptClick(dog: MarketOrderModel) {
     this.router.navigateByUrl('/email-service/edit-script/' + dog.id);
   }
 
@@ -159,7 +159,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.marketCap.refresh();
   }
 */
-  onDogClick(dog: WatchDog) {
+  onDogClick(dog: MarketOrderModel) {
     this.router.navigateByUrl('/email-service/edit-watchdogs/' + dog.id);
   }
 
@@ -206,7 +206,7 @@ export class RunWatchdogsComponent implements OnInit, AfterViewInit, OnDestroy {
        let time = new Date().toLocaleTimeString();
        let errors:string[] =[]
 
-       let ar:WatchDog[] = this.watchDogs;
+       let ar:MarketOrderModel[] = this.watchDogs;
      /!*  ar.forEach(function (item) {
          let market = markets[item.symbol];
          if(market){

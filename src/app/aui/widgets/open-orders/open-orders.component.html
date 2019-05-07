@@ -13,7 +13,7 @@
                 <small>{{order.base}}_{{order.coin}}</small>
             </td>
             <td >
-                <span class="{{order.action==='SELL'?'red':'green'}}">{{order.action}}</span>
+                <span class="{{order.orderType==='SELL'?'red':'green'}}">{{order.orderType}}</span>
             </td>
             <td>
                 <span>${{order.amountCoin | coin2us:order.coin | async}}</span>

@@ -1,8 +1,13 @@
 import {VOOrder} from '../amodels/app-models';
 import {ApiPublicBinance} from '../a-core/apis/api-public/api-public-binance';
+import {Observable} from 'rxjs/internal/Observable';
+import {filter} from 'rxjs/operators';
 
 export class UTILS {
 
+  static clearNull(obs: Observable<any>) {
+    return obs.pipe(filter(o => !!o));
+  }
   static decimals: { [symbol: string]: { rateDecimals: number, amountDecimals: number } } = {};
 
   static arrayToObject(ar: any[]): any {// {[key:string]:number | string[]}  {

@@ -43,7 +43,7 @@ export class MarketStats {
 
     history.forEach(function (item: VOOrder) {
 
-      if (item.action === 'BUY') {
+      if (item.orderType === 'BUY') {
         amountCoinBuy += item.amountCoin;
         amountBaseBuy += item.amountCoin * item.rate;
         if (amountBaseBuy > maxBuy) maxBuy = amountBaseBuy;

@@ -12,7 +12,7 @@ import {UtilsBooks} from '../../../acom/utils-books';
 
 import {UserLoginService} from '../../services/user-login.service';
 import {type} from 'os';
-import {WatchDog} from '../../../amodels/watch-dog';
+import {MarketOrderModel} from '../../../amodels/market-order-model';
 import * as moment from 'moment';
 import {UTILS} from '../../../acom/utils';
 import {ApiPublicBinance} from '../api-public/api-public-binance';
@@ -238,6 +238,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
           symbol: item.asset,
           available: +item.free,
           pending: +item.locked,
+          balance: +item.locked + +item.free,
           address: ''
         })
       });

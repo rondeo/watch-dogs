@@ -9,7 +9,7 @@ import {StorageService} from '../../services/app-storage.service';
 import {ApiPublicBittrex} from '../api-public/api-public-bittrex';
 import {UtilsBooks} from '../../../acom/utils-books';
 import {UserLoginService} from '../../services/user-login.service';
-import {WatchDog} from '../../../amodels/watch-dog';
+import {MarketOrderModel} from '../../../amodels/market-order-model';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {Subject} from 'rxjs/internal/Subject';
@@ -26,7 +26,7 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
     super(userLogin);
   }
 
- /* sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
+ /* sellCoin(sellCoin: MarketOrderModel): Observable<MarketOrderModel> {
     if (!sellCoin.coinUS) throw new Error(' need coin price')
     return this.getBalance(sellCoin.coin).switchMap(balance => {
       // console.log(balance);
@@ -198,15 +198,16 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
   downloadBalances(): Observable<VOBalance[]> {
     let uri = 'https://bittrex.com/api/v1.1/account/getbalances';
     return this.call(uri, {}).pipe(map(res => {
-      console.log(res);
+     //  console.log(res);
       return res.result.map(function (item) {
-        return {
+        return new VOBalance( {
+          exchange: 'bittrex',
           symbol: item.Currency,
           address: item.CryptoAddress,
           balance: item.Balance,
           available: item.Available,
           pending: item.Pending
-        }
+        })
       })
 
     }))

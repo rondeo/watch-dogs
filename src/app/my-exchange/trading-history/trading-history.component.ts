@@ -79,7 +79,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
      let uuid = order.uuid;
 
-     if (!confirm('Cancel order ' + order.action + ' ' + order.amountUS + ' ' + order.priceUS + '?')) return;
+     if (!confirm('Cancel order ' + order.orderType + ' ' + order.amountUS + ' ' + order.priceUS + '?')) return;
 
      api.cancelOrder(uuid).toPromise().then(res => {
        console.log(res);
@@ -170,8 +170,8 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
     this.ordersHistory.forEach(function (item) {
       totalFee += item.fee;
-      if (item.action === 'BUY') totalBuy += (item.amountCoin * item.rate);
-      else if (item.action === 'SELL') totalSell += (item.amountCoin * item.rate);
+      if (item.orderType === 'BUY') totalBuy += (item.amountCoin * item.rate);
+      else if (item.orderType === 'SELL') totalSell += (item.amountCoin * item.rate);
       else console.error(' no isActive ', item);
     });
 
@@ -194,7 +194,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
       //  amountUS: MATH.round(order.amountBase * priceBaseUS),
       priceUS: +(order.rate * priceBaseUS).toPrecision(4),
       rate: order.rate,
-      action: order.action,
+      orderType: order.orderType,
       isOpen: order.isOpen,
       coin: order.coin,
       base: order.base,
@@ -218,7 +218,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
         amountBase: item.amountBase,
         amountCoin: item.amountCoin,
         rate: item.rate,
-        action: item.action,
+        action: item.orderType,
         fee: item.fee,
         isOpen: item.isOpen
       };

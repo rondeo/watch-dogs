@@ -6,13 +6,14 @@ import {reject} from 'q';
 
 import {UtilsBooks} from '../../../acom/utils-books';
 import {LoginStatus, UserLoginService} from '../../services/user-login.service';
-import {WatchDog} from '../../../amodels/watch-dog';
+import {MarketOrderModel} from '../../../amodels/market-order-model';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {BehaviorSubjectMy} from '../../../acom/behavior-subject-my';
 import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {filter} from 'rxjs/operators';
 
 export abstract class ApiPrivateAbstaract {
 
@@ -33,7 +34,7 @@ export abstract class ApiPrivateAbstaract {
     }, 5 * 60000);
   }
 
-  /* sellCoin(sellCoin: WatchDog): Observable<WatchDog> {
+  /* sellCoin(sellCoin: MarketOrderModel): Observable<MarketOrderModel> {
      if (!sellCoin.coinUS) throw new Error(' need coin price')
      return this.getBalance(sellCoin.coin).switchMap(balance => {
        // console.log(balance);
@@ -220,7 +221,7 @@ export abstract class ApiPrivateAbstaract {
       this.balancesSub = new BehaviorSubject(null);
       this.refreshBalances();
     }
-    return this.balancesSub.asObservable();
+    return this.balancesSub.pipe(filter(res => !!res));
   }
 
   balance$(symbol: string): Observable<VOBalance> {

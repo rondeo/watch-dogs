@@ -264,6 +264,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
         bal.exchange = exchange;
         bal.available = +res[str];
         bal.pending = 0;
+        bal.balance = bal.available;
         bal.symbol = str;
         out.push(bal)
       }

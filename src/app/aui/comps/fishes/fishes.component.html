@@ -37,7 +37,7 @@
                     <td><span (click)="sortOnClick('timestamp')" class="btn">Time</span></td>
                 </tr>
                 <tr *ngFor="let fish of fishes">
-                    <td>{{fish.action}}</td>
+                    <td>{{fish.orderType}}</td>
                     <td>
                         <small>$</small>
                         {{fish.amountUS.toLocaleString()}}

@@ -281,7 +281,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     try {
 
       const order = await api.buyLimit2(this.market, amount, rateBuy);
-      msg = 'New Order ' + order.action + ' ' + order.isOpen ? 'Open' : 'Closed';
+      msg = 'New Order ' + order.orderType + ' ' + order.isOpen ? 'Open' : 'Closed';
       this.snackBar.open(msg, 'x', {duration: 30000});
       // api.refreshAllOpenOrders();
       // this.onNewOrder(order);
@@ -344,7 +344,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
       this.sub3 = api.openOrders$(base, coin).subscribe(orders => {
         let sum = 0;
         orders.forEach(function (item) {
-          if (item.action === 'BUY') sum += item.amountCoin;
+          if (item.orderType === 'BUY') sum += item.amountCoin;
         });
         this.pendingBaseUS = Math.round(priceCoin * sum);
         this.calculateBase();

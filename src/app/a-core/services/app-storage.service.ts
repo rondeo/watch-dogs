@@ -108,17 +108,7 @@ export class StorageService {
     return this.saveSelectedMC();
   }
 
-  async upsertWatchDog(wd: VOWatchdog) {
-    const exists = await this.getWatchDogByID(wd.id);
-    if (!exists) this.watchDogs.push(wd);
-    return this.saveWatchDogs();
-  }
-
-  async getWatchDogByID(id: string) {
-    const wd = await this.getWatchDogs();
-    return _.find(wd, {id: id});
-  }
-
+/*
   async getWatchDogs(): Promise<VOWatchdog[]> {
     if (this.watchDogs) return Promise.resolve(this.watchDogs);
     else return this.select(this.WATCH_DOGS).then(res => {
@@ -132,6 +122,7 @@ export class StorageService {
     if (this.watchDogs) return this.upsert(this.WATCH_DOGS, this.watchDogs);
     else throw new Error('no watchdogs to save');
   }
+*/
 
   keys() {
     return localforage.keys();

@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 
 
 @Component({
@@ -19,7 +19,7 @@ import {WatchDog} from '../../amodels/watch-dog';
 })
 export class WatchdogEditComponent implements OnInit {
 
-  watchDog: WatchDog = new WatchDog(VOWATCHDOG);
+  watchDog: MarketOrderModel = new MarketOrderModel(VOWATCHDOG);
 
   reports: string;
   bases: string[] = ['BTC', 'USDT', 'ETH'];
@@ -44,19 +44,19 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   async initAsync() {
-    this.selectedCoins = await this.storage.getSelectedMC();
+   /* this.selectedCoins = await this.storage.getSelectedMC();
     let id = this.route.snapshot.paramMap.get('uid');
 
     let wd = await this.botsService.getWatchDogById(id);
 
     if (!wd) {
-      wd = new WatchDog(VOWATCHDOG);
+      wd = new MarketOrderModel(VOWATCHDOG);
       // wd.id = id;
       wd.orderType = OrderType.SELL;
     }
    // if(!wd.sellScripts) wd.sellScripts = [];
    // if(!wd.buyScripts) wd.buyScripts = [];
-    this.watchDog = wd;
+    this.watchDog = wd;*/
   }
 
   async displayMC() {
@@ -107,12 +107,12 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   async saveWatchDog() {
-    try {
+  /*  try {
       await this.botsService.saveWatchDog(this.watchDog);
       this.snackBar.open(this.watchDog.name + ' Saved ', 'x', {duration: 2000});
     } catch (e) {
       this.snackBar.open(e.toString(), 'x', {duration: 2000, panelClass: 'alert-red'});
-    }
+    }*/
   }
 
   onClearReportClick() {

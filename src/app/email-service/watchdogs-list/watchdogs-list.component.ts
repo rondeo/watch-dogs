@@ -8,7 +8,7 @@ import {StorageService} from '../../a-core/services/app-storage.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 
 
 @Component({
@@ -19,7 +19,7 @@ import {WatchDog} from '../../amodels/watch-dog';
 export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   orderType: string;
-  watchDogs: WatchDog[];
+  watchDogs: MarketOrderModel[];
   MC: { [symbol: string]: VOMarketCap };
 
   isBotsRunning: boolean;
@@ -36,7 +36,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
 
   dryRunDogs() {
-    this.botsService.dryRun(this.orderType);
+    // this.botsService.dryRun(this.orderType);
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -51,15 +51,7 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
   }
 
   initSellBots() {
-    this.botsService.isSellRunning$().subscribe(isRunning => {
-      this.isBotsRunning = isRunning;
-    });
 
-    this.botsService.allWatchDogs$().subscribe(wds => {
-      this.watchDogs = wds.filter(function (item) {
-        return item.orderType === OrderType.SELL;
-      });
-    });
   }
 
 
@@ -80,27 +72,27 @@ export class WatchdogsListComponent implements OnInit, OnDestroy {
 
   }
 
-  async onDeleteClick(dog: WatchDog) {
+  async onDeleteClick(dog: MarketOrderModel) {
     console.log(dog);
-    if (!confirm('You want to delete Watchdog ' + dog.name + '?')) return;
-    this.botsService.deleteWatchDogById(dog.id);
+   //  if (!confirm('You want to delete Watchdog ' + dog.name + '?')) return;
+   // this.botsService.deleteWatchDogById(dog.id);
   }
 
-  onEditClick(dog: WatchDog) {
+  onEditClick(dog: MarketOrderModel) {
     this.router.navigateByUrl('/email-service/watchdog-edit/' + dog.id);
   }
 
   startStopBots() {
-    if (!this.isBotsRunning) {
+   /* if (!this.isBotsRunning) {
       if (this.orderType === 'SELL') this.botsService.startSellBots();
     } else {
       if (this.orderType === 'SELL') this.botsService.stopSellBots();
     }
-
+*/
   }
 
-  isActiveClick(dog: WatchDog) {
-    dog.isActive = !dog.isActive;
-    this.botsService.save();
+  isActiveClick(dog: MarketOrderModel) {
+   //// dog.isActive = !//dog.isActive;
+   //  this.botsService.save();
   }
 }

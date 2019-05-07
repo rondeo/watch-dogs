@@ -144,13 +144,13 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
     return this.call(url, null).pipe(map((res: any[]) => res.map(function (item: any) {
       if (item.currency === 'USD') item.currency = 'USDT';
-      return {
+      return new VOBalance({
         exchange: exchange,
         symbol: item.currency,
         balance: +item.available + (+item.reserved),
         available: +item.available,
-        pending: 0
-      };
+        pending: +item.reserved
+      });
     })));
   }
 

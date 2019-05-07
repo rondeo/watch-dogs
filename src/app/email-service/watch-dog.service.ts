@@ -36,8 +36,8 @@ export class WatchDogService {
   async refreshWatchdogs() {
     if (this.isloading) return;
 
-    const sellCoins: VOWatchdog[] = <VOWatchdog[]>await this.storage.getWatchDogs();
-    this.watchDogsSub.next(sellCoins);
+   // const sellCoins: VOWatchdog[] = <VOWatchdog[]>await this.storage.getWatchDogs();
+   // this.watchDogsSub.next(sellCoins);
 
 
 
@@ -78,7 +78,7 @@ export class WatchDogService {
     })*/
   }
 
-  async saveWatchDog(watchDog: VOWatchdog): Promise<any> {
+  /*async saveWatchDog(watchDog: VOWatchdog): Promise<any> {
     let dogs: VOWatchdog[] = this.watchDogsSub.getValue();
     if (!dogs) dogs = [];
     let exists: VOWatchdog = dogs.find(function (item) {
@@ -91,7 +91,7 @@ export class WatchDogService {
 
    return this.storage.saveWatchDogs(dogs);
 
-  }
+  }*/
 
 
  /* async saveWatchDogs(): Promise<any> {
@@ -140,7 +140,7 @@ export class WatchDogService {
     return this.auth.post(url, {email, scriptsActive, scriptsUnactive, emailActive, emailUnactive})*/
  // }
 
-  async deleteWatchdog(dog: VOWatchdog): Promise<any> {
+  /*async deleteWatchdog(dog: VOWatchdog): Promise<any> {
     let dogs: VOWatchdog[] = this.watchDogsSub.getValue();
 
     for (let i = dogs.length - 1; i >= 0; i--) {
@@ -149,5 +149,5 @@ export class WatchDogService {
     this.watchDogsSub.next(dogs);
 
     return this.storage.saveWatchDogs(dogs);
-  }
+  }*/
 }

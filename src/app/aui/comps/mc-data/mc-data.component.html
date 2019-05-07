@@ -7,7 +7,7 @@
     <small>r</small>
     <span>{{coinMC.rank}}</span>
     &nbsp;<small>B</small>
-    <span>{{coinMC.price_btc?coinMC.price_btc:'--'}}</span>
+    <span>{{coinMC.price_btc?(coinMC.price_btc.toString().substr(0, 9)):'--'}}</span>
     &nbsp;
     <small> $</small>
     <span>{{coinMC.price_usd | myUs}}</span>

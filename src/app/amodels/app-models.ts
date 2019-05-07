@@ -49,7 +49,12 @@ export class VOTransaction {
   hex?: string;
 }
 
-
+export enum OrderType {
+  NONE = '',
+  SELL = 'SELL',
+  BUY = 'BUY',
+  STOP_LOSS = 'STOP_LOSS'
+}
 
 export const VOORDER: VOOrder = {
   uuid: '',
@@ -57,7 +62,7 @@ export const VOORDER: VOOrder = {
   base: '',
   coin: '',
   rate: 0,
-  action: '',
+  orderType: OrderType.NONE,
   market:''
 };
 
@@ -65,7 +70,7 @@ export interface VOOrder {
   uuid: string;
   isOpen: boolean;
   message?: string;
-  action?: string;
+  orderType?: OrderType;
   type?: string;
   date?: string;
   timestamp?: number;
@@ -487,6 +492,7 @@ export class VOBalance {
   exchange: string;
   available: number;
   pending: number;
+  balance?: number;
   balanceUS?: number;
   address?: string;
   index?: number;
@@ -539,30 +545,21 @@ export class WalletModel {
 
 }
 */
-export enum OrderType {
-  SELL = 'SELL',
-  BUY = 'BUY'
-}
+
 
 export class VOWatchdog {
-  id: string;
   exchange: string;
-  base: string;
-  coin: string;
+  market: string;
   orderType: OrderType;
-  name: string;
-  isActive: boolean;
-  // isEmail: boolean;
-  results: string[] = [];
-  sellScripts: string[] = [];
-  buyScripts: string[] = [];
-  amount: number;
-  orderID: string;
-  _status: WatchDogStatus;
-
+  isLive: boolean;
+  amountUS: number;
+  results?: string[] = [];
+  sellScripts?: string[] = [];
+  buyScripts?: string[] = [];
+  orderID?: string;
   constructor(obj: any) {
     if (obj) for (let str in obj) this[str] = obj[str];
-    //  if(obj.action)this.orderType = obj.action
+    //  if(obj.orderType)this.orderType = obj.orderType
   }
 }
 
@@ -571,7 +568,7 @@ export const VOWATCHDOG = new VOWatchdog({});
 
 /*
 
-export class WatchDog {
+export class MarketOrderModel {
   uid: string;
   coinId: string;
   dogName: string;

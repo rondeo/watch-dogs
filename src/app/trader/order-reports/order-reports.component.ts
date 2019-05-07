@@ -44,13 +44,9 @@ export class OrderReportsComponent implements OnInit {
   market: string;
   exchange: string;
   dataName = '-logs';
-
   subBot;
-
   currentBot: MarketBot;
-
   isLive: boolean;
-
   ngOnInit() {
 
     this.subBot = this.followOrder.botsSub.asObservable().pipe(
@@ -59,7 +55,7 @@ export class OrderReportsComponent implements OnInit {
           return {
             exchange: item.exchange,
             market: item.market,
-            reason: item.reason,
+           // reason: item.reason,
             x: 'X'
           };
         });
@@ -108,18 +104,18 @@ export class OrderReportsComponent implements OnInit {
   onBuyClick() {
     const bot = this.currentBot;
     if (!bot) return;
-    bot.buyCoinInstant(0).then(res => {
+   /* bot.buyCoinInstant().then(res => {
       this.showBotHistory();
-    })
+    })*/
   }
 
   onSellClick() {
     const bot = this.currentBot;
     if (!bot) return;
     // const reason = prompt('Reason');
-    bot.sellCoinInstant(0).then(res => {
+   /* bot.sellCoinInstant(0).then(res => {
       this.showBotHistory();
-    })
+    })*/
   }
 
 
@@ -241,8 +237,8 @@ export class OrderReportsComponent implements OnInit {
     const exist = _.find(bots, {market: this.market});
     if (!exist) return;
     if (confirm('Delete  history ' + this.market + '?')) {
-      await exist.deleteHistory();
-      this.showBotHistory();
+      //await exist.deleteHistory();
+      // this.showBotHistory();
     }
   }
 

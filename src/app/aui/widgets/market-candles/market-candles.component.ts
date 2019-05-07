@@ -47,9 +47,12 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
   }
 
   downloadCandles() {
-    if (!this.exchange || !this.market) return;
+    const api = this.apisPublic.getExchangeApi(this.exchange)
+    if (!api || !this.market) return;
 
-    this.apisPublic.getExchangeApi(this.exchange).downloadCandles(this.market, this.candlesInterval, 200)
+
+
+      api.downloadCandles(this.market, this.candlesInterval, 200)
       .then(candles => {
         this.onCandles.emit(candles);
         if (!candles) {
@@ -57,10 +60,11 @@ export class MarketCandlesComponent implements OnInit, OnChanges {
           this.volumes = null;
           return;
         }
+        const rate = _.last(candles).close;
         this.candles = candles;
         this.closes = CandlesAnalys1.closes(candles);
         this.volumes = candles.map(function (o) {
-          return o.open > o.close ? -o.Volume : o.Volume;
+          return (o.open > o.close ? -o.Volume : o.Volume) * rate;
         });
       });
     if (this.inBrowser) {

@@ -14,7 +14,7 @@ import {VOLineGraph} from '../../aui/comps/line-graph/line-graph.component';
 import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {MovingAverage} from '../../acom/moving-average';
 
-import {WatchDog} from '../../amodels/watch-dog';
+import {MarketOrderModel} from '../../amodels/market-order-model';
 import {ShowExternalPageService} from '../../a-core/services/show-external-page.service';
 
 
@@ -27,7 +27,7 @@ import {ShowExternalPageService} from '../../a-core/services/show-external-page.
 export class WatchdogTestComponent implements OnInit {
 
   private uid: string;
-  watchDog: WatchDog = new WatchDog(new VOWatchdog({}));
+  watchDog: MarketOrderModel = new MarketOrderModel(new VOWatchdog({}));
   MC: VOMarketCap;
   scripts: string[];
   exchange: string;
@@ -58,11 +58,11 @@ export class WatchdogTestComponent implements OnInit {
 
   async initAsync() {
     if (!this.uid) throw new Error(' no id ');
-    this.watchDog = await this.botsService.getWatchDogById(this.uid);
-    if (!this.watchDog) throw new Error(' no WD for ' + this.uid);
+   // this.watchDog = await this.botsService.getWatchDogById(this.uid);
+  //  if (!this.watchDog) throw new Error(' no WD for ' + this.uid);
    // this.scripts = this.watchDog.sellScripts;
-    this.exchange = this.watchDog.exchange;
-    this.market = this.watchDog.base + '_' + this.watchDog.coin;
+  //  this.exchange = this.watchDog.exchange;
+   // this.market = this.watchDog.base + '_' + this.watchDog.coin;
 
     // console.log(this.watchDog);
     //  this.scriptText = this.scripts.join('<br>');

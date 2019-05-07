@@ -54,7 +54,7 @@ export class UsdtBtcBot {
       return;
     }
      /*  const progressOrders = this.currentOrders.filter(function (item) {
-      return !item.action;
+      return !item.orderType;
     });*/
 
    /* if (progressOrders.length) {

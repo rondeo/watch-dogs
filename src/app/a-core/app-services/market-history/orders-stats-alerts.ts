@@ -43,7 +43,7 @@ export class OrdersStatsAlerts {
     let bought = 0;
     let sold = 0;
     ar.forEach(function (o) {
-      o.action === 'BUY' ? bought += o.amountUS : sold += o.amountUS;
+      o.orderType === 'BUY' ? bought += o.amountUS : sold += o.amountUS;
     });
 
     const volPerMinute = 60 * (bought + sold) / (to - from);

@@ -27,7 +27,7 @@ export class WatchDogShared extends VOWatchdog {
 
   constructor(public wd: VOWatchdog) {
     super(wd);
-    this.wdId = wd.exchange + '-' + wd.base + '-' + wd.coin;
+  //  this.wdId = wd.exchange + '-' + wd.base + '-' + wd.coin;
     this.subscribeForBalances();
   }
 
@@ -107,12 +107,15 @@ export class WatchDogShared extends VOWatchdog {
     this.sub1 = null;
     if (this.sub2) this.sub2.unsubscribe();
     this.sub2 = null;
-    StorageService.instance.remove(this.wdId + '-errors');
-    StorageService.instance.remove(this.wdId + '-history');
+   //  StorageService.instance.remove(this.wdId + '-errors');
+   //  StorageService.instance.remove(this.wdId + '-history');
+
   }
 
+
+
   toJSON() {
-    return {
+    /*return {
       id: this.id,
       orderID: this.orderID,
       exchange: this.exchange,
@@ -126,7 +129,7 @@ export class WatchDogShared extends VOWatchdog {
       buyScripts: this.buyScripts,
       amount: this.amount,
       _status: this._status
-    }
+    }*/
 
   }
 }

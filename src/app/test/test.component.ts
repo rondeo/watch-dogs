@@ -95,16 +95,16 @@ export class TestComponent implements OnInit {
   running = false;
 
   async saveCurrentAction(action: string) {
-    const actionValues = (await this.storage.select('action-values')) || [];
+    const actionValues = (await this.storage.select('orderType-values')) || [];
     const exists = UTILS.find(this.currentValues, actionValues);
     if (exists) {
       console.log(exists);
       return;
     }
-    this.currentValues.action = action;
+    this.currentValues.orderType = action;
     actionValues.push(this.currentValues);
-    return this.storage.upsert('action-values', actionValues);
-    this.storage.upsert('action-values', this.currentValues);
+    return this.storage.upsert('orderType-values', actionValues);
+    this.storage.upsert('orderType-values', this.currentValues);
   }
 
   ngOnInit() {
@@ -185,12 +185,12 @@ export class TestComponent implements OnInit {
     // const result = await CandlesAnalys1.createState(this.candles);
    /* this.patterns = CandlesAnalys1.createPattern(this.patterns, result);
 
-    const action = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
-    if (action) console.warn(action);
+    const orderType = CandlesAnalys1.createAction(this.patterns, this.lastOrder);
+    if (orderType) console.warn(orderType);
 
     // @ts-ignore
-    if (action === 'BUY') this.buyCoin(lastCandle);
-    else if (action === 'SELL') this.sellCoin(lastCandle);
+    if (orderType === 'BUY') this.buyCoin(lastCandle);
+    else if (orderType === 'SELL') this.sellCoin(lastCandle);
     const newPrice = CandlesAnalys1.getVolumePrice(this.patterns);
     console.log(' new price ' + newPrice);*/
   }

@@ -28,6 +28,7 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'market/USDT_BTC', pathMatch: 'full'},
       {path: 'live-trader/:exchange/:market', component: LiveTraderComponent},
+      {path: 'live-trader', component: LiveTraderComponent},
       {path: 'common-markets', component: CommonMarketsComponent},
       {path: 'scan-markets', component: ScanMarketsComponent},
       {path: 'order-reports', component: OrderReportsComponent},

@@ -7,7 +7,7 @@
         <tbody>
         <tr *ngFor="let order of orders">
             <td><small>{{order.timestamp | toDate }}</small></td>
-            <td class="{{order.isOpen?'red':''}}">{{order.action}}</td>
+            <td class="{{order.isOpen?'red':''}}">{{order.orderType}}</td>
             <td><small>{{order.rate}}</small></td>
             <td>{{order.amountCoin | coin2us:order.coin | async}}</td>
         </tr>
