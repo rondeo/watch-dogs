@@ -304,7 +304,7 @@ export class MarketOrderModel extends VOWatchdog {
       results: this.results,
       sellScripts: this.sellScripts,
       buyScripts: this.buyScripts,
-      amountUS: this.amountUS
+      pots: 0
     };
 
   }

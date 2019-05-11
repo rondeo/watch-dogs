@@ -3,7 +3,7 @@ import {ApiMarketCapService} from '../../apis/api-market-cap.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import {StorageService} from '../../services/app-storage.service';
 import {OrdersHistory} from '../market-history/orders-history';
-import {CandlesData} from './candles-data';
+import {CandlesMinutes} from './candles-minutes';
 import * as _ from 'lodash';
 
 import {VOCandle} from '../../../amodels/api-models';
@@ -13,7 +13,7 @@ import * as moment_round from 'moment-round';
 import {Observable, Subject} from 'rxjs';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {skip} from 'rxjs/operators';
+import {filter, skip} from 'rxjs/operators';
 
 @Injectable()
 export class CandlesService {
@@ -30,17 +30,19 @@ export class CandlesService {
     //  setInterval(() => this.updateCandles(), 5 * 6000);
 
 
-    setInterval(()=> this.updateCandles1h(), 15* 60 * 1000)
+    setInterval(() => {
+     this.update5mCandles();
+    }, 20000);
   }
 
 
-  collection: { [id: string]: CandlesData } = {};
+  collection: { [id: string]: CandlesMinutes } = {};
 
   // canlesLength = 240;
   // overlap = 20;
   exchange = 'binance';
 
-  candlesDatas: CandlesData[];
+  candlesDatas: CandlesMinutes[];
 
   // userExclude = 'BCN,STORM,GRS,SC,DENT,NPXS,NCASH,PAX,BCC,FUN,TUSD,HOT,AMB,TRIG';
 
@@ -120,141 +122,159 @@ export class CandlesService {
      }
    }*/
 
-  updateNext1h(markets: string[], candles1h :{[market: string]: BehaviorSubject<VOCandle[]>}){
-   if(!markets.length) return;
-   const market = markets.shift();
-   const sub = candles1h[market];
+  updateNext1h(markets: string[], candles1h: { [market: string]: BehaviorSubject<VOCandle[]> }) {
+    if (!markets.length) return;
+    const market = markets.shift();
+    const sub = candles1h[market];
     console.log('%c ' + market + ' downloading 100 candles 1h', 'color:#ffbf00');
-    this.apisPublic.getExchangeApi('binance').downloadCandles(market,'1h', 100).then(candles =>{
+    this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 100).then(candles => {
       sub.next(candles);
-      setTimeout(()=>this.updateNext1h(markets, candles1h), 20000);
+      setTimeout(() => this.updateNext1h(markets, candles1h), 20000);
     });
   }
 
-  static removeUnused(candlesObj){
+  static removeUnused(candlesObj) {
     let markets = Object.keys(candlesObj).slice(0);
     markets.forEach(function (market) {
       const sub = candlesObj[market];
-      if(!sub.observers.length) delete candlesObj[market];
+      if (!sub.observers.length) delete candlesObj[market];
     });
     return candlesObj;
   }
 
-  updateCandles1h(){
+  updateCandles1h() {
     this.candles1h = CandlesService.removeUnused(this.candles1h);
     const markets = Object.keys(this.candles1h).slice(0);
     this.updateNext1h(markets, this.candles1h);
 
   }
 
-  private candles1h:{[market: string]: BehaviorSubject<VOCandle[]>} = {};
+  private candles1h: { [market: string]: BehaviorSubject<VOCandle[]> } = {};
 
-  candles1h$(market: string){
-    if(!this.candles1h[market]) {
-      const sub = new BehaviorSubject([]);;
+  candles1h$(market: string) {
+    if (!this.candles1h[market]) {
+      const sub = new BehaviorSubject([]);
+      ;
       this.candles1h[market] = sub;
       console.log('%c ' + market + ' downloading 100 candles 1h', 'color:#ffbf00');
-      this.apisPublic.getExchangeApi('binance').downloadCandles(market,'1h', 100).then(candles =>{
+      this.apisPublic.getExchangeApi('binance').downloadCandles(market, '1h', 100).then(candles => {
         sub.next(candles);
       })
     }
     return this.candles1h[market].asObservable().pipe(skip(1));
   }
 
+  update5mCandles(){
+    for(let market in this.candles5m) {
+      if(this.candles5m[market].numSubscribers === 0) {
+        this.candles5m[market].destroy();
+        delete this.candles5m[market];
+      }
+    }
 
-  getCandles5m(market: string){
-    return this.candles5mCache[market].getValue();
+    const ar: CandlesMinutes[] = Object.values(this.candles5m);
+    const now = Date.now();
+   //  console.log(ar);
+    const toUpdate: CandlesMinutes = ar.find(function (item) {
+      return item.expire < now;
+    });
+    if(toUpdate) toUpdate.updateCandles();
+   //  else console.log(' no candles to update');
   }
 
-  private candles5mCache: {[market: string]: BehaviorSubject<VOCandle[]>} = { };
+  private candles5m: { [market: string]: CandlesMinutes } = {};
 
-  candles5m$(market: string){
-    if(!this.candles5mCache[market]){
-      const sub = new BehaviorSubject([]);
-      this.candles5mCache[market] = sub;
-      this.storage.select('candles-' +this.exchange + market +'5m').then((candles: VOCandle[]) =>{
-
-        if(!candles || moment().diff(_.last(candles).to, 'minutes') > 15 || candles.length < 190 ){
-          console.log('%c ' + market + ' downloading 200 candles 5min', 'color:#ffbf00');
-          this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '5m', 200).then(candles =>{
-            const now = moment().valueOf();
-            candles = candles.filter(function (item) {
-              item.time = moment(item.to).format('HH:mm');
-              return item.to < now;
-            });
-            this.storage.upsert('candles-' +this.exchange + market +'5m', candles);
-            sub.next(candles);
-          })
-
-        } else sub.next(candles)
-
-      });
-
-      this.minuteCandles$(market).subscribe(candles1m =>{
-        let candles5m = sub.getValue();
-        if(!candles1m.length || !candles5m.length) return;
-
-       // const from = moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf().;
-
-        /*const last5min = candles1m.filter(function (item) {
-          return item.to
-        })*/
-
-        let lastTime = _.last(candles5m).to;
-
-        let available = _.last(candles1m).to;
-
-        let availableMinutes = moment(available).diff(lastTime, 'minutes');
-      //  console.log(market + ' 5m available ' + availableMinutes +' ' +moment(lastTime).format('HH:mm:ss'));
-
-        if(availableMinutes < 6) return;
-
-
-        const timestamp =  moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf();
-        const from1 = moment(timestamp).subtract(5, 'minutes').valueOf();
-        const from2 = moment(timestamp).subtract(10, 'minutes').valueOf();
-
-        const lastCandles = candles1m.filter(function (item) {
-          return item.to > timestamp;
-        });
-
-       // console.log('5m last candles ' + lastCandles.length);
-
-        const prevCandles = candles1m.filter(function (item) {
-          return item.to < timestamp && item.to > from1;
-        });
-
-        const prev2Candles = candles1m.filter(function (item) {
-          return item.to < from1 && item.to > from2;
-        });
-
-        const prevCandle = CandlesAnalys1.createCandle(prevCandles);
-        const prev2Candle = CandlesAnalys1.createCandle(prev2Candles);
-
-        candles5m = candles5m.filter(function (item) {
-          return item.to < from2;
-        });
-
-        candles5m.push(prev2Candle);
-        candles5m.push(prevCandle);
-
-        if(lastCandles.length > 2){
-          const lastCandle = CandlesAnalys1.createCandle(lastCandles);
-          candles5m.push(lastCandle);
-        }
-
-       // console.log(_.map(candles5m,'time'));
-
-
-      //  console.log(' 5m last 2 '+candles5m[candles5m.length -2].time+ ' ' +_.last(candles5m).time);
-        candles5m = _.takeRight(candles5m, 200);
-
-        sub.next(candles5m);
-        this.storage.upsert('candles-' +this.exchange + market +'5m', candles5m);
-
-      })
+  candles5m$(market: string) {
+    if (!this.candles5m[market]) {
+      this.candles5m[market] = new CandlesMinutes('binance', market, '5m', this.apisPublic, this.storage);
     }
-    return this.candles5mCache[market].asObservable();
+    return this.candles5m[market].candles$.pipe(filter(v => !!v));
+
+    /* const sub = new BehaviorSubject([]);
+     this.candles5mCache[market] = sub;
+     this.storage.select('candles-' +this.exchange + market +'5m').then((candles: VOCandle[]) =>{
+
+       if(!candles || moment().diff(_.last(candles).to, 'minutes') > 15 || candles.length < 190 ){
+         console.log('%c ' + market + ' downloading 200 candles 5min', 'color:#ffbf00');
+         this.apisPublic.getExchangeApi(this.exchange).downloadCandles(market, '5m', 200).then(candles =>{
+           const now = moment().valueOf();
+           candles = candles.filter(function (item) {
+             item.time = moment(item.to).format('HH:mm');
+             return item.to < now;
+           });
+           this.storage.upsert('candles-' +this.exchange + market +'5m', candles);
+           sub.next(candles);
+         })
+
+       } else sub.next(candles)
+
+     });
+
+     this.minuteCandles$(market).subscribe(candles1m =>{
+       let candles5m = sub.getValue();
+       if(!candles1m.length || !candles5m.length) return;
+
+      // const from = moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf().;
+
+       /!*const last5min = candles1m.filter(function (item) {
+         return item.to
+       })*!/
+
+       let lastTime = _.last(candles5m).to;
+
+       let available = _.last(candles1m).to;
+
+       let availableMinutes = moment(available).diff(lastTime, 'minutes');
+     //  console.log(market + ' 5m available ' + availableMinutes +' ' +moment(lastTime).format('HH:mm:ss'));
+
+       if(availableMinutes < 6) return;
+
+
+       const timestamp =  moment().subtract(moment().minutes() % 5, 'minutes').second(0).valueOf();
+       const from1 = moment(timestamp).subtract(5, 'minutes').valueOf();
+       const from2 = moment(timestamp).subtract(10, 'minutes').valueOf();
+
+       const lastCandles = candles1m.filter(function (item) {
+         return item.to > timestamp;
+       });
+
+      // console.log('5m last candles ' + lastCandles.length);
+
+       const prevCandles = candles1m.filter(function (item) {
+         return item.to < timestamp && item.to > from1;
+       });
+
+       const prev2Candles = candles1m.filter(function (item) {
+         return item.to < from1 && item.to > from2;
+       });
+
+       const prevCandle = CandlesAnalys1.createCandle(prevCandles);
+       const prev2Candle = CandlesAnalys1.createCandle(prev2Candles);
+
+       candles5m = candles5m.filter(function (item) {
+         return item.to < from2;
+       });
+
+       candles5m.push(prev2Candle);
+       candles5m.push(prevCandle);
+
+       if(lastCandles.length > 2){
+         const lastCandle = CandlesAnalys1.createCandle(lastCandles);
+         candles5m.push(lastCandle);
+       }
+
+      // console.log(_.map(candles5m,'time'));
+
+
+     //  console.log(' 5m last 2 '+candles5m[candles5m.length -2].time+ ' ' +_.last(candles5m).time);
+       candles5m = _.takeRight(candles5m, 200);
+
+       sub.next(candles5m);
+       this.storage.upsert('candles-' +this.exchange + market +'5m', candles5m);
+
+     })
+   }
+   return this.candles5mCache[market].asObservable();*/
   }
 
   deleteCandles(market: string) {
@@ -292,7 +312,7 @@ export class CandlesService {
         let candles15m = sub.getValue();
         if (!candles15m.length) return;
 
-        const timestamp =  moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();
+        const timestamp = moment().subtract(moment().minutes() % 15, 'minutes').second(0).valueOf();
         const from1 = moment(timestamp).subtract(15, 'minutes').valueOf();
         const from2 = moment(timestamp).subtract(30, 'minutes').valueOf();
 
@@ -320,16 +340,14 @@ export class CandlesService {
         candles15m.push(prev2Candle);
         candles15m.push(prevCandle);
 
-        if(lastCandles.length > 3){
+        if (lastCandles.length > 3) {
           const lastCandle = CandlesAnalys1.createCandle(lastCandles);
           candles15m.push(lastCandle);
         }
 
 
-
-       // console.log(' 15m last 2 ' +candles15m[candles15m.length -2].time + ' ' +_.last(candles15m).time);
-       //  console.log(_.map(candles15m, 'time'));
-
+        // console.log(' 15m last 2 ' +candles15m[candles15m.length -2].time + ' ' +_.last(candles15m).time);
+        //  console.log(_.map(candles15m, 'time'));
 
 
         candles15m = _.takeRight(candles15m, 200);
@@ -339,15 +357,15 @@ export class CandlesService {
         this._mas[market] = null;
         this._closes[market] = null;
 
-        this.storage.upsert('candles-' +this.exchange + market +'15m', candles15m);
+        this.storage.upsert('candles-' + this.exchange + market + '15m', candles15m);
 
       });
 
       this.candles15m[market] = sub;
 
-      this.storage.select('candles-' +this.exchange + market +'15m').then((candles: VOCandle[]) => {
+      this.storage.select('candles-' + this.exchange + market + '15m').then((candles: VOCandle[]) => {
 
-        if(candles) console.log(market + ' 15m ' + moment().diff(_.last(candles).to, 'minutes') + ' min');
+        if (candles) console.log(market + ' 15m ' + moment().diff(_.last(candles).to, 'minutes') + ' min');
 
         if (candles && moment().diff(_.last(candles).to, 'minutes') < 25 && candles.length > 190) {
 
@@ -361,7 +379,7 @@ export class CandlesService {
 
             });
 
-            this.storage.upsert('candles-' +this.exchange + market +'15m', candles);
+            this.storage.upsert('candles-' + this.exchange + market + '15m', candles);
             // const closes = CandlesAnalys1.closes(candles);
             // this.closes15m$(market).next(closes);
             this._volumes[market] = null;
@@ -414,36 +432,11 @@ export class CandlesService {
   statsSub: Subject<string> = new Subject();
 
   async init() {
-    const subscribed = (await this.storage.select('subscribed-candles')) || [];
-    this.candlesDatas = subscribed.map((item: { exchange: string, markets: string[], interval: string }) => {
-      const ctr = new CandlesData(
-        this.apisPublic.getExchangeApi(item.exchange),
-        this.storage,
-        item.interval
-      );
-      ctr.candlesSub.subscribe(data => {
-        this.candlesSub.next(data);
-      });
-      item.markets.forEach(function (market) {
-        ctr.subscribe(market);
-      });
-      return ctr;
-    });
+
   }
 
   saveSubscribed() {
     clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      const data = this.candlesDatas.map(function (item) {
-        return {
-          exchange: item.exchange,
-          markets: item.subscribedMarkets,
-          interval: item.candlesInterval
-        };
-      });
-
-      this.storage.upsert('subscribed-candles', data);
-    }, 5000);
   }
 
   /* async getNewCandles(exchange: string, market: string, candlesInterval: string){
@@ -572,7 +565,7 @@ export class CandlesService {
     if (err.length) {
       console.error(err);
       console.log(market + ' 1m DOWNLOADING 200 candles ');
-      candles = await api.downloadCandles(market,'1m', 200);
+      candles = await api.downloadCandles(market, '1m', 200);
       candles = candles.filter(function (item) {
         return item.to < now;
       });
@@ -586,37 +579,20 @@ export class CandlesService {
   }
 
   getAllSubscriptions(): Observable<{ exchange: string, market: string, candles: VOCandle[] }>[] {
-    const candles: CandlesData[] = Object.values(this.collection);
+    const candles: CandlesMinutes[] = Object.values(this.collection);
     let out = [] = [];
 
-    candles.forEach(function (o) {
-      out = out.concat(o.getAllSubscriptions());
-    });
+
     return out;
   }
 
-  subscribe(exchange: string, market: string, candlesInterval: string)
-    : Observable<{ exchange: string, market: string, candles: VOCandle[] }> {
-    let cdata: CandlesData = _.find(this.candlesDatas, {exchange: exchange, candlesInterval: candlesInterval});
-    if (cdata) cdata.subscribe(market);
-    else {
-      cdata = new CandlesData(
-        this.apisPublic.getExchangeApi(exchange),
-        this.storage,
-        candlesInterval
-      );
-      cdata.subscribe(market);
-      cdata.candlesSub.subscribe(data => {
-        this.candlesSub.next(data);
-      });
-    }
-
-    return this.candlesSub.asObservable();
+  subscribe(exchange: string, market: string, candlesInterval: string) {
+    let cdata: CandlesMinutes = _.find(this.candlesDatas, {exchange: exchange, candlesInterval: candlesInterval});
   }
 
   unsubscribe(exchange: string, market: string, interval: string) {
-    let ctr: CandlesData = this.collection[exchange];
-    ctr.subscribe(market);
+    let ctr: CandlesMinutes = this.collection[exchange];
+    //  ctr.subscribe(market);
   }
 
 

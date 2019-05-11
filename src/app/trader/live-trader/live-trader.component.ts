@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
-import {filter} from 'rxjs/operators';
+import {filter, skip} from 'rxjs/operators';
 import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {MarketOrderModel} from '../../amodels/market-order-model';
 import {UsdtBtcMarket} from '../../a-core/app-services/app-bots-services/usdt-btc-market';
@@ -30,7 +30,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   market: string;
   exchange: string;
   // exchange: string = null;
-  amount = 100;
+  amountPots = 1;
   price: number;
 
   base: string;
@@ -39,7 +39,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   balanceBaseUS: number;
   balanceCoinUS: number;
 
-  stopLossPercent: number = 1;
+  stopLossPercent: number = 2.5;
   stopLoss: number;
 
   currentBot: MarketBot;
@@ -68,14 +68,13 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   bots$: Observable<MarketBot[]>;
   usdtbtcs$: Observable<UsdtBtcMarket[]>;
-  bookBuy: number;
-  bookSell: number;
+
+  currentOrderLiquidPrice: number;
 
   ngOnInit() {
     const params = this.route.snapshot.params;
     this.marketService.exchange$.next(params.exchange);
     this.marketService.market$.next(params.market);
-
     this.bots$ = this.botsService.orders$;
 
     this.usdtbtcs$ = this.botsService.usdtbtc$;
@@ -304,6 +303,12 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     if (this.exchange !== bot.exchange) {
       this.marketService.exchange$.next(bot.exchange);
     }
+
+    const sub = this.marketService.priceBuy$.pipe(skip(1)).subscribe(price => {
+      this.price = price;
+      sub.unsubscribe()
+    });
+
     this.marketService.market$.next(bot.market);
     if(this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
@@ -332,29 +337,32 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
   onBuyClick() {
-    const amountUS = this.amount;
-    const price = this.price;
+    const pots = this.amountPots;
+    let price = +this.price;
+    if(isNaN(price)) return;
+   //  if(!price) price = this.marketService.priceBuy$.getValue();
     const exchange = this.marketService.exchange$.getValue();
     const market = this.marketService.market$.getValue();
     const bot: MarketBot = this.botsService.getBot(exchange, market);
-    bot.setBuyOrder(price, amountUS,this.stopLoss);
+    bot.setBuyOrder(price, pots, this.stopLoss);
+   // bot.addPots(pots);
 
   }
 
   onSellClick() {
-    const amountUS = this.amount;
-    const price = this.price;
+    const pots = this.amountPots;
+    const price = +this.price;
+    if(isNaN(price)) return;
     const exchange = this.marketService.exchange$.getValue();
     const market = this.marketService.market$.getValue();
     const bot: MarketBot = this.botsService.getBot(exchange, market);
-
-    bot.setSellOrder(price, amountUS, this.stopLoss);
+    bot.setSellOrder(price, pots, this.stopLoss);
   }
 
   onAmountChanged() {
-    const amount = this.amount;
-    if(isNaN(amount)) return;
-    this.marketService.amount$.next(this.amount)
+    const pots = this.amountPots;
+    if(isNaN(pots)) return;
+    this.marketService.pots$.next(pots)
 
   }
 
@@ -396,5 +404,26 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   calculateStopLoss(){
     const num = this.price - (this.price * (this.stopLossPercent/100));
     this.stopLoss = MATH.toPrecision(num, 4);//+num.toString().substr(0,this.marketService.marketPrecision)
+  }
+
+  onCurrentLiquidSaveClick(bot: MarketBot) {
+    bot.setNewLiquidPrice();
+    bot.isPriceLiquidEdit = false;
+  }
+
+  onPriceLiquidClick(bot: MarketBot) {
+    bot.isPriceLiquidEdit = true;
+  }
+
+  onCancelEditClick(bot: MarketBot) {
+    bot.isPriceLiquidEdit = false;
+  }
+
+  onBotPriceSellClick(bot: MarketBot) {
+    bot.downloadBooks();
+  }
+
+  onBotSellClick(bot: MarketBot) {
+    bot.sellCoinInstant();
   }
 }

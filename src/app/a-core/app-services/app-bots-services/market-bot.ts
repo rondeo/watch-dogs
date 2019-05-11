@@ -19,13 +19,16 @@ import {OrderType, VOOrder} from '../../../amodels/app-models';
 
 export class MarketBot extends BotBase {
 
-  selected: boolean;
+  selected = false;
+  priceLiquidInput = 0;
+  isPriceLiquidEdit = false;
 
   constructor(
     exchange: string,
     market: string,
+    pots: number,
+    potSize: number,
     public orderType: OrderType,
-    amountUS: number,
     public isLive: boolean,
     storage: StorageService,
     apiPrivate: ApiPrivateAbstaract,
@@ -38,8 +41,9 @@ export class MarketBot extends BotBase {
 
   ) {
 
-    super(exchange, market, amountUS, orderType, apiPrivate, apiPublic, candlesService, storage, marketCap);
+    super(exchange, market, pots, potSize, orderType, apiPrivate, apiPublic, candlesService, storage);
 
+    this.priceLiqud$.subscribe(v => this.priceLiquidInput = v);
     /* this.botInit().then(() => this.start());
     candles15.subscribe$(market).subscribe(candles => {
       console.log('market', candles)
@@ -48,11 +52,15 @@ export class MarketBot extends BotBase {
 
   // lastOrder: { stamp: number, orderType: string, price: number };
   prevPrice: number;
-  interval;
-  sub1;
-  sub2;
   timeout;
 
+
+
+  async setNewLiquidPrice(){
+    console.log(this.priceLiquidInput);
+    this.stopLoss.rate = this.priceLiquidInput;
+    this.priceLiqud$.next(this.priceLiquidInput);
+  }
 
   async tick() {
 

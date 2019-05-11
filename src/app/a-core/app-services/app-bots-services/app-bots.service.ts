@@ -3,20 +3,13 @@ import {StorageService} from '../../services/app-storage.service';
 import {OrderType, VOWatchdog} from '../../../amodels/app-models';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {DatabaseService} from '../../services/database.service';
-import {BehaviorSubjectMy} from '../../../acom/behavior-subject-my';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {GRAPHS} from '../../../acom/grpahs';
 import {VOMCObj} from '../../../amodels/api-models';
 import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {MarketOrderModel} from '../../../amodels/market-order-model';
-import {SellCoinFilling} from './sell-coin-filling';
-import {MovingAverage} from '../../../acom/moving-average';
-import {WatchDogStatus} from './watch-dog-status';
 import {MarketBot} from './market-bot';
 import {CandlesService} from '../candles/candles.service';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {UsdtBtcMarket} from './usdt-btc-market';
 import {BtcUsdtService} from '../alerts/btc-usdt.service';
 
@@ -24,6 +17,8 @@ import {BtcUsdtService} from '../alerts/btc-usdt.service';
 @Injectable()
 export class AppBotsService {
 
+  static potSoizeUS = 100;
+  MC: VOMCObj;
   get orders$() {
     return this.bots$;
   }
@@ -32,7 +27,10 @@ export class AppBotsService {
     return this.usdtbtcSub;
   }
 
+
   private usdtbtcSub: BehaviorSubject<UsdtBtcMarket[]>;
+  private bots$: BehaviorSubject<MarketBot[]> = new BehaviorSubject(null);
+  private runInterval;
 
   constructor(
     private storage: StorageService,
@@ -40,17 +38,37 @@ export class AppBotsService {
     private apisPublic: ApisPublicService,
     private marketCap: ApiMarketCapService,
     private candlesService: CandlesService,
-    private btcusdt: BtcUsdtService,
-
+    private btcusdt: BtcUsdtService
   ) {
+
+    marketCap.getTicker().then(MC => {
+      if(!MC) return;
+      this.MC = MC;
+      this.initBots();
+    });
+
+   const exchanges = apisPrivate.getAllAvailable();
+   const usdts: UsdtBtcMarket[] = exchanges.map(function (item) {
+     return new UsdtBtcMarket(item, apisPublic, apisPrivate, marketCap);
+   });
+   this.usdtbtcSub = new BehaviorSubject(usdts);
+  }
+
+
+  private initBots() {
+    const MC = this.MC;
+    const potSizeUS = AppBotsService.potSoizeUS;
 
     this.storage.select('bots')
       .then(wd => this.bots$.next(wd.map((o: VOWatchdog )=> {
+        const coin = o.market.split('_')[1];
+        const potSize = potSizeUS / MC[coin].price_usd;
         return new MarketBot(
           o.exchange,
           o.market,
+          o.pots,
+          potSize,
           o.orderType,
-          o.amountUS,
           o.isLive,
           this.storage,
           this.apisPrivate.getExchangeApi(o.exchange),
@@ -60,16 +78,7 @@ export class AppBotsService {
           this.btcusdt
         )
       })));
-
-   const exchanges = apisPrivate.getAllAvailable();
-   const usdts: UsdtBtcMarket[] = exchanges.map(function (item) {
-     return new UsdtBtcMarket(item, apisPublic, apisPrivate, marketCap);
-   });
-   this.usdtbtcSub = new BehaviorSubject(usdts);
   }
-
-  private bots$: BehaviorSubject<MarketBot[]> = new BehaviorSubject(null);
-  private runInterval;
 
   getBot(exchange: string, market: string): MarketBot {
     const bots: MarketBot[] = this.bots$.getValue();
@@ -78,11 +87,16 @@ export class AppBotsService {
       return item.exchange === exchange && item.market === market;
     });
     if (!bot) {
+      const MC = this.MC;
+      const potSizeUS = AppBotsService.potSoizeUS;
+      const coin = market.split('_')[1];
+      const potSize = potSizeUS / MC[coin].price_usd;
       bot = new MarketBot(
         exchange,
         market,
-        null,
         0,
+        potSize,
+        OrderType.NONE,
         false,
         this.storage,
         this.apisPrivate.getExchangeApi(exchange),

@@ -77,7 +77,7 @@ export class FollowOrdersService {
         exchange: item.exchange,
         market: item.market,
         orderType: item.orderType,
-        amountUS: item.amountUS,
+        balance: item.balanceCoin$.getValue().balance,
         isLive: item.isLive
       };
     });
@@ -96,8 +96,9 @@ export class FollowOrdersService {
       new MarketBot(
         exchange,
         market,
-        orderType,
+        0,
         100,
+        orderType,
         isLive,
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),

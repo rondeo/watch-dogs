@@ -552,7 +552,7 @@ export class VOWatchdog {
   market: string;
   orderType: OrderType;
   isLive: boolean;
-  amountUS: number;
+  pots: number;
   results?: string[] = [];
   sellScripts?: string[] = [];
   buyScripts?: string[] = [];
