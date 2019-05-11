@@ -142,7 +142,7 @@ export class BotBase {
     this.base = ar[0];
     this.coin = ar[1];
 
-    if(pots) this.pots$.next(pots);
+    if (pots) this.pots$.next(pots);
 
     /*marketCap.ticker$().subscribe(MC => {
       this.mcBase = MC[this.base];
@@ -151,8 +151,8 @@ export class BotBase {
 
     storage.select(this.id + '-orders')
       .then(orders => this.orders$.next(orders.map(function (item) {
-      return new MyOrder(item)
-    })));
+        return new MyOrder(item)
+      })));
 
     console.log('  bot created ' + this.id);
     this.orders$.pipe(filter(orders => !!orders)).subscribe(orders => {
@@ -170,7 +170,7 @@ export class BotBase {
     candles$.subscribe(candles => {
       //  console.log(market, candles);
       this.candles = candles;
-      const last = candles[candles.length -1];
+      const last = candles[candles.length - 1];
       this.lastPrice$.next(last.close);
     });
 
@@ -181,7 +181,7 @@ export class BotBase {
   }
 
 
-  calculateBalanceByOrders(){
+  calculateBalanceByOrders() {
 
   }
 
@@ -260,7 +260,7 @@ export class BotBase {
     this.pots$.next(oldPots);
 
     const amountCoin = pots * this.potSize;
-   //  this.log({action: 'BUY_ORDER', reason: ' qty ' + amountCoin + ' rate ' + rate});
+    //  this.log({action: 'BUY_ORDER', reason: ' qty ' + amountCoin + ' rate ' + rate});
 
     if (!this.isLive) {
       const market = this.market;
@@ -280,9 +280,8 @@ export class BotBase {
         isOpen = true;
         rate = stopLoss - (stopLoss * 0.02);
         const stopPrice = stopLoss;
-
         this.priceLiqud$.next(rate);
-        const stopLossOrder: MyOrder = new MyOrder({market, uuid, rate, stopLoss, orderType, isOpen, timestamp, fee, pots});
+        const stopLossOrder: MyOrder = new MyOrder({market, uuid, rate, stopPrice, orderType, amountCoin, isOpen, timestamp, fee, pots});
         orders.push(stopLossOrder);
       }
 

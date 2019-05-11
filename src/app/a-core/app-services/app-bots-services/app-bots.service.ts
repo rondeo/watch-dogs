@@ -147,7 +147,7 @@ export class AppBotsService {
     return this.allWatchDogsSub.asObservable();
   }
 */
-  private save() {
+  save() {
     console.log('%c saving dogs ' + moment().format('mm:ss'), 'color:green');
     const wds: MarketBot[] = this.getBots();
     const wdsData: VOWatchdog[] = wds.map(function (item) {

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {OrderType, VOOrder} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
@@ -16,6 +16,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {MATH} from '../../acom/math';
 import {Utils} from 'tslint';
 import {UTILS} from '../../acom/utils';
+import {BotEditComponent} from '../../aui/dialogs/bot-edit/bot-edit.component';
 
 @Component({
   selector: 'app-live-trader',
@@ -50,6 +51,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     private router: Router,
    // private apisPublic: ApisPublicService,
     private snackBar: MatSnackBar,
+   private dialog: MatDialog,
    // private marketsHistory: MarketsHistoryService,
    // private candleService: CandlesService,
    // private apisPrivate: ApisPrivateService,
@@ -345,8 +347,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const market = this.marketService.market$.getValue();
     const bot: MarketBot = this.botsService.getBot(exchange, market);
     bot.setBuyOrder(price, pots, this.stopLoss);
-   // bot.addPots(pots);
-
   }
 
   onSellClick() {
@@ -425,5 +425,13 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   onBotSellClick(bot: MarketBot) {
     bot.sellCoinInstant();
+  }
+
+  onEditClick(bot: MarketBot) {
+    const ref = this.dialog.open(BotEditComponent, {height: '400px', width:'600px', data: bot})
+    ref.afterClosed().subscribe(res => {
+     this.botsService.save();
+    })
+
   }
 }

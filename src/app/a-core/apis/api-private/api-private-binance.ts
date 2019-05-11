@@ -429,7 +429,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       this.createLogin().then(cred => {
         this.call(URL, data, type)
           .subscribe(res => sub.next(res), err => sub.error(err));
-      })
+      });
       return sub.asObservable();
     }
 

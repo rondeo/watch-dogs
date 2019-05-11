@@ -40,6 +40,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import {AuthModule} from './a-core/auth/auth.module';
 import {MaterialAppModule} from './aui/material/material-app.module';
+import {DialogsModule} from './aui/dialogs/dialogs.module';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import {MaterialAppModule} from './aui/material/material-app.module';
     UiModule,
     AppServicesModule,
     WidgetsModule,
+    DialogsModule,
     AuthModule.forRoot(),
     RouterModule.forRoot(rootRouterConfig, {useHash: true}),
     EffectsModule.forRoot([AppEffects]),
