@@ -546,13 +546,18 @@ export class WalletModel {
 }
 */
 
+export enum WDType {
+  OFF = 'OFF',
+  SHORT = 'SHORT',
+  LONG = 'LONG'
+}
 
 export class VOWatchdog {
   exchange: string;
   market: string;
-  orderType: OrderType;
-  isLive: boolean;
-  pots: number;
+  wdType: WDType;
+  pots?: number;
+  stopLossPercent?: number;
   results?: string[] = [];
   sellScripts?: string[] = [];
   buyScripts?: string[] = [];

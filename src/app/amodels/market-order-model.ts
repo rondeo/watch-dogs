@@ -1,19 +1,13 @@
-import {OrderType, VOBalance, VOMarketCap, VOWATCHDOG, VOWatchdog} from './app-models';
-import {VOCoinDayValue, VOCoinsDayData} from './api-models';
+import {OrderType, VOWatchdog, WDType} from './app-models';
+import {VOCoinDayValue} from './api-models';
 import {MovingAverage, VOMovingAvg} from '../acom/moving-average';
-import {ɵAnimationStyleNormalizer} from '@angular/animations/browser';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
-import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
-import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
 import {StorageService} from '../a-core/services/app-storage.service';
 import {SellCoinFilling} from '../a-core/app-services/app-bots-services/sell-coin-filling';
-import {IWatchDog, WatchDogStatus} from '../a-core/app-services/app-bots-services/watch-dog-status';
 import {Observable, Subject, Subscription} from 'rxjs';
-import {CandlesService} from '../a-core/app-services/candles/candles.service';
 
 export interface RunResults {
   actiin: string;
@@ -299,8 +293,7 @@ export class MarketOrderModel extends VOWatchdog {
       orderID: this.orderID,
       exchange: this.exchange,
       market: this.market,
-      orderType: this.orderType,
-      isLive: this.isLive,
+      wdType: WDType.OFF,
       results: this.results,
       sellScripts: this.sellScripts,
       buyScripts: this.buyScripts,

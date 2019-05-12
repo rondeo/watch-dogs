@@ -31,7 +31,6 @@
 
 
         <div>
-
             <div>
                 &nbsp;&nbsp;
                 <mat-form-field class="w3">
@@ -172,39 +171,20 @@
                 <td class="w6">Entry</td>
                 <td class="w7">Liquid</td>
                 <td class="w6">Last</td>
-                <td class="w6">Sell Price</td>
-                <td class="w6">Sell</td>
                 <td>edit</td>
                 <td>Del</td>
             </tr>
             <tr *ngFor="let bot of (bots$ | async)">
                 <td (click)="onBotClick(bot)" class="small">{{bot.id}}</td>
                 <td>{{bot.pots$ | async}}</td>
-                <td>{{bot.priceEntry$ | async}}</td>
+                <td>{{bot.priceInit$ | async}}</td>
                 <td>
-                    <span
-                            *ngIf="!bot.isPriceLiquidEdit"
-                            (click)="onPriceLiquidClick(bot)"
-                    >{{bot.priceLiqud$ | async}} </span>
-                    <span *ngIf="bot.isPriceLiquidEdit">
-                          <input class="w5" type="text" [(ngModel)]="bot.priceLiquidInput">
-                                &nbsp;
-                        <small>
-                             <mat-icon [inline]="true" (click)="onCurrentLiquidSaveClick(bot)"
-                                       class="btn">save</mat-icon>
-                            <mat-icon [inline]="true" (click)="onCancelEditClick(bot)" class="btn">clear</mat-icon>
-                        </small>
-                    </span>
+                    <span>{{bot.priceStop$ | async}} </span>
                 </td>
                 <td>
                     {{bot.lastPrice$ | async}}
                 </td>
-                <td>
-                    <span (click)="onBotPriceSellClick(bot)">{{bot.priceSell$ | async}}</span>
-                </td>
-                <td><button (click)="onBotSellClick(bot)" >Sell</button></td>
-
-                <td><mat-icon [ngClass]="bot.isLive?'red':''" class="btn" (click)="onEditClick(bot)">edit</mat-icon></td>
+                <td><mat-icon [ngClass]="(bot.wdType$ | async) === 'OFF'? '':'red'" class="btn" (click)="onEditClick(bot)">edit</mat-icon></td>
                 <td (click)="onDeleteBotClick(bot)">X</td>
             </tr>
             </tbody>

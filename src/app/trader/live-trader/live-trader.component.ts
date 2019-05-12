@@ -315,7 +315,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     if(this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
     bot.selected = true;
-    this.myOrders$ = bot.orders$;
+    this.myOrders$ = bot.ordersHistory$;
     this.setRoute();
   }
 
@@ -428,8 +428,10 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
   onEditClick(bot: MarketBot) {
-    const ref = this.dialog.open(BotEditComponent, {height: '400px', width:'600px', data: bot})
+    const ref = this.dialog.open(BotEditComponent, {height: '400px', width:'600px', data: bot});
+
     ref.afterClosed().subscribe(res => {
+     //  if(!isNaN(res))  bot.pots$.next(res);
      this.botsService.save();
     })
 

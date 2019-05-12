@@ -9,23 +9,30 @@ import {Observable} from 'rxjs/internal/Observable';
 import {filter} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Subject} from 'rxjs/internal/Subject';
+import {CandlesUtils} from '../candles/candles-utils';
 
 export class StopLossOrder {
+  stopLossPercent = 3;
 
   inProgerss: string;
   triggered$: Subject<VOOrder> = new Subject();
   constructor(
     private market: string,
     private apiPrivate: ApiPrivateAbstaract,
-    orders$: BehaviorSubject<VOOrder[]>,
+    openOrders: Observable<VOOrder[]>,
     candles$: Observable<VOCandle[]>,
     balance$: Observable<VOBalance>,
-    private isLive = false
+    private isLive
   ) {
 
-    combineLatest(orders$.pipe(filter(v => (v && v.length !== 0))), candles$)
-      .subscribe(([orders, candles]) => {
-        const stopLosses = orders.filter(function (item) {
+
+
+    combineLatest(openOrders.pipe(filter(v => !!v)), candles$)
+      .subscribe(([stopLoss, candles]) => {
+
+
+
+        /*const stopLosses = orders.filter(function (item) {
           return item.orderType === OrderType.STOP_LOSS
         });
 
@@ -37,7 +44,7 @@ export class StopLossOrder {
           const old = stopLosses[0];
           if(!isLive) {
             orders.splice(orders.indexOf(old), 1);
-            orders$.next(orders);
+            ordersHisory$.next(orders);
             stopLosses.shift();
           } else {
             this.inProgerss = 'CANCEL_EXTRA_STOP_LOSS';
@@ -55,7 +62,7 @@ export class StopLossOrder {
           } else {
             this.resetStopLoss(candles.slice(candles.length - 25), stopLosses[0])
           }
-        }
+        }*/
      // console.log(orders, candles)
     });
 

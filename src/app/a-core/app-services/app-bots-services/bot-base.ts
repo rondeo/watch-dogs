@@ -1,21 +1,19 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {MacdSignal} from './macd-signal';
 import {StorageService} from '../../services/app-storage.service';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {filter, map} from 'rxjs/operators';
+import {filter, skip} from 'rxjs/operators';
 import * as moment from 'moment';
-import {noop} from 'rxjs/internal-compatibility';
-import {OrderType, VOBalance, VOBooks, VOMarketCap, VOOrder, VOWatchdog} from '../../../amodels/app-models';
+import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../../../amodels/app-models';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
 import {CandlesService} from '../candles/candles.service';
 import * as _ from 'lodash';
 import {UtilsBooks} from '../../../acom/utils-books';
 import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {SellOnJump} from './sell-on-jump';
 import {UTILS} from '../../../acom/utils';
 import {VOCandle} from '../../../amodels/api-models';
 import {StopLossOrder} from './stop-loss-order';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {Observable} from 'rxjs/internal/Observable';
 
 
 export enum MCState {
@@ -66,53 +64,70 @@ export class MyOrder implements VOOrder {
 }
 
 export class BotBase {
-  state$: BehaviorSubject<BotState>;
-  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
+  // state$: BehaviorSubject<BotState>;
+//  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
+  static potSizeUS = 50;
   base: string;
   coin: string;
   // mcCoin: VOMarketCap;
   // mcBase: VOMarketCap;
-  isLive: boolean;
 
   // balance: MarketBalance;
-  macdSignal: MacdSignal;
+//   macdSignal: MacdSignal;
   //  stopLossOrder: StopLossOrder;
-  sellOnJump: SellOnJump;
+//  sellOnJump: SellOnJump;
   patterns: any[];
   private logs: any[] = [];
   id: string;
 
 /////////////////////////////////////////////////// new ///////////////
 
+  wdType$:BehaviorSubject<WDType>;
 
-  orders$: BehaviorSubject<VOOrder[]> = new BehaviorSubject(null);
-  balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
+  stopLossPercent$: BehaviorSubject<number> = new BehaviorSubject(2);
+  priceInit$: BehaviorSubject<number> = new BehaviorSubject(0);
+  priceStop$: BehaviorSubject<number> = new BehaviorSubject(0);
   pots$: BehaviorSubject<number> = new BehaviorSubject(0);
 
-  priceEntry$: BehaviorSubject<number> = new BehaviorSubject(0);
-  priceBuy$: BehaviorSubject<number> = new BehaviorSubject(0);
-  priceSell$: BehaviorSubject<number> = new BehaviorSubject(0)
-  priceLiqud$: BehaviorSubject<number> = new BehaviorSubject(0);
+  bookBuy$: BehaviorSubject<number> = new BehaviorSubject(0);
+  bookSell$: BehaviorSubject<number> = new BehaviorSubject(0);
+
   value$: BehaviorSubject<number> = new BehaviorSubject(0);
   books$: BehaviorSubject<VOBooks> = new BehaviorSubject(null);
   lastPrice$: BehaviorSubject<number> = new BehaviorSubject(0);
 
+  // stopLoss$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
+
+  ordersOpen$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+  ordersHistory$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+
+  protected _balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
+
+  get balanceCoin$ (): Observable<VOBalance> {
+    return this._balanceCoin$.pipe(filter(v => !!v));
+  }
+  
+  protected _balanceBase$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
+  get balanceBase$() :Observable<VOBalance> {
+    return this._balanceBase$.pipe(filter(v => !!v));
+  }
+
+  get balanceCoin(): number {
+    return this._balanceCoin$.getValue().balance
+  }
+
   get amountCoin() {
+    const bal = this._balanceCoin$.getValue();
+    if(bal) return bal.balance;
     return (this.pots$.getValue() || 1) * this.potSize;
   }
 
-  get orders(): VOOrder[] {
-    return this.orders$.getValue() || [];
-  }
-
-  get stopLoss(): VOOrder {
-    return this.orders.find(function (item) {
-      return item.orderType === OrderType.STOP_LOSS;
-    });
+  get ordersHistory(): VOOrder[] {
+    return this.ordersHistory$.getValue() || [];
   }
 
   get buyOrder(): VOOrder {
-    return this.orders.find(function (item) {
+    return this.ordersOpen$.getValue().find(function (item) {
       return item.orderType === OrderType.BUY;
     });
   }
@@ -129,42 +144,68 @@ export class BotBase {
     public exchange: string,
     public market: string,
     private pots: number,
-    private potSize: number,
-    public orderType: OrderType,
+    public potSize: number,
+    wdType: WDType,
     public apiPrivate: ApiPrivateAbstaract,
     public apiPublic: ApiPublicAbstract,
     public candlesService: CandlesService,
-    public storage: StorageService,
+    public storage: StorageService
     // public marketCap: ApiMarketCapService
   ) {
     this.id = exchange + '-' + market;
     const ar = market.split('_');
-    this.base = ar[0];
-    this.coin = ar[1];
+    const base = ar[0];
+    const coin = ar[1];
+    this.base = base;
+    this.coin = coin;
+    this.wdType$ = new BehaviorSubject(wdType);
+    if(wdType !== WDType.OFF) this.subscribeForBalancesAndOrders();
 
     if (pots) this.pots$.next(pots);
+
 
     /*marketCap.ticker$().subscribe(MC => {
       this.mcBase = MC[this.base];
       this.mcCoin = MC[this.coin];
     });*/
 
-    storage.select(this.id + '-orders')
-      .then(orders => this.orders$.next(orders.map(function (item) {
+
+
+
+    this.wdType$.subscribe(type => console.log(type));
+    storage.select(this.id + '-orders-history')
+      .then(orders => this.ordersHistory$.next(orders?orders.map(function (item) {
         return new MyOrder(item)
-      })));
+      }):[]));
+
+    storage.select(this.id + '-orders-open')
+      .then(orders => this.ordersOpen$.next(orders?orders.map(function (item) {
+        return new MyOrder(item)
+      }):[]));
 
     console.log('  bot created ' + this.id);
-    this.orders$.pipe(filter(orders => !!orders)).subscribe(orders => {
-      console.log(orders);
+
+    this.ordersHistory$.subscribe(orders => {
+
+      console.log(this.id + ' orders history ', orders);
+
+      const stopLosses =  orders.filter(function (item) {
+        return !!item.stopPrice;
+      });
+
+      if(stopLosses.length > 1) {
+
+      }
+
       const buyOrder = this.buyOrder;
-      if (buyOrder) {
+     /* if (buyOrder) {
         this.priceEntry$.next(buyOrder.rate);
       }
-      const stopLoss = this.stopLoss;
-      if (stopLoss) this.priceLiqud$.next(stopLoss.rate);
+      */
+
 
     });
+
     const candles$ = candlesService.candles5m$(market);
 
     candles$.subscribe(candles => {
@@ -174,12 +215,86 @@ export class BotBase {
       this.lastPrice$.next(last.close);
     });
 
-    this.balanceCoin$.pipe(filter(v => !!v)).subscribe(balance => {
-      console.log(this.id, balance);
+    this.balanceCoin$.subscribe(balance => {
+     // console.log(this.id, balance);
     });
-    this.stopLossController = new StopLossOrder(market, apiPrivate, this.orders$, candles$, this.balanceCoin$)
+
+
+    combineLatest(this.balanceCoin$, this.pots$).pipe(skip(1)).subscribe(([balance, pots]) => {
+      //console.log(balance, pots);
+      const diff = (this.potSize * pots) - balance.balance;
+      console.log(this.id + ' pots diff ' + diff);
+      if(Math.abs(diff) > this.potSize /2) {
+        if(diff > 0 )  this.buyCoinInstant(diff);
+        else this.sellCoinInstant(Math.abs(diff))
+      }
+    });
+
+    this.stopLossController = new StopLossOrder(
+      market,
+      apiPrivate,
+      this.ordersOpen$,
+      candles$,
+      this.balanceCoin$,
+      wdType);
   }
 
+  subscribeForBalancesAndOrders() {
+    const base = this.base;
+    const coin = this.coin;
+
+    this.apiPrivate.openOrdersAll$.subscribe(orders => {
+      const myOrders = orders.filter(function (item) {
+        return item.base === base && item.coin === coin;
+      });
+
+      console.log(this.id + ' open orders   ', myOrders);
+      this.ordersOpen$.next(myOrders);
+    });
+
+    this.apiPrivate.balances$().subscribe(balances => {
+
+      const balanceBase = balances.find(function (item) {
+        return item.symbol === base;
+      });
+      const balanceCoin = balances.find(function(item) {
+        return item.symbol === coin;
+      });
+
+      this.setBalances(balanceBase, balanceCoin);
+    });
+
+    this.apiPrivate.ordersHistory$(this.market).subscribe(orders => {
+      const buyOrders = orders.filter(function (item) {
+        return item.orderType === OrderType.BUY;
+      });
+
+      const sellOrders = orders.filter(function (item) {
+        return item.orderType === OrderType.SELL;
+      });
+
+      this.storage.upsert(this.id + '-orders-history', this.ordersHistory$.getValue());
+      this.ordersHistory$.next(orders);
+    });
+    combineLatest(this.ordersHistory$, this.balanceCoin$).subscribe(([orders, balance]) => {
+      const bal = balance.balance;
+
+      if(orders.length) {
+
+      }
+
+    });
+
+  }
+
+  setBalances(balanceBase: VOBalance, balanceCoin: VOBalance) {
+    console.log(this.id + ' balances  ', balanceBase,  balanceCoin);
+    const bb = this._balanceBase$.getValue();
+    if(!bb || bb.balance !== balanceBase.balance) this._balanceBase$.next(balanceBase);
+    const bc = this._balanceCoin$.getValue();
+    if(!bc || bc.balance !== balanceCoin.balance) this._balanceCoin$.next(balanceCoin);
+
+  }
 
   calculateBalanceByOrders() {
 
@@ -209,12 +324,13 @@ export class BotBase {
     const sellPrice = UtilsBooks.getRateForAmountCoin(books.buy, amount);
     const buyPrice = UtilsBooks.getRateForAmountCoin(books.sell, amount);
     this.marketPrecision = sellPrice.toString().length > buyPrice.toString().length ? sellPrice.toString().length : buyPrice.toString().length;
-    this.priceSell$.next(sellPrice);
-    this.priceBuy$.next(buyPrice);
+    this.bookSell$.next(sellPrice);
+    this.bookBuy$.next(buyPrice);
   }
 
-  /*
+
     async buyCoinInstant(qty: number) {
+    console.log('%c buyCoinInstant  ' + this.id + ' ' + qty, 'color:red');
       if (!qty) qty = this.amountCoin;
 
       if (!qty) {
@@ -222,6 +338,7 @@ export class BotBase {
         this.log({action: 'STOP BUY', reason: ' no QTY'});
         return null;
       }
+
       try {
         const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
         const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
@@ -229,13 +346,12 @@ export class BotBase {
         const order = await this.apiPrivate.buyLimit2(this.market, qty, rate);
         console.log('BUY ORDER RESULT ', order);
         this.log({action: 'BUY_ORDER_RESULT', reason: order.amountCoin + '  ' + order.rate + ' ' + order.isOpen});
-        this.apiPrivate.refreshAllOpenOrders();
+
       } catch (e) {
         this.log({action: 'ERROR', reason: 'buy coin ' + e.toString()});
       }
       return {uuid: 'test'};
     }
-  */
 
   adjustBalance() {
 
@@ -253,48 +369,17 @@ export class BotBase {
     this.pots$.next(oldPots);
   }
 
-  async setBuyOrder(rate: number, pots: number, stopLoss: number) {
+  async setBuyOrder(rate: number, amountCoin: number, stopLoss: number) {
 
-    let oldPots = this.pots$.getValue();
-    oldPots = oldPots + pots;
-    this.pots$.next(oldPots);
-
-    const amountCoin = pots * this.potSize;
+  //  const amountCoin = pots * this.potSize;
     //  this.log({action: 'BUY_ORDER', reason: ' qty ' + amountCoin + ' rate ' + rate});
 
-    if (!this.isLive) {
-      const market = this.market;
-      let uuid = Date.now();
-      let orderType = OrderType.BUY;
-      let isOpen = false;
-      const timestamp = Date.now();
-      let fee = amountCoin * 0.002;
-      const order: MyOrder = new MyOrder({market, uuid, rate, orderType, amountCoin, isOpen, timestamp, fee, pots});
-      const orders = this.orders$.getValue() || [];
-
-      orders.push(order);
-      if (stopLoss) {
-        uuid++;
-        fee = fee * 2;
-        orderType = OrderType.STOP_LOSS;
-        isOpen = true;
-        rate = stopLoss - (stopLoss * 0.02);
-        const stopPrice = stopLoss;
-        this.priceLiqud$.next(rate);
-        const stopLossOrder: MyOrder = new MyOrder({market, uuid, rate, stopPrice, orderType, amountCoin, isOpen, timestamp, fee, pots});
-        orders.push(stopLossOrder);
-      }
-
-      this.orders$.next(orders);
-      this.save();
-      return Promise.resolve();
-    }
     return new Promise(async (resolve, reject) => {
       try {
         const order = await this.apiPrivate.buyLimit2(this.market, amountCoin, rate);
         console.log('BUY ORDER RESULT ', order);
         this.log({action: 'BUY_ORDER_RESULT', reason: order.amountCoin + '  ' + order.rate + ' ' + order.isOpen});
-        this.apiPrivate.refreshAllOpenOrders();
+
       } catch (e) {
         this.log({action: 'ERROR BUY_ORDER_RESULT', reason: e.toString()});
         reject();
@@ -305,13 +390,13 @@ export class BotBase {
 
   async setSellOrder(rate: number, pots: number, stopLoss: number) {
     const amountCoin = pots * this.potSize;
-    this.log({action: 'SELL_ORDER', reason: 'qty ' + amountCoin + 'rate ' + rate + ' live:' + this.isLive});
+   /* this.log({action: 'SELL_ORDER', reason: 'qty ' + amountCoin + 'rate ' + rate + ' live:' + this.isLive});
     if (!this.isLive) return Promise.resolve();
 
     if (!amountCoin) {
       // Promise.resolve(' amount too low ' + this.balance.balanceUS);
       return;
-    }
+    }*/
 
     //  const cancelResult: VOOrder[] = await this.orders.cancelSellOrders();
     /*   this.log({
@@ -323,35 +408,18 @@ export class BotBase {
     const order = await this.apiPrivate.sellLimit2(this.market, amountCoin, rate);
     this.log({action: 'SELL_LIMIT ', reason: 'rate ' + order.rate + ' qty ' + order.amountCoin + ' open ' + order.isOpen});
 
-    this.apiPrivate.refreshAllOpenOrders();
+
     return order;
   }
 
 
-  async sellCoinInstant() {
-    const amountCoin = this.amountCoin;
-    let rate = this.priceSell$.getValue();
+  async sellCoinInstant(qty = 0) {
+    const amountCoin = qty? qty:this.amountCoin;
+    let rate = this.bookSell$.getValue();
     if (!rate) {
       await this.downloadBooks().toPromise();
       await UTILS.wait(0.1);
-      rate = this.priceSell$.getValue();
-    }
-    if (!this.isLive) {
-      const market = this.market;
-      let uuid = Date.now();
-      let orderType = OrderType.SELL;
-      let isOpen = false;
-      const timestamp = Date.now();
-      let fee = amountCoin * 0.002;
-      const pots = amountCoin / this.potSize;
-      const order: MyOrder = new MyOrder({market, uuid, rate, orderType, amountCoin, isOpen, timestamp, fee, pots});
-      const orders = this.orders$.getValue() || [];
-
-      orders.push(order);
-
-      this.orders$.next(orders);
-      this.save();
-      return
+      rate = this.bookSell$.getValue();
     }
 
     // await this.orders.cancelAllOrders();
@@ -442,7 +510,7 @@ export class BotBase {
     const market = this.market;
     const out = Object.assign({time, market}, log);
     //  console.log(out);
-    if (this.isLive) console.log(this.market + ' ' + log.action + ' ' + log.reason);
+   //  if (this.isLive) console.log(this.market + ' ' + log.action + ' ' + log.reason);
     this.logs.push(out);
   }
 
@@ -462,14 +530,14 @@ export class BotBase {
      return amount
    }
  */
-  get state() {
+/*  get state() {
     return this.state$.getValue();
   }
 
   set state(state: BotState) {
     this.state$.next(state);
     this.storage.upsert('state-' + this.exchange + this.market, state);
-  }
+  }*/
 
   destroy() {
     this.stop();
@@ -481,11 +549,13 @@ export class BotBase {
 
   async deleteData() {
     await this.storage.remove(this.id + '-logs');
-    await this.storage.remove(this.id + '-orders');
+    await this.storage.remove(this.id + '-orders-history');
+    await this.storage.remove(this.id + '-orders-open');
   }
 
   async save() {
-    this.storage.upsert(this.id + '-orders', this.orders$.getValue());
+    this.storage.upsert(this.id + '-orders-history', this.ordersHistory$.getValue());
+    this.storage.upsert(this.id + '-orders-open', this.ordersOpen$.getValue());
     if (!this.logs.length) return;
     const logs = await this.getLogs();
     this.logs = [];
@@ -513,9 +583,9 @@ export class BotBase {
     return {
       exchange: this.exchange,
       market: this.market,
-      orderType: this.orderType,
-      isLive: this.isLive,
-      pots: this.pots$.getValue()
+      wdType: this.wdType$.getValue(),
+      pots: this.pots$.getValue(),
+      stopLossPercent: this.stopLossPercent$.getValue()
     }
   }
 

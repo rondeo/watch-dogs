@@ -9,6 +9,7 @@ import {ApiMarketCapService} from '../apis/api-market-cap.service';
 import {UtilsBooks} from '../../acom/utils-books';
 import {filter, map} from 'rxjs/operators';
 import {AppBotsService} from '../app-services/app-bots-services/app-bots.service';
+import {BotBase} from '../app-services/app-bots-services/bot-base';
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +96,7 @@ export class TradeMarketService {
 
     this.marketCap.getTicker().then(mc => {
       const price = mc[base].price_usd;
-      const amount = pots * AppBotsService.potSoizeUS / price;
+      const amount = pots * BotBase.potSizeUS;
       const sellPrice = UtilsBooks.getRateForAmountBase(books.buy, amount);
       const buyPrice = UtilsBooks.getRateForAmountBase(books.sell, amount);
       this.marketPrecision = sellPrice.toString().length > buyPrice.toString().length?sellPrice.toString().length:buyPrice.toString().length;

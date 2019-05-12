@@ -77,7 +77,6 @@ export class OrderReportsComponent implements OnInit {
   }
 
   showBot() {
-    this.isLive = this.currentBot ? this.currentBot.isLive : false;
     this.showBotHistory();
 
   }
@@ -92,7 +91,7 @@ export class OrderReportsComponent implements OnInit {
 
 
   onIsLiveChange(evt) {
-    this.currentBot.isLive = this.isLive;
+   //  this.currentBot.isLive = this.isLive;
     const bots = this.followOrder.botsSub.getValue();
     this.followOrder.saveBots(bots)
   }
@@ -185,10 +184,10 @@ export class OrderReportsComponent implements OnInit {
       return;
     }
 
-    if(this.currentBot.macdSignal){
+    /*if(this.currentBot.macdSignal){
       this.macd1$ = this.currentBot.macdSignal.macd15m$;
       this.macd2$ = this.currentBot.macdSignal.macd30m$;
-    }
+    }*/
 
 
 

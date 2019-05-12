@@ -277,7 +277,7 @@ export class BuySellCoinComponent implements OnInit {
   refreshData(base, coin) {
     const api = this.apisPrivate.getExchangeApi(this.exchange);
     api.refreshBalances();
-    api.refreshAllOpenOrders();
+    // api.refreshAllOpenOrders();
   }
 
 }

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
-import {OrderType, VOWatchdog} from '../../../amodels/app-models';
+import {VOWatchdog, WDType} from '../../../amodels/app-models';
 import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
 import {ApisPublicService} from '../../apis/api-public/apis-public.service';
 import * as _ from 'lodash';
@@ -12,12 +12,11 @@ import {CandlesService} from '../candles/candles.service';
 import {BehaviorSubject} from 'rxjs';
 import {UsdtBtcMarket} from './usdt-btc-market';
 import {BtcUsdtService} from '../alerts/btc-usdt.service';
+import {BotBase} from './bot-base';
 
 
 @Injectable()
 export class AppBotsService {
-
-  static potSoizeUS = 100;
   MC: VOMCObj;
   get orders$() {
     return this.bots$;
@@ -57,7 +56,7 @@ export class AppBotsService {
 
   private initBots() {
     const MC = this.MC;
-    const potSizeUS = AppBotsService.potSoizeUS;
+    const potSizeUS = BotBase.potSizeUS;
 
     this.storage.select('bots')
       .then(wd => this.bots$.next(wd.map((o: VOWatchdog )=> {
@@ -68,8 +67,7 @@ export class AppBotsService {
           o.market,
           o.pots,
           potSize,
-          o.orderType,
-          o.isLive,
+          o.wdType || WDType.OFF,
           this.storage,
           this.apisPrivate.getExchangeApi(o.exchange),
           this.apisPublic.getExchangeApi(o.exchange),
@@ -88,7 +86,7 @@ export class AppBotsService {
     });
     if (!bot) {
       const MC = this.MC;
-      const potSizeUS = AppBotsService.potSoizeUS;
+      const potSizeUS = BotBase.potSizeUS;
       const coin = market.split('_')[1];
       const potSize = potSizeUS / MC[coin].price_usd;
       bot = new MarketBot(
@@ -96,8 +94,7 @@ export class AppBotsService {
         market,
         0,
         potSize,
-        OrderType.NONE,
-        false,
+        WDType.OFF,
         this.storage,
         this.apisPrivate.getExchangeApi(exchange),
         this.apisPublic.getExchangeApi(exchange),

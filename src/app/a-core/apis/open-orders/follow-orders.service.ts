@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../../services/app-storage.service';
 
-import {OrderType, VOOrder} from '../../../amodels/app-models';
+import {OrderType, WDType} from '../../../amodels/app-models';
 import {ApisPrivateService} from '../api-private/apis-private.service';
 import {FollowOpenOrder} from './follow-open-order';
-import {VOCandle} from '../../../amodels/api-models';
 import {CandlesService} from '../../app-services/candles/candles.service';
 import {ApiMarketCapService} from '../api-market-cap.service';
 import {ApisPublicService} from '../api-public/apis-public.service';
@@ -76,9 +75,9 @@ export class FollowOrdersService {
       return {
         exchange: item.exchange,
         market: item.market,
-        orderType: item.orderType,
-        balance: item.balanceCoin$.getValue().balance,
-        isLive: item.isLive
+        isLong: true,
+        balance: item.balanceCoin,
+       WDType
       };
     });
     return this.storage.upsert('bots', tosave);
@@ -98,8 +97,7 @@ export class FollowOrdersService {
         market,
         0,
         100,
-        orderType,
-        isLive,
+        WDType.OFF,
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),

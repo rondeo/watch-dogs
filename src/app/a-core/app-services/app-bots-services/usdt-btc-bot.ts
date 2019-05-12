@@ -217,11 +217,11 @@ export class UsdtBtcBot {
       this.balanceCoin = _.find(balances, {symbol: this.coin});
     });
 
-    this.sub3 = this.apiPrivate.allOpenOrders$()
+    this.sub3 = this.apiPrivate.openOrdersAll$
       .pipe(
         map(orders => {
           console.log(' OPEN ORDERS ', orders);
-          return _.filter(orders, {market:this.market})
+          return orders
         })
       ).subscribe(orders => {
         if (!orders) return;

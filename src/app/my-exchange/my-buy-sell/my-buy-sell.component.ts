@@ -262,7 +262,7 @@ export class MyBuySellComponent implements OnInit, OnDestroy {
 
   async setStopLoss() {
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
-    const openOrders: VOOrder[] = api.openOrdersSub.getValue();
+    const openOrders: VOOrder[] = api._openOrdersAll$.getValue();
     console.log(openOrders);
 
     const rate = this.rateBuy;
