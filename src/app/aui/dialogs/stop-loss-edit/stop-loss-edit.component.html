@@ -1,0 +1,62 @@
+<div>
+    <div>
+        <mat-form-field class="w4">
+            <mat-label>Stop Loss percent</mat-label>
+            <input matInput type="number"
+                   [step]="0.1"
+                   [(ngModel)]="stopLossPercent"
+                   (ngModelChange)="onStopPercentChange()"
+            >
+        </mat-form-field>
+        &nbsp;&nbsp;
+        <mat-form-field class="w4">
+            <mat-label>Sell percent</mat-label>
+            <input matInput type="number"
+                   [step]="0.1"
+                   [(ngModel)]="sellPercent"
+                   (ngModelChange)="onSellPercentChange()"
+            >
+        </mat-form-field>
+    </div>
+
+    <div>
+        <div>Stop Loss</div>
+        <table>
+            <tbody>
+            <tr>
+                <td>Stop Price</td>
+                <td>Sell Price</td>
+                <td>X</td>
+            </tr>
+            <tr>
+                <td>{{stopLossOrder.stopPrice}}</td>
+                <td>{{stopLossOrder.rate}}</td>
+                <td (click)="onDeleteOrderClick(stopLossOrder.uuid)">X</td>
+            </tr>
+            <tr>
+                <td>{{stopPrice}}</td>
+                <td>{{sellPrice}}</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+            <tr>
+                <td>MA</td>
+            </tr>
+
+            <tr>
+                <td> <span>{{stopLoss.ma$ | async}}</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br/>
+    <div>
+        <button mat-raised-button (click)="onApplyClick()">Apply</button>
+    </div>
+
+</div>

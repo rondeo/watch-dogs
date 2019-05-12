@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../../services/app-storage.service';
-import {filter, skip} from 'rxjs/operators';
+import {filter, map, skip} from 'rxjs/operators';
 import * as moment from 'moment';
 import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../../../amodels/app-models';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
@@ -14,6 +14,8 @@ import {VOCandle} from '../../../amodels/api-models';
 import {StopLossOrder} from './stop-loss-order';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {Observable} from 'rxjs/internal/Observable';
+import {Subject} from 'rxjs/internal/Subject';
+import {CandlesUtils} from '../candles/candles-utils';
 
 
 export enum MCState {
@@ -82,11 +84,12 @@ export class BotBase {
 
 /////////////////////////////////////////////////// new ///////////////
 
+  mas$: Subject<{ ma3: number, ma7: number,  ma25: number, ma99: number}>  = new Subject();
   wdType$:BehaviorSubject<WDType>;
 
-  stopLossPercent$: BehaviorSubject<number> = new BehaviorSubject(2);
+
   priceInit$: BehaviorSubject<number> = new BehaviorSubject(0);
-  priceStop$: BehaviorSubject<number> = new BehaviorSubject(0);
+  priceStop$: Observable<number>;
   pots$: BehaviorSubject<number> = new BehaviorSubject(0);
 
   bookBuy$: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -137,6 +140,7 @@ export class BotBase {
   private sub1: Subscription;
   private sub2: Subscription;
   private candles: VOCandle[];
+
   stopLossController: StopLossOrder;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -160,7 +164,6 @@ export class BotBase {
     this.coin = coin;
     this.wdType$ = new BehaviorSubject(wdType);
     if(wdType !== WDType.OFF) this.subscribeForBalancesAndOrders();
-
     if (pots) this.pots$.next(pots);
 
 
@@ -168,8 +171,6 @@ export class BotBase {
       this.mcBase = MC[this.base];
       this.mcCoin = MC[this.coin];
     });*/
-
-
 
 
     this.wdType$.subscribe(type => console.log(type));
@@ -187,23 +188,6 @@ export class BotBase {
 
     this.ordersHistory$.subscribe(orders => {
 
-      console.log(this.id + ' orders history ', orders);
-
-      const stopLosses =  orders.filter(function (item) {
-        return !!item.stopPrice;
-      });
-
-      if(stopLosses.length > 1) {
-
-      }
-
-      const buyOrder = this.buyOrder;
-     /* if (buyOrder) {
-        this.priceEntry$.next(buyOrder.rate);
-      }
-      */
-
-
     });
 
     const candles$ = candlesService.candles5m$(market);
@@ -212,6 +196,11 @@ export class BotBase {
       //  console.log(market, candles);
       this.candles = candles;
       const last = candles[candles.length - 1];
+      const closes = candles.map(function (item) {
+        return item.close;
+      });
+      const mas = CandlesUtils.mas(closes);
+      this.mas$.next(mas);
       this.lastPrice$.next(last.close);
     });
 
@@ -219,7 +208,23 @@ export class BotBase {
      // console.log(this.id, balance);
     });
 
+    this.stopLossController = new StopLossOrder(
+      market,
+      apiPrivate,
+      potSize,
+      this.ordersOpen$,
+      this.balanceCoin$,
+      candles$,
+      this.mas$,
+      wdType,
+      this.storage
+      );
+    this.priceStop$ = this.stopLossController.stopLossOrder$.pipe(map((order) =>{
+      return order?order.stopPrice:0;
+    }))
+  }
 
+  followPots() {
     combineLatest(this.balanceCoin$, this.pots$).pipe(skip(1)).subscribe(([balance, pots]) => {
       //console.log(balance, pots);
       const diff = (this.potSize * pots) - balance.balance;
@@ -229,14 +234,6 @@ export class BotBase {
         else this.sellCoinInstant(Math.abs(diff))
       }
     });
-
-    this.stopLossController = new StopLossOrder(
-      market,
-      apiPrivate,
-      this.ordersOpen$,
-      candles$,
-      this.balanceCoin$,
-      wdType);
   }
 
   subscribeForBalancesAndOrders() {
@@ -247,9 +244,9 @@ export class BotBase {
       const myOrders = orders.filter(function (item) {
         return item.base === base && item.coin === coin;
       });
-
       console.log(this.id + ' open orders   ', myOrders);
       this.ordersOpen$.next(myOrders);
+      this.storage.upsert(this.id + '-orders-open', myOrders);
     });
 
     this.apiPrivate.balances$().subscribe(balances => {
@@ -276,15 +273,6 @@ export class BotBase {
       this.storage.upsert(this.id + '-orders-history', this.ordersHistory$.getValue());
       this.ordersHistory$.next(orders);
     });
-    combineLatest(this.ordersHistory$, this.balanceCoin$).subscribe(([orders, balance]) => {
-      const bal = balance.balance;
-
-      if(orders.length) {
-
-      }
-
-    });
-
   }
 
   setBalances(balanceBase: VOBalance, balanceCoin: VOBalance) {
@@ -293,7 +281,6 @@ export class BotBase {
     if(!bb || bb.balance !== balanceBase.balance) this._balanceBase$.next(balanceBase);
     const bc = this._balanceCoin$.getValue();
     if(!bc || bc.balance !== balanceCoin.balance) this._balanceCoin$.next(balanceCoin);
-
   }
 
   calculateBalanceByOrders() {
@@ -348,6 +335,7 @@ export class BotBase {
         this.log({action: 'BUY_ORDER_RESULT', reason: order.amountCoin + '  ' + order.rate + ' ' + order.isOpen});
 
       } catch (e) {
+        console.error(e);
         this.log({action: 'ERROR', reason: 'buy coin ' + e.toString()});
       }
       return {uuid: 'test'};
@@ -556,6 +544,7 @@ export class BotBase {
   async save() {
     this.storage.upsert(this.id + '-orders-history', this.ordersHistory$.getValue());
     this.storage.upsert(this.id + '-orders-open', this.ordersOpen$.getValue());
+    this.storage.upsert(this.id + '-stop_loss', this.stopLossController.toJSON());
     if (!this.logs.length) return;
     const logs = await this.getLogs();
     this.logs = [];
@@ -585,7 +574,7 @@ export class BotBase {
       market: this.market,
       wdType: this.wdType$.getValue(),
       pots: this.pots$.getValue(),
-      stopLossPercent: this.stopLossPercent$.getValue()
+      stopLossPercent: this.stopLossController.stopLossPercent
     }
   }
 

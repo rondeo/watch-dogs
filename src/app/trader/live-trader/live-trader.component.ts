@@ -17,6 +17,7 @@ import {MATH} from '../../acom/math';
 import {Utils} from 'tslint';
 import {UTILS} from '../../acom/utils';
 import {BotEditComponent} from '../../aui/dialogs/bot-edit/bot-edit.component';
+import {StopLossEditComponent} from '../../aui/dialogs/stop-loss-edit/stop-loss-edit.component';
 
 @Component({
   selector: 'app-live-trader',
@@ -434,6 +435,15 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
      //  if(!isNaN(res))  bot.pots$.next(res);
      this.botsService.save();
     })
+
+  }
+
+  onStopPriceClick(bot: MarketBot) {
+    const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width:'600px', data: bot});
+    ref.afterClosed().subscribe(res => {
+      if(res === 'SAVE') this.botsService.save();
+    })
+
 
   }
 }

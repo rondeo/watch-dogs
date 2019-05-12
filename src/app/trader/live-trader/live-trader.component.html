@@ -4,95 +4,13 @@
         &nbsp;&nbsp;
         <mat-checkbox #USDT_BTC>USDT BTC</mat-checkbox>
         &nbsp;&nbsp;
-        <mat-checkbox #bots [checked]="true">Bots</mat-checkbox>
+
         &nbsp;&nbsp;
         <mat-checkbox #botOrders>Orders</mat-checkbox>
 
         <mat-checkbox #marketCandles>Candles</mat-checkbox>
     </div>
     <br/>
-    <div>
-        <table>
-            <tbody>
-            <tr>
-                <th>{{marketService.exchange$ | async}}</th>
-                <th> {{base}} </th>
-                <th> {{coin}} </th>
-            </tr>
-            <tr>
-                <td>
-                    <small>Balances:</small>
-                </td>
-                <td><sup>$</sup> {{balanceBaseUS}} </td>
-                <td><sup>$</sup> {{balanceCoinUS}} </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <div>
-            <div>
-                &nbsp;&nbsp;
-                <mat-form-field class="w3">
-                    <input matInput
-                           [(ngModel)]="amountPots"
-                           [type]="'number'"
-                           (ngModelChange)="onAmountChanged()"
-                           placeholder="Pots"
-                    >
-                </mat-form-field>
-                &nbsp;&nbsp;
-                <mat-form-field class="w6">
-                    <input matInput
-                           [(ngModel)]="price"
-                           (ngModelChange)="onPriceChanged()"
-                           placeholder="Limit Price">
-                </mat-form-field>
-                &nbsp;&nbsp;
-                <mat-form-field class="w6">
-                    <input matInput
-                           [(ngModel)]="stopLoss"
-                           placeholder="Stop Loss">
-                    <mat-hint>{{stopLossPercent}}%</mat-hint>
-                </mat-form-field>
-                <br/>
-                <div>
-                    <sub>Books</sub>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <sup>SL: </sup>
-                    <mat-slider
-                            [(ngModel)]="stopLossPercent"
-                            (change)="onStopLossPercentChanged()"
-                            [thumbLabel]="true"
-                            [max]="5"
-                            [min]="0.5"
-                            [step]="0.25"
-                    ></mat-slider>
-                    <br/>
-                    <span
-                            (click)="onPriceBuyClick()"
-                    >{{marketService.priceBuy$ | async}}</span>
-                    &nbsp;&nbsp;
-                    <span
-                        (click)="onRefreshBooksClick()"
-                ><mat-icon>cached</mat-icon></span>
-                    &nbsp;&nbsp;
-                    <span
-                            (click)="onPriceSellClick()"
-                    >{{marketService.priceSell$ | async}}</span>
-
-                </div>
-            </div>
-        </div>
-
-        <br/>
-        <div>
-            <button mat-raised-button class="green-color" (click)="onBuyClick()">Buy</button>
-
-            &nbsp;&nbsp;
-            <button mat-raised-button color="accent" (click)="onSellClick()">Sell</button>
-        </div>
-    </div>
 
 
     <div *ngIf="allMarkets.checked">
@@ -161,35 +79,35 @@
         </table>
     </div>
 
-    <div *ngIf="bots.checked">
         <h3>Bots</h3>
         <table>
             <tbody>
             <tr class="small">
                 <td class="w10">ID</td>
                 <td>pots</td>
+                <td>Type</td>
                 <td class="w6">Entry</td>
                 <td class="w7">Liquid</td>
                 <td class="w6">Last</td>
-                <td>edit</td>
+
                 <td>Del</td>
             </tr>
             <tr *ngFor="let bot of (bots$ | async)">
                 <td (click)="onBotClick(bot)" class="small">{{bot.id}}</td>
                 <td>{{bot.pots$ | async}}</td>
+                <td (click)="onEditClick(bot)"> {{bot.wdType$ | async}}</td>
                 <td>{{bot.priceInit$ | async}}</td>
                 <td>
-                    <span>{{bot.priceStop$ | async}} </span>
+                    <span (click)="onStopPriceClick(bot)">{{bot.priceStop$ | async}} </span>
                 </td>
                 <td>
                     {{bot.lastPrice$ | async}}
                 </td>
-                <td><mat-icon [ngClass]="(bot.wdType$ | async) === 'OFF'? '':'red'" class="btn" (click)="onEditClick(bot)">edit</mat-icon></td>
                 <td (click)="onDeleteBotClick(bot)">X</td>
             </tr>
             </tbody>
         </table>
-    </div>
+
 
     <div *ngIf="botOrders.checked">
         <h3>Active orders</h3>
