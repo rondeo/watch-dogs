@@ -17,9 +17,7 @@ export class MarketBot extends BotBase {
   constructor(
     exchange: string,
     market: string,
-    pots: number,
     potSize: number,
-    wdType: WDType,
     storage: StorageService,
     apiPrivate: ApiPrivateAbstaract,
     apiPublic: ApiPublicAbstract,
@@ -31,7 +29,7 @@ export class MarketBot extends BotBase {
 
   ) {
 
-    super(exchange, market, pots, potSize, wdType, apiPrivate, apiPublic, candlesService, storage);
+    super(exchange, market, potSize, apiPrivate, apiPublic, candlesService, storage);
 
     // this.priceLiqud$.subscribe(v => this.priceLiquidInput = v);
 
@@ -52,8 +50,8 @@ export class MarketBot extends BotBase {
    //  this.priceLiqud$.next(this.priceLiquidInput);
   }
 
-  async setBuyOrder(rate: number, amountCoin: number, stopLoss: number): Promise<any> {
-    if (this.wdType$.getValue() !== WDType.OFF) return super.setBuyOrder(rate, amountCoin, stopLoss);
+  async setBuyOrder(rate: number, amountCoin: number): Promise<any> {
+    if (this.wdType$.getValue() !== WDType.OFF) return super.setBuyOrder(rate, amountCoin);
 
     //  const amountCoin = pots * this.potSize;
     const pots = +(amountCoin / this.potSize).toFixed(1);
@@ -67,7 +65,6 @@ export class MarketBot extends BotBase {
     const orders = this.ordersHistory$.getValue() || [];
     orders.push(order);
     this.ordersHistory$.next(orders);
-    this.save();
     return Promise.resolve();
   }
 
@@ -266,11 +263,7 @@ export class MarketBot extends BotBase {
 
   }
 
-  removeOrder(order: VOOrder) {
-    const orders = this.ordersHistory$.getValue().filter(function (item) {
-      return item.uuid !== order.uuid
-    });
-    this.ordersHistory$.next(orders);
-    this.save();
+  cancelOrder(uuid: string) {
+    return this.apiPrivate.cancelOrder2(uuid, this.market);
   }
 }

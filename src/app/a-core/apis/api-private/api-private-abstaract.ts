@@ -13,7 +13,7 @@ import {BehaviorSubjectMy} from '../../../acom/behavior-subject-my';
 import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {filter} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {MyOrder} from '../../app-services/app-bots-services/bot-base';
 
 export abstract class ApiPrivateAbstaract {
@@ -31,7 +31,6 @@ export abstract class ApiPrivateAbstaract {
   constructor(private userLogin: UserLoginService) {
     this.refreshBalancesInterval = setInterval(() => {
       this.refreshBalances();
-      this.refreshOpenOrdersNow();
       console.log(this.exchange + ' orders history markets: ' + this.refreshAllOrdersHistoryNow());
     }, 60000);
 
@@ -78,6 +77,7 @@ export abstract class ApiPrivateAbstaract {
      })
 
    }*/
+/*
 
   cancelOrder2(orderId: string, market: string): Promise<VOOrder> {
     return new Promise<VOOrder>((resolve, reject) => {
@@ -88,7 +88,23 @@ export abstract class ApiPrivateAbstaract {
       }, reject)
     })
   }
+*/
 
+  cancelOrder2(orderId: string, market: string) {
+    let base: string;
+    let coin: string;
+    if(market) {
+      const ar = market.split('_');
+      base = ar[0];
+      coin = ar[1];
+    }
+
+    return this.cancelOrder(orderId, base, coin).pipe(map(res => {
+      this.refreshOpenOrdersNow();
+      console.log(' cancel order result ', res);
+      return res;
+    }))
+  }
 
   abstract cancelOrder(orderId, base?: string, coin?: string): Observable<VOOrder>;
 
@@ -180,8 +196,9 @@ export abstract class ApiPrivateAbstaract {
   private _refreshAllOpenOrders() {
     const num = this._openOrdersAll$.observers.length;
     if(!num) return;
-    console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ' + this._openOrdersAll$.getValue(), 'color:pink');
+    console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
     this.downloadAllOpenOrders().subscribe(res => {
+      console.log( this.exchange + ' open orders ', res)
       if(res.length) {
         this.refreshOrdersTimeout = setTimeout(() => {
           this._refreshAllOpenOrders();
@@ -218,7 +235,7 @@ export abstract class ApiPrivateAbstaract {
     const bs: BehaviorSubject<VOOrder[]> = this._ordersHistory[market];
     this.progressOrdersHistory = setTimeout(() =>this.refreshOrdersHistoryMarkets(markets), 10000);
 
-    this.getAllOrders2(market, from, now).subscribe(orders => {
+    this.downloadOrdersHistory(market, from, now).subscribe(orders => {
       orders = orders.map(function (item: any) {
         item.orderType = item.action;
         return new MyOrder(item)
@@ -312,16 +329,16 @@ export abstract class ApiPrivateAbstaract {
     return new Promise((resolve, reject) => {
       this.buyLimit(ar[0], ar[1], quantity, rate).then(order => {
         resolve(order);
-        this.refreshBalances();
-        this.refreshOpenOrdersNow();
+        // this.refreshBalances();
+       //  this.refreshOpenOrdersNow();
       }, reject);
     })
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
     return this._stopLoss(market, quantity, stopPrice, sellPrice).then(res => {
-      this.refreshBalances();
-      this.refreshOpenOrdersNow();
+    //   this.refreshBalances();
+     //  this.refreshOpenOrdersNow();
 
       return res;
     });
@@ -372,7 +389,7 @@ export abstract class ApiPrivateAbstaract {
     return null;
   }
 
-  getAllOrders2(market: string, from: number, to: number) {
+  downloadOrdersHistory(market: string, from: number, to: number) {
     const ar = market.split('_');
     return this.getAllOrders(ar[0], ar[1], from, to);
   }

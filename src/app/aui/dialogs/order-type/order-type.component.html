@@ -1,0 +1,26 @@
+<div>
+    <mat-radio-group aria-label="Select Type"
+                     [value]="data.wdType$ | async"
+                     (change)="onTypeChanged($event)">
+        <mat-radio-button value="OFF">OFF</mat-radio-button>
+        &nbsp;
+        <mat-radio-button value="LONG">LONG</mat-radio-button>
+        &nbsp;
+        <mat-radio-button value="SHORT">SHORT</mat-radio-button>
+    </mat-radio-group>
+    <br/>
+    <br/>
+    <mat-form-field class="w3">
+        <input matInput
+               [(ngModel)]="amountPots"
+               [type]="'number'"
+               [step]="1"
+               placeholder="Pots"
+        >
+    </mat-form-field>
+
+    &nbsp;&nbsp;
+    <button mat-raised-button (click)="onApplyClick()">Apply</button>
+
+
+</div>

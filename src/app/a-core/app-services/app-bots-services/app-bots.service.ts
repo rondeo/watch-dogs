@@ -13,10 +13,14 @@ import {BehaviorSubject} from 'rxjs';
 import {UsdtBtcMarket} from './usdt-btc-market';
 import {BtcUsdtService} from '../alerts/btc-usdt.service';
 import {BotBase} from './bot-base';
+import {Subject} from 'rxjs/internal/Subject';
 
 
 @Injectable()
 export class AppBotsService {
+
+
+  errors$: Subject<string> = new Subject()
   MC: VOMCObj;
   get orders$() {
     return this.bots$;
@@ -62,19 +66,19 @@ export class AppBotsService {
       .then(wd => this.bots$.next(wd.map((o: VOWatchdog )=> {
         const coin = o.market.split('_')[1];
         const potSize = potSizeUS / MC[coin].price_usd;
-        return new MarketBot(
+        const bot = new MarketBot(
           o.exchange,
           o.market,
-          o.pots,
           potSize,
-          o.wdType || WDType.OFF,
           this.storage,
           this.apisPrivate.getExchangeApi(o.exchange),
           this.apisPublic.getExchangeApi(o.exchange),
           this.candlesService,
           this.marketCap,
           this.btcusdt
-        )
+        );
+        bot.error$.subscribe(err => this.errors$.next(err));
+        return bot;
       })));
   }
 
@@ -92,9 +96,7 @@ export class AppBotsService {
       bot = new MarketBot(
         exchange,
         market,
-        0,
         potSize,
-        WDType.OFF,
         this.storage,
         this.apisPrivate.getExchangeApi(exchange),
         this.apisPublic.getExchangeApi(exchange),
@@ -102,6 +104,9 @@ export class AppBotsService {
         this.marketCap,
         this.btcusdt
         );
+      bot.error$.subscribe(error => {
+        this.errors$.next(error);
+      })
       bots.push(bot);
       this.save();
     }

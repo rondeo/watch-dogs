@@ -344,7 +344,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   async buyLimit(base: string, coin: string, amountCoin: number, rate: number): Promise<VOOrder> {
     let market = base + '_' + coin;
-    console.log(' buy market ' + base + coin + '  amountCoin: ' + amountCoin + ' rate:' + rate);
+    console.log(' BUY_LIMIT ' + base +'_' + coin + '  amountCoin: ' + amountCoin + ' rate:' + rate);
     if (isNaN(amountCoin) || isNaN(rate)) {
       console.warn(' not a number ' + amountCoin + '  ' + rate);
     }
@@ -367,7 +367,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     console.log(url, data);
 
     return this.call(url, data, RequestType.POST).pipe(map(res => {
-      console.log('result buyLimit market ' + base + coin, res);
+      console.log('BUY_LIMIT result ' + base + coin, res);
       return {
         uuid: res.orderId,
         action: res.side,
@@ -387,7 +387,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
 
   async sellLimit(base: string, coin: string, amountCoin: number, rate: number): Promise<VOOrder> {
     let market = base + '_' + coin;
-    console.log(' sell market ' + market + '  quantity: ' + amountCoin + ' rate:' + rate);
+    console.log(' SELL_LIMIT ' + market + '  quantity: ' + amountCoin + ' rate:' + rate);
     let url = this.prefix + 'https://api.binance.com/api/v3/order';
 
     const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
@@ -404,7 +404,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     };
 
     return this.call(url, data, RequestType.POST).pipe(map(res => {
-      console.log('result sellLimit market ' + market, res);
+      console.log('SELL_LIMIT result' + market, res);
 
       return {
         uuid: res.orderId,

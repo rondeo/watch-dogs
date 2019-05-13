@@ -5,9 +5,10 @@ import {MatDialogModule} from '@angular/material';
 import {MaterialAppModule} from '../material/material-app.module';
 import {FormsModule} from '@angular/forms';
 import { StopLossEditComponent } from './stop-loss-edit/stop-loss-edit.component';
+import { OrderTypeComponent } from './order-type/order-type.component';
 
 @NgModule({
-  declarations: [BotEditComponent, StopLossEditComponent],
+  declarations: [BotEditComponent, StopLossEditComponent, OrderTypeComponent],
   imports: [
     CommonModule,
     MaterialAppModule,
@@ -15,7 +16,8 @@ import { StopLossEditComponent } from './stop-loss-edit/stop-loss-edit.component
   ],
   entryComponents: [
     BotEditComponent,
-    StopLossEditComponent
+    StopLossEditComponent,
+    OrderTypeComponent
   ]
 })
 export class DialogsModule { }

@@ -4,16 +4,15 @@ import {VOCandle} from '../../../amodels/api-models';
 import {MATH} from '../../../acom/math';
 import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {Observable} from 'rxjs/internal/Observable';
-import {filter} from 'rxjs/operators';
-import {Subject} from 'rxjs/internal/Subject';
+import {withLatestFrom} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../../services/app-storage.service';
 
 export interface StopLossSettings {
-  stopLossPercent: number
-  sellPercent: number
+  stopLossPercent: number;
+  sellPercent: number;
+  resetStopLossAt: number;
 }
 
 
@@ -21,6 +20,7 @@ export interface StopLossSettings {
 export class StopLossOrder {
   stopLossPercent = -3;
   sellPercent = -2;
+  resetStopLossAt = 3;
   inProgerss: string;
 
   ma$: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -37,19 +37,75 @@ export class StopLossOrder {
     balance$: Observable<VOBalance>,
     candles$: Observable<VOCandle[]>,
     mas$: Observable<{ ma3: number, ma7: number,  ma25: number, ma99: number}>,
-    private wdType: WDType,
+    wdType$: BehaviorSubject<WDType>,
     private storage: StorageService
   ) {
 
+    wdType$.subscribe(type => {
+      if(type === WDType.SHORT) {
+        const stopLoss = this.stopLossOrder$.getValue();
+        if(stopLoss) {
+          this.cancelOrder(stopLoss.uuid);
+        }
+      }
+    })
     this.storage.select(market + '-stop-loss-settings').then((set: StopLossSettings)=> {
-      this.stopLossPercent = set.stopLossPercent;
-      this.sellPercent = set.sellPercent;
+      if(set) {
+        this.stopLossPercent = set.stopLossPercent;
+        this.sellPercent = set.sellPercent;
+        this.resetStopLossAt = set.resetStopLossAt || 3
+      }
+    });
+
+    mas$.subscribe(mas => {
+      const ma = mas.ma25;
+      this.ma$.next(+ma.toFixed(8));
+    });
+    mas$.subscribe(ma => {
+      const newStopPrice = this.stopPrice;
+      const stopLoss: VOOrder = this.stopLossOrder$.getValue();
+      if(!stopLoss) return;
+
+      const diff = MATH.percent(newStopPrice, stopLoss.stopPrice);
+      console.log(market + ' stop diff ' + diff);
+
+      if(diff > this.resetStopLossAt) {
+        this.priceStopLoss$.next(0)
+        this.cancelOrder(stopLoss.uuid).then(res => {
+          console.log(' cancel order result', res);
+        }).catch(console.error)
+      }
+    })
+    openOrders$.subscribe(openOrders => {
+      if(openOrders.length) {
+        const stopLosses = openOrders.filter(function (item) {
+          return item.stopPrice;
+        });
+        if(stopLosses.length ===1) {
+          this.stopLossOrder$.next(stopLosses[0]);
+        }
+      }
+
+      console.log(market , openOrders);
     })
 
-    combineLatest(openOrders$.pipe(filter(v => !!v)),balance$, mas$)
-      .subscribe(([openOrders, balance, mas]) => {
+
+    balance$.pipe(withLatestFrom(openOrders$))
+    // combineLatest(openOrders$.pipe(filter(v => !!v)), balance$)
+      .subscribe(([ balance, openOrders]) => {
+        if(!balance) return;
+
+        console.log(openOrders);
         const bal = balance.balance;
 
+
+        const err = openOrders.some(function (item) {
+          return item.market !== market;
+        });
+        if(err) {
+          console.error(' not my orders ');
+          return;
+        }
         if(bal < (potSize / 5)) {
           console.log(' balance too small  ');
           return;
@@ -59,43 +115,50 @@ export class StopLossOrder {
           return item.stopPrice;
         });
 
-        console.log(openOrders, balance, mas);
+        const available = balance.available;
+        const wdType = wdType$.getValue();
+
         switch(wdType) {
           case WDType.OFF:
             break;
             case WDType.LONG:
-              const ma = mas.ma25;
-              this.ma$.next(+ma.toFixed(8));
-              const stopLossPrice = ma+ (ma * (this.stopLossPercent/100));
-              this.priceStopLoss$.next(+stopLossPrice.toFixed(8));
-              const sellPrice = +(stopLossPrice + (stopLossPrice * (this.sellPercent / 100))).toFixed(8);
-              this.priceSell$.next(+sellPrice.toFixed(8));
+              const stopPrice = this.stopPrice;
+              this.priceStopLoss$.next(stopPrice);
+              const sellPrice = this.sellPrice;
+              this.priceSell$.next(sellPrice);
 
-              if(stopLosses.length > 1) {
+              if(stopLosses.length === 0) {
+                this.stopLossOrder$.next(null);
+                this.priceStopLoss$.next(0);
+
+                if(available < (potSize / 5)) {
+                  console.log(' available very little ');
+                  return;
+                }
+
+                this.setStopLoss(available);
+              } else if(stopLosses.length > 1) {
                 this.combineStopLosses(stopLosses);
                 this.stopLossOrder$.next(null);
                 this.priceStopLoss$.next(0);
                 return;
               }
+              else {
+                const stopLoss = stopLosses[0];
+                if(available > (potSize / 5)) {
+                  this.stopLossOrder$.next(null);
+                  this.priceStopLoss$.next(0);
+                   this.cancelOrder(stopLoss.uuid).then(res => {
+                     console.log('CANCEL STOP LOSS result', res);
+                      this.apiPrivate.refreshBalances();
+                  });
 
-              if(stopLosses.length === 0) {
-                const available = balance.available;
-                if(available < (potSize / 5)) {
-                  console.log(' available very little ')
                   return;
                 }
 
-
-                this.setStopLoss(available);
-                this.stopLossOrder$.next(null);
-                this.priceStopLoss$.next(0);
-                return;
-              } else {
-                const stopLoss = stopLosses[0];
                 this.stopLossOrder$.next(stopLoss);
                 this.priceStopLoss$.next(stopLoss.stopPrice);
               }
-
 
 
               break;
@@ -180,25 +243,16 @@ export class StopLossOrder {
   }
 
   async cancelOrder(uuid: string) {
-    this.log({action: 'CANCELING ORDER ', reason: uuid});
+
+    console.log(this.market + ' CANCEL STOP LOSS ' + uuid);
     const ar = this.market.split('_');
     return this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
   }
 
-  async cancelSopLossOrders() {
-   /*
-    if (!this.orders.length) return Promise.resolve();
-    return new Promise(async (resolve, reject) => {
-      Promise.all(this.orders.map((order) => {
-        return this.cancelOrder(order.uuid)
-      })).then(result => {
-        setTimeout(() => {
-          this.apiPrivate.refreshAllOpenOrders();
-          setTimeout(() => resolve(result), 5000);
-        }, 2000);
-
-      }, reject);
-    })*/
+  async cancelSopLossOrder() {
+    const order = this.stopLossOrder$.getValue();
+    if(!order) return Promise.resolve()
+    else return this.cancelOrder(order.uuid);
   }
 
 
@@ -217,13 +271,19 @@ export class StopLossOrder {
     }*/
   }
 
+  get stopPrice(): number {
+    const ma = this.ma$.getValue();
+    return +(ma+ (ma * (this.stopLossPercent/100))).toPrecision(6);
+  }
+
+  get sellPrice(): number {
+    const stopPrice = this.stopPrice;
+    return +(stopPrice + (stopPrice * (this.sellPercent / 100))).toPrecision(6);
+  }
+
   async setStopLoss( qty: number) {
-
-   const stopLossPrice = this.priceStopLoss$.getValue();
-    const sellPrice = this.priceSell$.getValue();
-
     try {
-     const result = await this.apiPrivate.stopLoss(this.market, qty, stopLossPrice, sellPrice);
+     const result = await this.apiPrivate.stopLoss(this.market, qty, this.stopPrice, this.sellPrice);
      const reason = ' set stop loss ';
       this.log({action: 'STOP_LOSS RESULT ', reason: result.uuid});
     } catch (e) {
@@ -232,7 +292,7 @@ export class StopLossOrder {
   }
 
   destroy() {
-
+    this.storage.remove(this.market + '-stop-loss-settings');
   }
 
   private combineStopLosses(stopLosses: VOOrder[]) {
@@ -240,14 +300,14 @@ export class StopLossOrder {
   }
 
   save() {
-    this.storage.upsert(this.market + '-stop-loss-settings', this.toJSON())
-
+    this.storage.upsert(this.market + '-stop-loss-settings', this.toJSON());
   }
 
   toJSON(): StopLossSettings {
     return {
       stopLossPercent: this.stopLossPercent,
-      sellPercent: this.sellPercent
+      sellPercent: this.sellPercent,
+      resetStopLossAt: this.resetStopLossAt
 
     }
   }

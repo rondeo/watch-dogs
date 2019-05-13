@@ -84,7 +84,8 @@
             <tbody>
             <tr class="small">
                 <td class="w10">ID</td>
-                <td>pots</td>
+                <td>P</td>
+                <td>PB</td>
                 <td>Type</td>
                 <td class="w6">Entry</td>
                 <td class="w7">Liquid</td>
@@ -95,7 +96,8 @@
             <tr *ngFor="let bot of (bots$ | async)">
                 <td (click)="onBotClick(bot)" class="small">{{bot.id}}</td>
                 <td>{{bot.pots$ | async}}</td>
-                <td (click)="onEditClick(bot)"> {{bot.wdType$ | async}}</td>
+                <td>{{bot.potsBalance$ | async}}</td>
+                <td (click)="onEditTypeClick(bot)"> {{bot.wdType$ | async}}</td>
                 <td>{{bot.priceInit$ | async}}</td>
                 <td>
                     <span (click)="onStopPriceClick(bot)">{{bot.priceStop$ | async}} </span>

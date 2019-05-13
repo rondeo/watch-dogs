@@ -18,6 +18,8 @@ import {Utils} from 'tslint';
 import {UTILS} from '../../acom/utils';
 import {BotEditComponent} from '../../aui/dialogs/bot-edit/bot-edit.component';
 import {StopLossEditComponent} from '../../aui/dialogs/stop-loss-edit/stop-loss-edit.component';
+import {OrderTypeComponent} from '../../aui/dialogs/order-type/order-type.component';
+import {Subject} from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-live-trader',
@@ -75,6 +77,10 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   currentOrderLiquidPrice: number;
 
   ngOnInit() {
+
+    this.botsService.errors$.subscribe(error => {
+      this.snackBar.open(error, 'x');
+    })
     const params = this.route.snapshot.params;
     this.marketService.exchange$.next(params.exchange);
     this.marketService.market$.next(params.market);
@@ -307,16 +313,11 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       this.marketService.exchange$.next(bot.exchange);
     }
 
-    const sub = this.marketService.priceBuy$.pipe(skip(1)).subscribe(price => {
-      this.price = price;
-      sub.unsubscribe()
-    });
-
     this.marketService.market$.next(bot.market);
     if(this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
     bot.selected = true;
-    this.myOrders$ = bot.ordersHistory$;
+    this.myOrders$ = bot.ordersOpen$;
     this.setRoute();
   }
 
@@ -335,62 +336,17 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const exchange = this.exchange,
       market = this.marketService.market$.getValue(),
       bot =  this.currentBot? this.currentBot.id: '';
-
     this.router.navigate(['/trader/live-trader', {exchange, market, bot}])
-  }
-
-  onBuyClick() {
-    const pots = this.amountPots;
-    let price = +this.price;
-    if(isNaN(price)) return;
-   //  if(!price) price = this.marketService.priceBuy$.getValue();
-    const exchange = this.marketService.exchange$.getValue();
-    const market = this.marketService.market$.getValue();
-    const bot: MarketBot = this.botsService.getBot(exchange, market);
-    bot.setBuyOrder(price, pots, this.stopLoss);
-  }
-
-  onSellClick() {
-    const pots = this.amountPots;
-    const price = +this.price;
-    if(isNaN(price)) return;
-    const exchange = this.marketService.exchange$.getValue();
-    const market = this.marketService.market$.getValue();
-    const bot: MarketBot = this.botsService.getBot(exchange, market);
-    bot.setSellOrder(price, pots, this.stopLoss);
-  }
-
-  onAmountChanged() {
-    const pots = this.amountPots;
-    if(isNaN(pots)) return;
-    this.marketService.pots$.next(pots)
-
-  }
-
-  onPriceBuyClick() {
-    this.price = MATH.toPrecision(this.marketService.priceBuy$.getValue(), 4);
-    this.calculateStopLoss();
-  }
-
-  onPriceSellClick() {
-    this.price =  MATH.toPrecision(this.marketService.priceSell$.getValue(), 4);
-    this.calculateStopLoss();
-  }
-
-  onStopLossPercentChanged() {
-   this.calculateStopLoss();
-
   }
 
   onDeleteOrderClick(order: VOOrder) {
     if(!this.currentBot) return;
-    this.currentBot.removeOrder(order)
+    this.currentBot.cancelOrder(order.uuid).toPromise();
   }
 
   onRefreshBooksClick() {
     this.marketService.refreshBooks();
   }
-
   onDeleteBotClick(bot: MarketBot) {
     const msg = ' Delete ' + bot.id + '?';
     if(confirm(msg)) {
@@ -428,8 +384,9 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     bot.sellCoinInstant();
   }
 
-  onEditClick(bot: MarketBot) {
-    const ref = this.dialog.open(BotEditComponent, {height: '400px', width:'600px', data: bot});
+
+  onEditTypeClick(bot: MarketBot) {
+    const ref = this.dialog.open(OrderTypeComponent, {height: '200px', width:'300px', data: bot});
 
     ref.afterClosed().subscribe(res => {
      //  if(!isNaN(res))  bot.pots$.next(res);
@@ -441,7 +398,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   onStopPriceClick(bot: MarketBot) {
     const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width:'600px', data: bot});
     ref.afterClosed().subscribe(res => {
-      if(res === 'SAVE') this.botsService.save();
     })
 
 

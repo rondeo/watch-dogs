@@ -95,9 +95,8 @@ export class FollowOrdersService {
       new MarketBot(
         exchange,
         market,
-        0,
-        100,
-        WDType.OFF,
+        50,
+
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),

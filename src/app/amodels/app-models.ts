@@ -2,6 +2,7 @@
  * Created by Vlad on 7/8/2017.
  */
 import {WatchDogStatus} from '../a-core/app-services/app-bots-services/watch-dog-status';
+import {StopLossSettings} from '../a-core/app-services/app-bots-services/stop-loss-order';
 
 export interface User {
   id: string;
@@ -557,7 +558,7 @@ export class VOWatchdog {
   market: string;
   wdType: WDType;
   pots?: number;
-  stopLossPercent?: number;
+  stopLoss?: StopLossSettings;
   results?: string[] = [];
   sellScripts?: string[] = [];
   buyScripts?: string[] = [];

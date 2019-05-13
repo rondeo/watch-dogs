@@ -1,0 +1,40 @@
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef, MatRadioChange} from '@angular/material';
+import {MarketBot} from '../../../a-core/app-services/app-bots-services/market-bot';
+import {WDType} from '../../../amodels/app-models';
+
+@Component({
+  selector: 'app-order-type',
+  templateUrl: './order-type.component.html',
+  styleUrls: ['./order-type.component.scss']
+})
+export class OrderTypeComponent implements OnInit {
+
+  wdType: WDType;
+
+  amountPots: number;
+
+  constructor(
+    public dialogRef: MatDialogRef<OrderTypeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: MarketBot
+  ) { }
+
+  ngOnInit() {
+
+    this.data.pots$.subscribe(pots => {
+      this.amountPots = pots;
+    })
+    this.data.wdType$.subscribe(type => this.wdType = type);
+  }
+
+  onTypeChanged($event: MatRadioChange) {
+    this.wdType = $event.value;
+  }
+
+  onApplyClick() {
+
+    this.data.wdType$.next(this.wdType);
+    this.data.pots$.next(+this.amountPots);
+    this.data.saveSettings();
+  }
+}

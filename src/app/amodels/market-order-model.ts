@@ -299,7 +299,6 @@ export class MarketOrderModel extends VOWatchdog {
       buyScripts: this.buyScripts,
       pots: 0
     };
-
   }
 
   async onError(msg: string) {

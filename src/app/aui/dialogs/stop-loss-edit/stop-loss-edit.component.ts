@@ -12,6 +12,7 @@ import {MyOrder} from '../../../a-core/app-services/app-bots-services/bot-base';
 })
 export class StopLossEditComponent implements OnInit {
 
+  resetStopLossAt: number;
   stopLoss: StopLossOrder;
   stopLossPercent: number;
   sellPercent: number;
@@ -27,11 +28,12 @@ export class StopLossEditComponent implements OnInit {
     this.stopLoss = data.stopLossController;
     this.stopLossPercent = this.stopLoss.stopLossPercent;
     this.sellPercent = this.stopLoss.sellPercent;
+    this.resetStopLossAt = this.stopLoss.resetStopLossAt;
     this.stopLoss.ma$.subscribe(ma => {
       if(ma) this.onStopPercentChange();
     });
     this.stopLoss.stopLossOrder$.subscribe(order => {
-      this.stopLossOrder = order;
+      this.stopLossOrder = order || new MyOrder({});
     })
   }
 
@@ -42,23 +44,30 @@ export class StopLossEditComponent implements OnInit {
   onApplyClick() {
     this.stopLoss.sellPercent = this.sellPercent;
     this.stopLoss.stopLossPercent = this.stopLossPercent;
+    this.stopLoss.resetStopLossAt = this.resetStopLossAt;
     this.stopLoss.save();
    //  this.dialogRef.close('SAVE');
   }
 
   onDeleteOrderClick(uuid : string) {
-    if(confirm('Cancel Order? ')) this.stopLoss.cancelOrder(uuid);
+
+    if(confirm('Cancel Order? ' + uuid)) this.stopLoss.cancelOrder(uuid);
   }
 
   onStopPercentChange() {
-    const ma = this.stopLoss.ma$.getValue();
-    this.stopPrice = +(ma+ (ma * (this.stopLossPercent/100))).toPrecision(6);
+
+    this.stopPrice = this.stopLoss.stopPrice;
     this.onSellPercentChange();
   }
 
 
   onSellPercentChange() {
-    this.sellPrice = +(this.stopPrice + (this.stopPrice * (this.sellPercent / 100))).toPrecision(6);
+    this.sellPrice = this.stopLoss.sellPrice;
+
+  }
+
+  onRefreshClick() {
+    this.data.refreshOpenOrders();
 
   }
 }

@@ -104,7 +104,7 @@ export class BotEditComponent implements OnInit {
     let price = +this.price;
     const stopLoss = this.stopLoss;
     if(isNaN(price) || isNaN(pots)) return;
-    this.data.setBuyOrder(price, pots, +this.stopLoss);
+    this.data.setBuyOrder(price, pots);
   }
 
   onSellClick() {

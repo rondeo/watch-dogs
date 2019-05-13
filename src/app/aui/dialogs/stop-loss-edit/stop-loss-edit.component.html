@@ -17,10 +17,19 @@
                    (ngModelChange)="onSellPercentChange()"
             >
         </mat-form-field>
+        &nbsp;&nbsp;
+        <mat-form-field class="w4">
+            <mat-label>Reset At</mat-label>
+            <input matInput type="number"
+                   [step]="0.1"
+                   [(ngModel)]="resetStopLossAt"
+            >
+        </mat-form-field>
     </div>
 
     <div>
         <div>Stop Loss</div>
+        <mat-icon (click)="onRefreshClick()">refresh</mat-icon>
         <table>
             <tbody>
             <tr>
