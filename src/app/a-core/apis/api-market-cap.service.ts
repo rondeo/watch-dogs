@@ -72,6 +72,7 @@ export class ApiMarketCapService {
       const oldRank = ranks?(ranks[item.symbol] ? ranks[item.symbol] : 500):0;
 
       const data = item['quote']['USD'];
+
       if (!out[item.symbol]) out[item.symbol] = {
         id: item.slug,// item.id,
         slug: item.slug,
@@ -81,15 +82,15 @@ export class ApiMarketCapService {
         r6:oldRank? MATH.percent(oldRank.r6, +item.cmc_rank):0,
         r24: oldRank?MATH.percent(oldRank.r24, +item.cmc_rank):0,
         price_usd: +data.price,
-        price_btc: +data.price / priceBTC,
+       // price_btc: +data.price / priceBTC,
         volume_usd_24h: data.volume24h,
         market_cap_usd: +data.market_cap,
         available_supply: +item.circulating_supply,
         total_supply: +item.total_supply,
         max_supply: +item.max_supply,
-        percent_change_1h: +(data.percent_change_1h - btc1h).toFixed(2),
-        percent_change_24h: +(data.percent_change_24h - btc24h).toFixed(2),
-        percent_change_7d: +(data.percent_change_7d - btc7d).toFixed(2),
+        percent_change_1h: +(data.percent_change_1h).toFixed(2),
+        percent_change_24h: +(data.percent_change_24h).toFixed(2),
+        percent_change_7d: +(data.percent_change_7d).toFixed(2),
         last_updated: item.last_updated
       };
     });

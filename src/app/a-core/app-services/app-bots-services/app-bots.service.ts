@@ -82,12 +82,13 @@ export class AppBotsService {
       })));
   }
 
-  getBot(exchange: string, market: string): MarketBot {
+  createBot(exchange: string, market: string): MarketBot {
     const bots: MarketBot[] = this.bots$.getValue();
 
     let bot: MarketBot = bots.find(function (item) {
       return item.exchange === exchange && item.market === market;
     });
+
     if (!bot) {
       const MC = this.MC;
       const potSizeUS = BotBase.potSizeUS;
@@ -195,4 +196,6 @@ export class AppBotsService {
     this.bots$.next(bots);
     this.save();
   }
+
+
 }

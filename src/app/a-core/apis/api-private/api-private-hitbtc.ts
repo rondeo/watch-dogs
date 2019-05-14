@@ -1,5 +1,5 @@
 
-import {VOBalance, VOOrder} from '../../../amodels/app-models';
+import {VOBalance, VOBooks, VOOrder, VOTrade} from '../../../amodels/app-models';
 import {ApiPrivateAbstaract} from './api-private-abstaract';
 import {StorageService} from '../../services/app-storage.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -10,6 +10,8 @@ import {UserLoginService} from '../../services/user-login.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {Subject} from 'rxjs/internal/Subject';
+import {MATH} from '../../../acom/math';
+import {UTILS} from '../../../acom/utils';
 
 export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   apiPublic: ApiPublicHitbtc;
@@ -39,9 +41,10 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   constructor(
     private http: HttpClient,
-    userLogin: UserLoginService
+    userLogin: UserLoginService,
+    storage: StorageService
   ) {
-    super(userLogin);
+    super(userLogin, storage);
   }
 
   getOpenOrders(base: string, coin: string): Observable<VOOrder[]> {
@@ -55,7 +58,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   downloadAllOpenOrders(): Observable<VOOrder[]> {
     const url = 'api/hitbtc/order';
     return this.call(url, null).pipe(map(res => {
-      console.log('getAllOpenOrders', res);
+      console.log(' getAllOpenOrders result', res);
       return res.map(ApiPrivateHitbtc.parseOrder);
     }));
   }
@@ -214,6 +217,98 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
         };
       })).toPromise();
+  }
+
+
+  async _stopLoss(market: string, amountCoin: number, stopPriceN: number, sellPriceN: number) {
+
+    const ar = market.split('_');
+
+    if (isNaN(amountCoin) || isNaN(stopPriceN) || !stopPriceN || !sellPriceN) {
+      console.error(' not a number amountCoin ' + amountCoin + ' stopPriceN  ' + stopPriceN + ' sellPriceN ' +sellPriceN);
+      return Promise.resolve();
+    }
+
+    const decimals: { amountDecimals: number, rateDecimals: number } = await this.getDecimals(market);
+
+
+    const quantity = '' + MATH.formatDecimals(amountCoin, decimals.amountDecimals);// Math.ceil(amountCoin * Math.pow(10, decimals.amountDecimals))/Math.pow(10, decimals.amountDecimals);
+    const stopPrice = stopPriceN.toFixed(decimals.rateDecimals);
+    const price = sellPriceN.toFixed(decimals.rateDecimals);
+
+    //  const amountDecimals = val.amountDecimals;
+    // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
+    // data.rate = +data.rate.toFixed(val.rateDecimals);
+    console.log('!!! STOP LOSS ' ,  market , quantity, stopPrice, price);
+
+    const url = 'api/hitbtc/order';
+    let data = {
+      side: 'sell',
+      quantity,
+      stopPrice,
+      price,
+      symbol:ApiPrivateHitbtc.toMarket(market)
+    };
+
+    return this.call(url, data)
+      .pipe(map((res: any) => {
+        console.log( this.exchange + '- ' + market + ' STOP_LOSS result ', res);
+        let result: any = res;
+
+        return {
+          id: res.id,
+          isOpen: res.status === 'new',
+          uuid: res.clientOrderId,
+          action: res.side.toUpperCase(),
+          amountCoin: +res.quantity,
+          rate: +res.price,
+          status: res.status,
+          market: market
+
+        };
+      })).toPromise();
+
+
+  }
+
+
+  static toMarket(market) {
+    return market.replace('USDT', 'USD').split('_').reverse().join('');
+  }
+
+
+  downloadBooks(market: string, limit: number): Promise<VOBooks> {
+    let url = ('/api/proxy-5min/https://api.hitbtc.com/api/2/public/orderbook/{{market}}?limit=' + limit)
+      .replace('{{market}}', ApiPrivateHitbtc.toMarket(market));
+    console.log(url);
+    return this.http.get(url).pipe(map((res: any) => {
+
+      if (!res.bid) {
+        console.log(res);
+        throw new Error(this.exchange + ' wromg data ');
+      }
+      let buy: VOTrade[] = res.bid.map(function (item) {
+        return {
+          amountCoin: +item.size,
+          rate: +item.price
+        }
+      });
+
+      let sell = res.ask.map(function (item) {
+        return {
+          amountCoin: +item.size,
+          rate: +item.price
+        }
+      });
+
+      return {
+        market,
+        exchange: 'hitbtc',
+        buy: buy,
+        sell: sell
+      }
+
+    })).toPromise();
   }
 
   private call(URL: string, post: any): Observable<any> {

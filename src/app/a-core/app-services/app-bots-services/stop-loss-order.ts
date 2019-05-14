@@ -8,6 +8,8 @@ import {Observable} from 'rxjs/internal/Observable';
 import {withLatestFrom} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../../services/app-storage.service';
+import {Utils} from 'tslint';
+import {UTILS} from '../../../acom/utils';
 
 export interface StopLossSettings {
   stopLossPercent: number;
@@ -148,7 +150,15 @@ export class StopLossOrder {
             return;
           }
 
-          this.setStopLoss(available);
+          this.setStopLoss(available).then(res => {
+            console.log(market + ' STOP_LOSS_RESULT', res);
+            let delay = 2;
+            if(!res) delay = 20;
+            UTILS.wait(delay).then(() => {
+              this.apiPrivate.refreshBalances();
+            })
+
+          });
         } else if (stopLosses.length > 1) {
           this.combineStopLosses(stopLosses);
           this.stopLossOrder$.next(null);
@@ -289,17 +299,23 @@ export class StopLossOrder {
     return StopLossOrder.getStopPrice(ma, this.stopLossPercent);
   }
 
-
   async setStopLoss(qty: number) {
     const stopPrice = this.stopPrice;
+    if(stopPrice === 0) {
+      console.error(' stop price 0')
+      return
+    }
     const sellPrice = StopLossOrder.getSellPrice(stopPrice, this.sellPercent);
+    let result;
+
     try {
-      const result = await this.apiPrivate.stopLoss(this.market, qty, this.stopPrice, sellPrice);
+      result = await this.apiPrivate.stopLoss(this.market, qty, this.stopPrice, sellPrice);
       const reason = ' set stop loss ';
       this.log({action: 'STOP_LOSS RESULT ', reason: result.uuid});
     } catch (e) {
       console.error(e);
     }
+    return  result
   }
 
   destroy() {

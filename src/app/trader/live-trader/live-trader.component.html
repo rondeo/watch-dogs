@@ -43,6 +43,8 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        &nbsp;&nbsp;
+        <button mat-raised-button (click)="onAddClick()">Add</button>
     </div>
 
 
@@ -89,18 +91,22 @@
                 <td>Type</td>
                 <td class="w6">Entry</td>
                 <td class="w7">Liquid</td>
+                <td class="w6">MA25</td>
                 <td class="w6">Last</td>
 
                 <td>Del</td>
             </tr>
             <tr *ngFor="let bot of (bots$ | async)">
-                <td (click)="onBotClick(bot)" class="small">{{bot.id}}</td>
+                <td (click)="onBotClick(bot)" class="x-small">{{bot.id}}</td>
                 <td>{{bot.pots$ | async}}</td>
                 <td>{{bot.potsBalance$ | async}}</td>
                 <td (click)="onEditTypeClick(bot)"> {{bot.wdType$ | async}}</td>
                 <td>{{bot.priceInit$ | async}}</td>
                 <td>
                     <span (click)="onStopPriceClick(bot)">{{bot.priceStop$ | async}} </span>
+                </td>
+                <td>
+                    {{bot.ma$ | async}}
                 </td>
                 <td>
                     {{bot.lastPrice$ | async}}

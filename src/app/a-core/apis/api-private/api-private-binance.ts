@@ -37,16 +37,16 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
   constructor(
     private http: HttpClient,
     userLogin: UserLoginService,
-    private storage: StorageService = null
+    storage: StorageService
   ) {
-    super(userLogin);
+    super(userLogin, storage);
   }
 
-  downloadBooks(market: string): Promise<{ amountCoin: string, rate: string }[]> {
+  downloadBooks(market: string, length: number): Promise<VOBooks> {
     const symbol = market.split('_').reverse().join('');
     const params = {
       symbol,
-      limit: '5'
+      limit: length.toString()
     };
     let url = this.prefix + 'https://api.binance.com/api/v1/depth';
 
@@ -58,14 +58,18 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       const sell = r.asks.map(function (o) {
         return {amountCoin: +o[1], rate: +o[0]}
       });
-      return buy.concat(sell)
+      return  {
+        market: market,
+        exchange: this.exchange,
+        buy,
+        sell
+      }
 
     }, console.error)).toPromise();
   }
 
-  decimals = {};
 
-  async getDecimals(market: string): Promise<{ amountDecimals: number, rateDecimals: number }> {
+/*  async getDecimals(market: string): Promise<{ amountDecimals: number, rateDecimals: number }> {
     if (market === 'BTC_NAV') return Promise.resolve({amountDecimals: 2, rateDecimals: 7});
     if (this.decimals[market]) {
       console.log(market, this.decimals[market]);
@@ -76,7 +80,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       this.decimals[market] = UTILS.parseDecimals(res);
       return this.decimals[market]
     })
-  }
+  }*/
 
   getAllOrders(base: string, coin: string, startTime: number, endTime: number): Observable<VOOrder[]> {
     let url = this.prefix + 'https://api.binance.com/api/v3/myTrades';
@@ -306,7 +310,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     //  const amountDecimals = val.amountDecimals;
     // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
     // data.rate = +data.rate.toFixed(val.rateDecimals);
-    console.log('!!! STOP LOSS ', market, quantity, stopPrice, price);
+    console.log(' STOP LOSS ', market, quantity, stopPrice, price);
 
     let url = this.prefix + 'https://api.binance.com/api/v3/order';
     let data = {

@@ -398,4 +398,9 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     })
 
   }
+
+  onAddClick() {
+    const bot = this.botsService.createBot(this.exchange, this.market);
+
+  }
 }

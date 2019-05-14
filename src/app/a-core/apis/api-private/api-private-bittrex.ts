@@ -21,9 +21,10 @@ export class ApiPrivateBittrex extends ApiPrivateAbstaract {
 
   constructor(
     private http: HttpClient,
-    userLogin: UserLoginService
+    userLogin: UserLoginService,
+    storage: StorageService
   ) {
-    super(userLogin);
+    super(userLogin, storage);
   }
 
  /* sellCoin(sellCoin: MarketOrderModel): Observable<MarketOrderModel> {

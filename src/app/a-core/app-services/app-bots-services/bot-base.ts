@@ -15,6 +15,7 @@ import {StopLossOrder} from './stop-loss-order';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subject} from 'rxjs/internal/Subject';
 import {CandlesUtils} from '../candles/candles-utils';
+import {MATH} from '../../../acom/math';
 
 
 export enum MCState {
@@ -89,6 +90,7 @@ export class BotBase {
 /////////////////////////////////////////////////// new ///////////////
 
   mas$: Subject<{ ma3: number, ma7: number, ma25: number, ma99: number }> = new Subject();
+  ma$: Subject<number> = new Subject();
   wdType$: BehaviorSubject<WDType>;
 
 
@@ -199,6 +201,10 @@ export class BotBase {
         this.cancelAllOpenOrders();
       } else if(type === WDType.LONG) {
         this.cancelAllOpenOrders();
+        UTILS.wait(5).then(() =>{
+          const pots = this.pots$.getValue();
+          this.adjustBalanceToPots(pots);
+        })
       }
 
     });
@@ -248,7 +254,9 @@ export class BotBase {
       });
       const mas = CandlesUtils.mas(closes);
       this.mas$.next(mas);
-      this.lastPrice$.next(last.close);
+      const p =  MATH.percent(mas.ma3, mas.ma25)
+      this.ma$.next(+p.toFixed(2));
+      this.lastPrice$.next(+mas.ma3.toPrecision(6));
     });
 
     this.balanceCoin$.subscribe(balance => {
@@ -362,29 +370,34 @@ export class BotBase {
     this.followPots();
   }
 
+
   followPots() {
     this.sub4 = this.pots$.pipe(skip(2)).subscribe(pots => {
       console.log(pots);
       const wdType = this.wdType$.getValue();
       if (wdType !== WDType.LONG) return;
-
-      const postsBalance = this.potsBalance$.getValue();
-      const diff = pots - postsBalance;
-      console.log('%c ' + this.id + ' pots diff ' + diff, 'color:green');
-
-        if (Math.abs(diff) > 0.3) {
-          const amountCoin = Math.abs(diff) * this.potSize;
-          if (diff > 0) this.buyCoinInstant(amountCoin).then(res => {
-            console.log(this.id + '  followPots BUY ', res)
-          }).catch(console.error);
-          else this.sellCoinInstant(amountCoin).then(res => {
-            console.log(this.id + '  followPots SELL ', res)
-          }).catch(console.error);
-        }
-
-
+      this.adjustBalanceToPots(pots);
     });
   }
+
+  private adjustBalanceToPots(pots){
+
+    const postsBalance = this.potsBalance$.getValue();
+    const diff = pots - postsBalance;
+    console.log('%c ' + this.id + ' pots diff ' + diff, 'color:green');
+
+    if (Math.abs(diff) > 0.3) {
+      const amountCoin = Math.abs(diff) * this.potSize;
+      if (diff > 0) this.buyCoinInstant(amountCoin).then(res => {
+        console.log(this.id + '  followPots BUY ', res)
+      }).catch(console.error);
+      else this.sellCoinInstant(amountCoin).then(res => {
+        console.log(this.id + '  followPots SELL ', res)
+      }).catch(console.error);
+    }
+
+  }
+
 
   setBalances(balanceBase: VOBalance, balanceCoin: VOBalance) {
     this._balanceBase$.next(balanceBase);

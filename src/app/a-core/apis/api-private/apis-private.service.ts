@@ -41,15 +41,15 @@ export class ApisPrivateService {
   private cerateExchange(exchange: string): ApiPrivateAbstaract {
     switch (exchange) {
       case 'bittrex':
-        return new ApiPrivateBittrex(this.http, this.userLogin);
+        return new ApiPrivateBittrex(this.http, this.userLogin, this.storage);
       case 'poloniex':
-        return new ApiPrivatePoloniex(this.http, this.userLogin);
+        return new ApiPrivatePoloniex(this.http, this.userLogin, this.storage);
       case 'hitbtc':
-        return new ApiPrivateHitbtc(this.http, this.userLogin);
+        return new ApiPrivateHitbtc(this.http, this.userLogin, this.storage);
       case 'cryptopia':
         return null; // new ApiPrivateCryptopia(this.http, this.storage);
       case 'binance':
-        return new ApiPrivateBinance(this.http, this.userLogin);
+        return new ApiPrivateBinance(this.http, this.userLogin, this.storage);
 
     }
     return undefined;

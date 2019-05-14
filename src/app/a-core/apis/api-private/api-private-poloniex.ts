@@ -21,9 +21,10 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
 
   constructor(
     private http: HttpClient,
-    userLogin: UserLoginService
+    userLogin: UserLoginService,
+    storage: StorageService
   ) {
-    super(userLogin);
+    super(userLogin, storage);
     this.balancesSub = new BehaviorSubject<VOBalance[]>(null);
   }
 

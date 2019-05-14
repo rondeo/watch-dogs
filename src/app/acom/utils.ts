@@ -47,7 +47,7 @@ export class UTILS {
 
   }
 
-  static parseDecimals(data: { amountCoin: string, rate: string }[]) {
+  static parseDecimals(data: { amountCoin: number, rate: number }[]) {
     let maxRate = 0;
     let maxAmount = 0;
     data.forEach(function (item) {
@@ -69,7 +69,7 @@ export class UTILS {
     };
   }
 
-  static setDecimals(exchange: string, market: string, orders: { amountCoin: string, rate: string }[]) {
+  static setDecimals(exchange: string, market: string, orders: { amountCoin: number, rate: number }[]) {
     if (!UTILS.decimals[exchange + market]) {
       UTILS.decimals[exchange + market] = UTILS.parseDecimals(orders);
       // console.log('setting decimals ' + exchange + base + coin, val);
