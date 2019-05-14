@@ -136,10 +136,10 @@ export class FollowOpenOrder {
   }
 
   async sellCoinInstant() {
-    this.log(' SELL INSTANT ');
-    const result1 = await this.stopLossOrder.cancelSopLossOrders();
+   // this.log(' SELL INSTANT ');
+   // const result1 = await this.stopLossOrder.cancelSopLossOrders();
 
-    this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
+    // this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
     setTimeout(() => {
       this.log(' Downloading books ');
       this.apisPublic.getExchangeApi(this.exchange).downloadBooks2(this.market).toPromise().then(books => {
@@ -155,8 +155,8 @@ export class FollowOpenOrder {
   }
 
   async sellCoin(rate: number) {
-    const result1 = await this.stopLossOrder.cancelSopLossOrders();
-    this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
+    // const result1 = await this.stopLossOrder.cancelSopLossOrders();
+   //  this.log(' CANCEL ORDER RESULT ' + JSON.stringify(result1));
     const qty = this.balanceCoin.available;
     /* if (qty * this.priceCounUS < 20) {
        this.log(' nothing to sell ');

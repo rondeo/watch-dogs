@@ -350,7 +350,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   onDeleteBotClick(bot: MarketBot) {
     const msg = ' Delete ' + bot.id + '?';
     if(confirm(msg)) {
-      this.botsService.deleteBot(bot)
+      this.botsService.deleteBot(bot);
     }
   }
 
@@ -386,11 +386,8 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
 
   onEditTypeClick(bot: MarketBot) {
-    const ref = this.dialog.open(OrderTypeComponent, {height: '200px', width:'300px', data: bot});
-
+    const ref = this.dialog.open(OrderTypeComponent, {height: '230px', width:'350px', data: bot});
     ref.afterClosed().subscribe(res => {
-     //  if(!isNaN(res))  bot.pots$.next(res);
-     this.botsService.save();
     })
 
   }
@@ -399,7 +396,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width:'600px', data: bot});
     ref.afterClosed().subscribe(res => {
     })
-
 
   }
 }

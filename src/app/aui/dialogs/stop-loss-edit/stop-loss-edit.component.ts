@@ -12,6 +12,7 @@ import {MyOrder} from '../../../a-core/app-services/app-bots-services/bot-base';
 })
 export class StopLossEditComponent implements OnInit {
 
+  id: string;
   resetStopLossAt: number;
   stopLoss: StopLossOrder;
   stopLossPercent: number;
@@ -25,6 +26,7 @@ export class StopLossEditComponent implements OnInit {
     public dialogRef: MatDialogRef<StopLossEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MarketBot
   ) {
+    this.id = data.id;
     this.stopLoss = data.stopLossController;
     this.stopLossPercent = this.stopLoss.stopLossPercent;
     this.sellPercent = this.stopLoss.sellPercent;
@@ -55,19 +57,17 @@ export class StopLossEditComponent implements OnInit {
   }
 
   onStopPercentChange() {
-
-    this.stopPrice = this.stopLoss.stopPrice;
+    const ma = this.stopLoss.ma$.getValue();
+    this.stopPrice = StopLossOrder.getStopPrice(ma, this.stopLossPercent);
     this.onSellPercentChange();
   }
 
 
   onSellPercentChange() {
-    this.sellPrice = this.stopLoss.sellPrice;
-
+    this.sellPrice = StopLossOrder.getSellPrice(this.stopPrice, this.sellPercent);
   }
 
   onRefreshClick() {
     this.data.refreshOpenOrders();
-
   }
 }

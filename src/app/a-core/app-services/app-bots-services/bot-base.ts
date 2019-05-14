@@ -141,6 +141,18 @@ export class BotBase {
     });
   }
 
+  set wdType(type: WDType) {
+    const t = this.wdType$.getValue();
+    if(t !== type) {
+      this.wdType$.next(type);
+    }
+
+  }
+
+  get wdType() {
+    return this.wdType$.getValue();
+  }
+
   private marketPrecision;
   private interval;
   private sub1: Subscription;
@@ -176,11 +188,21 @@ export class BotBase {
       this.pots$.next(sett.pots);
     });
 
-    this.wdType$ = new BehaviorSubject(WDType.OFF);
-    this.wdType$.subscribe(type => {
+    this.wdType$ = new BehaviorSubject(null);
+
+    this.wdType$.pipe(filter(v => !!v)).subscribe(type => {
+      console.log(this.id + ' ' + type);
       if (type !== WDType.OFF) this.subscribeForBalancesAndOrders();
       else this.unsubscribe();
+
+      if(type === WDType.SHORT) {
+        this.cancelAllOpenOrders();
+      } else if(type === WDType.LONG) {
+        this.cancelAllOpenOrders();
+      }
+
     });
+
 
 
     /*marketCap.ticker$().subscribe(MC => {
@@ -233,7 +255,7 @@ export class BotBase {
       const potsBalance = balance ? +(balance.balance / this.potSize).toFixed(1) : 0;
       this.potsBalance$.next(potsBalance);
 
-      if(this.wdType$.getValue() === WDType.SHORT && balance.available > (this.potSize * 0.3)) {
+      if (this.wdType$.getValue() === WDType.SHORT && balance.available > (this.potSize * 0.3)) {
         this.sellCoinInstant(balance.balance);
       }
 
@@ -256,6 +278,28 @@ export class BotBase {
     }))
   }
 
+  async cancelAllOpenOrders() {
+    console.log(this.id + ' canceling all open orders')
+    const openOrders = this.ordersOpen$.getValue();
+   const results = await this.cancelOrders(openOrders.map(function (item) {
+      return item.uuid;
+    }));
+    console.log(this.id + ' CANCEL ORDERS RESULTS ', results);
+    await UTILS.wait(5);
+    this.apiPrivate.refreshBalances();
+    return results;
+
+
+  }
+  cancelOrders(uids: string[]) {
+    return Promise.all(uids.map(async (uid) =>{
+      await UTILS.wait(2);
+      const res = await this.apiPrivate.cancelOrder2(uid, this.market).toPromise();
+      await UTILS.wait(2);
+      return  res;
+    }))
+
+  }
   refreshOpenOrders() {
     this.apiPrivate.refreshOpenOrdersNow();
   }
@@ -280,6 +324,7 @@ export class BotBase {
         return item.base === base && item.coin === coin;
       });
 
+
       console.log(this.id + ' MY open orders   ', myOrders);
       this.ordersOpen$.next(myOrders);
       this.storage.upsert(this.id + '-orders-open', myOrders);
@@ -294,8 +339,8 @@ export class BotBase {
       });
 
       const min = this.potSize / 10;
-      if(balanceCoin.available < min) balanceCoin.available = 0;
-      if(balanceCoin.balance < min) balanceCoin.balance = 0;
+      if (balanceCoin.available < min) balanceCoin.available = 0;
+      if (balanceCoin.balance < min) balanceCoin.balance = 0;
 
       console.log(balanceCoin);
       this.setBalances(balanceBase, balanceCoin);
@@ -320,12 +365,13 @@ export class BotBase {
   followPots() {
     this.sub4 = this.pots$.pipe(skip(2)).subscribe(pots => {
       console.log(pots);
+      const wdType = this.wdType$.getValue();
+      if (wdType !== WDType.LONG) return;
+
       const postsBalance = this.potsBalance$.getValue();
       const diff = pots - postsBalance;
       console.log('%c ' + this.id + ' pots diff ' + diff, 'color:green');
-      const wdType = this.wdType$.getValue();
 
-      if(wdType === WDType.LONG) {
         if (Math.abs(diff) > 0.3) {
           const amountCoin = Math.abs(diff) * this.potSize;
           if (diff > 0) this.buyCoinInstant(amountCoin).then(res => {
@@ -335,7 +381,7 @@ export class BotBase {
             console.log(this.id + '  followPots SELL ', res)
           }).catch(console.error);
         }
-      }
+
 
     });
   }
@@ -346,13 +392,13 @@ export class BotBase {
     if (!oldBalanceCoin || oldBalanceCoin.available !== balanceCoin.available || oldBalanceCoin.pending !== balanceCoin.pending) {
       console.log('%c ' + this.id + ' balance changed  ', 'color: red');
       console.log(oldBalanceCoin, balanceCoin);
-      this.apiPrivate.downloadAllOpenOrders().subscribe(openOrders => {
-
+      this.apiPrivate.refreshOpenOrdersNow().then(openOrders => {
         //  this.apiPrivate.downloadOrdersHistory(this.market, moment().valueOf(), moment().subtract(1, 'day').valueOf())
         //   .subscribe(ordersHistory => {
         //  this.ordersHistory$.next(ordersHistory);
-        console.log(this.id + ' open orders ', openOrders);
-        this.ordersOpen$.next(openOrders);
+        //  console.log(this.id + ' open orders ', openOrders);
+        // this.ordersOpen$.next(openOrders);
+
         this.storage.upsert(this.id + '-balanceCoin', balanceCoin);
         console.log(this.id + ' new balance  ', balanceCoin);
         this._balanceCoin$.next(balanceCoin);
@@ -403,7 +449,10 @@ export class BotBase {
 
     const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
     const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
-    return this.setBuyOrder(rate, qty);
+    const res = await this.setBuyOrder(rate, qty);
+    await UTILS.wait(2);
+    this.apiPrivate.refreshBalances();
+    return res;
   }
 
   addPots(pots: number) {
@@ -429,6 +478,7 @@ export class BotBase {
       this.error$.next(this.id + ' available ' + baseAvailable + ' need  ' + need);
       return
     }
+
     let result;
     try {
       result = await this.apiPrivate.buyLimit2(this.market, amountCoin, rate);
@@ -443,26 +493,32 @@ export class BotBase {
   async setSellOrder(rate: number, amountCoin: number, stopLoss: number) {
     const balance: VOBalance = this._balanceCoin$.getValue()
 
-    if(!balance) {
+    if (!balance) {
       console.error(' no balance ')
       return Promise.resolve()
     }
 
-    if(amountCoin > balance.balance) {
+    if (amountCoin > balance.balance) {
       console.error(' no enough balance ');
       return Promise.resolve()
     }
 
-    if(amountCoin < balance.available) {
-      console.log('CANCELING ALL OPEN orders');
+    if (amountCoin > balance.available) {
       const openOrders = this.ordersOpen$.getValue();
-      await Promise.all(openOrders.map( (item) => {
-        return this.apiPrivate.cancelOrder2(item.uuid, item.market);
-      }));
-      await UTILS.wait(5);
+      if (openOrders.length) {
+        console.log('CANCELING ALL OPEN orders ', openOrders);
+        await Promise.all(openOrders.map((item) => {
+          return this.apiPrivate.cancelOrder2(item.uuid, item.market).toPromise();
+        }));
+        await UTILS.wait(5);
+      } else {
+        console.error(' no available and no open orders ')
+      }
+
+
     }
 
-    console.log(this.id +  ' SELL_ORDER qty ' + amountCoin + 'rate ' + rate);
+    console.log(this.id + ' SELL_ORDER qty ' + amountCoin + 'rate ' + rate);
     let result;
     try {
       result = await this.apiPrivate.sellLimit2(this.market, amountCoin, rate);
@@ -480,11 +536,16 @@ export class BotBase {
     const books = await this.apiPublic.downloadBooks2(this.market).toPromise();
     const rate = UtilsBooks.getRateForAmountCoin(books.buy, amountCoin);
     console.log('SELL_INSTANT ' + qty);
-    return this.setSellOrder(rate, amountCoin, 0)
+    const res = await this.setSellOrder(rate, amountCoin, 0);
+    await UTILS.wait(2);
+    this.apiPrivate.refreshBalances();
+    return res;
   }
 
 
-  async botInit() {
+  async
+
+  botInit() {
     /* const ar = this.market.split('_');
    //  this.base = ar[0];
     // this.coin = ar[1];
@@ -549,7 +610,14 @@ export class BotBase {
   }
 
 
-  log(log: { action: string, reason: string }) {
+  log(log
+        :
+        {
+          action: string, reason
+            :
+            string
+        }
+  ) {
     // if (typeof message !== 'string') out = UTILS.toString(message);
     // else out = message;
     const time = moment().format('DD HH:mm');
@@ -575,7 +643,7 @@ export class BotBase {
      } else amount = +amount.toFixed(2);
      return amount
    }
- */
+  */
 
   /*  get state() {
       return this.state$.getValue();
@@ -627,7 +695,9 @@ export class BotBase {
     this.storage.upsert(this.id + '-settings', this.toJSON());
   }
 
-  toJSON(): VOWatchdog {
+  toJSON()
+    :
+    VOWatchdog {
     return {
       exchange: this.exchange,
       market: this.market,

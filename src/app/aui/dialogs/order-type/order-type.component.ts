@@ -10,8 +10,8 @@ import {WDType} from '../../../amodels/app-models';
 })
 export class OrderTypeComponent implements OnInit {
 
+  id: string;
   wdType: WDType;
-
   amountPots: number;
 
   constructor(
@@ -20,10 +20,10 @@ export class OrderTypeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this.id = this.data.id;
     this.data.pots$.subscribe(pots => {
       this.amountPots = pots;
-    })
+    });
     this.data.wdType$.subscribe(type => this.wdType = type);
   }
 
@@ -32,8 +32,7 @@ export class OrderTypeComponent implements OnInit {
   }
 
   onApplyClick() {
-
-    this.data.wdType$.next(this.wdType);
+    this.data.wdType = this.wdType;
     this.data.pots$.next(+this.amountPots);
     this.data.saveSettings();
   }

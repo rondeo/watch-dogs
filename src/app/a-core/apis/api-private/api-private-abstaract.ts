@@ -99,9 +99,11 @@ export abstract class ApiPrivateAbstaract {
       coin = ar[1];
     }
 
+    console.log('CANCEL ORDER ' + orderId);
     return this.cancelOrder(orderId, base, coin).pipe(map(res => {
-      this.refreshOpenOrdersNow();
+
       console.log(' cancel order result ', res);
+      this.refreshOpenOrdersNow();
       return res;
     }))
   }
@@ -187,33 +189,37 @@ export abstract class ApiPrivateAbstaract {
 */
 
 
-  refreshOpenOrdersNow() {
+  refreshOpenOrdersNow(): Promise<VOOrder[]> {
     clearTimeout(this.refreshOrdersTimeout);
-    this._refreshAllOpenOrders();
+    return this._refreshAllOpenOrders();
   }
   refreshOrdersTimeout;
 
-  private _refreshAllOpenOrders() {
-    const num = this._openOrdersAll$.observers.length;
-    if(!num) return;
-    console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
-    this.downloadAllOpenOrders().subscribe(res => {
-      console.log( this.exchange + ' open orders ', res)
-      if(res.length) {
+  private _refreshAllOpenOrders(): Promise<VOOrder[]> {
+    return new Promise((resolve, reject) => {
+      const num = this._openOrdersAll$.observers.length;
+      if(!num) return;
+      console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
+      this.downloadAllOpenOrders().subscribe(res => {
+        console.log( this.exchange + ' open orders ', res)
+       /* if(res.length) {
+          this.refreshOrdersTimeout = setTimeout(() => {
+            this._refreshAllOpenOrders();
+          }, 25000);
+        }*/
+        this._openOrdersAll$.next(res);
+        resolve(res);
+      }, err => {
+        reject(err);
         this.refreshOrdersTimeout = setTimeout(() => {
           this._refreshAllOpenOrders();
-        }, 25000);
-      }
-      this._openOrdersAll$.next(res);
+        }, 5000);
+        /* this.refreshOrdersTimeout = setTimeout(() => {
+           this.refreshAllOpenOrders();
+         }, 50000);*/
+      });    //
+    })
 
-    }, err => {
-      this.refreshOrdersTimeout = setTimeout(() => {
-        this._refreshAllOpenOrders();
-      }, 5000);
-      /* this.refreshOrdersTimeout = setTimeout(() => {
-         this.refreshAllOpenOrders();
-       }, 50000);*/
-    });    //
   }
 
 
