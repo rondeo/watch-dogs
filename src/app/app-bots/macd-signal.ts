@@ -1,9 +1,9 @@
-import {MACD} from '../../../trader/libs/techind';
-import {MACDOutput} from '../../../trader/libs/techind/moving_averages/MACD';
+import {MACD} from '../trader/libs/techind';
+import {MACDOutput} from '../trader/libs/techind/moving_averages/MACD';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {VOCandle} from '../../../amodels/api-models';
-import {CandlesService} from '../candles/candles.service';
-import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {VOCandle} from '../amodels/api-models';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import {BuySellState} from './models';
 
 

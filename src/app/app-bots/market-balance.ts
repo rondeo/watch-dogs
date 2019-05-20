@@ -1,11 +1,11 @@
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {VOBalance, VOOrder} from '../../../amodels/app-models';
-import {StorageService} from '../../services/app-storage.service';
+import {VOBalance, VOOrder} from '../amodels/app-models';
+import {StorageService} from '../a-core/services/app-storage.service';
 import {StopLossOrder} from './stop-loss-order';
 import * as _ from 'lodash';
-import {MarketCapService} from '../../../market-cap/services/market-cap.service';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {MarketCapService} from '../market-cap/services/market-cap.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
 
 export enum BalanceState {
   NONE = 'NONE',

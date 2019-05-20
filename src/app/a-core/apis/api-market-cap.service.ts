@@ -15,41 +15,38 @@ import {catchError, filter, first, map, refCount, share, shareReplay} from 'rxjs
 import {MATH} from '../../acom/math';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ajax, fromPromise} from 'rxjs/internal-compatibility';
-import { interval } from 'rxjs';
+import {interval} from 'rxjs';
 import {keyframes} from '@angular/animations';
 import {of} from 'rxjs/internal/observable/of';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 
 @Injectable()
 export class ApiMarketCapService {
 
-  // oldMC$: Observable<{[symbol: string]:number}>;
-  //  oldMCSub = new BehaviorSubject<{[symbol: string]:number}>(null);
-
-  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }>;
-  oldData$;
+  private tikerSub: BehaviorSubject<{ [symbol: string]: VOMarketCap }> = new BehaviorSubject(null);
+  private oldDataSub: BehaviorSubject<any> = new BehaviorSubject(null);
   private coinsDay: VOCoinsDayData;
-  tikerInterval;
+
   private coinsAr: VOMarketCapSelected[];
 
   constructor(
     private http: HttpClient,
     private storage: StorageService
   ) {
-    this.tikerSub = new BehaviorSubject(null);
-    this.tikerInterval = setInterval(() => this.refreshTicker(),  60000);
-    this.refreshTicker();
+
+    setInterval(() => {
+      this.downloadTicker();
+    }, 10e4);
+    this.downloadTicker();
+    this.downloadOldData().subscribe(data => this.oldDataSub.next(data));
   }
-
-  // private data: { [symbol: string]: VOMarketCap };
-  //  private agrigatedSub: BehaviorSubjectMy<{ [symbol: string]: VOMCAgregated }> = new BehaviorSubjectMy();
-
 
   static mapDataMC(data: any[], ranks) {
     const out = {};
     const BTC = data.shift();
 
     if (BTC.symbol !== 'BTC') throw new Error(' first not BTC');
-    const btcusd =BTC['quote']['USD'];
+    const btcusd = BTC['quote']['USD'];
     const btc1h = +btcusd.percent_change_1h;
     const btc24h = +btcusd.percent_change_24h;
     const btc7d = +btcusd.percent_change_7d;
@@ -61,7 +58,6 @@ export class ApiMarketCapService {
     btcusd.price_usd = priceBTC;
     BTC.id = BTC.slug;
 
-
     const USDT = data.find(function (item) {
       return item.symbol === 'USDT';
     })['quote']['USD'];
@@ -69,7 +65,7 @@ export class ApiMarketCapService {
     data.forEach(function (item) {
       if (item.symbol === 'ETHOS') item.symbol = 'BQX';
 
-      const oldRank = ranks?(ranks[item.symbol] ? ranks[item.symbol] : 500):0;
+      const oldRank = ranks ? (ranks[item.symbol] ? ranks[item.symbol] : 500) : 0;
 
       const data = item['quote']['USD'];
 
@@ -79,10 +75,10 @@ export class ApiMarketCapService {
         name: item.name,
         symbol: item.symbol,
         rank: +item.cmc_rank,
-        r6:oldRank? MATH.percent(oldRank.r6, +item.cmc_rank):0,
-        r24: oldRank?MATH.percent(oldRank.r24, +item.cmc_rank):0,
+        r6: oldRank ? MATH.percent(oldRank.r6, +item.cmc_rank) : 0,
+        r24: oldRank ? MATH.percent(oldRank.r24, +item.cmc_rank) : 0,
         price_usd: +data.price,
-       // price_btc: +data.price / priceBTC,
+        // price_btc: +data.price / priceBTC,
         volume_usd_24h: data.volume24h,
         market_cap_usd: +data.market_cap,
         available_supply: +item.circulating_supply,
@@ -90,7 +86,7 @@ export class ApiMarketCapService {
         max_supply: +item.max_supply,
         percent_change_1h: +(data.percent_change_1h).toFixed(2),
         percent_change_24h: +(data.percent_change_24h).toFixed(2),
-        percent_change_7d: +(data.percent_change_7d).toFixed(2),
+        percent_change_7d: +(data.percent_change_7d || 0).toFixed(2),
         last_updated: item.last_updated
       };
     });
@@ -99,15 +95,15 @@ export class ApiMarketCapService {
     out['USDT'].percent_change_24h = +(USDT.percent_change_24h.toFixed(2));
     out['USDT'].percent_change_7d = +(USDT.percent_change_7d.toFixed(2));
     out['BTC'] = Object.assign(BTC, btcusd);
-   // console.log(out);
     return out;
   }
 
+  get oldData$() {
+    return this.oldDataSub.pipe(filter(v => !!v));
+  }
 
-  getOldData() {
-    if(!this.oldData$) {
-
-      const key = function (items:any[]) {
+  downloadOldData() {
+      const key = function (items: any[]) {
         const out = {};
         items.forEach(function (item) {
           if (item.symbol === 'ETHOS') item.symbol = 'BQX';
@@ -116,85 +112,47 @@ export class ApiMarketCapService {
         return out;
       };
 
-      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap12.json');
-      const mc24h =  this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap24.json');
-      this.oldData$ = forkJoin([mc6h, mc24h])
+      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap48.json');
+      const mc24h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap144.json');
+      return forkJoin([mc6h, mc24h])
         .pipe(catchError(error => of(null)),
-        map(res =>{
-          if(!res) return  null;
-          let res6h = (<any>res[0]).data;
-          let res24h = key((<any>res[1]).data);
-          const out = {};
-          res6h.forEach(function (item) {
-            let symbol = item.symbol;
-            if (symbol === 'ETHOS') symbol = 'BQX';
-            if (!out[symbol]) out[symbol] = {
-              r6: item.cmc_rank,
-              r24: res24h[symbol]? +res24h[symbol].cmc_rank: 0
-            }
+          map(res => {
+            if (!res) return null;
+            let res6h = (<any>res[0]).data || [];
+            let res24h = key((<any>res[1]).data);
+            const out = {};
+
+            res6h.forEach(function (item) {
+              let symbol = item.symbol;
+              if (symbol === 'ETHOS') symbol = 'BQX';
+              if (!out[symbol]) out[symbol] = {
+                r6: item.cmc_rank,
+                r24: res24h[symbol] ? +res24h[symbol].cmc_rank : 0
+              }
+            });
+            return out;
           })
-         // console.log(res);
-
-          return out;
-        })
-      ).pipe(shareReplay(1))
-    }
-    return this.oldData$;
+        );
   }
 
-  refreshTicker() {
-    forkJoin(this.getOldData(), this.downloadTicker())
-      .pipe(map(res => {
-         // console.log(res);
-        const oldData = res[0];
-        const newData = res[1];
-        const data = ApiMarketCapService.mapDataMC(newData, oldData);
-         console.log('last_updated ' + moment(data['BTC'].last_updated).format('HH:mm'));
-        this.tikerSub.next(data);
-      }))
-      .subscribe(res => {
-      });
-  }
-
-  ticker():Promise<VOMCObj>{
-    return new Promise((resolve, reject)=>{
-      this.tikerSub.subscribe(res =>{
-        if(res) resolve(res);
-      })
-    })
-  }
   ticker$(): Observable<{ [symbol: string]: VOMarketCap }> {
-   /* if(!this.myTicker$) {
-
-     /!* interval(10000).subscribe(()=>{
-        console.log(' tick');
-      })*!/
-
-      const data = ajax('api/proxy-5min/https://api.coinmarketcap.com/v1/ticker/?limit=500');
-      data.subscribe((res) =>{
-        console.log(res.response);
-      });
-
-      this.myTicker$ = this.downloadTicker().pipe(
-
-
-      );
-
-      this.myTicker$.subscribe(console.warn);
-    }*/
-    return this.tikerSub.pipe(filter(MC =>!!MC));
+    return this.tikerSub.pipe(filter(MC => !!MC));
   }
 
-  myTicker$;
-  downloadTicker(): Observable<any[]> {
-    const CMC_PRO_API_KEY = '6d420757-bcc7-4e9e-89bc-9e17ef61717f';
+  downloadTicker() {
+    const CMC_PRO_API_KEY = '2e839c65-7d80-4445-866a-f690ccdb181b';// '6d420757-bcc7-4e9e-89bc-9e17ef61717f';
     const limit = '500';
     const params = {CMC_PRO_API_KEY, limit};
-    let url = 'api/proxy-5min/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
-    return this.http.get(url, {params})
+    let url = 'api/proxy-15min/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
+    this.http.get(url, {params})
       .pipe(
         map((res: any) => res.data)
-      );
+      ).subscribe(newData => {
+        this.oldData$.subscribe(oldData => {
+          const merged = ApiMarketCapService.mapDataMC(newData, oldData)
+          this.tikerSub.next(merged);
+        });
+    });
   }
 
   async getCoinsArWithSelected(): Promise<VOMarketCapSelected[]> {
@@ -215,65 +173,10 @@ export class ApiMarketCapService {
 
   async getTicker(): Promise<VOMCObj> {
     return new Promise<VOMCObj>((resolve, reject) => {
-      this.ticker$().subscribe((res)=>{
-        if(res)  resolve(res)
+      this.ticker$().subscribe((res) => {
+        if (res) resolve(res)
       })
     })
   }
-
-  // uplight.ca API //////////////////////////////////////////////////////////////////
-/*
-  getCoinLongHistory(coin: string) {
-    const now = moment().toISOString();
-    const ago50H = moment().subtract(500, 'hours').toISOString();
-    return this.getCoinHistory5Hours(coin, ago50H, now);
-  }
-
-  getCoinHistory5Hours(coin: string, from: string, to: string): Observable<VOMCObj[]> {
-    if (!coin) throw new Error(' no coin');
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/5-hours/coin-history/:symbol/:from/:to'
-      .replace(':symbol', coin).replace(':from', from).replace(':to', to);
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  get30MinLast(): Observable<VOMCObj[]> {
-
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/last/1';
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  getTickers30Min(limit = 2): Observable<VOMCObj[]> {
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-min/last/' + limit;
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  getTicker30MinFrom(from: string, limit = 1): Observable<VOMCObj[]> {
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/from/' + from + '/' + limit;
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  getCoinHistory(coin: string, from: string, to: string): Observable<VOMCObj[]> {
-    if (!coin) throw new Error(' no coin');
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/30-mins/coin-history/:symbol/:from/:to'
-      .replace(':symbol', coin).replace(':from', from).replace(':to', to);
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  getTickers5Hours(limit = 2): Observable<VOMCObj[]> {
-    const url = 'api/proxy-1hour/http://uplight.ca:50001/cmc-mongo/hours/last/' + limit;
-    console.log(url);
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-
-  getTicker5HoursFrom(from: string, limit = 1) {
-    const url = 'api/proxy-5min/http://uplight.ca:50001/cmc-mongo/hours/from/' + from + '/' + limit;
-    return this.http.get(url).pipe(map((res: any) => res.data));
-  }
-*/
 
 }

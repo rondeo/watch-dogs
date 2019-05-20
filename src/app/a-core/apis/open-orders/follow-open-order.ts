@@ -9,14 +9,14 @@ import {MATH} from '../../../acom/math';
 import * as moment from 'moment';
 import {StorageService} from '../../services/app-storage.service';
 import {CandlesAnalys1} from '../../app-services/scanner/candles-analys1';
-import {SellOnJump} from '../../app-services/app-bots-services/sell-on-jump';
-import {StopLossOrder} from '../../app-services/app-bots-services/stop-loss-order';
 import {ApiPrivateAbstaract} from '../api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../api-public/api-public-abstract';
 import {UtilsBooks} from '../../../acom/utils-books';
 import {Subject, Subscription} from 'rxjs';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
+import {SellOnJump} from '../../../app-bots/sell-on-jump';
+import {StopLossOrder} from '../../../app-bots/stop-loss-order';
 
 export class FollowOpenOrder {
   constructor(

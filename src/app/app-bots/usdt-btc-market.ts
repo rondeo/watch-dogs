@@ -1,10 +1,10 @@
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {VOBalance} from '../../../amodels/app-models';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {VOMCObj} from '../../../amodels/api-models';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
+import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
+import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {VOBalance} from '../amodels/app-models';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {VOMCObj} from '../amodels/api-models';
 
 export class UsdtBtcMarket {
   private apiPublic: ApiPublicAbstract;

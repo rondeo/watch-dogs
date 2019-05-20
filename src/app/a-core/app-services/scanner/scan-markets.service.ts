@@ -15,10 +15,10 @@ import {MACD, MFI} from '../../../trader/libs/techind';
 import {ApiCryptoCompareService} from '../../apis/api-crypto-compare.service';
 import {Subject} from 'rxjs/internal/Subject';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {MacdSignal} from '../app-bots-services/macd-signal';
 import {ReplaySubject} from 'rxjs/internal/ReplaySubject';
 import {Observable} from 'rxjs/internal/Observable';
 import {MACDOutput} from '../../../trader/libs/techind/moving_averages/MACD';
+import {MacdSignal} from '../../../app-bots/macd-signal';
 
 export interface VOMessage {
   time: string;

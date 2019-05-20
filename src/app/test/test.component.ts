@@ -12,7 +12,6 @@ import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.servic
 import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
 import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {VOBalance} from '../amodels/app-models';
-import {SellOnJump} from '../a-core/app-services/app-bots-services/sell-on-jump';
 import {UTILS} from '../acom/utils';
 import {TestCandlesService} from './test-candles.service';
 import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';

@@ -8,6 +8,7 @@ import {ApiPrivateHitbtc} from './api-private-hitbtc';
 import {UserLoginService} from '../../services/user-login.service';
 import {ApiPrivateBinance} from './api-private-binance';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {ApiPrivateCoinbase} from './api-private-coinbase';
 
 
 @Injectable()
@@ -27,9 +28,6 @@ export class ApisPrivateService {
     ApisPrivateService.instance = this;
   }
 
-  getAllAvailable(): string[] {
-    return ['binance', 'bittrex', 'poloniex', 'hitbtc']
-  }
 
   getExchangeApi(exchange: string): ApiPrivateAbstaract {
     if (!this.exchanges[exchange]) {
@@ -40,6 +38,8 @@ export class ApisPrivateService {
 
   private cerateExchange(exchange: string): ApiPrivateAbstaract {
     switch (exchange) {
+      case 'coinbase':
+        return new ApiPrivateCoinbase(this.http, this.userLogin, this.storage)
       case 'bittrex':
         return new ApiPrivateBittrex(this.http, this.userLogin, this.storage);
       case 'poloniex':

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {FollowOrdersService} from '../../a-core/apis/open-orders/follow-orders.service';
-import {MarketBot} from '../../a-core/app-services/app-bots-services/market-bot';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {ApisPublicService} from '../../a-core/apis/api-public/apis-public.service';
 import {CandlesService} from '../../a-core/app-services/candles/candles.service';
@@ -12,6 +11,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {OrderType} from '../../amodels/app-models';
+import {MarketBot} from '../../app-bots/market-bot';
 
 @Component({
   selector: 'app-follow-market',

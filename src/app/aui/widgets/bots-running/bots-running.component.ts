@@ -3,8 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {OrderType, VOWatchdog} from '../../../amodels/app-models';
 
 import {MatSnackBar} from '@angular/material';
-import {AppBotsService} from '../../../a-core/app-services/app-bots-services/app-bots.service';
+
 import {MarketOrderModel} from '../../../amodels/market-order-model';
+import {AppBotsService} from '../../../app-bots/app-bots.service';
 
 @Component({
   selector: 'app-bots-running',

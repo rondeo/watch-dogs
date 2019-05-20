@@ -1,9 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {MarketBot} from '../../../a-core/app-services/app-bots-services/market-bot';
-import {StopLossOrder} from '../../../a-core/app-services/app-bots-services/stop-loss-order';
+
+
 import {VOOrder} from '../../../amodels/app-models';
-import {MyOrder} from '../../../a-core/app-services/app-bots-services/bot-base';
+import {StopLossOrder} from '../../../app-bots/stop-loss-order';
+import {MyOrder} from '../../../app-bots/bot-base';
+import {MarketBot} from '../../../app-bots/market-bot';
+
 
 @Component({
   selector: 'app-stop-loss-edit',
@@ -62,12 +65,22 @@ export class StopLossEditComponent implements OnInit {
     this.onSellPercentChange();
   }
 
-
   onSellPercentChange() {
     this.sellPrice = StopLossOrder.getSellPrice(this.stopPrice, this.sellPercent);
   }
 
   onRefreshClick() {
     this.data.refreshOpenOrders();
+  }
+
+  sendStopLoss() {
+    console.log(this.data);
+     const balance = this.data.balanceCoin;
+
+      const available = balance.available;
+      console.log(balance);
+        this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
+          console.log(res);
+        })
   }
 }

@@ -1,9 +1,9 @@
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {StorageService} from '../../services/app-storage.service';
-import {ResistanceSupport} from '../../../trader/libs/levels/resistance-support';
+import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {ResistanceSupport} from '../trader/libs/levels/resistance-support';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {VOCandle} from '../../../amodels/api-models';
+import {VOCandle} from '../amodels/api-models';
 
 export class ResistanceSupportController {
   interval;

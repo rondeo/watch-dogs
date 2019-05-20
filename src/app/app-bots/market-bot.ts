@@ -1,29 +1,47 @@
-import {StorageService} from '../../services/app-storage.service';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
-import {CandlesService} from '../candles/candles.service';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 
-import {BtcUsdtService} from '../alerts/btc-usdt.service';
+import {BtcUsdtService} from '../a-core/app-services/alerts/btc-usdt.service';
 import {BotBase, MyOrder} from './bot-base';
-import {OrderType, VOOrder, WDType} from '../../../amodels/app-models';
+import {OrderType, VOOrder, WDType} from '../amodels/app-models';
+import {AppState} from '../app-store/reducers';
+import {createFeatureSelector, createSelector, select, Store} from '@ngrx/store';
+import {map} from 'rxjs/operators';
 
+const bots = createFeatureSelector('bots');
+
+const balances = state => state.balances;
+const openOrders = state => {
+  console.log(state);
+  return state.openOrders;
+};
+
+const serverData = createSelector(bots, (state: any)=> {
+  return state.balances
+});
 export class MarketBot extends BotBase {
 
   selected = false;
   priceLiquidInput = 0;
   isPriceLiquidEdit = false;
 
+  serverData$;
+
   constructor(
     exchange: string,
     market: string,
     potSize: number,
+    store: Store<AppState>,
     storage: StorageService,
     apiPrivate: ApiPrivateAbstaract,
     apiPublic: ApiPublicAbstract,
     candlesService: CandlesService,
     marketCap: ApiMarketCapService,
     public btcusdt: BtcUsdtService,
+
     // private minuteCandles: MinuteCandlesService,
     // private candles15: Candles15minService
 
@@ -38,6 +56,11 @@ export class MarketBot extends BotBase {
     candles15.subscribe$(market).subscribe(candles => {
       console.log('market', candles)
     })*/
+
+    this.serverData$ = store.pipe(select(serverData))
+      this.serverData$.subscribe(data => {
+      console.log(data);
+    })
   }
 
   // lastOrder: { stamp: number, orderType: string, price: number };
@@ -67,6 +90,8 @@ export class MarketBot extends BotBase {
     this.ordersHistory$.next(orders);
     return Promise.resolve();
   }
+
+
 
   async tick() {
 

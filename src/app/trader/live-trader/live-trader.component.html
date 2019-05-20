@@ -81,7 +81,7 @@
         </table>
     </div>
 
-        <h3>Bots</h3>
+        <h3>Bots <small >{{this.currentBot?.id}}</small></h3>
         <table>
             <tbody>
             <tr class="small">
@@ -118,7 +118,10 @@
 
 
     <div *ngIf="botOrders.checked">
-        <h3>Active orders</h3>
+
+        <h3>Active orders  </h3>
+        <span *ngIf="currentBot">{{currentBot.id}}</span> &nbsp;&nbsp;
+        <mat-icon (click)="onActiveOrdersRefreshClick()">refresh</mat-icon>
         <table>
             <tbody>
             <tr *ngFor="let ord of (myOrders$ | async)">

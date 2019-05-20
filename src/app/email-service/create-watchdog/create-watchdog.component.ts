@@ -9,8 +9,9 @@ import {MarketCapService} from '../../market-cap/services/market-cap.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MarketOrderModel} from '../../amodels/market-order-model';
 import * as moment from 'moment';
-import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
-import {WatchDogStatus} from '../../a-core/app-services/app-bots-services/watch-dog-status';
+import {AppBotsService} from '../../app-bots/app-bots.service';
+import {WatchDogStatus} from '../../app-bots/watch-dog-status';
+
 
 
 @Component({

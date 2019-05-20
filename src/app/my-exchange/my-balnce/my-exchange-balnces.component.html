@@ -2,7 +2,7 @@
 
     <mat-form-field class="w8">
         <mat-select [ngModel]="exchange" placeholder="Select Exchange" (selectionChange)="onEchangeChanged($event)">
-            <mat-option *ngFor="let exch of exchangesPrivate" [value]="exch">
+            <mat-option *ngFor="let exch of exchangesPrivate$ | async" [value]="exch">
                 {{exch}}
             </mat-option>
         </mat-select>

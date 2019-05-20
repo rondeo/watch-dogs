@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import {VOCandle} from '../../../amodels/api-models';
+import {VOCandle} from '../amodels/api-models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
-import {StorageService} from '../../services/app-storage.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
+import {StorageService} from '../a-core/services/app-storage.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({

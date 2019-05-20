@@ -1,13 +1,13 @@
-import {VOCandle} from '../../../amodels/api-models';
-import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {VOCandle} from '../amodels/api-models';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import * as _ from 'lodash';
-import {MATH} from '../../../acom/math';
+import {MATH} from '../acom/math';
 import * as moment from 'moment';
-import {CandlesService} from '../candles/candles.service';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 import {distinctUntilChanged} from 'rxjs/operators';
-import {MarketState} from '../alerts/btc-usdt.service';
+import {MarketState} from '../a-core/app-services/alerts/btc-usdt.service';
 import {BuySellState} from './models';
 
 

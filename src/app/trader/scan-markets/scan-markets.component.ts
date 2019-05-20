@@ -15,7 +15,6 @@ import {CandlesAnalys1} from '../../a-core/app-services/scanner/candles-analys1'
 import {CandlesAnalys2} from '../../a-core/app-services/scanner/candles-analys2';
 import {ApiCryptoCompareService} from '../../a-core/apis/api-crypto-compare.service';
 import {NotesHistoryComponent} from '../notes-history/notes-history.component';
-import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {CandlesService} from '../../a-core/app-services/candles/candles.service';
 import {FollowOrdersService} from '../../a-core/apis/open-orders/follow-orders.service';
 import {Subject, Subscription} from 'rxjs';

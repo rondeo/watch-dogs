@@ -5,10 +5,10 @@ import {AuthHttpService, VOUser} from './a-core/services/auth-http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {StorageService} from './a-core/services/app-storage.service';
 import {MarketCapService} from './market-cap/services/market-cap.service';
-import {AppBotsService} from './a-core/app-services/app-bots-services/app-bots.service';
+
 import {FollowOrdersService} from './a-core/apis/open-orders/follow-orders.service';
 import {Store} from '@ngrx/store';
-import {AppState} from './a-core/reducers';
+import {AppBotsService} from './app-bots/app-bots.service';
 
 @Component({
   selector: 'app-root',
@@ -23,8 +23,7 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private botsService: AppBotsService,
     private snackBar: MatSnackBar,
-    private followOrders: FollowOrdersService,
-    private store: Store<AppState>
+    private followOrders: FollowOrdersService
   ) {
   }
   title = 'app works!';

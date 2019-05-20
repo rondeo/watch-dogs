@@ -5,7 +5,6 @@ import {FollowOrdersService} from '../../a-core/apis/open-orders/follow-orders.s
 import {ActivatedRoute, Router} from '@angular/router';
 import * as _ from 'lodash';
 import * as  moment from 'moment';
-import {MarketBot} from '../../a-core/app-services/app-bots-services/market-bot';
 import {map} from 'rxjs/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {noop} from 'rxjs/internal-compatibility';
@@ -15,6 +14,7 @@ import {VOCandle} from '../../amodels/api-models';
 import {MACD} from '../libs/techind';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
 import {Observable} from 'rxjs/internal/Observable';
+import {MarketBot} from '../../app-bots/market-bot';
 
 @Component({
   selector: 'app-order-reports',

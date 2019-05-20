@@ -1,8 +1,8 @@
-import {VOCandle} from '../../../amodels/api-models';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import {VOCandle} from '../amodels/api-models';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import * as _ from 'lodash';
-import {CandlesAnalys1} from '../scanner/candles-analys1';
-import {MATH} from '../../../acom/math';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
+import {MATH} from '../acom/math';
 
 export class BuyOnDown {
 

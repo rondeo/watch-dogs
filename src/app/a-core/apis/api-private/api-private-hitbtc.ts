@@ -17,6 +17,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
   apiPublic: ApiPublicHitbtc;
   exchange = 'hitbtc';
 
+  url = '/api/proxy/https://api.hitbtc.com/api/2';
+
   static parseOrder(item) {
     console.log(item.status);
     let base = item.symbol.slice(-3);
@@ -142,7 +144,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
   downloadBalances(): Observable<VOBalance[]> {
 
-    const url = 'api/hitbtc/trading/balance';
+    const url = this.url + '/trading/balance';
     const exchange = this.exchange;
 
     return this.call(url, null).pipe(map((res: any[]) => res.map(function (item: any) {
@@ -162,7 +164,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
     if (base === 'USDT') base = 'USD';
 
-    const url = 'api/hitbtc/order';
+    const url = this.url + '/order';
     let data = {
       side: 'buy',
       quantity: quantity,
@@ -192,7 +194,7 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
     if (base === 'USDT') base = 'USD';
 
-    const url = 'api/hitbtc/order';
+    const url =  this.url + '/order';
     let data = {
       side: 'sell',
       quantity: quantity,
@@ -204,7 +206,6 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       .pipe(map((res: any) => {
         console.log(res);
         let result: any = res;
-
         return {
           id: res.id,
           isOpen: res.status === 'new',
@@ -239,12 +240,13 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
     //  const amountDecimals = val.amountDecimals;
     // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
     // data.rate = +data.rate.toFixed(val.rateDecimals);
-    console.log('!!! STOP LOSS ' ,  market , quantity, stopPrice, price);
+    console.log(this.exchange + ' !!! STOP LOSS DOESNT WORK ' ,  market , quantity, stopPrice, price);
 
-    const url = 'api/hitbtc/order';
+    const url =  this.url + '/order';
     let data = {
       side: 'sell',
       quantity,
+      type: 'stopLimit',
       stopPrice,
       price,
       symbol:ApiPrivateHitbtc.toMarket(market)
@@ -254,7 +256,6 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
       .pipe(map((res: any) => {
         console.log( this.exchange + '- ' + market + ' STOP_LOSS result ', res);
         let result: any = res;
-
         return {
           id: res.id,
           isOpen: res.status === 'new',
@@ -267,13 +268,11 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
 
         };
       })).toPromise();
-
-
   }
 
 
   static toMarket(market) {
-    return market.replace('USDT', 'USD').split('_').reverse().join('');
+    return market.split('_').reverse().join('');
   }
 
 

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatRadioChange} from '@angular/material';
-import {MarketBot} from '../../../a-core/app-services/app-bots-services/market-bot';
 import {WDType} from '../../../amodels/app-models';
+import {MarketBot} from '../../../app-bots/market-bot';
 
 @Component({
   selector: 'app-order-type',

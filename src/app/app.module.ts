@@ -30,17 +30,18 @@ import {UserLoginService} from './a-core/services/user-login.service';
 import {ShowExternalPageService} from './a-core/services/show-external-page.service';
 import {AppServicesModule} from './a-core/app-services/app-services.module';
 import {WidgetsModule} from './aui/widgets/widgets.module';
-import { ValueColorDirective } from './aui/directives/value-color.directive';
-import { TestComponent } from './test/test.component';
-import { EffectsModule } from '@ngrx/effects';
-import { AppEffects } from './app.effects';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './a-core/reducers';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
+import {ValueColorDirective} from './aui/directives/value-color.directive';
+import {TestComponent} from './test/test.component';
+import {EffectsModule} from '@ngrx/effects';
+import {AppEffects} from './app.effects';
+import {StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from '../environments/environment';
 import {AuthModule} from './a-core/auth/auth.module';
 import {MaterialAppModule} from './aui/material/material-app.module';
 import {DialogsModule} from './aui/dialogs/dialogs.module';
+import {metaReducers, reducers} from './app-store/reducers';
+import {AppBotsEffects} from './app-bots/effects/app-bots.effects';
 
 
 @NgModule({
@@ -64,9 +65,9 @@ import {DialogsModule} from './aui/dialogs/dialogs.module';
     DialogsModule,
     AuthModule.forRoot(),
     RouterModule.forRoot(rootRouterConfig, {useHash: true}),
-    EffectsModule.forRoot([AppEffects]),
-    StoreModule.forRoot(reducers, { metaReducers }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    EffectsModule.forRoot([AppEffects, AppBotsEffects]),
+    StoreModule.forRoot(reducers, {metaReducers}),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
   ],
   declarations: [
     AppComponent,
@@ -79,7 +80,6 @@ import {DialogsModule} from './aui/dialogs/dialogs.module';
     AuthHttpService,
     SlackService,
     ExchangeSsService,
-
     SendAlertService,
     MarketCapService,
     StorageService,

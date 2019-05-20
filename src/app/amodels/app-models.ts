@@ -1,8 +1,9 @@
 /*
  * Created by Vlad on 7/8/2017.
  */
-import {WatchDogStatus} from '../a-core/app-services/app-bots-services/watch-dog-status';
-import {StopLossSettings} from '../a-core/app-services/app-bots-services/stop-loss-order';
+
+
+import {StopLossSettings} from '../app-bots/stop-loss-order';
 
 export interface User {
   id: string;

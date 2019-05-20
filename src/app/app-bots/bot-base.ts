@@ -1,21 +1,21 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {StorageService} from '../../services/app-storage.service';
+import {StorageService} from '../a-core/services/app-storage.service';
 import {filter, map, skip} from 'rxjs/operators';
 import * as moment from 'moment';
-import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../../../amodels/app-models';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {CandlesService} from '../candles/candles.service';
+import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../amodels/app-models';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import * as _ from 'lodash';
-import {UtilsBooks} from '../../../acom/utils-books';
-import {ApiPublicAbstract} from '../../apis/api-public/api-public-abstract';
+import {UtilsBooks} from '../acom/utils-books';
+import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UTILS} from '../../../acom/utils';
-import {VOCandle} from '../../../amodels/api-models';
+import {UTILS} from '../acom/utils';
+import {VOCandle} from '../amodels/api-models';
 import {StopLossOrder} from './stop-loss-order';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subject} from 'rxjs/internal/Subject';
-import {CandlesUtils} from '../candles/candles-utils';
-import {MATH} from '../../../acom/math';
+import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
+import {MATH} from '../acom/math';
 
 
 export enum MCState {
@@ -123,8 +123,8 @@ export class BotBase {
     return this._balanceBase$.pipe(filter(v => !!v));
   }
 
-  get balanceCoin(): number {
-    return this._balanceCoin$.getValue().balance
+  get balanceCoin(): VOBalance {
+    return this._balanceCoin$.getValue()
   }
 
   get amountCoin() {
@@ -206,11 +206,17 @@ export class BotBase {
           this.adjustBalanceToPots(pots);
         })
       }
-
     });
 
-
-
+    this.balanceCoin$.subscribe(balance => {
+      if(!balance.pending && !balance.available) {
+        const current = this.wdType$.getValue();
+        if(current === WDType.LONG) {
+          this.wdType$.next(WDType.OFF);
+          this.saveSettings();
+        }
+      }
+    });
     /*marketCap.ticker$().subscribe(MC => {
       this.mcBase = MC[this.base];
       this.mcCoin = MC[this.coin];
@@ -708,9 +714,7 @@ export class BotBase {
     this.storage.upsert(this.id + '-settings', this.toJSON());
   }
 
-  toJSON()
-    :
-    VOWatchdog {
+  toJSON(): VOWatchdog {
     return {
       exchange: this.exchange,
       market: this.market,

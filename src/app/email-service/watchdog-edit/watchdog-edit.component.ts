@@ -8,8 +8,8 @@ import {MatSnackBar} from '@angular/material';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
-import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
 import {MarketOrderModel} from '../../amodels/market-order-model';
+import {AppBotsService} from '../../app-bots/app-bots.service';
 
 
 @Component({
@@ -60,12 +60,12 @@ export class WatchdogEditComponent implements OnInit {
   }
 
   async displayMC() {
-    const MC = await this.marketCap.downloadTicker().toPromise();
+   /* const MC = await this.marketCap.downloadTicker().toPromise();
     console.log(MC);
     let coin = this.watchDog.coin;
     if (!coin) return;
 
-    console.log(MC[coin]);
+    console.log(MC[coin]);*/
    // this.mcCoin = MC[coin];
   }
 

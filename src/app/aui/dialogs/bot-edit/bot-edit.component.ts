@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MarketBot} from '../../../a-core/app-services/app-bots-services/market-bot';
 import {MAT_DIALOG_DATA, MatDialogRef, MatRadioChange} from '@angular/material';
 import {Observable} from 'rxjs/internal/Observable';
 import {MATH} from '../../../acom/math';
 import {WDType} from '../../../amodels/app-models';
+import {MarketBot} from '../../../app-bots/market-bot';
 
 @Component({
   selector: 'app-bot-edit',

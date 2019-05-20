@@ -97,10 +97,10 @@ export class V2DataComponent implements OnInit {
 
 
   ngOnInit() {
-    this.marketCap.downloadTicker().subscribe(MC => {
+   /* this.marketCap.downloadTicker().subscribe(MC => {
       // this.MC = MC;
       this.downloadAllExchanges();
-    })
+    })*/
   }
 
 

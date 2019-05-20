@@ -14,9 +14,6 @@ import {CandlesAnalys1} from '../scanner/candles-analys1';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {Subject} from 'rxjs/internal/Subject';
 
-import {MarketBalance} from '../app-bots-services/market-balance';
-import {MarketOrders, OrdersState} from '../app-bots-services/market-orders';
-import {StopLossOrder} from '../app-bots-services/stop-loss-order';
 import {UTILS} from '../../../acom/utils';
 
 

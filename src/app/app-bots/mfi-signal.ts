@@ -1,4 +1,4 @@
-import {CandlesService} from '../candles/candles.service';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BuySellState} from './models';
 

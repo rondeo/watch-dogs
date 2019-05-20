@@ -1,26 +1,32 @@
 import {Injectable} from '@angular/core';
-import {StorageService} from '../../services/app-storage.service';
-import {VOWatchdog, WDType} from '../../../amodels/app-models';
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {ApisPublicService} from '../../apis/api-public/apis-public.service';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {VOWatchdog, WDType} from '../amodels/app-models';
+import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
+import {ApisPublicService} from '../a-core/apis/api-public/apis-public.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {VOMCObj} from '../../../amodels/api-models';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
+import {VOMCObj} from '../amodels/api-models';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
 import {MarketBot} from './market-bot';
-import {CandlesService} from '../candles/candles.service';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {BehaviorSubject} from 'rxjs';
 import {UsdtBtcMarket} from './usdt-btc-market';
-import {BtcUsdtService} from '../alerts/btc-usdt.service';
-import {BotBase} from './bot-base';
+import {BtcUsdtService} from '../a-core/app-services/alerts/btc-usdt.service';
+import {BotBase, BotState} from './bot-base';
 import {Subject} from 'rxjs/internal/Subject';
+import {createSelector, select, Store} from '@ngrx/store';
+import {AppState} from '../app-store/reducers';
+import {AppBotsDownloadBalances, AppBotsLoaded, LoadAppBots} from './actions/app-bots.actions';
+import {connectableObservableDescriptor} from 'rxjs/internal/observable/ConnectableObservable';
+
+
 
 
 @Injectable()
 export class AppBotsService {
 
 
-  errors$: Subject<string> = new Subject()
+  errors$: Subject<string> = new Subject();
   MC: VOMCObj;
   get orders$() {
     return this.bots$;
@@ -36,6 +42,7 @@ export class AppBotsService {
   private runInterval;
 
   constructor(
+    private store: Store<AppState>,
     private storage: StorageService,
     private apisPrivate: ApisPrivateService,
     private apisPublic: ApisPublicService,
@@ -48,13 +55,29 @@ export class AppBotsService {
       if(!MC) return;
       this.MC = MC;
       this.initBots();
+
+     /* this.store.pipe(select((state) => {
+        console.warn(state);
+        return state;
+      })).subscribe(console.log);
+*/
     });
 
-   const exchanges = apisPrivate.getAllAvailable();
+   const exchanges = apisPrivate.exchanges$.getValue();
    const usdts: UsdtBtcMarket[] = exchanges.map(function (item) {
      return new UsdtBtcMarket(item, apisPublic, apisPrivate, marketCap);
    });
    this.usdtbtcSub = new BehaviorSubject(usdts);
+
+/*
+   const sub = this.bots$.subscribe(bots =>{
+     if(bots) {
+       this.store.dispatch(new AppBotsLoaded(bots));
+       sub.unsubscribe();
+      //  this.store.dispatch(new AppBotsDownloadBalances());
+
+     }
+   })*/
   }
 
 
@@ -70,6 +93,7 @@ export class AppBotsService {
           o.exchange,
           o.market,
           potSize,
+          this.store,
           this.storage,
           this.apisPrivate.getExchangeApi(o.exchange),
           this.apisPublic.getExchangeApi(o.exchange),
@@ -98,6 +122,7 @@ export class AppBotsService {
         exchange,
         market,
         potSize,
+        this.store,
         this.storage,
         this.apisPrivate.getExchangeApi(exchange),
         this.apisPublic.getExchangeApi(exchange),
@@ -107,7 +132,7 @@ export class AppBotsService {
         );
       bot.error$.subscribe(error => {
         this.errors$.next(error);
-      })
+      });
       bots.push(bot);
       this.save();
     }

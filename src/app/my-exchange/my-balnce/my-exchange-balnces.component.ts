@@ -11,6 +11,7 @@ import {ShowExternalPageService} from '../../a-core/services/show-external-page.
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {VOMCObj} from '../../amodels/api-models';
 import {UserLoginService} from '../../a-core/services/user-login.service';
+import {Observable} from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-my-balnce',
@@ -32,7 +33,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  exchangesPrivate: string[];
+  exchangesPrivate$:Observable<string[]>
 
   balancesAr: VOBalance[];
   balancesAll: VOBalance[];
@@ -81,7 +82,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
 
-    this.exchangesPrivate = this.apisPrivate.getAllAvailable();
+    this.exchangesPrivate$ = this.apisPrivate.exchanges$
     this.route.params.subscribe(params => {
       if (this.exchange !== params.exchange) {
         this.balancesAll = [];

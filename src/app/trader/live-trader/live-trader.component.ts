@@ -7,11 +7,11 @@ import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
 import {filter, skip} from 'rxjs/operators';
-import {AppBotsService} from '../../a-core/app-services/app-bots-services/app-bots.service';
+
 import {MarketOrderModel} from '../../amodels/market-order-model';
-import {UsdtBtcMarket} from '../../a-core/app-services/app-bots-services/usdt-btc-market';
+
 import {TradeMarketService} from '../../a-core/services/trade-market.service';
-import {MarketBot} from '../../a-core/app-services/app-bots-services/market-bot';
+
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {MATH} from '../../acom/math';
 import {Utils} from 'tslint';
@@ -20,6 +20,9 @@ import {BotEditComponent} from '../../aui/dialogs/bot-edit/bot-edit.component';
 import {StopLossEditComponent} from '../../aui/dialogs/stop-loss-edit/stop-loss-edit.component';
 import {OrderTypeComponent} from '../../aui/dialogs/order-type/order-type.component';
 import {Subject} from 'rxjs/internal/Subject';
+import {MarketBot} from '../../app-bots/market-bot';
+import {AppBotsService} from '../../app-bots/app-bots.service';
+import {UsdtBtcMarket} from '../../app-bots/usdt-btc-market';
 
 @Component({
   selector: 'app-live-trader',
@@ -110,44 +113,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
       this.balanceCoinUS = balance.balanceUS;
     });
 
-
-    /* this.route.params.subscribe(params => {
-       console.warn(params);
-       if (this.market !== params.market) {
-         this.market = params.market;
-       }
-
-       console.log(this.exchange);
-       if (params.exchange === 'null') {
-
-         console.warn(' exhange null ')
-       } else if (this.exchange !== params.exchange) {
-
-         this.exchange = params.exchange;
-         console.log(' exchange ' + this.exchange);
-         const api: ApiPublicAbstract = this.apisPublic.getExchangeApi(this.exchange);
-         if (!api) {
-           console.warn('no api for ' + this.exchange);
-           return
-         }
-         const market = this.market;
-
-         this.markets$ = api.markets$.pipe(map(markets => {
-           console.log(markets);
-           console.log(markets.indexOf(market));
-           if (markets.indexOf(market) === -1) {
-             this.market = null;
-             this.onMarketChanged(null);
-           }
-           return markets.sort();
-         }));
-
-       } else {
-         console.warn(' same exchange');
-       }
-     });*/
-    // this.subscribe();
-
   }
 
   ngOnDestroy() {
@@ -156,147 +121,13 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
 
   subscribe() {
-    //  const ar = this.market.split('_');
 
-    /*const hist = this.candleService.getCandlesHist(this.exchange, this.market);
-    hist.candles$().subscribe(candles=>{
-      if(!candles) return;
-      //console.log(' NEW CANDLES ', _.last(candles));
-      this.candles = _.clone(candles);
-
-      this.volumes = candles.map(function (item) {
-        return  item.close > item.open?item.Volume: -item.Volume;
-
-      });
-      this.drawSignals();
-    });
-*/
-
-
-    /*  const ctr = this.marketsHistory.getOrdersHistory(this.exchange, this.market);
-
-      this.sub1 = ctr.ordersVolumeAlerts$(20).subscribe(diff => {
-        // console.warn('diff  ', diff);
-        this.snackBar.open(' Volume ' + this.exchange + ' ' + this.market + ' ' + diff + '%', 'x');
-      });
-      this.marketCap.getTicker().then(MC => {
-        const coinPrice = MC[ar[1]].price_usd;
-        const coinAmount = 20000 / coinPrice;
-
-
-        this.sub3 = ctr.sharksHistory$(200).subscribe(res => {
-          if (!res) return;
-          // console.log(' sharksHistory$ ',res);
-          this.fishes = _.clone(res).reverse();
-          this.drawSignals();
-
-        });
-
-        this.sub2 = ctr.sharksAlert$(coinAmount).subscribe(orders => {
-          console.log('new fishes ', orders);
-          //  this.drawSignals();
-          // this.fishes = _.uniqBy(this.fishes.reverse().concat(orders).reverse().slice(0,100), 'uuid');
-          // this.storage.upsert('fishes', this.fishes);
-
-        });
-      });*/
   }
 
- /* async drawSignals() {
-    const candles = this.candles;
-    let fishes: VOOrderExt[] = _.clone(this.fishes).reverse();
-
-    if (!fishes.length || !candles.length) return;
-    const startTime = candles[0].to;
-    const length = candles.length;
-    let endTime = _.last(candles).to;
-    fishes = fishes.filter(function (item) {
-      return item.timestamp > startTime;
-    });
-
-    const lastFishTime = _.last(fishes).timestamp;
-
-    if (lastFishTime > endTime) endTime = lastFishTime;
-
-    const step = (endTime - startTime) / length;
-    endTime += step;
-    const ordersAr = [];
-    for (let i = startTime; i < endTime; i += step) {
-      const fAr = [];
-      while (fishes.length && fishes[0].timestamp < i) fAr.push(fishes.shift());
-      ordersAr.push(fAr);
-    }
-    const signals = ordersAr.map(function (far) {
-      let val = 0;
-      if (!far.length) return 0;
-      far.forEach(function (item) {
-        if (item.orderType === 'BUY') val += item.amountUS;
-        else val -= item.amountUS;
-      });
-      return val;
-    });
-    console.log(_.last(signals));
-    this.triggers1 = signals;
-  }
-*/
   unsubscribe() {
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub1.unsubscribe();
   }
-
-  /*getData() {
-    clearInterval(this.interval);
-    this.isRequesting = true;
-
-    this.interval = setInterval(() => this.getData(), 60 * 1000);
-
-    const api: ApiPublicAbstract = this.apiPublic.getExchangeApi(this.exchange);
-    if (!api) throw new Error(' no api for ' + this.exchange);
-
-
-    const ar = this.market.split('_');
-    api.getCandlesticks(ar[0], ar[1], 100).then(res => {
-      const highs = [];
-      const closes = [];
-      const lows = [];
-      res.forEach(function (item) {
-        closes.push(Math.round(item.close * 1e8));
-        lows.push(Math.round(item.low * 1e8));
-        highs.push(Math.round(item.high * 1e8));
-      });
-
-      this.closes = closes;
-      this.highs = highs;
-      this.lows = lows;
-      this.candles = res;
-      setTimeout(() => {
-        this.isRequesting = false;
-      }, 500);
-
-    }, err => {
-      this.isRequesting = false;
-      this.snackBar.open('Error communication', 'x', {panelClass: 'error'})
-    });
-
-    /!* api.downloadMarketHistory(ar[0], ar[1]).subscribe(res =>{
-      this.ordersHistory = res;
-     })*!/
-  }*/
-
-/*
-  onResSupChange(evt) {
-    const ar = this.overlays.slice(0);
-    const ind = ar.indexOf(EnumOverlay.SUPPORT_RESISTANCE);
-    if (evt.checked && ind === -1) {
-
-      ar.push(EnumOverlay.SUPPORT_RESISTANCE);
-      this.overlays = ar;
-    } else {
-      if (ind !== -1) ar.splice(ind, 1);
-    }
-    this.overlays = ar;
-  }
-*/
 
   onExchangeChanged($event: string) {
     this.marketService.exchange$.next($event);
@@ -314,10 +145,12 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     }
 
     this.marketService.market$.next(bot.market);
+
     if(this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
     bot.selected = true;
     this.myOrders$ = bot.ordersOpen$;
+    console.log(bot);
     this.setRoute();
   }
 
@@ -344,9 +177,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     this.currentBot.cancelOrder(order.uuid).toPromise();
   }
 
-  onRefreshBooksClick() {
-    this.marketService.refreshBooks();
-  }
   onDeleteBotClick(bot: MarketBot) {
     const msg = ' Delete ' + bot.id + '?';
     if(confirm(msg)) {
@@ -354,27 +184,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPriceChanged() {
-   this.calculateStopLoss();
-  }
 
-  calculateStopLoss(){
-    const num = this.price - (this.price * (this.stopLossPercent/100));
-    this.stopLoss = MATH.toPrecision(num, 4);//+num.toString().substr(0,this.marketService.marketPrecision)
-  }
-
-  onCurrentLiquidSaveClick(bot: MarketBot) {
-    bot.setNewLiquidPrice();
-    bot.isPriceLiquidEdit = false;
-  }
-
-  onPriceLiquidClick(bot: MarketBot) {
-    bot.isPriceLiquidEdit = true;
-  }
-
-  onCancelEditClick(bot: MarketBot) {
-    bot.isPriceLiquidEdit = false;
-  }
 
   onBotPriceSellClick(bot: MarketBot) {
     bot.downloadBooks();
@@ -401,6 +211,11 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   onAddClick() {
     const bot = this.botsService.createBot(this.exchange, this.market);
+
+  }
+
+  onActiveOrdersRefreshClick() {
+    this.currentBot.refreshOpenOrders();
 
   }
 }

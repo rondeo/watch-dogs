@@ -1,15 +1,15 @@
-import {VOBalance, VOOrder, WDType} from '../../../amodels/app-models';
+import {VOBalance, VOOrder, WDType} from '../amodels/app-models';
 import * as _ from 'lodash';
-import {VOCandle} from '../../../amodels/api-models';
-import {MATH} from '../../../acom/math';
-import {CandlesAnalys1} from '../scanner/candles-analys1';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
+import {VOCandle} from '../amodels/api-models';
+import {MATH} from '../acom/math';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {Observable} from 'rxjs/internal/Observable';
 import {withLatestFrom} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {StorageService} from '../../services/app-storage.service';
+import {StorageService} from '../a-core/services/app-storage.service';
 import {Utils} from 'tslint';
-import {UTILS} from '../../../acom/utils';
+import {UTILS} from '../acom/utils';
 
 export interface StopLossSettings {
   stopLossPercent: number;
@@ -27,6 +27,7 @@ export class StopLossOrder {
   priceStopByCanles$: BehaviorSubject<number> = new BehaviorSubject(0);
   priceSell$: BehaviorSubject<number> = new BehaviorSubject(0);
 
+  disabled = false;
 
   stopLossOrder$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
 
@@ -38,7 +39,7 @@ export class StopLossOrder {
     balance$: Observable<VOBalance>,
     candles$: Observable<VOCandle[]>,
     mas$: Observable<{ ma3: number, ma7: number, ma25: number, ma99: number }>,
-    wdType$: BehaviorSubject<WDType>,
+    protected wdType$: BehaviorSubject<WDType>,
     private storage: StorageService
   ) {
 
@@ -53,8 +54,9 @@ export class StopLossOrder {
 
     wdType$.subscribe(type => {
       if(type === WDType.LONG) {
-
+        this.disabled = false;
       } else {
+        this.disabled = true;
         this.stopLossOrder$.next(null);
       }
     })
@@ -114,7 +116,7 @@ export class StopLossOrder {
     balance$.pipe(withLatestFrom(openOrders$))
     // combineLatest(openOrders$.pipe(filter(v => !!v)), balance$)
       .subscribe(([balance, openOrders]) => {
-        if (!balance) return;
+        if (!balance || this.disabled) return;
 
         const wdType = wdType$.getValue();
         if (wdType !== WDType.LONG) return;
@@ -149,8 +151,10 @@ export class StopLossOrder {
             console.log(' available very little ');
             return;
           }
+          const stopPrice = this.stopPrice;
+          const sellPrice = StopLossOrder.getSellPrice(stopPrice, this.sellPercent);
 
-          this.setStopLoss(available).then(res => {
+          this.setStopLoss(available, stopPrice, sellPrice).then(res => {
             console.log(market + ' STOP_LOSS_RESULT', res);
             let delay = 2;
             if(!res) delay = 20;
@@ -254,6 +258,8 @@ export class StopLossOrder {
 
   async cancelOrder(uuid: string) {
 
+    if(this.disabled) return ;
+
     console.log(this.market + ' CANCEL STOP LOSS ' + uuid);
     const ar = this.market.split('_');
     return this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
@@ -299,15 +305,12 @@ export class StopLossOrder {
     return StopLossOrder.getStopPrice(ma, this.stopLossPercent);
   }
 
-  async setStopLoss(qty: number) {
-    const stopPrice = this.stopPrice;
-    if(stopPrice === 0) {
-      console.error(' stop price 0')
+  async setStopLoss(qty: number, stopPrice: number, sellPrice: number) {
+    if(stopPrice === 0 || sellPrice === 0) {
+      console.error(' stop price 0');
       return
     }
-    const sellPrice = StopLossOrder.getSellPrice(stopPrice, this.sellPercent);
     let result;
-
     try {
       result = await this.apiPrivate.stopLoss(this.market, qty, this.stopPrice, sellPrice);
       const reason = ' set stop loss ';

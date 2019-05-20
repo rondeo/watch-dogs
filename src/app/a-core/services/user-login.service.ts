@@ -134,7 +134,6 @@ export class UserLoginService {
     const salt: string = await this.getSalt();
     const ID = CryptoJS.HmacSHA1(exchange + '-cred', salt).toString();
     let credentials: string = await this.geCredentialsFromUser(exchange);
-
     credentials = await this.encodeString(credentials, salt);
     localStorage.setItem(ID, credentials);
     return credentials;

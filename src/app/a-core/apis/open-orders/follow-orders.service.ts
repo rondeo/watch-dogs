@@ -8,11 +8,12 @@ import {CandlesService} from '../../app-services/candles/candles.service';
 import {ApiMarketCapService} from '../api-market-cap.service';
 import {ApisPublicService} from '../api-public/apis-public.service';
 import * as _ from 'lodash';
-import {MarketBot} from '../../app-services/app-bots-services/market-bot';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
-import {MinuteCandlesService} from '../../app-services/app-bots-services/minute-candles.service';
-import {Candles15minService} from '../../app-services/app-bots-services/candles-15min.service';
+import {MarketBot} from '../../../app-bots/market-bot';
+import {MinuteCandlesService} from '../../../app-bots/minute-candles.service';
+import {Candles15minService} from '../../../app-bots/candles-15min.service';
+
 
 @Injectable()
 export class FollowOrdersService {
@@ -96,7 +97,7 @@ export class FollowOrdersService {
         exchange,
         market,
         50,
-
+        null,
         this.storage,
         this.apisPrivate.getExchangeApi('binance'),
         this.apisPublic.getExchangeApi('binance'),

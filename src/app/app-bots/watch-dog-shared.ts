@@ -1,8 +1,8 @@
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {StorageService} from '../../services/app-storage.service';
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApisPrivateService} from '../../apis/api-private/apis-private.service';
-import {VOMarketCap, VOWatchdog} from '../../../amodels/app-models';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {StorageService} from '../a-core/services/app-storage.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
+import {VOMarketCap, VOWatchdog} from '../amodels/app-models';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {WatchDogStatus} from './watch-dog-status';

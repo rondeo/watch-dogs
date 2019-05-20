@@ -6,8 +6,8 @@ import * as _ from 'lodash';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {ApisPrivateService} from '../a-core/apis/api-private/apis-private.service';
 import {StorageService} from '../a-core/services/app-storage.service';
-import {SellCoinFilling} from '../a-core/app-services/app-bots-services/sell-coin-filling';
 import {Observable, Subject, Subscription} from 'rxjs';
+import {SellCoinFilling} from '../app-bots/sell-coin-filling';
 
 export interface RunResults {
   actiin: string;

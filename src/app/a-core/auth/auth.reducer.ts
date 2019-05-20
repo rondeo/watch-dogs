@@ -17,16 +17,9 @@ export function authReducer(state = initialAuthState,
   switch (action.type) {
 
     case AuthActionTypes.LoginAction:
-      return {
-        loggedIn: true,
-        user: action.payload.user
-      };
-
+      return {...state};
     case AuthActionTypes.LogoutAction:
-        return {
-          loggedIn: false,
-          user: undefined
-        };
+        return {...state};
 
     default:
       return state;

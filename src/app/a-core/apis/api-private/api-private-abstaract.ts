@@ -14,9 +14,9 @@ import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {filter, map} from 'rxjs/operators';
-import {MyOrder} from '../../app-services/app-bots-services/bot-base';
 import {UTILS} from '../../../acom/utils';
 import {of} from 'rxjs/internal/observable/of';
+import {MyOrder} from '../../../app-bots/bot-base';
 
 export abstract class ApiPrivateAbstaract {
 
@@ -33,10 +33,10 @@ export abstract class ApiPrivateAbstaract {
   private credentials: { apiKey: string, password: string };
 
   constructor(private userLogin: UserLoginService, protected storage: StorageService) {
-    this.refreshBalancesInterval = setInterval(() => {
+  /*  this.refreshBalancesInterval = setInterval(() => {
       this.refreshBalances();
       console.log(this.exchange + ' orders history markets: ' + this.refreshAllOrdersHistoryNow());
-    }, 60000);
+    }, 60000);*/
 
   }
 
@@ -170,8 +170,8 @@ export abstract class ApiPrivateAbstaract {
   loadingBalances;
 
   refreshBalances() {
-    if (this.loadingBalances) return;
-    this.loadingBalances = setTimeout(() => this._refreshBalances(), 3000);
+  //  if (this.loadingBalances) return;
+   //  this.loadingBalances = setTimeout(() => this._refreshBalances(), 3000);
 
   }
 
@@ -221,9 +221,8 @@ export abstract class ApiPrivateAbstaract {
   refreshOrdersTimeout;
 
   private _refreshAllOpenOrders(): Promise<VOOrder[]> {
+
     return new Promise((resolve, reject) => {
-      const num = this._openOrdersAll$.observers.length;
-      if (!num) return;
       console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
       this.downloadAllOpenOrders().subscribe(res => {
         console.log(this.exchange + ' open orders ', res)
@@ -398,6 +397,16 @@ export abstract class ApiPrivateAbstaract {
     return this.credentials;
   }
 
+  getApiKey(): Observable<{apiKey: string, password: string}> {
+    if(this.credentials) return of(this.credentials);
+    const sub: Subject<{apiKey: string, password: string}> = new Subject();
+    this.userLogin.getExchangeCredentials(this.exchange).then(str => {
+      this.credentials = JSON.parse(str);
+      sub.next(this.credentials);
+    });
+    return sub
+  }
+
   getOpenOrders2(market: string): Promise<VOOrder[]> {
     const ar = market.split('_');
     return new Promise((resolve, reject) => {
@@ -405,7 +414,6 @@ export abstract class ApiPrivateAbstaract {
         resolve(orders);
       }, reject);
     })
-
 
   }
 

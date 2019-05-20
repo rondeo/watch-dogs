@@ -1,13 +1,13 @@
-import {VOMCObj} from '../../../amodels/api-models';
+import {VOMCObj} from '../amodels/api-models';
 import * as _ from 'lodash';
 
-import {ApiMarketCapService} from '../../apis/api-market-cap.service';
-import {ApiPrivateAbstaract} from '../../apis/api-private/api-private-abstaract';
-import {VOBalance, VOBooks, VOMarketCap, VOOrder} from '../../../amodels/app-models';
-import {CandlesService} from '../candles/candles.service';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
+import {VOBalance, VOBooks, VOMarketCap, VOOrder} from '../amodels/app-models';
+import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import {map} from 'rxjs/operators';
 import {pipe} from 'rxjs/internal-compatibility';
-import {CandlesAnalys1} from '../scanner/candles-analys1';
+import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import {Subject} from 'rxjs/internal/Subject';
 import {MarketBalance} from './market-balance';
 import {MarketOrders} from './market-orders';

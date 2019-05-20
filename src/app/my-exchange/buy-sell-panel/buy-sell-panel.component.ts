@@ -33,7 +33,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.exchanges = this.apisPrivate.getAllAvailable();
+    this.exchanges = this.apisPrivate.exchanges$.getValue();
   }
 
 
