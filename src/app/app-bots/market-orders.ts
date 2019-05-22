@@ -41,14 +41,18 @@ export class MarketOrders {
 
 
   log(log: {action: string, reason: string}){
+
     console.log(log.action + ' ' + log.reason);
   }
+
 
   async init() {
     this.ordersHistory$ = new BehaviorSubject((await this.storage.select(this.id + '-orders-history')) || []);
     this.openOrders$ = new BehaviorSubject((await this.storage.select(this.id + '-open-orders')) || []);
+
+
     this.state$ = new BehaviorSubject(OrdersState.NONE);
-    this.sub1 = this.apiPrivate.openOrdersAll$.subscribe(orders => {
+    this.sub1 = this.apiPrivate.openOrders$.subscribe(orders => {
       if (!orders) return;
       const myOrders: VOOrder[] = <VOOrder[]>_.filter(orders, {market: this.market});
       //  console.log(this.market + ' my order ', myOrder);

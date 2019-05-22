@@ -77,7 +77,7 @@ export class BalanceMarketComponent implements OnInit, OnChanges {
   onRefreshBalancesClick() {
     this.isLoadingBalances = true;
     const api = this.apiPrivate.getExchangeApi(this.exchange);
-    api.refreshBalances();
+    api.refreshBalancesNow();
   }
 
 

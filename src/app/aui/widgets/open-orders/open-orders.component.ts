@@ -46,7 +46,7 @@ export class OpenOrdersComponent implements OnInit, OnChanges, OnDestroy {
     if (this.sub) this.sub.unsubscribe();
     if (!this.exchange) return;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    api.openOrdersAll$.subscribe(orders => {
+    api.openOrders$.subscribe(orders => {
       if (!orders) return;
       const current = _.keyBy(this.orders, 'uuid');
       orders.forEach(function (o) {

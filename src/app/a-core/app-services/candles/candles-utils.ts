@@ -39,6 +39,7 @@ export class CandlesUtils {
     const ma25 = _.mean(_.takeRight(closes, 25));
 
     return {
+      last: _.last(closes),
       ma3,
       ma7,
       ma25,

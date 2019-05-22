@@ -25,7 +25,6 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
     storage: StorageService
   ) {
     super(userLogin, storage);
-    this.balancesSub = new BehaviorSubject<VOBalance[]>(null);
   }
 
 

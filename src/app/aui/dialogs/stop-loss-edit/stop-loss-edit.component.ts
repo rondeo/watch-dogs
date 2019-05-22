@@ -34,8 +34,8 @@ export class StopLossEditComponent implements OnInit {
     this.stopLossPercent = this.stopLoss.stopLossPercent;
     this.sellPercent = this.stopLoss.sellPercent;
     this.resetStopLossAt = this.stopLoss.resetStopLossAt;
-    this.stopLoss.ma$.subscribe(ma => {
-      if(ma) this.onStopPercentChange();
+    this.stopLoss.mas$.subscribe(mas => {
+      if (mas) this.onStopPercentChange();
     });
     this.stopLoss.stopLossOrder$.subscribe(order => {
       this.stopLossOrder = order || new MyOrder({});
@@ -51,18 +51,19 @@ export class StopLossEditComponent implements OnInit {
     this.stopLoss.stopLossPercent = this.stopLossPercent;
     this.stopLoss.resetStopLossAt = this.resetStopLossAt;
     this.stopLoss.save();
-   //  this.dialogRef.close('SAVE');
+    //  this.dialogRef.close('SAVE');
   }
 
-  onDeleteOrderClick(uuid : string) {
+  onDeleteOrderClick(uuid: string) {
 
-    if(confirm('Cancel Order? ' + uuid)) this.stopLoss.cancelOrder(uuid);
+    if (confirm('Cancel Order? ' + uuid)) this.stopLoss.cancelOrder(uuid);
   }
 
   onStopPercentChange() {
-    const ma = this.stopLoss.ma$.getValue();
-    this.stopPrice = StopLossOrder.getStopPrice(ma, this.stopLossPercent);
-    this.onSellPercentChange();
+    const mas = this.data.mas$.getValue();
+    const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
+    this.stopPrice = prices.stopPrice;
+    this.sellPercent = prices.sellPrice;
   }
 
   onSellPercentChange() {
@@ -75,12 +76,12 @@ export class StopLossEditComponent implements OnInit {
 
   sendStopLoss() {
     console.log(this.data);
-     const balance = this.data.balanceCoin;
+    const balance = this.data.balanceCoin;
 
-      const available = balance.available;
-      console.log(balance);
-        this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
-          console.log(res);
-        })
+    const available = balance.available;
+    console.log(balance);
+    this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
+      console.log(res);
+    })
   }
 }

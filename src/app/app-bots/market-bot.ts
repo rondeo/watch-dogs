@@ -18,12 +18,11 @@ const openOrders = state => {
   console.log(state);
   return state.openOrders;
 };
-
 const serverData = createSelector(bots, (state: any)=> {
   return state.balances
 });
-export class MarketBot extends BotBase {
 
+export class MarketBot extends BotBase {
   selected = false;
   priceLiquidInput = 0;
   isPriceLiquidEdit = false;
@@ -47,7 +46,7 @@ export class MarketBot extends BotBase {
 
   ) {
 
-    super(exchange, market, potSize, apiPrivate, apiPublic, candlesService, storage);
+    super(exchange, market, potSize, apiPrivate, apiPublic, candlesService, storage, marketCap);
 
     // this.priceLiqud$.subscribe(v => this.priceLiquidInput = v);
 

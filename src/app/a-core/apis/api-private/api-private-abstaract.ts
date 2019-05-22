@@ -24,6 +24,13 @@ export abstract class ApiPrivateAbstaract {
   apiPublic: any;
   loginSub: Subject<boolean> = new Subject();
 
+  private openOrdersSub$: BehaviorSubject<VOOrder[]> = new BehaviorSubject(null);
+  private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject(null);
+
+  get openOrders() {
+    return this.openOrdersSub$.asObservable();
+  }
+
   decimals: { [market: string]: { amountDecimals: number, rateDecimals: number } } = {};
 
   userLogin$() {
@@ -33,11 +40,11 @@ export abstract class ApiPrivateAbstaract {
   private credentials: { apiKey: string, password: string };
 
   constructor(private userLogin: UserLoginService, protected storage: StorageService) {
-  /*  this.refreshBalancesInterval = setInterval(() => {
-      this.refreshBalances();
-      console.log(this.exchange + ' orders history markets: ' + this.refreshAllOrdersHistoryNow());
-    }, 60000);*/
-
+      this.refreshBalancesInterval = setInterval(() => {
+        const l = this.balancesSub.observers.length;
+        console.log(this.exchange + ' observers ' + l);
+        this.refreshBalancesNow();
+      }, 6e4);
   }
 
   /* sellCoin(sellCoin: MarketOrderModel): Observable<MarketOrderModel> {
@@ -125,9 +132,7 @@ export abstract class ApiPrivateAbstaract {
 
     console.log('CANCEL ORDER ' + orderId);
     return this.cancelOrder(orderId, base, coin).pipe(map(res => {
-
       console.log(' cancel order result ', res);
-      this.refreshOpenOrdersNow();
       return res;
     }))
   }
@@ -153,58 +158,53 @@ export abstract class ApiPrivateAbstaract {
 
   private _refreshBalances() {
     console.log('%c _refreshBalances ' + this.exchange, 'color:pink');
-    if (!this.balancesSub) {
-      //  console.warn(' no balancesSub ' + this.exchange);
-      return;
-    }
+    this.loadingBalances = Date.now();
     this.downloadBalances().subscribe(balances => {
-
-      this.balancesSub.next(balances);
       this.loadingBalances = 0;
+      this.balancesSub.next(balances);
     }, error => {
       //   setTimeout(() => this._refreshBalances(), 50000);
     });
   }
 
-  balancesSub: BehaviorSubject<VOBalance[]>;
-  loadingBalances;
 
-  refreshBalances() {
-  //  if (this.loadingBalances) return;
-   //  this.loadingBalances = setTimeout(() => this._refreshBalances(), 3000);
+  loadingBalances = 0;
 
+  refreshBalancesNow() {
+    if (this.loadingBalances) return;
+    this._refreshBalances();
   }
 
   //////////////////////////////// Open Orders ////////////////////////////////////////////////////////////
   /* getAllOpenOrders(): VOOrder[] {
-     return this._openOrdersAll$.getValue();
+     return this._openOrdersSub$.getValue();
    }
 
    allOpenOrders$(): Observable<VOOrder[]> {
-     if (!this._openOrdersAll$) {
-       this._openOrdersAll$ = new BehaviorSubject(null);
+     if (!this._openOrdersSub$) {
+       this._openOrdersSub$ = new BehaviorSubject(null);
        this.refreshAllOpenOrders();
      }
-     return this._openOrdersAll$.asObservable();
+     return this._openOrdersSub$.asObservable();
    }
  */
-  get openOrdersAll$() {
-    return this._openOrdersAll$.pipe(filter(v => !!v));
+  get openOrders$() {
+    return this.openOrdersSub$.pipe(filter(v => !!v));
   }
 
-  _openOrdersAll$: BehaviorSubject<VOOrder[]> = new BehaviorSubject(null);
 
-  openOrders$(base: string, coin: string) {
-    const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
-    this._openOrdersAll$.subscribe(res => {
-      if (!res) return sub.asObservable();
-      const orders: VOOrder[] = res.filter(function (item: VOOrder) {
-        return item.base === base && item.coin === coin;
-      });
-      setTimeout(() => sub.next(orders), 20);
-    })
-    return sub.asObservable()
-  }
+
+  /* openOrders$(base: string, coin: string) {
+     const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
+     this.openOrdersSub$.subscribe(res => {
+       if (!res) return sub.asObservable();
+       const orders: VOOrder[] = res.filter(function (item: VOOrder) {
+         return item.base === base && item.coin === coin;
+       });
+       setTimeout(() => sub.next(orders), 20);
+     })
+     return sub.asObservable()
+   }*/
 
   /*stopRefreshOpenOrders() {
     clearTimeout(this.refreshOrdersTimeout);
@@ -213,36 +213,26 @@ export abstract class ApiPrivateAbstaract {
 */
 
 
-  refreshOpenOrdersNow(): Promise<VOOrder[]> {
-    clearTimeout(this.refreshOrdersTimeout);
+  /*refreshOpenOrdersNow(): Promise<VOOrder[]> {
+
+
     return this._refreshAllOpenOrders();
-  }
+  }*/
 
-  refreshOrdersTimeout;
+  refreshOpenOrdersTime;
+  refreshAllOpenOrders(): Promise<VOOrder[]> {
+    if (this.refreshOpenOrdersTime) return;
+    this.refreshOpenOrdersTime = Date.now();
+    console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
+    this.downloadAllOpenOrders().subscribe(res => {
+      console.log(this.exchange + ' open orders ', res);
+      this.openOrdersSub$.next(res);
+      this.refreshOpenOrdersTime = 0;
+    }, err => {
+      this.refreshOpenOrdersTime = 0;
 
-  private _refreshAllOpenOrders(): Promise<VOOrder[]> {
+    });
 
-    return new Promise((resolve, reject) => {
-      console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
-      this.downloadAllOpenOrders().subscribe(res => {
-        console.log(this.exchange + ' open orders ', res)
-        /* if(res.length) {
-           this.refreshOrdersTimeout = setTimeout(() => {
-             this._refreshAllOpenOrders();
-           }, 25000);
-         }*/
-        this._openOrdersAll$.next(res);
-        resolve(res);
-      }, err => {
-        reject(err);
-        this.refreshOrdersTimeout = setTimeout(() => {
-          this._refreshAllOpenOrders();
-        }, 5000);
-        /* this.refreshOrdersTimeout = setTimeout(() => {
-           this.refreshAllOpenOrders();
-         }, 50000);*/
-      });    //
-    })
 
   }
 
@@ -306,12 +296,7 @@ export abstract class ApiPrivateAbstaract {
     this.getAllOrders(base, coin, from, to).subscribe(res => this.allOrdersSub.next(res));
   }
 
-
   balances$() {
-    if (!this.balancesSub) {
-      this.balancesSub = new BehaviorSubject(null);
-      this.refreshBalances();
-    }
     return this.balancesSub.pipe(filter(res => !!res));
   }
 
@@ -321,7 +306,7 @@ export abstract class ApiPrivateAbstaract {
       if (balances) {
         //  console.log(balances);
         setTimeout(() => sub.next(_.find(balances, {symbol: symbol})), 20);
-      } else this.refreshBalances();
+      } else this.refreshBalancesNow();
     });
     return sub;
 
@@ -397,9 +382,9 @@ export abstract class ApiPrivateAbstaract {
     return this.credentials;
   }
 
-  getApiKey(): Observable<{apiKey: string, password: string}> {
-    if(this.credentials) return of(this.credentials);
-    const sub: Subject<{apiKey: string, password: string}> = new Subject();
+  getApiKey(): Observable<{ apiKey: string, password: string }> {
+    if (this.credentials) return of(this.credentials);
+    const sub: Subject<{ apiKey: string, password: string }> = new Subject();
     this.userLogin.getExchangeCredentials(this.exchange).then(str => {
       this.credentials = JSON.parse(str);
       sub.next(this.credentials);

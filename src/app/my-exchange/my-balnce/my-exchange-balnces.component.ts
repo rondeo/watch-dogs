@@ -177,7 +177,7 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
   }
 
   refreshBalances() {
-    this.apisPrivate.getExchangeApi(this.exchange).refreshBalances();
+    this.apisPrivate.getExchangeApi(this.exchange).refreshBalancesNow();
   }
 
   onSortClick(criteria: string): void {

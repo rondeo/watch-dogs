@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../a-core/services/app-storage.service';
-import {filter, map, skip} from 'rxjs/operators';
+import {debounceTime, filter, map, skip} from 'rxjs/operators';
 import * as moment from 'moment';
 import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../amodels/app-models';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
@@ -16,6 +16,10 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Subject} from 'rxjs/internal/Subject';
 import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
 import {MATH} from '../acom/math';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {subscribeBalance} from './bot-utils';
+import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
+import {BotBus} from './bot-bus';
 
 
 export enum MCState {
@@ -71,6 +75,8 @@ export interface BotSettings {
 }
 
 export class BotBase {
+
+  bus: BotBus;
   // state$: BehaviorSubject<BotState>;
 //  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
   static potSizeUS = 50;
@@ -89,8 +95,8 @@ export class BotBase {
 
 /////////////////////////////////////////////////// new ///////////////
 
-  mas$: Subject<{ ma3: number, ma7: number, ma25: number, ma99: number }> = new Subject();
-  ma$: Subject<number> = new Subject();
+  mas$: BehaviorSubject<{last: number, ma3: number, ma7: number, ma25: number, ma99: number }> = new BehaviorSubject(null);
+  maDelta$: Subject<number> = new Subject();
   wdType$: BehaviorSubject<WDType>;
 
 
@@ -109,13 +115,13 @@ export class BotBase {
 
   // stopLoss$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
 
-  ordersOpen$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+  ordersOpen$: BehaviorSubject<VOOrder[]>;//  = new BehaviorSubject([]);
   ordersHistory$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
 
   protected _balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
 
   get balanceCoin$(): Observable<VOBalance> {
-    return this._balanceCoin$.pipe(skip(1));
+    return this._balanceCoin$.pipe(filter(v => !!v));
   }
 
   protected _balanceBase$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
@@ -145,10 +151,9 @@ export class BotBase {
 
   set wdType(type: WDType) {
     const t = this.wdType$.getValue();
-    if(t !== type) {
+    if (t !== type) {
       this.wdType$.next(type);
     }
-
   }
 
   get wdType() {
@@ -174,11 +179,12 @@ export class BotBase {
     public apiPrivate: ApiPrivateAbstaract,
     public apiPublic: ApiPublicAbstract,
     public candlesService: CandlesService,
-    public storage: StorageService
-    // public marketCap: ApiMarketCapService
+    public storage: StorageService,
+    public marketCap: ApiMarketCapService
   ) {
 
     this.id = exchange + '-' + market;
+    this.bus = new BotBus(this.id);
     const ar = market.split('_');
     const base = ar[0];
     const coin = ar[1];
@@ -190,40 +196,33 @@ export class BotBase {
       this.pots$.next(sett.pots);
     });
 
-    this.wdType$ = new BehaviorSubject(null);
+    this.wdType$ = this.bus.wdType$;
+    this.ordersOpen$ = this.bus.ordersOpen$;
+    this._balanceCoin$ = this.bus.balanceCoin$;
+
 
     this.wdType$.pipe(filter(v => !!v)).subscribe(type => {
       console.log(this.id + ' ' + type);
       if (type !== WDType.OFF) this.subscribeForBalancesAndOrders();
       else this.unsubscribe();
+      if (type === WDType.SHORT) {
+        this.cancelAllOpenOrders();
+      } else if (type === WDType.LONG) {
 
-      if(type === WDType.SHORT) {
-        this.cancelAllOpenOrders();
-      } else if(type === WDType.LONG) {
-        this.cancelAllOpenOrders();
-        UTILS.wait(5).then(() =>{
-          const pots = this.pots$.getValue();
-          this.adjustBalanceToPots(pots);
-        })
+        /* this.cancelAllOpenOrders();
+         UTILS.wait(5).then(() =>{
+           const pots = this.pots$.getValue();
+           this.adjustBalanceToPots(pots);
+         })*/
       }
     });
 
-    this.balanceCoin$.subscribe(balance => {
-      if(!balance.pending && !balance.available) {
-        const current = this.wdType$.getValue();
-        if(current === WDType.LONG) {
-          this.wdType$.next(WDType.OFF);
-          this.saveSettings();
-        }
-      }
+    this.balanceCoin$.pipe(skip(1)).subscribe(balanceCoin => {
+      console.warn(this.id, balanceCoin);
+      this.storage.upsert(this.id + '-balanceCoin', balanceCoin);
+      this.apiPrivate.refreshAllOpenOrders();
     });
-    /*marketCap.ticker$().subscribe(MC => {
-      this.mcBase = MC[this.base];
-      this.mcCoin = MC[this.coin];
-    });*/
 
-
-    this.wdType$.subscribe(type => console.log(type));
     storage.select(this.id + '-orders-history')
       .then(orders => {
         this.ordersHistory$.next(orders ? orders.map(function (item) {
@@ -231,17 +230,19 @@ export class BotBase {
         }) : []);
       });
 
-    storage.select(this.id + '-orders-open')
-      .then(orders => {
-        this.ordersOpen$.next(orders ? orders.map(function (item) {
-          return new MyOrder(item)
-        }) : []);
 
-        storage.select(this.id + '-balanceCoin').then(b => {
-          console.log(this.id + ' saved balance ', b);
-          this._balanceCoin$.next(b)
+    storage.select(this.id + '-balanceCoin').then(b => {
+      console.log(this.id + ' saved balance ', b);
+      this._balanceCoin$.next(b);
+
+      storage.select(this.id + '-orders-open')
+        .then(orders => {
+          this.ordersOpen$.next(orders ? orders.map(function (item) {
+            return new MyOrder(item)
+          }) : []);
+
         });
-      });
+    });
 
     console.log('  bot created ' + this.id);
 
@@ -250,7 +251,6 @@ export class BotBase {
     });
 
     const candles$ = candlesService.candles5m$(market);
-
     candles$.subscribe(candles => {
       //  console.log(market, candles);
       this.candles = candles;
@@ -260,25 +260,21 @@ export class BotBase {
       });
       const mas = CandlesUtils.mas(closes);
       this.mas$.next(mas);
-      const p =  MATH.percent(mas.ma3, mas.ma25)
-      this.ma$.next(+p.toFixed(2));
+      const p = MATH.percent(mas.ma3, mas.ma25)
+      this.maDelta$.next(+p.toFixed(2));
       this.lastPrice$.next(+mas.ma3.toPrecision(6));
     });
 
-    this.balanceCoin$.subscribe(balance => {
+    combineLatest(this.balanceCoin$, marketCap.ticker$().pipe(map(MC => MC[this.coin].price_usd))).subscribe(([balance, priceUS]) => {
+      this.potSize = BotBase.potSizeUS / priceUS;
       const potsBalance = balance ? +(balance.balance / this.potSize).toFixed(1) : 0;
       this.potsBalance$.next(potsBalance);
-
-      if (this.wdType$.getValue() === WDType.SHORT && balance.available > (this.potSize * 0.3)) {
-        this.sellCoinInstant(balance.balance);
-      }
-
     });
 
     this.stopLossController = new StopLossOrder(
       market,
       apiPrivate,
-      potSize,
+      this.bus,
       this.ordersOpen$,
       this.balanceCoin$,
       candles$,
@@ -292,30 +288,44 @@ export class BotBase {
     }))
   }
 
+  subAll;
+
+  subscribeForAll() {
+
+    if (this.subAll) this.subAll.unsubscribe();
+    this.subAll = combineLatest(this.wdType$, this.balanceCoin$, this.pots$, this.potsBalance$)
+      .pipe(debounceTime(100))
+      .subscribe(([type, balance, pots, potsBalance]) => {
+        if (type === WDType.LONG) {
+          this.adjustBalanceToPots(pots, potsBalance);
+        }
+      })
+  }
+
   async cancelAllOpenOrders() {
     console.log(this.id + ' canceling all open orders')
     const openOrders = this.ordersOpen$.getValue();
-   const results = await this.cancelOrders(openOrders.map(function (item) {
+    const results = await this.cancelOrders(openOrders.map(function (item) {
       return item.uuid;
     }));
     console.log(this.id + ' CANCEL ORDERS RESULTS ', results);
     await UTILS.wait(5);
-    this.apiPrivate.refreshBalances();
+    this.apiPrivate.refreshBalancesNow();
     return results;
-
-
   }
+
   cancelOrders(uids: string[]) {
-    return Promise.all(uids.map(async (uid) =>{
+    return Promise.all(uids.map(async (uid) => {
       await UTILS.wait(2);
       const res = await this.apiPrivate.cancelOrder2(uid, this.market).toPromise();
       await UTILS.wait(2);
-      return  res;
+      return res;
     }))
 
   }
+
   refreshOpenOrders() {
-    this.apiPrivate.refreshOpenOrdersNow();
+    this.apiPrivate.refreshAllOpenOrders()
   }
 
   unsubscribe() {
@@ -330,35 +340,20 @@ export class BotBase {
 
   subscribeForBalancesAndOrders() {
     if (this.sub1) return;
+    this.subscribeForAll();
     const base = this.base;
     const coin = this.coin;
 
-    this.sub1 = this.apiPrivate.openOrdersAll$.subscribe(orders => {
+    this.sub1 = this.apiPrivate.openOrders$.subscribe(orders => {
       const myOrders = orders.filter(function (item) {
         return item.base === base && item.coin === coin;
       });
-
-
       console.log(this.id + ' MY open orders   ', myOrders);
       this.ordersOpen$.next(myOrders);
       this.storage.upsert(this.id + '-orders-open', myOrders);
     });
 
-    this.sub2 = this.apiPrivate.balances$().subscribe(balances => {
-      const balanceBase = balances.find(function (item) {
-        return item.symbol === base;
-      });
-      const balanceCoin = balances.find(function (item) {
-        return item.symbol === coin;
-      });
-
-      const min = this.potSize / 10;
-      if (balanceCoin.available < min) balanceCoin.available = 0;
-      if (balanceCoin.balance < min) balanceCoin.balance = 0;
-
-      console.log(balanceCoin);
-      this.setBalances(balanceBase, balanceCoin);
-    });
+    this.sub2 = subscribeBalance(base, coin, this.potSize / 10, this.apiPrivate.balances$(), this._balanceCoin$, this._balanceBase$);
 
     this.sub3 = this.apiPrivate.ordersHistory$(this.market).subscribe(orders => {
       const buyOrders = orders.filter(function (item) {
@@ -371,29 +366,18 @@ export class BotBase {
 
       this.ordersHistory$.next(orders);
       this.storage.upsert(this.id + '-orders-history', orders);
-
     });
-    this.followPots();
+
   }
 
-
-  followPots() {
-    this.sub4 = this.pots$.pipe(skip(2)).subscribe(pots => {
-      console.log(pots);
-      const wdType = this.wdType$.getValue();
-      if (wdType !== WDType.LONG) return;
-      this.adjustBalanceToPots(pots);
-    });
-  }
-
-  private adjustBalanceToPots(pots){
-
-    const postsBalance = this.potsBalance$.getValue();
+  private adjustBalanceToPots(pots: number, postsBalance: number) {
     const diff = pots - postsBalance;
     console.log('%c ' + this.id + ' pots diff ' + diff, 'color:green');
 
+
     if (Math.abs(diff) > 0.3) {
       const amountCoin = Math.abs(diff) * this.potSize;
+
       if (diff > 0) this.buyCoinInstant(amountCoin).then(res => {
         console.log(this.id + '  followPots BUY ', res)
       }).catch(console.error);
@@ -404,40 +388,6 @@ export class BotBase {
 
   }
 
-
-  setBalances(balanceBase: VOBalance, balanceCoin: VOBalance) {
-    this._balanceBase$.next(balanceBase);
-    const oldBalanceCoin: VOBalance = this._balanceCoin$.getValue();
-    if (!oldBalanceCoin || oldBalanceCoin.available !== balanceCoin.available || oldBalanceCoin.pending !== balanceCoin.pending) {
-      console.log('%c ' + this.id + ' balance changed  ', 'color: red');
-      console.log(oldBalanceCoin, balanceCoin);
-      this.apiPrivate.refreshOpenOrdersNow().then(openOrders => {
-        //  this.apiPrivate.downloadOrdersHistory(this.market, moment().valueOf(), moment().subtract(1, 'day').valueOf())
-        //   .subscribe(ordersHistory => {
-        //  this.ordersHistory$.next(ordersHistory);
-        //  console.log(this.id + ' open orders ', openOrders);
-        // this.ordersOpen$.next(openOrders);
-
-        this.storage.upsert(this.id + '-balanceCoin', balanceCoin);
-        console.log(this.id + ' new balance  ', balanceCoin);
-        this._balanceCoin$.next(balanceCoin);
-        // })
-      })
-    } else this._balanceCoin$.next(balanceCoin);
-  }
-
-  calculateBalanceByOrders() {
-
-  }
-
-  buyNow() {
-
-
-  }
-
-  maintainStopLoss() {
-
-  }
 
   downloadBooks() {
     const sub = this.apiPublic.downloadBooks2(this.market);
@@ -460,6 +410,7 @@ export class BotBase {
 
 
   async buyCoinInstant(qty: number) {
+    console.warn(' buyCoinInstant ' + qty);
     if (!qty) {
       console.warn(' no QTY');
       this.log({action: 'STOP BUY', reason: ' no QTY'});
@@ -470,7 +421,7 @@ export class BotBase {
     const rate = UtilsBooks.getRateForAmountCoin(books.sell, qty);
     const res = await this.setBuyOrder(rate, qty);
     await UTILS.wait(2);
-    this.apiPrivate.refreshBalances();
+    this.apiPrivate.refreshBalancesNow();
     return res;
   }
 
@@ -488,11 +439,12 @@ export class BotBase {
 
   async setBuyOrder(rate: number, amountCoin: number) {
     const balanceBase = this._balanceBase$.getValue();
+    if (!balanceBase) return;
     const baseAvailable = balanceBase.available;
     let need = (amountCoin * rate);
     need = need + (need * 0.003);
     need = +need.toPrecision(4);
-    console.log('%c BUY_ORDER  ' + this.id + ' qty ' + amountCoin + ' need ' + need + ' available ' + baseAvailable, 'color:red');
+    console.warn('%c BUY_ORDER  ' + this.id + ' qty ' + amountCoin + ' need ' + need + ' available ' + baseAvailable, 'color:red');
     if (baseAvailable < need) {
       this.error$.next(this.id + ' available ' + baseAvailable + ' need  ' + need);
       return
@@ -510,10 +462,10 @@ export class BotBase {
   }
 
   async setSellOrder(rate: number, amountCoin: number, stopLoss: number) {
+    console.warn(' setSellOrder ', rate, amountCoin, stopLoss);
     const balance: VOBalance = this._balanceCoin$.getValue()
-
     if (!balance) {
-      console.error(' no balance ')
+      console.error(' no balance ');
       return Promise.resolve()
     }
 
@@ -557,7 +509,7 @@ export class BotBase {
     console.log('SELL_INSTANT ' + qty);
     const res = await this.setSellOrder(rate, amountCoin, 0);
     await UTILS.wait(2);
-    this.apiPrivate.refreshBalances();
+    this.apiPrivate.refreshBalancesNow();
     return res;
   }
 

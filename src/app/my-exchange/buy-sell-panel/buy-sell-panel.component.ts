@@ -172,7 +172,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
 
   async setStopLoss() {
     const api: ApiPrivateAbstaract = this.apisPrivate.getExchangeApi(this.exchange);
-    const openOrders: VOOrder[] = api._openOrdersAll$.getValue();
+    const openOrders: VOOrder[] = await api.openOrders$.toPromise();
     console.log(openOrders);
 
     const rate = this.rateBuy;
@@ -341,14 +341,14 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
         this.calculateBase();
       });
 
-      this.sub3 = api.openOrders$(base, coin).subscribe(orders => {
+      /*this.sub3 = api.openOrders$(base, coin).subscribe(orders => {
         let sum = 0;
         orders.forEach(function (item) {
           if (item.orderType === 'BUY') sum += item.amountCoin;
         });
         this.pendingBaseUS = Math.round(priceCoin * sum);
         this.calculateBase();
-      });
+      });*/
     });
 
   }
