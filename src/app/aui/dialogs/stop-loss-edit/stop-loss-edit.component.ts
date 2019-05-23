@@ -80,8 +80,8 @@ export class StopLossEditComponent implements OnInit {
 
     const available = balance.available;
     console.log(balance);
-    this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
+   /* this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
       console.log(res);
-    })
+    })*/
   }
 }

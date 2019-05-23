@@ -349,13 +349,7 @@ export abstract class ApiPrivateAbstaract {
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
-    console.log('STOP_LOSS ' + this.exchange + ' ' + market + ' ' + quantity + ' ' + stopPrice + ' ' + sellPrice);
-    return this._stopLoss(market, quantity, stopPrice, sellPrice).then(res => {
-      console.log('STOP_LOSS result ' + this.exchange + market, res);
-
-      return res;
-    });
-
+    return this._stopLoss(market, quantity, stopPrice, sellPrice);
   }
 
   async _stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {

@@ -199,6 +199,24 @@ export class BotBase {
     this.wdType$ = this.bus.wdType$;
     this.ordersOpen$ = this.bus.ordersOpen$;
     this._balanceCoin$ = this.bus.balanceCoin$;
+    this.mas$ = this.bus.mas$;
+
+    combineLatest(this._balanceCoin$, this.wdType$).pipe(filter(([balance, type])=>{
+      return !!balance && type === WDType.SHORT
+    })).subscribe(([balance, wdType])=>{
+
+      console.log(balance);
+
+        if(balance.pending) {
+          this.cancelAllOpenOrders();
+        } else if(balance.available) {
+          this.sellCoinInstant(balance.available);
+          UTILS.wait(10).then(() => {
+            this.apiPrivate.refreshBalancesNow();
+          })
+        }
+
+    })
 
 
     this.wdType$.pipe(filter(v => !!v)).subscribe(type => {
@@ -206,7 +224,7 @@ export class BotBase {
       if (type !== WDType.OFF) this.subscribeForBalancesAndOrders();
       else this.unsubscribe();
       if (type === WDType.SHORT) {
-        this.cancelAllOpenOrders();
+        // this.cancelAllOpenOrders();
       } else if (type === WDType.LONG) {
 
         /* this.cancelAllOpenOrders();
@@ -509,14 +527,11 @@ export class BotBase {
     console.log('SELL_INSTANT ' + qty);
     const res = await this.setSellOrder(rate, amountCoin, 0);
     await UTILS.wait(2);
-    this.apiPrivate.refreshBalancesNow();
     return res;
   }
 
 
-  async
-
-  botInit() {
+  async botInit() {
     /* const ar = this.market.split('_');
    //  this.base = ar[0];
     // this.coin = ar[1];

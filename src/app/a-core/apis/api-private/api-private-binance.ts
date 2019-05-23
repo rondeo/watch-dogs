@@ -310,7 +310,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
     //  const amountDecimals = val.amountDecimals;
     // data.amountCoin = +data.amountCoin.toFixed(val.amountDecimals);
     // data.rate = +data.rate.toFixed(val.rateDecimals);
-    console.log(' STOP LOSS ', market, quantity, stopPrice, price);
+
 
     let url = this.prefix + 'https://api.binance.com/api/v3/order';
     let data = {
@@ -323,6 +323,7 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
       timeInForce: 'GTC'
     };
 
+    console.log('SEND STOP LOSS ', data);
 
     return this.call(url, data, RequestType.POST).pipe(map(res => {
       console.log('result STOP_LOSS market ' + market, res);
@@ -339,7 +340,6 @@ export class ApiPrivateBinance extends ApiPrivateAbstaract {
         fee: -1
       }
     })).toPromise();
-
   }
 
   takeProfit(market: string, quantity: number, stopPrice: number) {

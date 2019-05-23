@@ -6,12 +6,19 @@ import {debounceTime, filter, map} from 'rxjs/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 
 
-enum StopLossState {
-  OFF,
-  NEED,
-  SET,
-  DUAL,
-  SETTING
+export enum StopLossState {
+  OFF='STOP_LOSS_OFF',
+  NEED='STOP_LOSS_NEED',
+  SET='STOP_LOSS_SET',
+  DUAL='STOP_LOSS_DUAL'
+}
+
+
+export enum BotState {
+  OFF = 'BOT_STATE_OFF',
+  CANCELING_ORDERS = 'CANCELING_ORDERS',
+  SELLING_COIN = 'SELLING_COIN',
+  WAITING = 'WAITING'
 }
 
 
@@ -60,10 +67,13 @@ export class BotBus {
   priceStop$: Observable<number>;
 
 
-  balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null)
+  balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
 
   ordersOpen$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
   ordersHistory$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+
+
+  progressOrders$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
 
   constructor(public id: string) {
   //  this.wdType$.subscribe(console.warn);
@@ -77,7 +87,7 @@ export class BotBus {
     this.stopLossState$ = combineLatest(this.wdType$,this.ordersOpen$)
       .pipe(debounceTime(1000), map(BotBus.stopLossStatus));
     this.stopLossState$.subscribe(res => {
-      console.warn(this.id, res);
+      console.log(this.id, res);
     })
       //.pipe(map( wd => wd === WDType.LONG?StopLossState.ON: StopLossState.OFF));
 
@@ -92,6 +102,20 @@ export class BotBus {
     }))
   }
 
+  addProgressOrder(order: VOOrder) {
+    let orders = this.progressOrders$.getValue();
+    orders.push(order);
+    this.progressOrders$.next(orders);
+  }
 
+  removeProgressOrderByID(uuids: string[]) {
+    let orders = this.progressOrders$.getValue();
+    const l = orders.length;
+    if(!l) return;
+    orders = orders.filter(function (item) {
+      return  uuids.indexOf(item.uuid) !== -1;
+    });
+    if(orders.length !== l) this.progressOrders$.next(orders);
+  }
 
 }

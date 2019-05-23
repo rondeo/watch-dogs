@@ -5,13 +5,13 @@ import {MATH} from '../acom/math';
 import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {Observable} from 'rxjs/internal/Observable';
-import {skip, withLatestFrom} from 'rxjs/operators';
+import {filter, skip, withLatestFrom} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../a-core/services/app-storage.service';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {BotBus, StopLossState} from './bot-bus';
 import {Utils} from 'tslint';
 import {UTILS} from '../acom/utils';
-import {combineLatest} from 'rxjs/internal/observable/combineLatest';
-import {BotBus} from './bot-bus';
 
 export interface StopLossSettings {
   stopLossPercent: number;
@@ -27,6 +27,8 @@ export class StopLossOrder {
   resetStopLossAt = 3;
   disabled = false;
   stopLossOrder$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
+
+  inProgress = false;
 
   static getStopLossPrices(mas, stopLossPercent, sellPercent) {
     const ma25 = mas.ma3;
@@ -61,6 +63,35 @@ export class StopLossOrder {
       }
     });
 
+    combineLatest(bus.stopLossState$, bus.balanceCoin$, bus.mas$)
+      .pipe(filter(([state, balance, mas]) => {
+        return state === StopLossState.NEED && balance.available !== 0 && !!mas
+    }))
+      .subscribe(([state, balance, mas]) => {
+        if(this.inProgress) return;
+      console.log(market, state, balance, mas);
+        const available = balance.available;
+
+        const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
+
+        this.inProgress = true;
+
+        console.log(market  + ' setting stop loss ');
+
+        this.apiPrivate.stopLoss(this.market, available, prices.stopPrice,  prices.sellPrice).then(res =>{
+          console.warn(' STOP LOSS TRIGGERED !!!!!!!!!!!!!!!!!!!!!!!!!!! ', res);
+
+          this.inProgress = false;
+        }).catch(err => {
+          this.inProgress = false;
+        });
+
+        UTILS.wait(20).then(() => {
+          this.apiPrivate.refreshBalancesNow();
+        })
+
+    });
+
     wdType$.pipe(skip(2)).subscribe(type => {
       if (type === WDType.LONG) {
         this.disabled = false;
@@ -85,8 +116,11 @@ export class StopLossOrder {
       }
 
       const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
-      if(!stopLoss) {
+
+      if(!stopLoss) return;
+     /* if(!stopLoss) {
         const available = balanceCoin.available;
+
         if(!available) {
           console.warn(this.market + ' not  available ' + available);
           return;
@@ -99,7 +133,7 @@ export class StopLossOrder {
         console.log(' no stopLoss ' + this.market );
         return;
       }
-
+*/
       const diff = MATH.percent(prices.stopPrice, stopLoss.stopPrice);
       console.log(market + 'STOP_LOSS diff ' + diff, 'color: green ');
 
@@ -171,23 +205,25 @@ export class StopLossOrder {
     return StopLossOrder.getStopPrice(ma, this.stopLossPercent);
   }*/
 
-  async setStopLoss(qty: number, stopPrice: number, sellPrice: number) {
+  /*async setStopLoss(qty: number, stopPrice: number, sellPrice: number) {
     if (stopPrice === 0 || sellPrice === 0) {
       console.error(' stop price 0');
-      return
+      throw new Error(' price errors  stopPrice '+ stopPrice+ ' sellPrice ' + sellPrice)
     }
     console.log(this.market + '  SET STOP LOSS ')
     let result;
     try {
+
       result = await this.apiPrivate.stopLoss(this.market, qty, stopPrice, sellPrice);
-      const reason = ' set stop loss ';
-      this.log({action: 'STOP_LOSS RESULT ', reason: result.uuid});
+
+      console.log({action: 'STOP_LOSS RESULT ', reason: result.uuid});
     } catch (e) {
       console.error(e);
+      throw new Error(' price errors  stopPrice '+ stopPrice+ ' sellPrice ' + sellPrice)
     }
     return result
   }
-
+*/
   destroy() {
     this.storage.remove(this.market + '-stop-loss-settings');
   }
