@@ -10,14 +10,16 @@ import {OrderType, VOOrder, WDType} from '../amodels/app-models';
 import {AppState} from '../app-store/reducers';
 import {createFeatureSelector, createSelector, select, Store} from '@ngrx/store';
 import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
+import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
 
 const bots = createFeatureSelector('bots');
-
 const balances = state => state.balances;
 const openOrders = state => {
   console.log(state);
   return state.openOrders;
 };
+
 const serverData = createSelector(bots, (state: any)=> {
   return state.balances
 });
@@ -28,6 +30,9 @@ export class MarketBot extends BotBase {
   isPriceLiquidEdit = false;
 
   serverData$;
+
+  closes30min$: Observable<number[]>;
+  macdCloses;
 
   constructor(
     exchange: string,
@@ -41,12 +46,10 @@ export class MarketBot extends BotBase {
     marketCap: ApiMarketCapService,
     public btcusdt: BtcUsdtService,
 
-    // private minuteCandles: MinuteCandlesService,
-    // private candles15: Candles15minService
-
   ) {
 
     super(exchange, market, potSize, apiPrivate, apiPublic, candlesService, storage, marketCap);
+    this.closes30min$ = this.bus.closes$.pipe(map(CandlesUtils.converCloses5mto30min));
 
     // this.priceLiqud$.subscribe(v => this.priceLiquidInput = v);
 
@@ -58,7 +61,6 @@ export class MarketBot extends BotBase {
 
     this.serverData$ = store.pipe(select(serverData))
       this.serverData$.subscribe(data => {
-      console.log(data);
     })
   }
 
@@ -100,7 +102,7 @@ export class MarketBot extends BotBase {
      const lastPrice = lastCandle.close;
      if (this.prevPrice === lastPrice) return;
 
-     console.log(this.market + ' ' + this.balance.state + ' ' + this.orders.state + ' ' + this.macdSignal.reason);
+     console.log(this.market + ' ' + this.balance.viewState + ' ' + this.orders.viewState + ' ' + this.macdSignal.reason);
 
      setTimeout(() => this.save(), 5000);
 
@@ -114,10 +116,10 @@ export class MarketBot extends BotBase {
      const volumes = this.candlesService.volumes(this.market);
      const closes = CandlesAnalys1.closes(candles15m);
 
-     const btcusdtState = this.btcusdt.state;
+     const btcusdtState = this.btcusdt.viewState;
 
      /!*  if (btcusdtState === MarketState.DROPPING) {
-         if (this.balance.state === BalanceState.SOLD) {
+         if (this.balance.viewState === BalanceState.SOLD) {
            return;
          }
 
@@ -125,7 +127,7 @@ export class MarketBot extends BotBase {
          const cancelResults = await this.orders.cancelAllOrders();
          this.log({orderType: 'CANCEL ALL ORDERS', reason: _.map(_.flatten(cancelResults), 'uuid').toString()});
 
-         this.state = BotState.TO_USDT;
+         this.viewState = BotState.TO_USDT;
          this.sellCoinInstant(0);
 
          return;
@@ -147,7 +149,7 @@ export class MarketBot extends BotBase {
      const buyPrice = mas.ma3;
 
 
-     let macdState = this.macdSignal.state;
+     let macdState = this.macdSignal.viewState;
 
 
      // console.log(this.market + ' macd ' + macdState + ' ' + this.macdSignal.reason);
@@ -155,7 +157,7 @@ export class MarketBot extends BotBase {
 
      ///////////////////////////////////
 
-     if (macdState === BuySellState.BUY_NOW && this.balance.state === BalanceState.SOLD && this.orders.state === OrdersState.NONE) {
+     if (macdState === BuySellState.BUY_NOW && this.balance.viewState === BalanceState.SOLD && this.orders.viewState === OrdersState.NONE) {
 
        this.log({action: 'BUY NOW', reason: this.macdSignal.reason});
 
@@ -199,7 +201,7 @@ export class MarketBot extends BotBase {
     /*
 
           this.log({action: 'USDT_BTC', reason: btcusdtState});
-          // this.state = BotState.BUYING;
+          // this.viewState = BotState.BUYING;
          //  this.buyCoinInstant(0);
            this.setBuyOrder(buyPrice);
           return;
@@ -208,11 +210,11 @@ export class MarketBot extends BotBase {
         }
 
 
-        if (macdState === BuySellState.SELL_NOW && this.balance.state === BalanceState.BOUGHT) {
+        if (macdState === BuySellState.SELL_NOW && this.balance.viewState === BalanceState.BOUGHT) {
           this.log({action: 'SELL NOW', reason: this.macdSignal.reason});
 
-          if (this.orders.state === OrdersState.SELLING) {
-            this.log({action: 'STOP SELL', reason: this.orders.state});
+          if (this.orders.viewState === OrdersState.SELLING) {
+            this.log({action: 'STOP SELL', reason: this.orders.viewState});
             return;
           }
 
@@ -224,11 +226,11 @@ export class MarketBot extends BotBase {
           this.log({action: 'MC', reason: ' r6 ' + this.mcCoin.r6 + ' r24 ' + this.mcCoin.r24});
           this.log({action: 'USDT_BTC', reason: btcusdtState});
           this.setSellOrder(buyPrice);
-          //this.state = BotState.SELLING;
+          //this.viewState = BotState.SELLING;
           return;
         }
 
-        if (this.orders.state === OrdersState.BUYING) {
+        if (this.orders.viewState === OrdersState.BUYING) {
           if (macdState === BuySellState.SELL) {
             this.log({action: 'CANCEL BUY', reason: 'macd SELL'});
            //  this.orders.cancelBuyOrders();
@@ -243,17 +245,17 @@ export class MarketBot extends BotBase {
             this.log({action: 'CANCEL BUY', reason: ' age > 40 ' + age + ' Pd ' + priceD + ' ' + rate});
             this.orders.cancelBuyOrders();
           } else {
-            this.log({action: 'BUYING', reason: 'age ' + age + ' Pd ' + priceD + ' macd ' + this.macdSignal.state});
+            this.log({action: 'BUYING', reason: 'age ' + age + ' Pd ' + priceD + ' macd ' + this.macdSignal.viewState});
           }
 
-          if (this.balance.state === BalanceState.BOUGHT) {
+          if (this.balance.viewState === BalanceState.BOUGHT) {
             this.log({action: 'PART BUY', reason: 'age ' + age + ' Pd ' + priceD});
           }
 
           return;
         }
 
-        if (this.balance.state === BalanceState.BOUGHT && this.orders.state === OrdersState.SELLING) {
+        if (this.balance.viewState === BalanceState.BOUGHT && this.orders.viewState === OrdersState.SELLING) {
 
           if (macdState === BuySellState.BUY) {
             this.log({action: 'CANCEL SELL', reason: 'macd BUY'});
@@ -275,11 +277,11 @@ export class MarketBot extends BotBase {
         // this.log({orderType: 'close < ma25', reason: '  ma25 ' + mas.ma25.toFixed(8) + ' close ' + last15m.close});
 
 
-        if (this.orders.state === OrdersState.STOP_LOSS) {
+        if (this.orders.viewState === OrdersState.STOP_LOSS) {
           this.stopLossOrder.checkStopLoss(stopLossPrice, this.balance.balance);
         }
 
-        if (this.orders.state === OrdersState.NONE && this.balance.state === BalanceState.BOUGHT) {
+        if (this.orders.viewState === OrdersState.NONE && this.balance.viewState === BalanceState.BOUGHT) {
           this.stopLossOrder.setStopLoss(stopLossPrice, this.balance.balance)
         }
     */

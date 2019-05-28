@@ -96,7 +96,7 @@ export class MacdSignal {
         if(prevState === BuySellState.BUY && newState === BuySellState.SELL) newState = BuySellState.CHANGE_SELL;
         else if(prevState === BuySellState.SELL && newState === BuySellState.BUY) newState = BuySellState.CHANGE_BUY;
         if (prevState !== newState) this._state.next(newState);
-        //  console.log('%c ' + market + '  ' + state, 'color:blue');
+        //  console.log('%c ' + market + '  ' + viewState, 'color:blue');
 
 
       })
@@ -143,14 +143,14 @@ export class MacdSignal {
          else {
            newState = state15m;
          }
-         const prevState = this.state;
+         const prevState = this.viewState;
 
          if(prevState === BuySellState.BUY && newState === BuySellState.SELL) newState = BuySellState.CHANGE_SELL;
          else if(prevState === BuySellState.SELL && newState === BuySellState.BUY) newState = BuySellState.CHANGE_BUY;
 
 
          if (prevState !== newState) this._state.next(newState);
-         //  console.log('%c ' + market + '  ' + state, 'color:blue');
+         //  console.log('%c ' + market + '  ' + viewState, 'color:blue');
 
        })
      }*/
@@ -196,7 +196,7 @@ export class MacdSignal {
     const prev = result[L - 2];
 
 
-    const prevState = this.state;
+    const prevState = this.viewState;
     let newState = BuySellState.NONE;
     this.reason = ' prev ' + prev.histogram.toPrecision(3) + ' last ' + last.histogram.toPrecision(3);
 

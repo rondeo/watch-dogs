@@ -255,7 +255,7 @@ export class CandlesAnalys1 {
 
   static getVolumePrice(patterns: any[]) {
     const largeVolume = patterns.find(function (item) {
-      return item.state.indexOf('LARGE-VOLUME') !== -1 || item.state.indexOf('HUGE-VOLUME') !== -1;
+      return item.viewState.indexOf('LARGE-VOLUME') !== -1 || item.viewState.indexOf('HUGE-VOLUME') !== -1;
     });
 
     let price = 0;
@@ -267,17 +267,17 @@ export class CandlesAnalys1 {
                       lastOrder: { stamp: number, action: string, price: number }, support): { action: string, reason: string } {
     if (patterns.length < 3) return null;
     const last = _.first(patterns);
-    //  console.log(last.t, last.state);
+    //  console.log(last.t, last.viewState);
     const prev = patterns[1];
 
 
-    /*  if(prev.state === 'WATCH-TO-BUY') {
-        if(last.state.indexOf('DOWN') !== -1){
-          last.state = 'WATCH-TO-BUY';
+    /*  if(prev.viewState === 'WATCH-TO-BUY') {
+        if(last.viewState.indexOf('DOWN') !== -1){
+          last.viewState = 'WATCH-TO-BUY';
           return 'WATCH-TO-BUY';
         }
       }*/
-    const lastState = last.state;
+    const lastState = last.viewState;
 
     if (lastState === 'DROP_LARGE-VOLUME') return {
       action: 'SELL',
@@ -313,7 +313,7 @@ export class CandlesAnalys1 {
 
 
     /* const drop = _.find(patterns, function (item) {
-       return item.state.indexOf('DROP') !== -1;
+       return item.viewState.indexOf('DROP') !== -1;
      });
 
 
@@ -325,26 +325,26 @@ export class CandlesAnalys1 {
        }
      }
  */
-    if (last.state === 'UP_WITH-VOLUME') return {
+    if (last.viewState === 'UP_WITH-VOLUME') return {
       action: 'BUY',
       reason: 'UP_WITH-VOLUME'
     };
 
-    if (last.state === 'UP_HUGE-VOLUME') return {
+    if (last.viewState === 'UP_HUGE-VOLUME') return {
       action: 'BUY',
       reason: 'UP_HUGE-VOLUME'
     };
-    if (last.state === 'UP_LARGE-VOLUME') return {
+    if (last.viewState === 'UP_LARGE-VOLUME') return {
       action: 'BUY',
       reason: 'UP_HUGE-VOLUME'
     };
 
 
-    /* if (prev.state === 'DROP_LARGE-VOLUME' && last.state === 'STAY_LARGE-VOLUME') {
-       last.state = 'WATCH-TO-BUY';
+    /* if (prev.viewState === 'DROP_LARGE-VOLUME' && last.viewState === 'STAY_LARGE-VOLUME') {
+       last.viewState = 'WATCH-TO-BUY';
        return 'WATCH-TO-BUY'
      }*/
-    /* if (last.state === 'UP_WITH-VOLUME') {
+    /* if (last.viewState === 'UP_WITH-VOLUME') {
 
 
        return '';

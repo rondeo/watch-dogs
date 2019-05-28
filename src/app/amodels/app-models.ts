@@ -551,7 +551,10 @@ export class WalletModel {
 export enum WDType {
   OFF = 'OFF',
   SHORT = 'SHORT',
-  LONG = 'LONG'
+  LONG = 'LONG',
+  LONGING = 'LONGING',
+  LOST = 'LOST',
+  BUYING = 'BUYING'
 }
 
 export class VOWatchdog {

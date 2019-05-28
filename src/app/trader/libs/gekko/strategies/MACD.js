@@ -15,9 +15,9 @@ var method = {};
 
 // prepare everything our method needs
 method.init = function() {
-  // keep state about the current trend
+  // keep viewState about the current trend
   // here, on every new candle we use this
-  // state object to check if we need to
+  // viewState object to check if we need to
   // report it.
   this.trend = {
     direction: 'none',
@@ -63,7 +63,7 @@ method.check = function() {
 
     // new trend detected
     if(this.trend.direction !== 'up')
-      // reset the state for the new trend
+      // reset the viewState for the new trend
       this.trend = {
         duration: 0,
         persisted: false,
@@ -88,7 +88,7 @@ method.check = function() {
 
     // new trend detected
     if(this.trend.direction !== 'down')
-      // reset the state for the new trend
+      // reset the viewState for the new trend
       this.trend = {
         duration: 0,
         persisted: false,

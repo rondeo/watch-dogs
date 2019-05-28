@@ -24,6 +24,17 @@ import {MarketBot} from '../../app-bots/market-bot';
 import {AppBotsService} from '../../app-bots/app-bots.service';
 import {UsdtBtcMarket} from '../../app-bots/usdt-btc-market';
 
+
+export interface ViewState {
+  active: string;
+  selected: string;
+  exchange: string;
+  market: string;
+  botList: boolean;
+  isAllMarkets: boolean
+  isCandles: boolean;
+}
+
 @Component({
   selector: 'app-live-trader',
   templateUrl: './live-trader.component.html',
@@ -34,8 +45,12 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   exchanges$: Observable<string[]>;
   markets$: Observable<string[]>;
+
   market: string;
   exchange: string;
+
+  closes: number[];
+  isAllMarkets: boolean;
   // exchange: string = null;
   amountPots = 1;
   price: number;
@@ -48,24 +63,23 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   stopLossPercent: number = 2.5;
   stopLoss: number;
-
   currentBot: MarketBot;
   myOrders$: BehaviorSubject<VOOrder[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-   // private apisPublic: ApisPublicService,
+    // private apisPublic: ApisPublicService,
     private snackBar: MatSnackBar,
-   private dialog: MatDialog,
-   // private marketsHistory: MarketsHistoryService,
-   // private candleService: CandlesService,
-   // private apisPrivate: ApisPrivateService,
+    private dialog: MatDialog,
+    // private marketsHistory: MarketsHistoryService,
+    // private candleService: CandlesService,
+    // private apisPrivate: ApisPrivateService,
     private botsService: AppBotsService,
     public marketService: TradeMarketService,
     // private tradesHistoryService: TradesHistoryService,
     private marketCap: ApiMarketCapService,
-//    private storage: StorageService
+    //    private storage: StorageService
   ) {
 
   }
@@ -78,38 +92,43 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   usdtbtcs$: Observable<UsdtBtcMarket[]>;
 
   currentOrderLiquidPrice: number;
+  isCandles: boolean;
 
   ngOnInit() {
+   this.route.params.subscribe(state => {
+     this.marketService.setViewState(state as ViewState);
+    });
+
 
     this.botsService.errors$.subscribe(error => {
       this.snackBar.open(error, 'x');
-    })
-    const params = this.route.snapshot.params;
-    this.marketService.exchange$.next(params.exchange);
-    this.marketService.market$.next(params.market);
+    });
+
     this.bots$ = this.botsService.orders$;
-
     this.usdtbtcs$ = this.botsService.usdtbtc$;
-    this.marketService.market$.pipe(filter(market => {
-      return this.market !== market && !!market;
-     //  if(this.sub1) this.sub1.unsubscribe();
-    })).subscribe(market => this.market = market);
 
-    this.marketService.exchange$.subscribe(exchange => {
-      this.exchange = exchange;
-    });
+    this.marketService.state$.subscribe(state => {
+      this.market = state.market;
+      this.exchange = state.exchange;
+      if(this.market) {
+        const ar = this.market.split('_');
+        this.base = ar[0];
+        this.coin = ar[1];
+      } else {
+        this.base = null;
+        this.coin = null;
+      }
+      this.isAllMarkets = state.isAllMarkets;
+      this.isCandles = state.isCandles;
 
-    UTILS.clearNull(this.marketService.market$).subscribe(market =>{
-      const ar = market.split('_');
-      this.base = ar[0];
-      this.coin = ar[1];
-    });
+    })
+
 
     this.marketService.balanceBase$.subscribe(balance => {
-        this.balanceBaseUS = balance.balanceUS;
+      this.balanceBaseUS = balance.balanceUS;
     });
 
-    this.marketService.balanceCoin$.subscribe(balance =>{
+    this.marketService.balanceCoin$.subscribe(balance => {
       this.balanceCoinUS = balance.balanceUS;
     });
 
@@ -130,60 +149,71 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
   onExchangeChanged($event: string) {
-    this.marketService.exchange$.next($event);
-    this.setRoute();
+    //  this.marketService.exchange$.next($event);
+    const state = this.marketService.viewState;
+    state.exchange = $event;
+    this.setUrl(state);
+
   }
 
   onMarketChanged($event: string) {
-    this.marketService.market$.next($event);
-    this.setRoute();
+    const state = this.marketService.viewState;
+    state.market = $event;
+    this.setUrl(state);
+    // this.marketService.market$.next($event);
+
   }
 
+
   onBotClick(bot: MarketBot) {
-    if (this.exchange !== bot.exchange) {
-      this.marketService.exchange$.next(bot.exchange);
-    }
-
-    this.marketService.market$.next(bot.market);
-
-    if(this.currentBot) this.currentBot.selected = false;
+    if (this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
     bot.selected = true;
     this.myOrders$ = bot.ordersOpen$;
-    console.log(bot);
-    this.setRoute();
+    const state = this.marketService.viewState;
+    state.selected = bot.market;
+    state.market = bot.market;
+    state.exchange = bot.exchange;
+    this.setUrl(state);
   }
 
   onUsdtBtcClick(usdtbtc: UsdtBtcMarket) {
-    this.marketService.exchange$.next(usdtbtc.exchange);
-    this.marketService.market$.next('USDT_BTC');
-    this.setRoute();
+    const state = this.marketService.viewState;
+    state.exchange = usdtbtc.exchange;
+    state.market = 'USDT_BTC';
+    this.setUrl(state);
+    //  this.marketService.exchange$.next(usdtbtc.exchange);
+    // this.marketService.market$.next('USDT_BTC');
+
   }
 
   onUsdClick() {
-    this.marketService.market$.next('USD_BTC');
-    this.setRoute();
+    // this.marketService.market$.next('USD_BTC');
+    const state = this.marketService.viewState;
+    state.market = 'USDT_BTC';
+    this.setUrl(state);
+    //  this.setRoute();
   }
 
-  setRoute() {
-    const exchange = this.exchange,
-      market = this.marketService.market$.getValue(),
-      bot =  this.currentBot? this.currentBot.id: '';
-    this.router.navigate(['/trader/live-trader', {exchange, market, bot}])
+  setUrl(state: ViewState) {
+    /* const exchange = this.exchange,
+       market = this.marketService.market$.getValue(),
+       bot =  this.currentBot? this.currentBot.id: '';*/
+
+    this.router.navigate(['/trader/live-trader', state])
   }
 
   onDeleteOrderClick(order: VOOrder) {
-    if(!this.currentBot) return;
+    if (!this.currentBot) return;
     this.currentBot.cancelOrder(order.uuid).toPromise();
   }
 
   onDeleteBotClick(bot: MarketBot) {
     const msg = ' Delete ' + bot.id + '?';
-    if(confirm(msg)) {
+    if (confirm(msg)) {
       this.botsService.deleteBot(bot);
     }
   }
-
 
 
   onBotPriceSellClick(bot: MarketBot) {
@@ -196,20 +226,21 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
 
   onEditTypeClick(bot: MarketBot) {
-    const ref = this.dialog.open(OrderTypeComponent, {height: '230px', width:'350px', data: bot});
+    const ref = this.dialog.open(OrderTypeComponent, {height: '230px', width: '350px', data: bot});
     ref.afterClosed().subscribe(res => {
     })
 
   }
 
   onStopPriceClick(bot: MarketBot) {
-    const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width:'600px', data: bot});
+    const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width: '600px', data: bot});
     ref.afterClosed().subscribe(res => {
     })
 
   }
 
   onAddClick() {
+
     const bot = this.botsService.createBot(this.exchange, this.market);
 
   }
@@ -217,5 +248,17 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   onActiveOrdersRefreshClick() {
     this.currentBot.refreshOpenOrders();
 
+  }
+
+  onAllMarketsChanged() {
+    const state = this.marketService.viewState;
+    state.isAllMarkets = this.isAllMarkets;
+    this.setUrl(state);
+  }
+
+  onCandlesChanged() {
+    const state = this.marketService.viewState;
+    state.isCandles = this.isCandles;
+    this.setUrl(state);
   }
 }

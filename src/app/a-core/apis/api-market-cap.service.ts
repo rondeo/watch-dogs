@@ -112,8 +112,8 @@ export class ApiMarketCapService {
         return out;
       };
 
-      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap48.json');
-      const mc24h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap144.json');
+      const mc6h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap6.json');
+      const mc24h = this.http.get('api/proxy-5min/http://front-desk.ca/coin-media/market-cap24.json');
       return forkJoin([mc6h, mc24h])
         .pipe(catchError(error => of(null)),
           map(res => {

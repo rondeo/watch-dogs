@@ -27,13 +27,11 @@ export class StopLossOrder {
   resetStopLossAt = 3;
   disabled = false;
   stopLossOrder$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
-
   inProgress = false;
-
   static getStopLossPrices(mas, stopLossPercent, sellPercent) {
     const ma25 = mas.ma3;
     const last = mas.last;
-    const lowerPrice = last < ma25? last : ma25;
+    const lowerPrice = last < ma25 ? last : ma25;
     const stopPrice = StopLossOrder.getStopPrice(lowerPrice, stopLossPercent);
     const sellPrice = StopLossOrder.getSellPrice(stopPrice, sellPercent);
     return {
@@ -46,11 +44,6 @@ export class StopLossOrder {
     private market: string,
     private apiPrivate: ApiPrivateAbstaract,
     private bus: BotBus,
-    openOrders$: Observable<VOOrder[]>,
-    private balanceCoin$: Observable<VOBalance>,
-    candles$: Observable<VOCandle[]>,
-    public mas$: Observable<{last: number, ma3: number, ma7: number, ma25: number, ma99: number }>,
-    protected wdType$: BehaviorSubject<WDType>,
     private storage: StorageService
   ) {
 
@@ -66,107 +59,81 @@ export class StopLossOrder {
     combineLatest(bus.stopLossState$, bus.balanceCoin$, bus.mas$)
       .pipe(filter(([state, balance, mas]) => {
         return state === StopLossState.NEED && balance.available !== 0 && !!mas
-    }))
+      }))
       .subscribe(([state, balance, mas]) => {
-        if(this.inProgress) return;
-      console.log(market, state, balance, mas);
+        if (this.inProgress) return;
+        console.log(market, state, balance, mas);
         const available = balance.available;
 
         const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
-
         this.inProgress = true;
 
-        console.log(market  + ' setting stop loss ');
+        console.log(market + ' NEED SET STOP_LOSS ');
+        this.bus.log('NEED SET STOP_LOSS ' + [available , prices.stopPrice, prices.sellPrice].join(','));
 
-        this.apiPrivate.stopLoss(this.market, available, prices.stopPrice,  prices.sellPrice).then(res =>{
-          console.warn(' STOP LOSS TRIGGERED !!!!!!!!!!!!!!!!!!!!!!!!!!! ', res);
-
-          this.inProgress = false;
-        }).catch(err => {
+        this.apiPrivate.stopLoss(this.market, available, prices.stopPrice, prices.sellPrice)
+          .then(res => {
+            this.bus.log('STOP_LOSS RESULT ' + JSON.stringify(res));
+            console.log(market + ' STOP LOSS RESULT ', res);
+          }).catch(err => {
+          this.bus.log('STOP_LOSS ERROR ' + err.message);
+         console.error(market, err)
+        }).finally(() =>{
           this.inProgress = false;
         });
 
         UTILS.wait(20).then(() => {
           this.apiPrivate.refreshBalancesNow();
         })
+      });
 
-    });
-
-    wdType$.pipe(skip(2)).subscribe(type => {
+    bus.wdType$.pipe(skip(2)).subscribe(type => {
       if (type === WDType.LONG) {
         this.disabled = false;
       } else {
         this.disabled = true;
         // this.stopLossOrder$.next(null);
       }
-      this.save();
+    //   console.warn(this.market);
+     //  this.save();
     });
 
-    this.mas$.pipe(skip(2), withLatestFrom(balanceCoin$, this.stopLossOrder$))
+    bus.mas$.pipe(skip(2), withLatestFrom(bus.balanceCoin$, this.stopLossOrder$))
+
       .subscribe(([mas, balanceCoin, stopLoss]) => {
 
-      if (this.disabled) return;
-      const wdType = wdType$.getValue();
-      if (wdType !== WDType.LONG) return;
-      const b = balanceCoin.balance;
+        if (this.disabled) return;
+        const wdType = bus.wdType$.getValue();
+        if (wdType !== WDType.LONG) return;
+        const b = balanceCoin.balance;
 
-      if(!b) {
-        console.log(market + ' no balance  ');
-        return;
-      }
-
-      const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
-
-      if(!stopLoss) return;
-     /* if(!stopLoss) {
-        const available = balanceCoin.available;
-
-        if(!available) {
-          console.warn(this.market + ' not  available ' + available);
+        if (!b) {
+          console.log(market + ' no balance  ');
           return;
         }
-        console.warn(this.market + '  setting stop loss ', prices);
 
-        this.setStopLoss(available, prices.stopPrice, prices.sellPrice).then(res => {
-          console.log(' set stop loss result ', res)
-        });
-        console.log(' no stopLoss ' + this.market );
-        return;
-      }
-*/
-      const diff = MATH.percent(prices.stopPrice, stopLoss.stopPrice);
-      console.log(market + 'STOP_LOSS diff ' + diff, 'color: green ');
+        const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
 
-      if (diff > this.resetStopLossAt) {
-        console.log('%c ' + this.market + ' reset stopLoss ', 'color:red' )
-        //  this.priceStopLoss$.next(0)
-        this.cancelOrder(stopLoss.uuid).then(res => {
-          console.log(' cancel order result', res);
-        }).catch(console.error)
-      }
-    });
+        if (!stopLoss) return;
 
-    openOrders$.subscribe(openOrders => {
-      const stopLosses = openOrders.filter(function (item) {
-        return item.stopPrice;
-      });
+        const diff = MATH.percent(prices.stopPrice, stopLoss.stopPrice);
+        console.log(market + 'STOP_LOSS diff ' + diff, 'color: green ');
 
-      if(stopLosses.length === 0) this.stopLossOrder$.next(null);
-      else {
-        this.stopLossOrder$.next(stopLosses[0]);
-        if(stopLosses.length > 1) {
-          console.warn(' stop loss orders more then one ');
-          Promise.all(openOrders.map((order) => {
-            return this.cancelOrder(order.uuid);
-          })).then(results => {
-            console.log(results);
+        if (diff > this.resetStopLossAt) {
+          this.inProgress = true;
+          UTILS.wait(20).then(() => {
+            this.inProgress = false;
           });
+
+          this.bus.log('CANCEL OLD STOP_LOSS diff: '+ diff + '  resetStopLossAt ' + this.resetStopLossAt)
+          console.log('%c ' + this.market + ' reset stopLoss ', 'color:red');   //  this.priceStopLoss$.next(0)
+          this.cancelOrder(stopLoss.uuid).then(res => {
+            this.bus.log('CANCEL OLD STOP_LOSS RESULT '+ JSON.stringify(res))
+            console.log(' cancel order result', res);
+          }).catch(console.error)
         }
-      }
-    });
-
+      });
   }
-
 
   log(data: { action: string, reason: string }) {
     console.log(data.action + ' ' + data.reason)
@@ -174,14 +141,14 @@ export class StopLossOrder {
 
   calculatePrice(candles: VOCandle[]): number {
     const closes = CandlesAnalys1.closes(candles);
-    return _.mean(_.takeRight(closes, 35));  }
+    return _.mean(_.takeRight(closes, 35));
+  }
 
   async cancelOrder(uuid: string) {
-
     if (this.disabled) return;
-
     console.log(this.market + ' CANCEL STOP LOSS ' + uuid);
     const ar = this.market.split('_');
+
     return this.apiPrivate.cancelOrder(uuid, ar[0], ar[1]).toPromise();
   }
 
@@ -233,9 +200,8 @@ export class StopLossOrder {
   }
 
   save() {
-
     const data = this.toJSON();
-    console.log(this.market + ' save stop loss settings  ', data);
+    console.warn(this.market + ' save stop loss settings  ', data);
     this.storage.upsert(this.market + '-stop-loss-settings', this.toJSON());
   }
 

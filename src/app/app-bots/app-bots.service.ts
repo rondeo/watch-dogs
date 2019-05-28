@@ -55,9 +55,9 @@ export class AppBotsService {
       this.MC = MC;
       this.initBots();
 
-     /* this.store.pipe(select((state) => {
-        console.warn(state);
-        return state;
+     /* this.store.pipe(select((viewState) => {
+        console.warn(viewState);
+        return viewState;
       })).subscribe(console.log);
 */
     });

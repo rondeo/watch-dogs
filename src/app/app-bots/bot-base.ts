@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../a-core/services/app-storage.service';
-import {debounceTime, filter, map, skip} from 'rxjs/operators';
+import {debounceTime, filter, map, pairwise, skip} from 'rxjs/operators';
 import * as moment from 'moment';
 import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../amodels/app-models';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
@@ -19,7 +19,7 @@ import {MATH} from '../acom/math';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {subscribeBalance} from './bot-utils';
 import {ApiMarketCapService} from '../a-core/apis/api-market-cap.service';
-import {BotBus} from './bot-bus';
+import {BotBus, deltaMas} from './bot-bus';
 
 
 export enum MCState {
@@ -77,7 +77,7 @@ export interface BotSettings {
 export class BotBase {
 
   bus: BotBus;
-  // state$: BehaviorSubject<BotState>;
+  // viewState$: BehaviorSubject<BotState>;
 //  mcState$: BehaviorSubject<MCState> = new BehaviorSubject(MCState.NONE);
   static potSizeUS = 50;
   base: string;
@@ -95,8 +95,8 @@ export class BotBase {
 
 /////////////////////////////////////////////////// new ///////////////
 
-  mas$: BehaviorSubject<{last: number, ma3: number, ma7: number, ma25: number, ma99: number }> = new BehaviorSubject(null);
-  maDelta$: Subject<number> = new Subject();
+  mas$: Observable<{last: number, ma3: number, ma7: number, ma25: number, ma99: number }>;// = new BehaviorSubject(null);
+  maDelta$: Observable<number>;
   wdType$: BehaviorSubject<WDType>;
 
 
@@ -111,12 +111,14 @@ export class BotBase {
 
   value$: BehaviorSubject<number> = new BehaviorSubject(0);
   books$: BehaviorSubject<VOBooks> = new BehaviorSubject(null);
-  lastPrice$: BehaviorSubject<number> = new BehaviorSubject(0);
+  lastPrice$: Observable<number>;
 
   // stopLoss$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
 
   ordersOpen$: BehaviorSubject<VOOrder[]>;//  = new BehaviorSubject([]);
   ordersHistory$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+
+  stopLossOrder$: Observable<VOOrder>;
 
   protected _balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
 
@@ -151,7 +153,7 @@ export class BotBase {
 
   set wdType(type: WDType) {
     const t = this.wdType$.getValue();
-    if (t !== type) {
+    if (t && t !== type) {
       this.wdType$.next(type);
     }
   }
@@ -167,7 +169,6 @@ export class BotBase {
   private sub3: Subscription;
   private sub4: Subscription;
   private sub5: Subscription;
-  private candles: VOCandle[];
 
   stopLossController: StopLossOrder;
 
@@ -184,7 +185,9 @@ export class BotBase {
   ) {
 
     this.id = exchange + '-' + market;
-    this.bus = new BotBus(this.id);
+    const candles$ = candlesService.candles5m$(market);
+
+    this.bus = new BotBus(this.id, candles$, storage);
     const ar = market.split('_');
     const base = ar[0];
     const coin = ar[1];
@@ -200,13 +203,12 @@ export class BotBase {
     this.ordersOpen$ = this.bus.ordersOpen$;
     this._balanceCoin$ = this.bus.balanceCoin$;
     this.mas$ = this.bus.mas$;
+    this.stopLossOrder$ = this.bus.stopLossOrder$;
 
     combineLatest(this._balanceCoin$, this.wdType$).pipe(filter(([balance, type])=>{
       return !!balance && type === WDType.SHORT
     })).subscribe(([balance, wdType])=>{
-
       console.log(balance);
-
         if(balance.pending) {
           this.cancelAllOpenOrders();
         } else if(balance.available) {
@@ -215,7 +217,6 @@ export class BotBase {
             this.apiPrivate.refreshBalancesNow();
           })
         }
-
     })
 
 
@@ -268,22 +269,13 @@ export class BotBase {
 
     });
 
-    const candles$ = candlesService.candles5m$(market);
-    candles$.subscribe(candles => {
-      //  console.log(market, candles);
-      this.candles = candles;
-      const last = candles[candles.length - 1];
-      const closes = candles.map(function (item) {
-        return item.close;
-      });
-      const mas = CandlesUtils.mas(closes);
-      this.mas$.next(mas);
-      const p = MATH.percent(mas.ma3, mas.ma25)
-      this.maDelta$.next(+p.toFixed(2));
-      this.lastPrice$.next(+mas.ma3.toPrecision(6));
-    });
+    this.maDelta$ = this.bus.mas$.pipe(map(deltaMas));
+    this.lastPrice$ = this.bus.mas$.pipe(map(mas => mas.last));
 
-    combineLatest(this.balanceCoin$, marketCap.ticker$().pipe(map(MC => MC[this.coin].price_usd))).subscribe(([balance, priceUS]) => {
+
+    combineLatest(this.balanceCoin$, marketCap.ticker$()
+      .pipe(map(MC => MC[this.coin].price_usd)))
+      .subscribe(([balance, priceUS]) => {
       this.potSize = BotBase.potSizeUS / priceUS;
       const potsBalance = balance ? +(balance.balance / this.potSize).toFixed(1) : 0;
       this.potsBalance$.next(potsBalance);
@@ -293,30 +285,36 @@ export class BotBase {
       market,
       apiPrivate,
       this.bus,
-      this.ordersOpen$,
-      this.balanceCoin$,
-      candles$,
-      this.mas$,
-      this.wdType$,
       this.storage
     );
 
-    this.priceStop$ = this.stopLossController.stopLossOrder$.pipe(map((order) => {
-      return order ? order.stopPrice : 0;
-    }))
+    this.priceStop$ = this.bus.priceStop$
   }
 
   subAll;
 
   subscribeForAll() {
 
+    this.balanceCoin$.pipe(
+      pairwise()
+    ).subscribe(([old, balance]) =>{
+      console.log('old / new balance', old, balance);
+    });
+
     if (this.subAll) this.subAll.unsubscribe();
     this.subAll = combineLatest(this.wdType$, this.balanceCoin$, this.pots$, this.potsBalance$)
       .pipe(debounceTime(100))
       .subscribe(([type, balance, pots, potsBalance]) => {
-        if (type === WDType.LONG) {
+        if (type === WDType.LONGING && potsBalance === 0) {
+          this.wdType$.next(WDType.LOST);
+        } else if (type === WDType.LONG && potsBalance !== 0) {
+          this.wdType$.next(WDType.LONGING);
+          this.adjustBalanceToPots(pots, potsBalance);
+        } else if (type === WDType.LONGING && potsBalance !== 0) {
           this.adjustBalanceToPots(pots, potsBalance);
         }
+
+
       })
   }
 
@@ -393,9 +391,8 @@ export class BotBase {
     console.log('%c ' + this.id + ' pots diff ' + diff, 'color:green');
 
 
-    if (Math.abs(diff) > 0.3) {
+    if (Math.abs(diff) > 1) {
       const amountCoin = Math.abs(diff) * this.potSize;
-
       if (diff > 0) this.buyCoinInstant(amountCoin).then(res => {
         console.log(this.id + '  followPots BUY ', res)
       }).catch(console.error);
@@ -498,7 +495,10 @@ export class BotBase {
         console.log('CANCELING ALL OPEN orders ', openOrders);
         await Promise.all(openOrders.map((item) => {
           return this.apiPrivate.cancelOrder2(item.uuid, item.market).toPromise();
-        }));
+        })).catch(err => {
+          console.error('ERROR CANCELING ORDERS', err);
+          this.apiPrivate.refreshAllOpenOrders();
+        });
         await UTILS.wait(5);
       } else {
         console.error(' no available and no open orders ')
@@ -536,7 +536,7 @@ export class BotBase {
    //  this.base = ar[0];
     // this.coin = ar[1];
 
-    //  this.state$ = new BehaviorSubject<BotState>((await this.storage.select('state-' + this.exchange + this.market)) || BotState.NONE);
+    //  this.viewState$ = new BehaviorSubject<BotState>((await this.storage.select('viewState-' + this.exchange + this.market)) || BotState.NONE);
 
      await this.initMarketCap();
      //  console.log(this.market + ' init ' + this.isLive + ' $' + this.amountCoinUS);
@@ -552,17 +552,17 @@ export class BotBase {
 
 
      this.sellOnJump = new SellOnJump(this.market, this.candlesService);
-     this.sellOnJump.state$.subscribe(state => {
-       if (state === BuySellState.SELL_ON_JUMP && this.balance.state === BalanceState.BOUGHT) {
+     this.sellOnJump.viewState$.subscribe(viewState => {
+       if (viewState === BuySellState.SELL_ON_JUMP && this.balance.viewState === BalanceState.BOUGHT) {
 
          this.log({action: 'SELL_ON_JUMP', reason: this.sellOnJump.reason});
 
          this.sellCoinInstant(0);
        }
-       console.log(this.market + ' sellOnJump ' + state + ' ' + this.sellOnJump.reason);
+       console.log(this.market + ' sellOnJump ' + viewState + ' ' + this.sellOnJump.reason);
      });
 
-     this.macdSignal.state$.subscribe(res => {
+     this.macdSignal.viewState$.subscribe(res => {
        this.log({action: 'MACD ' + res, reason: this.macdSignal.reason});
        /!* if (res === BuySellState.BUY_NOW) {
           this.log({orderType: 'BUY_BY_MACD', reason: this.macdSignal.reason});
@@ -581,8 +581,8 @@ export class BotBase {
        }
      });
 
-     this.balance.state$.subscribe(state => {
-       this.log({action: 'BALANCE', reason: state});
+     this.balance.viewState$.subscribe(viewState => {
+       this.log({action: 'BALANCE', reason: viewState});
      });
 
      // this.stopLossOrder = new StopLossOrder(this.market, this.apiPrivate);
@@ -631,13 +631,13 @@ export class BotBase {
    }
   */
 
-  /*  get state() {
-      return this.state$.getValue();
+  /*  get viewState() {
+      return this.viewState$.getValue();
     }
 
-    set state(state: BotState) {
-      this.state$.next(state);
-      this.storage.upsert('state-' + this.exchange + this.market, state);
+    set viewState(viewState: BotState) {
+      this.viewState$.next(viewState);
+      this.storage.upsert('viewState-' + this.exchange + this.market, viewState);
     }*/
 
   destroy() {

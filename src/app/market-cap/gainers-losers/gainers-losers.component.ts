@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MarketCapService} from '../services/market-cap.service';
-import {VOMarketCap, VOMCDisplay} from '../../amodels/app-models';
+import {VOMarket, VOMarketCap, VOMCDisplay} from '../../amodels/app-models';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
@@ -146,9 +146,24 @@ export class GainersLosersComponent implements OnInit {
     }
 
 
-    allCoins = this.filterExhangeCoins(allCoins);
-    let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
-    this.coinsAvailable = sorted;
+    if(this.top === 'USDT') {
+      this.base = 'USDT'
+      this.apisPublic.getExchangeApi(this.exchange).getMarkets().then(data => {
+        const mc = allCoins.filter(function (mc) {
+          return !!data['USDT_' + mc.symbol]
+        });
+
+        let sorted = _.orderBy(mc, this.sortBy, this.asc_desc);
+        this.coinsAvailable = sorted;
+
+      })
+    } else {
+      this.base = 'BTC';
+      allCoins = this.filterExhangeCoins(allCoins);
+      let sorted = _.orderBy(allCoins, this.sortBy, this.asc_desc);
+      this.coinsAvailable = sorted;
+    }
+
   }
 
   onClickHeader(criteria: string): void {

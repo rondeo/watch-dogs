@@ -1,5 +1,7 @@
 <div>
-    <h4>{{id}}</h4>
+    <span class="mat-headline">{{id}}</span>
+    &nbsp;&nbsp;
+    <mat-checkbox [(ngModel)]="disabled">Disabled</mat-checkbox>
     <div>
         <mat-form-field class="w4">
             <mat-label>Stop Loss percent</mat-label>

@@ -15,7 +15,7 @@ export class CandlesMinutes {
   minutes: number;
   expire = 0;
   expireStr: string;
-  private candlesLength = 120;
+  private candlesLength = 300;
   candles$: BehaviorSubject<VOCandle[]> = new BehaviorSubject(null);
 
   get numSubscribers() {
@@ -40,7 +40,6 @@ export class CandlesMinutes {
         // console.log(this.id, this.expireStr);
       }
     });
-
   }
 
   getCandles() {
@@ -51,7 +50,8 @@ export class CandlesMinutes {
     const now = moment().valueOf();
     let length = this.candlesLength;
     let oldCandles = this.candles$.getValue() || [];
-    if (oldCandles && oldCandles.length) {
+   if(oldCandles.length < this.candlesLength) oldCandles = [];
+    if (oldCandles.length) {
       const missingMinutes = (now - oldCandles[oldCandles.length - 1].to) / 6e4;
       length = Math.ceil(missingMinutes / this.minutes) + 1;
       if (length > 50) {

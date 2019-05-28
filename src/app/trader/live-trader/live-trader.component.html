@@ -1,6 +1,6 @@
 <div>
     <div>
-        <mat-checkbox #allMarkets>All Markets</mat-checkbox>
+        <mat-checkbox #allMarkets [(ngModel)]="isAllMarkets" (ngModelChange)="onAllMarketsChanged()">All Markets</mat-checkbox>
         &nbsp;&nbsp;
         <mat-checkbox #USDT_BTC>USDT BTC</mat-checkbox>
         &nbsp;&nbsp;
@@ -8,7 +8,7 @@
         &nbsp;&nbsp;
         <mat-checkbox #botOrders>Orders</mat-checkbox>
 
-        <mat-checkbox #marketCandles>Candles</mat-checkbox>
+        <mat-checkbox #marketCandles [(ngModel)]="isCandles" (ngModelChange)="onCandlesChanged()">Candles</mat-checkbox>
     </div>
     <br/>
 
@@ -81,6 +81,8 @@
         </table>
     </div>
 
+    <div>
+
         <h3>Bots <small >{{this.currentBot?.id}}</small></h3>
         <table>
             <tbody>
@@ -116,6 +118,10 @@
             </tbody>
         </table>
 
+    </div>
+    <div>
+        <app-macd-indicator [closes]="closes"></app-macd-indicator>
+    </div>
 
     <div *ngIf="botOrders.checked">
 

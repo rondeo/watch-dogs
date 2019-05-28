@@ -24,6 +24,8 @@ export class StopLossEditComponent implements OnInit {
   stopPrice: number;
   sellPrice: number;
   ma: number;
+  disabled: boolean;
+
 
   constructor(
     public dialogRef: MatDialogRef<StopLossEditComponent>,
@@ -31,15 +33,15 @@ export class StopLossEditComponent implements OnInit {
   ) {
     this.id = data.id;
     this.stopLoss = data.stopLossController;
+
     this.stopLossPercent = this.stopLoss.stopLossPercent;
     this.sellPercent = this.stopLoss.sellPercent;
     this.resetStopLossAt = this.stopLoss.resetStopLossAt;
-    this.stopLoss.mas$.subscribe(mas => {
+    this.disabled = this.stopLoss.disabled;
+    data.bus.mas$.subscribe(mas => {
       if (mas) this.onStopPercentChange();
     });
-    this.stopLoss.stopLossOrder$.subscribe(order => {
-      this.stopLossOrder = order || new MyOrder({});
-    })
+    data.stopLossOrder$.subscribe(order => this.stopLossOrder = (order || new MyOrder({})))
   }
 
   ngOnInit() {
@@ -50,7 +52,9 @@ export class StopLossEditComponent implements OnInit {
     this.stopLoss.sellPercent = this.sellPercent;
     this.stopLoss.stopLossPercent = this.stopLossPercent;
     this.stopLoss.resetStopLossAt = this.resetStopLossAt;
+    this.stopLoss.disabled = this.disabled;
     this.stopLoss.save();
+
     //  this.dialogRef.close('SAVE');
   }
 
@@ -63,7 +67,7 @@ export class StopLossEditComponent implements OnInit {
     const mas = this.data.mas$.getValue();
     const prices = StopLossOrder.getStopLossPrices(mas, this.stopLossPercent, this.sellPercent);
     this.stopPrice = prices.stopPrice;
-    this.sellPercent = prices.sellPrice;
+    this.sellPrice = prices.sellPrice;
   }
 
   onSellPercentChange() {
@@ -75,11 +79,18 @@ export class StopLossEditComponent implements OnInit {
   }
 
   sendStopLoss() {
+
     console.log(this.data);
     const balance = this.data.balanceCoin;
-
     const available = balance.available;
-    console.log(balance);
+    const market = this.data.market;
+
+    this.data.apiPrivate.stopLoss(market, available, this.stopPrice, this.sellPrice).then(res => {
+      console.log(res);
+
+    })
+
+
    /* this.stopLoss.setStopLoss(available, this.stopPrice, this.sellPrice).then(res => {
       console.log(res);
     })*/

@@ -46,4 +46,17 @@ export class CandlesUtils {
       ma99
     };
   }
+
+  static converCloses5mto30min(closes: number[]) {
+    closes.reverse();
+    const out = [];
+    for(let i = 0, n = closes.length; i<n; i+=6) {
+      out.push(closes[i]);
+    }
+    out.reverse();
+    return out;
+  }
 }
+
+
+

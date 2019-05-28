@@ -10,9 +10,9 @@ var method = {};
 // Prepare everything our method needs
 method.init = function() {
   this.name = 'tulip-macd'
-  // keep state about the current trend
+  // keep viewState about the current trend
   // here, on every new candle we use this
-  // state object to check if we need to
+  // viewState object to check if we need to
   // report it.
   this.trend = 'none';
 

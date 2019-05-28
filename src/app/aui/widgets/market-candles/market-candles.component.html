@@ -17,7 +17,7 @@
     </mat-form-field>
 
     &nbsp;&nbsp;
-    <a [routerLink]="['/trader/follow-market', {market:market, exchange:exchange}]" ><span class="fa fa-anchor fa-2x dgreen"></span> </a>
+    <a [routerLink]="['/trader/live-trader', {market:market, exchange:exchange, isAllMarkets:true}]" ><span class="fa fa-anchor fa-2x dgreen"></span> </a>
     &nbsp;&nbsp;
 
     <app-mc-data [coin]="market?market.split('_')[1]:null"></app-mc-data>
