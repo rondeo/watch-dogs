@@ -14,9 +14,10 @@ const STATE0: ViewState = {
   selected: null,
   exchange: null,
   market: null,
-  allMarkets: false,
+  isAllMarkets: false,
   botList: true,
-  active:null
+  active:null,
+  isCandles: false
 };
 
 @Injectable({

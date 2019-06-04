@@ -115,7 +115,8 @@ export class MyExchangeBalncesComponent implements OnInit, OnDestroy {
       const MC = this.MC;
       // console.log(this.balancesAll);
      //  console.log(balances);
-      this.balancesAll = balances;
+      this.balancesAll = Object.values(balances);
+
       this.balancesAll.forEach(function (item) {
         const coinMC = MC[item.symbol];
         if (coinMC) {

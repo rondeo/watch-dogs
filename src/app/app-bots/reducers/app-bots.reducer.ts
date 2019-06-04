@@ -1,7 +1,11 @@
 import { Action } from '@ngrx/store';
 import {AppBotsActions, AppBotsActionTypes, LoadAppBots} from '../actions/app-bots.actions';
-import {MarketBot} from '../market-bot';
+
 import {VOBalance, VOOrder} from '../../amodels/app-models';
+import {BotBus} from '../bot-bus';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {debounceTime, skip} from 'rxjs/operators';
+import {BotBase} from '../bot-base';
 
 
 export enum BotsCondition {
@@ -11,7 +15,7 @@ export enum BotsCondition {
 
 export interface BotsState {
   botsState: BotsCondition;
-  botsData: MarketBot[];
+  botsData: BotBase[];
   balances: VOBalance[];
   openOrders: VOOrder[];
 }
@@ -35,6 +39,8 @@ export function BotsReducer(state = initialState, action: AppBotsActions): BotsS
       return state;
   }
 }
+
+
 
 
 

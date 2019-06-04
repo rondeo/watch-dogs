@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import {ApiMarketCapService} from '../../a-core/apis/api-market-cap.service';
 import {Subscription} from 'rxjs';
 import {Observable} from 'rxjs/internal/Observable';
-import {filter, skip} from 'rxjs/operators';
+import {filter, map, skip} from 'rxjs/operators';
 
 import {MarketOrderModel} from '../../amodels/market-order-model';
 
@@ -20,9 +20,9 @@ import {BotEditComponent} from '../../aui/dialogs/bot-edit/bot-edit.component';
 import {StopLossEditComponent} from '../../aui/dialogs/stop-loss-edit/stop-loss-edit.component';
 import {OrderTypeComponent} from '../../aui/dialogs/order-type/order-type.component';
 import {Subject} from 'rxjs/internal/Subject';
-import {MarketBot} from '../../app-bots/market-bot';
 import {AppBotsService} from '../../app-bots/app-bots.service';
 import {UsdtBtcMarket} from '../../app-bots/usdt-btc-market';
+import {BotBase} from '../../app-bots/bot-base';
 
 
 export interface ViewState {
@@ -63,7 +63,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   stopLossPercent: number = 2.5;
   stopLoss: number;
-  currentBot: MarketBot;
+  currentBot: BotBase;
   myOrders$: BehaviorSubject<VOOrder[]>;
 
   constructor(
@@ -72,9 +72,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     // private apisPublic: ApisPublicService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    // private marketsHistory: MarketsHistoryService,
-    // private candleService: CandlesService,
-    // private apisPrivate: ApisPrivateService,
     private botsService: AppBotsService,
     public marketService: TradeMarketService,
     // private tradesHistoryService: TradesHistoryService,
@@ -88,7 +85,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   sub2: Subscription;
   sub3: Subscription;
 
-  bots$: Observable<MarketBot[]>;
+  bots$: Observable<BotBase[]>;
   usdtbtcs$: Observable<UsdtBtcMarket[]>;
 
   currentOrderLiquidPrice: number;
@@ -165,15 +162,15 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
 
-  onBotClick(bot: MarketBot) {
-    if (this.currentBot) this.currentBot.selected = false;
+  onBotClick(bot: BotBase) {
+   // if (this.currentBot) this.currentBot.selected = false;
     this.currentBot = bot;
-    bot.selected = true;
+   // bot.selected = true;
     this.myOrders$ = bot.ordersOpen$;
     const state = this.marketService.viewState;
-    state.selected = bot.market;
-    state.market = bot.market;
-    state.exchange = bot.exchange;
+   //  state.selected = bot.config.;
+    state.market = bot.config.market;
+    state.exchange = bot.config.exchange;
     this.setUrl(state);
   }
 
@@ -186,6 +183,7 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
     // this.marketService.market$.next('USDT_BTC');
 
   }
+
 
   onUsdClick() {
     // this.marketService.market$.next('USD_BTC');
@@ -205,10 +203,10 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
   onDeleteOrderClick(order: VOOrder) {
     if (!this.currentBot) return;
-    this.currentBot.cancelOrder(order.uuid).toPromise();
+   // this.currentBot.cancelOrder(order.uuid).toPromise();
   }
 
-  onDeleteBotClick(bot: MarketBot) {
+  onDeleteBotClick(bot: BotBase) {
     const msg = ' Delete ' + bot.id + '?';
     if (confirm(msg)) {
       this.botsService.deleteBot(bot);
@@ -216,23 +214,23 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
 
-  onBotPriceSellClick(bot: MarketBot) {
+  onBotPriceSellClick(bot: BotBase) {
     bot.downloadBooks();
   }
 
-  onBotSellClick(bot: MarketBot) {
+  onBotSellClick(bot: BotBase) {
     bot.sellCoinInstant();
   }
 
 
-  onEditTypeClick(bot: MarketBot) {
+  onEditTypeClick(bot: BotBase) {
     const ref = this.dialog.open(OrderTypeComponent, {height: '230px', width: '350px', data: bot});
     ref.afterClosed().subscribe(res => {
     })
 
   }
 
-  onStopPriceClick(bot: MarketBot) {
+  onStopPriceClick(bot: BotBase) {
     const ref = this.dialog.open(StopLossEditComponent, {height: '400px', width: '600px', data: bot});
     ref.afterClosed().subscribe(res => {
     })

@@ -289,7 +289,8 @@ export class MarketOrderModel extends VOWatchdog {
   }
 
   toJSON(): VOWatchdog {
-    return {
+    return new VOWatchdog({})
+    /*return {
       orderID: this.orderID,
       exchange: this.exchange,
       market: this.market,
@@ -298,7 +299,7 @@ export class MarketOrderModel extends VOWatchdog {
       sellScripts: this.sellScripts,
       buyScripts: this.buyScripts,
       pots: 0
-    };
+    };*/
   }
 
   async onError(msg: string) {

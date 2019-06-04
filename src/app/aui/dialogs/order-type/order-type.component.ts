@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatRadioChange} from '@angular/material';
 import {WDType} from '../../../amodels/app-models';
-import {MarketBot} from '../../../app-bots/market-bot';
+import {BotBase} from '../../../app-bots/bot-base';
 
 @Component({
   selector: 'app-order-type',
@@ -16,7 +16,7 @@ export class OrderTypeComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<OrderTypeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MarketBot
+    @Inject(MAT_DIALOG_DATA) public data: BotBase
   ) { }
 
   ngOnInit() {
@@ -34,6 +34,5 @@ export class OrderTypeComponent implements OnInit {
   onApplyClick() {
     this.data.wdType = this.wdType;
     this.data.pots$.next(+this.amountPots);
-    this.data.saveSettings();
   }
 }

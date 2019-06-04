@@ -12,7 +12,6 @@ import {
 } from '../actions/app-bots.actions';
 import {concatMap, map, switchMap, timeout} from 'rxjs/operators';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {MarketBot} from '../market-bot';
 import {VOBalance, VOWatchdog} from '../../amodels/app-models';
 import {ApisPrivateService} from '../../a-core/apis/api-private/apis-private.service';
 import {ApiPrivateAbstaract} from '../../a-core/apis/api-private/api-private-abstaract';

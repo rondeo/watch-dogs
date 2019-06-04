@@ -29,15 +29,9 @@ export class UsdtBtcMarket {
 
     this.apiPrivate.balances$().subscribe(balances => {
       // console.log(this.exchange, balances);
-      this.usd = balances.find(function (item) {
-        return item.symbol === 'USD'
-      }) || new VOBalance();
-      this.usdt = balances.find(function (item) {
-        return item.symbol === 'USDT'
-      })
-      this.btc = balances.find(function (item) {
-        return item.symbol === 'BTC'
-      });
+      this.usd =  balances['USD']? balances['USD']: new VOBalance();
+      this.usdt = balances['USDT']? balances['USDT']: new VOBalance();
+      this.btc = balances['BTC']? balances['BTC'] : new VOBalance();
     })
 
   }

@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {OrderType} from '../../amodels/app-models';
-import {MarketBot} from '../../app-bots/market-bot';
+
 
 @Component({
   selector: 'app-follow-market',
@@ -24,7 +24,7 @@ export class FollowMarketComponent implements OnInit {
   market: string;
   exchange: string;
   reason: OrderType;
-  testbot: MarketBot;
+  testbot: any;
 
   constructor(
     private rote: ActivatedRoute,
@@ -41,7 +41,7 @@ export class FollowMarketComponent implements OnInit {
     this.followOrder.createBot(this.exchange, this.market, this.reason);
   }
 
-  mapBots(bots: MarketBot[]){
+  mapBots(bots: any[]){
     return bots.map(function (item) {
       return {
         exchange: item.exchange,

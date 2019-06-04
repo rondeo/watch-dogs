@@ -14,7 +14,8 @@ import {VOCandle} from '../../amodels/api-models';
 import {MACD} from '../libs/techind';
 import {MACDOutput} from '../libs/techind/moving_averages/MACD';
 import {Observable} from 'rxjs/internal/Observable';
-import {MarketBot} from '../../app-bots/market-bot';
+import {BotBase} from '../../app-bots/bot-base';
+
 
 @Component({
   selector: 'app-order-reports',
@@ -45,7 +46,7 @@ export class OrderReportsComponent implements OnInit {
   exchange: string;
   dataName = '-logs';
   subBot;
-  currentBot: MarketBot;
+  currentBot: BotBase;
   isLive: boolean;
   ngOnInit() {
 
@@ -208,14 +209,14 @@ export class OrderReportsComponent implements OnInit {
 
     switch (this.dataName) {
       case '-patterns':
-        this.ordersData = bot.getPatterns().map(function (item) {
+       /* this.ordersData = bot.getPatterns().map(function (item) {
           return {
             date: moment(item.stamp).format('DD HH:mm'),
             v3_med: item.v3_med,
             ma3_25: item.ma3_25,
             ma7_99: item.ma7_99
           }
-        });
+        });*/
         break;
       default:
         bot.getLogs().then(logs => {
@@ -233,7 +234,7 @@ export class OrderReportsComponent implements OnInit {
   ///////////////////////////////////////////////////
   async onDeleteRecordsClick() {
     const bots = await this.followOrder.getBots();
-    const exist = _.find(bots, {market: this.market});
+    const exist = true// _.find(bots, {market: this.market});
     if (!exist) return;
     if (confirm('Delete  history ' + this.market + '?')) {
       //await exist.deleteHistory();

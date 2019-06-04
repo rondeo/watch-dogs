@@ -277,7 +277,7 @@ export class CandlesAnalys1 {
           return 'WATCH-TO-BUY';
         }
       }*/
-    const lastState = last.viewState;
+   /* const lastState = last.viewState;
 
     if (lastState === 'DROP_LARGE-VOLUME') return {
       action: 'SELL',
@@ -307,7 +307,7 @@ export class CandlesAnalys1 {
         }
       }
     }
-
+*/
 
     // console.log(market, lastDown);
 
@@ -325,7 +325,7 @@ export class CandlesAnalys1 {
        }
      }
  */
-    if (last.viewState === 'UP_WITH-VOLUME') return {
+   /* if (last.viewState === 'UP_WITH-VOLUME') return {
       action: 'BUY',
       reason: 'UP_WITH-VOLUME'
     };
@@ -338,7 +338,7 @@ export class CandlesAnalys1 {
       action: 'BUY',
       reason: 'UP_HUGE-VOLUME'
     };
-
+*/
 
     /* if (prev.viewState === 'DROP_LARGE-VOLUME' && last.viewState === 'STAY_LARGE-VOLUME') {
        last.viewState = 'WATCH-TO-BUY';

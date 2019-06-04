@@ -558,9 +558,11 @@ export enum WDType {
 }
 
 export class VOWatchdog {
+  id: string;
+  potSize: number;
   exchange: string;
   market: string;
-  wdType: WDType;
+  wdType?: WDType;
   pots?: number;
   stopLoss?: StopLossSettings;
   results?: string[] = [];
@@ -569,6 +571,7 @@ export class VOWatchdog {
   orderID?: string;
   constructor(obj: any) {
     if (obj) for (let str in obj) this[str] = obj[str];
+    this.id = this.exchange + '-' + this.market;
     //  if(obj.orderType)this.orderType = obj.orderType
   }
 }

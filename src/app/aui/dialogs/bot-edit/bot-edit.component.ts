@@ -3,7 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef, MatRadioChange} from '@angular/material';
 import {Observable} from 'rxjs/internal/Observable';
 import {MATH} from '../../../acom/math';
 import {WDType} from '../../../amodels/app-models';
-import {MarketBot} from '../../../app-bots/market-bot';
+import {BotBase} from '../../../app-bots/bot-base';
+
 
 @Component({
   selector: 'app-bot-edit',
@@ -27,7 +28,7 @@ export class BotEditComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<BotEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MarketBot
+    @Inject(MAT_DIALOG_DATA) public data: BotBase
   ) {
     this.bookBuy$ = data.bookBuy$;
     this.bookSell$ = data.bookSell$;
@@ -40,10 +41,10 @@ export class BotEditComponent implements OnInit {
     // this.data.WDType$.subscribe(type => this.WDType = type);
     this.base = this.data.base;
     this.coin = this.data.coin;
-    this.data.balanceBase$.subscribe(balance => {
+    this.data.bus.balanceBase$.subscribe(balance => {
       this.balanceBase = balance.balance;
     });
-    this.data.balanceCoin$.subscribe(balance => {
+    this.data.bus.balanceCoin$.subscribe(balance => {
       this.balanceCoin = balance.balance;
     });
     this.data.pots$.subscribe(pots => {
@@ -104,14 +105,14 @@ export class BotEditComponent implements OnInit {
     let price = +this.price;
     const stopLoss = this.stopLoss;
     if(isNaN(price) || isNaN(pots)) return;
-    this.data.setBuyOrder(price, pots);
+    // this.data.setBuyOrder(price, pots);
   }
 
   onSellClick() {
     const pots = this.amountPots;
     const price = +this.price;
     if(isNaN(price) || isNaN(pots)) return;
-    const amountCoin = pots * this.data.potSize;
+    const amountCoin = pots * this.data.config.potSize;
 
     this.data.setSellOrder(price, pots, this.stopLoss);
   }

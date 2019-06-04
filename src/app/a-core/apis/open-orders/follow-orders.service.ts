@@ -10,7 +10,6 @@ import {ApisPublicService} from '../api-public/apis-public.service';
 import * as _ from 'lodash';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BtcUsdtService} from '../../app-services/alerts/btc-usdt.service';
-import {MarketBot} from '../../../app-bots/market-bot';
 import {MinuteCandlesService} from '../../../app-bots/minute-candles.service';
 import {Candles15minService} from '../../../app-bots/candles-15min.service';
 
@@ -19,7 +18,7 @@ import {Candles15minService} from '../../../app-bots/candles-15min.service';
 export class FollowOrdersService {
   excchanges: string[] = ['binance'];
   excludes: string[] = ['BTC', 'USDT', 'USD'];
-  botsSub: BehaviorSubject<MarketBot[]> = new BehaviorSubject<any[]>([]);
+   botsSub: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   followingOrdersSub: BehaviorSubject<FollowOpenOrder[]> = new BehaviorSubject<FollowOpenOrder[]>([]);
   // following: { [index: string]: FollowOpenOrder } = {};
 
@@ -60,7 +59,7 @@ export class FollowOrdersService {
 
   async deleteBot(market: string) {
     let bots = this.botsSub.getValue();
-    const exist = _.find(bots, {market: market});
+    const exist = true ;// _.find(bots, {market: market});
     if (!exist) return;
     console.log(exist);
     /* if(exist.destroy()) {
@@ -70,14 +69,14 @@ export class FollowOrdersService {
    }*/
   }
 
-  async saveBots(bots: MarketBot[]) {
+  async saveBots(bots: any[]) {
     this.botsSub.next(bots);
     const tosave = bots.map(function (item) {
       return {
         exchange: item.exchange,
         market: item.market,
         isLong: true,
-        balance: item.balanceCoin,
+        balance: 0,
        WDType
       };
     });
@@ -86,14 +85,14 @@ export class FollowOrdersService {
 
   async createBot(exchange: string, market: string, orderType: OrderType, isLive = false) {
     const bots = this.botsSub.getValue();
-    const excist = _.find(bots, {market: market});
+    const excist =  true;//_.find(bots, {market: market});
     if (excist) {
       // excist.reason = reason;
       this.saveBots(bots);
       return;
     }
     bots.push(
-      new MarketBot(
+      /*new MarketBot(
         exchange,
         market,
         50,
@@ -104,7 +103,7 @@ export class FollowOrdersService {
         this.canlesService,
         this.marketCap,
         this.btcusdtService
-      )
+      )*/
     );
     return this.saveBots(bots);
   }

@@ -25,7 +25,7 @@ export abstract class ApiPrivateAbstaract {
   loginSub: Subject<boolean> = new Subject();
 
   private openOrdersSub$: BehaviorSubject<VOOrder[]> = new BehaviorSubject(null);
-  private balancesSub: BehaviorSubject<VOBalance[]> = new BehaviorSubject(null);
+  private balancesSub: BehaviorSubject<{[coin: string]:VOBalance}> = new BehaviorSubject({});
 
   get openOrders() {
     return this.openOrdersSub$.asObservable();
@@ -161,7 +161,12 @@ export abstract class ApiPrivateAbstaract {
     this.loadingBalances = Date.now();
     this.downloadBalances().subscribe(balances => {
       this.loadingBalances = 0;
-      this.balancesSub.next(balances);
+      const obj = {};
+      balances.forEach(function (item) {
+        this.obj[item.symbol] = item;
+      }, {obj});
+
+      this.balancesSub.next(obj);
     }, error => {
       //   setTimeout(() => this._refreshBalances(), 50000);
     });
@@ -225,7 +230,7 @@ export abstract class ApiPrivateAbstaract {
     this.refreshOpenOrdersTime = Date.now();
     console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
     this.downloadAllOpenOrders().subscribe(res => {
-      console.log(this.exchange + ' open orders ', res);
+      console.log(this.exchange + ' OPEN ORDERS ', res);
       this.openOrdersSub$.next(res);
       this.refreshOpenOrdersTime = 0;
     }, err => {
@@ -313,19 +318,10 @@ export abstract class ApiPrivateAbstaract {
   }
 
 
-  async getBalance(symbol: string): Promise<VOBalance> {
-    if (this.balancesSub.getValue()) {
-      const bal = _.find(this.balancesSub.getValue(), {symbol: symbol});
-      return Promise.resolve(bal)
-    }
-    return new Promise<VOBalance>((resolve, reject) => {
-      this.downloadBalances().subscribe(bals => {
-        resolve(_.find(bals, {symbol: symbol}));
-        this.balancesSub.next(bals);
-      }, reject);
-    });
+  /*async getBalance(symbol: string): Promise<VOBalance> {
+    const
   }
-
+*/
   sellLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
     return new Promise((resolve, reject) => {

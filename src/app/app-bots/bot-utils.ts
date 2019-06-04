@@ -1,7 +1,25 @@
 import {Observable} from 'rxjs/internal/Observable';
 import {VOBalance} from '../amodels/app-models';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {filter, map, pairwise} from 'rxjs/operators';
 
+export function optimizeBalance (potSize: number, balance: VOBalance) {
+  const min = potSize / 10;
+  if(!balance)  return null;
+  if (balance.available < min) balance.available = 0;
+  if (balance.balance < min) balance.balance = 0;
+  return balance;
+}
+
+export function balanceChangeFilter(balanceCoin$: Observable<VOBalance>)  {
+  return balanceCoin$.pipe(
+    pairwise(),
+    filter(([old, balance]) => (old && balance) && (old.available !== balance.available || old.pending !== balance.pending)),
+    map(([old, balance]) => balance)
+  )
+}
+
+/*
 export function subscribeBalance(
   base: string,
   coin: string,
@@ -39,3 +57,4 @@ export function subscribeBalance(
 
 
   }
+*/

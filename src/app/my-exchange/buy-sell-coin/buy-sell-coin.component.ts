@@ -152,7 +152,7 @@ export class BuySellCoinComponent implements OnInit {
     let amountBase = this.amountUS / basePriceUS;
     const api = this.apisPrivate.getExchangeApi(this.exchange);
 
-    const balanceBase = await api.getBalance(base);
+   /* const balanceBase = await api.getBalance(base);
    //  console.log(balanceBase);
     const left = balanceBase.available - amountBase;
     let isMax = false;
@@ -170,7 +170,7 @@ export class BuySellCoinComponent implements OnInit {
     }
 
     const amountCoin = +(amountBase / rate).toFixed(8);
-    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);
+    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);*/
   }
 
 
@@ -185,7 +185,7 @@ export class BuySellCoinComponent implements OnInit {
 
     let amountCoin = +(this.amountUS / basePriceUS / rate).toFixed(8);
     const api = this.apisPrivate.getExchangeApi(this.exchange);
-    const balanceCoin = await api.getBalance(coin);
+   /* const balanceCoin = await api.getBalance(coin);
    //  console.log(balanceCoin);
     const left = (balanceCoin.available - amountCoin) * rate;
     let isMax = false;
@@ -193,7 +193,7 @@ export class BuySellCoinComponent implements OnInit {
       isMax = true;
       amountCoin = balanceCoin.available;
     }
-    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);
+    this.confirmOrder(base, coin, action, rate, amountCoin, basePriceUS, isMax);*/
   }
 
   confirmOrder(base: string, coin: string, action: string, rate: number, amountCoin: number, priceBaseUS: number, isMax: boolean) {

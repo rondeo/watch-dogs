@@ -7,8 +7,8 @@
             <mat-label>Stop Loss percent</mat-label>
             <input matInput type="number"
                    [step]="0.1"
-                   [(ngModel)]="stopLossPercent"
-                   (ngModelChange)="onStopPercentChange()"
+                   [formControl]="stopLossPercent"
+
             >
         </mat-form-field>
         &nbsp;&nbsp;
@@ -16,8 +16,7 @@
             <mat-label>Sell percent</mat-label>
             <input matInput type="number"
                    [step]="0.1"
-                   [(ngModel)]="sellPercent"
-                   (ngModelChange)="onSellPercentChange()"
+                   [formControl]="sellPercent"
             >
         </mat-form-field>
         &nbsp;&nbsp;
@@ -28,6 +27,8 @@
                    [(ngModel)]="resetStopLossAt"
             >
         </mat-form-field>
+        &nbsp;&nbsp;
+        <button mat-raised-button (click)="onApplyClick()">Apply</button>
     </div>
 
     <div>
@@ -48,27 +49,25 @@
             <tr>
                 <td>{{stopPrice}}</td>
                 <td>{{sellPrice}}</td>
-                <td><button (click)="sendStopLoss()">Send</button></td>
+                <td>
+                    <button (click)="sendStopLoss()">Send</button>
+                </td>
             </tr>
             </tbody>
         </table>
         <table>
             <tbody>
             <tr>
-                <td>MA</td>
+                <td>Last</td>
+                <td>MA25</td>
             </tr>
 
             <tr>
-                <td> <span>{{stopLoss.ma$ | async}}</span></td>
+                <td><span>{{(ma$ | async).last}}</span></td>
+                <td><span>{{(ma$ | async).ma25.toPrecision(5)}}</span></td>
             </tr>
             </tbody>
         </table>
-
-    </div>
-
-    <br/>
-    <div>
-        <button mat-raised-button (click)="onApplyClick()">Apply</button>
     </div>
 
 </div>
