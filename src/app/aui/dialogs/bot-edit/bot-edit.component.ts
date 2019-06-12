@@ -32,9 +32,6 @@ export class BotEditComponent implements OnInit {
   ) {
     this.bookBuy$ = data.bookBuy$;
     this.bookSell$ = data.bookSell$;
-    console.log(data.wdType$.getValue())
-
-
   }
 
   ngOnInit() {
@@ -55,10 +52,10 @@ export class BotEditComponent implements OnInit {
 
 
   onPotsChanged() {
-    const pots = this.data.pots$.getValue();
+  /*  const pots = this.data.pots$.getValue();
     if(this.amountPots > pots) this.action = 'BUY';
     else if(this.amountPots < pots) this.action = 'SELL';
-    else this.action = 'NONE';
+    else this.action = 'NONE';*/
   }
 
 
@@ -85,7 +82,7 @@ export class BotEditComponent implements OnInit {
   }
 
   onRefreshBooksClick() {
-    this.data.downloadBooks();
+  //   this.data.downloadBooks();
   }
 
   onPriceSellClick() {
@@ -94,8 +91,7 @@ export class BotEditComponent implements OnInit {
   }
 
   onSaveClick() {
-    this.data.wdType$.next(this.WDType);
-    this.data.pots$.next(this.amountPots);
+    this.data.bus.saveSettings(this.WDType, this.amountPots, 0, 0);
     // this.dialogRef.close(this.amountPots);
   }
 
@@ -114,7 +110,7 @@ export class BotEditComponent implements OnInit {
     if(isNaN(price) || isNaN(pots)) return;
     const amountCoin = pots * this.data.config.potSize;
 
-    this.data.setSellOrder(price, pots, this.stopLoss);
+    // this.data.setSellOrder(price, pots, this.stopLoss);
   }
 
   onTypeChanged($event: MatRadioChange) {

@@ -11,7 +11,8 @@ import {CandlesAnalys1} from '../a-core/app-services/scanner/candles-analys1';
 import {Subject} from 'rxjs/internal/Subject';
 import {MarketBalance} from './market-balance';
 import {MarketOrders} from './market-orders';
-import {StopLossOrder} from './stop-loss-order';
+
+
 
 
 
@@ -30,7 +31,7 @@ export class UsdtBtcBot {
 
   balances: MarketBalance;
   marketOrders: MarketOrders;
-  stopLoss: StopLossOrder;
+
 
   private get market() {
     return this.base + '_' + this.coin;

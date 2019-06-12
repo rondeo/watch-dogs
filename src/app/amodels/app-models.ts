@@ -3,7 +3,7 @@
  */
 
 
-import {StopLossSettings} from '../app-bots/stop-loss-order';
+import {StopLossSettings} from '../app-bots/stop-loss-auto';
 
 export interface User {
   id: string;
@@ -60,17 +60,19 @@ export enum OrderType {
 
 export const VOORDER: VOOrder = {
   uuid: '',
+  action: '',
   isOpen: false,
   base: '',
   coin: '',
   rate: 0,
   orderType: OrderType.NONE,
-  market:''
+  market: ''
 };
 
 export interface VOOrder {
   uuid: string;
   isOpen: boolean;
+  action: string;
   message?: string;
   orderType?: OrderType;
   type?: string;
@@ -303,8 +305,8 @@ export class VOMarketCap {
 
   last_updated?: number;
   selected?: boolean;
-  r6?:number;
-  r24?:number;
+  r6?: number;
+  r24?: number;
 
   constructor(obj?: any) {
     if (obj) for (let str in obj) this[str] = obj[str];
@@ -554,7 +556,9 @@ export enum WDType {
   LONG = 'LONG',
   LONGING = 'LONGING',
   LOST = 'LOST',
-  BUYING = 'BUYING'
+  BUYING = 'BUYING',
+  OUT = 'OUT',
+  LONG_SL = 'LONG_SL'
 }
 
 export class VOWatchdog {
@@ -564,11 +568,14 @@ export class VOWatchdog {
   market: string;
   wdType?: WDType;
   pots?: number;
+  entryPrice?: number;
+  liquidPrice?: number;
   stopLoss?: StopLossSettings;
   results?: string[] = [];
   sellScripts?: string[] = [];
   buyScripts?: string[] = [];
   orderID?: string;
+
   constructor(obj: any) {
     if (obj) for (let str in obj) this[str] = obj[str];
     this.id = this.exchange + '-' + this.market;
@@ -617,10 +624,10 @@ export interface VOResult {
 }
 
 export enum VOAlert {
-  UP= 'UP',
+  UP = 'UP',
   DOWN = 'DOWN',
   DROPPING = 'DROPPING',
   JAMPING = 'JUMPING',
-  WATERFALL= 'WATERFALL',
+  WATERFALL = 'WATERFALL',
   FOUNTAIN = 'FOUNTAIN'
 }

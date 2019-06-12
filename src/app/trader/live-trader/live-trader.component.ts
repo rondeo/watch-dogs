@@ -214,17 +214,13 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
   }
 
 
-  onBotPriceSellClick(bot: BotBase) {
-    bot.downloadBooks();
-  }
-
   onBotSellClick(bot: BotBase) {
-    bot.sellCoinInstant();
+    // bot.sellCoinInstant();
   }
 
 
   onEditTypeClick(bot: BotBase) {
-    const ref = this.dialog.open(OrderTypeComponent, {height: '230px', width: '350px', data: bot});
+    const ref = this.dialog.open(OrderTypeComponent, {height: '330px', width: '350px', data: bot});
     ref.afterClosed().subscribe(res => {
     })
 

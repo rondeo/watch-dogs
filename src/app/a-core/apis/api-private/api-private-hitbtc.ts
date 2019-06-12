@@ -100,7 +100,8 @@ export class ApiPrivateHitbtc extends ApiPrivateAbstaract {
         }) || {
           uuid: orderId,
           isOpen: false,
-          market:base+'_'+coin
+          market:base+'_'+coin,
+          action: 'UNKNOWN'
         };
       }));
   }

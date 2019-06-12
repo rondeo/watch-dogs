@@ -173,6 +173,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       if (res)
         return {
           uuid: orderId,
+          action: 'CANCEL',
           isOpen: (res.success !== 1),
           coin: null,
           base: null,
@@ -289,6 +290,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       return {
         uuid: res.orderNumber,
         isOpen: !!res.orderNumber,
+        action: 'BUY',
         rate: res.rate,
         amountCoin: quantity, //TODO get real property
         base: base,
@@ -316,6 +318,7 @@ export class ApiPrivatePoloniex extends ApiPrivateAbstaract {
       console.log(' sellLimit market ' + market, res);
       return {
         uuid: res.orderNumber,
+        action: 'SELL',
         isOpen: !!res.orderNumber,
         rate: res.rate,
         amountCoin: quantity, //TODO get real property

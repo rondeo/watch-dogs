@@ -188,6 +188,7 @@ export class TradingHistoryComponent implements OnInit, OnChanges {
 
     return {
       uuid: order.uuid,
+      action: order.action,
       amountBase: order.amountBase,
       amountCoin: order.amountCoin,
       amountUS: Math.round(order.amountCoin * order.rate * priceBaseUS),

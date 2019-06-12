@@ -1,6 +1,8 @@
 import {VOCandle} from '../../../amodels/api-models';
 import {MATH} from '../../../acom/math';
 import * as _ from 'lodash';
+import {MACD, StochasticRSI} from '../../../trader/libs/techind';
+import {MACDOutput} from '../../../trader/libs/techind/moving_averages/MACD';
 
 export class CandlesUtils {
 
@@ -47,7 +49,7 @@ export class CandlesUtils {
     };
   }
 
-  static converCloses5mto30min(closes: number[]) {
+  static convertCloses5mto30min(closes: number[]) {
     closes.reverse();
     const out = [];
     for(let i = 0, n = closes.length; i<n; i+=6) {
@@ -55,6 +57,42 @@ export class CandlesUtils {
     }
     out.reverse();
     return out;
+  }
+
+  static convertCloses5mTo15min(closes: number[]) {
+    closes.reverse();
+    const out = [];
+    for(let i = 0, n = closes.length; i<n; i+=3) {
+      out.push(closes[i]);
+    }
+    out.reverse();
+    return out;
+  }
+
+  static rsi(values: number[], rsiPeriod=14, stochasticPeriod=14, kPeriod=3, dPeriod=3): {stochRSI: number, k: number, d: number}[] {
+    const inputRSI = {
+      values,
+      rsiPeriod,
+      stochasticPeriod,
+      kPeriod,
+      dPeriod
+    };
+    const stochRSI = new StochasticRSI(inputRSI);
+    return  stochRSI.getResult();
+  }
+
+  static macd(values: number[], fastPeriod = 12, slowPeriod = 26, signalPeriod = 9): MACDOutput[] {
+    let macdInput = {
+      values,
+      fastPeriod,
+      slowPeriod,
+      signalPeriod,
+      SimpleMAOscillator: true,
+      SimpleMASignal: false
+    };
+
+    let macd = new MACD(macdInput);
+    return macd.getResult();
   }
 }
 

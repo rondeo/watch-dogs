@@ -21,7 +21,43 @@
     </mat-form-field>
 
     &nbsp;&nbsp;
-    <button mat-raised-button (click)="onApplyClick()">Apply</button>
+
+    <mat-form-field class="w5">
+        <input matInput
+               [(ngModel)]="entryPrice"
+               placeholder="Entry Price"
+        >
+        <mat-hint (click)="onHintEntryPriceClick()" >{{hintEntryPrice}}</mat-hint>
+
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field class="w5">
+        <input matInput
+               [(ngModel)]="liquidPrice"
+               placeholder="Liquid Price"
+        >
+        <mat-hint (click)="onHintLiquidPriceClick()" >{{hintLiquidPrice}}</mat-hint>
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <span class="btn" (click)="onApplyClick()"><mat-icon>save</mat-icon></span>
+
+
+    <div>
+       <span class="mat-body-1">Open Orders</span>
+        &nbsp;&nbsp;
+        <span (click)="refreshOpenOrders()" class="btn">
+        <mat-icon>refresh</mat-icon>
+        </span>
+        <table>
+            <tr *ngFor="let order of (openOrders$ | async)">
+                <td>{{order.action}}</td>
+                <td>{{order.amountCoin}}</td>
+                <td>{{order.rate}}</td>
+                <td>{{order.stopPrice}}</td>
+                <td class="btn" (click)="onCancelOrderClick(order)">X</td>
+            </tr>
+        </table>
+    </div>
 
 
 </div>

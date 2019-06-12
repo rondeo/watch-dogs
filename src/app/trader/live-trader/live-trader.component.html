@@ -102,6 +102,7 @@
                 <td (click)="onBotClick(bot)" class="x-small">{{bot.id}}</td>
                 <td>{{bot.pots$ | async}}</td>
                 <td>{{bot.potsBalance$ | async}}</td>
+
                 <td (click)="onEditTypeClick(bot)"> {{bot.wdType$ | async}}</td>
                 <td>{{bot.priceInit$ | async}}</td>
                 <td>
@@ -131,8 +132,8 @@
         <table>
             <tbody>
             <tr *ngFor="let ord of (myOrders$ | async)">
-                <td>{{ord.orderType}}</td>
-                <td>{{ord.amountUS}}</td>
+                <td>{{ord.action}}</td>
+                <td>{{ord.amountCoin}}</td>
                 <td>{{ord.rate}}</td>
                 <td>{{ord.isOpen}}</td>
                 <td (click)="onDeleteOrderClick(ord)">X</td>

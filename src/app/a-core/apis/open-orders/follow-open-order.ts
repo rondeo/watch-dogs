@@ -16,7 +16,7 @@ import {Subject, Subscription} from 'rxjs';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
 import {SellOnJump} from '../../../app-bots/sell-on-jump';
-import {StopLossOrder} from '../../../app-bots/stop-loss-order';
+import {StopLossAuto} from '../../../app-bots/stop-loss-auto';
 
 export class FollowOpenOrder {
   constructor(
@@ -54,7 +54,7 @@ export class FollowOpenOrder {
   apiPublic: ApiPublicAbstract;
 
   sellOnJump: SellOnJump;
-  stopLossOrder: StopLossOrder;
+  stopLossOrder: StopLossAuto;
 
   MC: VOMarketCap;
   // priceCounUS: number;
@@ -194,7 +194,7 @@ export class FollowOpenOrder {
     this.apiPublic = this.apisPublic.getExchangeApi(this.exchange);
     this.marketCap.ticker$().subscribe(obj => this.MC = obj[this.coin]);
     await this.subscribeForBalances();
-    this.sellOnJump = new SellOnJump(this.market, this.candlesService);
+   //  this.sellOnJump = new SellOnJump(this.market, this.candlesService);
     this.sellOnJump.log = msg => {
       //  console.log(msg);
       // this.log(msg, true);

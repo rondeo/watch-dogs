@@ -1,7 +1,11 @@
 <div>
     <span class="mat-headline">{{id}}</span>
+    <br/>
     &nbsp;&nbsp;
     <mat-checkbox [(ngModel)]="disabled">Disabled</mat-checkbox>
+    &nbsp;&nbsp;
+    <mat-checkbox [(ngModel)]="stopLossConfig.auto">Reset</mat-checkbox>
+
     <div>
         <mat-form-field class="w4">
             <mat-label>Stop Loss percent</mat-label>
@@ -32,7 +36,8 @@
     </div>
 
     <div>
-        <div>Stop Loss</div>
+        <span>Stop Loss</span>
+        &nbsp;&nbsp;
         <mat-icon (click)="onRefreshClick()">refresh</mat-icon>
         <table>
             <tbody>
@@ -44,7 +49,7 @@
             <tr>
                 <td>{{stopLossOrder.stopPrice}}</td>
                 <td>{{stopLossOrder.rate}}</td>
-                <td (click)="onDeleteOrderClick(stopLossOrder.uuid)">X</td>
+                <td (click)="onDeleteOrderClick(stopLossOrder)">X</td>
             </tr>
             <tr>
                 <td>{{stopPrice}}</td>

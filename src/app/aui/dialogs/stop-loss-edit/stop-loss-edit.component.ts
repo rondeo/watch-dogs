@@ -3,12 +3,13 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 
 import {VOOrder, VOWatchdog} from '../../../amodels/app-models';
-import {StopLossOrder} from '../../../app-bots/stop-loss-order';
+import {STOP_LOSS_DEFAULT, StopLossAuto, StopLossSettings} from '../../../app-bots/stop-loss-auto';
 import {BotBase, MyOrder} from '../../../app-bots/bot-base';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/internal/Observable';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {UTILS} from '../../../acom/utils';
+import {cancelOrders} from '../../../app-bots/controllers/cancel-orders';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class StopLossEditComponent implements OnInit {
   ma$: Observable<{ last: number, ma3: number, ma7: number, ma25: number, ma99: number }>;
   disabled: boolean;
 
+  stopLossConfig: StopLossSettings = STOP_LOSS_DEFAULT;
 
   constructor(
     public dialogRef: MatDialogRef<StopLossEditComponent>,
@@ -40,11 +42,15 @@ export class StopLossEditComponent implements OnInit {
   ) {
 
     this.id = data.id;
+    data.bus.config$.subscribe(config => {
+      this.stopLossConfig = config.stopLoss;
+    })
   //  this.stopLoss = data.stopLossController;
     this.stopLossPercent = new FormControl(0);
     this.stopLossPercent$ = this.stopLossPercent.valueChanges;
     this.sellPercent = new FormControl(0);
     this.sellPercent$ = this.sellPercent.valueChanges;
+
     this.ma$ = data.mas$;
 
     this.resetStopLossAt = data.config.stopLoss.resetStopLossAt;
@@ -60,7 +66,7 @@ export class StopLossEditComponent implements OnInit {
 
     combineLatest(this.stopLossPercent$, this.sellPercent$, this.data.mas$)
       .subscribe(([stopLossPercent, sellPercent, mas]) => {
-        const prices = StopLossOrder.getStopLossPrices(mas, stopLossPercent, sellPercent);
+        const prices = StopLossAuto.getStopLossPrices(mas, stopLossPercent, sellPercent);
         this.stopPrice = prices.stopPrice;
         this.sellPrice = prices.sellPrice;
       });
@@ -84,18 +90,11 @@ export class StopLossEditComponent implements OnInit {
     this.data.bus.config$.next(wd);
   }
 
-  onDeleteOrderClick(uuid: string) {
+  onDeleteOrderClick(order: VOOrder) {
 
-    if (confirm('Cancel Order? ' + uuid)) {
-      this.data.cancelOrders([uuid]).then((res) => {
-        console.log(res);
-        UTILS.wait(10).then(() => {
-          this.data.apiPrivate.refreshAllOpenOrders();
-        })
-      }).catch(err =>{
-        console.log(' ERROR ', err);
-        this.data.apiPrivate.refreshAllOpenOrders();
-      })
+    if (confirm('Cancel Order? ' + order.uuid)) {
+      cancelOrders([order], this.data.apiPrivate)
+
     }
   }
 

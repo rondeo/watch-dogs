@@ -9,11 +9,30 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MarketState} from '../a-core/app-services/alerts/btc-usdt.service';
 import {BuySellState} from './models';
+import {BotBus} from './bot-bus';
+import {VOWatchdog} from '../amodels/app-models';
+import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
+import {Subscription} from 'rxjs/internal/Subscription';
 
+
+export enum Status {
+  NONE='NONE',
+  GOING_UP='GOING_UP',
+  GOING_DOWN='GOING_DOWN',
+  JUMPING='JUMPING',
+  SELL_ON_JUMP = 'SELL_ON_JUMP'
+}
+
+export class SellOnJumpState {
+  constructor(public type: Status, public payload: number[]) {
+
+  }
+}
 
 export class SellOnJump {
 
-  private _state:BehaviorSubject<BuySellState | MarketState>;
+  private _state:BehaviorSubject<SellOnJumpState>;
+  private subs: Subscription[] = [];
   get state$(){
     return this._state.asObservable().pipe(distinctUntilChanged())
   }
@@ -22,41 +41,42 @@ export class SellOnJump {
   }
   reason: string;
   private prev:number;
-  constructor(
-    private market: string,
 
-    private candlesService: CandlesService
+  config: VOWatchdog;
+  constructor(
+    private bus: BotBus
   ) {
 
-    this._state = new BehaviorSubject(BuySellState.NONE);
-    candlesService.candles15min$(market).subscribe(candles =>{
-
-      const closes = candlesService.closes(market);
-      const mas = candlesService.mas(market);
-
-      const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
-      this.reason = ' ma3_7 ' + ma3_7 + '  prev ' + this.prev;
-
-      if(ma3_7 > 3) this._state.next(MarketState.JUMPING);
-      else this._state.next(BuySellState.NONE);
-
-      if(this.state === MarketState.JUMPING){
-        if(this.prev > ma3_7) {
-
-          this._state.next(BuySellState.SELL_ON_JUMP);
-        }
-      }
-      this.prev = ma3_7;
-    })
+    bus.config$.subscribe(config => this.config = config);
+    this._state = new BehaviorSubject(new SellOnJumpState(Status.NONE, []));
+    this.init();
   }
 
 
   init(){
 
+   const sub = this.bus.closes$.subscribe(closes5m =>{
+      const closes = closes5m; // CandlesUtils.convertCloses5mTo15min(closes5m);
+      const mas = CandlesUtils.mas(closes);
+      const ma3_7 = MATH.percent(mas.ma3, mas.ma7);
+      this.reason = ' ma3_7 ' + ma3_7 + '  prev ' + this.prev;
+      console.log(this.reason);
+
+      if(ma3_7 > 3) this._state.next(new SellOnJumpState(Status.JUMPING, [ma3_7]));
+      else this._state.next(new SellOnJumpState(Status.NONE, []));
+
+      if(this.state.type === Status.JUMPING){
+        if(this.prev > ma3_7) {
+          this._state.next(new SellOnJumpState(Status.SELL_ON_JUMP, [ma3_7, this.prev]));
+        }
+      }
+      this.prev = ma3_7;
+    });
+    this.subs.push(sub);
   }
 
   log(log: {action: string, reason: string}){
-    console.log(this.market , log);
+   //  console.log(this.market , log);
   }
   private timeJump;
 
@@ -154,5 +174,15 @@ export class SellOnJump {
 
   }
 
+  unsubscribe() {
+    this.subs.forEach(function (item) {
+      item.unsubscribe();
+    })
+    this.subs = [];
+  }
 
+  destroy() {
+    this.unsubscribe();
+    this.bus = null;
+  }
 }

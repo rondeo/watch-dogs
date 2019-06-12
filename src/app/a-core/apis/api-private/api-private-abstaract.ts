@@ -225,7 +225,7 @@ export abstract class ApiPrivateAbstaract {
   }*/
 
   refreshOpenOrdersTime;
-  refreshAllOpenOrders(): Promise<VOOrder[]> {
+  refreshAllOpenOrders(): void {
     if (this.refreshOpenOrdersTime) return;
     this.refreshOpenOrdersTime = Date.now();
     console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
@@ -324,24 +324,12 @@ export abstract class ApiPrivateAbstaract {
 */
   sellLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
-    return new Promise((resolve, reject) => {
-      this.sellLimit(ar[0], ar[1], quantity, rate).then(order => {
-        resolve(order);
-        // this.refreshAllOpenOrders();
-        //this.refreshBalances();
-      }, reject);
-    })
+      return this.sellLimit(ar[0], ar[1], quantity, rate);
   }
 
   buyLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
-    return new Promise((resolve, reject) => {
-      this.buyLimit(ar[0], ar[1], quantity, rate).then(order => {
-        resolve(order);
-        // this.refreshBalances();
-        //  this.refreshOpenOrdersNow();
-      }, reject);
-    })
+      return  this.buyLimit(ar[0], ar[1], quantity, rate);
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {
