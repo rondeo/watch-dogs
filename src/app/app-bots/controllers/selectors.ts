@@ -11,11 +11,18 @@ export const transferToSLState = (bus: BotBus) => {
   ).pipe(filter(([wdType, stopLossOrdres]) => wdType === WDType.LONG && stopLossOrdres.length !== 0))
 }
 
-export const cancelSellOrdersForLong = (bus: BotBus) => {
+export function selectSellOrdersForLong (bus: BotBus): Observable<VOOrder[]> {
   return combineLatest(
     bus.wdType$,
     bus.sellOrders$
-  ).pipe(filter(([wdType, sellOrdres]) => wdType === WDType.LONG && sellOrdres.length !== 0))
+  ).pipe(
+    filter(([wdType, sellOrdres]) => wdType === WDType.LONG && sellOrdres.length !== 0),
+    map(([wdType, sellOrdres]) => {
+      return sellOrdres.filter(function (item) {
+        return item.type  !== 'STOP_LOSS_LIMIT';
+      })
+    } )
+  )
 }
 
 export const setStopLossAuto = (bus: BotBus) => {
@@ -25,7 +32,7 @@ export const setStopLossAuto = (bus: BotBus) => {
   ).pipe(
     debounceTime(10),
     filter(([wdType, delta]) => {
-    return wdType === WDType.LONG && delta < 1.2 && delta > 0.5;
+    return wdType === WDType.LONG && delta > 0.5;
   }))
 }
 

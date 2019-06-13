@@ -140,7 +140,7 @@ export class BotBus {
       return order.action === 'BUY';
     })));
     this.sellOrders$ = this.ordersOpen$.pipe(map(orders => orders.filter(function (order: VOOrder) {
-      return order.action === 'SELL' && order.type === 'LIMIT';
+      return order.action === 'SELL';
     })));
 
     this.potsBalance$ = this.balanceCoin$.pipe(

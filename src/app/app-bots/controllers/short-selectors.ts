@@ -19,8 +19,8 @@ export function cancelStopLossOnShort(bus: BotBus): Observable<VOOrder[]> {
 
 
 
-export const waitForSelling = (bus: BotBus) =>
-  combineLatest(
+export function waitForSelling (bus: BotBus): Observable<VOOrder[]> {
+  return combineLatest(
     bus.wdType$,
     bus.potsBalance$,
     bus.sellOrders$
@@ -30,6 +30,7 @@ export const waitForSelling = (bus: BotBus) =>
     map(([wdType, postBalance, sellOrdres]) => sellOrdres)
   );
 
+}
 
 export function cancelBuysForShort(bus: BotBus): Observable<VOOrder[]> {
  return  combineLatest(
@@ -50,7 +51,9 @@ export function needSellOrder(bus: BotBus): Observable<number> {
     bus.ordersOpen$
   ).pipe(
     selectShort,
-    filter(([wdType, balanceCoin, orders]) => balanceCoin.available !==0 && orders.length === 0),
+    filter(([wdType, balanceCoin, orders]) => {
+      return balanceCoin.available !==0 && orders.length === 0
+    }),
     map(([wdType, balanceCoin, ordres]) => {
       return balanceCoin.available
     })

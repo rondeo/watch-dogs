@@ -8,10 +8,12 @@ import {Subject} from 'rxjs/internal/Subject';
 
 export class BuySignal {
   signal$: Subject<string> = new Subject();
-  candlesSub
+  candlesSub;
+
   constructor(private bus: BotBus) {
     console.log('%c ' + bus.id + ' BuySignal  ', 'color:red');
 
+    // this.startTest()
     this.candlesSub =  bus.candles$.subscribe(candles5m => {
 
       const closes5m = CandlesUtils.closes(candles5m);
@@ -51,6 +53,9 @@ export class BuySignal {
       }
 
 
+
+      return;
+
       if(preLastStoch.d > preLastStoch.k &&  lastStoch.d < lastStoch.k ) {
         console.log('%c  ' + bus.id +  ' BUY ', 'color:red');
         this.signal$.next('BUY_NOW');
@@ -79,6 +84,10 @@ export class BuySignal {
     });
   }
 
+
+  startTest() {
+    setInterval(() =>  this.signal$.next('BUY_NOW'), 20000);
+  }
   destroy() {
     this.bus = null;
     this.candlesSub.unsubscribe();
