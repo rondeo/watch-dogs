@@ -101,7 +101,7 @@ export class StopLossAuto {
 
          if (this.settings.disabled) {
            console.log('%c STOP_LOSS_DISABLED', this.color);
-           if(stopLosses.length) cancelOrders(stopLosses, this.apiPrivate).subscribe((r) => console.log(r))
+           if(stopLosses.length) cancelOrders(stopLosses, this.apiPrivate, this.bus).subscribe((r) => console.log(r))
 
            return;
          }
@@ -114,7 +114,7 @@ export class StopLossAuto {
 
          if (stopLosses.length > 1) {
            console.log('%c ' + this.config.id + ' ERROR  DOUBLE STOP_LOSS ', this.color);
-           cancelOrders(stopLosses, this.apiPrivate).subscribe((r) => console.log(r))
+           cancelOrders(stopLosses, this.apiPrivate, this.bus).subscribe((r) => console.log(r))
            return;
          }
 
@@ -126,7 +126,7 @@ export class StopLossAuto {
            console.log('%c ' + this.config.id + ' NEED STOP_LOSS', this.color);
            if(stopLosses.length) {
              console.log(this.config.id + ' CANCEL EXISTING  STOP_LOSS to create new ')
-             cancelOrders(stopLosses, this.apiPrivate).subscribe((r) => console.log(r));
+             cancelOrders(stopLosses, this.apiPrivate, this.bus).subscribe((r) => console.log(r));
              return;
            }
 
@@ -136,6 +136,8 @@ export class StopLossAuto {
 
            if(this.config.liquidPrice) prices.stopPrice = this.config.liquidPrice;
 
+           if(this.bus.isDirty) return;
+           this.bus.isDirty = true;
            this.apiPrivate.stopLoss(this.market, available, prices.stopPrice, prices.sellPrice)
              .then(res => {
 
@@ -149,7 +151,7 @@ export class StopLossAuto {
            });
 
            UTILS.wait(20).then(() => {
-             this.apiPrivate.refreshBalancesNow();
+            // this.apiPrivate.refreshBalancesNow();
            });
 
            return;
@@ -227,7 +229,9 @@ export class StopLossAuto {
           });
 
           console.log('%c ' + this.market + ' reset stopLoss ', 'color:red');   //  this.priceStopLoss$.next(0)
-          cancelOrders([stopLoss], this.apiPrivate).subscribe(res => {
+          if(this.bus.isDirty) return;
+          this.bus.isDirty = true;
+          cancelOrders([stopLoss], this.apiPrivate, this.bus).subscribe(res => {
               console.log(' cancel order result', res);
             },
             err => {

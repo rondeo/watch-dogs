@@ -93,7 +93,7 @@ export class StopLossEditComponent implements OnInit {
   onDeleteOrderClick(order: VOOrder) {
 
     if (confirm('Cancel Order? ' + order.uuid)) {
-      cancelOrders([order], this.data.apiPrivate)
+      cancelOrders([order], this.data.apiPrivate, this.data.bus)
 
     }
   }

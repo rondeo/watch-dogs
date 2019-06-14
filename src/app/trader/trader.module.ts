@@ -11,11 +11,11 @@ import {AnalyzeCoinComponent} from './analyze-coin/analyze-coin.component';
 import {UiModule} from '../aui/comps/ui.module';
 import {CommonMarketsComponent} from './common-markets/common-markets.component';
 import {LiveTraderComponent} from './live-trader/live-trader.component';
-import { ScanMarketsComponent } from './scan-markets/scan-markets.component';
-import { MarketDetailsComponent } from './market-details/market-details.component';
-import { NotesHistoryComponent } from './notes-history/notes-history.component';
-import { OrderReportsComponent } from './order-reports/order-reports.component';
-import { FollowMarketComponent } from './follow-market/follow-market.component';
+import {ScanMarketsComponent} from './scan-markets/scan-markets.component';
+import {MarketDetailsComponent} from './market-details/market-details.component';
+import {NotesHistoryComponent} from './notes-history/notes-history.component';
+import {OrderReportsComponent} from './order-reports/order-reports.component';
+import {FollowMarketComponent} from './follow-market/follow-market.component';
 import {TestModule} from '../test/test.module';
 import {WidgetsModule} from '../aui/widgets/widgets.module';
 import {DirectivesModule} from '../aui/directives/directives.module';
@@ -67,7 +67,7 @@ const routes: Routes = [
     FollowMarketComponent
   ],
   providers: [SoketConnectorService],
-  entryComponents:[
+  entryComponents: [
     MarketDetailsComponent,
     NotesHistoryComponent
   ]

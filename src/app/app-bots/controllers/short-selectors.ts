@@ -12,7 +12,7 @@ export function cancelStopLossOnShort(bus: BotBus): Observable<VOOrder[]> {
     bus.stopLossOrders$
   ).pipe(
     selectShort,
-    filter(([wdType, stopLosses]) => stopLosses.length !== 0),
+    filter(([wdType, stopLosses]) => !bus.isDirty && stopLosses.length !== 0),
     map(([wdType, stopLosses]) => stopLosses)
   );
 }
@@ -26,7 +26,7 @@ export function waitForSelling (bus: BotBus): Observable<VOOrder[]> {
     bus.sellOrders$
   ).pipe(
     selectShort,
-    filter(([wdType, postBalance, sellOrdres]) => postBalance > 0.3 && sellOrdres.length !== 0),
+    filter(([wdType, postBalance, sellOrdres]) => !bus.isDirty && postBalance > 0.3 && sellOrdres.length !== 0),
     map(([wdType, postBalance, sellOrdres]) => sellOrdres)
   );
 
@@ -39,7 +39,7 @@ export function cancelBuysForShort(bus: BotBus): Observable<VOOrder[]> {
     bus.buyOrders$
   ).pipe(
     selectShort,
-    filter(([wdType, postBalance, orders]) => postBalance > 0.3 && orders.length !== 0),
+    filter(([wdType, postBalance, orders]) => !bus.isDirty && postBalance > 0.3 && orders.length !== 0),
     map(([wdType, postBalance, ordres]) => ordres)
   );
 }
@@ -52,7 +52,7 @@ export function needSellOrder(bus: BotBus): Observable<number> {
   ).pipe(
     selectShort,
     filter(([wdType, balanceCoin, orders]) => {
-      return balanceCoin.available !==0 && orders.length === 0
+      return !bus.isDirty && balanceCoin.available !==0 && orders.length === 0
     }),
     map(([wdType, balanceCoin, ordres]) => {
       return balanceCoin.available
@@ -67,7 +67,7 @@ export function shortIsReady(bus: BotBus): Observable<number> {
     bus.ordersOpen$
   ).pipe(
     selectShort,
-    filter(([wdType, balanceCoin, orders]) => balanceCoin.balance ===0 && orders.length === 0),
+    filter(([wdType, balanceCoin, orders]) => !bus.isDirty && balanceCoin.balance ===0 && orders.length === 0),
     map(([wdType, balanceCoin, ordres]) => {
       const config = bus.config$.getValue();
       return config.pots * config.potSize

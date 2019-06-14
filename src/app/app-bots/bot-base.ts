@@ -20,7 +20,7 @@ import {TaskController} from './controllers/models';
 import {
   buyForLong,
   buyingForLong,
-  selectSellOrdersForLong,
+  selectSellOrdersForLong, sellForLong,
   setStopLossAuto,
   transferToSLState
 } from './controllers/selectors';
@@ -129,13 +129,11 @@ export class BotBase {
     this.bus.setWDType(type)
   }
 
-
   private marketPrecision;
   private interval;
   private sub1: Subscription;
   private sub2: Subscription;
   private sub3: Subscription;
-
 
   controller: TaskController;
 
@@ -178,12 +176,13 @@ export class BotBase {
     });
   }
 
-  stopLossAuto;
+  stopLossAuto: StopLossAuto;
   subAll;
 
   async init() {
-    if (this.config.wdType === WDType.LONG_SL && this.config.stopLoss.auto)
-      this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
+
+    //if (this.config.wdType === WDType.LONG_SL && this.config.stopLoss.auto)
+     // this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
 
     this.bus.balanceChange$.subscribe(() => {
       this.apiPrivate.refreshAllOpenOrders();
@@ -191,6 +190,13 @@ export class BotBase {
 
     this.apiPrivate.balances$().pipe(skip(1)).subscribe(balances => {
       this.allBalances = balances;
+      if(this.bus.isDirty) {
+        UTILS.wait(5).then(() => {
+          this.apiPrivate.refreshAllOpenOrders().then(() => {
+            this.bus.isDirty = false;
+          })
+        })
+      }
       console.log(balances[this.coin], this.bus.ordersOpen$.getValue())
 
       this.bus.balanceTick(optimizeBalance(this.config.potSize, balances[this.coin]), balances[this.base]);
@@ -226,13 +232,16 @@ export class BotBase {
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
   buySignal: BuySignal;
   initShort() {
     console.log(' INIT SHORT');
     let sub: Subscription;
     sub = cancelStopLossOnShort(this.bus).subscribe(stopLossOrders => {
       console.log(' cancelStopLossOnShort ', stopLossOrders);
-      cancelOrders(stopLossOrders, this.apiPrivate).subscribe(res => console.log(res))
+
+
+      cancelOrders(stopLossOrders, this.apiPrivate, this.bus).subscribe(res => console.log(res))
     });
     this.subs.push(sub);
     sub = waitForSelling(this.bus).subscribe(data => {
@@ -241,14 +250,17 @@ export class BotBase {
     this.subs.push(sub);
     sub = cancelBuysForShort(this.bus).subscribe(buyOrders => {
       console.log(' need cancel buy orders for short ', buyOrders)
-      cancelOrders(buyOrders, this.apiPrivate)
+      if(this.bus.isDirty) return;
+      this.bus.isDirty = true;
+      cancelOrders(buyOrders, this.apiPrivate, this.bus)
     });
 
     this.subs.push(sub);
     sub = needSellOrder(this.bus).subscribe(amountCoin => {
       console.log(' need sell order ', amountCoin);
 
-      const market = this.config.market
+      const market = this.config.market;
+
       const order: VOOrder = {
         uuid: Date.now().toString(),
         isOpen: true,
@@ -290,9 +302,9 @@ export class BotBase {
 
     let sub: Subscription;
     console.log(' INIT LONG ');
-    sub = buyForLong(this.bus).subscribe(amountCoin => {
-      console.log(this.id + ' BUY FOR LONG ', amountCoin);
-      const market = this.config.market
+    sub = buyForLong(this.bus).subscribe(({amountCoin, buyOrders}) => {
+      console.log(this.id + ' BUY FOR LONG ', amountCoin, buyOrders);
+      const market = this.config.market;
       const order: VOOrder = {
         uuid: Date.now().toString(),
         isOpen: true,
@@ -302,7 +314,7 @@ export class BotBase {
         amountCoin,
         rate: 0
       };
-     this.bus.addOrder(order);
+      this.bus.addOrder(order);
     });
     this.subs.push(sub);
     sub = buyingForLong(this.bus).subscribe(data => {
@@ -311,7 +323,7 @@ export class BotBase {
     this.subs.push(sub);
     sub = setStopLossAuto(this.bus).subscribe(data => {
       console.log(this.id + ' SET STOP_LOSS Auto ', data);
-      if (!this.stopLossAuto) this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
+     // if (!this.stopLossAuto) this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
     });
     this.subs.push(sub);
     sub = selectSellOrdersForLong(this.bus).subscribe(sellOrders => {
@@ -320,20 +332,52 @@ export class BotBase {
     this.subs.push(sub);
     sub = transferToSLState(this.bus).subscribe(data => {
       console.log(this.id + ' TRANSFER TO SL STATE ', data);
-      this.bus.setWDType(WDType.LONG_SL);
+      // this.bus.setWDType(WDType.LONG_SL);
     });
 
     this.subs.push(sub);
-    sub = this.bus.ordersOpen$.pipe(filter(openOrders => openOrders.some(function (item) {
-      return item.type === 'TEMP'
-    }))).subscribe(tempOrders => {
+
+    sub = this.bus.tempOrders$.subscribe(tempOrders => {
       console.log(tempOrders);
       if(tempOrders.length === 1) {
+        console.log(' snd order ', tempOrders);
         this.sendOrder(tempOrders[0])
-      } else console.log(' ERROR FEW TEMP ORDERS', tempOrders);
+      } else {
+        console.log(' ERROR FEW TEMP ORDERS', tempOrders);
+      }
     })
+
     this.subs.push(sub);
+
+    sub = sellForLong(this.bus).subscribe(({amountCoin, orders}) => {
+      console.log(this.id + ' SELL LONG ', amountCoin, orders);
+      if(this.stopLossAuto) {
+        this.stopLossAuto.destroy();
+      }
+      if(orders.length) {
+        cancelOrders(orders, this.apiPrivate, this.bus);
+        return;
+      }
+
+      amountCoin = Math.abs(amountCoin);
+      const market = this.config.market
+
+      const order: VOOrder = {
+        uuid: Date.now().toString(),
+        isOpen: true,
+        market,
+        action: 'SELL',
+        type: 'TEMP',
+        amountCoin,
+        rate: 0
+      };
+      this.bus.addOrder(order);
+    })
+
+
   }
+
+
 
   async cancelAllOpenOrders() {
     console.log(this.id + ' canceling all open orders')
@@ -389,7 +433,26 @@ export class BotBase {
   }
 
   async sendOrder(order: VOOrder) {
+    if(this.bus.isDirty) {
+      console.log(' DATA DIRTY');
+      return
+    }
+    this.bus.isDirty = true;
+    if(order.amountCoin === 0) {
+      console.warn(' amount 0');
+      this.bus.removeOrder(order);
+      return;
+    }
     let res = order;
+    if(order.action === 'SELL') {
+      const balanceCoin = this.bus.balanceCoin$.getValue();
+      if(balanceCoin.available < order.amountCoin) {
+        console.log(' DONT have available balance coin ', order, balanceCoin);
+        return
+      }
+    }
+
+
     console.log('sending order ', order);
     if(!order.rate) {
       console.log(' DOWNLOADING BOOKS FOR Rate ');
@@ -398,6 +461,13 @@ export class BotBase {
       order.rate = UtilsBooks.getRateForAmountCoin(myBooks, order.amountCoin);
       await UTILS.wait(10);
     }
+
+    const balanceBase: VOBalance = this.bus.balanceBase$.getValue();
+    if(balanceBase.available < order.amountCoin * order.rate) {
+      console.log(' DONT HAVE enough balance base ' +(order.amountCoin * order.rate), order, balanceBase);
+      return
+    }
+
     try {
       if (order.action === 'BUY') res = await this.apiPrivate.buyLimit2(order.market, order.amountCoin, order.rate);
       else res = await this.apiPrivate.sellLimit2(order.market, order.amountCoin, order.rate);
@@ -408,9 +478,6 @@ export class BotBase {
       console.log(order, res);
       res.type = 'SENT';
       this.bus.replaceOrder(order, res);
-      UTILS.wait(10).then(() => {
-        this.apiPrivate.refreshAllOpenOrders();
-      })
     }
     return res;
   }
@@ -424,10 +491,10 @@ export class BotBase {
     return this.sendOrder(order);
   }
 
+
   onConfigChanged(wd0: WDType, pots0: number, wd1: WDType, pots1: number, pots: number, orders: VOOrder[]) {
 
   }
-
 
   destroy() {
     this.stop();

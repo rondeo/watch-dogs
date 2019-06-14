@@ -16,6 +16,7 @@ import {balanceChangeFilter} from './bot-utils';
 import {BTask} from './actions/bot-tasks'
 import {Subscription} from 'rxjs/internal/Subscription';
 import {selectBuyPrices, selectStopPrices} from './controllers/selectors';
+import {StopLossSettings} from './stop-loss-auto';
 
 export enum BotActions {
   BalanceChanged = 'BalanceChanged',
@@ -110,14 +111,33 @@ export class BotBus {
   priceStop$: Observable<number>;
   entryPrices$: Observable<number[]>;
 
+  private _isDirty: boolean;
+  set isDirty(d: boolean) {
+    console.log(' dirty ' + d);
+    this._isDirty = d;
+  }
+
+  get isDirty(): boolean {
+    return  this._isDirty;
+  }
+
   balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
   balanceBase$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);
   balanceChange$: Observable<VOBalance>;
 
   ordersOpen$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
   ordersHistory$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+  tempOrders$: Observable<VOOrder[]>;
  // stopLossSettings$: BehaviorSubject<StopLossSettings>;
   // progressOrders$: BehaviorSubject<VOOrder[]> = new BehaviorSubject([]);
+
+  balanceCoin: VOBalance;
+  balanceBase: VOBalance;
+  stopLossOrders: VOOrder[];
+  buyOrders: VOOrder[];
+  sellOrders: VOOrder[];
+  openOrders: VOOrder[];
+
 
 
   constructor(private config: VOWatchdog, public candles$: Observable<VOCandle[]>, private storage: StorageService) {
@@ -140,7 +160,11 @@ export class BotBus {
       return order.action === 'BUY';
     })));
     this.sellOrders$ = this.ordersOpen$.pipe(map(orders => orders.filter(function (order: VOOrder) {
-      return order.action === 'SELL';
+      return order.action === 'SELL' && order.type !== 'STOP_LOSS_LIMIT';
+    })));
+
+    this.tempOrders$ = this.ordersOpen$.pipe(map(orders =>orders.filter(function (item) {
+      return item.type === 'TEMP';
     })));
 
     this.potsBalance$ = this.balanceCoin$.pipe(
@@ -149,7 +173,23 @@ export class BotBus {
 
     this.potsDelta$ = combineLatest(this.pots$, this.potsBalance$).pipe(map(([pots, potsBalance]) => {
       return potsBalance / pots;
-    }))
+    }));
+
+    this.balanceBase$.subscribe(balance => this.balanceBase = balance);
+    this.balanceCoin$.subscribe(balance => this.balanceCoin = balance);
+    this.ordersOpen$.subscribe(openOrders => {
+      this.openOrders = openOrders;
+      this.buyOrders = openOrders.filter(function (order: VOOrder) {
+        return order.action === 'BUY';
+      });
+      this.sellOrders = openOrders.filter(function (order: VOOrder) {
+        return order.action === 'SELL' && order.type !== 'STOP_LOSS_LIMIT';
+      });
+      this.stopLossOrders = openOrders.filter(function (order: VOOrder) {
+        return order.type === 'STOP_LOSS_LIMIT';
+      });
+    })
+
 
     /*this.stopLossState$ = combineLatest(this.wdType$, this.ordersOpen$)
       .pipe(debounceTime(1000), map(BotBus.stopLossStatus));
@@ -175,6 +215,15 @@ export class BotBus {
 
   setWDType(wdType: WDType) {
     this.config$.next(Object.assign(this.config$.getValue(), {wdType}));
+  }
+
+  setStopLossConfig(stopLoss: StopLossSettings) {
+    const cfg = this.config$.getValue();
+    cfg.stopLoss = stopLoss;
+    this.config$.next(cfg);
+  }
+  getStopLossConfig(): StopLossSettings {
+    return this.config$.getValue().stopLoss;
   }
 
   async init() {

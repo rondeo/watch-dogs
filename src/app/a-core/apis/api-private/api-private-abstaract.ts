@@ -175,9 +175,12 @@ export abstract class ApiPrivateAbstaract {
 
   loadingBalances = 0;
 
-  refreshBalancesNow() {
-    if (this.loadingBalances) return;
-    this._refreshBalances();
+  refreshBalancesNow(): Promise<{[coin: string]: VOBalance}> {
+    return new Promise((resolve, reject) => {
+      this.balancesSub.subscribe(balances => resolve(balances),err => reject(err));
+      if (!this.loadingBalances) this._refreshBalances();
+    })
+
   }
 
   //////////////////////////////// Open Orders ////////////////////////////////////////////////////////////
@@ -225,18 +228,25 @@ export abstract class ApiPrivateAbstaract {
   }*/
 
   refreshOpenOrdersTime;
-  refreshAllOpenOrders(): void {
-    if (this.refreshOpenOrdersTime) return;
-    this.refreshOpenOrdersTime = Date.now();
-    console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
-    this.downloadAllOpenOrders().subscribe(res => {
-      console.log(this.exchange + ' OPEN ORDERS ', res);
-      this.openOrdersSub$.next(res);
-      this.refreshOpenOrdersTime = 0;
-    }, err => {
-      this.refreshOpenOrdersTime = 0;
+  refreshAllOpenOrders(): Promise<VOOrder[]> {
+    return new Promise((resolve, reject) => {
 
-    });
+      this.openOrdersSub$.subscribe(orders => resolve(orders), err => reject(err));
+
+      if (this.refreshOpenOrdersTime) return;
+      this.refreshOpenOrdersTime = Date.now();
+      console.log('%c _refreshAllOpenOrders ' + this.exchange + ' ', 'color:pink');
+      this.downloadAllOpenOrders().subscribe(res => {
+        console.log(this.exchange + ' OPEN ORDERS ', res);
+        this.openOrdersSub$.next(res);
+        this.refreshOpenOrdersTime = 0;
+      }, err => {
+        this.refreshOpenOrdersTime = 0;
+
+      });
+
+    })
+
 
 
   }

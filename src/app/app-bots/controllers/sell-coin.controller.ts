@@ -29,9 +29,7 @@ export class SellCoinController implements TaskController{
         this.subscribe();
         if(balanceCoin.available && (balanceCoin.available> this.config.potSize / 5))  this.status.next(new NeedSell(balanceCoin.available));
         else {
-
           console.log('waiting for availabele to sell');
-
         }
 
       }
@@ -41,7 +39,7 @@ export class SellCoinController implements TaskController{
   subscribe() {
     if(this.subs.length || !this.bus) return;
     let sub = this.bus.stopLossOrders$.subscribe(stopLosses => {
-      if(stopLosses.length) cancelOrders(stopLosses, this.apiPrivate);
+      if(stopLosses.length) cancelOrders(stopLosses, this.apiPrivate, this.bus);
     });
     this.subs.push(sub);
 

@@ -8,7 +8,7 @@ export const transferToSLState = (bus: BotBus) => {
   return combineLatest(
     bus.wdType$,
     bus.stopLossOrders$ //.pipe(filter(stopLossOrdres => stopLossOrdres.length !== 0))
-  ).pipe(filter(([wdType, stopLossOrdres]) => wdType === WDType.LONG && stopLossOrdres.length !== 0))
+  ).pipe(filter(([wdType, stopLossOrdres]) => !bus.isDirty && wdType === WDType.LONG && stopLossOrdres.length !== 0))
 }
 
 export function selectSellOrdersForLong (bus: BotBus): Observable<VOOrder[]> {
@@ -16,12 +16,8 @@ export function selectSellOrdersForLong (bus: BotBus): Observable<VOOrder[]> {
     bus.wdType$,
     bus.sellOrders$
   ).pipe(
-    filter(([wdType, sellOrdres]) => wdType === WDType.LONG && sellOrdres.length !== 0),
-    map(([wdType, sellOrdres]) => {
-      return sellOrdres.filter(function (item) {
-        return item.type  !== 'STOP_LOSS_LIMIT';
-      })
-    } )
+    filter(([wdType, sellOrders]) => !bus.isDirty && wdType === WDType.LONG && sellOrders.length !== 0),
+    map(([wdType, sellOrdres]) => sellOrdres)
   )
 }
 
@@ -32,7 +28,7 @@ export const setStopLossAuto = (bus: BotBus) => {
   ).pipe(
     debounceTime(10),
     filter(([wdType, delta]) => {
-    return wdType === WDType.LONG && delta > 0.5;
+    return !bus.isDirty && wdType === WDType.LONG && delta > 0.5;
   }))
 }
 
@@ -40,25 +36,54 @@ export const buyingForLong = (bus: BotBus) => {
   return combineLatest(
     bus.wdType$,
     bus.buyOrders$
-  ).pipe(filter(([wdType, orders]) => wdType === WDType.LONG && orders.length !== 0))
+  ).pipe(filter(([wdType, orders]) => !bus.isDirty && (wdType === WDType.LONG || wdType === WDType.LONG_SL) && orders.length !== 0))
 }
 
-export const buyForLong = (bus: BotBus) => {
+export function buyForLong  (bus: BotBus): Observable<{amountCoin: number, buyOrders: VOOrder[]}>{
+  return combineLatest(
+    bus.wdType$,
+    bus.potsDelta$,
+    bus.buyOrders$
+  ).pipe(
+    filter(([wdType, potsDelta, buyOrders]) => {
+      return !bus.isDirty &&  (wdType === WDType.LONG || wdType === WDType.LONG_SL) && potsDelta < 0.8 && buyOrders.length === 0;
+    }),
+    map(([state, delta, buyOrders]) => {
+      const config = bus.config$.getValue();
+      const potsNeed = config.pots - delta;
+      const amountCoin =  potsNeed * config.potSize;
+      return {amountCoin, buyOrders}; //
+    })
+  )
+}
+
+
+export function sellForLong(bus: BotBus): Observable<{amountCoin: number, orders: VOOrder[]}> {
   return combineLatest(
     bus.wdType$,
     bus.potsDelta$,
     bus.ordersOpen$
   ).pipe(
-    filter(([state, potsDelta, openOrders]) => {
-      return state === WDType.LONG && potsDelta < 0.5 && openOrders.length === 0;
+    filter(([wdType, potsDelta, orders]) => {
+      orders = orders.filter(function (item) {
+       return  item.type !== 'STOP_LOSS_LIMIT';
+      });
+      console.log(wdType, potsDelta, orders);
+      return !bus.isDirty && (wdType === WDType.LONG || wdType === WDType.LONG_SL) && potsDelta > 1.2 && orders.length === 0;
     }),
-    map(([state, delta, openOrders]) => {
+    map(([state, delta, orders]) => {
       const config = bus.config$.getValue();
-      const potsNeed = config.pots - delta;
-      return potsNeed * config.potSize;
+      console.log(delta);
+      const potsNeed = config.pots - (delta * config.pots);
+
+      const amountCoin =  potsNeed * config.potSize;
+      return {amountCoin, orders}; //
     })
   )
+
 }
+
+
 
 export const selectStopPrices = (orders: VOOrder[]) => {
   if (!orders) return 0;
