@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="reactive">
+    <list default="true" id="26114f2d-70ea-4b4a-832a-19222ded432c" name="Default" comment="promises">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-bots/bot-base.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/bot-base.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-bots/controllers/buy-sell.commands.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/controllers/buy-sell.commands.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-bots/controllers/cancel-orders.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/controllers/cancel-orders.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app-bots/stop-loss-auto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/stop-loss-auto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/aui/dialogs/stop-loss-edit/stop-loss-edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/aui/dialogs/stop-loss-edit/stop-loss-edit.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-bots/sell-on-jump.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-bots/jump-signal.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
@@ -28,8 +26,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/app-bots/bot-base.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="246">
-                  <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
+                <state relative-caret-position="319">
+                  <caret line="217" column="39" lean-forward="true" selection-start-line="217" selection-start-column="39" selection-end-line="217" selection-end-column="39" />
                   <folding>
                     <element signature="e#0#62#0" expanded="true" />
                   </folding>
@@ -37,11 +35,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/aui/dialogs/stop-loss-edit/stop-loss-edit.component.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="365">
-                  <caret line="65" column="14" lean-forward="true" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="14" />
+                <state relative-caret-position="785">
+                  <caret line="60" column="7" lean-forward="true" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
                   <folding>
                     <element signature="e#0#56#0" expanded="true" />
                   </folding>
@@ -60,13 +58,46 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="395">
-                  <caret line="48" column="10" lean-forward="true" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
+                <state relative-caret-position="391">
+                  <caret line="52" column="23" lean-forward="true" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
                   <folding>
                     <element signature="e#0#89#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="455">
+                  <caret line="97" column="7" lean-forward="true" selection-start-line="97" selection-start-column="7" selection-end-line="97" selection-end-column="7" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/app-bots/jump-signal.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="331">
+                  <caret line="40" column="14" lean-forward="true" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
+                  <folding>
+                    <element signature="e#0#47#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="450">
+                  <caret line="198" lean-forward="true" selection-start-line="198" selection-end-line="198" />
+                  <folding>
+                    <element signature="e#0#85#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -103,40 +134,6 @@
                   <caret line="34" selection-start-line="34" selection-end-line="34" />
                   <folding>
                     <element signature="e#0#49#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/sell-coin.controller.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="22" column="10" lean-forward="true" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/trader/trader.module.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="320">
-                  <caret line="40" column="11" lean-forward="true" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
-                  <folding>
-                    <element signature="e#0#39#0" expanded="true" />
-                    <element signature="e#1549#2103#0" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/stop-loss.selectors.ts">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="11" column="9" lean-forward="true" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
-                  <folding>
-                    <element signature="e#0#34#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -258,7 +255,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/app-bots/bot-utils.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/market-bot.ts" />
         <option value="$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-orders.service.ts" />
         <option value="$PROJECT_DIR$/src/app/trader/follow-market/follow-market.component.ts" />
@@ -278,10 +274,8 @@
         <option value="$PROJECT_DIR$/src/app/aui/dialogs/order-type/order-type.component.html" />
         <option value="$PROJECT_DIR$/src/app/aui/dialogs/order-type/order-type.component.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/start-long.controller.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-bots/sell-on-jump.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/short-to-long.controller.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/long-to-short.controller.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/buy-coin.controller.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/stop-loss-order.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/usdt-btc-bot.ts" />
@@ -303,12 +297,15 @@
         <option value="$PROJECT_DIR$/src/app/app-bots/bot-bus.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/models.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/cancel-orders.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts" />
-        <option value="$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/stop-loss-auto.ts" />
         <option value="$PROJECT_DIR$/src/app/app-bots/controllers/buy-sell.commands.ts" />
-        <option value="$PROJECT_DIR$/src/app/app-bots/bot-base.ts" />
         <option value="$PROJECT_DIR$/src/app/aui/dialogs/stop-loss-edit/stop-loss-edit.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-bots/sell-on-jump.ts" />
+        <option value="$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-bots/jump-signal.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts" />
+        <option value="$PROJECT_DIR$/src/app/app-bots/bot-base.ts" />
       </list>
     </option>
   </component>
@@ -354,6 +351,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="app-bots" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="watch-dogs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="watch-dogs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="app-bots" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -658,13 +663,6 @@
       <workItem from="1559413277414" duration="219137000" />
       <workItem from="1560316395461" duration="36091000" />
       <workItem from="1560438552502" duration="10831000" />
-    </task>
-    <task id="LOCAL-00113" summary="resistance controller">
-      <created>1543419395335</created>
-      <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
-      <option name="project" value="LOCAL" />
-      <updated>1543419395335</updated>
     </task>
     <task id="LOCAL-00114" summary="alerts BTC">
       <created>1543423607958</created>
@@ -1002,11 +1000,18 @@
       <option name="project" value="LOCAL" />
       <updated>1560580075871</updated>
     </task>
-    <option name="localTasksCounter" value="162" />
+    <task id="LOCAL-00162" summary="promises">
+      <created>1560590119885</created>
+      <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
+      <option name="project" value="LOCAL" />
+      <updated>1560590119885</updated>
+    </task>
+    <option name="localTasksCounter" value="163" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4411817000" />
+    <option name="totallyTimeSpent" value="4417437000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1019,9 +1024,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="0" width="2503" height="1447" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.73046094" visible="true" weight="0.14654113" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.73046094" visible="true" weight="0.14654113" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.2695391" side_tool="true" weight="0.14490381" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1029,7 +1033,7 @@
       <window_info anchor="bottom" id="Messages" order="0" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.49775967" weight="0.17583269" />
-      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.49694502" visible="true" weight="0.22695585" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49694502" visible="true" weight="0.22695585" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -1093,7 +1097,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/tables1" />
     </ignored-roots>
-    <MESSAGE value="alert" />
     <MESSAGE value="refactor" />
     <MESSAGE value="15 min candles" />
     <MESSAGE value="bot init" />
@@ -1118,7 +1121,8 @@
     <MESSAGE value="controllers" />
     <MESSAGE value="reactive programming" />
     <MESSAGE value="reactive" />
-    <option name="LAST_COMMIT_MESSAGE" value="reactive" />
+    <MESSAGE value="promises" />
+    <option name="LAST_COMMIT_MESSAGE" value="promises" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -1269,16 +1273,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-bots/sell-on-jump.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="35" column="6" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-bots/models.ts">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1411,13 +1405,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="83" column="7" lean-forward="true" selection-start-line="38" selection-start-column="2" selection-end-line="83" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/short-selectors.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1020">
@@ -1502,16 +1489,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="210" column="77" lean-forward="true" selection-start-line="210" selection-start-column="3" selection-end-line="210" selection-end-column="77" />
-          <folding>
-            <element signature="e#0#85#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-bots/stop-loss-auto.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
@@ -1532,26 +1509,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="48" column="10" lean-forward="true" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-bots/bot-base.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app-bots/bot-bus.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
@@ -1564,10 +1521,57 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/aui/dialogs/stop-loss-edit/stop-loss-edit.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="65" column="14" lean-forward="true" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="14" />
+        <state relative-caret-position="785">
+          <caret line="60" column="7" lean-forward="true" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/a-core/apis/open-orders/follow-open-order.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="198" lean-forward="true" selection-start-line="198" selection-end-line="198" />
+          <folding>
+            <element signature="e#0#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-bots/jump-signal.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="40" column="14" lean-forward="true" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/short.controller.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="97" column="7" lean-forward="true" selection-start-line="97" selection-start-column="7" selection-end-line="97" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-bots/bot-base.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="217" column="39" lean-forward="true" selection-start-line="217" selection-start-column="39" selection-end-line="217" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-bots/controllers/long.controller.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="52" column="23" lean-forward="true" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#89#0" expanded="true" />
           </folding>
         </state>
       </provider>

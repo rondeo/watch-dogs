@@ -14,41 +14,36 @@ import {potsDifference, selectBalanceDifference, selectPotsBuying} from './selec
 import {UtilsBooks} from '../../acom/utils-books';
 import {UTILS} from '../../acom/utils';
 import {StopLossAuto, StopLossSettings} from '../stop-loss-auto';
-import {SellOnJump} from '../sell-on-jump';
+
 import {BotBus} from '../bot-bus';
 import {BuySellCommands} from './buy-sell.commands';
+import {JumpSignal} from '../jump-signal'
 
 
-export class LongController implements TaskController {
-  readonly type = ControllerType.START_LONG;
-  active = false;
-  balanceCoin: VOBalance;
-  balanceBase: VOBalance;
-  openOrders: VOOrder[];
-  progressOrder: VOOrder;
-  balanceDiff$: Observable<number>;
-  buyAction$: Observable<any>;
-  status: BehaviorSubject<Action> = new BehaviorSubject(new TaskNone());
+export enum LongSignal {
+  NONE = '[LongSignal] NONE',
+  DONE = '[LongSignal] DONE'
+}
+
+export class LongController {
 
   subs: Subscription[] = [];
-  pots: number;
   config: VOWatchdog;
   stopLossController: StopLossAuto;
-  sellOnJump: SellOnJump;
+  jumpSignal: JumpSignal;
+  signal$: BehaviorSubject<LongSignal> = new BehaviorSubject(LongSignal.NONE);
 
   constructor(private bus: BotBus, private commands: BuySellCommands) {
     console.log('%c ' + bus.id + ' starting Long', 'color:red');
-    let sub = bus.balanceCoin$.subscribe(balanceCoin => {
-      this.balanceCoin = balanceCoin;
-    });
     bus.config$.subscribe(cfg => this.config = cfg);
-    this.subs.push(sub);
     this.init();
   }
 
   init() {
 
     this.stopLossController = new StopLossAuto(this.bus, this.commands);
+    this.jumpSignal = new JumpSignal(this.bus);
+
     this.bus.pots$.pipe(withLatestFrom(this.bus.potsBalance$)).subscribe(async ([pots, potsBalance]) => {
       const need = pots - potsBalance;
       console.log(need);
@@ -71,6 +66,10 @@ export class LongController implements TaskController {
 
       }
     });
+
+    this.jumpSignal.signal$.subscribe(signal => {
+      console.log(signal)
+    })
   }
 
 
@@ -85,7 +84,7 @@ export class LongController implements TaskController {
     console.log(' destroying ');
     this.unsubscribe();
     this.bus = null;
-    if (this.sellOnJump) this.sellOnJump.destroy();
+    if (this.jumpSignal) this.jumpSignal.destroy();
     this.commands = null;
     if (this.stopLossController) this.stopLossController.destroy();
     this.stopLossController = null;

@@ -15,7 +15,7 @@ import {UtilsBooks} from '../../../acom/utils-books';
 import {Subject, Subscription} from 'rxjs';
 import {noop} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
-import {SellOnJump} from '../../../app-bots/sell-on-jump';
+
 import {StopLossAuto} from '../../../app-bots/stop-loss-auto';
 
 export class FollowOpenOrder {
@@ -53,7 +53,7 @@ export class FollowOpenOrder {
   apiPrivate: ApiPrivateAbstaract;
   apiPublic: ApiPublicAbstract;
 
-  sellOnJump: SellOnJump;
+
   stopLossOrder: StopLossAuto;
 
   MC: VOMarketCap;
@@ -194,19 +194,6 @@ export class FollowOpenOrder {
     this.apiPublic = this.apisPublic.getExchangeApi(this.exchange);
     this.marketCap.ticker$().subscribe(obj => this.MC = obj[this.coin]);
     await this.subscribeForBalances();
-   //  this.sellOnJump = new SellOnJump(this.market, this.candlesService);
-    this.sellOnJump.log = msg => {
-      //  console.log(msg);
-      // this.log(msg, true);
-    };
-    this.sellOnJump.sellCoin = () => {
-      this.log(' SELL COIN by sellOnJump ', true);
-      setTimeout(() => {
-        this.sellCoinInstant();
-      }, 2000);
-
-      // this.sellCoin(rate);
-    };
 
     // this.stopLossOrder = new StopLossOrder(this.market,  this.apiPrivate);
 

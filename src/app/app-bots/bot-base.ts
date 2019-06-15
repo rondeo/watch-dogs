@@ -1,11 +1,10 @@
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {StorageService} from '../a-core/services/app-storage.service';
-import {filter, map, skip} from 'rxjs/operators';
+import {map, skip} from 'rxjs/operators';
 import {OrderType, VOBalance, VOBooks, VOOrder, VOWatchdog, WDType} from '../amodels/app-models';
 import {ApiPrivateAbstaract} from '../a-core/apis/api-private/api-private-abstaract';
 import {CandlesService} from '../a-core/app-services/candles/candles.service';
 import * as _ from 'lodash';
-import {UtilsBooks} from '../acom/utils-books';
 import {ApiPublicAbstract} from '../a-core/apis/api-public/api-public-abstract';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UTILS} from '../acom/utils';
@@ -17,19 +16,7 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../app-store/reducers';
 import {optimizeBalance} from './bot-utils';
 import {TaskController} from './controllers/models';
-import {
-  buyForLong,
-  buyingForLong,
-  selectSellOrdersForLong, sellForLong,
-  setStopLossAuto,
-  transferToSLState
-} from './controllers/selectors';
-import {StopLossAuto} from './stop-loss-auto';
-import {cancelBuysForShort, cancelStopLossOnShort, needSellOrder, shortIsReady, waitForSelling} from './controllers/short-selectors';
-import {cancelOrders} from './controllers/cancel-orders';
-import {BuySignal} from './controllers/buy-signal';
-import {combineLatest} from 'rxjs/internal/observable/combineLatest';
-import {ShortController} from './controllers/short.controller';
+import {ShortController, ShortSignal} from './controllers/short.controller';
 import {LongController} from './controllers/long.controller';
 import {BuySellCommands} from './controllers/buy-sell.commands';
 
@@ -180,7 +167,7 @@ export class BotBase {
     });
   }
 
-  stopLossAuto: StopLossAuto;
+
   shortController: ShortController;
   longController: LongController;
   subAll;
@@ -226,15 +213,23 @@ export class BotBase {
       this.unsubscribeAr();
 
       if (wdType === WDType.LONG) {
-        if (this.buySignal) this.buySignal.destroy();
         if(this.shortController) this.shortController.destroy();
         if(this.longController) this.longController.destroy('re-init');
         this.longController = new LongController(this.bus, this.commands);
-
-        this.buySignal = null;
+        sub = this.longController.signal$.subscribe(signal => {
+          console.log(signal)
+        })
       } else if (wdType === WDType.SHORT) {
-        if (this.stopLossAuto) this.stopLossAuto.destroy();
-        this.stopLossAuto = null;
+        if(this.shortController) this.shortController.destroy();
+        if(this.longController) this.longController.destroy('re-init');
+        this.shortController = new ShortController(this.bus, this.commands)
+        this.shortController.signal$.subscribe(signal => {
+          console.log(signal);
+          if(signal === ShortSignal.TIME_TO_BUY) {
+            this.bus.setWDType(WDType.LONG);
+          }
+        })
+
       }
     })
 
@@ -243,7 +238,7 @@ export class BotBase {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  buySignal: BuySignal;
+
 
   async cancelAllOpenOrders() {
     console.log(this.id + ' canceling all open orders')

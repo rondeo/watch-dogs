@@ -23,17 +23,12 @@ export enum Status {
   SELL_ON_JUMP = 'SELL_ON_JUMP'
 }
 
-export class SellOnJumpState {
-  constructor(public type: Status, public payload: number[]) {
 
-  }
-}
+export class JumpSignal {
 
-export class SellOnJump {
-
-  private _state:BehaviorSubject<SellOnJumpState>;
+  private _state:BehaviorSubject<Status>;
   private subs: Subscription[] = [];
-  get state$(){
+  get signal$(){
     return this._state.asObservable().pipe(distinctUntilChanged())
   }
   get state(){
@@ -48,7 +43,7 @@ export class SellOnJump {
   ) {
 
     bus.config$.subscribe(config => this.config = config);
-    this._state = new BehaviorSubject(new SellOnJumpState(Status.NONE, []));
+    this._state = new BehaviorSubject(Status.NONE);
     this.init();
   }
 
@@ -62,12 +57,12 @@ export class SellOnJump {
       this.reason = ' ma3_7 ' + ma3_7 + '  prev ' + this.prev;
       console.log(this.reason);
 
-      if(ma3_7 > 3) this._state.next(new SellOnJumpState(Status.JUMPING, [ma3_7]));
-      else this._state.next(new SellOnJumpState(Status.NONE, []));
+      if(ma3_7 > 3) this._state.next(Status.JUMPING);
+      else this._state.next(Status.NONE);
 
-      if(this.state.type === Status.JUMPING){
+      if(this.state === Status.JUMPING){
         if(this.prev > ma3_7) {
-          this._state.next(new SellOnJumpState(Status.SELL_ON_JUMP, [ma3_7, this.prev]));
+          this._state.next(Status.SELL_ON_JUMP);
         }
       }
       this.prev = ma3_7;
@@ -115,14 +110,6 @@ export class SellOnJump {
 
   }
 
-
-  sellOnSecondMax() {
-
-  }
-
-  sellCoin() {
-
-  }
 
   isJump(candles: VOCandle[]): boolean {
     const prices = CandlesAnalys1.closes(candles);
