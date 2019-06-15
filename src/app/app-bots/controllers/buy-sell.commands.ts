@@ -7,6 +7,7 @@ import {UTILS} from '../../acom/utils';
 
 export class BuySellCommands {
   config: VOWatchdog;
+
   constructor(private bus: BotBus, private apiPrivate: ApiPrivateAbstaract, private apiPublic: ApiPublicAbstract) {
 
     bus.config$.subscribe(cfg => this.config = cfg);
@@ -18,19 +19,19 @@ export class BuySellCommands {
 
   async sendOrder(market: string, type: string, amountCoin: number, rate: number) {
 
-    if(this.bus.isDirty) {
+    if (this.bus.isDirty) {
       console.log(' DATA DIRTY');
       return
     }
 
-    if(amountCoin === 0) {
+    if (amountCoin === 0) {
       console.warn(' amount 0');
       return;
     }
 
-    if(type === 'SELL') {
+    if (type === 'SELL') {
       const available = this.bus.balanceCoin.available;
-      if(available < amountCoin) {
+      if (available < amountCoin) {
         console.log(' DONT have available balance coin ' + amountCoin + ' available ' + available);
         return
       }
@@ -38,22 +39,22 @@ export class BuySellCommands {
 
 
     this.bus.isDirty = true;
-    if(!rate) {
+    if (!rate) {
       console.log(' DOWNLOADING BOOKS FOR Rate ');
       const books = await this.apiPublic.downloadBooks2(market).toPromise();
-      const myBooks = type === 'BUY'?books.sell:books.buy;
+      const myBooks = type === 'BUY' ? books.sell : books.buy;
       rate = UtilsBooks.getRateForAmountCoin(myBooks, amountCoin);
       await UTILS.wait(10);
     }
 
-    if(type === 'BUY') {
+    if (type === 'BUY') {
       const balanceBase: VOBalance = this.bus.balanceBase;
-      if(balanceBase.available < amountCoin * rate) {
-        console.log(' DONT HAVE enough balance base ' +(amountCoin * rate) + '  available' +  balanceBase.available);
+      if (balanceBase.available < amountCoin * rate) {
+        console.log(' DONT HAVE enough balance base ' + (amountCoin * rate) + '  available' + balanceBase.available);
         return
       }
     }
-    console.log(market +' sending order ' + type + ' amountCoin ' + amountCoin + ' rate ' + rate);
+    console.log(market + ' sending order ' + type + ' amountCoin ' + amountCoin + ' rate ' + rate);
     let res;
     try {
       if (type === 'BUY') res = await this.apiPrivate.buyLimit2(market, amountCoin, rate);
@@ -64,8 +65,6 @@ export class BuySellCommands {
 
     await UTILS.wait(5);
     await this.apiPrivate.refreshBalancesNow();
-    await this.apiPrivate.refreshAllOpenOrders();
-    this.bus.isDirty = false;
     return res;
   }
 
@@ -73,5 +72,51 @@ export class BuySellCommands {
     console.warn('SELL_INSTANT ' + amountCoin);
     return this.sendOrder(market, 'SELL', amountCoin, 0);
   }
+
+
+  cancelOrdersPromise(ordres: VOOrder[], resolve = null) {
+    return new Promise((resolve, reject) => {
+      if (this.bus.isDirty) {
+        return reject('data is dirty')
+      }
+      const next = ordres.shift();
+
+      if (!next) {
+        this.apiPrivate.refreshBalancesNow();
+        UTILS.wait(5).then(() => {
+          resolve();
+        });
+        return
+      }
+
+      this.apiPrivate.cancelOrder2(next.uuid, next.market).subscribe(res => {
+        UTILS.wait(5).then(() => {
+          this.cancelOrdersPromise(ordres, resolve);
+        })
+      }, err => {
+        UTILS.wait(10).then(() => {
+          this.cancelOrdersPromise(ordres, resolve);
+        })
+      })
+
+    })
+
+  }
+
+
+ async setStopLoss(market: string, amountCoin: number, stopPrice: number, sellPrice: number) {
+
+   if (this.bus.isDirty) {
+     console.log(' DATA DIRTY');
+     return
+   }
+
+  const res = await this.apiPrivate.stopLoss(market, amountCoin, stopPrice, sellPrice);
+   await UTILS.wait(5);
+   this.apiPrivate.refreshBalancesNow();
+   await UTILS.wait(5);
+   return res;
+  }
+
 
 }

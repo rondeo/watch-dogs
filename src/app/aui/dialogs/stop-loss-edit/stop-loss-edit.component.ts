@@ -59,7 +59,8 @@ export class StopLossEditComponent implements OnInit {
     data.bus.mas$.subscribe(mas => {
       if (mas) this.onStopPercentChange();
     });
-    data.stopLossOrder$.subscribe(order => this.stopLossOrder = (order || new MyOrder({})))
+
+    data.bus.stopLossOrders$.subscribe(orders => this.stopLossOrder = orders.length?orders[0]:new MyOrder({}));
   }
 
   ngOnInit() {

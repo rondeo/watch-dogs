@@ -19,7 +19,6 @@ import {BotBus} from '../bot-bus';
 import {BuySellCommands} from './buy-sell.commands';
 
 
-
 export class LongController implements TaskController {
   readonly type = ControllerType.START_LONG;
   active = false;
@@ -48,21 +47,25 @@ export class LongController implements TaskController {
   }
 
   init() {
+
+    this.stopLossController = new StopLossAuto(this.bus, this.commands);
     this.bus.pots$.pipe(withLatestFrom(this.bus.potsBalance$)).subscribe(async ([pots, potsBalance]) => {
       const need = pots - potsBalance;
       console.log(need);
-      if(Math.abs(need) > 0.3) {
+      if (Math.abs(need) > 0.3) {
         let amountCoin = need * this.config.potSize;
         const market = this.config.market;
-        if(need > 0) {
-        await this.commands.buyCoinInstant(market, amountCoin);
-        }else  {
-         amountCoin = Math.abs(amountCoin);
-         if(this.stopLossController) {
-          await this.stopLossController.cancelAndStop();
-         }
+        if (need > 0) {
+          await this.commands.buyCoinInstant(market, amountCoin);
+        } else {
+          /////////////////// cancel stop loss and sell after///////////////////////
+          amountCoin = Math.abs(amountCoin);
+          if (this.stopLossController) {
+            await this.stopLossController.cancelAndStop();
+          }
+
           await this.commands.sellCoinInstant(market, amountCoin);
-         if(this.stopLossController) this.stopLossController.resume()
+          if (this.stopLossController) this.stopLossController.resume()
         }
         console.log(' orders sent ');
 
@@ -70,9 +73,6 @@ export class LongController implements TaskController {
     });
   }
 
-  checkState(balanceCoin: VOBalance, openOrders: VOOrder[], books: VOBooks, config: VOWatchdog) {
-
-  }
 
   unsubscribe() {
     this.subs.forEach(function (item) {
@@ -80,13 +80,14 @@ export class LongController implements TaskController {
     })
     this.subs = [];
   }
+
   destroy(reason: string) {
-    console.log(' destroying ' );
+    console.log(' destroying ');
     this.unsubscribe();
     this.bus = null;
-    if(this.sellOnJump)this.sellOnJump.destroy();
-   this.commands = null;
-    if(this.stopLossController)this.stopLossController.destroy();
+    if (this.sellOnJump) this.sellOnJump.destroy();
+    this.commands = null;
+    if (this.stopLossController) this.stopLossController.destroy();
     this.stopLossController = null;
   }
 

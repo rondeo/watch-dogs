@@ -187,21 +187,28 @@ export class BotBase {
 
   async init() {
 
+
     this.commands = new BuySellCommands(this.bus, this.apiPrivate, this.apiPublic);
 
     this.bus.balanceChange$.subscribe(async () => {
 
     });
 
-
     this.apiPrivate.balances$().pipe(skip(1)).subscribe(async balances => {
       this.allBalances = balances;
       this.bus.balanceTick(optimizeBalance(this.config.potSize, balances[this.coin]), balances[this.base]);
-      console.log(balances[this.coin], this.bus.ordersOpen$.getValue())
+      console.log(balances[this.coin], this.bus.ordersOpen$.getValue());
+
       if(this.bus.isDirty){
         await UTILS.wait(5);
         await this.apiPrivate.refreshAllOpenOrders();
         this.bus.isDirty = false;
+      } else {
+        if(this.bus.balanceCoin.pending && this.bus.openOrders.length === 0) {
+          console.log('%c DATA NOT VALID ', 'color:red');
+          await this.apiPrivate.refreshAllOpenOrders();
+          this.bus.isDirty = false;
+        }
       }
 
     });

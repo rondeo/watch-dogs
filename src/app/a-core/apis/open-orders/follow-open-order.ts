@@ -209,9 +209,7 @@ export class FollowOpenOrder {
     };
 
     // this.stopLossOrder = new StopLossOrder(this.market,  this.apiPrivate);
-    this.stopLossOrder.log = (msg) => {
-     //  this.log(msg, true);
-    };
+
     this.start();
   }
 
