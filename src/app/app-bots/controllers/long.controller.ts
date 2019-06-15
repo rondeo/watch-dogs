@@ -4,9 +4,9 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {BotBase} from '../bot-base';
 import {Observable} from 'rxjs/internal/Observable';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
-import {debounceTime, map, take} from 'rxjs/operators';
+import {debounceTime, map, take, withLatestFrom} from 'rxjs/operators';
 import {BTask, TaskName} from '../actions/bot-tasks';
-import {Action, ControllerType, Lost, TaskController, TaskNone} from './models';
+import {Action, ControllerType, Lost, NeedBuy, NeedSell, TaskController, TaskNone} from './models';
 import {ApiPrivateAbstaract} from '../../a-core/apis/api-private/api-private-abstaract';
 import {ApiPublicAbstract} from '../../a-core/apis/api-public/api-public-abstract';
 import {config} from 'rxjs/internal-compatibility';
@@ -15,6 +15,8 @@ import {UtilsBooks} from '../../acom/utils-books';
 import {UTILS} from '../../acom/utils';
 import {StopLossAuto, StopLossSettings} from '../stop-loss-auto';
 import {SellOnJump} from '../sell-on-jump';
+import {BotBus} from '../bot-bus';
+import {BuySellCommands} from './buy-sell.commands';
 
 
 
@@ -28,126 +30,45 @@ export class LongController implements TaskController {
   balanceDiff$: Observable<number>;
   buyAction$: Observable<any>;
   status: BehaviorSubject<Action> = new BehaviorSubject(new TaskNone());
+
   subs: Subscription[] = [];
   pots: number;
-
-
+  config: VOWatchdog;
   stopLossController: StopLossAuto;
   sellOnJump: SellOnJump;
 
-  constructor(private base: BotBase, private apiPrivate: ApiPrivateAbstaract, private apiPublic: ApiPublicAbstract) {
-    console.log('%c ' + base.id + ' starting Long', 'color:red');
-    let sub = base.bus.balanceCoin$.subscribe(balanceCoin => {
-
-
+  constructor(private bus: BotBus, private commands: BuySellCommands) {
+    console.log('%c ' + bus.id + ' starting Long', 'color:red');
+    let sub = bus.balanceCoin$.subscribe(balanceCoin => {
       this.balanceCoin = balanceCoin;
-    })
+    });
+    bus.config$.subscribe(cfg => this.config = cfg);
     this.subs.push(sub);
     this.init();
   }
 
-
- /* async buyCoin(amount: number) {
-    const market = this.base.bus.config$.getValue().market;
-    let rate = this.base.bus.config$.getValue().entryPrice;
-    if(!rate) {
-      const books = await this.apiPublic.downloadBooks2(market).toPromise();
-      rate = UtilsBooks.getRateForAmountCoin(books.sell, amount);
-    }
-    console.log(market + ' BUY coin ' + amount + ' rate ' + rate);
-
-    this.apiPrivate.buyLimit2(market, amount, rate).then(res => {
-      this.progressOrder = res;
-      console.log(res);
-      UTILS.wait(2).then(() => {
-        this.apiPrivate.refreshAllOpenOrders();
-      })
-    })
-
-  }*/
-
-/*  async sellCoin(amount: number) {
-    const market = this.base.bus.config$.getValue().market;
-    let rate = this.base.bus.config$.getValue().entryPrice;
-    if(!rate) {
-      const books = await this.apiPublic.downloadBooks2(market).toPromise();
-      rate = UtilsBooks.getRateForAmountCoin(books.buy, amount);
-    }
-    console.log(' SELL coin ' + amount + ' rate ' + rate);
-    return ;
-    this.apiPrivate.sellLimit2(market, amount, rate).then(res => {
-      this.progressOrder = res;
-    })
-  }*/
-
-
   init() {
-    let sub: Subscription;
-    this.stopLossController = new StopLossAuto(this.apiPrivate, this.base.bus);
-    this.sellOnJump = new SellOnJump(this.base.bus);
+    this.bus.pots$.pipe(withLatestFrom(this.bus.potsBalance$)).subscribe(async ([pots, potsBalance]) => {
+      const need = pots - potsBalance;
+      console.log(need);
+      if(Math.abs(need) > 0.3) {
+        let amountCoin = need * this.config.potSize;
+        const market = this.config.market;
+        if(need > 0) {
+        await this.commands.buyCoinInstant(market, amountCoin);
+        }else  {
+         amountCoin = Math.abs(amountCoin);
+         if(this.stopLossController) {
+          await this.stopLossController.cancelAndStop();
+         }
+          await this.commands.sellCoinInstant(market, amountCoin);
+         if(this.stopLossController) this.stopLossController.resume()
+        }
+        console.log(' orders sent ');
 
-    sub = combineLatest(this.sellOnJump.state$, this.stopLossController.state$).subscribe(([selOnJump, stopLoss]) => {
-      console.log(selOnJump, stopLoss);
+      }
     });
-
-
-
-  /*  let sub = combineLatest( this.base.bus.balanceCoin$, this.base.ordersOpen$, this.base.bus.config$)
-      .pipe(debounceTime(2000))
-      .subscribe(([ balanceCoin, openOrders, config]) => {
-
-        if(this.progressOrder) {
-          const progresUid = this.progressOrder.uuid;
-          const exists = openOrders.find(function (item) {
-            return item.uuid === progresUid;
-          });
-          if(exists) this.progressOrder = null;
-          else openOrders.push(this.progressOrder);
-        }
-
-
-        const prevBalance = this.balanceCoin?this.balanceCoin.balance - (config.potSize/ 10):0;
-        const current = balanceCoin.balance - (config.potSize/ 10);
-
-        if(prevBalance > 0 && current < 0) {
-          this.status.next(new Lost());
-          sub.unsubscribe();
-          return
-        }
-
-        this.balanceCoin = balanceCoin;
-        this.openOrders = openOrders;
-        this.analyzeState(balanceCoin, openOrders, config);
-
-      });
-    this.subs.push(sub);
-
-    this.stopLossController = new StopLossOrder(this.apiPrivate, this.base.bus);
-    this.sellOnJump = new SellOnJump(this.base.bus);
-    this.sellOnJump.state$.subscribe(state => {
-      console.log(state);
-    })*/
   }
-
-  /*async analyzeState( balanceCoin: VOBalance, openOrders: VOOrder[], config: VOWatchdog) {
-
-    const potsRequired = config.pots;
-    const potsBalance = balanceCoin.balance / config.potSize;
-    const potsBuying = selectPotsBuying(openOrders, config.potSize);
-
-    const diff = potsRequired - potsBalance - potsBuying;
-   //  console.log(diff);
-
-    if(diff > 0.3) {
-      console.log(' need buy coin ' + (diff * config.potSize));
-      this.buyCoin(diff * config.potSize);
-    } else {
-
-    }
-
-    console.log(balanceCoin, openOrders, config);
-  }
-*/
 
   checkState(balanceCoin: VOBalance, openOrders: VOOrder[], books: VOBooks, config: VOWatchdog) {
 
@@ -162,10 +83,9 @@ export class LongController implements TaskController {
   destroy(reason: string) {
     console.log(' destroying ' );
     this.unsubscribe();
-    this.base = null;
+    this.bus = null;
     if(this.sellOnJump)this.sellOnJump.destroy();
-    this.sellOnJump = null;
-    this.apiPrivate = null;
+   this.commands = null;
     if(this.stopLossController)this.stopLossController.destroy();
     this.stopLossController = null;
   }

@@ -111,14 +111,16 @@ export class BotBus {
   priceStop$: Observable<number>;
   entryPrices$: Observable<number[]>;
 
-  private _isDirty: boolean;
+  isDirty$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   set isDirty(d: boolean) {
     console.log(' dirty ' + d);
-    this._isDirty = d;
+    this.isDirty$.next(d)
+
   }
 
   get isDirty(): boolean {
-    return  this._isDirty;
+    return  this.isDirty$.getValue();
   }
 
   balanceCoin$: BehaviorSubject<VOBalance> = new BehaviorSubject(null);

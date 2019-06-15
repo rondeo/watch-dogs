@@ -50,6 +50,7 @@ export class NeedBuy implements Action {
   constructor(public payload) {
 
   }
+
 }
 
 export class NeedSell implements Action  {

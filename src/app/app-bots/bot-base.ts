@@ -29,6 +29,9 @@ import {cancelBuysForShort, cancelStopLossOnShort, needSellOrder, shortIsReady, 
 import {cancelOrders} from './controllers/cancel-orders';
 import {BuySignal} from './controllers/buy-signal';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {ShortController} from './controllers/short.controller';
+import {LongController} from './controllers/long.controller';
+import {BuySellCommands} from './controllers/buy-sell.commands';
 
 
 export enum MCState {
@@ -137,6 +140,7 @@ export class BotBase {
 
   controller: TaskController;
 
+  commands: BuySellCommands;
   subs: Subscription[] = [];
 
 ///////////////////////////////////////////////////////////////////////////
@@ -177,207 +181,62 @@ export class BotBase {
   }
 
   stopLossAuto: StopLossAuto;
+  shortController: ShortController;
+  longController: LongController;
   subAll;
 
   async init() {
 
-    //if (this.config.wdType === WDType.LONG_SL && this.config.stopLoss.auto)
-     // this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
+    this.commands = new BuySellCommands(this.bus, this.apiPrivate, this.apiPublic);
 
-    this.bus.balanceChange$.subscribe(() => {
-      this.apiPrivate.refreshAllOpenOrders();
+    this.bus.balanceChange$.subscribe(async () => {
+
     });
 
-    this.apiPrivate.balances$().pipe(skip(1)).subscribe(balances => {
-      this.allBalances = balances;
-      if(this.bus.isDirty) {
-        UTILS.wait(5).then(() => {
-          this.apiPrivate.refreshAllOpenOrders().then(() => {
-            this.bus.isDirty = false;
-          })
-        })
-      }
-      console.log(balances[this.coin], this.bus.ordersOpen$.getValue())
 
+    this.apiPrivate.balances$().pipe(skip(1)).subscribe(async balances => {
+      this.allBalances = balances;
       this.bus.balanceTick(optimizeBalance(this.config.potSize, balances[this.coin]), balances[this.base]);
-      if(this.config.wdType === WDType.LONG) {
-        console.log(this.bus.balanceCoin$.getValue(), this.bus.ordersOpen$.getValue())
+      console.log(balances[this.coin], this.bus.ordersOpen$.getValue())
+      if(this.bus.isDirty){
+        await UTILS.wait(5);
+        await this.apiPrivate.refreshAllOpenOrders();
+        this.bus.isDirty = false;
       }
+
     });
 
     const coin = this.coin;
-
     this.apiPrivate.openOrders$.pipe(map(orders => orders.filter(function (order) {
       return order.coin === coin;
     }))).subscribe(orders => this.bus.ordersOpen$.next(orders));
 
 
     //////////////////////////////////////////////////////////////////////////////////
+    let sub: Subscription;
     this.bus.wdType$.subscribe(wdType => {
       console.log(this.id + '  ' + wdType);
       this.unsubscribeAr();
 
       if (wdType === WDType.LONG) {
         if (this.buySignal) this.buySignal.destroy();
+        if(this.shortController) this.shortController.destroy();
+        if(this.longController) this.longController.destroy('re-init');
+        this.longController = new LongController(this.bus, this.commands);
+
         this.buySignal = null;
-        this.initLong();
       } else if (wdType === WDType.SHORT) {
         if (this.stopLossAuto) this.stopLossAuto.destroy();
         this.stopLossAuto = null;
-        this.initShort();
       }
     })
+
+
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
   buySignal: BuySignal;
-  initShort() {
-    console.log(' INIT SHORT');
-    let sub: Subscription;
-    sub = cancelStopLossOnShort(this.bus).subscribe(stopLossOrders => {
-      console.log(' cancelStopLossOnShort ', stopLossOrders);
-
-
-      cancelOrders(stopLossOrders, this.apiPrivate, this.bus).subscribe(res => console.log(res))
-    });
-    this.subs.push(sub);
-    sub = waitForSelling(this.bus).subscribe(data => {
-      console.log(' waitForSelling  ', data);
-    });
-    this.subs.push(sub);
-    sub = cancelBuysForShort(this.bus).subscribe(buyOrders => {
-      console.log(' need cancel buy orders for short ', buyOrders)
-      if(this.bus.isDirty) return;
-      this.bus.isDirty = true;
-      cancelOrders(buyOrders, this.apiPrivate, this.bus)
-    });
-
-    this.subs.push(sub);
-    sub = needSellOrder(this.bus).subscribe(amountCoin => {
-      console.log(' need sell order ', amountCoin);
-
-      const market = this.config.market;
-
-      const order: VOOrder = {
-        uuid: Date.now().toString(),
-        isOpen: true,
-        market,
-        action: 'SELL',
-        type: 'TEMP',
-        amountCoin,
-        rate: 0
-      };
-      this.bus.addOrder(order);
-
-     /* this.sellCoinInstant(amountCoin).then(res => {
-        console.log(' need sell order RESULT ', res);
-      })*/
-      /*  this.buyCoinInstant(data).then(res => {
-          console.log(' need sell order RESULT ', res);
-        })*/
-    });
-
-    this.subs.push(sub);
-    sub = shortIsReady(this.bus).subscribe(amountCoin => {
-      console.log(this.id + ' ready to buy ' + amountCoin);
-      if (!this.buySignal) {
-        this.buySignal = new BuySignal(this.bus);
-        const s = combineLatest(shortIsReady(this.bus), this.buySignal.signal$).subscribe(([amountCoin, signal]) => {
-          console.log(amountCoin, signal);
-          if (signal === 'BUY_NOW') {
-            console.log('BUY_NOW transferring to long  ');
-            this.bus.setWDType(WDType.LONG);
-          }
-        });
-        this.subs.push(s)
-      }
-    });
-    this.subs.push(sub);
-  }
-
-  initLong() {
-
-    let sub: Subscription;
-    console.log(' INIT LONG ');
-    sub = buyForLong(this.bus).subscribe(({amountCoin, buyOrders}) => {
-      console.log(this.id + ' BUY FOR LONG ', amountCoin, buyOrders);
-      const market = this.config.market;
-      const order: VOOrder = {
-        uuid: Date.now().toString(),
-        isOpen: true,
-        market,
-        action: 'BUY',
-        type: 'TEMP',
-        amountCoin,
-        rate: 0
-      };
-      this.bus.addOrder(order);
-    });
-    this.subs.push(sub);
-    sub = buyingForLong(this.bus).subscribe(data => {
-      console.log(this.id + ' BUYING FOR LONG ', data);
-    });
-    this.subs.push(sub);
-    sub = setStopLossAuto(this.bus).subscribe(data => {
-      console.log(this.id + ' SET STOP_LOSS Auto ', data);
-     // if (!this.stopLossAuto) this.stopLossAuto = new StopLossAuto(this.apiPrivate, this.bus);
-    });
-    this.subs.push(sub);
-    sub = selectSellOrdersForLong(this.bus).subscribe(sellOrders => {
-      if(sellOrders.length) console.log(this.id + ' CANCEL SELL ORDERS FOR LONG ', sellOrders);
-    });
-    this.subs.push(sub);
-    sub = transferToSLState(this.bus).subscribe(data => {
-      console.log(this.id + ' TRANSFER TO SL STATE ', data);
-      // this.bus.setWDType(WDType.LONG_SL);
-    });
-
-    this.subs.push(sub);
-
-    sub = this.bus.tempOrders$.subscribe(tempOrders => {
-      console.log(tempOrders);
-      if(tempOrders.length === 1) {
-        console.log(' snd order ', tempOrders);
-        this.sendOrder(tempOrders[0])
-      } else {
-        console.log(' ERROR FEW TEMP ORDERS', tempOrders);
-      }
-    })
-
-    this.subs.push(sub);
-
-    sub = sellForLong(this.bus).subscribe(({amountCoin, orders}) => {
-      console.log(this.id + ' SELL LONG ', amountCoin, orders);
-      if(this.stopLossAuto) {
-        this.stopLossAuto.destroy();
-      }
-      if(orders.length) {
-        cancelOrders(orders, this.apiPrivate, this.bus);
-        return;
-      }
-
-      amountCoin = Math.abs(amountCoin);
-      const market = this.config.market
-
-      const order: VOOrder = {
-        uuid: Date.now().toString(),
-        isOpen: true,
-        market,
-        action: 'SELL',
-        type: 'TEMP',
-        amountCoin,
-        rate: 0
-      };
-      this.bus.addOrder(order);
-    })
-
-
-  }
-
-
 
   async cancelAllOpenOrders() {
     console.log(this.id + ' canceling all open orders')
@@ -417,79 +276,6 @@ export class BotBase {
   }
 
 
-  async buyCoinInstant(order: VOOrder) {
-    console.warn(this.config.market + ' buyCoinInstant ' + order.amountCoin);
-    if (!order.amountCoin) {
-      console.warn(' no QTY');
-      return Promise.resolve(null);
-    }
-    let books = this.bus.books$.getValue();
-    if (!books) {
-      books = await this.apiPublic.downloadBooks2(order.market).toPromise();
-      this.bus.books$.next(books);
-    }
-    order.rate = UtilsBooks.getRateForAmountCoin(books.sell, order.amountCoin);
-    return this.sendOrder(order);
-  }
-
-  async sendOrder(order: VOOrder) {
-    if(this.bus.isDirty) {
-      console.log(' DATA DIRTY');
-      return
-    }
-    this.bus.isDirty = true;
-    if(order.amountCoin === 0) {
-      console.warn(' amount 0');
-      this.bus.removeOrder(order);
-      return;
-    }
-    let res = order;
-    if(order.action === 'SELL') {
-      const balanceCoin = this.bus.balanceCoin$.getValue();
-      if(balanceCoin.available < order.amountCoin) {
-        console.log(' DONT have available balance coin ', order, balanceCoin);
-        return
-      }
-    }
-
-
-    console.log('sending order ', order);
-    if(!order.rate) {
-      console.log(' DOWNLOADING BOOKS FOR Rate ');
-      const books = await this.apiPublic.downloadBooks2(order.market).toPromise();
-      const myBooks = order.action === 'BUY'?books.sell:books.buy;
-      order.rate = UtilsBooks.getRateForAmountCoin(myBooks, order.amountCoin);
-      await UTILS.wait(10);
-    }
-
-    const balanceBase: VOBalance = this.bus.balanceBase$.getValue();
-    if(balanceBase.available < order.amountCoin * order.rate) {
-      console.log(' DONT HAVE enough balance base ' +(order.amountCoin * order.rate), order, balanceBase);
-      return
-    }
-
-    try {
-      if (order.action === 'BUY') res = await this.apiPrivate.buyLimit2(order.market, order.amountCoin, order.rate);
-      else res = await this.apiPrivate.sellLimit2(order.market, order.amountCoin, order.rate);
-    } catch (e) {
-      console.log(e);
-    }
-    if (res) {
-      console.log(order, res);
-      res.type = 'SENT';
-      this.bus.replaceOrder(order, res);
-    }
-    return res;
-  }
-
-  async sellCoinInstant(order: VOOrder) {
-
-    const books = await this.apiPublic.downloadBooks2(this.config.market).toPromise();
-    const rate = UtilsBooks.getRateForAmountCoin(books.buy, order.amountCoin);
-    console.warn('SELL_INSTANT ' + order.amountCoin);
-
-    return this.sendOrder(order);
-  }
 
 
   onConfigChanged(wd0: WDType, pots0: number, wd1: WDType, pots1: number, pots: number, orders: VOOrder[]) {

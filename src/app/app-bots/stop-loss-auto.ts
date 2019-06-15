@@ -68,9 +68,11 @@ export class StopLossAuto {
   };
 
   config: VOWatchdog;
-  private market: string
+  private market: string;
   private settings: StopLossSettings;
   state$: BehaviorSubject<string> = new BehaviorSubject('NONE');
+
+  stopped: boolean;
 
   constructor(
     private apiPrivate: ApiPrivateAbstaract,
@@ -94,6 +96,7 @@ export class StopLossAuto {
 
        .subscribe(([mas, balanceCoin, openOrders]) => {
 
+         if(this.stopped) return;
          console.log('%c ' + this.config.id+ ' new  MAS  ', this.color);
          const stopLosses = openOrders.filter(function (item) {
            return item.stopPrice;
@@ -205,6 +208,7 @@ export class StopLossAuto {
     )
       .subscribe(([mas, balanceCoin, openOrders]) => {
 
+        if(this.stopped) return;
         const stopLosses = openOrders.filter(function (item) {
           return item.stopPrice;
         });
@@ -256,5 +260,17 @@ export class StopLossAuto {
     this.apiPrivate = null;
     this.bus = null;
     this.unsubscribe();
+  }
+
+  cancelAndStop() {
+    this.stopped = true;
+    if(this.bus.stopLossOrders) {
+      cancelOrders(this.bus.stopLossOrders, this.apiPrivate, this.bus)
+    }
+
+  }
+
+  resume() {
+    this.stopped = false;
   }
 }

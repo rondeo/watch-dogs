@@ -34,3 +34,34 @@ export function cancelOrders(ordres: VOOrder[], api: ApiPrivateAbstaract, bus: B
 }
 
 
+export function cancelOrdersPromise(ordres: VOOrder[], api: ApiPrivateAbstaract, bus: BotBus, resolve = null) {
+  return new Promise((resolve, reject) => {
+    if(bus.isDirty) {
+      return reject('data is dirty')
+    }
+    const next = ordres.shift();
+
+    if(!next) {
+      api.refreshAllOpenOrders();
+      UTILS.wait(5).then(() => {
+        resolve();
+      });
+      return
+    }
+
+    api.cancelOrder2(next.uuid, next.market).subscribe(res => {
+      UTILS.wait(5).then(() => {
+        cancelOrdersPromise(ordres, api, bus, resolve);
+      })
+    }, err => {
+      UTILS.wait(10).then(() => {
+        cancelOrdersPromise(ordres, api, bus, resolve);
+      })
+    })
+
+
+  })
+
+
+
+}
