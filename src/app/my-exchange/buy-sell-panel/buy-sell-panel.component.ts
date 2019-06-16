@@ -318,20 +318,21 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
          this.snackBar.open(moment().format('HH:mm') + ' ' +signal.type + ' '+signal.rate);
        });
    */
+
     this.marketCap.getTicker().then(MC => {
 
       const priceBase = base === 'USDT' ? 1 : MC[base].price_usd;
       const priceCoin = MC[coin].price_usd;
       const api = this.apisPrivate.getExchangeApi(this.exchange);
-      this.sub1 = api.balance$(base).subscribe((balance: VOBalance) => {
+    /*  this.sub1 = api.balance$(base).subscribe((balance: VOBalance) => {
 
         const balanceBase = balance.available + balance.pending;
         if (!this.tradingAmountUS) this.tradingBalanceBaseUS = Math.round(balanceBase * priceBase);
 
         //  const tradingBalanceBaseUS = this.tradingAmountUS? this.tradingAmountUS - balanceCoinUS: (balanceBase * priceBase);
-      });
+      });*/
 
-      this.sub2 = api.balance$(coin).subscribe((balance: VOBalance) => {
+  /*    this.sub2 = api.balance$(coin).subscribe((balance: VOBalance) => {
         this.balanceCoinAvailable = balance.available;
 
 
@@ -339,7 +340,7 @@ export class BuySellPanelComponent implements OnInit, OnDestroy {
         this.balanceCoinPendingUS = Math.round(balance.pending * priceCoin);
         this.balanceCoinAvailableUS = balanceCoinAvailableUS;
         this.calculateBase();
-      });
+      });*/
 
       /*this.sub3 = api.openOrders$(base, coin).subscribe(orders => {
         let sum = 0;

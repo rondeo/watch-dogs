@@ -18,6 +18,11 @@ import {config} from 'rxjs/internal-compatibility';
 import {BuySellCommands} from './controllers/buy-sell.commands';
 
 
+export enum SLSignal {
+  NONE = '[SLSignal] NONE'
+}
+
+
 export interface StopLossSettings {
   stopLossPercent: number;
   sellPercent: number;
@@ -37,8 +42,8 @@ export const STOP_LOSS_DEFAULT: StopLossSettings = {
 export class StopLossAuto {
   color: string = 'color:blue';
   subs: Subscription[] = [];
-  stopLossOrder$: BehaviorSubject<VOOrder> = new BehaviorSubject(null);
   inProgress = false;
+  signal$: BehaviorSubject<string> = new BehaviorSubject(SLSignal.NONE);
 
   static getStopPrice(ma: number, stopPercent: number): number {
     return +(ma + (ma * (stopPercent / 100))).toPrecision(6);
@@ -71,8 +76,6 @@ export class StopLossAuto {
   config: VOWatchdog;
   private market: string;
   private settings: StopLossSettings;
-  state$: BehaviorSubject<string> = new BehaviorSubject('NONE');
-
   stopped: boolean;
 
   constructor(
@@ -144,7 +147,8 @@ export class StopLossAuto {
     console.log(this.config.id + ' start auto UP');
     if (this.subAuto) this.subAuto.unsubscribe();
     if (!this.bus) return;
-    this.subAuto = this.bus.mas$.pipe(
+    let sub;
+   sub =  this.subAuto = this.bus.mas$.pipe(
       withLatestFrom(this.bus.balanceCoin$, this.bus.ordersOpen$)
     )
       .subscribe(([mas, balanceCoin, openOrders]) => {
@@ -165,6 +169,7 @@ export class StopLossAuto {
         }
 
       })
+    this.subs.push(sub);
   }
 
   unsubscribe() {
@@ -175,6 +180,7 @@ export class StopLossAuto {
   }
 
   destroy() {
+    console.log(' destroy stop-loss auto');
     this.commands = null;
     this.bus = null;
     this.unsubscribe();

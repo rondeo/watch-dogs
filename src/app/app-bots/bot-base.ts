@@ -17,7 +17,7 @@ import {AppState} from '../app-store/reducers';
 import {optimizeBalance} from './bot-utils';
 import {TaskController} from './controllers/models';
 import {ShortController, ShortSignal} from './controllers/short.controller';
-import {LongController} from './controllers/long.controller';
+import {LongController, LongSignal} from './controllers/long.controller';
 import {BuySellCommands} from './controllers/buy-sell.commands';
 
 
@@ -192,7 +192,13 @@ export class BotBase {
         this.bus.isDirty = false;
       } else {
         if(this.bus.balanceCoin.pending && this.bus.openOrders.length === 0) {
-          console.log('%c DATA NOT VALID ', 'color:red');
+          console.log('%c DATA NOT VALID pending but no open orders ', 'color:red');
+          console.log(this.bus.balanceCoin, this.bus.openOrders);
+          await this.apiPrivate.refreshAllOpenOrders();
+          this.bus.isDirty = false;
+        } else if(this.bus.sellOrders.length && !this.bus.balanceCoin.pending) {
+          console.log('%c DATA NOT VALID sell orders but no pending ', 'color:red');
+          console.log(this.bus.balanceCoin, this.bus.openOrders);
           await this.apiPrivate.refreshAllOpenOrders();
           this.bus.isDirty = false;
         }
@@ -213,23 +219,34 @@ export class BotBase {
       this.unsubscribeAr();
 
       if (wdType === WDType.LONG) {
-        if(this.shortController) this.shortController.destroy();
+        if(this.shortController) this.shortController.destroy(' to long ');
+        this.shortController = null;
         if(this.longController) this.longController.destroy('re-init');
+        this.longController = null;
         this.longController = new LongController(this.bus, this.commands);
         sub = this.longController.signal$.subscribe(signal => {
           console.log(signal)
+          if(signal === LongSignal.DONE) {
+            this.longController.destroy(' on done');
+            this.longController = null;
+            this.bus.setWDType(WDType.LOST);
+          }
         })
+        this.subs.push(sub);
       } else if (wdType === WDType.SHORT) {
-        if(this.shortController) this.shortController.destroy();
-        if(this.longController) this.longController.destroy('re-init');
+        if(this.shortController) this.shortController.destroy(' re-init ');
+        this.shortController = null;
+        if(this.longController) this.longController.destroy(' to short ');
+        this.longController = null;
         this.shortController = new ShortController(this.bus, this.commands)
-        this.shortController.signal$.subscribe(signal => {
+       sub =  this.shortController.signal$.subscribe(signal => {
           console.log(signal);
           if(signal === ShortSignal.TIME_TO_BUY) {
             this.bus.setWDType(WDType.LONG);
           }
         })
 
+        this.subs.push(sub);
       }
     })
 

@@ -13,7 +13,7 @@ import {BehaviorSubjectMy} from '../../../acom/behavior-subject-my';
 import {Subject} from 'rxjs/internal/Subject';
 import {Observable} from 'rxjs/internal/Observable';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {filter, map} from 'rxjs/operators';
+import {filter, map, skip, take} from 'rxjs/operators';
 import {UTILS} from '../../../acom/utils';
 import {of} from 'rxjs/internal/observable/of';
 import {MyOrder} from '../../../app-bots/bot-base';
@@ -24,8 +24,11 @@ export abstract class ApiPrivateAbstaract {
   apiPublic: any;
   loginSub: Subject<boolean> = new Subject();
 
+  refreshBalancesInterval;
+  balanceTimestamp: number = 1;
+
   private openOrdersSub$: BehaviorSubject<VOOrder[]> = new BehaviorSubject(null);
-  private balancesSub: BehaviorSubject<{[coin: string]:VOBalance}> = new BehaviorSubject({});
+  private balancesSub: BehaviorSubject<{ [coin: string]: VOBalance }> = new BehaviorSubject({});
 
   get openOrders() {
     return this.openOrdersSub$.asObservable();
@@ -40,67 +43,19 @@ export abstract class ApiPrivateAbstaract {
   private credentials: { apiKey: string, password: string };
 
   constructor(private userLogin: UserLoginService, protected storage: StorageService) {
-      this.refreshBalancesInterval = setInterval(() => {
-        const l = this.balancesSub.observers.length;
-        console.log(this.exchange + ' observers ' + l);
-        this.refreshBalancesNow();
-      }, 6e4);
+    this.refreshBalancesInterval = setInterval(() => {
+      const l = this.balancesSub.observers.length;
+      console.log(this.exchange + ' observers ' + l);
+      const secD = moment().diff(moment(this.balanceTimestamp), 'seconds');
+      if(secD < 30) {
+        console.log( ' was updated ago ' + secD + ' seconds');
+        return
+      }
+      this.refreshBalancesNow().then((balances) => {
+       //  console.log(balances);
+      });
+    }, 6e4);
   }
-
-  /* sellCoin(sellCoin: MarketOrderModel): Observable<MarketOrderModel> {
-     if (!sellCoin.coinUS) throw new Error(' need coin price')
-     return this.getBalance(sellCoin.coin).switchMap(balance => {
-       // console.log(balance);
-       if (balance.balance * sellCoin.coinUS < 10) {
-         sellCoin.balanceCoin = 0;
-       } else sellCoin.balanceCoin = balance.balance;
-
-       if (!sellCoin.balanceCoin) {
-         sellCoin.balanceCoin = 0;
-         return Observable.of(sellCoin);
-       }
-
-       return this.apiPublic.downloadBooks(sellCoin.base, sellCoin.coin).switchMap(books => {
-         // console.log(books);
-
-         let rate = UtilsBooks.getRateForAmountCoin(books.buy, sellCoin.balanceCoin);
-         const myCoinprice = sellCoin.baseUS * rate;
-         // sellCoin.booksDelta = +(100 * (myCoinprice - sellCoin.coinUS) / sellCoin.coinUS).toPrecision(2);
-         rate = +(rate - (rate * 0.01)).toFixed(8);
-         return this.sellLimit(sellCoin.base, sellCoin.coin, sellCoin.balanceCoin, rate).switchMap(order => {
-           console.log(order);
-           if (order.uuid) {
-             sellCoin.id = order.uuid;
-             return this.getOrder(order.uuid, sellCoin.base, sellCoin.coin).switchMap(order => {
-
-               return Observable.of(sellCoin)
-             })
-
-           } else throw new Error(order.message)
-
-
-         })
-
-
-       })
-
-
-     })
-
-   }*/
-
-  /*
-
-    cancelOrder2(orderId: string, market: string): Promise<VOOrder> {
-      return new Promise<VOOrder>((resolve, reject) => {
-        const ar = market.split('_');
-        this.cancelOrder(orderId, ar[0], ar[1]).subscribe(order => {
-          this.refreshBalances();
-          this._refreshAllOpenOrders();
-        }, reject)
-      })
-    }
-  */
 
   downloadBooks(market: string, length: number): Promise<VOBooks> {
     console.error(this.exchange + ' NEED implement ')
@@ -142,12 +97,7 @@ export abstract class ApiPrivateAbstaract {
   abstract getOrder(orderId, base: string, coin: string): Observable<VOOrder>;
 
 
-  /* stopRefreshInterval() {
-     clearInterval(this.refreshBalancesInterval);
-     this.refreshBalancesInterval = null;
-   }*/
 
-  refreshBalancesInterval;
 
   /*startRefreshBalances(delay?: number) {
     if (!delay) delay = 60;
@@ -155,79 +105,42 @@ export abstract class ApiPrivateAbstaract {
 
   }*/
 
-
-  private _refreshBalances() {
-    console.log('%c _refreshBalances ' + this.exchange, 'color:pink');
-    this.loadingBalances = Date.now();
-    this.downloadBalances().subscribe(balances => {
-      this.loadingBalances = 0;
-      const obj = {};
-      balances.forEach(function (item) {
-        this.obj[item.symbol] = item;
-      }, {obj});
-
-      this.balancesSub.next(obj);
-    }, error => {
-      //   setTimeout(() => this._refreshBalances(), 50000);
-    });
+  ///////////////////////////// Balances /////////////////////////////////////////
+  balances$() {
+    return this.balancesSub.pipe(filter(res => !!res));
   }
 
+  refreshBalancesNow(): Promise<{ [coin: string]: VOBalance }> {
+    if (this.balanceTimestamp) {
+      this.balanceTimestamp = 0;
+      console.log('%c _refreshBalances ' + this.exchange, 'color:pink');
+      this.downloadBalances().subscribe(balances => {
+        this.balanceTimestamp = Date.now();
+        const obj = {};
+        balances.forEach(function (item) {
+          this.obj[item.symbol] = item;
+        }, {obj});
 
-  loadingBalances = 0;
+        this.balancesSub.next(obj);
+      }, error => {
+        //   setTimeout(() => this._refreshBalances(), 50000);
+      });
+    }
 
-  refreshBalancesNow(): Promise<{[coin: string]: VOBalance}> {
-    return new Promise((resolve, reject) => {
-      this.balancesSub.subscribe(balances => resolve(balances),err => reject(err));
-      if (!this.loadingBalances) this._refreshBalances();
-    })
-
+    return this.balancesSub.pipe(
+      skip(1),
+      take(1)
+    ).toPromise();
   }
 
-  //////////////////////////////// Open Orders ////////////////////////////////////////////////////////////
-  /* getAllOpenOrders(): VOOrder[] {
-     return this._openOrdersSub$.getValue();
-   }
+  ///////////////////////////////////////// Open Orders /////////////////////////////////////////////////////////
 
-   allOpenOrders$(): Observable<VOOrder[]> {
-     if (!this._openOrdersSub$) {
-       this._openOrdersSub$ = new BehaviorSubject(null);
-       this.refreshAllOpenOrders();
-     }
-     return this._openOrdersSub$.asObservable();
-   }
- */
   get openOrders$() {
     return this.openOrdersSub$.pipe(filter(v => !!v));
   }
 
-
-
-  /* openOrders$(base: string, coin: string) {
-     const sub: Subject<VOOrder[]> = new Subject<VOOrder[]>();
-     this.openOrdersSub$.subscribe(res => {
-       if (!res) return sub.asObservable();
-       const orders: VOOrder[] = res.filter(function (item: VOOrder) {
-         return item.base === base && item.coin === coin;
-       });
-       setTimeout(() => sub.next(orders), 20);
-     })
-     return sub.asObservable()
-   }*/
-
-  /*stopRefreshOpenOrders() {
-    clearTimeout(this.refreshOrdersTimeout);
-    this.refreshOrdersTimeout = null;
-  }
-*/
-
-
-  /*refreshOpenOrdersNow(): Promise<VOOrder[]> {
-
-
-    return this._refreshAllOpenOrders();
-  }*/
-
   refreshOpenOrdersTime;
+
   refreshAllOpenOrders(): Promise<VOOrder[]> {
     return new Promise((resolve, reject) => {
 
@@ -242,15 +155,9 @@ export abstract class ApiPrivateAbstaract {
         this.refreshOpenOrdersTime = 0;
       }, err => {
         this.refreshOpenOrdersTime = 0;
-
       });
-
     })
-
-
-
   }
-
 
   //////////////////////////////////////////////////////////////////////////////////
   allOrdersSub = new BehaviorSubject(null);
@@ -311,35 +218,15 @@ export abstract class ApiPrivateAbstaract {
     this.getAllOrders(base, coin, from, to).subscribe(res => this.allOrdersSub.next(res));
   }
 
-  balances$() {
-    return this.balancesSub.pipe(filter(res => !!res));
-  }
 
-  balance$(symbol: string): Observable<VOBalance> {
-    const sub: Subject<VOBalance> = new Subject<VOBalance>();
-    this.balancesSub.asObservable().subscribe(balances => {
-      if (balances) {
-        //  console.log(balances);
-        setTimeout(() => sub.next(_.find(balances, {symbol: symbol})), 20);
-      } else this.refreshBalancesNow();
-    });
-    return sub;
-
-  }
-
-
-  /*async getBalance(symbol: string): Promise<VOBalance> {
-    const
-  }
-*/
   sellLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
-      return this.sellLimit(ar[0], ar[1], quantity, rate);
+    return this.sellLimit(ar[0], ar[1], quantity, rate);
   }
 
   buyLimit2(market: string, quantity: number, rate: number): Promise<VOOrder> {
     const ar = market.split('_');
-      return  this.buyLimit(ar[0], ar[1], quantity, rate);
+    return this.buyLimit(ar[0], ar[1], quantity, rate);
   }
 
   async stopLoss(market: string, quantity: number, stopPrice: number, sellPrice: number) {

@@ -128,7 +128,7 @@ export class MarketOrderModel extends VOWatchdog {
 
 
       // this.mcCoin = MC[this.coin];
-      const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.exchange);
+     /* const api: ApiPrivateAbstaract = ApisPrivateService.instance.getExchangeApi(this.exchange);
       this.message = 'initialized';
       this.sub1 = api.balance$(this.coin).subscribe(balance => {
         if (!this.coinMC) return;
@@ -142,9 +142,9 @@ export class MarketOrderModel extends VOWatchdog {
           this.coinUS = 0;
           // this.status = WatchDogStatus.NO_BALANCE;
         }
-      });
+      });*/
 
-      this.sub2 = api.balance$(this.base).subscribe(balance => {
+    /*  this.sub2 = api.balance$(this.base).subscribe(balance => {
         //  console.log(this.wdId, balance);
         if (!this.baseMC) return;
         if (balance) {
@@ -155,7 +155,7 @@ export class MarketOrderModel extends VOWatchdog {
           // this.status = WatchDogStatus.NO_BALANCE_BASE;
           console.warn(' no balance for ' + this.base);
         }
-      });
+      });*/
   }
 
   setDataMC(curr: any, base: any) {

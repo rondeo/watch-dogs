@@ -15,18 +15,18 @@ import {CandlesUtils} from '../a-core/app-services/candles/candles-utils';
 import {Subscription} from 'rxjs/internal/Subscription';
 
 
-export enum Status {
-  NONE='NONE',
-  GOING_UP='GOING_UP',
-  GOING_DOWN='GOING_DOWN',
-  JUMPING='JUMPING',
-  SELL_ON_JUMP = 'SELL_ON_JUMP'
+export enum JumpStatus {
+  NONE='[JumpStatus] NONE',
+  GOING_UP='[JumpStatus] GOING_UP',
+  GOING_DOWN='[JumpStatus] GOING_DOWN',
+  JUMPING='[JumpStatus] JUMPING',
+  SELL_ON_JUMP = '[JumpStatus] SELL_ON_JUMP'
 }
 
 
 export class JumpSignal {
 
-  private _state:BehaviorSubject<Status>;
+  private _state:BehaviorSubject<JumpStatus>;
   private subs: Subscription[] = [];
   get signal$(){
     return this._state.asObservable().pipe(distinctUntilChanged())
@@ -43,7 +43,7 @@ export class JumpSignal {
   ) {
 
     bus.config$.subscribe(config => this.config = config);
-    this._state = new BehaviorSubject(Status.NONE);
+    this._state = new BehaviorSubject(JumpStatus.NONE);
     this.init();
   }
 
@@ -57,12 +57,12 @@ export class JumpSignal {
       this.reason = ' ma3_7 ' + ma3_7 + '  prev ' + this.prev;
       console.log(this.reason);
 
-      if(ma3_7 > 3) this._state.next(Status.JUMPING);
-      else this._state.next(Status.NONE);
+      if(ma3_7 > 3) this._state.next(JumpStatus.JUMPING);
+      else this._state.next(JumpStatus.NONE);
 
-      if(this.state === Status.JUMPING){
+      if(this.state === JumpStatus.JUMPING){
         if(this.prev > ma3_7) {
-          this._state.next(Status.SELL_ON_JUMP);
+          this._state.next(JumpStatus.SELL_ON_JUMP);
         }
       }
       this.prev = ma3_7;
