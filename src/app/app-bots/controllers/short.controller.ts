@@ -56,14 +56,14 @@ export class ShortController {
     let sub: Subscription;
 
     this.rsiMacdSignal = new RsiMacdSignal(this.bus);
-    sub = this.rsiMacdSignal.stoch$.subscribe(signal => {
+    sub = this.rsiMacdSignal.rsi$.subscribe(signal => {
       if(signal === RsiMacdSignal.RSI_BUY) {
        this.signal$.next(ShortSignal.TIME_TO_BUY);
       }
     });
     this.subs.push(sub);
 
-    sub = combineLatest(this.rsiMacdSignal.stoch$, this.rsiMacdSignal.macd$).subscribe(([rsi,macd]) =>{
+    sub = combineLatest(this.rsiMacdSignal.rsi$, this.rsiMacdSignal.macd$).subscribe(([rsi,macd]) =>{
       console.log(this.config.id,rsi,macd)
     });
     this.subs.push(sub);

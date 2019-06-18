@@ -8,7 +8,8 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 
 export class RsiMacdSignal {
-  static NONE = '[RsiMacdSignal] NONE';
+  static RSI_NONE = '[RsiMacdSignal] RSI_NONE';
+  static MACD_NONE = '[RsiMacdSignal] MACD_NONE';
   static RSI_BUY = '[RsiMacdSignal] RSI_BUY';
   static RSI_SELL = '[RsiMacdSignal] RSI_SELL';
   static RSI_CROSS_UP = '[RsiMacdSignal] RSI_CROSS_DOWN';
@@ -20,8 +21,8 @@ export class RsiMacdSignal {
 
   private subs: Subscription[] = [];
   private config: VOWatchdog;
-  stoch$: BehaviorSubject<string> = new BehaviorSubject(RsiMacdSignal.NONE);
-  macd$: BehaviorSubject<string> = new BehaviorSubject(RsiMacdSignal.NONE);
+  rsi$: BehaviorSubject<string> = new BehaviorSubject(RsiMacdSignal.RSI_NONE);
+  macd$: BehaviorSubject<string> = new BehaviorSubject(RsiMacdSignal.MACD_NONE);
   constructor(private bus: BotBus) {
     const sub = bus.config$.subscribe(cfg => this.config = cfg);
     this.subs.push(sub);
@@ -82,13 +83,13 @@ export class RsiMacdSignal {
     // console.log('%c ' + rsi_2.k + '   ' + rsi_1.k, 'color:blue');
 
     if(rsi_2.d > rsi_2.k && rsi_1.d < rsi_1.k)  {
-      if(rsi_1.d < 30) this.stoch$.next(RsiMacdSignal.RSI_BUY);
-      else this.stoch$.next(RsiMacdSignal.RSI_CROSS_UP);
+      if(rsi_1.d < 30) this.rsi$.next(RsiMacdSignal.RSI_BUY);
+      else this.rsi$.next(RsiMacdSignal.RSI_CROSS_UP);
 
     }
     if(rsi_2.d < rsi_2.k && rsi_1.d > rsi_1.k)  {
-      if(rsi_1.d > 70) this.stoch$.next(RsiMacdSignal.RSI_SELL);
-      else this.stoch$.next(RsiMacdSignal.RSI_CROSS_DOWN);
+      if(rsi_1.d > 70) this.rsi$.next(RsiMacdSignal.RSI_SELL);
+      else this.rsi$.next(RsiMacdSignal.RSI_CROSS_DOWN);
     }
 
   }

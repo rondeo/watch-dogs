@@ -44,7 +44,7 @@ export class LongController {
     this.subs.push(sub);
 
    // this.jumpSignal = new JumpSignal(this.bus);
-    //sub = this.jumpSignal.stoch$.subscribe( signal => this.onJumpSignal(signal));
+    //sub = this.jumpSignal.rsi$.subscribe( signal => this.onJumpSignal(signal));
     // this.subs.push(sub);
 
    sub =  this.bus.pots$.pipe(withLatestFrom(this.bus.potsBalance$))
@@ -57,12 +57,12 @@ export class LongController {
 
     this.rsiMacdSignal = new RsiMacdSignal(this.bus);
 
-    sub = combineLatest(this.rsiMacdSignal.stoch$, this.rsiMacdSignal.macd$).subscribe(([rsi,macd]) =>{
+    sub = combineLatest(this.rsiMacdSignal.rsi$, this.rsiMacdSignal.macd$).subscribe(([rsi,macd]) =>{
       console.log(this.config.id,rsi,macd)
     });
     this.subs.push(sub);
 
-   sub = this.rsiMacdSignal.stoch$.subscribe(signal => {
+   sub = this.rsiMacdSignal.rsi$.subscribe(signal => {
      // console.log(this.config.id + signal);
       if(signal == RsiMacdSignal.RSI_SELL) {
         if(this.jumpSignal) this.jumpSignal.destroy();
