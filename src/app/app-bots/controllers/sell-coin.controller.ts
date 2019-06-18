@@ -8,80 +8,61 @@ import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {cancelOrders} from './cancel-orders';
 import {Observable} from 'rxjs/internal/Observable';
 import {UtilsBooks} from '../../acom/utils-books';
+import {BuySellCommands} from './buy-sell.commands';
 
 
-export class SellCoinController implements TaskController{
-  type : ControllerType = ControllerType.LONG_TO_SHORT;
-  status: BehaviorSubject<Action> = new BehaviorSubject(new TaskNone());
+export enum SellingSignal {
+  NONE = '[SellingSignal] NONE',
+  DONE = '[SellingSignal] DONE'
+}
+
+export class SellCoinController{
+  signal$: BehaviorSubject<SellingSignal> = new BehaviorSubject(SellingSignal.NONE);
   config: VOWatchdog;
   subs: Subscription[] = [];
-  constructor(private bus: BotBus, private apiPrivate: ApiPrivateAbstaract) {
+  timeout
+  constructor(private bus: BotBus, private commands: BuySellCommands) {
    bus.config$.subscribe(cfg => this.config = cfg);
    this.init();
+   this.sellCoin();
   }
 
   init() {
-    console.log(this.config.id +  ' LongToShortController  ');
-    this.bus.balanceCoin$.subscribe(balanceCoin => {
-      if(balanceCoin.balance < this.config.potSize / 5) {
-        setTimeout(() => this.status.next(new TaskDone(balanceCoin)), 100);
-      } else {
-        this.subscribe();
-        if(balanceCoin.available && (balanceCoin.available> this.config.potSize / 5))  this.status.next(new NeedSell(balanceCoin.available));
-        else {
-          console.log('waiting for availabele to sell');
-        }
+    let sub = this.bus.balanceCoin$.subscribe(balanceCoin => {
+      console.log(balanceCoin);
+      if(balanceCoin.balance === 0) this.signal$.next(SellingSignal.DONE);
+      else this.sellCoin();
+    })
 
-      }
-    });
   }
 
-  subscribe() {
-    if(this.subs.length || !this.bus) return;
-    let sub = this.bus.stopLossOrders$.subscribe(stopLosses => {
-      if(stopLosses.length) cancelOrders(stopLosses, this.apiPrivate, this.bus);
-    });
-    this.subs.push(sub);
+  async sellCoin() {
+    clearTimeout(this.timeout);
 
-    sub = combineLatest(this.status, this.bus.candles$).subscribe(([status, candles]) => {
-      console.log(candles);
-      if(status.type !== TaskName.NEED_SELL) return;
-      let price = candles[candles.length -1].close;
-      const amountCoin = status.payload;
-      this.apiPrivate.downloadBooks(this.config.market, 10).then(books => {
+    await this.commands.cancelOrdersPromise(this.bus.openOrders);
 
-        price = UtilsBooks.getRateForAmountCoin(books.sell, amountCoin);
-        this.status.next(new SetSellOrder({price, amountCoin}));
-      })
+    const market = this.config.market;
+    const available = this.bus.balanceCoin.available;
+    try {
+      await this.commands.sellCoinInstant(market, available);
+    } catch (e) {
+     this.timeout = setTimeout(() => this.sellCoin(), 20e3);
+    }
 
-      console.log(status, price);
 
-    //   this.status.next(new SetSellOrder({price, amountCoin}));
-    })
-    this.subs.push(sub);
-
-    sub = (this.status as Observable<SetSellOrder>).subscribe( status => {
-      if(status.type !== TaskName.SET_SELL_ORDER) return;
-      console.log(' SELLING COIN ' );
-
-      this.apiPrivate.sellLimit2(this.config.market, status.payload.amountCoin, status.payload.price).then(res => {
-        this.status.next(new SellOrderSet(res));
-        this.bus.addOrder(res);
-        this.apiPrivate.refreshAllOpenOrders();
-      }).catch(console.log);
-
-    })
   }
 
   unsubscribe() {
     this.subs.forEach(function (item) {
       item.unsubscribe();
     });
+    this.subs = []
   }
 
   destroy(reason: string): void{
+    console.log(reason);
    this.unsubscribe();
-    this.apiPrivate = null;
+    this.commands = null;
     this.bus = null;
   }
 

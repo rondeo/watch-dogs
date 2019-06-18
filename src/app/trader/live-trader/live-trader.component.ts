@@ -120,7 +120,6 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
 
     })
 
-
     this.marketService.balanceBase$.subscribe(balance => {
       this.balanceBaseUS = balance.balanceUS;
     });
@@ -168,9 +167,9 @@ export class LiveTraderComponent implements OnInit, OnDestroy {
    // bot.selected = true;
     this.myOrders$ = bot.ordersOpen$;
     const state = this.marketService.viewState;
-   //  state.selected = bot.config.;
     state.market = bot.config.market;
     state.exchange = bot.config.exchange;
+
     this.setUrl(state);
   }
 

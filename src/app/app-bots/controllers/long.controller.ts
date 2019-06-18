@@ -7,6 +7,9 @@ import {StopLossAuto} from '../stop-loss-auto';
 import {BotBus} from '../bot-bus';
 import {BuySellCommands} from './buy-sell.commands';
 import {JumpSignal, JumpStatus} from '../jump-signal'
+import {SellCoinController, SellingSignal} from './sell-coin.controller';
+import {RsiMacdSignal} from './rsi-macd.signal';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 
 
 export enum LongSignal {
@@ -21,6 +24,8 @@ export class LongController {
   config: VOWatchdog;
   stopLossController: StopLossAuto;
   jumpSignal: JumpSignal;
+  rsiMacdSignal:RsiMacdSignal;
+  sellCoinController: SellCoinController;
   signal$: BehaviorSubject<LongSignal> = new BehaviorSubject(LongSignal.NONE);
 
   constructor(private bus: BotBus, private commands: BuySellCommands) {
@@ -35,12 +40,12 @@ export class LongController {
   init() {
     let sub: Subscription;
     this.stopLossController = new StopLossAuto(this.bus, this.commands);
-    sub = this.stopLossController.signal$.subscribe(signal => console.log(signal));
+    sub = this.stopLossController.signal$.subscribe(signal => console.log(this.config.id + signal));
     this.subs.push(sub);
 
-    this.jumpSignal = new JumpSignal(this.bus);
-    sub = this.jumpSignal.signal$.subscribe( signal => this.onJumpSignal(signal));
-    this.subs.push(sub);
+   // this.jumpSignal = new JumpSignal(this.bus);
+    //sub = this.jumpSignal.stoch$.subscribe( signal => this.onJumpSignal(signal));
+    // this.subs.push(sub);
 
    sub =  this.bus.pots$.pipe(withLatestFrom(this.bus.potsBalance$))
      .subscribe( ([pots, potsBalance]) => this.onPotsChange(pots, potsBalance));
@@ -50,6 +55,37 @@ export class LongController {
       .subscribe(([balanceOld, balanceCoin]) => this.onBalance(balanceOld, balanceCoin));
     this.subs.push(sub);
 
+    this.rsiMacdSignal = new RsiMacdSignal(this.bus);
+
+    sub = combineLatest(this.rsiMacdSignal.stoch$, this.rsiMacdSignal.macd$).subscribe(([rsi,macd]) =>{
+      console.log(this.config.id,rsi,macd)
+    });
+    this.subs.push(sub);
+
+   sub = this.rsiMacdSignal.stoch$.subscribe(signal => {
+     // console.log(this.config.id + signal);
+      if(signal == RsiMacdSignal.RSI_SELL) {
+        if(this.jumpSignal) this.jumpSignal.destroy();
+        this.jumpSignal = null;
+        if(this.stopLossController)  this.stopLossController.destroy();
+        this.sellCoinController = null;
+        this.rsiMacdSignal.destroy(' selling coin');
+        if(this.sellCoinController) this.sellCoinController.destroy(' re-init ');
+
+        /////////////// selling coin ////////////////////////
+
+        if(!this.sellCoinController) {
+          this.sellCoinController = new SellCoinController(this.bus, this.commands);
+          sub = this.sellCoinController.signal$.subscribe(signal => {
+            console.log(this.config.id + signal);
+            if(signal === SellingSignal.DONE) this.signal$.next(LongSignal.DONE);
+          });
+          this.subs.push(sub);
+        }
+
+      }
+    })
+    this.subs.push(sub);
   }
 
 
@@ -71,13 +107,13 @@ export class LongController {
         await this.commands.sellCoinInstant(market, amountCoin);
         if (this.stopLossController) this.stopLossController.resume()
       }
-      console.log(' orders sent ');
+      console.log(this.config.id + ' orders sent ');
 
     }
   }
 
   async onJumpSignal (signal) {
-    console.log(signal);
+    console.log(this.config.id + signal);
     if(signal === JumpStatus.SELL_ON_JUMP) {
       if (this.stopLossController) {
         this.stopLossController.destroy();
@@ -108,13 +144,15 @@ export class LongController {
   }
 
   destroy(reason: string) {
-    console.log(' destroying  long ' + reason);
+    console.log(this.config.id + ' destroying  long ' + reason);
     this.unsubscribe();
     this.bus = null;
     if (this.jumpSignal) this.jumpSignal.destroy();
     this.commands = null;
     if (this.stopLossController) this.stopLossController.destroy();
     this.stopLossController = null;
+    if(this.sellCoinController) this.sellCoinController.destroy('destroy all');
+    this.sellCoinController = null;
   }
 
   cancel() {

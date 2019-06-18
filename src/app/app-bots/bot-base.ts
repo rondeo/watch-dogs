@@ -173,14 +173,7 @@ export class BotBase {
   subAll;
 
   async init() {
-
-
     this.commands = new BuySellCommands(this.bus, this.apiPrivate, this.apiPublic);
-
-    this.bus.balanceChange$.subscribe(async () => {
-
-    });
-
     this.apiPrivate.balances$().pipe(skip(1)).subscribe(async balances => {
       this.allBalances = balances;
       this.bus.balanceTick(optimizeBalance(this.config.potSize, balances[this.coin]), balances[this.base]);
@@ -203,7 +196,6 @@ export class BotBase {
           this.bus.isDirty = false;
         }
       }
-
     });
 
     const coin = this.coin;
@@ -225,7 +217,7 @@ export class BotBase {
         this.longController = null;
         this.longController = new LongController(this.bus, this.commands);
         sub = this.longController.signal$.subscribe(signal => {
-          console.log(signal)
+          console.log(this.config.id + signal);
           if(signal === LongSignal.DONE) {
             this.longController.destroy(' on done');
             this.longController = null;
@@ -240,7 +232,7 @@ export class BotBase {
         this.longController = null;
         this.shortController = new ShortController(this.bus, this.commands)
        sub =  this.shortController.signal$.subscribe(signal => {
-          console.log(signal);
+          console.log(this.config.id + signal);
           if(signal === ShortSignal.TIME_TO_BUY) {
             this.bus.setWDType(WDType.LONG);
           }
@@ -254,8 +246,6 @@ export class BotBase {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
   async cancelAllOpenOrders() {
     console.log(this.id + ' canceling all open orders')
@@ -305,26 +295,8 @@ export class BotBase {
     this.stop();
     this.unsubscribeAr();
     this.unsubscribe();
-    this.deleteData();
-  }
+    this.bus.destroy();
 
-  async deleteData() {
-    await this.storage.remove(this.id + '-logs');
-    await this.storage.remove(this.id + '-orders-history');
-    await this.storage.remove(this.id + '-orders-open');
-    await this.storage.remove(this.id + '-settings')
-  }
-
-  async saveLogs() {
-    if (!this.logs.length) return;
-    const logs = await this.getLogs();
-    this.logs = [];
-    this.storage.upsert(this.id + '-logs', _.takeRight(logs, 500));
-  }
-
-  async getLogs() {
-    let history: any[] = (await this.storage.select(this.id + '-logs')) || [];
-    return history.concat(this.logs);
   }
 
   stop() {

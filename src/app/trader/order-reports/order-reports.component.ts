@@ -219,9 +219,6 @@ export class OrderReportsComponent implements OnInit {
         });*/
         break;
       default:
-        bot.getLogs().then(logs => {
-          this.ordersData = logs;
-        });
         break;
     }
   }
